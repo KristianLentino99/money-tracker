@@ -1,40 +1,40 @@
 {
   "investments": {
     "title": "Investimenti",
-    "createButton": "Crea Portafoglio",
-    "loadError": "Impossibile carica portafogli",
+    "createButton": "Crea portafoglio",
+    "loadError": "Impossibile caricare i portafogli",
     "tryAgain": "Riprova",
     "menu": {
       "view": "Visualizza",
       "delete": "Elimina"
     },
     "card": {
-      "hidden": "Hidden",
-      "portfolioType": "{type} Portafoglio",
-      "costBasis": "costo basis"
+      "hidden": "Nascosto",
+      "portfolioType": "Portafoglio {type}",
+      "costBasis": "Costo di carico"
     },
     "empty": {
-      "title": "nessun portafogli ancora",
-      "description": "Crea Il tuo primo Investimento Portafoglio un Inizio tracking Il tuo Posizioni, Transazioni, e performance.",
-      "createFirstButton": "Crea Il tuo primo Portafoglio"
+      "title": "Nessun portafoglio ancora",
+      "description": "Crea il tuo primo portafoglio di investimento per iniziare a monitorare posizioni, transazioni e performance.",
+      "createFirstButton": "Crea il tuo primo portafoglio"
     },
     "trash": {
-      "title": "cestino",
-      "retentionHint": "elementi qui sono definitivamente eliminato dopo {days} giorni",
-      "loadError": "non è stato possibile carica trashed portafogli.",
-      "deletedAgo": "eliminato {time}",
-      "restoreButton": "ripristina",
-      "restoringButton": "Restoring…",
+      "title": "Cestino",
+      "retentionHint": "Gli elementi qui vengono eliminati definitivamente dopo {days} giorni",
+      "loadError": "Impossibile caricare i portafogli nel cestino.",
+      "deletedAgo": "Eliminato {time}",
+      "restoreButton": "Ripristina",
+      "restoringButton": "Ripristino…",
       "purgeButton": "Elimina ora",
-      "purgingButton": "eliminazione…",
-      "confirmPurgeTitle": "Elimina Portafoglio definitivamente?",
-      "confirmPurge": "definitivamente Elimina \"{name}\"? questo non può essere undone.",
+      "purgingButton": "Eliminazione…",
+      "confirmPurgeTitle": "Eliminare definitivamente il portafoglio?",
+      "confirmPurge": "Eliminare definitivamente \"{name}\"? L'operazione non può essere annullata.",
       "tryAgain": "Riprova",
       "notifications": {
-        "restored": "Portafoglio restored",
-        "restoreError": "Impossibile ripristina Portafoglio",
-        "purged": "Portafoglio definitivamente eliminato",
-        "purgeError": "Impossibile Elimina Portafoglio"
+        "restored": "Portafoglio ripristinato",
+        "restoreError": "Impossibile ripristinare il portafoglio",
+        "purged": "Portafoglio eliminato definitivamente",
+        "purgeError": "Impossibile eliminare il portafoglio"
       }
     }
   }

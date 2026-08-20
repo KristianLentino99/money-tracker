@@ -2,62 +2,62 @@
   "settings": {
     "aiIntegrations": {
       "title": "Integrazioni IA",
-      "description": "Connetti AI assistants like Claude o ChatGPT un analyze Il tuo dati finanziari directly da chat.",
+      "description": "Collega assistenti IA come Claude o ChatGPT per analizzare i tuoi dati finanziari direttamente dalla chat.",
       "mcpServer": {
-        "title": "MCP server",
-        "description": "Usa questo URL un Connetti AI assistants un Il tuo MoneyMatter Conto. Il tuo data è condiviso Leggi-solo.",
+        "title": "Server MCP",
+        "description": "Usa questo URL per collegare gli assistenti IA al tuo account MoneyMatter. I tuoi dati vengono condivisi in sola lettura.",
         "copyTooltip": "Copia URL",
-        "copiedNotification": "MCP server URL Copiato un clipboard"
+        "copiedNotification": "URL del server MCP copiato negli appunti"
       },
       "quickConnect": {
-        "title": "Quick Connetti",
-        "description": "Scegli un AI assistente sotto. fai clic il button un Apri its Impostazioni, then follow il passaggi.",
-        "openSettings": "Apri Impostazioni",
+        "title": "Connessione rapida",
+        "description": "Scegli un assistente IA qui sotto. Fai clic sul pulsante per aprire le sue impostazioni, poi segui i passaggi.",
+        "openSettings": "Apri impostazioni",
         "claude": {
           "steps": {
-            "createConnector": "fai clic il {icon} icon Successivo un \"Connectors\" un Crea un Nuovo connector",
+            "createConnector": "Fai clic sull'icona {icon} accanto a \"Connectors\" per creare un nuovo connettore",
             "selectCustom": "Seleziona {action}",
-            "enterName": "per \"Nome\" inserisci {value}",
-            "pasteUrl": "per \"Remote MCP server URL\" paste {value}",
-            "finish": "lasciare Avanzate Impostazioni empty e fai clic {action}",
-            "authorize": "tu sarà essere redirected un MoneyMatter un authorize accesso"
+            "enterName": "Per \"Name\" inserisci {value}",
+            "pasteUrl": "Per \"Remote MCP server URL\" incolla {value}",
+            "finish": "Lascia vuote le impostazioni avanzate e fai clic su {action}",
+            "authorize": "Verrai reindirizzato a MoneyMatter per autorizzare l'accesso"
           }
         },
         "chatgpt": {
           "steps": {
-            "addConnector": "fai clic {action}",
-            "pasteUrl": "per \"URL\" paste {value}",
-            "clickAdd": "fai clic {action}",
-            "authorize": "tu sarà essere redirected un MoneyMatter un authorize accesso"
+            "addConnector": "Fai clic su {action}",
+            "pasteUrl": "Per \"URL\" incolla {value}",
+            "clickAdd": "Fai clic su {action}",
+            "authorize": "Verrai reindirizzato a MoneyMatter per autorizzare l'accesso"
           }
         }
       },
       "actions": {
-        "addCustomConnector": "Aggiungi Personalizzato connector",
-        "addConnector": "Aggiungi connector",
+        "addCustomConnector": "Aggiungi connettore personalizzato",
+        "addConnector": "Aggiungi connettore",
         "add": "Aggiungi"
       },
       "connectedApps": {
-        "title": "connesso app",
-        "description": "app quello hai accesso un Il tuo dati finanziari. Puoi revocare accesso a qualsiasi ora.",
-        "emptyTitle": "nessun app connesso ancora.",
-        "emptyDescription": "Usa il buttons above un Connetti un AI assistente.",
-        "connectedAt": "connesso: {date}",
-        "lastUsed": "ultimo utilizzato: {time}",
-        "scope": "Scope: {scopes}",
-        "revoke": "revocare"
+        "title": "App connesse",
+        "description": "App che hanno accesso ai tuoi dati finanziari. Puoi revocare l'accesso in qualsiasi momento.",
+        "emptyTitle": "Nessuna app connessa ancora.",
+        "emptyDescription": "Usa i pulsanti qui sopra per collegare un assistente IA.",
+        "connectedAt": "Connessa: {date}",
+        "lastUsed": "Ultimo utilizzo: {time}",
+        "scope": "Ambito: {scopes}",
+        "revoke": "Revoca"
       },
       "revokeDialog": {
-        "title": "revocare accesso?",
-        "description": "questo sarà immediately Disconnetti il app e invalidate tutti its tokens. Puoi ricollega più tardi.",
-        "confirm": "revocare accesso",
-        "successNotification": "app accesso revoked correttamente",
-        "errorNotification": "Impossibile revocare app accesso"
+        "title": "Revocare l'accesso?",
+        "description": "Questo disconnetterà immediatamente l'app e invaliderà tutti i suoi token. Potrai riconnetterla più tardi.",
+        "confirm": "Revoca accesso",
+        "successNotification": "Accesso dell'app revocato correttamente",
+        "errorNotification": "Impossibile revocare l'accesso dell'app"
       },
       "scopes": {
-        "financeRead": "Leggi dati finanziari",
-        "profileRead": "Leggi profilo",
-        "offlineAccess": "offline accesso"
+        "financeRead": "Lettura dati finanziari",
+        "profileRead": "Lettura profilo",
+        "offlineAccess": "Accesso offline"
       }
     }
   }

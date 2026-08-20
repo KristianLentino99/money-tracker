@@ -11,11 +11,6 @@
         "title": "Bagian sidebar",
         "description": "Pilih bagian mana yang muncul di sidebar.",
         "alwaysVisibleTooltip": "Bagian ini selalu terlihat."
-      },
-      "header": {
-        "title": "Header",
-        "description": "Pilih tindakan header mana yang terlihat.",
-        "supportButton": "Tombol dukungan"
       }
     }
   }

@@ -2,95 +2,95 @@
   "settings": {
     "tags": {
       "title": "Etichette",
-      "addButton": "Aggiungi Etichetta",
-      "empty": "Nessuna etichetta ancora. Crea Il tuo primo Etichetta un organize Il tuo Transazioni.",
+      "addButton": "Aggiungi etichetta",
+      "empty": "Nessuna etichetta ancora. Crea la tua prima etichetta per organizzare le tue transazioni.",
       "tabs": {
         "details": "Dettagli",
-        "reminders": "Reminders"
+        "reminders": "Promemoria"
       },
       "form": {
-        "createTitle": "Crea Etichetta",
-        "editTitle": "Modifica Etichetta",
+        "createTitle": "Crea etichetta",
+        "editTitle": "Modifica etichetta",
         "name": "Nome",
-        "namePlaceholder": "Etichetta Nome",
-        "color": "Color",
-        "icon": "Icon",
-        "iconPlaceholder": "Seleziona icon",
-        "iconSearchPlaceholder": "Cerca icons...",
-        "clearIcon": "Cancella icon",
+        "namePlaceholder": "Nome etichetta",
+        "color": "Colore",
+        "icon": "Icona",
+        "iconPlaceholder": "Seleziona icona",
+        "iconSearchPlaceholder": "Cerca icone...",
+        "clearIcon": "Rimuovi icona",
         "description": "Descrizione",
-        "descriptionPlaceholder": "Facoltativo Descrizione",
+        "descriptionPlaceholder": "Descrizione facoltativa",
         "saveButton": "Salva",
-        "previewPlaceholder": "Etichetta Nome"
+        "previewPlaceholder": "Nome etichetta"
       },
       "delete": {
-        "title": "Elimina Etichetta?",
-        "description": "questo sarà definitivamente Elimina \"{name}\" e Rimuovi it da tutti Transazioni. Questa azione non può essere annullata.",
+        "title": "Eliminare l'etichetta?",
+        "description": "Questo eliminerà definitivamente \"{name}\" e la rimuoverà da tutte le transazioni. Questa azione non può essere annullata.",
         "deleteButton": "Elimina",
         "cancelButton": "Annulla"
       },
       "notifications": {
-        "createSuccess": "Etichetta creato",
-        "createFailed": "Impossibile Crea Etichetta",
-        "updateSuccess": "Etichetta aggiornato",
-        "updateFailed": "Impossibile Aggiorna Etichetta",
-        "deleteSuccess": "Etichetta eliminato",
-        "deleteFailed": "Impossibile Elimina Etichetta"
+        "createSuccess": "Etichetta creata",
+        "createFailed": "Impossibile creare l'etichetta",
+        "updateSuccess": "Etichetta aggiornata",
+        "updateFailed": "Impossibile aggiornare l'etichetta",
+        "deleteSuccess": "Etichetta eliminata",
+        "deleteFailed": "Impossibile eliminare l'etichetta"
       },
       "reminders": {
-        "addButton": "Aggiungi Reminder",
-        "empty": "nessun reminders ancora. Crea un reminder un ottieni notified about questo Etichetta's activity.",
+        "addButton": "Aggiungi promemoria",
+        "empty": "Nessun promemoria ancora. Crea un promemoria per essere avvisato sull'attività di questa etichetta.",
         "enabled": "Abilitato",
         "disabled": "Disabilitato",
         "form": {
-          "createTitle": "Crea Reminder",
-          "editTitle": "Modifica Reminder",
-          "type": "Reminder Tipo",
-          "typePlaceholder": "Seleziona Tipo",
-          "amountThreshold": "Importo soglia",
-          "amountThresholdPlaceholder": "inserisci soglia Importo",
-          "amountThresholdHint": "ottieni notified quando spesa su questo Etichetta exceeds questo Importo",
+          "createTitle": "Crea promemoria",
+          "editTitle": "Modifica promemoria",
+          "type": "Tipo di promemoria",
+          "typePlaceholder": "Seleziona tipo",
+          "amountThreshold": "Soglia importo",
+          "amountThresholdPlaceholder": "Inserisci l'importo soglia",
+          "amountThresholdHint": "Ricevi una notifica quando la spesa su questa etichetta supera questo importo",
           "frequency": "Frequenza",
-          "frequencyPlaceholder": "Seleziona Frequenza",
-          "dayOfMonth": "giorno di Mese",
+          "frequencyPlaceholder": "Seleziona frequenza",
+          "dayOfMonth": "Giorno del mese",
           "dayOfMonthPlaceholder": "Seleziona giorno",
-          "dayOfMonthHint": "per mesi con fewer giorni, il ultimo giorno sarà essere utilizzato",
+          "dayOfMonthHint": "Per i mesi con meno giorni, verrà usato l'ultimo giorno disponibile",
           "isEnabled": "Abilitato",
           "saveButton": "Salva"
         },
         "types": {
-          "amountThreshold": "Importo soglia",
-          "amountThresholdDescription": "Notify quando spesa exceeds un certain Importo",
-          "existenceCheck": "Activity Check",
-          "existenceCheckDescription": "Notify quando there sono Transazioni con questo Etichetta"
+          "amountThreshold": "Soglia importo",
+          "amountThresholdDescription": "Notifica quando la spesa supera un determinato importo",
+          "existenceCheck": "Controllo attività",
+          "existenceCheckDescription": "Notifica quando ci sono transazioni con questa etichetta"
         },
         "frequencies": {
-          "immediate": "Immediate",
-          "immediateDescription": "Triggers quando Transazioni sono tagged (24h cooldown)",
+          "immediate": "Immediata",
+          "immediateDescription": "Si attiva quando le transazioni vengono etichettate (attesa di 24 ore)",
           "daily": "Giornaliero",
-          "dailyDescription": "Check ogni giorno",
+          "dailyDescription": "Controlla ogni giorno",
           "weekly": "Settimanale",
-          "weeklyDescription": "Check ogni Monday",
+          "weeklyDescription": "Controlla ogni lunedì",
           "monthly": "Mensile",
-          "monthlyDescription": "Check su un specific giorno ogni Mese",
-          "quarterly": "Quarterly",
-          "quarterlyDescription": "Check ogni 3 mesi (Jan, Apr, Jul, Oct)",
+          "monthlyDescription": "Controlla in un giorno specifico ogni mese",
+          "quarterly": "Trimestrale",
+          "quarterlyDescription": "Controlla ogni 3 mesi (gen, apr, lug, ott)",
           "yearly": "Annuale",
-          "yearlyDescription": "Check once per Anno in January"
+          "yearlyDescription": "Controlla una volta l'anno a gennaio"
         },
         "delete": {
-          "title": "Elimina reminder?",
-          "description": "questo sarà definitivamente Elimina questo reminder. Questa azione non può essere annullata.",
+          "title": "Eliminare il promemoria?",
+          "description": "Questo eliminerà definitivamente questo promemoria. Questa azione non può essere annullata.",
           "deleteButton": "Elimina",
           "cancelButton": "Annulla"
         },
         "notifications": {
-          "createSuccess": "Reminder creato",
-          "createFailed": "Impossibile Crea reminder",
-          "updateSuccess": "Reminder aggiornato",
-          "updateFailed": "Impossibile Aggiorna reminder",
-          "deleteSuccess": "Reminder eliminato",
-          "deleteFailed": "Impossibile Elimina reminder"
+          "createSuccess": "Promemoria creato",
+          "createFailed": "Impossibile creare il promemoria",
+          "updateSuccess": "Promemoria aggiornato",
+          "updateFailed": "Impossibile aggiornare il promemoria",
+          "deleteSuccess": "Promemoria eliminato",
+          "deleteFailed": "Impossibile eliminare il promemoria"
         }
       }
     }

@@ -1,12 +1,12 @@
 {
   "transactions": {
     "filters": {
-      "filtersLabel": "filtri",
+      "filtersLabel": "Filtri",
       "selectFilters": "Seleziona filtri",
       "reset": "Reimposta",
       "apply": "Applica",
       "dateRange": {
-        "placeholder": "Data o range",
+        "placeholder": "Data o intervallo",
         "presets": {
           "thisMonth": "Questo mese",
           "last3Months": "ultimo 3 mesi",
@@ -18,15 +18,15 @@
         "label": "Tipo di transazione:",
         "income": "Entrate",
         "expense": "Uscita",
-        "allTypes": "tutti tipi"
+        "allTypes": "Tutti i tipi"
       },
       "amountRange": {
         "from": "Importo da (gte)",
-        "to": "un (lte)",
+        "to": "A (lte)",
         "placeholderFrom": ">= di",
         "placeholderTo": "<= di",
-        "compactFrom": "Min Importo",
-        "compactTo": "Max Importo"
+        "compactFrom": "Importo minimo",
+        "compactTo": "Importo massimo"
       },
       "refundsFilter": {
         "label": "Rimborsi"
@@ -43,79 +43,79 @@
         "only": "solo"
       },
       "noteIncludes": {
-        "label": "Nota includes (comma-separated):",
+        "label": "La nota include (separati da virgola):",
         "placeholder": "Amazon,nike",
-        "compactPlaceholder": "Cerca in Nota"
+        "compactPlaceholder": "Cerca nelle note"
       },
       "tags": {
         "allTags": "Tutte le etichette",
         "tagSingular": "Etichetta",
         "tagPlural": "Etichette",
-        "selected": "Selezionato",
+        "selected": "selezionate",
         "searchPlaceholder": "Cerca etichette..."
       },
       "payees": {
         "label": "Beneficiari",
-        "selectedOne": "1 Beneficiario Selezionato",
-        "selectedMany": "{n} Beneficiari Selezionato"
+        "selectedOne": "1 beneficiario selezionato",
+        "selectedMany": "{n} beneficiari selezionati"
       },
-      "removeFilter": "Rimuovi Filtra",
+      "removeFilter": "Rimuovi filtro",
       "menu": {
         "type": "Tipo",
         "tags": "Etichette",
-        "amount": "Importo range",
-        "note": "Nota"
+        "amount": "Intervallo importo",
+        "note": "Note"
       },
       "transferNature": {
-        "label": "Trasferimento kinds",
-        "disabledTooltip": "Trasferimenti sono excluded da il Filtra above, so Trasferimento kinds hai nessun effect.",
-        "commonTransfer": "tra Conti",
-        "outOfWallet": "fuori di wallet",
-        "toPortfolio": "un Portafoglio",
-        "toVenture": "un venture",
-        "selectedCount": "{n} Selezionato"
+        "label": "Tipo di trasferimento",
+        "disabledTooltip": "I trasferimenti sono esclusi dal filtro sopra, quindi il tipo di trasferimento non ha alcun effetto.",
+        "commonTransfer": "Tra conti",
+        "outOfWallet": "Fuori dal portafoglio",
+        "toPortfolio": "Verso un portafoglio",
+        "toVenture": "Verso una venture",
+        "selectedCount": "{n} selezionati"
       }
     },
     "list": {
-      "noMoreData": "nessun Altro Transazioni",
-      "loadingMore": "Caricamento Altro...",
-      "detailsTitle": "Transazione Dettagli",
-      "detailsDescription": "Visualizza e Modifica transazione"
+      "noMoreData": "Nessun'altra transazione",
+      "loadingMore": "Caricamento altre...",
+      "detailsTitle": "Dettagli transazione",
+      "detailsDescription": "Visualizza e modifica la transazione"
     },
     "bulkEdit": {
       "selectAll": "Seleziona tutto",
-      "cancelSelection": "Annulla selection",
+      "cancelSelection": "Annulla selezione",
       "editButton": "Modifica",
-      "selectedCount": "{count} Selezionato",
-      "dialogTitle": "Modifica {count} Transazioni",
-      "dialogDescription": "Changes sarà essere applied un tutti Selezionato Transazioni. solo filled Campi sarà essere aggiornato.",
+      "selectedCount": "{count} selezionate",
+      "dialogTitle": "Modifica {count} transazioni",
+      "dialogDescription": "Le modifiche verranno applicate a tutte le transazioni selezionate. Verranno aggiornati solo i campi compilati.",
       "categoryLabel": "Categoria",
-      "categoryPlaceholder": "Seleziona Categoria...",
+      "categoryPlaceholder": "Seleziona categoria...",
       "payeeLabel": "Beneficiario",
-      "payeePlaceholder": "Seleziona Beneficiario...",
+      "payeePlaceholder": "Seleziona beneficiario...",
       "tagsLabel": "Etichette",
-      "tagsPlaceholder": "Seleziona Etichette...",
+      "tagsPlaceholder": "Seleziona etichette...",
       "noteLabel": "Nota",
-      "notePlaceholder": "inserisci Nota...",
-      "applyButton": "Applica changes",
+      "notePlaceholder": "Inserisci nota...",
+      "applyButton": "Applica modifiche",
       "applyingButton": "Applying...",
-      "confirmTitle": "Conferma changes",
-      "confirmDescription": "sei about un Aggiorna {count} Transazioni:",
+      "confirmTitle": "Conferma modifiche",
+      "confirmDescription": "Stai per aggiornare {count} transazioni:",
       "confirmCategoryLabel": "Categoria",
       "confirmPayeeLabel": "Beneficiario",
       "confirmTagsLabel": "Etichette",
       "confirmNoteLabel": "Nota",
       "cancelButton": "Annulla",
       "confirmApplyButton": "Applica",
-      "successMessage": "correttamente aggiornato {count} Transazioni",
-      "unexpectedError": "un Errore imprevisto verificato",
-      "tagModeLabel": "Etichetta azione",
-      "tagModeAdd": "Aggiungi un esistente Etichette",
-      "tagModeReplace": "Replace Tutte le etichette",
-      "tagModeRemove": "Rimuovi questi Etichette",
+      "successMessage": "{count} transazioni aggiornate correttamente",
+      "unexpectedError": "Si è verificato un errore imprevisto",
+      "tagModeLabel": "Azione etichette",
+      "tagModeAdd": "Aggiungi alle etichette esistenti",
+      "tagModeReplace": "Sostituisci tutte le etichette",
+      "tagModeRemove": "Rimuovi queste etichette",
       "unselectableReasons": {
-        "split": "può't essere Selezionato: Suddivisione Transazioni non Supporto bulk modifica. Modifica it individually instead.",
-        "sharedAccount": "può't essere Selezionato: questo Transazione è su un Conto condiviso con tu, e solo its proprietario può Modifica it."
+        "split": "Non selezionabile: le transazioni suddivise non supportano la modifica in blocco. Modificala singolarmente.",
+        "sharedAccount": "Non selezionabile: questa transazione è su un conto condiviso con te e solo il proprietario può modificarla."
       }
     },
     "transactionGroups": {
@@ -127,45 +127,45 @@
       "addToGroupDialog": {
         "title": "Aggiungi un esistente gruppo",
         "searchPlaceholder": "Cerca gruppi...",
-        "noGroupsMessage": "nessun gruppi ancora. Crea uno primo.",
-        "noSearchResultsMessage": "nessun gruppi corrispondenza Il tuo Cerca.",
+        "noGroupsMessage": "Ancora nessun gruppo. Creane prima uno.",
+        "noSearchResultsMessage": "Nessun gruppo corrisponde alla tua ricerca.",
         "addingText": "Adding...",
-        "buttonLabel": "Aggiungi un gruppo",
+        "buttonLabel": "Aggiungi al gruppo",
         "cancelButton": "Annulla",
         "transactionCountLabel": "Transazioni"
       },
       "createGroupDialog": {
-        "title": "Crea transazione gruppo",
+        "title": "Crea gruppo di transazioni",
         "descriptionPrefix": "gruppo",
         "groupNameLabel": "Nome",
-        "groupNamePlaceholder": "e.g. potrebbe salary Trasferimento",
-        "noteLabel": "Nota (Facoltativo)",
-        "notePlaceholder": "Facoltativo Descrizione...",
+        "groupNamePlaceholder": "es. bonifico stipendio di maggio",
+        "noteLabel": "Nota (facoltativo)",
+        "notePlaceholder": "Descrizione facoltativa...",
         "creatingText": "creazione...",
         "buttonLabel": "Crea gruppo",
         "cancelButton": "Annulla"
       },
       "groupsPage": {
-        "title": "Transazione gruppi",
+        "title": "Gruppi di transazioni",
         "searchPlaceholder": "Cerca gruppi...",
-        "noGroupsMessage": "nessun Transazione gruppi ancora.",
-        "emptyStateHint": "Seleziona Transazioni su il Transazioni Pagina e fai clic \"Crea gruppo\" un Inizia.",
+        "noGroupsMessage": "Ancora nessun gruppo di transazioni.",
+        "emptyStateHint": "Seleziona delle transazioni nella pagina Transazioni e fai clic su \"Crea gruppo\" per iniziare.",
         "transactionCountLabel": "Transazioni"
       },
       "errors": {
-        "nameRequired": "gruppo Il nome è obbligatorio",
-        "minTransactions": "Seleziona almeno {min} Transazioni",
-        "alreadyInGroup": "alcuni Selezionato Transazioni già belong un un gruppo",
+        "nameRequired": "Il nome del gruppo è obbligatorio",
+        "minTransactions": "Seleziona almeno {min} transazioni",
+        "alreadyInGroup": "Alcune transazioni selezionate appartengono già a un gruppo",
         "createFailed": "Impossibile Crea gruppo",
-        "addFailed": "Impossibile Aggiungi Transazioni un gruppo"
+        "addFailed": "Impossibile aggiungere le transazioni al gruppo"
       }
     },
     "planned": {
       "label": "Pianificato",
-      "confirmedLabel": "Confirmed",
+      "confirmedLabel": "Confermata",
       "plannedTooltip": "Transazione pianificata",
-      "expiredTooltip": "Expected {days} giorni fa, nessun corrispondente banca Transazione",
-      "mergedTooltip": "Confirmed da Pianificato voce su {date}"
+      "expiredTooltip": "Prevista {days} giorni fa, nessuna transazione bancaria corrispondente",
+      "mergedTooltip": "Confermata dalla voce pianificata del {date}"
     },
     "table": {
       "columns": {
@@ -174,36 +174,36 @@
         "category": "Categoria",
         "payee": "Beneficiario",
         "amount": "Importo",
-        "refAmount": "Base Importo",
-        "originalAmount": "originale Importo",
+        "refAmount": "Importo base",
+        "originalAmount": "Importo originale",
         "note": "Nota",
         "tags": "Etichette",
-        "categorizationSource": "Categorized da",
+        "categorizationSource": "Categorizzato da",
         "group": "gruppo",
         "refund": "Rimborso",
         "split": "Suddivisione"
       },
-      "outOfWallet": "fuori di wallet",
-      "hint": "fai clic un riga un Visualizza dettagli. Seleziona righe un bulk Modifica.",
+      "outOfWallet": "Fuori dal portafoglio",
+      "hint": "Fai clic su una riga per vedere i dettagli. Seleziona le righe per la modifica in blocco.",
       "emptyTitle": "Nessuna transazione corrispondenza questi filtri",
-      "emptyDescription": "riprova adjusting o resetting il filtri.",
+      "emptyDescription": "Prova a modificare o azzerare i filtri.",
       "columnConfig": {
-        "title": "Tabella Impostazioni",
+        "title": "Impostazioni tabella",
         "columns": "colonne",
-        "visibleCount": "{count} visible",
-        "resetDefaults": "Reimposta un defaults"
+        "visibleCount": "{count} visibili",
+        "resetDefaults": "Ripristina predefiniti"
       },
       "categorizationSourceValues": {
-        "manual": "manuale",
+        "manual": "Manuale",
         "ai": "AI",
         "mcc_rule": "MCC rule",
-        "user_rule": "utente rule",
-        "subscription_rule": "abbonamento rule",
-        "payee_rule": "Beneficiario rule"
+        "user_rule": "Regola utente",
+        "subscription_rule": "Regola abbonamento",
+        "payee_rule": "Regola beneficiario"
       },
       "viewToggle": {
-        "list": "elenco Visualizza",
-        "table": "Tabella Visualizza"
+        "list": "Vista elenco",
+        "table": "Vista tabella"
       },
       "fullscreen": {
         "enter": "Focus mode",
@@ -212,12 +212,12 @@
     },
     "bulkDelete": {
       "button": "Elimina",
-      "externalTooltip": "Selection contiene banca-synced Transazioni, che non può essere eliminato.",
+      "externalTooltip": "La selezione contiene transazioni sincronizzate con la banca, che non possono essere eliminate.",
       "confirmButton": "Elimina",
-      "confirmTitle": "Elimina {count} Transazioni?",
-      "confirmDescription": "Questa azione non può essere annullata. Trasferimenti sarà hai both sides rimosso.",
-      "successMessage": "{count} Transazioni eliminato",
-      "unexpectedError": "Impossibile Elimina Transazioni. Riprova."
+      "confirmTitle": "Eliminare {count} transazioni?",
+      "confirmDescription": "Questa azione non può essere annullata. Per i trasferimenti verranno rimossi entrambi i lati.",
+      "successMessage": "{count} transazioni eliminate",
+      "unexpectedError": "Impossibile eliminare le transazioni. Riprova."
     }
   },
   "records": {
@@ -226,14 +226,14 @@
       "overdueBadge": "Overdue",
       "scheduledBadge": "programmato",
       "payAction": "Mark pagato",
-      "hideToggle": "Nascondi upcoming Pagamenti",
+      "hideToggle": "Nascondi i pagamenti in arrivo",
       "expectedBadge": "Expected",
       "unconfirmedBadge": "Unconfirmed",
-      "morePlans": "+{count} Altro Pianificato",
-      "morePlansAtLeast": "+{count}+ Altro Pianificato",
-      "deletePlanTitle": "Elimina Transazione pianificata?",
+      "morePlans": "+altre {count} pianificate",
+      "morePlansAtLeast": "+oltre {count} pianificate",
+      "deletePlanTitle": "Eliminare la transazione pianificata?",
       "deletePlanDescription": "Questa azione non può essere annullata.",
-      "plansLoadFailed": "non è stato possibile carica Pianificato Transazioni"
+      "plansLoadFailed": "Impossibile caricare le transazioni pianificate"
     }
   }
 }

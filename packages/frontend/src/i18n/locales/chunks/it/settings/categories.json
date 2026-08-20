@@ -2,21 +2,21 @@
   "settings": {
     "categories": {
       "title": "Categorie",
-      "addButton": "Aggiungi Categoria",
-      "empty": "nessun Categorie ancora. Crea Il tuo primo Categoria un Inizia.",
+      "addButton": "Aggiungi categoria",
+      "empty": "Nessuna categoria ancora. Crea la tua prima categoria per iniziare.",
       "delete": {
-        "title": "Elimina Categoria?",
-        "description": "questo sarà definitivamente Elimina \"{name}\". Questa azione non può essere annullata.",
+        "title": "Eliminare la categoria?",
+        "description": "Questo eliminerà definitivamente \"{name}\". Questa azione non può essere annullata.",
         "deleteButton": "Elimina",
         "cancelButton": "Annulla"
       },
       "errors": {
-        "cannotLoad": "Impossibile carica Categorie"
+        "cannotLoad": "Impossibile caricare le categorie"
       },
       "notifications": {
-        "deleteSuccess": "Categoria eliminato",
-        "deleteFailed": "Impossibile Elimina Categoria",
-        "checkFailed": "Impossibile check Categoria"
+        "deleteSuccess": "Categoria eliminata",
+        "deleteFailed": "Impossibile eliminare la categoria",
+        "checkFailed": "Impossibile verificare la categoria"
       }
     }
   }

@@ -113,7 +113,7 @@ import ExternalLink from '@/components/external-link.vue';
 import InputField from '@/components/fields/input-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { useNotificationCenter } from '@/components/notification-center';
-import { useAccountsStore, useOnboardingStore, useUserStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 import { ExternalLinkIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
@@ -192,10 +192,6 @@ const handleSyncAccounts = async () => {
 
     // Refresh accounts store
     await accountsStore.refetchAccounts();
-
-    // Mark onboarding task as complete
-    const onboardingStore = useOnboardingStore();
-    onboardingStore.completeTask('connect-bank');
 
     addSuccessNotification(t('pages.integrations.monobank.syncSuccess', { count: selectedAccountIds.value.length }));
 

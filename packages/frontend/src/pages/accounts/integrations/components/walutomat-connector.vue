@@ -127,7 +127,7 @@ import TextareaField from '@/components/fields/textarea-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Checkbox, type CheckedState } from '@/components/lib/ui/checkbox';
 import { useNotificationCenter } from '@/components/notification-center';
-import { useAccountsStore, useOnboardingStore, useUserStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
@@ -225,9 +225,6 @@ const handleImport = async () => {
     await syncSelectedAccounts(connectionId.value, [...selectedIds.value]);
 
     await accountsStore.refetchAccounts();
-
-    const onboardingStore = useOnboardingStore();
-    onboardingStore.completeTask('connect-bank');
 
     addSuccessNotification(t('pages.integrations.walutomat.importSuccess', { count: selectedIds.value.size }));
 

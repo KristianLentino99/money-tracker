@@ -8,13 +8,11 @@
       "archived": "Archived",
       "manual": "Manual accounts",
       "sharedWithMe": "Shared with me",
-      "vehicles": "Vehicles",
-      "bankConnections": "Bank connections"
+      "vehicles": "Vehicles"
     },
     "empty": {
       "title": "No Accounts Yet",
-      "description": "Connect your bank or create a manual account to start tracking your finances, balances, and transactions.",
-      "connectBank": "Connect Bank Account",
+      "description": "Create a manual account to start tracking your finances, balances, and transactions.",
       "createManual": "Create Manual Account"
     },
     "overview": {
@@ -26,9 +24,6 @@
     },
     "sharedBy": "Shared by {handle}",
     "viaHousehold": "Shared via {handle}'s household",
-    "connect": "Connect",
-    "connectBank": "Connect bank",
-    "noBanksConnected": "No banks connected yet — connect one to sync balances automatically.",
     "reconnect": "Reconnect",
     "manageConnection": "Manage connection",
     "accountsCount": "{count} account | {count} accounts",

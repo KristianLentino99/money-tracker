@@ -150,7 +150,7 @@ import InputField from '@/components/fields/input-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import * as Tooltip from '@/components/lib/ui/tooltip';
 import { useNotificationCenter } from '@/components/notification-center';
-import { useAccountsStore, useOnboardingStore, useUserStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 import { BuildingIcon, ExternalLinkIcon, InfoIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
@@ -223,9 +223,6 @@ const handleImportAccounts = async () => {
     await syncSelectedAccounts(connectionId.value, allAccountIds);
 
     await accountsStore.refetchAccounts();
-
-    const onboardingStore = useOnboardingStore();
-    onboardingStore.completeTask('connect-bank');
 
     addSuccessNotification(t('pages.integrations.lunchflow.importSuccess', { count: allAccountIds.length }));
 

@@ -7,13 +7,11 @@
       "archived": "Archivadas",
       "manual": "Cuentas manuales",
       "sharedWithMe": "Compartidas conmigo",
-      "vehicles": "Vehículos",
-      "bankConnections": "Conexiones bancarias"
+      "vehicles": "Vehículos"
     },
     "empty": {
       "title": "Aún no hay cuentas",
-      "description": "Conecte su banco o cree una cuenta manual para comenzar a hacer seguimiento de sus finanzas, saldos y transacciones.",
-      "connectBank": "Conectar cuenta bancaria",
+      "description": "Cree una cuenta manual para comenzar a hacer seguimiento de sus finanzas, saldos y transacciones.",
       "createManual": "Crear cuenta manual"
     },
     "sharedBy": "Compartida por {handle}",
@@ -26,9 +24,6 @@
       "vehicles": "Vehículos",
       "projected": "Previsto {amount} · {count} movimiento planificado hasta {date} | Previsto {amount} · {count} movimientos planificados hasta {date}"
     },
-    "connect": "Conectar",
-    "connectBank": "Conectar banco",
-    "noBanksConnected": "Aún no hay bancos conectados — conecte uno para sincronizar los saldos automáticamente.",
     "reconnect": "Reconectar",
     "manageConnection": "Gestionar conexión",
     "accountsCount": "{count} cuenta | {count} cuentas",

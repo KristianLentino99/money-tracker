@@ -56,13 +56,10 @@
     "language": "Language",
     "newTransaction": "Add transaction",
     "settings": "Settings",
-    "feedback": "Send feedback",
-    "support": "Support",
     "sync": {
       "syncing": "Syncing",
       "synchronizing": "Synchronizing...",
       "syncedTime": "Synced {time}",
-      "connectBank": "Connect bank",
       "syncingAccounts": "Syncing {count} accounts",
       "stuck": "Sync stuck"
     },
@@ -84,30 +81,6 @@
     "dark": "Dark",
     "system": "System"
   },
-  "feedback": {
-    "dialog": {
-      "title": "Leave feedback",
-      "description": "Tell us what is working and what is not.",
-      "typeLabel": "Type",
-      "typePlaceholder": "Choose a type",
-      "types": {
-        "bug": "Something is broken",
-        "featureRequest": "I want a feature",
-        "other": "Something else"
-      },
-      "messageLabel": "Your feedback",
-      "messagePlaceholder": "What happened, or what would you like to see?",
-      "messageRequired": "Please write a message before sending.",
-      "submit": "Send",
-      "thanks": "Thanks, we read every message.",
-      "unavailable": "Sending is unavailable right now. Use the board below instead.",
-      "or": "or",
-      "board": {
-        "title": "Post it on the public board",
-        "description": "Vote on other people's ideas, see what is already planned, and get a reply on yours."
-      }
-    }
-  },
   "syncStatusTooltip": {
     "title": "Banks connections sync status",
     "syncedSuccessfully": "Synced successfully",
@@ -127,7 +100,6 @@
     "neverSynced": "Never synced",
     "syncNowButton": "Sync Now",
     "noBankAccounts": "No bank accounts connected",
-    "connectButton": "Connect",
     "retrySyncButton": "Retry sync",
     "manageConnectionsButton": "Manage connections",
     "needsReauthTitle": "Connections need reconnecting",
@@ -186,10 +158,6 @@
       "createManualAccount": {
         "title": "Create Manual Account",
         "description": "Track cash, savings, or any account manually"
-      },
-      "connectBank": {
-        "title": "Connect Your Bank",
-        "description": "Automatically sync transactions from your bank"
       },
       "divider": "or import existing data",
       "importFile": {
@@ -272,10 +240,6 @@
           "setup-tag-reminder": {
             "title": "Set up a tag reminder",
             "description": "Get notified about recurring expenses"
-          },
-          "connect-bank": {
-            "title": "Connect a bank account",
-            "description": "Sync transactions automatically"
           },
           "import-csv": {
             "title": "Import from any text source",

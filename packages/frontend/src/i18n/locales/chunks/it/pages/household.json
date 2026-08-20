@@ -2,74 +2,74 @@
   "pages": {
     "household": {
       "title": "Famiglia",
-      "description": "invita trusted people un Azione accesso un tutti il Conti tu propri. membri Visualizza Il tuo Conti e (con scrivi accesso) può registrazione Transazioni su li.",
+      "description": "Invita persone di fiducia a condividere l'accesso a tutti i conti di cui sei proprietario. I membri vedono i tuoi conti e (con accesso in scrittura) possono registrarvi transazioni.",
       "myHousehold": {
-        "title": "My Famiglia",
-        "description": "People qui ottieni accesso un ogni Conto tu propri. per-Conto Azioni sempre override Famiglia accesso."
+        "title": "La mia famiglia",
+        "description": "Le persone qui ottengono accesso a ogni conto di cui sei proprietario. Le condivisioni per singolo conto hanno sempre priorità sull'accesso familiare."
       },
-      "youOwner": "tu — proprietario",
-      "noMembers": "nessun uno ha joined Il tuo Famiglia ancora.",
-      "loadMembersError": "non è stato possibile carica Famiglia membri. riprova refreshing.",
+      "youOwner": "Tu — proprietario",
+      "noMembers": "Nessuno ha ancora aderito alla tua famiglia.",
+      "loadMembersError": "Impossibile caricare i membri della famiglia. Prova ad aggiornare.",
       "permissions": {
-        "read": "Leggi",
-        "write": "scrivi",
-        "manage": "Gestisci"
+        "read": "Lettura",
+        "write": "Scrittura",
+        "manage": "Gestione"
       },
       "writeScope": {
-        "all": "può Modifica qualsiasi Transazione",
-        "own": "può Modifica solo loro propri Transazioni"
+        "all": "Può modificare qualsiasi transazione",
+        "own": "Può modificare solo le proprie transazioni"
       },
       "invite": {
-        "emailLabel": "email",
-        "emailPlaceholder": "person{'@'}example.com",
-        "permissionLabel": "autorizzazione",
-        "writeScopeLabel": "scrivi scope",
-        "submit": "Invia Famiglia invita",
-        "sent": "invito inviata.",
-        "error": "non è stato possibile Invia il invito.",
-        "emailDeliveryFailed": "invito creato, but il email non è stato possibile essere delivered. Puoi invia di nuovo it da il invitations panel."
+        "emailLabel": "Email",
+        "emailPlaceholder": "persona{'@'}esempio.com",
+        "permissionLabel": "Permesso",
+        "writeScopeLabel": "Ambito di scrittura",
+        "submit": "Invia invito alla famiglia",
+        "sent": "Invito inviato.",
+        "error": "Impossibile inviare l'invito.",
+        "emailDeliveryFailed": "Invito creato, ma non è stato possibile consegnare l'email. Puoi inviarlo di nuovo dal pannello degli inviti."
       },
       "revoke": {
         "action": "Rimuovi",
-        "title": "Rimuovi Famiglia membro?",
-        "description": "{handle} sarà lose accesso un ogni Conto in Il tuo Famiglia. per-Conto Azioni (se qualsiasi) sono unaffected.",
+        "title": "Rimuovere il membro della famiglia?",
+        "description": "{handle} perderà l'accesso a ogni conto della tua famiglia. Le condivisioni per singolo conto (se presenti) non sono interessate.",
         "confirm": "Rimuovi",
-        "success": "membro rimosso.",
-        "error": "non è stato possibile Rimuovi questo membro."
+        "success": "Membro rimosso.",
+        "error": "Impossibile rimuovere questo membro."
       },
       "permissionChange": {
-        "setRead": "Make Leggi-solo",
-        "setWrite": "Allow writes",
-        "success": "autorizzazione aggiornato.",
-        "error": "non è stato possibile Aggiorna autorizzazione."
+        "setRead": "Imposta come sola lettura",
+        "setWrite": "Consenti la scrittura",
+        "success": "Permesso aggiornato.",
+        "error": "Impossibile aggiornare il permesso."
       },
       "imIn": {
-        "title": "Households I'm in",
-        "description": "Altro people's households tu've joined. Leaving drops Il tuo accesso un ogni Conto they condiviso questo way.",
-        "empty": "tu haven't joined anyone else's Famiglia.",
-        "unnamedHousehold": "{'@'}{handle}'s Famiglia",
-        "loadError": "non è stato possibile carica il households tu're in. Riprova più tardi."
+        "title": "Famiglie di cui faccio parte",
+        "description": "Famiglie di altre persone a cui hai aderito. Uscendo perderai l'accesso a ogni conto che hanno condiviso in questo modo.",
+        "empty": "Non hai aderito alla famiglia di nessun altro.",
+        "unnamedHousehold": "Famiglia di {'@'}{handle}",
+        "loadError": "Impossibile caricare le famiglie di cui fai parte. Riprova più tardi."
       },
       "leave": {
-        "action": "lasciare",
-        "title": "lasciare questo Famiglia?",
-        "description": "tu'll lose accesso un ogni Conto {owner} Azioni fino a loro Famiglia. per-Conto Azioni (se qualsiasi) sono unaffected.",
-        "confirm": "lasciare",
-        "success": "tu left il Famiglia.",
-        "error": "non è stato possibile lasciare il Famiglia."
+        "action": "Esci",
+        "title": "Uscire da questa famiglia?",
+        "description": "Perderai l'accesso a ogni conto che {owner} condivide tramite la propria famiglia. Le condivisioni per singolo conto (se presenti) non sono interessate.",
+        "confirm": "Esci",
+        "success": "Hai lasciato la famiglia.",
+        "error": "Impossibile uscire dalla famiglia."
       },
       "pending": {
-        "badge": "in sospeso",
-        "resend": "invia di nuovo",
+        "badge": "In sospeso",
+        "resend": "Invia di nuovo",
         "cancel": "Annulla",
-        "cancelTitle": "Annulla invito?",
-        "cancelDescription": "Annulla il in sospeso invito inviata un {email}? They sarà nessun longer essere able un accetta it.",
+        "cancelTitle": "Annullare l'invito?",
+        "cancelDescription": "Annullare l'invito in sospeso inviato a {email}? Non potranno più accettarlo.",
         "cancelConfirm": "Annulla invito",
-        "cancelSuccess": "invito annullato.",
-        "cancelError": "Impossibile Annulla invito.",
-        "resendSuccess": "invito resent.",
-        "resendError": "Impossibile invia di nuovo invito.",
-        "resendDeliveryFailed": "invito aggiornato, but il email Impossibile essere inviata. Riprova più tardi."
+        "cancelSuccess": "Invito annullato.",
+        "cancelError": "Impossibile annullare l'invito.",
+        "resendSuccess": "Invito inviato di nuovo.",
+        "resendError": "Impossibile inviare di nuovo l'invito.",
+        "resendDeliveryFailed": "Invito aggiornato, ma non è stato possibile inviare l'email. Riprova più tardi."
       }
     }
   }

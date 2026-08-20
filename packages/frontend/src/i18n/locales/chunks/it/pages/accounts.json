@@ -2,19 +2,17 @@
   "accounts": {
     "title": "Conti",
     "createAccount": "Crea conto",
-    "createVehicle": "Aggiungi Veicolo",
+    "createVehicle": "Aggiungi veicolo",
     "actionsMenu": "Azioni del conto",
     "sections": {
       "archived": "Archiviati",
       "manual": "Conti manuali",
-      "sharedWithMe": "condiviso con me",
-      "vehicles": "Veicoli",
-      "bankConnections": "Connessioni bancarie"
+      "sharedWithMe": "Condiviso con me",
+      "vehicles": "Veicoli"
     },
     "empty": {
       "title": "Nessun conto",
-      "description": "Collega la tua banca oppure crea un conto manuale per iniziare a tenere sotto controllo finanze, saldi e transazioni.",
-      "connectBank": "Collega un conto bancario",
+      "description": "Crea un conto manuale per iniziare a tenere sotto controllo finanze, saldi e transazioni.",
       "createManual": "Crea un conto manuale"
     },
     "overview": {
@@ -24,14 +22,11 @@
       "vehicles": "Veicoli",
       "projected": "Previsti {amount} · {count} elemento pianificato fino al {date} | Previsti {amount} · {count} elementi pianificati fino al {date}"
     },
-    "sharedBy": "condiviso da {handle}",
-    "viaHousehold": "condiviso tramite la famiglia di {handle}",
-    "connect": "Collega",
-    "connectBank": "Collega banca",
-    "noBanksConnected": "Nessuna banca collegata — collegane una per sincronizzare automaticamente i saldi.",
+    "sharedBy": "Condiviso da {handle}",
+    "viaHousehold": "Condiviso tramite la famiglia di {handle}",
     "reconnect": "Ricollega",
     "manageConnection": "Gestisci connessione",
-    "accountsCount": "{count} Conto | {count} Conti",
+    "accountsCount": "{count} conto | {count} conti",
     "inGroupSubtitle": "in {name}",
     "sort": {
       "auto": "Automatico",
@@ -40,7 +35,7 @@
       "ariaLabel": "Ordina i conti"
     },
     "status": {
-      "active": "attivo",
+      "active": "Attivo",
       "expiringSoon": "In scadenza",
       "expired": "Scaduto"
     }

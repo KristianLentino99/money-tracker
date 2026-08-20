@@ -1,12 +1,12 @@
 {
   "settings": {
     "subscriptions": {
-      "title": "programmato Pagamenti",
+      "title": "Pagamenti programmati",
       "defaultAutoRecord": {
-        "label": "Predefinito Registrazione automatica su Nuovo programmato Pagamenti",
-        "help": "quando Abilitato, il Crea-abbonamento form's Registrazione automatica toggle starts su da Predefinito. Puoi sempre override it per abbonamento.",
-        "successNotification": "Setting salvato",
-        "errorNotification": "Impossibile Salva setting"
+        "label": "Registrazione automatica predefinita per i nuovi pagamenti programmati",
+        "help": "Quando abilitata, l'interruttore di registrazione automatica nel modulo di creazione abbonamento parte attivo per impostazione predefinita. Puoi sempre modificarlo per ogni singolo abbonamento.",
+        "successNotification": "Impostazione salvata",
+        "errorNotification": "Impossibile salvare l'impostazione"
       }
     }
   }

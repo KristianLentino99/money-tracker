@@ -86,30 +86,6 @@
             :projected-total="projectedTotal"
           />
 
-          <AccountsSection :title="$t('accounts.sections.bankConnections')" :count="bankConnectionsCount">
-            <template #action>
-              <UiButton size="sm" @click="openAddIntegrationDialog">
-                <LinkIcon class="size-4" />
-                <span class="@[30rem]/accounts-page:hidden">{{ $t('accounts.connect') }}</span>
-                <span class="hidden @[30rem]/accounts-page:inline">{{ $t('accounts.connectBank') }}</span>
-              </UiButton>
-            </template>
-
-            <div
-              v-if="connectionRows.length"
-              class="border-border/60 bg-card divide-border/60 divide-y overflow-hidden rounded-xl border"
-            >
-              <BankConnectionRow
-                v-for="row in sortedConnectionRows"
-                :key="row.connection.id"
-                :connection="row.connection"
-                :accounts="row.accounts"
-                :folder-group-names="folderGroupNames"
-              />
-            </div>
-            <p v-else class="text-muted-foreground px-1 py-2 text-sm">{{ $t('accounts.noBanksConnected') }}</p>
-          </AccountsSection>
-
           <AccountsSection v-if="manualItems.length" :title="$t('accounts.sections.manual')" :count="manualCount">
             <div class="border-border/60 bg-card divide-border/60 divide-y overflow-hidden rounded-xl border">
               <template v-for="item in manualItems" :key="item.id">
@@ -183,7 +159,7 @@
       <template v-else>
         <div class="py-12 text-center">
           <div class="mb-4">
-            <LandmarkIcon class="text-muted-foreground mx-auto size-12" />
+            <WalletIcon class="text-muted-foreground mx-auto size-12" />
           </div>
           <h3 class="text-foreground mb-2 text-lg font-medium">{{ $t('accounts.empty.title') }}</h3>
           <p class="text-muted-foreground mb-6">
@@ -191,11 +167,6 @@
           </p>
 
           <div class="mx-auto flex max-w-sm flex-col gap-3">
-            <UiButton size="lg" @click="openAddIntegrationDialog">
-              <LinkIcon class="size-5" />
-              {{ $t('accounts.empty.connectBank') }}
-            </UiButton>
-
             <CreateAccountDialog>
               <UiButton variant="outline">
                 <PlusIcon class="size-4" />
@@ -205,19 +176,12 @@
           </div>
         </div>
       </template>
-
-      <AddIntegrationDialog
-        v-model:open="isDialogOpen"
-        :providers="providers || []"
-        @integration-added="handleIntegrationAdded"
-      />
     </div>
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { loadAccountGroups } from '@/api/account-groups';
-import { type BankConnection, type BankProvider, listConnections, listProviders } from '@/api/bank-data-providers';
 import { getVehicles } from '@/api/vehicles';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import type { AccountGroups } from '@/common/types/models';
@@ -232,15 +196,12 @@ import GroupTotal from '@/components/sidebar/accounts-view/group-total.vue';
 import { collectGroupAccounts } from '@/components/sidebar/accounts-view/helpers/account-totals';
 import { useBaseBalanceTotals } from '@/composable/use-base-balance-totals';
 import { useProjectedBalance } from '@/composable/use-projected-balance';
-import AddIntegrationDialog from '@/pages/accounts/integrations/components/add-integration-dialog.vue';
 import { useAccountsStore } from '@/stores';
 import { ACCOUNT_CATEGORIES, ACCOUNT_STATUSES, AccountModel } from '@bt/shared/types';
-import { useQuery, useQueryClient } from '@tanstack/vue-query';
-import { CarIcon, ChevronDownIcon, EllipsisVerticalIcon, LandmarkIcon, LinkIcon, PlusIcon } from '@lucide/vue';
+import { useQuery } from '@tanstack/vue-query';
+import { CarIcon, ChevronDownIcon, EllipsisVerticalIcon, PlusIcon, WalletIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, ref } from 'vue';
 
 import { computeAccountsOverview } from './accounts-overview-totals';
 import AccountGroupRow from './components/account-group-row.vue';
@@ -248,18 +209,11 @@ import AccountListRow from './components/account-list-row.vue';
 import AccountsOverviewCard from './components/accounts-overview-card.vue';
 import AccountsSection from './components/accounts-section.vue';
 import AccountsSortMenu from './components/accounts-sort-menu.vue';
-import BankConnectionRow from './components/bank-connection-row.vue';
-import { collectManualAccounts, mapFolderGroupNames, pruneBankLinkedAccounts } from './manual-accounts-split';
 import { useAccountsSort } from './use-accounts-sort';
-
-const route = useRoute();
-const router = useRouter();
-const queryClient = useQueryClient();
-const { t } = useI18n();
 
 const isActionsMenuOpen = ref(false);
 
-const { sortConnectionRows, sortLeafAccounts, sortVehicles, sortManual } = useAccountsSort();
+const { sortLeafAccounts, sortVehicles, sortManual } = useAccountsSort();
 
 const { accounts, activeAccounts, isAccountsFetched } = storeToRefs(useAccountsStore());
 
@@ -275,27 +229,9 @@ const { data: vehicles } = useQuery({
   queryFn: getVehicles,
 });
 
-const { data: providers } = useQuery({
-  queryKey: VUE_QUERY_CACHE_KEYS.bankProviders,
-  queryFn: listProviders,
-  staleTime: Infinity,
-  placeholderData: [] as BankProvider[],
-});
-
-const { data: bankConnections, isFetched: isConnectionsFetched } = useQuery({
-  queryKey: VUE_QUERY_CACHE_KEYS.bankConnections,
-  queryFn: listConnections,
-  staleTime: Infinity,
-  placeholderData: [] as BankConnection[],
-});
-
 const { baseCurrencyCode, includeCreditLimit, sumBaseBalance } = useBaseBalanceTotals();
 
-// Gate the skeleton on the groups and connections queries too: until they resolve every
-// account would render as ungrouped and Bank connections would flash "no banks connected".
-const isInitialLoading = computed(
-  () => !isAccountsFetched.value || !isGroupsFetched.value || !isConnectionsFetched.value,
-);
+const isInitialLoading = computed(() => !isAccountsFetched.value || !isGroupsFetched.value);
 
 // id -> account map for every account nested anywhere in the group tree, so the
 // ungrouped list can exclude anything already shown under a group.
@@ -315,36 +251,7 @@ const accountsInGroups = computed(() => {
   return flatten(accountGroups.value ?? []);
 });
 
-// Bank connections are driven by the accounts' own connection link, not group membership:
-// regrouping a synced account must never move it out of this section (or hide the connection).
-const bankAccountsByConnectionId = computed(() => {
-  const map = new Map<string, AccountModel[]>();
-  for (const account of activeAccounts.value ?? []) {
-    if (!account.bankDataProviderConnectionId || account.share?.isOwner === false) continue;
-    const bucket = map.get(account.bankDataProviderConnectionId);
-    if (bucket) bucket.push(account);
-    else map.set(account.bankDataProviderConnectionId, [account]);
-  }
-  return map;
-});
-
-// Connections with no active accounts (nothing selected, or everything archived/unlinked)
-// are skipped rather than shown as "0 accounts" rows.
-const connectionRows = computed(() =>
-  (bankConnections.value ?? [])
-    .map((connection) => ({ connection, accounts: bankAccountsByConnectionId.value.get(connection.id) ?? [] }))
-    .filter((row) => row.accounts.length > 0),
-);
-
-// Manual section shows only manual accounts: folder groups pruned of bank-linked accounts
-// (those render under their connection above), dropped entirely when nothing manual remains.
-const manualFolderGroups = computed(() =>
-  pruneBankLinkedAccounts({
-    groups: (accountGroups.value ?? []).filter((group) => group.bankDataProviderConnectionId == null),
-  }),
-);
-
-const folderGroupNames = computed(() => mapFolderGroupNames({ groups: accountGroups.value ?? [] }));
+const manualFolderGroups = computed(() => accountGroups.value ?? []);
 
 const vehicleAccountIds = computed(() => new Set((vehicles.value ?? []).map((v) => v.accountId)));
 
@@ -384,19 +291,10 @@ const moneyAccounts = computed(() =>
 // section, its count, its total, and the overview all agree and no row null-derefs.
 const vehiclesWithAccount = computed(() => (vehicles.value ?? []).filter((v) => v.account != null));
 
-// Loose rows of the Manual section: ungrouped manual accounts, plus manual accounts a
-// user placed inside a connection-managed group (that group only renders under Bank
-// connections implicitly, so without this rescue they would vanish from the page).
-const manualLooseAccounts = computed(() => [
-  ...ungroupedAccounts.value.filter((account) => !account.bankDataProviderConnectionId),
-  ...collectManualAccounts({
-    groups: (accountGroups.value ?? []).filter((group) => group.bankDataProviderConnectionId != null),
-  }),
-]);
+const manualLooseAccounts = computed(() => ungroupedAccounts.value);
 
 // Apply the shared sort choice to each section. Manual folds folder-groups and loose
 // accounts into one tagged list so the chosen order can interleave them.
-const sortedConnectionRows = computed(() => sortConnectionRows(connectionRows.value));
 const manualItems = computed(() => sortManual(manualFolderGroups.value, manualLooseAccounts.value));
 const sortedVehicles = computed(() => sortVehicles(vehiclesWithAccount.value));
 const sortedShared = computed(() => sortLeafAccounts(sharedAccounts.value));
@@ -419,13 +317,6 @@ const { aggregateFor } = useProjectedBalance();
 const plannedTotals = computed(() => aggregateFor({ accountIds: moneyAccounts.value.map((account) => account.id) }));
 const projectedTotal = computed(() => overview.value.total + plannedTotals.value.refPlannedDelta);
 
-const connectionAccountsCount = computed(() => connectionRows.value.reduce((sum, row) => sum + row.accounts.length, 0));
-
-const bankConnectionsCount = computed<string | undefined>(() => {
-  if (!connectionRows.value.length) return undefined;
-  return `${connectionRows.value.length} · ${t('accounts.accountsCount', { count: connectionAccountsCount.value })}`;
-});
-
 const manualCount = computed(() => {
   const inFolders = manualFolderGroups.value.reduce((sum, group) => sum + collectGroupAccounts({ group }).length, 0);
   return inFolders + manualLooseAccounts.value.length;
@@ -434,26 +325,4 @@ const manualCount = computed(() => {
 const vehiclesBaseTotal = computed(() => sumBaseBalance({ accounts: vehicleAccounts.value }));
 
 const isArchivedOpen = ref(false);
-
-const isDialogOpen = ref(false);
-
-const openAddIntegrationDialog = () => {
-  isDialogOpen.value = true;
-};
-
-const handleIntegrationAdded = () => {
-  isDialogOpen.value = false;
-  queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.bankConnections });
-};
-
-// Deep link from onboarding / dashboard: `?connect=bank` opens the add-bank dialog,
-// then the param is stripped so a refresh or back-nav doesn't reopen it.
-onMounted(() => {
-  if (route.query.connect === 'bank') {
-    isDialogOpen.value = true;
-    const nextQuery = { ...route.query };
-    delete nextQuery.connect;
-    router.replace({ query: nextQuery });
-  }
-});
 </script>

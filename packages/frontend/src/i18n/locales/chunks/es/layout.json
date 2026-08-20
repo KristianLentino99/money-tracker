@@ -56,13 +56,10 @@
     "language": "Idioma",
     "newTransaction": "Nueva transacción",
     "settings": "Ajustes",
-    "feedback": "Enviar comentarios",
-    "support": "Apoyar",
     "sync": {
       "syncing": "Sincronizando",
       "synchronizing": "Sincronizando...",
       "syncedTime": "Sincronizado {time}",
-      "connectBank": "Conectar banco",
       "syncingAccounts": "Sincronizando {count} cuentas",
       "stuck": "Sincronización bloqueada"
     },
@@ -84,30 +81,6 @@
     "dark": "Oscuro",
     "system": "Sistema"
   },
-  "feedback": {
-    "dialog": {
-      "title": "Dejar comentarios",
-      "description": "Cuéntenos qué funciona y qué no.",
-      "typeLabel": "Tipo",
-      "typePlaceholder": "Elija un tipo",
-      "types": {
-        "bug": "Algo no funciona",
-        "featureRequest": "Quiero una función",
-        "other": "Otra cosa"
-      },
-      "messageLabel": "Su comentario",
-      "messagePlaceholder": "¿Qué ocurrió o qué le gustaría ver?",
-      "messageRequired": "Escriba un mensaje antes de enviarlo.",
-      "submit": "Enviar",
-      "thanks": "Gracias, leemos todos los mensajes.",
-      "unavailable": "El envío no está disponible en este momento. Use el tablero de abajo en su lugar.",
-      "or": "o",
-      "board": {
-        "title": "Publíquelo en el tablero público",
-        "description": "Vote las ideas de otras personas, vea qué está ya planificado y reciba una respuesta a la suya."
-      }
-    }
-  },
   "syncStatusTooltip": {
     "title": "Estado de sincronización de conexiones bancarias",
     "syncedSuccessfully": "Sincronizado correctamente",
@@ -127,7 +100,6 @@
     "neverSynced": "Nunca sincronizado",
     "syncNowButton": "Sincronizar ahora",
     "noBankAccounts": "No hay cuentas bancarias conectadas",
-    "connectButton": "Conectar",
     "retrySyncButton": "Reintentar sincronización",
     "manageConnectionsButton": "Gestionar conexiones",
     "needsReauthTitle": "Las conexiones necesitan reconectarse",
@@ -186,10 +158,6 @@
       "createManualAccount": {
         "title": "Crear cuenta manual",
         "description": "Lleve un seguimiento manual de efectivo, ahorros o cualquier cuenta"
-      },
-      "connectBank": {
-        "title": "Conectar su banco",
-        "description": "Sincronice automáticamente las transacciones de su banco"
       },
       "divider": "o importe datos existentes",
       "importFile": {
@@ -272,10 +240,6 @@
           "setup-tag-reminder": {
             "title": "Configurar un recordatorio de etiqueta",
             "description": "Reciba notificaciones sobre gastos recurrentes"
-          },
-          "connect-bank": {
-            "title": "Conectar una cuenta bancaria",
-            "description": "Sincronice transacciones automáticamente"
           },
           "import-csv": {
             "title": "Importar desde cualquier fuente de texto",

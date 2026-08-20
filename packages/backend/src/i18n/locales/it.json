@@ -31,7 +31,7 @@
   },
   "transactions": {
     "notFound": "Transazione non trovata.",
-    "missingRequiredFields": "Mancano alcuni campi obbligatori: destinationAmount, destinationAccountId.",
+    "missingRequiredFields": "Manca uno dei campi obbligatori: destinationAmount, destinationAccountId.",
     "destinationAmountRequiredCrossCurrency": "destinationAmount è obbligatorio quando si modifica l'importo di un trasferimento in valuta diversa.",
     "refundAndTransferNotAllowed": "Non è consentito creare una transazione che sia contemporaneamente un rimborso e un trasferimento.",
     "notOwnTransaction": "Puoi modificare o eliminare solo le transazioni che hai creato su questo conto condiviso.",
@@ -57,7 +57,7 @@
     "linkCannotFind": "Impossibile trovare la transazione di base o quella opposta.",
     "linkPlannedNotAllowed": "Una transazione pianificata non può essere collegata come trasferimento.",
     "linkSplitTransactionNotAllowed": "Una transazione con suddivisioni non può essere collegata come trasferimento.",
-    "invalidTagIds": "Uno o più ID di etichette non sono validi o non appartengono a questo utente.",
+    "invalidTagIds": "Uno o più ID di etichette non sono validi o non appartengono all'utente.",
     "cannotEditPortfolioLinkedTransaction": "Impossibile modificare una transazione collegata a un portafoglio. Scollegala prima.",
     "refFieldsRequiredForTransferToPortfolio": "Per le transazioni di trasferimento verso un portafoglio è necessario impostare la valuta e l'importo di riferimento.",
     "vehicleAccountReadonly": "Questo conto tiene traccia di un veicolo. Il suo valore può essere modificato solo dalla pagina del veicolo.",
@@ -151,7 +151,7 @@
     "currencyNotFound": "Valuta non trovata.",
     "transactionNotFound": "Transazione di investimento non trovata.",
     "userBaseCurrencyNotFound": "Valuta principale dell'utente non trovata.",
-    "insufficientSharesToSell": "Azioni insufficienti da vendere. Dopo questo aggiornamento avresti {{adjustedQuantity}} azioni, ma stai tentando di venderne {{sellQuantity}}.",
+    "insufficientSharesToSell": "Non hai abbastanza azioni da vendere. Dopo questo aggiornamento avresti {{adjustedQuantity}} azioni, ma stai tentando di venderne {{sellQuantity}}.",
     "sourceAndDestinationMustDiffer": "I portafogli di origine e destinazione devono essere diversi.",
     "transferAmountMustBePositive": "L'importo del trasferimento deve essere maggiore di zero.",
     "sourcePortfolioNotFound": "Portafoglio di origine non trovato.",
@@ -174,7 +174,7 @@
     "unlinkPaymentNotFound": "Pagamento del prestito non trovato.",
     "unlinkPaymentInvalidSelection": "Questa transazione non è un pagamento di questo prestito.",
     "correctionAsOfBeforeStartDate": "currentBalanceAsOf non può essere precedente alla data di inizio del prestito.",
-    "correctionOverpay": "Il saldo corretto comporterebbe un pagamento in eccesso di {{overpayAmount}} sul prestito: i pagamenti per un totale di {{paymentsTotal}} sono datati il o dopo {{asOfDate}}."
+    "correctionOverpay": "Il saldo corretto comporterebbe un pagamento in eccesso di {{overpayAmount}} sul prestito: i pagamenti per un totale di {{paymentsTotal}} sono in data pari o successiva a {{asOfDate}}."
   },
   "errors": {
     "connectionNotFound": "Connessione non trovata.",
@@ -261,7 +261,7 @@
       "invalidCredentialsFormat": "Formato delle credenziali SimpleFIN non valido.",
       "invalidSetupToken": "Token di configurazione SimpleFIN non valido o già utilizzato. Generane uno nuovo da SimpleFIN Bridge e riprova.",
       "invalidAccessUrl": "URL di accesso SimpleFIN non valido o non autorizzato.",
-      "claimFailed": "Impossibile riscattare un URL di accesso SimpleFIN dal token di configurazione.",
+      "claimFailed": "Impossibile ottenere un URL di accesso SimpleFIN dal token di configurazione.",
       "accountNotFound": "Conto SimpleFIN non trovato.",
       "accountNoExternalId": "Questo conto non è collegato a un conto SimpleFIN.",
       "accountAbsentFromResponse": "SimpleFIN non ha restituito dati per questo conto nell'ultima sincronizzazione. Il conto potrebbe essere stato disabilitato dalla banca: prova a sincronizzare di nuovo o ricollegalo se il problema persiste.",
@@ -326,7 +326,7 @@
     "baseCurrencyExists": "La valuta principale esiste già.",
     "currencyCodeNotExist": "La valuta con il codice fornito non esiste.",
     "currencyNotExist": "La valuta con codice \"{{currencyCode}}\" non esiste.",
-    "cannotDeleteDefaultCurrency": "Non è consentito eliminare la valuta predefinita. Rimuovi prima l'impostazione predefinita.",
+    "cannotDeleteDefaultCurrency": "Non è consentito eliminare la valuta predefinita. Toglila prima come valuta predefinita.",
     "cannotDeleteCurrencyWithAccounts": "Non è consentito eliminare una valuta associata a uno o più conti. Elimina prima i conti. Nomi dei conti: \"{{accountNames}}\".",
     "cannotDeleteCurrencyWithInvestments": "Non è consentito eliminare la valuta \"{{currencyCode}}\" mentre è utilizzata da posizioni di investimento. Elimina prima quelle posizioni.",
     "defaultCurrencyNotPresent": "Impossibile eliminare la valuta: la valuta predefinita non è presente nel sistema."

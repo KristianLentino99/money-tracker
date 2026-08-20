@@ -235,7 +235,7 @@ import InputField from '@/components/fields/input-field.vue';
 import TextareaField from '@/components/fields/textarea-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { useNotificationCenter } from '@/components/notification-center';
-import { useAccountsStore, useOnboardingStore, useUserStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 import { TriangleAlertIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
@@ -423,10 +423,6 @@ const handleSyncAccounts = async () => {
 
     // Refresh accounts store
     await accountsStore.refetchAccounts();
-
-    // Mark onboarding task as complete
-    const onboardingStore = useOnboardingStore();
-    onboardingStore.completeTask('connect-bank');
 
     addSuccessNotification(
       t('pages.integrations.enableBankingConnector.syncSuccess', { count: selectedAccountIds.value.length }),

@@ -3,108 +3,108 @@
     "importExport": {
       "budgetBakersWalletImport": {
         "pageTitle": "Importa da Wallet (BudgetBakers)",
-        "pageDescription": "Importa Il tuo Transazioni exported da il Wallet app da BudgetBakers.",
+        "pageDescription": "Importa le transazioni esportate dall'app Wallet di BudgetBakers.",
         "fileUpload": {
-          "stepTitle": "Carica Il tuo Wallet file CSV",
-          "description": "Carica uno o Altro Wallet CSV Esporta file un Importa transazioni. tutti file deve avere il same colonne.",
-          "maxSize": "massimo file size: 10 MB",
-          "parsing": "Parsing…",
+          "stepTitle": "Carica il tuo file CSV di Wallet",
+          "description": "Carica uno o più file CSV esportati da Wallet per importare le transazioni. Tutti i file devono avere le stesse colonne.",
+          "maxSize": "Dimensione massima del file: 10 MB",
+          "parsing": "Analisi in corso…",
           "errors": {
             "invalidFormatNamed": "\"{name}\" non è un file CSV.",
-            "parseFailed": "Impossibile parse file. per favore check il formato e Riprova.",
+            "parseFailed": "Impossibile analizzare il file. Controlla il formato e riprova.",
             "merge": {
-              "emptySelection": "Seleziona almeno uno file CSV",
-              "fileReadFailed": "non è stato possibile Leggi \"{file}\"",
-              "fileEmpty": "\"{file}\" è empty",
-              "fileNoDataRows": "\"{file}\" ha Nessun dato righe",
-              "headerMismatch": "colonne in \"{file}\" non corrispondenza il primo file. tutti file deve avere il same colonne in il same order.",
-              "forbiddenHeader": "\"{file}\" uses un reserved colonna Nome",
-              "tooManyRows": "Selezionato file Totale Altro di {max} righe. Rimuovi alcuni file o righe e Riprova.",
-              "parseError": "non è stato possibile parse \"{file}\". Make sure it's un valido CSV."
+              "emptySelection": "Seleziona almeno un file CSV",
+              "fileReadFailed": "Impossibile leggere \"{file}\"",
+              "fileEmpty": "\"{file}\" è vuoto",
+              "fileNoDataRows": "\"{file}\" non contiene righe di dati",
+              "headerMismatch": "Le colonne di \"{file}\" non corrispondono al primo file. Tutti i file devono avere le stesse colonne nello stesso ordine.",
+              "forbiddenHeader": "\"{file}\" usa un nome di colonna riservato",
+              "tooManyRows": "I file selezionati totalizzano più di {max} righe. Rimuovi alcuni file o righe e riprova.",
+              "parseError": "Impossibile analizzare \"{file}\". Verifica che sia un CSV valido."
             }
           },
           "continue": "Continua"
         },
         "preview": {
-          "accountsHelper": "Configura come ogni detected Conto sarà essere handled durante Importa.",
+          "accountsHelper": "Configura come verrà gestito ogni conto rilevato durante l'importazione.",
           "accounts": "Conti",
           "transactions": "Transazioni",
-          "rowPrefix": "riga {rowIndex}: "
+          "rowPrefix": "Riga {rowIndex}: "
         },
         "accountRow": {
-          "transactionsCount": "{count} Transazioni | {count} Transazione | {count} Transazioni",
-          "modeLabel": "azione",
+          "transactionsCount": "{count} transazioni | {count} transazione | {count} transazioni",
+          "modeLabel": "Azione",
           "modePlaceholder": "Seleziona azione",
-          "modeCreateNew": "Crea nuovo Conto",
-          "modeLinkExisting": "collega un esistente Conto",
-          "currentBalanceLabel": "Attuale Saldo (Facoltativo)",
-          "currentBalancePlaceholder": "e.g. 1234.56",
-          "currentBalanceHint": "lasciare blank un Inizio da il sum di importato Transazioni.",
-          "linkTargetLabel": "esistente Conto",
-          "linkTargetPlaceholder": "Seleziona Conto",
-          "keepBalanceNote": "il esistente Conto's Attuale Saldo sarà essere preserved. Cronologia sarà essere Indietro-filled."
+          "modeCreateNew": "Crea nuovo conto",
+          "modeLinkExisting": "Collega a conto esistente",
+          "currentBalanceLabel": "Saldo attuale (facoltativo)",
+          "currentBalancePlaceholder": "ad es. 1234,56",
+          "currentBalanceHint": "Lascia vuoto per partire dalla somma delle transazioni importate.",
+          "linkTargetLabel": "Conto esistente",
+          "linkTargetPlaceholder": "Seleziona conto",
+          "keepBalanceNote": "Il saldo attuale del conto esistente verrà mantenuto. La cronologia verrà inserita retroattivamente."
         },
         "execute": {
-          "starting": "Starting Importa…",
+          "starting": "Avvio dell'importazione…",
           "progressCount": "{processed} / {total}",
-          "statusQueued": "Queued",
-          "statusRunning": "importazione…",
-          "statusCompleted": "Complete",
-          "statusFailed": "non riuscito",
-          "failed": "Importa non riuscito.",
-          "partialImportNote": "alcuni righe potrebbe hai già been importato prima di questo failure. Re-importazione potrebbe Crea duplicati."
+          "statusQueued": "In coda",
+          "statusRunning": "Importazione in corso…",
+          "statusCompleted": "Completata",
+          "statusFailed": "Non riuscita",
+          "failed": "Importazione non riuscita.",
+          "partialImportNote": "Alcune righe potrebbero essere già state importate prima di questo errore. Reimportarle potrebbe creare duplicati."
         },
         "done": {
-          "successTitle": "Importa complete",
-          "successDescription": "Il tuo Wallet data ha been correttamente importato.",
-          "partialTitle": "importato con {count} errore(s)",
-          "partialDescription": "alcuni righe erano importato correttamente, but others encountered errori.",
-          "allFailedTitle": "Importa non riuscito",
-          "allFailedDescription": "nessun righe erano importato. revisione il errori sotto e Riprova.",
-          "accountsCreated": "Conti creato",
-          "accountsLinked": "Conti collegato",
-          "categoriesCreated": "Categorie creato",
-          "tagsCreated": "Etichette creato",
-          "transactionsImported": "Transazioni importato",
-          "transfersImported": "Trasferimenti importato",
-          "outOfWalletImported": "fuori-di-wallet importato",
-          "mergedIntoPlanned": "Merged in Pianificato",
-          "duplicatesSkipped": "duplicati skipped",
-          "errorsTitle": "{count} riga(s) non riuscito | {count} riga non riuscito | {count} righe non riuscito",
-          "errorsOverflow": "+{count} Altro",
-          "balanceWarningTitle": "alcuni Conto saldi potrebbe essere incorrect",
-          "balanceWarningBody": "We non è stato possibile Reimposta il Saldo su uno o Altro esistente Conti dopo Importa. revisione il affected Conti.",
-          "viewTransactions": "Visualizza Transazioni",
+          "successTitle": "Importazione completata",
+          "successDescription": "I dati di Wallet sono stati importati correttamente.",
+          "partialTitle": "Importazione completata con {count} errore/i",
+          "partialDescription": "Alcune righe sono state importate correttamente, altre hanno riscontrato errori.",
+          "allFailedTitle": "Importazione non riuscita",
+          "allFailedDescription": "Nessuna riga è stata importata. Rivedi gli errori qui sotto e riprova.",
+          "accountsCreated": "Conti creati",
+          "accountsLinked": "Conti collegati",
+          "categoriesCreated": "Categorie create",
+          "tagsCreated": "Etichette create",
+          "transactionsImported": "Transazioni importate",
+          "transfersImported": "Trasferimenti importati",
+          "outOfWalletImported": "Fuori portafoglio importati",
+          "mergedIntoPlanned": "Uniti a transazioni pianificate",
+          "duplicatesSkipped": "Duplicati saltati",
+          "errorsTitle": "{count} riga/righe non riuscite | {count} riga non riuscita | {count} righe non riuscite",
+          "errorsOverflow": "+altre {count}",
+          "balanceWarningTitle": "Alcuni saldi dei conti potrebbero non essere corretti",
+          "balanceWarningBody": "Non è stato possibile azzerare il saldo di uno o più conti esistenti dopo l'importazione. Rivedi i conti interessati.",
+          "viewTransactions": "Visualizza transazioni",
           "importAnother": "Importa un altro file"
         },
         "stepper": {
           "steps": {
             "upload": "Carica",
-            "resolve": "Resolve",
-            "review": "revisione",
+            "resolve": "Abbina",
+            "review": "Revisione",
             "results": "Fatto"
           }
         },
         "resolve": {
-          "resolvedCounterWord": "resolved",
+          "resolvedCounterWord": "risolti",
           "accounts": {
             "sectionTitle": "Conti",
-            "currentBalanceLabel": "Attuale Saldo (Facoltativo)",
-            "currentBalancePlaceholder": "lasciare blank un Usa importato Totale",
-            "willCreateHint": "sarà Crea un Nuovo {currency} Conto"
+            "currentBalanceLabel": "Saldo attuale (facoltativo)",
+            "currentBalancePlaceholder": "Lascia vuoto per usare il totale importato",
+            "willCreateHint": "Verrà creato un nuovo conto in {currency}"
           },
           "categories": {
             "sectionTitle": "Categorie"
           },
           "quickActions": {
-            "mapExactMatches": "mappa exact corrisponde",
-            "createNewForUnmatched": "Crea nuovo per unmatched",
+            "mapExactMatches": "Abbina corrispondenze esatte",
+            "createNewForUnmatched": "Crea nuovo per i non abbinati",
             "reset": "Reimposta",
             "tooltips": {
-              "mapExactMatchesAccounts": "collega ogni Conto whose Nome exactly corrisponde un esistente Conto",
-              "mapExactMatchesCategories": "collega ogni Categoria whose Nome exactly corrisponde un esistente Categoria",
-              "createNewForUnmatched": "imposta tutti ancora-unresolved righe un Crea un Nuovo voce",
-              "reset": "Cancella tutti choices e auto-corrispondenza da Nome di nuovo"
+              "mapExactMatchesAccounts": "Collega ogni conto il cui nome corrisponde esattamente a un conto esistente",
+              "mapExactMatchesCategories": "Collega ogni categoria il cui nome corrisponde esattamente a una categoria esistente",
+              "createNewForUnmatched": "Imposta tutte le righe non ancora risolte per creare una nuova voce",
+              "reset": "Cancella tutte le scelte e riesegue l'abbinamento automatico per nome"
             }
           },
           "footer": {
@@ -114,17 +114,17 @@
         },
         "review": {
           "transactions": "Transazioni",
-          "transfersDetected": "Trasferimenti detected",
-          "outOfWallet": "fuori di wallet",
-          "duplicatesSkipped": "duplicati skipped",
-          "willImport": "sarà Importa",
-          "warningsTitle": "{count} avviso(s)",
-          "rowPrefix": "riga {rowIndex}:",
-          "duplicatesTitle": "{count} possible duplicate(s)",
-          "duplicatesHint": "Checked righe sarà essere importato anyway; unchecked duplicati sono skipped.",
+          "transfersDetected": "Trasferimenti rilevati",
+          "outOfWallet": "Fuori portafoglio",
+          "duplicatesSkipped": "Duplicati saltati",
+          "willImport": "Verranno importate",
+          "warningsTitle": "{count} avviso/i",
+          "rowPrefix": "Riga {rowIndex}:",
+          "duplicatesTitle": "{count} possibile/i duplicato/i",
+          "duplicatesHint": "Le righe selezionate verranno comunque importate; i duplicati deselezionati vengono saltati.",
           "back": "Indietro",
-          "importButton": "Importa {count} Transazioni",
-          "importing": "importazione…"
+          "importButton": "Importa {count} transazioni",
+          "importing": "Importazione in corso…"
         }
       }
     }

@@ -7,7 +7,7 @@
     </div>
 
     <!-- Primary Options -->
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid gap-3">
       <CreateAccountDialog>
         <button
           class="border-border hover:border-foreground/25 hover:bg-accent/50 group flex w-full items-start gap-4 rounded-lg border bg-transparent p-5 text-left transition-all"
@@ -23,21 +23,6 @@
           </div>
         </button>
       </CreateAccountDialog>
-
-      <button
-        class="border-border hover:border-foreground/25 hover:bg-accent/50 group flex w-full items-start gap-4 rounded-lg border bg-transparent p-5 text-left transition-all"
-        @click="navigateToIntegrations"
-      >
-        <div class="bg-primary/10 group-hover:bg-primary/15 rounded-lg p-2.5 transition-colors">
-          <LandmarkIcon class="text-primary-text size-5" />
-        </div>
-        <div>
-          <h3 class="font-medium">{{ $t('dashboard.onboarding.connectBank.title') }}</h3>
-          <p class="text-muted-foreground mt-1 text-sm leading-relaxed">
-            {{ $t('dashboard.onboarding.connectBank.description') }}
-          </p>
-        </div>
-      </button>
     </div>
 
     <!-- Divider -->
@@ -70,14 +55,10 @@
 <script setup lang="ts">
 import CreateAccountDialog from '@/components/dialogs/create-account-dialog.vue';
 import { ROUTES_NAMES } from '@/routes';
-import { ArrowRightIcon, FileUpIcon, LandmarkIcon, WalletIcon } from '@lucide/vue';
+import { ArrowRightIcon, FileUpIcon, WalletIcon } from '@lucide/vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
-const navigateToIntegrations = () => {
-  router.push({ name: ROUTES_NAMES.accounts, query: { connect: 'bank' } });
-};
 
 const navigateToImport = () => {
   router.push({ name: ROUTES_NAMES.settingsDataManagement });

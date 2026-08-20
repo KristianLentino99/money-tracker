@@ -1,10 +1,7 @@
 <template>
   <div ref="headerRef">
     <DemoBanner />
-    <div
-      ref="headerBarRef"
-      class="shadow-header border-border @container/header-bar flex items-center justify-between border-b px-4 py-2 sm:px-6"
-    >
+    <div class="shadow-header border-border flex items-center justify-between border-b px-4 py-2 sm:px-6">
       <div class="flex items-center gap-4">
         <template v-if="isMobileView">
           <Sheet.Sheet :open="isMobileSheetOpen" @update:open="isMobileSheetOpen = $event">
@@ -44,41 +41,6 @@
       </div>
 
       <div class="ml-auto flex items-center gap-2">
-        <DesktopOnlyTooltip :content="$t('header.feedback')" :disabled="!isHeaderBarCompact">
-          <span class="inline-flex">
-            <FeedbackDialog>
-              <Button
-                variant="secondary"
-                :size="isHeaderBarCompact ? 'icon' : 'sm'"
-                :class="['flex items-center gap-1.5', { 'feedback-pulse': isFeedbackPulsing }]"
-                :aria-label="$t('header.feedback')"
-                @mouseenter="onFeedbackEnter"
-                @click="onFeedbackClick"
-              >
-                <FeedbackIcon class="text-primary-text size-4" />
-                <span class="hidden @[890px]/header-bar:inline">{{ $t('header.feedback') }}</span>
-              </Button>
-            </FeedbackDialog>
-          </span>
-        </DesktopOnlyTooltip>
-
-        <DesktopOnlyTooltip
-          v-if="isSupportButtonVisible"
-          :content="$t('header.support')"
-          :disabled="!isHeaderBarCompact"
-        >
-          <Button
-            variant="secondary"
-            :size="isHeaderBarCompact ? 'icon' : 'sm'"
-            class="flex items-center gap-1.5"
-            :aria-label="$t('header.support')"
-            @click="openSupport"
-          >
-            <HeartIcon class="text-heart size-4 fill-current" />
-            <span class="hidden @[890px]/header-bar:inline">{{ $t('header.support') }}</span>
-          </Button>
-        </DesktopOnlyTooltip>
-
         <template v-if="accountsNeedingRelink.length > 0">
           <AccountsRelinkWarning />
         </template>
@@ -139,8 +101,6 @@
 
 <script setup lang="ts">
 import AccountsRelinkWarning from '@/components/accounts-relink-warning.vue';
-import FeedbackIcon from '@/components/common/icons/feedback-icon.vue';
-import FeedbackDialog from '@/components/dialogs/feedback-dialog.vue';
 import DemoBanner from '@/components/demo/demo-banner.vue';
 import ManageTransactionDialog from '@/components/dialogs/manage-transaction/index.vue';
 import Button from '@/components/lib/ui/button/Button.vue';
@@ -155,9 +115,7 @@ import { isMobileSheetOpen } from '@/composable/global-state/mobile-sheet';
 import { useCategorizationStatus } from '@/composable/use-categorization-status';
 import { useCssVarFromElementSize } from '@/composable/use-css-var-from-element-size';
 import { useDateLocale } from '@/composable/use-date-locale';
-import { useFeedbackAttention } from '@/composable/use-feedback-attention';
 import { useIdleEnabled } from '@/composable/use-idle-enabled';
-import { useSupportButton } from '@/composable/use-support-button';
 import { useSyncStatus } from '@/composable/use-sync-status';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
 import { ROUTES_NAMES } from '@/routes/constants';
@@ -165,7 +123,6 @@ import { useAccountsStore } from '@/stores';
 import {
   AlertTriangleIcon,
   CloudCheckIcon,
-  HeartIcon,
   ImportIcon,
   MenuIcon,
   PlusIcon,
@@ -173,7 +130,6 @@ import {
   SettingsIcon,
   SparklesIcon,
 } from '@lucide/vue';
-import { useResizeObserver } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -191,25 +147,6 @@ const route = useRoute();
 const isMobileView = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile);
 const showConfirmDialog = ref(false);
 const isPopoverOpen = ref(false);
-
-const { isPulsing: isFeedbackPulsing, onEnter: onFeedbackEnter, onClick: onFeedbackClick } = useFeedbackAttention();
-
-// Mirror the `@[890px]/header-bar` container query that toggles the feedback
-// button's label — tooltip is only useful in the icon-only state.
-const headerBarRef = ref<HTMLElement | null>(null);
-const isHeaderBarCompact = ref(true);
-useResizeObserver(headerBarRef, ([entry]) => {
-  if (!entry) return;
-  isHeaderBarCompact.value = entry.contentRect.width < 890;
-});
-
-const DONATE_URL = 'https://donatr.ee/letehaha';
-
-const { isSupportButtonVisible } = useSupportButton();
-
-const openSupport = () => {
-  window.open(DONATE_URL, '_blank', 'noopener,noreferrer');
-};
 
 const syncStatus = useSyncStatus();
 
@@ -236,7 +173,7 @@ const syncButtonLabel = computed(() => {
       ? t('header.sync.syncedTime', { time: lastSyncRelativeTime.value })
       : t('header.sync.synchronizing');
   }
-  return t('header.sync.connectBank');
+  return t('header.sync.synchronizing');
 });
 
 // Auto-check sync once accounts have loaded and no connection needs re-linking.

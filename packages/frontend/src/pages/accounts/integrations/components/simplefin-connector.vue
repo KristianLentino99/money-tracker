@@ -121,7 +121,7 @@ import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Callout } from '@/components/lib/ui/callout';
 import { useNotificationCenter } from '@/components/notification-center';
 import { useSyncStatus } from '@/composable/use-sync-status';
-import { useAccountsStore, useOnboardingStore, useUserStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 import { useQueryClient } from '@tanstack/vue-query';
 import { ExternalLinkIcon, InfoIcon } from '@lucide/vue';
@@ -242,7 +242,6 @@ const handleImportAccounts = () => {
     .then(async () => {
       await accountsStore.refetchAccounts();
       invalidateBankConnectionQueries();
-      useOnboardingStore().completeTask('connect-bank');
     })
     .catch(async (error) => {
       await accountsStore.refetchAccounts();

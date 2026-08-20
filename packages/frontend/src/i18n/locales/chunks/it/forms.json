@@ -32,7 +32,7 @@
         "toggleLabel": "Specifica l'importo effettivo in contanti",
         "toggleHint": "Usa questa opzione quando l'operazione viene regolata in una valuta diversa oppure conosci solo il totale e vuoi calcolare automaticamente la commissione.",
         "currencyLabel": "Valuta del pagamento",
-        "currencyPlaceholder": "Seleziona Valuta",
+        "currencyPlaceholder": "Seleziona valuta",
         "totalPaidLabel": "Totale pagato",
         "totalReceivedLabel": "Totale ricevuto",
         "totalPlaceholder": "ad es. 1700",
@@ -60,7 +60,7 @@
       "nameRequired": "Il nome è obbligatorio",
       "typeLabel": "Tipo di portafoglio",
       "typePlaceholder": "Seleziona il tipo di portafoglio",
-      "descriptionLabel": "Descrizione (Facoltativo)",
+      "descriptionLabel": "Descrizione (facoltativo)",
       "descriptionPlaceholder": "Una breve descrizione di questo portafoglio...",
       "displayCurrencyLabel": "Valuta di visualizzazione",
       "displayCurrencyPlaceholder": "Seleziona la valuta di visualizzazione",
@@ -77,7 +77,7 @@
     "portfolioTransfer": {
       "transferTypeLabel": "Tipo di trasferimento",
       "transferTypes": {
-        "portfolioToPortfolio": "a un altro Portafoglio",
+        "portfolioToPortfolio": "A un altro portafoglio",
         "portfolioToAccount": "A un conto",
         "accountToPortfolio": "A un portafoglio"
       },
@@ -91,24 +91,24 @@
       "toAccountLabel": "Al conto",
       "toAccountPlaceholder": "Seleziona il conto di destinazione",
       "currencyLabel": "Valuta",
-      "currencyPlaceholder": "Seleziona Valuta",
+      "currencyPlaceholder": "Seleziona valuta",
       "amountLabel": "Importo",
       "amountLabelWithCurrency": "Importo ({currency})",
       "amountPlaceholder": "0.00",
       "dateLabel": "Data",
-      "descriptionLabel": "Descrizione (Facoltativo)",
+      "descriptionLabel": "Descrizione (facoltativo)",
       "descriptionPlaceholder": "Aggiungi una nota su questo trasferimento...",
       "cancelButton": "Annulla",
       "submitButton": "Trasferimento",
       "submitButtonLoading": "Elaborazione...",
       "confirmDialog": {
-        "title": "Conferma Trasferimento",
+        "title": "Conferma trasferimento",
         "description": "Verrà creato un {amount} di {action} da {from} a {to}",
         "actionTransfer": "Trasferimento",
         "actionWithdrawal": "prelievo",
         "actionDeposit": "deposito",
         "cancelButton": "Annulla",
-        "confirmButton": "Conferma Trasferimento"
+        "confirmButton": "Conferma trasferimento"
       },
       "validation": {
         "required": "Questo campo è obbligatorio",
@@ -127,7 +127,7 @@
       "nameLabel": "Nome del conto",
       "namePlaceholder": "Nome del conto",
       "currencyLabel": "Valuta",
-      "currencyPlaceholder": "Seleziona Valuta",
+      "currencyPlaceholder": "Seleziona valuta",
       "addCurrencyButton": "Aggiungi nuova valuta +",
       "initialBalanceLabel": "Saldo iniziale",
       "initialBalancePlaceholder": "Saldo iniziale",
@@ -160,7 +160,7 @@
       "amountLabel": "Importo",
       "amountPlaceholder": "Inserisci l'importo",
       "currencyLabel": "Valuta",
-      "currencyPlaceholder": "Seleziona Valuta",
+      "currencyPlaceholder": "Seleziona valuta",
       "dateLabel": "Data",
       "descriptionLabel": "Descrizione",
       "adjustmentLabel": "Questa è una rettifica del saldo",
@@ -170,7 +170,7 @@
       "submitButton": "Invia",
       "submitButtonLoading": "Invio...",
       "confirmDialog": {
-        "title": "Conferma Trasferimento",
+        "title": "Conferma trasferimento",
         "description": "Verrà creato un {amount} di {action} da {from} a {to}",
         "cancelButton": "Annulla",
         "confirmButton": "Conferma",
@@ -193,13 +193,13 @@
     "exchangeCurrency": {
       "fromCurrencyLabel": "Dalla valuta",
       "toCurrencyLabel": "Alla valuta",
-      "currencyPlaceholder": "Seleziona Valuta",
+      "currencyPlaceholder": "Seleziona valuta",
       "fromAmountLabel": "Importo di origine",
       "toAmountLabel": "Importo di destinazione",
       "amountPlaceholder": "0.00",
       "maxButton": "Massimo: {amount}",
       "dateLabel": "Data del cambio",
-      "descriptionLabel": "Descrizione (Facoltativo)",
+      "descriptionLabel": "Descrizione (facoltativo)",
       "descriptionPlaceholder": "Aggiungi una nota su questo cambio...",
       "cancelButton": "Annulla",
       "submitButton": "Cambia",
@@ -230,7 +230,7 @@
       "salvageFloorPctLabel": "Valore residuo minimo (% del prezzo di acquisto)",
       "currentMileageLabel": "Chilometraggio attuale (facoltativo)",
       "currentMileagePlaceholder": "ad es. 45000",
-      "submitButton": "Aggiungi Veicolo",
+      "submitButton": "Aggiungi veicolo",
       "submitButtonLoading": "Aggiunta...",
       "notifications": {
         "success": "Veicolo aggiunto",
@@ -251,13 +251,13 @@
       "loanTypeLabel": "Tipo di prestito",
       "loanTypePlaceholder": "Seleziona il tipo di prestito",
       "currencyLabel": "Valuta",
-      "currencyPlaceholder": "Seleziona Valuta",
+      "currencyPlaceholder": "Seleziona valuta",
       "originalPrincipalLabel": "Capitale originario",
       "originalPrincipalPlaceholder": "ad es. 320000",
       "initialBalanceLabel": "Saldo residuo attuale",
       "initialBalancePlaceholder": "Quanto devi oggi",
       "interestRateLabel": "Tasso di interesse (APR %)",
-      "interestRatePlaceholder": "e.g. 6.25",
+      "interestRatePlaceholder": "ad es. 6,25",
       "minPaymentEstimateTooltip": "Stimato in base al capitale, al tasso d'interesse annuale e alla durata usando la formula standard di ammortamento.",
       "minPaymentApplyEstimateAriaLabel": "Usa il pagamento minimo stimato",
       "termMonthsLabel": "Durata (mesi)",
@@ -307,8 +307,8 @@
   "fields": {
     "categorySelect": {
       "noCategoriesFound": "Nessuna categoria trovata",
-      "selectCategoryLabel": "Seleziona Categoria",
-      "searchCategoryLabel": "Cerca Categoria",
+      "selectCategoryLabel": "Seleziona categoria",
+      "searchCategoryLabel": "Cerca categoria",
       "clearSearchLabel": "Cancella ricerca",
       "clearSelectionLabel": "Cancella selezione",
       "searchPlaceholder": "Cerca...",
@@ -330,7 +330,7 @@
       "noResults": "Nessun risultato trovato."
     },
     "comboboxCategories": {
-      "searchPlaceholder": "Cerca Categorie...",
+      "searchPlaceholder": "Cerca categorie...",
       "unselectedPlaceholder": "Tutte le categorie",
       "selectedOne": "1 categoria selezionata",
       "selectedMany": "{n} categorie selezionate"
@@ -339,17 +339,17 @@
       "ungrouped": "Senza gruppo"
     },
     "tagSelect": {
-      "placeholder": "Seleziona Etichette...",
+      "placeholder": "Seleziona etichette...",
       "noTagsAvailable": "Nessuna etichetta disponibile"
     },
     "categoryMultiSelect": {
-      "placeholder": "Seleziona Categorie...",
-      "searchPlaceholder": "Cerca Categorie...",
+      "placeholder": "Seleziona categorie...",
+      "searchPlaceholder": "Cerca categorie...",
       "noCategoriesFound": "Nessuna categoria trovata"
     },
     "payeeMultiSelect": {
       "label": "Tutti i beneficiari",
-      "searchPlaceholder": "Cerca Beneficiari",
+      "searchPlaceholder": "Cerca beneficiari",
       "selectedMany": "{n} beneficiari selezionati",
       "noResults": "Nessun beneficiario trovato",
       "unknownPayee": "Beneficiario sconosciuto",
@@ -357,9 +357,9 @@
     },
     "payeeSelect": {
       "placeholder": "Seleziona un beneficiario",
-      "searchPlaceholder": "Cerca Beneficiari…",
+      "searchPlaceholder": "Cerca beneficiari…",
       "empty": "Nessun beneficiario",
-      "createAffordance": "Crea Beneficiario \"{name}\"",
+      "createAffordance": "Crea beneficiario \"{name}\"",
       "createNew": "Crea nuovo beneficiario",
       "sharedOwnerPayeesLoadError": "Impossibile caricare i beneficiari del conto condiviso. Riprova."
     }

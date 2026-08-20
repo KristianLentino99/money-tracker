@@ -1,34 +1,34 @@
 {
   "pages": {
     "sharedWithMe": {
-      "title": "condiviso con me",
-      "loadError": "Impossibile carica condiviso resources.",
+      "title": "Condivisi con me",
+      "loadError": "Impossibile caricare le risorse condivise.",
       "empty": {
-        "title": "Nothing condiviso con tu ancora",
-        "description": "quando someone Azioni un Conto con tu, it'll Mostra su qui."
+        "title": "Nessuna condivisione ancora",
+        "description": "Quando qualcuno condivide un conto con te, apparirà qui."
       },
       "sections": {
         "account": "Conti",
-        "household": "Households",
-        "budget": "budget condiviso con tu"
+        "household": "Famiglie",
+        "budget": "Budget condivisi con te"
       },
-      "sharedBy": "condiviso da {handle}",
-      "viaHousehold": "Via {handle} Famiglia",
-      "unnamedResource": "Untitled",
+      "sharedBy": "Condiviso da {handle}",
+      "viaHousehold": "Tramite la famiglia di {handle}",
+      "unnamedResource": "Senza titolo",
       "permissions": {
-        "read": "Leggi",
-        "write": "scrivi",
-        "manage": "Gestisci"
+        "read": "Lettura",
+        "write": "Scrittura",
+        "manage": "Gestione"
       },
-      "leave": "lasciare",
-      "leaveTitle": "lasciare Azione?",
-      "leaveDescription": "tu'll lose accesso un {resource} owned da {owner}. il proprietario non sarà essere notified.",
-      "leaveConfirm": "lasciare",
-      "leaveSuccess": "tu've left il Azione.",
-      "leaveError": "Impossibile lasciare il Azione.",
+      "leave": "Esci",
+      "leaveTitle": "Uscire dalla condivisione?",
+      "leaveDescription": "Perderai l'accesso a {resource} di proprietà di {owner}. Il proprietario non riceverà una notifica.",
+      "leaveConfirm": "Esci",
+      "leaveSuccess": "Hai lasciato la condivisione.",
+      "leaveError": "Impossibile uscire dalla condivisione.",
       "pending": {
-        "heading": "in sospeso invitations",
-        "review": "revisione"
+        "heading": "Inviti in sospeso",
+        "review": "Rivedi"
       }
     }
   }

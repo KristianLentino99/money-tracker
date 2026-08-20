@@ -7,13 +7,11 @@
       "archived": "Diarsipkan",
       "manual": "Akun manual",
       "sharedWithMe": "Dibagikan dengan saya",
-      "vehicles": "Kendaraan",
-      "bankConnections": "Koneksi Bank"
+      "vehicles": "Kendaraan"
     },
     "empty": {
       "title": "Belum Ada Akun",
-      "description": "Hubungkan bank Anda atau buat akun manual untuk mulai melacak keuangan, saldo, dan transaksi Anda.",
-      "connectBank": "Hubungkan Akun Bank",
+      "description": "Buat akun manual untuk mulai melacak keuangan, saldo, dan transaksi Anda.",
       "createManual": "Buat Akun Manual"
     },
     "sharedBy": "Dibagikan oleh {handle}",
@@ -27,9 +25,6 @@
       "vehicles": "Kendaraan",
       "projected": "Proyeksi {amount} · {count} entri terencana hingga {date} | Proyeksi {amount} · {count} entri terencana hingga {date}"
     },
-    "connect": "Hubungkan",
-    "connectBank": "Hubungkan bank",
-    "noBanksConnected": "Belum ada bank yang terhubung — hubungkan satu untuk menyinkronkan saldo secara otomatis.",
     "reconnect": "Hubungkan Kembali",
     "manageConnection": "Kelola koneksi",
     "accountsCount": "{count} akun | {count} akun",

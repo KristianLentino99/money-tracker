@@ -1,6 +1,5 @@
 import { config } from '@/common/config';
 import type { DemoBlockedFeature, DemoEndReason } from '@/common/const/demo';
-import type { FeedbackType } from '@/components/dialogs/feedback-submission';
 import type { AIKeyProvider } from '@bt/shared/types';
 import posthog from 'posthog-js';
 import type { Router } from 'vue-router';
@@ -63,17 +62,7 @@ type AnalyticsEvent =
   // Dashboard customization
   | { event: 'dashboard_edit_opened' }
   | { event: 'dashboard_layout_saved'; properties: { widget_count: number } }
-  | { event: 'dashboard_widget_config_saved'; properties: { widget_id: string } }
-  // Feedback
-  | { event: 'feedback_button_clicked' }
-  | { event: 'feedback_button_hovered' }
-  | {
-      event: 'user_feedback_submitted';
-      properties: {
-        feedback_type: FeedbackType;
-        message: string;
-      };
-    };
+  | { event: 'dashboard_widget_config_saved'; properties: { widget_id: string } };
 
 // ============================================
 // Core Functions

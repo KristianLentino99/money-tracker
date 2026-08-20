@@ -76,18 +76,12 @@
       <template v-else>{{ $t('syncStatusTooltip.neverSynced') }}</template>
     </div>
 
-    <!-- Empty state: no bank accounts -->
+    <!-- Empty state -->
     <div
       v-if="!isSyncing && accountStatuses.length === 0 && connectionsNeedingReauth.length === 0"
       class="text-muted-foreground flex flex-col items-center gap-2 py-4 text-center text-sm"
     >
-      <Building2 class="size-10 opacity-50" />
       <span>{{ $t('syncStatusTooltip.noBankAccounts') }}</span>
-      <Button as-child size="sm" class="mt-4 w-full">
-        <RouterLink :to="{ name: ROUTES_NAMES.accounts, query: { connect: 'bank' } }">{{
-          $t('syncStatusTooltip.connectButton')
-        }}</RouterLink>
-      </Button>
     </div>
 
     <!-- Scrollable account list (accounts in progress, queued, or failed). Cap
@@ -207,7 +201,6 @@ import { ROUTES_NAMES } from '@/routes/constants';
 import type { AiCategorizationProgressPayload } from '@bt/shared/types';
 import {
   AlertTriangleIcon,
-  Building2,
   CheckCircle2,
   Circle,
   Clock,

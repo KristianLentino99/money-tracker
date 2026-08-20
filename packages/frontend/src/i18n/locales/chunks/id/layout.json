@@ -56,13 +56,10 @@
     "language": "Bahasa",
     "newTransaction": "Transaksi Baru",
     "settings": "Pengaturan",
-    "feedback": "Kirim masukan",
-    "support": "Dukungan",
     "sync": {
       "syncing": "Menyinkronkan",
       "synchronizing": "Menyinkronkan...",
       "syncedTime": "Disinkronkan {time}",
-      "connectBank": "Hubungkan bank",
       "syncingAccounts": "Menyinkronkan {count} akun",
       "stuck": "Sinkronisasi macet"
     },
@@ -84,30 +81,6 @@
     "dark": "Gelap",
     "system": "Sistem"
   },
-  "feedback": {
-    "dialog": {
-      "title": "Kirim masukan",
-      "description": "Beri tahu kami apa yang berjalan baik dan apa yang tidak.",
-      "typeLabel": "Jenis",
-      "typePlaceholder": "Pilih jenis",
-      "types": {
-        "bug": "Ada yang rusak",
-        "featureRequest": "Saya ingin fitur baru",
-        "other": "Hal lainnya"
-      },
-      "messageLabel": "Masukan Anda",
-      "messagePlaceholder": "Apa yang terjadi, atau apa yang ingin Anda lihat?",
-      "messageRequired": "Tulis pesan sebelum mengirim.",
-      "submit": "Kirim",
-      "thanks": "Terima kasih, kami membaca setiap pesan.",
-      "unavailable": "Pengiriman sedang tidak tersedia. Gunakan papan di bawah ini sebagai gantinya.",
-      "or": "atau",
-      "board": {
-        "title": "Posting di papan publik",
-        "description": "Beri suara pada ide orang lain, lihat apa yang sudah direncanakan, dan dapatkan balasan untuk ide Anda."
-      }
-    }
-  },
   "syncStatusTooltip": {
     "title": "Status sinkronisasi koneksi bank",
     "syncedSuccessfully": "Berhasil disinkronkan",
@@ -127,7 +100,6 @@
     "neverSynced": "Belum pernah disinkronkan",
     "syncNowButton": "Sinkronkan Sekarang",
     "noBankAccounts": "Tidak ada rekening bank yang terhubung",
-    "connectButton": "Hubungkan",
     "retrySyncButton": "Ulangi sinkronisasi",
     "manageConnectionsButton": "Kelola koneksi",
     "needsReauthTitle": "Koneksi perlu disambungkan ulang",
@@ -186,10 +158,6 @@
       "createManualAccount": {
         "title": "Buat Akun Manual",
         "description": "Lacak uang tunai, tabungan, atau akun apa pun secara manual"
-      },
-      "connectBank": {
-        "title": "Hubungkan Bank Anda",
-        "description": "Sinkronkan transaksi secara otomatis dari bank Anda"
       },
       "divider": "atau impor data yang ada",
       "importFile": {
@@ -272,10 +240,6 @@
           "setup-tag-reminder": {
             "title": "Siapkan pengingat tag",
             "description": "Dapatkan pemberitahuan tentang pengeluaran berulang"
-          },
-          "connect-bank": {
-            "title": "Hubungkan rekening bank",
-            "description": "Sinkronkan transaksi secara otomatis"
           },
           "import-csv": {
             "title": "Impor dari sumber teks apa pun",

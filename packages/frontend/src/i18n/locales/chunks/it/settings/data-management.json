@@ -82,10 +82,10 @@
           "tooLarge": "I tuoi dati sono troppo grandi per una singola esportazione. Contatta il supporto."
         },
         "dateRange": {
-          "label": "Intervallo di data (Facoltativo)",
+          "label": "Intervallo di date (facoltativo)",
           "helper": "Solo alcune tabelle degli eventi (transazioni, cronologia dei saldi e attività di investimento) vengono filtrate. Conti, categorie e altre tabelle di riferimento restano complete.",
           "placeholder": "Sempre",
-          "clear": "Cancella Intervallo di data"
+          "clear": "Cancella intervallo di date"
         },
         "listDescription": "Scarica un file ZIP per fogli di calcolo, imposte o migrazioni"
       }

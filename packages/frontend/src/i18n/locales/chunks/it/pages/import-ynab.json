@@ -3,7 +3,7 @@
     "importExport": {
       "ynabImport": {
         "pageTitle": "Importa da YNAB",
-        "pageDescription": "Carica l'esportazione Register.csv o Register.tsv di YNAB per importare conti, transazioni, categorie, beneficiari ed etichette in MoneyMatter.",
+        "pageDescription": "Carica il file Register.csv o Register.tsv esportato da YNAB per importare conti, transazioni, categorie, beneficiari ed etichette in MoneyMatter.",
         "stepper": {
           "steps": {
             "upload": "Carica",
@@ -13,41 +13,41 @@
         },
         "fileUpload": {
           "stepTitle": "Trascina qui il tuo Register.csv o Register.tsv",
-          "description": "YNAB → budget → Esporta budget → decomprimi → usa il file Register.csv o Register.tsv.",
+          "description": "YNAB → Budget → Esporta budget → decomprimi → usa il file Register.csv o Register.tsv.",
           "maxSize": "Fino a 10 MB.",
-          "parsing": "Parsing…",
+          "parsing": "Analisi in corso…",
           "continueToPreview": "Continua",
           "errors": {
-            "invalidFormat": "per favore Carica un .csv o .file TSV."
+            "invalidFormat": "Carica un file .csv o .tsv."
           }
         },
         "preview": {
-          "emptyList": "Niente da importare qui.",
+          "emptyList": "Non c'è nulla da importare qui.",
           "accounts": "Conti",
           "transactions": "Transazioni",
           "dateRange": "Intervallo: {from} → {to}",
           "accountsHelper": "Conferma la valuta per ogni conto YNAB.",
           "warningsTitle": "Avvisi",
-          "rowPrefix": "riga {rowIndex}:",
+          "rowPrefix": "Riga {rowIndex}:",
           "startOver": "Ricomincia",
-          "continueToImport": "Inizia importazione"
+          "continueToImport": "Avvia importazione"
         },
         "accountRow": {
-          "transactionsCount": "{count} Transazioni",
+          "transactionsCount": "{count} transazioni",
           "startingBalance": "Saldo iniziale",
           "currencyPlaceholder": "USD",
           "currencyLabel": "Valuta",
           "currencyInvalid": "Inserisci un codice valuta di 3 lettere (ad es. USD)",
-          "autoDetected": "Rilevata automaticamente: {code}"
+          "autoDetected": "rilevata automaticamente: {code}"
         },
         "execute": {
           "starting": "Avvio dell'importazione…",
           "progressCount": "{processed} / {total}",
           "statusQueued": "In coda",
-          "statusRunning": "importazione…",
-          "statusCompleted": "Completato",
-          "statusFailed": "Non riuscito",
-          "failed": "Non è stato possibile completare l'importazione."
+          "statusRunning": "Importazione in corso…",
+          "statusCompleted": "Fatto",
+          "statusFailed": "Non riuscita",
+          "failed": "Impossibile completare l'importazione."
         },
         "done": {
           "successTitle": "Importazione completata",
@@ -59,8 +59,8 @@
           "transactionsImported": "Transazioni importate",
           "transfersImported": "Trasferimenti importati",
           "splitsDetected": "Gruppi di suddivisioni rilevati",
-          "errorsTitle": "Impossibile importare {count} righe",
-          "viewTransactions": "Visualizza Transazioni",
+          "errorsTitle": "Importazione non riuscita per {count} righe",
+          "viewTransactions": "Visualizza transazioni",
           "importAnother": "Importa un altro file"
         }
       }

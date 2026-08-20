@@ -47,19 +47,19 @@
         "skipped": "Saltato"
       },
       "selectField": {
-        "clearSelection": "Cancella Selezione"
+        "clearSelection": "Cancella selezione"
       }
     },
     "errors": {
       "copyToClipboardFailed": "Impossibile copiare negli appunti"
     },
     "notifications": {
-      "subscriptionCurrencyNotConnected": "Il riepilogo degli abbonamenti non può convertire {currencies} nella tua valuta principale. Collega la valuta in Impostazioni → Valute.",
+      "subscriptionCurrencyNotConnected": "Il riepilogo degli abbonamenti non può convertire {currencies} nella tua valuta principale. Collega la valuta in Impostazioni → valute.",
       "backgroundJobFailed": "Un processo in background non è riuscito mentre eri assente: {error}"
     },
     "labels": {
-      "email": "email",
-      "password": "password",
+      "email": "Email",
+      "password": "Password",
       "system": "sistema",
       "unknown": "Sconosciuto",
       "total": "Totale"
@@ -69,9 +69,9 @@
       "password": "La tua password"
     },
     "dialogs": {
-      "createAccount": "Crea Conto",
-      "createVehicle": "Aggiungi Veicolo",
-      "editVehicle": "Modifica Veicolo"
+      "createAccount": "Crea conto",
+      "createVehicle": "Aggiungi veicolo",
+      "editVehicle": "Modifica veicolo"
     },
     "accountCategories": {
       "general": "Generale",
@@ -115,8 +115,8 @@
     },
     "aiFeatures": {
       "categorization": {
-        "name": "Transazione Categorizzazione",
-        "description": "Categorizza automaticamente le transazioni in base alla descrizione e tutto’esercente"
+        "name": "Categorizzazione delle transazioni",
+        "description": "Categorizza automaticamente le transazioni in base alla descrizione e all'esercente"
       },
       "statementParsing": {
         "name": "Analizzatore di estratti conto",
@@ -129,7 +129,7 @@
     },
     "transactions": {
       "delete": {
-        "success": "rimosso correttamente",
+        "success": "Rimosso correttamente",
         "error": "Impossibile eliminare la transazione!"
       },
       "submit": {
@@ -145,15 +145,15 @@
     },
     "outOfWallet": "Fuori portafoglio",
     "dateSelector": {
-      "dialogTitle": "Intervallo di Data",
+      "dialogTitle": "Intervallo di date",
       "dueDate": "Scadenza",
       "quickSelect": "Selezione rapida",
       "apply": "Applica",
       "periodTypes": {
-        "day": "giorno",
+        "day": "Giorno",
         "month": "Mese",
-        "quarter": "Quarter",
-        "halfYear": "Half-Anno",
+        "quarter": "Trimestre",
+        "halfYear": "Semestre",
         "year": "Anno"
       },
       "filterModes": {
@@ -164,31 +164,31 @@
       },
       "currentMonth": "Mese corrente",
       "placeholders": {
-        "day": "riprova: 2025-03-15, 03/15/2025",
-        "month": "riprova: Jan 2025, 03/2025",
-        "quarter": "riprova: Q1, Q4 2025",
-        "halfYear": "riprova: H1, H2 2025",
-        "year": "riprova: 2025, 2024",
-        "default": "riprova: 2025, Q4, Jan 2025"
+        "day": "Prova: 2025-03-15, 03/15/2025",
+        "month": "Prova: Jan 2025, 03/2025",
+        "quarter": "Prova: Q1, Q4 2025",
+        "halfYear": "Prova: H1, H2 2025",
+        "year": "Prova: 2025, 2024",
+        "default": "Prova: 2025, Q4, Jan 2025"
       }
     },
     "appUpdate": {
       "title": "Aggiornamento disponibile",
-      "description": "A Nuovo Versione è ready. Ricarica a ottieni il più recente improvements.",
+      "description": "È disponibile una nuova versione. Ricarica per ottenere gli ultimi miglioramenti.",
       "reload": "Ricarica"
     },
     "resourceLease": {
       "activeLabel": "Sessione attiva",
       "expiredLabel": "Sessione scaduta",
-      "defaultResourceLabel": "questa risorsa",
-      "activeTooltip": "{resource} è being kept su il server, e about {duration} di inactivity è consentito. Mantieni working e it stays disponibile.",
-      "countingDownTooltip": "{resource} è released in {time} because tu're inattivo. Interact con il Pagina a Mantieni it.",
-      "cappedTooltip": "{resource} è released in {time}. il massimo sessione length ha been reached, so questo può nessun longer essere extended.",
-      "expiredTooltip": "{resource} ha been released da il server. inizio di nuovo a Continua.",
+      "defaultResourceLabel": "Questa risorsa",
+      "activeTooltip": "{resource} viene mantenuto sul server ed è consentita circa {duration} di inattività. Continua a lavorare e resterà disponibile.",
+      "countingDownTooltip": "{resource} verrà rilasciato tra {time} perché sei inattivo. Interagisci con la pagina per mantenerlo.",
+      "cappedTooltip": "{resource} verrà rilasciato tra {time}. È stata raggiunta la durata massima della sessione, quindi non può più essere estesa.",
+      "expiredTooltip": "{resource} è stato rilasciato dal server. Ricomincia per continuare.",
       "status": {
-        "active": "{resource} è being kept disponibile.",
-        "countingDown": "{resource} sarà essere released presto.",
-        "expired": "{resource} ha been released."
+        "active": "{resource} viene mantenuto disponibile.",
+        "countingDown": "{resource} verrà rilasciato a breve.",
+        "expired": "{resource} è stato rilasciato."
       },
       "duration": {
         "seconds": "{count} secondo | {count} secondi",
@@ -201,14 +201,14 @@
         "brand": "Marchio",
         "letters": "Lettere"
       },
-      "searchPlaceholder": "Marchio Nome Oppure dominio",
-      "searchHint": "Tipo a Marchio Nome, Oppure a dominio like amazon.com",
-      "noResults": "nessun corrispondente brands trovato.",
+      "searchPlaceholder": "Nome del marchio o dominio",
+      "searchHint": "Digita il nome di un marchio o un dominio come amazon.com",
+      "noResults": "Nessun marchio corrispondente trovato.",
       "noResultsLettersHint": "Usa invece le lettere",
       "useDomainDirectly": "Usa {domain}",
-      "autoLabel": "automatico (da Nome)",
-      "domainHint": "a trova il exact Marchio, Tipo il company's sito web dominio (e.g. amazon.com) – quello sempre corrisponde il right logo.",
-      "searchError": "non è stato possibile carica logos – riprova di nuovo",
+      "autoLabel": "Automatico (dal nome)",
+      "domainHint": "Per trovare il marchio esatto, digita il dominio del sito web dell'azienda (es. amazon.com): corrisponderà sempre al logo corretto.",
+      "searchError": "Impossibile caricare i loghi: riprova",
       "editAriaLabel": "Modifica logo",
       "dialogTitle": "Cambia logo",
       "resetToAuto": "Ripristina automatico",
@@ -217,135 +217,135 @@
       "lettersPlaceholder": "AB",
       "colorLabel": "Colore",
       "colorSwatchAriaLabel": "Usa Colore {color}",
-      "customColorAriaLabel": "scegli a Personalizzato Colore",
+      "customColorAriaLabel": "Scegli un colore personalizzato",
       "applyLetters": "Applica",
       "lettersSelectedLabel": "Lettere “{letters}”"
     }
   },
   "accountGroups": {
     "create": {
-      "error": "Impossibile Crea il gruppo"
+      "error": "Impossibile creare il gruppo"
     },
     "update": {
-      "success": "gruppo aggiornato",
-      "error": "Impossibile aggiorna gruppo"
+      "success": "Gruppo aggiornato",
+      "error": "Impossibile aggiornare il gruppo"
     },
     "delete": {
-      "success": "gruppo ha been Eliminato",
-      "error": "Impossibile Elimina il gruppo"
+      "success": "Il gruppo è stato eliminato",
+      "error": "Impossibile eliminare il gruppo"
     },
     "link": {
-      "success": "Conto ha been aggiunto a il gruppo",
-      "error": "Impossibile Aggiungi il Conto a il gruppo"
+      "success": "Il conto è stato aggiunto al gruppo",
+      "error": "Impossibile aggiungere il conto al gruppo"
     },
     "unlink": {
-      "success": "Conto ha been rimosso da il gruppo",
-      "error": "Impossibile rimuovi il Conto da il gruppo"
+      "success": "Il conto è stato rimosso dal gruppo",
+      "error": "Impossibile rimuovere il conto dal gruppo"
     }
   },
   "validation": {
-    "minLength": "Minimal length è {length}.",
-    "emailInvalid": "Per favore inserisci a valido email indirizzo.",
-    "passwordsNoMatch": "Passwords non corrispondenza"
+    "minLength": "La lunghezza minima è {length}.",
+    "emailInvalid": "Inserisci un indirizzo email valido.",
+    "passwordsNoMatch": "Le password non corrispondono"
   },
   "notifications": {
     "title": "Notifiche",
-    "markAllAsRead": "Mark Tutto come Leggi",
-    "empty": "nessun Notifiche ancora",
+    "markAllAsRead": "Segna tutto come letto",
+    "empty": "Nessuna notifica",
     "containerAriaLabel": "Notifiche",
     "closeToast": "Chiudi notifica",
-    "viewOnGitHub": "visualizza su GitHub",
-    "newVersion": "Nuovo Versione {version}",
-    "newRelease": "Nuovo release",
+    "viewOnGitHub": "Visualizza su GitHub",
+    "newVersion": "Nuova versione {version}",
+    "newRelease": "Nuova release",
     "tagReminder": {
-      "thresholdMessage": "Speso {amount} (soglia: {threshold})",
-      "existenceMessage": "{count} Transazione | {count} Transazioni"
+      "thresholdMessage": "speso {amount} (soglia: {threshold})",
+      "existenceMessage": "{count} transazione | {count} transazioni"
     },
     "share": {
-      "sendFailedHint": "apri il sharing panel a invia di nuovo."
+      "sendFailedHint": "Apri il pannello di condivisione per inviare di nuovo."
     }
   },
   "currencyNames": {
-    "UAH": "Ucraino Hryvnia",
-    "USD": "US Dollar",
+    "UAH": "Hryvnia ucraina",
+    "USD": "Dollaro statunitense",
     "EUR": "Euro",
-    "GBP": "British Pound Sterling",
-    "JPY": "Japanese Yen",
-    "CHF": "Swiss Franc",
-    "CAD": "Canadian Dollar",
-    "AUD": "Australian Dollar",
-    "NZD": "Nuovo Zealand Dollar",
-    "CNY": "Chinese Yuan",
-    "HKD": "Hong Kong Dollar",
-    "SGD": "Singapore Dollar",
-    "SEK": "Swedish Krona",
-    "NOK": "Norwegian Krone",
-    "DKK": "Danish Krone",
-    "PLN": "Polish Zloty",
-    "CZK": "Czech Koruna",
-    "HUF": "Hungarian Forint",
-    "RON": "Romanian Leu",
-    "BGN": "Bulgarian Lev",
-    "HRK": "Croatian Kuna",
-    "RSD": "Serbian Dinar",
-    "TRY": "Turkish Lira",
-    "RUB": "Russian Ruble",
-    "BYN": "Belarusian Ruble",
-    "KZT": "Kazakhstani Tenge",
-    "INR": "Indian Rupee",
-    "IDR": "Indonesiano Rupiah",
-    "MYR": "Malaysian Ringgit",
-    "PHP": "Philippine Peso",
-    "THB": "Thai Baht",
-    "VND": "Vietnamese Dong",
-    "KRW": "South Korean Won",
-    "TWD": "Nuovo Taiwan Dollar",
-    "BRL": "Brazilian Real",
-    "MXN": "Mexican Peso",
-    "ARS": "Argentine Peso",
-    "CLP": "Chilean Peso",
-    "COP": "Colombian Peso",
-    "PEN": "Peruvian Sol",
-    "ZAR": "South African Rand",
-    "EGP": "Egyptian Pound",
-    "AED": "UAE Dirham",
-    "SAR": "Saudi Riyal",
-    "ILS": "Israeli Nuovo Shekel",
-    "QAR": "Qatari Riyal",
-    "KWD": "Kuwaiti Dinar",
-    "BHD": "Bahraini Dinar",
-    "OMR": "Omani Rial",
-    "JOD": "Jordanian Dinar",
-    "MAD": "Moroccan Dirham",
-    "NGN": "Nigerian Naira",
-    "KES": "Kenyan Shilling",
-    "GHS": "Ghanaian Cedi",
-    "XOF": "CFA Franc BCEAO",
-    "XAF": "CFA Franc BEAC",
+    "GBP": "Sterlina britannica",
+    "JPY": "Yen giapponese",
+    "CHF": "Franco svizzero",
+    "CAD": "Dollaro canadese",
+    "AUD": "Dollaro australiano",
+    "NZD": "Dollaro neozelandese",
+    "CNY": "Yuan cinese",
+    "HKD": "Dollaro di Hong Kong",
+    "SGD": "Dollaro di Singapore",
+    "SEK": "Corona svedese",
+    "NOK": "Corona norvegese",
+    "DKK": "Corona danese",
+    "PLN": "Zloty polacco",
+    "CZK": "Corona ceca",
+    "HUF": "Fiorino ungherese",
+    "RON": "Leu rumeno",
+    "BGN": "Lev bulgaro",
+    "HRK": "Kuna croata",
+    "RSD": "Dinaro serbo",
+    "TRY": "Lira turca",
+    "RUB": "Rublo russo",
+    "BYN": "Rublo bielorusso",
+    "KZT": "Tenge kazako",
+    "INR": "Rupia indiana",
+    "IDR": "Rupia indonesiana",
+    "MYR": "Ringgit malese",
+    "PHP": "Peso filippino",
+    "THB": "Baht thailandese",
+    "VND": "Dong vietnamita",
+    "KRW": "Won sudcoreano",
+    "TWD": "Dollaro taiwanese",
+    "BRL": "Real brasiliano",
+    "MXN": "Peso messicano",
+    "ARS": "Peso argentino",
+    "CLP": "Peso cileno",
+    "COP": "Peso colombiano",
+    "PEN": "Sol peruviano",
+    "ZAR": "Rand sudafricano",
+    "EGP": "Sterlina egiziana",
+    "AED": "Dirham degli Emirati Arabi Uniti",
+    "SAR": "Riyal saudita",
+    "ILS": "Nuovo siclo israeliano",
+    "QAR": "Riyal qatariota",
+    "KWD": "Dinaro kuwaitiano",
+    "BHD": "Dinaro bahreinita",
+    "OMR": "Rial omanita",
+    "JOD": "Dinaro giordano",
+    "MAD": "Dirham marocchino",
+    "NGN": "Naira nigeriana",
+    "KES": "Scellino keniota",
+    "GHS": "Cedi ghanese",
+    "XOF": "Franco CFA BCEAO",
+    "XAF": "Franco CFA BEAC",
     "BTC": "Bitcoin",
     "ETH": "Ethereum"
   },
   "fileDropzone": {
-    "clickOrDrag": "fai clic Oppure drag a file qui",
-    "clickOrDragMultiple": "fai clic Oppure drag CSV file qui",
-    "dropHere": "Drop file a Carica",
-    "dropHereMultiple": "Drop file qui",
-    "removeFile": "rimuovi file",
-    "fileTooLarge": "file è too large. Max size è {max}.",
-    "fileTooLargeNamed": "{name} è larger di {max}",
-    "filesSelected": "{count} file Selezionato | {count} file Selezionato",
-    "clearAll": "Cancella Tutto",
-    "onlyFirstFileTaken": "Multiple file dropped – solo il primo era usato."
+    "clickOrDrag": "Fai clic o trascina un file qui",
+    "clickOrDragMultiple": "Fai clic o trascina i file CSV qui",
+    "dropHere": "Rilascia il file per caricarlo",
+    "dropHereMultiple": "Rilascia i file qui",
+    "removeFile": "Rimuovi file",
+    "fileTooLarge": "Il file è troppo grande. La dimensione massima è {max}.",
+    "fileTooLargeNamed": "{name} è più grande di {max}",
+    "filesSelected": "{count} file selezionato | {count} file selezionati",
+    "clearAll": "Cancella tutto",
+    "onlyFirstFileTaken": "Sono stati rilasciati più file: è stato usato solo il primo."
   },
   "demo": {
-    "featureNotAvailable": "questo feature è non disponibile in demo mode",
-    "passwordChangeRestricted": "password changes sono non disponibile in demo mode",
+    "featureNotAvailable": "Questa funzionalità non è disponibile in modalità demo",
+    "passwordChangeRestricted": "La modifica della password non è disponibile in modalità demo",
     "investmentsRestricted": {
-      "title": "Investimenti non disponibile in Demo",
-      "description": "il Investimenti feature è non disponibile in demo mode. Per favore Registrati per a full Conto a accesso Investimenti tracking."
+      "title": "Investimenti non disponibili nella demo",
+      "description": "La funzionalità Investimenti non è disponibile in modalità demo. Registrati per un account completo per accedere al tracciamento degli investimenti."
     },
     "banner": {
-      "message": "tu're exploring a demo con sample data{time}. {signUpLink} a Crea il tuo propri Conto.",
+      "message": "Stai esplorando una demo con dati di esempio{time}. {signUpLink} per creare il tuo account.",
       "resets": "resets in {time}",
       "signUp": "Registrati",
       "timeFormat": {
@@ -353,31 +353,31 @@
         "minutes": "{minutes}m"
       }
     },
-    "sessionExpiredNotice": "il tuo demo sessione ha ended. Crea a Gratis Conto a Continua, Oppure Accedi sotto se tu già ha uno."
+    "sessionExpiredNotice": "La tua sessione demo è terminata. Crea un account gratuito per continuare, oppure accedi qui sotto se ne hai già uno."
   },
   "settings": {
     "currencies": {
       "setBase": {
         "overlay": {
-          "title": "Changing il tuo Valuta principale",
-          "description": "stiamo recalculating ogni Importo in il tuo Nuovo Valuta principale. questo può take a few minuti — Per favore Mantieni questo tab apri.",
-          "takingLong": "questo è taking longer di usual. il tuo data è safe — stiamo ancora working su it.",
-          "failedTitle": "Valuta principale change non riuscito",
-          "unreachableTitle": "può't verifica il change Stato",
-          "unreachableDescription": "il server è non responding. Puoi dismiss questo screen — se il change è ancora running, il app sarà lock di nuovo su il tuo Avanti Azione.",
-          "dismiss": "Dismiss",
-          "preparing": "Getting things ready…",
-          "finishing": "Finishing su…",
-          "stepCounter": "passaggio {current} di {total}",
+          "title": "Modifica della valuta principale",
+          "description": "Stiamo ricalcolando tutti gli importi nella tua nuova valuta principale. L'operazione può richiedere qualche minuto: tieni questa scheda aperta.",
+          "takingLong": "L'operazione sta richiedendo più tempo del solito. I tuoi dati sono al sicuro: ci stiamo ancora lavorando.",
+          "failedTitle": "Modifica della valuta principale non riuscita",
+          "unreachableTitle": "Impossibile verificare lo stato della modifica",
+          "unreachableDescription": "Il server non risponde. Puoi chiudere questa schermata: se la modifica è ancora in corso, l'app si bloccherà di nuovo alla tua prossima azione.",
+          "dismiss": "Chiudi",
+          "preparing": "Preparazione in corso…",
+          "finishing": "Completamento…",
+          "stepCounter": "Passaggio {current} di {total}",
           "steps": {
-            "transactions": "Updating Transazioni",
-            "accounts": "Updating Conti",
-            "loanDetails": "Updating Prestiti",
-            "balances": "Rebuilding Saldo Cronologia",
-            "investmentTransactions": "Updating Investimento Transazioni",
-            "portfolioTransfers": "Updating Portafoglio Trasferimenti",
-            "holdings": "Updating Posizioni",
-            "portfolioBalances": "Rebuilding Portafoglio saldi"
+            "transactions": "Aggiornamento transazioni",
+            "accounts": "Aggiornamento conti",
+            "loanDetails": "Aggiornamento prestiti",
+            "balances": "Ricostruzione dello storico saldi",
+            "investmentTransactions": "Aggiornamento transazioni di investimento",
+            "portfolioTransfers": "Aggiornamento trasferimenti di portafoglio",
+            "holdings": "Aggiornamento posizioni",
+            "portfolioBalances": "Ricostruzione dei saldi di portafoglio"
           }
         }
       }
@@ -385,16 +385,16 @@
   },
   "ai": {
     "estimatedCost": {
-      "yourApiKey": "(il tuo Chiave API)",
-      "setByEndpoint": "imposta da il tuo endpoint"
+      "yourApiKey": "(la tua chiave API)",
+      "setByEndpoint": "Impostato dal tuo endpoint"
     }
   },
   "transactionGroups": {
     "groupDialog": {
       "editTitle": "Modifica gruppo",
       "nameLabel": "Nome",
-      "noteLabel": "Nota (Facoltativo)",
-      "notePlaceholder": "Facoltativo Nota...",
+      "noteLabel": "Nota (facoltativo)",
+      "notePlaceholder": "Nota facoltativa...",
       "loadingText": "Caricamento...",
       "savingAction": "Salva",
       "cancelButton": "Annulla",
@@ -402,15 +402,15 @@
       "deleteAction": "Elimina gruppo",
       "transactionsLabel": "Transazioni",
       "deleteGroupTitle": "Elimina gruppo",
-      "deleteGroupDescription": "Sei sicuro di voler eliminare \"{groupName}\"? il Transazioni sarà non essere Eliminato.",
-      "removeTransactionTitle": "rimuovi Transazione da gruppo",
-      "removeTransactionDescription": "questo sarà lasciare fewer di 2 Transazioni in il gruppo, so il gruppo sarà essere Eliminato. Continua?",
-      "removeTransactionDescriptionNormal": "sono tu sure tu vuoi a rimuovi questo Transazione da il gruppo?",
-      "removeButtonText": "rimuovi",
-      "removeAndDeleteButtonText": "rimuovi & Elimina gruppo",
+      "deleteGroupDescription": "Sei sicuro di voler eliminare \"{groupName}\"? Le transazioni non verranno eliminate.",
+      "removeTransactionTitle": "Rimuovi transazione dal gruppo",
+      "removeTransactionDescription": "Questo lascerà meno di 2 transazioni nel gruppo, quindi il gruppo verrà eliminato. Continuare?",
+      "removeTransactionDescriptionNormal": "Sei sicuro di voler rimuovere questa transazione dal gruppo?",
+      "removeButtonText": "Rimuovi",
+      "removeAndDeleteButtonText": "Rimuovi ed elimina gruppo",
       "summary": {
         "transactions": "Transazioni",
-        "net": "Net",
+        "net": "Netto",
         "moneyIn": "Entrate",
         "moneyOut": "Uscite"
       }

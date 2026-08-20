@@ -261,8 +261,6 @@ export const ZodSettingsSchema = z.object({
   // provider's merchant field is empty. Off by default because Monobank's `counterName` is
   // empty for most card purchases, so it has to be an opt-in.
   payeeExtractionUsesDescription: z.boolean().optional(),
-  // Header "Support" (donation) button. Visible when unset; users opt out in Appearance settings.
-  showSupportButton: z.boolean().optional(),
   // When true, the sidebar Accounts panel hides accounts whose display balance is
   // zero, and hides any account group left with no non-zero account. Off by default.
   hideZeroBalances: z.boolean().optional(),
@@ -362,7 +360,6 @@ export const ZodSettingsPatchSchema = z.object({
   // Same element schema as `ZodSettingsSchema`, defaults and all, so the two can't drift.
   savedPivotViews: z.array(ZodSavedPivotViewSchema).optional(),
   payeeExtractionUsesDescription: z.boolean().optional(),
-  showSupportButton: z.boolean().optional(),
   hideZeroBalances: z.boolean().optional(),
   matchTransfersWithManualAccounts: z.boolean().optional(),
 });

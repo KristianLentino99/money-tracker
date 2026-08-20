@@ -1,116 +1,116 @@
 {
   "settings": {
     "admin": {
-      "title": "amministratore Panel",
-      "description": "Administrative tools e system management",
+      "title": "Pannello di amministrazione",
+      "description": "Strumenti amministrativi e gestione del sistema",
       "priceSync": {
-        "title": "Titoli Prezzo sincronizzazione",
-        "description": "manualmente trigger Prezzo synchronization per tutti Titoli con Posizioni",
-        "button": "Trigger Prezzo sincronizzazione",
-        "buttonLoading": "Syncing...",
+        "title": "Sincronizzazione prezzi titoli",
+        "description": "Avvia manualmente la sincronizzazione dei prezzi per tutti i titoli con posizioni",
+        "button": "Avvia sincronizzazione prezzi",
+        "buttonLoading": "Sincronizzazione in corso...",
         "notifications": {
-          "success": "Titoli prices sincronizzazione completato correttamente",
-          "failed": "Impossibile trigger Prezzo sincronizzazione",
-          "rateLimited": "non consentito. Riprova in {time}.",
-          "adminRequired": "amministratore privileges Obbligatorio per questo azione"
+          "success": "Sincronizzazione dei prezzi dei titoli completata correttamente",
+          "failed": "Impossibile avviare la sincronizzazione dei prezzi",
+          "rateLimited": "Non consentito. Riprova tra {time}.",
+          "adminRequired": "Sono necessari i privilegi di amministratore per questa azione"
         }
       },
       "priceUpload": {
-        "title": "manuale Titolo Prezzo Carica",
-        "description": "Carica historical Prezzo data per Titoli via CSV o JSON file",
-        "button": "Carica Titolo Prices",
-        "dialogTitle": "Carica Titolo Prices",
+        "title": "Caricamento manuale dei prezzi dei titoli",
+        "description": "Carica dati storici sui prezzi dei titoli tramite file CSV o JSON",
+        "button": "Carica prezzi dei titoli",
+        "dialogTitle": "Carica prezzi dei titoli",
         "selectSecurity": {
-          "searchLabel": "Cerca symbol o Nome",
+          "searchLabel": "Cerca simbolo o nome",
           "searchPlaceholder": "AAPL",
-          "searching": "Searching…",
-          "failed": "Impossibile Cerca Titoli.",
+          "searching": "Ricerca in corso…",
+          "failed": "Impossibile cercare i titoli.",
           "noResults": "Nessun risultato.",
           "changeButton": "Cambia"
         },
         "dateRangeInfo": {
-          "loading": "Caricamento Intervallo di data Informazione...",
-          "title": "disponibile Tassi di cambio Intervallo di data ({currency}):",
-          "tooltipText": "Puoi Carica Titolo prices solo per data per che we hai Tassi di cambio disponibile. Otherwise it non sarà essere possible un converti Titolo Prezzo un Altro Valute. se tu serve older data, Carica Tassi di cambio primo. Otherwise depending su che option tu sarà chose su il Successivo passaggi registrazione sarà essere auto-filtered (omitted) o uploading richiesta sarà fail."
+          "loading": "Caricamento informazioni sull'intervallo di date...",
+          "title": "Intervallo di date con tassi di cambio disponibili ({currency}):",
+          "tooltipText": "Puoi caricare i prezzi dei titoli solo per le date per cui disponiamo di tassi di cambio. In caso contrario non sarà possibile convertire il prezzo del titolo in altre valute. Se ti servono dati più vecchi, carica prima i tassi di cambio. A seconda dell'opzione scelta nei passaggi successivi, i record verranno filtrati automaticamente (omessi) oppure la richiesta di caricamento fallirà."
         },
         "fileUpload": {
           "title": "Carica file",
-          "supportedFormats": "CSV o JSON file supported",
+          "supportedFormats": "Sono supportati file CSV o JSON",
           "errors": {
-            "unsupportedFormat": "Unsupported file formato. per favore Carica CSV o JSON file.",
-            "parseFailed": "Impossibile parse {fileType} file: {error}"
+            "unsupportedFormat": "Formato file non supportato. Carica un file CSV o JSON.",
+            "parseFailed": "Impossibile analizzare il file {fileType}: {error}"
           }
         },
         "fieldMapper": {
-          "title": "mappa Campi",
-          "description": "corrispondenza Il tuo file's Campi un il Obbligatorio Campi sotto.",
-          "selectField": "Seleziona Campo...",
-          "dateFormatLabel": "Data formato",
-          "dateFormatDescription": "Seleziona il Data formato utilizzato in Il tuo file",
+          "title": "Mappa i campi",
+          "description": "Associa i campi del tuo file ai campi obbligatori indicati di seguito.",
+          "selectField": "Seleziona campo...",
+          "dateFormatLabel": "Formato data",
+          "dateFormatDescription": "Seleziona il formato data usato nel tuo file",
           "dateFormats": {
-            "ddMMyyyySlash": "DD/MM/YYYY (e.g., 31/12/2024)",
-            "MMddyyyySlash": "MM/DD/YYYY (e.g., 12/31/2024)",
-            "yyyyMMddDash": "YYYY-MM-DD (e.g., 2024-12-31)",
-            "ddMMyyyyDash": "DD-MM-YYYY (e.g., 31-12-2024)",
-            "MMddyyyyDash": "MM-DD-YYYY (e.g., 12-31-2024)"
+            "ddMMyyyySlash": "GG/MM/AAAA (es. 31/12/2024)",
+            "MMddyyyySlash": "MM/GG/AAAA (es. 12/31/2024)",
+            "yyyyMMddDash": "AAAA-MM-GG (es. 2024-12-31)",
+            "ddMMyyyyDash": "GG-MM-AAAA (es. 31-12-2024)",
+            "MMddyyyyDash": "MM-GG-AAAA (es. 12-31-2024)"
           },
-          "mappingComplete": "tutti Obbligatorio Campi mapped",
-          "mappingIncomplete": "per favore mappa tutti Obbligatorio Campi un Continua",
-          "fileInfo": "file:",
-          "records": "{count} registrazione",
+          "mappingComplete": "Tutti i campi obbligatori sono stati mappati",
+          "mappingIncomplete": "Mappa tutti i campi obbligatori per continuare",
+          "fileInfo": "File:",
+          "records": "{count} record",
           "changeFileButton": "Cambia file",
-          "continueButton": "Continua un Preview"
+          "continueButton": "Continua all'anteprima"
         },
         "preview": {
-          "title": "Data Preview",
-          "recordsCount": "{count} registrazione sarà essere uploaded | {count} registrazione sarà essere uploaded",
-          "recordsPeriod": "per Periodo tra {oldest} e {newest}",
-          "loadingExisting": "Caricamento esistente prices per comparison...",
+          "title": "Anteprima dati",
+          "recordsCount": "Verrà caricato {count} record | Verranno caricati {count} record",
+          "recordsPeriod": "per il periodo tra {oldest} e {newest}",
+          "loadingExisting": "Caricamento dei prezzi esistenti per il confronto...",
           "warnings": {
-            "significantDifferences": "Significant Prezzo differences detected",
-            "differencesDetails": "{count} registrazione ha un Prezzo difference maggiore di 4% compared un esistente data. per favore revisione carefully. | {count} registrazione hai un Prezzo difference maggiore di 4% compared un esistente data. per favore revisione carefully."
+            "significantDifferences": "Rilevate differenze di prezzo significative",
+            "differencesDetails": "{count} record ha una differenza di prezzo superiore al 4% rispetto ai dati esistenti. Rivedi attentamente. | {count} record hanno una differenza di prezzo superiore al 4% rispetto ai dati esistenti. Rivedi attentamente."
           },
-          "filterCheckbox": "Mostra solo registrazione con significant differences (>4%)",
+          "filterCheckbox": "Mostra solo i record con differenze significative (>4%)",
           "tableHeaders": {
             "date": "Data",
-            "newPrice": "Nuovo Prezzo",
-            "existingPrice": "esistente Prezzo",
-            "difference": "Difference (%)"
+            "newPrice": "Nuovo prezzo",
+            "existingPrice": "Prezzo esistente",
+            "difference": "Differenza (%)"
           },
-          "noExistingPrice": "N/un",
-          "scrollForMore": "Scroll per Altro...",
-          "noDifferences": "nessun registrazione con significant differences trovato.",
-          "backButton": "Indietro un Mapping",
-          "continueButton": "Continua un Opzioni"
+          "noExistingPrice": "N/D",
+          "scrollForMore": "Scorri per altro...",
+          "noDifferences": "Nessun record con differenze significative trovato.",
+          "backButton": "Torna alla mappatura",
+          "continueButton": "Continua alle opzioni"
         },
         "options": {
-          "title": "Carica Opzioni",
+          "title": "Opzioni di caricamento",
           "autoFilter": {
-            "title": "Auto-Filtra data outside disponibile range",
-            "description": "automaticamente Rimuovi data quello sono outside il disponibile Tasso di cambio range"
+            "title": "Filtra automaticamente le date fuori dall'intervallo disponibile",
+            "description": "Rimuove automaticamente le date che sono fuori dall'intervallo di tassi di cambio disponibile"
           },
           "override": {
-            "title": "Override esistente registrazione",
-            "description": "Aggiorna esistente Prezzo registrazione instead di skipping duplicati"
+            "title": "Sovrascrivi i record esistenti",
+            "description": "Aggiorna i record di prezzo esistenti invece di saltare i duplicati"
           },
           "backButton": "Indietro",
-          "uploadButton": "Carica Prices",
-          "uploadingButton": "Uploading..."
+          "uploadButton": "Carica prezzi",
+          "uploadingButton": "Caricamento in corso..."
         },
         "result": {
-          "title": "Carica Complete!",
-          "inserted": "✓ {count} Nuovo registrazione inserted | ✓ {count} Nuovo registrazione inserted",
-          "duplicates": "• {count} duplicate {action}",
+          "title": "Caricamento completato!",
+          "inserted": "✓ {count} nuovo record inserito | ✓ {count} nuovi record inseriti",
+          "duplicates": "• {count} duplicato {action}",
           "duplicatesUpdated": "aggiornato",
-          "duplicatesSkipped": "skipped",
-          "filtered": "• {count} Data filtered (outside range) | • {count} data filtered (outside range)",
+          "duplicatesSkipped": "saltato",
+          "filtered": "• {count} data filtrata (fuori intervallo) | • {count} date filtrate (fuori intervallo)",
           "closeButton": "Chiudi",
-          "uploadMoreButton": "Carica Altro"
+          "uploadMoreButton": "Carica altri"
         },
         "notifications": {
-          "dateInfoLoadFailed": "Impossibile carica Data informazioni: {error}",
-          "uploadSuccess": "correttamente uploaded {count} Prezzo registrazione | correttamente uploaded {count} Prezzo registrazione",
-          "uploadFailed": "Carica non riuscito: {error}"
+          "dateInfoLoadFailed": "Impossibile caricare le informazioni sulla data: {error}",
+          "uploadSuccess": "{count} record di prezzo caricato correttamente | {count} record di prezzo caricati correttamente",
+          "uploadFailed": "Caricamento non riuscito: {error}"
         }
       }
     }
