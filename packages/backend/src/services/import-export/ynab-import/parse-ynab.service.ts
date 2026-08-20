@@ -59,8 +59,9 @@ interface ClassifiedRow {
 }
 
 /**
- * Top-level entry point. Takes the verbatim contents of a `Register.csv` from
- * a YNAB ZIP export and produces the structured preview the wizard renders.
+ * Top-level entry point. Takes the verbatim contents of a `Register.csv` or
+ * `Register.tsv` from a YNAB export and produces the structured preview the
+ * wizard renders.
  *
  * Pure function: no DB writes, no side effects. Safe to call twice (the
  * execute worker re-parses to avoid persisting an intermediate session).
@@ -70,10 +71,13 @@ export function parseYnabRegister({ fileContent }: { fileContent: string }): Yna
     throw new ValidationError({ message: 'YNAB Register.csv is empty.' });
   }
 
+  const delimiter = detectYnabDelimiter({ fileContent });
+
   let records: Record<string, string>[];
   try {
     records = parse(fileContent, {
       columns: true,
+      delimiter,
       skip_empty_lines: true,
       trim: true,
       relax_column_count: true,
@@ -107,9 +111,18 @@ export function parseYnabRegister({ fileContent }: { fileContent: string }): Yna
   const classifiedRows: ClassifiedRow[] = [];
 
   // One budget = one date format and one currency format, so both are resolved
-  // over the whole file before any row is read.
+  // over the whole file before any row is read. A date with both lead fields
+  // ≤12 has no intrinsic order; in that case YNAB's decimal mark is the only
+  // locale signal in the Register. Comma-decimal budgets use day-first dates,
+  // while dot-decimal budgets retain YNAB's US month-first convention.
+  const decimalSeparator = detectYnabDecimalSeparator({
+    values: records.flatMap((record) => [record['Outflow'], record['Inflow']]),
+  });
   const dateValues = records.map((record) => (record['Date'] ?? '').trim());
-  const detectedDateFormat = detectDateColumnFormat({ values: dateValues, locale: 'en' });
+  const detectedDateFormat = detectDateColumnFormat({
+    values: dateValues,
+    locale: decimalSeparator === ',' ? 'es' : 'en',
+  });
   if (!detectedDateFormat.ok) {
     throw new ValidationError({
       message:
@@ -122,13 +135,11 @@ export function parseYnabRegister({ fileContent }: { fileContent: string }): Yna
     warnings.push({
       code: 'ambiguous-date-order',
       message:
-        'No row in the Date column settles whether it is day-first or month-first; dates were interpreted as MM/DD/YYYY. Check a few transactions after import.',
+        decimalSeparator === ','
+          ? 'No row in the Date column settles whether it is day-first or month-first; comma-decimal amounts indicate DD/MM/YYYY. Check a few transactions after import.'
+          : 'No row in the Date column settles whether it is day-first or month-first; dot-decimal amounts indicate MM/DD/YYYY. Check a few transactions after import.',
     });
   }
-
-  const decimalSeparator = detectYnabDecimalSeparator({
-    values: records.flatMap((record) => [record['Outflow'], record['Inflow']]),
-  });
 
   records.forEach((record, idx) => {
     // CSV row index that maps to the file's line number (header = line 1).
@@ -263,6 +274,16 @@ export function parseYnabRegister({ fileContent }: { fileContent: string }): Yna
     warnings,
     dateRange,
   };
+}
+
+/**
+ * YNAB can export the same Register shape as comma-separated CSV or as a
+ * tab-separated TSV. Delimiter is structural, so inspect the header only — a
+ * memo/payee may legitimately contain commas or tabs inside quoted fields.
+ */
+function detectYnabDelimiter({ fileContent }: { fileContent: string }): ',' | '\t' {
+  const firstLine = fileContent.split(/\r?\n/, 1)[0] ?? '';
+  return firstLine.includes('\t') ? '\t' : ',';
 }
 
 /** Walk transfer-leg rows and pair them. The first unmatched opposite leg of

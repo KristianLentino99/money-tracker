@@ -52,7 +52,10 @@ COPY packages/landing ./packages/landing
 
 # Build frontend SPA
 WORKDIR /app/packages/frontend
-RUN npm run build
+# Allow constrained self-hosting builders to raise V8's heap only for this
+# build step. Leaving the arg empty preserves Node's default elsewhere.
+ARG FRONTEND_BUILD_NODE_OPTIONS=
+RUN NODE_OPTIONS="$FRONTEND_BUILD_NODE_OPTIONS" npm run build
 
 # Build Astro landing
 WORKDIR /app/packages/landing

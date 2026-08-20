@@ -3,7 +3,7 @@
     "importExport": {
       "ynabImport": {
         "pageTitle": "Import from YNAB",
-        "pageDescription": "Upload your YNAB Register.csv export to bring accounts, transactions, categories, payees and tags into MoneyMatter.",
+        "pageDescription": "Upload your YNAB Register.csv or Register.tsv export to bring accounts, transactions, categories, payees and tags into MoneyMatter.",
         "stepper": {
           "steps": {
             "upload": "Upload",
@@ -12,13 +12,13 @@
           }
         },
         "fileUpload": {
-          "stepTitle": "Drop your Register.csv here",
-          "description": "YNAB → Budget → Export budget → unzip → use the Register.csv file.",
+          "stepTitle": "Drop your Register.csv or Register.tsv here",
+          "description": "YNAB → Budget → Export budget → unzip → use the Register.csv or Register.tsv file.",
           "maxSize": "Up to 10 MB.",
           "parsing": "Parsing…",
           "continueToPreview": "Continue",
           "errors": {
-            "invalidFormat": "Please upload a .csv file."
+            "invalidFormat": "Please upload a .csv or .tsv file."
           }
         },
         "preview": {

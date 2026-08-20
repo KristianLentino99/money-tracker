@@ -7,7 +7,7 @@
 
     <FileDropzone
       v-model="uploadedFile"
-      accept=".csv,text/csv"
+      accept=".csv,.tsv,text/csv,text/tab-separated-values"
       :max-size="MAX_FILE_SIZE"
       :validator="validateFile"
       :disabled="store.isParsing"
@@ -59,7 +59,8 @@ watch(uploadedFile, (file) => {
 });
 
 function validateFile(file: File): string | null {
-  if (!file.name.toLowerCase().endsWith('.csv')) {
+  const name = file.name.toLowerCase();
+  if (!name.endsWith('.csv') && !name.endsWith('.tsv')) {
     return t('pages.importExport.ynabImport.fileUpload.errors.invalidFormat');
   }
   return null;

@@ -18,7 +18,7 @@
           "parsing": "Analizando…",
           "continueToPreview": "Continuar",
           "errors": {
-            "invalidFormat": "Por favor carga un archivo .csv."
+            "invalidFormat": "Por favor carga un archivo .csv o .tsv."
           }
         },
         "preview": {

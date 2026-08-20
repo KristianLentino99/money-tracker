@@ -90,6 +90,25 @@ describe('parseYnabRegister', () => {
     });
   });
 
+  describe('tab-separated YNAB exports', () => {
+    it('parses a UTF-8 BOM TSV with European amounts and day-first dates', () => {
+      const tsvHeaders = YNAB_HEADERS.replaceAll(',', '\t');
+      const fileContent = [
+        `\uFEFF${tsvHeaders}`,
+        '"Fineco"\t""\t"20/09/2026"\t"Starting Balance"\t"Inflow: Ready to Assign"\t"Inflow"\t"Ready to Assign"\t""\t"€0,00"\t"€1.234,56"\t"Cleared"',
+        '"Fineco"\t""\t"17/09/2026"\t"Infomaniak"\t"Subscriptions: Hosting"\t"Subscriptions"\t"Hosting"\t""\t"€6,76"\t"€0,00"\t"Cleared"',
+        '',
+      ].join('\r\n');
+
+      const result = parseYnabRegister({ fileContent });
+
+      expect(result.accounts).toEqual([expect.objectContaining({ originalName: 'Fineco', startingBalance: 1234.56 })]);
+      expect(result.transactions).toEqual([
+        expect.objectContaining({ payeeName: 'Infomaniak', date: '2026-09-17', amount: -6.76 }),
+      ]);
+    });
+  });
+
   describe('warnings', () => {
     it('emits transfer-counterpart-missing when only one leg of a transfer is present', () => {
       // Single-sided transfer: an outflow from Checking to a counterpart that
@@ -249,7 +268,7 @@ describe('parseYnabRegister', () => {
       expect(rewe.amount).toBe(-3.5);
     });
 
-    it('falls back to MM/DD/YYYY and warns once when no row disambiguates the date order', () => {
+    it("uses dot-decimal amounts to retain YNAB's month-first fallback for an all-ambiguous date column", () => {
       const fileContent = [
         YNAB_HEADERS,
         `"Checking (USD) – 1234","","06/01/2026","Starting Balance","Inflow: Ready to Assign","Inflow","Ready to Assign","",$0.00,$100.00,"Cleared"`,
@@ -259,10 +278,34 @@ describe('parseYnabRegister', () => {
       const result = parseYnabRegister({ fileContent });
 
       expect(result.transactions.find((t) => t.payeeName === 'Cafe')!.date).toBe('2026-05-02');
-      const ambiguous = result.warnings.filter((w) => w.code === 'ambiguous-date-order');
-      expect(ambiguous).toHaveLength(1);
-      expect(ambiguous[0]!.rowIndex).toBeUndefined();
-      expect(ambiguous[0]!.message).toMatch(/MM\/DD\/YYYY/);
+      expect(result.warnings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'ambiguous-date-order',
+            message: expect.stringMatching(/dot-decimal.*MM\/DD/i),
+          }),
+        ]),
+      );
+    });
+
+    it('uses comma-decimal amounts to select day-first dates when the column is all ambiguous', () => {
+      const fileContent = [
+        YNAB_HEADERS,
+        '"Konto (EUR) – 1","","06/01/2026","Starting Balance","Inflow: Ready to Assign","Inflow","Ready to Assign","","€0,00","€100,00","Cleared"',
+        '"Konto (EUR) – 1","","05/02/2026","Rewe","Needs: Groceries","Needs","Groceries","Shop","€3,50","€0,00","Cleared"',
+        '',
+      ].join('\n');
+      const result = parseYnabRegister({ fileContent });
+
+      expect(result.transactions.find((t) => t.payeeName === 'Rewe')!.date).toBe('2026-02-05');
+      expect(result.warnings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'ambiguous-date-order',
+            message: expect.stringMatching(/comma-decimal.*DD\/MM/i),
+          }),
+        ]),
+      );
     });
 
     it('throws when the Date column mixes contradictory day/month orders', () => {

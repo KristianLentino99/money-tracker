@@ -31,7 +31,10 @@ x-logging: &default-logging
 
 services:
   backend:
-    image: letehaha/budget-tracker-be:${IMAGE_TAG:-latest}
+    # A self-hoster can override the repository for privately built images
+    # without editing this shared compose file. The published upstream image
+    # remains the default.
+    image: ${BACKEND_IMAGE_REPOSITORY:-letehaha/budget-tracker-be}:${IMAGE_TAG:-latest}
     restart: unless-stopped
     networks: [budget-tracker]
     # Internal-only: the frontend container reaches it over the `budget-tracker`
@@ -69,7 +72,7 @@ services:
     logging: *default-logging
 
   frontend:
-    image: letehaha/budget-tracker-fe:${IMAGE_TAG:-latest}
+    image: ${FRONTEND_IMAGE_REPOSITORY:-letehaha/budget-tracker-fe}:${IMAGE_TAG:-latest}
     restart: unless-stopped
     networks:
       budget-tracker:
