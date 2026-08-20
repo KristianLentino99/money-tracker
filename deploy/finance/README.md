@@ -19,6 +19,16 @@ both machines; it neither pushes to nor pulls from `letehaha`'s Docker Hub
 repositories. It refuses to deploy if `origin/dev` changes during the build or
 if the server has tracked source edits.
 
+For this already-provisioned host only, its initial bootstrap edits are now
+tracked by the first Finance release. Use this one-time migration command:
+
+```bash
+FINANCE_ALLOW_REMOTE_DIRTY=1 ./scripts/deploy-finance.sh
+```
+
+Do not use that override for unknown server-side edits: the normal command
+intentionally refuses to overwrite them.
+
 The frontend build receives `--max-old-space-size=3072` automatically. If the
 local Docker VM is deliberately capped below 3 GB, raise its memory allocation
 instead of reducing the heap; Vite's typecheck/build needs that headroom.

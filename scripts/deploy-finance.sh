@@ -14,6 +14,7 @@ readonly FINANCE_HOST="${FINANCE_HOST:-18.153.188.35}"
 readonly FINANCE_USER="${FINANCE_USER:-ubuntu}"
 readonly APP_DIR="${FINANCE_APP_DIR:-/opt/money-tracker}"
 readonly REMOTE="${FINANCE_USER}@${FINANCE_HOST}"
+readonly ALLOW_REMOTE_DIRTY="${FINANCE_ALLOW_REMOTE_DIRTY:-0}"
 # Vite + vue-tsc exceed Node's ~2 GB default heap on this project. This is used
 # only for the local, disposable image build; the runtime containers keep
 # Node's normal memory settings. Override only if the build machine has a
@@ -92,7 +93,7 @@ docker image save "$BACKEND_IMAGE" "$FRONTEND_IMAGE" | gzip | ssh "${SSH_OPTIONS
 
 echo "Activating ${TARGET_SHORT_SHA} on the server..."
 ssh "${SSH_OPTIONS[@]}" "$REMOTE" \
-  "TARGET_SHA='$TARGET_SHA' BACKEND_IMAGE='$BACKEND_IMAGE' FRONTEND_IMAGE='$FRONTEND_IMAGE' APP_DIR='$APP_DIR' bash -s" <<'REMOTE_SCRIPT'
+  "TARGET_SHA='$TARGET_SHA' BACKEND_IMAGE='$BACKEND_IMAGE' FRONTEND_IMAGE='$FRONTEND_IMAGE' APP_DIR='$APP_DIR' ALLOW_REMOTE_DIRTY='$ALLOW_REMOTE_DIRTY' bash -s" <<'REMOTE_SCRIPT'
 set -Eeuo pipefail
 
 if [[ ! -d "$APP_DIR/.git" ]]; then
@@ -100,8 +101,9 @@ if [[ ! -d "$APP_DIR/.git" ]]; then
   exit 1
 fi
 
-if [[ -n "$(sudo git -C "$APP_DIR" status --porcelain --untracked-files=no)" ]]; then
-  echo "Refusing to overwrite tracked edits on the production host." >&2
+remote_dirty="$(sudo git -C "$APP_DIR" status --porcelain --untracked-files=no)"
+if [[ -n "$remote_dirty" && "$ALLOW_REMOTE_DIRTY" != '1' ]]; then
+  echo "Refusing to overwrite tracked edits on the production host. Inspect them first, then rerun with FINANCE_ALLOW_REMOTE_DIRTY=1 only when they are expected bootstrap changes." >&2
   exit 1
 fi
 
@@ -111,6 +113,10 @@ sudo git -C "$APP_DIR" fetch --depth=1 origin dev
 if [[ "$(sudo git -C "$APP_DIR" rev-parse FETCH_HEAD)" != "$TARGET_SHA" ]]; then
   echo "origin/dev changed while the images were being built; rerun deployment." >&2
   exit 1
+fi
+if [[ -n "$remote_dirty" ]]; then
+  echo "Replacing approved bootstrap edits with the tracked release revision."
+  sudo git -C "$APP_DIR" reset --hard "$TARGET_SHA"
 fi
 sudo git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
 
