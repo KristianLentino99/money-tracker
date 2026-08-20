@@ -4,6 +4,7 @@
  */
 import type { StatementFileType } from '@bt/shared/types';
 import { logger } from '@js/utils';
+import { TextDecoder } from 'node:util';
 
 /** Maximum file size (10MB) */
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -68,16 +69,31 @@ function extractPdfFromPkcs7({ buffer }: { buffer: Buffer }): Buffer | null {
  * Detect if buffer contains valid text (for CSV/TXT detection)
  */
 function isValidTextContent({ buffer }: { buffer: Buffer }): boolean {
-  // Check first chunk for text-like content
-  const sampleSize = Math.min(buffer.length, 1000);
-  const sample = buffer.subarray(0, sampleSize);
+  let text: string;
+  try {
+    // FileReader preserves the source bytes, so pasted or uploaded UTF-8 text
+    // can contain multi-byte characters. Decode before checking printability;
+    // counting the individual UTF-8 bytes makes valid text look binary.
+    text = new TextDecoder('utf-8', { fatal: true }).decode(buffer);
+  } catch {
+    return false;
+  }
 
-  // Count printable ASCII and common text characters
+  // Check the first chunk for text-like content. A character-based sample
+  // avoids cutting a multi-byte UTF-8 sequence at the sample boundary.
+  const sample = Array.from(text).slice(0, 1000);
+
+  // Count printable Unicode characters and common text whitespace.
   let printableCount = 0;
-  for (let i = 0; i < sample.length; i++) {
-    const byte = sample[i]!;
-    // Printable ASCII (32-126), tab (9), newline (10), carriage return (13)
-    if ((byte >= 32 && byte <= 126) || byte === 9 || byte === 10 || byte === 13) {
+  for (const character of sample) {
+    const codePoint = character.codePointAt(0)!;
+    // Reject C0/C1 controls except tab, newline, and carriage return.
+    if (
+      (codePoint >= 32 && codePoint !== 127 && !(codePoint >= 128 && codePoint <= 159)) ||
+      codePoint === 9 ||
+      codePoint === 10 ||
+      codePoint === 13
+    ) {
       printableCount++;
     }
   }
