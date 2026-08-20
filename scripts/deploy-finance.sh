@@ -93,6 +93,18 @@ readonly BACKEND_IMAGE="money-tracker-finance-backend:finance-${TARGET_SHORT_SHA
 readonly FRONTEND_IMAGE="money-tracker-finance-frontend:finance-${TARGET_SHORT_SHA}"
 readonly REMOTE_GOOGLE_OAUTH_FILE="/run/money-tracker-finance-google-oauth-${TARGET_SHORT_SHA}.json"
 
+FRONTEND_BUILD_OPTIONS=(
+  --build-arg "VITE_SENTRY_RELEASE=${TARGET_SHA}"
+  --build-arg "FRONTEND_BUILD_NODE_OPTIONS=${FRONTEND_BUILD_NODE_OPTIONS}"
+  --build-arg "SENTRY_ORG=${SENTRY_ORG:-}"
+  --build-arg "SENTRY_PROJECT=${SENTRY_PROJECT:-}"
+)
+if [[ -n "${SENTRY_AUTH_TOKEN:-}" ]]; then
+  # BuildKit mounts the token only for the frontend build step. It is not a
+  # Docker ARG/ENV value and therefore cannot be persisted in image layers.
+  FRONTEND_BUILD_OPTIONS+=(--secret "id=sentry_auth_token,env=SENTRY_AUTH_TOKEN")
+fi
+
 echo "Building linux/amd64 images for ${TARGET_SHA}..."
 docker buildx build \
   --platform linux/amd64 \
@@ -104,8 +116,7 @@ docker buildx build \
 docker buildx build \
   --platform linux/amd64 \
   --load \
-  --build-arg "VITE_SENTRY_RELEASE=${TARGET_SHA}" \
-  --build-arg "FRONTEND_BUILD_NODE_OPTIONS=${FRONTEND_BUILD_NODE_OPTIONS}" \
+  "${FRONTEND_BUILD_OPTIONS[@]}" \
   --file "$BUILD_DIR/self-hosting/frontend/Dockerfile" \
   --tag "$FRONTEND_IMAGE" \
   "$BUILD_DIR"
@@ -168,7 +179,7 @@ if [[ "$SYNC_GOOGLE_OAUTH" == '1' ]]; then
     exit 1
   fi
   sudo python3 "$APP_DIR/scripts/sync-finance-google-secret.py" \
-    "$APP_DIR/self-hosting/.env" < "$REMOTE_GOOGLE_OAUTH_FILE"
+    "$APP_DIR/self-hosting/.env" < <(sudo cat "$REMOTE_GOOGLE_OAUTH_FILE")
 fi
 
 sudo docker tag "$BACKEND_IMAGE" money-tracker-finance-backend:latest

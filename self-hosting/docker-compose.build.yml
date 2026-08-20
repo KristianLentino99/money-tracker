@@ -6,8 +6,8 @@
 #
 # Runtime configuration is unchanged: the frontend is still configured via the
 # `environment:` block in the base file, and the backend via `env_file:`. The
-# build args below only feed build-time concerns (e.g. Sentry source-map upload)
-# and are all optional.
+# build args below only feed non-sensitive build-time concerns. The Sentry
+# token is supplied as a BuildKit secret rather than a build arg.
 
 services:
   backend:
@@ -21,9 +21,14 @@ services:
     build:
       context: ..
       dockerfile: self-hosting/frontend/Dockerfile
+      secrets:
+        - sentry_auth_token
       args:
-        SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
         SENTRY_ORG: ${SENTRY_ORG:-}
         SENTRY_PROJECT: ${SENTRY_PROJECT:-}
         VITE_SENTRY_RELEASE: ${VITE_SENTRY_RELEASE:-}
         FRONTEND_BUILD_NODE_OPTIONS: ${FRONTEND_BUILD_NODE_OPTIONS:-}
+
+secrets:
+  sentry_auth_token:
+    environment: SENTRY_AUTH_TOKEN

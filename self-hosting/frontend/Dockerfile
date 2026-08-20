@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # 🏗️ Stage 1️⃣: Build
 # --platform=$BUILDPLATFORM: this stage emits only static files (Vite SPA +
 # Astro landing), nothing arch-specific — so multi-arch builds run the heavy
@@ -9,13 +10,10 @@ WORKDIR /app
 
 # Deployment configuration (API origin, analytics keys, CSP hosts) enters at
 # container start via the entrypoint's runtime env — it is NOT baked here.
-# Build args carry only build-identity values and the Sentry source-map upload
-# credentials (compose interpolates them from the user's self-hosting/.env;
-# that file itself is NEVER copied into the image — it contains DB passwords +
-# auth secrets that must not leak into pushed image layers).
+# Build args carry only build-identity values. The Sentry source-map upload
+# token is mounted as a BuildKit secret and is never an ARG or ENV value.
 ARG VITE_SENTRY_RELEASE=
 ARG VITE_APP_COMMIT_HASH=
-ARG SENTRY_AUTH_TOKEN=
 ARG SENTRY_ORG=
 ARG SENTRY_PROJECT=
 
@@ -31,19 +29,6 @@ COPY packages/landing/package*.json ./packages/landing/
 # Install dependencies
 RUN npm ci
 
-# Materialize a minimal .env.production from build args. vite.config.js does
-# loadEnv from /app, so it picks these up at build time. Only VITE_* values
-# end up inlined into the bundle (Vite's prefix filter for client-side env).
-# Deployment values are absent on purpose: the SPA reads them at runtime from
-# window.__APP_CONFIG__ (written by the container entrypoint).
-RUN printf '%s\n' \
-    "VITE_SENTRY_RELEASE=$VITE_SENTRY_RELEASE" \
-    "VITE_APP_COMMIT_HASH=$VITE_APP_COMMIT_HASH" \
-    "SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN" \
-    "SENTRY_ORG=$SENTRY_ORG" \
-    "SENTRY_PROJECT=$SENTRY_PROJECT" \
-    > /app/.env.production
-
 # Copy the rest of the code
 COPY tsconfig.json ./
 COPY packages/shared ./packages/shared
@@ -55,7 +40,22 @@ WORKDIR /app/packages/frontend
 # Allow constrained self-hosting builders to raise V8's heap only for this
 # build step. Leaving the arg empty preserves Node's default elsewhere.
 ARG FRONTEND_BUILD_NODE_OPTIONS=
-RUN NODE_OPTIONS="$FRONTEND_BUILD_NODE_OPTIONS" npm run build
+RUN --mount=type=secret,id=sentry_auth_token,required=false \
+    set -eu; \
+    { \
+      printf '%s\n' \
+        "VITE_SENTRY_RELEASE=$VITE_SENTRY_RELEASE" \
+        "VITE_APP_COMMIT_HASH=$VITE_APP_COMMIT_HASH" \
+        "SENTRY_ORG=$SENTRY_ORG" \
+        "SENTRY_PROJECT=$SENTRY_PROJECT"; \
+      if [ -f /run/secrets/sentry_auth_token ]; then \
+        printf 'SENTRY_AUTH_TOKEN='; \
+        cat /run/secrets/sentry_auth_token; \
+        printf '\n'; \
+      fi; \
+    } > /app/.env.production; \
+    NODE_OPTIONS="$FRONTEND_BUILD_NODE_OPTIONS" npm run build; \
+    rm -f /app/.env.production
 
 # Build Astro landing
 WORKDIR /app/packages/landing
