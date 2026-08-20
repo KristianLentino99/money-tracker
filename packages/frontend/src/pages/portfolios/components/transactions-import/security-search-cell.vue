@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { searchSecurities } from '@/api/securities';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
+import { groupSecuritySearchResults } from '@/common/utils/group-security-search-results';
 import SecurityLogo from '@/components/common/security-logo.vue';
 import { InputField } from '@/components/fields';
 import { Button } from '@/components/lib/ui/button';
@@ -107,6 +108,7 @@ const buttonLabel = computed(() => {
 });
 
 const hasResults = computed(() => (query.data.value ?? []).length > 0);
+const groupedResults = computed(() => groupSecuritySearchResults({ results: query.data.value ?? [] }));
 </script>
 
 <template>
@@ -162,30 +164,39 @@ const hasResults = computed(() => (query.data.value ?? []).length > 0);
           {{ $t('investmentsImport.review.noResults') }}
         </div>
         <ul v-else class="py-1">
-          <li v-for="r in query.data.value" :key="`${r.providerName}:${r.providerSymbol}`">
-            <Button
-              type="button"
-              variant="ghost"
-              :disabled="blockedSet.has(r.providerSymbol)"
-              class="flex h-auto w-full items-center justify-between gap-2 rounded-none px-3 py-2 text-left font-normal"
-              @click="pickResult(r)"
+          <template v-for="group in groupedResults" :key="group.provider">
+            <li
+              role="presentation"
+              class="text-muted-foreground border-border/40 bg-muted/20 border-y px-3 py-1.5 text-[10px] font-semibold tracking-wide uppercase first:border-t-0"
             >
-              <SecurityLogo :security="r" class="size-5" />
-              <span class="min-w-0 flex-1">
-                <span class="font-medium">{{ r.symbol }}</span>
-                <span class="text-muted-foreground ml-2 truncate text-xs">{{ r.name }}</span>
-              </span>
-              <span
-                v-if="r.assetClass === ASSET_CLASS.crypto && assetClassFilter === 'all'"
-                class="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-medium uppercase"
+              {{ $t('dialogs.addSymbols.providers.heading') }}:
+              {{ $t(`dialogs.addSymbols.providers.${group.provider}`) }}
+            </li>
+            <li v-for="r in group.results" :key="`${r.providerName}:${r.providerSymbol}`">
+              <Button
+                type="button"
+                variant="ghost"
+                :disabled="blockedSet.has(r.providerSymbol)"
+                class="flex h-auto w-full items-center justify-between gap-2 rounded-none px-3 py-2 text-left font-normal"
+                @click="pickResult(r)"
               >
-                {{ $t('dialogs.addSymbols.assetClass.crypto') }}
-              </span>
-              <span v-if="blockedSet.has(r.providerSymbol)" class="text-muted-foreground text-[10px]">
-                {{ $t('investmentsImport.review.alreadyPicked') }}
-              </span>
-            </Button>
-          </li>
+                <SecurityLogo :security="r" class="size-5" />
+                <span class="min-w-0 flex-1">
+                  <span class="font-medium">{{ r.symbol }}</span>
+                  <span class="text-muted-foreground ml-2 truncate text-xs">{{ r.name }}</span>
+                </span>
+                <span
+                  v-if="r.assetClass === ASSET_CLASS.crypto && assetClassFilter === 'all'"
+                  class="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-medium uppercase"
+                >
+                  {{ $t('dialogs.addSymbols.assetClass.crypto') }}
+                </span>
+                <span v-if="blockedSet.has(r.providerSymbol)" class="text-muted-foreground text-[10px]">
+                  {{ $t('investmentsImport.review.alreadyPicked') }}
+                </span>
+              </Button>
+            </li>
+          </template>
         </ul>
       </ScrollArea>
     </Popover.PopoverContent>

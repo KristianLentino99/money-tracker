@@ -133,6 +133,12 @@ if (missingEnvVars.length > 0) {
   );
 }
 
+// Keep the legacy integration suite focused on its explicit fallback
+// assertions. Production leaves this unset and fans out to every configured
+// search catalog so provider-grouped results are visible to users.
+process.env.SECURITY_SEARCH_ALL_PROVIDERS = 'false';
+process.env.KRAKEN_SEARCH_ENABLED = 'false';
+
 /**
  * logo.dev brand search is always MSW-mocked in tests, so a real key is never
  * needed – but `searchBrands` short-circuits to [] when LOGO_DEV_SECRET_KEY is

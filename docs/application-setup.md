@@ -151,6 +151,9 @@ Key environment variables in `.env.development`:
 - `POLYGON_API_KEY`: Stock market data. Can be obtained at https://massive.com/ (previously polygon.io)
 - `ALPHA_VANTAGE_API_KEY`: Financial data. Can be obtained at https://www.alphavantage.co/
 - `FMP_API_KEY`: Financial Data API. Can be obtained at https://site.financialmodelingprep.com/
+- `YAHOO_FINANCE_ENABLED`: Enables Yahoo Finance search and price lookups. Defaults to `true`; no key is required.
+- `KRAKEN_SEARCH_ENABLED`: Enables Kraken's public crypto market catalog and OHLC prices. Defaults to `true`; no key is required.
+- `SECURITY_SEARCH_ALL_PROVIDERS`: Provider fan-out for search. Defaults to `true`; leave enabled so Yahoo, FMP, Polygon, and Alpha Vantage results remain visible in separate provider groups.
 - `API_LAYER_API_KEYS`: Currency exchange rates (comma-separated for multiple keys). Can be obtained at https://marketplace.apilayer.com/fixer-api. Better define several keys
 - `CURRENCY_RATES_API_URL`: Base URL for the self-hosted currency rates service (default `http://currency-rates-api:8080`). It supplies ECB + NBU rates for ~38 currencies, with `API_LAYER_API_KEYS` covering the exotic long tail.
 - `ENABLE_BANKING_REDIRECT_URL`: OAuth redirect URL required by Enable Banking – bank integration provider.

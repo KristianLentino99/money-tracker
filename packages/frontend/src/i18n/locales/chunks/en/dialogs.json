@@ -351,12 +351,21 @@
         "stocks": "Stocks",
         "crypto": "Crypto"
       },
+      "providers": {
+        "heading": "Provider",
+        "yahoo": "Yahoo Finance",
+        "fmp": "Financial Modeling Prep",
+        "polygon": "Polygon",
+        "alphavantage": "Alpha Vantage",
+        "kraken": "Kraken",
+        "coingecko": "CoinGecko"
+      },
       "marketCapRank": "#{rank}",
       "notifications": {
         "success": "Holding added.",
         "error": "Failed to add holding."
       },
-      "cryptoProviderNotConfigured": "Crypto search is unavailable. Set COINGECKO_API_KEY in your environment to enable it."
+      "cryptoProviderNotConfigured": "Crypto search is unavailable. Configure Kraken or COINGECKO_API_KEY to enable crypto support."
     },
     "deleteInvestmentTransaction": {
       "title": "Delete Transaction",

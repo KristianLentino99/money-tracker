@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { searchSecurities } from '@/api/securities';
+import { groupSecuritySearchResults } from '@/common/utils/group-security-search-results';
 import ResponsiveDialog from '@/components/common/responsive-dialog.vue';
 import ResponsiveTooltip from '@/components/common/responsive-tooltip.vue';
 import SecurityLogo from '@/components/common/security-logo.vue';
@@ -77,6 +78,7 @@ const isSearchPending = computed(
   () => hasQuery.value && (trimmedTerm.value !== debounced.value || query.isFetching.value),
 );
 const results = computed(() => query.data.value ?? []);
+const groupedResults = computed(() => groupSecuritySearchResults({ results: results.value }));
 const hasResults = computed(() => results.value.length > 0);
 const showEndIndicator = computed(() => hasResults.value && results.value.length <= 3);
 
@@ -221,54 +223,63 @@ async function addSymbol(sec: SecuritySearchResult) {
           <!-- RESULTS -->
           <ScrollArea v-else class="h-full">
             <ul>
-              <li
-                v-for="sec in results"
-                :key="`${sec.providerName}:${sec.providerSymbol}`"
-                :class="
-                  cn(
-                    'grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-2 px-2 py-1',
-                    sec.isInPortfolio ? 'cursor-not-allowed opacity-80' : 'hover:bg-muted/40 cursor-pointer',
-                  )
-                "
-                @click="!sec.isInPortfolio && addSymbol(sec)"
-              >
-                <span class="flex items-center gap-2 font-medium">
-                  <span v-if="sec.isInPortfolio" class="text-muted-foreground text-xs">
-                    <CheckCheckIcon class="text-success-text size-3" />
+              <template v-for="group in groupedResults" :key="group.provider">
+                <li
+                  role="presentation"
+                  class="text-muted-foreground border-border/40 bg-muted/20 border-y px-2 py-1.5 text-[10px] font-semibold tracking-wide uppercase first:border-t-0"
+                >
+                  {{ $t('dialogs.addSymbols.providers.heading') }}:
+                  {{ $t(`dialogs.addSymbols.providers.${group.provider}`) }}
+                </li>
+                <li
+                  v-for="sec in group.results"
+                  :key="`${sec.providerName}:${sec.providerSymbol}`"
+                  :class="
+                    cn(
+                      'grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-2 px-2 py-1',
+                      sec.isInPortfolio ? 'cursor-not-allowed opacity-80' : 'hover:bg-muted/40 cursor-pointer',
+                    )
+                  "
+                  @click="!sec.isInPortfolio && addSymbol(sec)"
+                >
+                  <span class="flex items-center gap-2 font-medium">
+                    <span v-if="sec.isInPortfolio" class="text-muted-foreground text-xs">
+                      <CheckCheckIcon class="text-success-text size-3" />
+                    </span>
+
+                    <SecurityLogo :security="sec" class="size-5" />
+
+                    {{ sec.symbol }}
+
+                    <!-- Only show the crypto badge in mixed-class listings (the
+                         "All" tab). When the user has already filtered to
+                         Crypto, repeating it on every row is just noise. -->
+                    <span
+                      v-if="sec.assetClass === ASSET_CLASS.crypto && assetClassFilter === 'all'"
+                      class="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-medium uppercase"
+                    >
+                      {{ $t('dialogs.addSymbols.assetClass.crypto') }}
+                    </span>
                   </span>
 
-                  <SecurityLogo :security="sec" class="size-5" />
+                  <span class="text-muted-foreground truncate text-xs">
+                    {{ sec.name }}
 
-                  {{ sec.symbol }}
-
-                  <!-- Only show the crypto badge in mixed-class listings (the
-                       "All" tab). When the user has already filtered to
-                       Crypto, repeating it on every row is just noise. -->
-                  <span
-                    v-if="sec.assetClass === ASSET_CLASS.crypto && assetClassFilter === 'all'"
-                    class="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-medium uppercase"
-                  >
-                    {{ $t('dialogs.addSymbols.assetClass.crypto') }}
+                    <span v-if="sec.isInPortfolio"> {{ $t('dialogs.addSymbols.addedIndicator') }} </span>
                   </span>
-                </span>
 
-                <span class="text-muted-foreground truncate text-xs">
-                  {{ sec.name }}
+                  <span class="text-muted-foreground text-right text-xs">
+                    <template v-if="sec.assetClass === ASSET_CLASS.crypto && sec.marketCapRank">
+                      {{ $t('dialogs.addSymbols.marketCapRank', { rank: sec.marketCapRank }) }}
+                    </template>
+                    <template v-else>
+                      {{ sec.exchangeName }}
+                    </template>
+                  </span>
 
-                  <span v-if="sec.isInPortfolio"> {{ $t('dialogs.addSymbols.addedIndicator') }} </span>
-                </span>
-
-                <span class="text-muted-foreground text-right text-xs">
-                  <template v-if="sec.assetClass === ASSET_CLASS.crypto && sec.marketCapRank">
-                    {{ $t('dialogs.addSymbols.marketCapRank', { rank: sec.marketCapRank }) }}
-                  </template>
-                  <template v-else>
-                    {{ sec.exchangeName }}
-                  </template>
-                </span>
-
-                <span class="text-muted-foreground text-right text-xs">{{ sec.currencyCode.toUpperCase() }}</span>
-              </li>
+                  <span class="text-muted-foreground text-right text-xs">{{ sec.currencyCode.toUpperCase() }}</span>
+                </li>
+              </template>
             </ul>
 
             <!-- End-of-list indicator. Only meaningful when the list is short

@@ -129,6 +129,7 @@ const securitiesPricesSyncImpl = async (options: SyncOptions): Promise<Securitie
     symbol: s.symbol ?? s.providerSymbol,
     providerSymbol: toProviderSymbol(s.providerSymbol),
     assetClass: s.assetClass,
+    providerName: s.assetClass === ASSET_CLASS.crypto ? s.providerName : undefined,
   }));
 
   logger.info(`[${label}] Fetching prices for ${securitiesById.size} securities using composite provider`);

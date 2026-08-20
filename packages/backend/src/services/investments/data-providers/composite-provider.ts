@@ -16,6 +16,7 @@ import {
 } from './base-provider';
 import { CoinGeckoDataProvider } from './coingecko-provider';
 import { FmpDataProvider } from './fmp-provider';
+import { KrakenDataProvider } from './kraken-provider';
 import { PolygonDataProvider } from './polygon-provider';
 import {
   getHistoricalPriceProviderPreference,
@@ -29,17 +30,23 @@ interface CompositeProviderOptions {
   polygonApiKey?: string;
   alphaVantageApiKey?: string;
   coingeckoApiKey?: string;
+  /** Defaults to true; Kraken's public market catalog needs no API key. */
+  krakenEnabled?: boolean;
   /** Defaults to true (Yahoo requires no API key). Set to false to explicitly disable. */
   yahooEnabled?: boolean;
+  /** Defaults to true. Test-only escape hatch for the legacy single-provider suite. */
+  searchAllProviders?: boolean;
 }
 
 export class CompositeDataProvider extends BaseSecurityDataProvider {
   readonly providerName = SECURITY_PROVIDER.composite;
 
   private providers: Map<SECURITY_PROVIDER, BaseSecurityDataProvider> = new Map();
+  private readonly searchAllProviders: boolean;
 
   constructor(options: CompositeProviderOptions) {
     super();
+    this.searchAllProviders = options.searchAllProviders !== false;
 
     // Initialize available providers
     if (options.fmpApiKey) {
@@ -58,6 +65,10 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
       this.providers.set(SECURITY_PROVIDER.coingecko, new CoinGeckoDataProvider({ apiKey: options.coingeckoApiKey }));
     }
 
+    if (options.krakenEnabled !== false) {
+      this.providers.set(SECURITY_PROVIDER.kraken, new KrakenDataProvider());
+    }
+
     if (options.yahooEnabled !== false) {
       this.providers.set(SECURITY_PROVIDER.yahoo, new YahooDataProvider());
     }
@@ -66,85 +77,110 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
   }
 
   /**
-   * Routes search requests. The query string doesn't tell us whether the user
-   * is looking for a stock or a coin, so when CoinGecko is registered we fan
-   * out: stock provider + CoinGecko in parallel and merge results. A failure
-   * in one side doesn't sink the other.
-   *
-   * Crypto results from stock providers (e.g. Yahoo's "BTC-USD") are dropped
-   * unconditionally because CoinGecko is now the sole source of truth for
-   * crypto – keeping both would surface the same coin twice in the UI.
-   *
-   * `options.assetClass` skips the irrelevant provider entirely (saves a
-   * round-trip when the user has filtered to one class).
+   * Routes search requests to every configured catalog. The query string does
+   * not tell us whether the user wants a stock or a crypto market, so the
+   * composite fans out to both groups in parallel and preserves each result's
+   * providerName for provider-grouped UI rendering. A single provider failure
+   * does not sink the other catalogs.
    */
   public async searchSecurities(query: string, options?: SearchOptions): Promise<SecuritySearchResult[]> {
-    const preference = getSearchProviderPreference();
-    const cryptoProvider = this.providers.get(SECURITY_PROVIDER.coingecko);
-
     const stocksRequested = !options?.assetClass || options.assetClass === ASSET_CLASS.stocks;
     const cryptoRequested = !options?.assetClass || options.assetClass === ASSET_CLASS.crypto;
 
-    if (cryptoRequested && !cryptoProvider) {
-      // Crypto search routed here without CoinGecko registered (typically
-      // COINGECKO_API_KEY missing or set to the .env.template placeholder).
-      //
-      // When the caller explicitly asked for crypto (`assetClass=crypto`), fail
-      // loudly so the API responds 503 and the UI can surface the actionable
-      // "set COINGECKO_API_KEY" hint. Returning [] here would leave self-hosters
-      // staring at an empty result list with no breadcrumb.
-      //
-      // For mixed search (assetClass omitted) we still have stock results to
-      // return – log + continue so the stock half isn't sunk by the missing
-      // optional integration.
-      if (options?.assetClass === ASSET_CLASS.crypto) {
-        throw new ServiceUnavailableError({
-          code: API_ERROR_CODES.cryptoProviderNotConfigured,
-          message: 'Crypto search is unavailable. Set COINGECKO_API_KEY in your environment to enable crypto support.',
-        });
-      }
-      logger.warn(
-        `Crypto search requested for "${query}" but CoinGecko provider is not configured. ` +
-          `Set COINGECKO_API_KEY to enable crypto search.`,
-      );
+    const stockProviderNames = [
+      SECURITY_PROVIDER.yahoo,
+      SECURITY_PROVIDER.fmp,
+      SECURITY_PROVIDER.polygon,
+      SECURITY_PROVIDER.alphavantage,
+    ].filter((providerName) => this.providers.has(providerName));
+    const cryptoProviderNames = [SECURITY_PROVIDER.kraken, SECURITY_PROVIDER.coingecko].filter((providerName) =>
+      this.providers.has(providerName),
+    );
+
+    if (options?.assetClass === ASSET_CLASS.crypto && cryptoProviderNames.length === 0) {
+      throw new ServiceUnavailableError({
+        code: API_ERROR_CODES.cryptoProviderNotConfigured,
+        message: 'Crypto search is unavailable. Configure Kraken or COINGECKO_API_KEY to enable crypto support.',
+      });
     }
 
-    const stockSearch = stocksRequested
-      ? this.executeWithFallback(
-          preference.primary,
-          preference.fallbacks,
-          (provider) => provider.searchSecurities(query, options),
-          `search for "${query}"`,
-        ).catch((error) => {
-          logger.error({ message: `Stock search failed for "${query}"`, error: error as Error });
-          return [] as SecuritySearchResult[];
-        })
-      : Promise.resolve<SecuritySearchResult[]>([]);
+    // Existing integration tests exercise the fallback chain in isolation.
+    // Production defaults to the provider-preserving fan-out below; keeping
+    // this branch explicit makes that test mode deterministic without changing
+    // the user-facing default.
+    if (!this.searchAllProviders) {
+      const preference = getSearchProviderPreference();
+      const cryptoProvider =
+        this.providers.get(SECURITY_PROVIDER.coingecko) ?? this.providers.get(SECURITY_PROVIDER.kraken);
 
-    const cryptoSearch =
-      cryptoRequested && cryptoProvider
-        ? cryptoProvider.searchSecurities(query, options).catch((error) => {
-            logger.error({ message: `CoinGecko search failed for "${query}"`, error: error as Error });
+      const stockSearch = stocksRequested
+        ? this.executeWithFallback(
+            preference.primary,
+            preference.fallbacks,
+            (provider) => provider.searchSecurities(query, options),
+            `search for "${query}"`,
+          ).catch((error) => {
+            logger.error({ message: `Stock search failed for "${query}"`, error: error as Error });
             return [] as SecuritySearchResult[];
           })
         : Promise.resolve<SecuritySearchResult[]>([]);
 
-    const [rawStockResults, cryptoResults] = await Promise.all([stockSearch, cryptoSearch]);
+      const cryptoSearch =
+        cryptoRequested && cryptoProvider
+          ? cryptoProvider.searchSecurities(query, options).catch((error) => {
+              logger.error({ message: `Crypto search failed for "${query}"`, error: error as Error });
+              return [] as SecuritySearchResult[];
+            })
+          : Promise.resolve<SecuritySearchResult[]>([]);
 
-    // Crypto results from a stock provider are duplicates of what CoinGecko
-    // returns – drop them so the UI never shows e.g. both Yahoo's "BTC-USD"
-    // and CoinGecko's "BTC".
-    const stockResults = rawStockResults.filter((r) => r.assetClass !== ASSET_CLASS.crypto);
+      const [rawStockResults, cryptoResults] = await Promise.all([stockSearch, cryptoSearch]);
+      return [...rawStockResults.filter((result) => result.assetClass !== ASSET_CLASS.crypto), ...cryptoResults];
+    }
 
-    return [...stockResults, ...cryptoResults];
+    const providerNames = [
+      ...(stocksRequested ? stockProviderNames : []),
+      ...(cryptoRequested ? cryptoProviderNames : []),
+    ];
+    const searches = providerNames.map(async (providerName) => {
+      const provider = this.providers.get(providerName)!;
+      try {
+        return await provider.searchSecurities(query, options);
+      } catch (error) {
+        logger.info(
+          `Security search failed for ${providerName}: ${error instanceof Error ? error.message : String(error)}`,
+        );
+        return [] as SecuritySearchResult[];
+      }
+    });
+
+    const results = await Promise.all(searches);
+    const seenProviderSymbols = new Set<string>();
+
+    return results.flatMap((providerResults, index) => {
+      const providerName = providerNames[index]!;
+      const isStockProvider = stockProviderNames.includes(providerName);
+
+      return providerResults
+        .filter((result) => !isStockProvider || result.assetClass !== ASSET_CLASS.crypto)
+        .filter((result) => {
+          const key = `${result.providerName}:${result.providerSymbol}`;
+          if (seenProviderSymbols.has(key)) return false;
+          seenProviderSymbols.add(key);
+          return true;
+        });
+    });
   }
 
   /**
-   * Routes latest price requests using assetClass (when known) so crypto goes
-   * to CoinGecko regardless of symbol shape; otherwise falls back to the
-   * existing symbol-classification rules.
+   * Routes provider-bound prices to their catalog source. Unbound securities
+   * retain the existing asset-class and region-based fallback rules.
    */
   public async getLatestPrice(providerSymbol: ProviderSymbol, options?: HistoricalPriceOptions): Promise<PriceData> {
+    const providerName = options?.providerName;
+    if (providerName && providerName !== SECURITY_PROVIDER.composite && this.providers.has(providerName)) {
+      return this.providers.get(providerName)!.getLatestPrice(providerSymbol);
+    }
+
     const preference = getLatestPriceProviderPreference(providerSymbol, options?.assetClass);
 
     return this.executeWithFallback(
@@ -164,7 +200,11 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
     providerSymbol: ProviderSymbol,
     options?: HistoricalPriceOptions,
   ): Promise<PriceData[]> {
-    const preference = getHistoricalPriceProviderPreference(providerSymbol, options?.assetClass);
+    const providerName = options?.providerName;
+    const preference =
+      providerName && providerName !== SECURITY_PROVIDER.composite && this.providers.has(providerName)
+        ? { primary: providerName, fallbacks: [] }
+        : getHistoricalPriceProviderPreference(providerSymbol, options?.assetClass);
 
     const result = await this.executeWithFallback(
       preference.primary,
@@ -232,7 +272,10 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
       // `pricingLastSyncedAt`. A second record here sends the same data to
       // Sentry two times.
       for (const security of failedSecurities) {
-        const preference = getHistoricalPriceProviderPreference(security.symbol, security.assetClass);
+        const preference =
+          security.providerName && this.providers.has(security.providerName)
+            ? { primary: security.providerName, fallbacks: [] }
+            : getHistoricalPriceProviderPreference(security.symbol, security.assetClass);
         // Skip the primary (already failed) and try only fallback providers
         const fallbackNames = preference.fallbacks.filter((f) => f !== preference.primary);
 
@@ -284,7 +327,13 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
     const groups = new Map<SECURITY_PROVIDER, SecurityPriceFetchInput[]>();
 
     securities.forEach((security) => {
-      const preference = getHistoricalPriceProviderPreference(security.symbol, security.assetClass);
+      const preference =
+        security.assetClass === ASSET_CLASS.crypto &&
+        security.providerName &&
+        security.providerName !== SECURITY_PROVIDER.composite &&
+        this.providers.has(security.providerName)
+          ? { primary: security.providerName, fallbacks: [] }
+          : getHistoricalPriceProviderPreference(security.symbol, security.assetClass);
       const providerName = this.findAvailableProvider(preference.primary, preference.fallbacks);
 
       if (providerName) {
@@ -372,6 +421,7 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
       [SECURITY_PROVIDER.polygon]: this.providers.has(SECURITY_PROVIDER.polygon),
       [SECURITY_PROVIDER.alphavantage]: this.providers.has(SECURITY_PROVIDER.alphavantage),
       [SECURITY_PROVIDER.coingecko]: this.providers.has(SECURITY_PROVIDER.coingecko),
+      [SECURITY_PROVIDER.kraken]: this.providers.has(SECURITY_PROVIDER.kraken),
     };
   }
 }

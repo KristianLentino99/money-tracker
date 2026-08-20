@@ -75,9 +75,12 @@ export interface HistoricalPriceOptions {
   endDate?: Date;
   /**
    * Asset class for routing in the composite provider. When set to `crypto`,
-   * the composite delegates to CoinGecko regardless of symbol shape.
+   * the composite uses the stored providerName when available and otherwise
+   * falls back to the default crypto provider preference.
    */
   assetClass?: ASSET_CLASS;
+  /** Provider-native source to use when the security is tied to a venue catalog. */
+  providerName?: SECURITY_PROVIDER;
 }
 
 /**
@@ -101,6 +104,8 @@ export interface SecurityPriceFetchInput {
   symbol: string;
   providerSymbol: ProviderSymbol;
   assetClass: ASSET_CLASS;
+  /** Original catalog provider, used for provider-bound crypto markets. */
+  providerName?: SECURITY_PROVIDER;
 }
 
 export abstract class BaseSecurityDataProvider {

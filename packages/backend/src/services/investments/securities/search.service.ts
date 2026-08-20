@@ -69,8 +69,20 @@ export const searchSecurities = async ({
       (r) => SUPPORTED_ASSET_CLASSES.includes(r.assetClass) && (!assetClass || r.assetClass === assetClass),
     );
 
-    // Apply limit if specified
-    let limitedResults = limit ? supportedResults.slice(0, limit) : supportedResults;
+    // Apply the cap per provider so a high-volume catalog cannot hide every
+    // other provider's match. The UI groups this flat response by provider.
+    let limitedResults = supportedResults;
+    if (limit) {
+      const resultsByProvider = new Map<SECURITY_PROVIDER, SecuritySearchResultFormatted[]>();
+      for (const result of supportedResults) {
+        const providerResults = resultsByProvider.get(result.providerName);
+        if (providerResults) providerResults.push(result);
+        else resultsByProvider.set(result.providerName, [result]);
+      }
+      limitedResults = Array.from(resultsByProvider.values()).flatMap((providerResults) =>
+        providerResults.slice(0, limit),
+      );
+    }
 
     // If portfolioId is provided, check which securities are already in the portfolio
     if (portfolioId) {

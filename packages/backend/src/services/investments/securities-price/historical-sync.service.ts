@@ -46,6 +46,7 @@ const syncHistoricalPricesImpl = async (securityId: string): Promise<{ count: nu
     startDate,
     endDate,
     assetClass: security.assetClass,
+    providerName: security.assetClass === ASSET_CLASS.crypto ? security.providerName : undefined,
   });
 
   if (prices.length === 0) {

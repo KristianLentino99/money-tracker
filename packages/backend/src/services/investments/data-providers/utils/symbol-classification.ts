@@ -62,9 +62,9 @@ export function getSearchProviderPreference(): {
 
 /**
  * Gets provider preference for historical price operations. Passing
- * `assetClass: ASSET_CLASS.crypto` short-circuits to CoinGecko regardless
- * of the symbol shape (CoinGecko coin slugs like "bitcoin" don't fit any
- * existing region regex).
+ * `assetClass: ASSET_CLASS.crypto` uses CoinGecko for legacy/unbound crypto
+ * rows. Provider-bound crypto rows are routed by the composite provider using
+ * their stored providerName, so Kraken pairs retain their venue identity.
  */
 export function getHistoricalPriceProviderPreference(
   symbol: string,

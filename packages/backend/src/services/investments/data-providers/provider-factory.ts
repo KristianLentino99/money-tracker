@@ -8,6 +8,7 @@ import { BaseSecurityDataProvider } from './base-provider';
 import { CoinGeckoDataProvider } from './coingecko-provider';
 import { CompositeDataProvider } from './composite-provider';
 import { FmpDataProvider } from './fmp-provider';
+import { KrakenDataProvider } from './kraken-provider';
 import { PolygonDataProvider } from './polygon-provider';
 import { YahooDataProvider } from './yahoo-provider';
 
@@ -68,13 +69,18 @@ class DataProviderFactory {
         return new CoinGeckoDataProvider({ apiKey });
       }
 
+      case SECURITY_PROVIDER.kraken:
+        return new KrakenDataProvider();
+
       case SECURITY_PROVIDER.composite: {
         return new CompositeDataProvider({
           fmpApiKey: process.env.FMP_API_KEY,
           polygonApiKey: process.env.POLYGON_API_KEY,
           alphaVantageApiKey: process.env.ALPHA_VANTAGE_API_KEY,
           coingeckoApiKey: getCoinGeckoKey(),
+          krakenEnabled: process.env.KRAKEN_SEARCH_ENABLED !== 'false',
           yahooEnabled: process.env.YAHOO_FINANCE_ENABLED !== 'false',
+          searchAllProviders: process.env.SECURITY_SEARCH_ALL_PROVIDERS !== 'false',
         });
       }
 
