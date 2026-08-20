@@ -14,6 +14,11 @@ readonly FINANCE_HOST="${FINANCE_HOST:-18.153.188.35}"
 readonly FINANCE_USER="${FINANCE_USER:-ubuntu}"
 readonly APP_DIR="${FINANCE_APP_DIR:-/opt/money-tracker}"
 readonly REMOTE="${FINANCE_USER}@${FINANCE_HOST}"
+# Vite + vue-tsc exceed Node's ~2 GB default heap on this project. This is used
+# only for the local, disposable image build; the runtime containers keep
+# Node's normal memory settings. Override only if the build machine has a
+# deliberately smaller Docker memory limit.
+readonly FRONTEND_BUILD_NODE_OPTIONS="${FINANCE_FRONTEND_BUILD_NODE_OPTIONS:---max-old-space-size=3072}"
 
 require_command() {
   command -v "$1" >/dev/null 2>&1 || {
@@ -77,6 +82,7 @@ docker buildx build \
   --platform linux/amd64 \
   --load \
   --build-arg "VITE_SENTRY_RELEASE=${TARGET_SHA}" \
+  --build-arg "FRONTEND_BUILD_NODE_OPTIONS=${FRONTEND_BUILD_NODE_OPTIONS}" \
   --file "$BUILD_DIR/self-hosting/frontend/Dockerfile" \
   --tag "$FRONTEND_IMAGE" \
   "$BUILD_DIR"
@@ -137,7 +143,7 @@ for _ in {1..30}; do
 done
 
 echo "Backend did not become healthy; showing service status and logs." >&2
-    "${COMPOSE[@]}" ps >&2
-    "${COMPOSE[@]}" logs --tail=100 backend >&2
+"${COMPOSE[@]}" ps >&2
+"${COMPOSE[@]}" logs --tail=100 backend >&2
 exit 1
 REMOTE_SCRIPT

@@ -19,6 +19,10 @@ both machines; it neither pushes to nor pulls from `letehaha`'s Docker Hub
 repositories. It refuses to deploy if `origin/dev` changes during the build or
 if the server has tracked source edits.
 
+The frontend build receives `--max-old-space-size=3072` automatically. If the
+local Docker VM is deliberately capped below 3 GB, raise its memory allocation
+instead of reducing the heap; Vite's typecheck/build needs that headroom.
+
 No additional secret needs to be added to the repository. The machine running
 the command needs an authenticated AWS CLI profile allowed to call
 `lightsail:DownloadDefaultKeyPair`, Docker, and access to the repository's
