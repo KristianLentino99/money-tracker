@@ -9,10 +9,4 @@ export {
 } from './custom-endpoint-failure';
 export { resolveAIConfiguration } from './ai-model-resolver';
 export { validateApiKey } from './api-key-validation';
-export {
-  getAvailableModels,
-  getFirstModelForProvider,
-  isValidModelId,
-  isRetiredModelId,
-  isModelRecommendedForFeature,
-} from './models-config';
+export { getAvailableModels, isValidModelId, isRetiredModelId, isModelRecommendedForFeature } from './models-config';
