@@ -32,6 +32,12 @@
                 {{ $t('settings.ai.credentialStatus.invalidBadge') }}
               </span>
             </div>
+            <p
+              v-if="providerInfo.provider === AI_PROVIDER.openrouter && providerInfo.model"
+              class="text-muted-foreground mt-1 text-xs"
+            >
+              {{ $t('settings.ai.apiKeyManager.modelValue', { model: providerInfo.model }) }}
+            </p>
             <CredentialStatus
               :status="providerInfo.status"
               :last-validated-at="providerInfo.lastValidatedAt"
@@ -126,7 +132,7 @@
               <select
                 v-model="selectedProvider"
                 class="bg-background w-full appearance-none rounded-md border py-2 pr-9 pl-3"
-                @change="validationError = ''"
+                @change="handleProviderChange"
               >
                 <option v-for="provider in availableProvidersToAdd" :key="provider.value" :value="provider.value">
                   {{ provider.label }}
@@ -157,8 +163,36 @@
             @update:model-value="validationError = ''"
           />
 
+          <div v-if="selectedProvider === AI_PROVIDER.openrouter" class="flex flex-col gap-2">
+            <InputField
+              v-model="modelInput"
+              :label="$t('settings.ai.apiKeyManager.form.modelLabel')"
+              :placeholder="$t('settings.ai.apiKeyManager.form.modelPlaceholder')"
+              :error-message="validationError"
+              @update:model-value="validationError = ''"
+            />
+            <p class="text-muted-foreground text-xs">
+              {{ $t('settings.ai.apiKeyManager.form.modelDescription') }}
+              <a
+                href="https://openrouter.ai/models"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary-text hover:underline"
+              >
+                {{ $t('settings.ai.apiKeyManager.form.modelListLink') }}
+              </a>
+            </p>
+          </div>
+
           <div class="flex gap-2">
-            <Button type="submit" :disabled="!apiKeyInput.trim() || isSettingKey">
+            <Button
+              type="submit"
+              :disabled="
+                !apiKeyInput.trim() ||
+                isSettingKey ||
+                (selectedProvider === AI_PROVIDER.openrouter && !modelInput.trim())
+              "
+            >
               <template v-if="isSettingKey">
                 <Loader2Icon class="mr-2 size-4 animate-spin" />
                 {{ $t('settings.ai.apiKeyManager.form.buttonSaving') }}
@@ -239,6 +273,20 @@ const PROVIDER_CONFIG = computed<Record<AIKeyProvider, ProviderConfigItem>>(() =
     apiKeyUrl: 'https://console.groq.com/keys',
     apiKeyUrlLabel: 'console.groq.com',
   },
+  [AI_PROVIDER.openrouter]: {
+    label: t('settings.ai.apiKeyManager.providers.openrouter.label'),
+    placeholder: t('settings.ai.apiKeyManager.providers.openrouter.placeholder'),
+    description: t('settings.ai.apiKeyManager.providers.openrouter.description'),
+    apiKeyUrl: 'https://openrouter.ai/settings/keys',
+    apiKeyUrlLabel: 'openrouter.ai',
+  },
+  [AI_PROVIDER.deepseek]: {
+    label: t('settings.ai.apiKeyManager.providers.deepseek.label'),
+    placeholder: t('settings.ai.apiKeyManager.providers.deepseek.placeholder'),
+    description: t('settings.ai.apiKeyManager.providers.deepseek.description'),
+    apiKeyUrl: 'https://platform.deepseek.com/api_keys',
+    apiKeyUrlLabel: 'platform.deepseek.com',
+  },
 }));
 
 const { addErrorNotification, addSuccessNotification } = useNotificationCenter();
@@ -254,6 +302,7 @@ const {
 } = useAiSettings();
 
 const apiKeyInput = ref('');
+const modelInput = ref('');
 const selectedProvider = ref<AIKeyProvider>(AI_PROVIDER.openai);
 const validationError = ref('');
 const deleteDialogState = reactive<{
@@ -293,16 +342,28 @@ const getProviderDescription = (provider: AIKeyProvider) => PROVIDER_CONFIG.valu
 const getProviderApiKeyUrl = (provider: AIKeyProvider) => PROVIDER_CONFIG.value[provider]?.apiKeyUrl ?? '';
 const getProviderApiKeyUrlLabel = (provider: AIKeyProvider) => PROVIDER_CONFIG.value[provider]?.apiKeyUrlLabel ?? '';
 
+const handleProviderChange = () => {
+  validationError.value = '';
+  if (selectedProvider.value !== AI_PROVIDER.openrouter) modelInput.value = '';
+};
+
 const handleSaveKey = async () => {
   const trimmedKey = apiKeyInput.value.trim();
   if (!trimmedKey) return;
+  const trimmedModel = modelInput.value.trim();
+  if (selectedProvider.value === AI_PROVIDER.openrouter && !trimmedModel) return;
 
   // Clear any previous validation error
   validationError.value = '';
 
   try {
-    await setApiKey({ apiKey: trimmedKey, provider: selectedProvider.value });
+    await setApiKey({
+      apiKey: trimmedKey,
+      provider: selectedProvider.value,
+      ...(selectedProvider.value === AI_PROVIDER.openrouter ? { model: trimmedModel } : {}),
+    });
     apiKeyInput.value = '';
+    modelInput.value = '';
     addSuccessNotification(t('settings.ai.apiKeyManager.notifications.saveSuccess'));
 
     trackAnalyticsEvent({

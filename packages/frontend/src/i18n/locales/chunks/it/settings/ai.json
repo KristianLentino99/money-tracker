@@ -1,0 +1,291 @@
+{
+  "settings": {
+    "ai": {
+      "title": "Impostazioni AI",
+      "description": "Configura AI-powered features like automatico Transazione categorizzazione",
+      "tabs": {
+        "features": "funzionalità di IA",
+        "apiKeys": "Chiavi API",
+        "invalidKeysTooltip": "uno o Altro Chiavi API sono Non valido",
+        "customEndpoints": "Personalizzato endpoint",
+        "invalidEndpointsTooltip": "uno o Altro Personalizzato endpoint sono nessun longer working"
+      },
+      "apiKeyManager": {
+        "title": "Chiavi API",
+        "description": "Aggiungi Il tuo propri Chiavi API un Usa specific fornitori",
+        "badges": {
+          "default": "Predefinito"
+        },
+        "buttons": {
+          "setDefault": "imposta come Predefinito"
+        },
+        "invalidKeyHelp": "Aggiungi un Nuovo chiave sotto un replace questo uno, o Rimuovi it se tu nessun longer serve it.",
+        "modelValue": "Modello: {model}",
+        "deleteDialog": {
+          "title": "Rimuovi Chiave API?",
+          "description": "Sei sicuro tu vuoi un Rimuovi il {provider} Chiave API?",
+          "descriptionMultiple": "funzionalità di IA attualmente usando {provider} sarà switch un un altro disponibile fornitore.",
+          "cancel": "Annulla",
+          "remove": "Rimuovi"
+        },
+        "allConfigured": "tutti fornitori sono imposta su",
+        "form": {
+          "titleAdd": "Aggiungi Chiave API",
+          "titleAddAnother": "Aggiungi un altro fornitore",
+          "providerLabel": "fornitore",
+          "apiKeyLabel": "Chiave API",
+          "modelLabel": "ID modello OpenRouter",
+          "modelPlaceholder": "deepseek/deepseek-v4-flash",
+          "modelDescription": "Inserisci l'identificativo esatto del modello da",
+          "modelListLink": "lista modelli di OpenRouter",
+          "buttonSaving": "Validating...",
+          "buttonSave": "Salva chiave"
+        },
+        "providers": {
+          "anthropic": {
+            "label": "Anthropic (Claude)",
+            "placeholder": "sk-ant-...",
+            "description": "ottieni Il tuo Chiave API da"
+          },
+          "openai": {
+            "label": "OpenAI (GPT)",
+            "placeholder": "sk-...",
+            "description": "ottieni Il tuo Chiave API da"
+          },
+          "google": {
+            "label": "Google (Gemini)",
+            "placeholder": "AIza...",
+            "description": "ottieni Il tuo Chiave API da"
+          },
+          "groq": {
+            "label": "Groq (Llama, GPT-OSS)",
+            "placeholder": "gsk_...",
+            "description": "ottieni Il tuo Chiave API da"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "placeholder": "sk-o-v1-...",
+            "description": "ottieni Il tuo Chiave API da"
+          },
+          "deepseek": {
+            "label": "DeepSeek",
+            "placeholder": "sk-...",
+            "description": "ottieni Il tuo Chiave API da"
+          }
+        },
+        "notifications": {
+          "saveSuccess": "Chiave API salvato e Convalidato correttamente",
+          "saveFailed": "Chiave API non è working. per favore verifica il chiave è correct, ha sufficient credits, e ha il Obbligatorio autorizzazioni.",
+          "setDefaultSuccess": "{provider} imposta come Predefinito",
+          "setDefaultFailed": "Impossibile imposta Predefinito fornitore",
+          "removeSuccess": "{provider} Chiave API rimosso",
+          "removeFailed": "Impossibile Rimuovi Chiave API"
+        }
+      },
+      "credentialStatus": {
+        "validated": "Convalidato {timeAgo}",
+        "failed": "non riuscito {timeAgo}",
+        "invalidBadge": "Non valido"
+      },
+      "features": {
+        "title": "funzionalità di IA",
+        "description": "Configura che Modello un Usa per ogni AI-powered feature",
+        "loading": "Caricamento features..."
+      },
+      "categorization": {
+        "modelHint": {
+          "trigger": "What Modello dovrebbe I Scegli?",
+          "text": "per Transazione categorizzazione, low-costo Modelli like Gemma 4, Gemini 3.5 Flash Lite, o Claude Haiku 4.5 sono recommended. categorizzazione è un straightforward task quello non require expensive reasoning Modelli. usando cheaper Modelli lets tu process Altro Transazioni a lower costo."
+        },
+        "howItWorks": {
+          "title": "come it works",
+          "points": {
+            "autoSync": "quando tu sincronizzazione Transazioni da Il tuo banca, uncategorized Transazioni sono automaticamente inviata un AI per categorizzazione.",
+            "analysis": "il AI analyzes Transazione descriptions e Esercente nomi un suggest appropriate Categorie da Il tuo esistente Categoria elenco.",
+            "override": "Puoi sempre manualmente override AI-suggested Categorie."
+          }
+        },
+        "loading": "Caricamento Modelli..."
+      },
+      "statementParsing": {
+        "modelHint": {
+          "trigger": "What Modello dovrebbe I Scegli?",
+          "text": "per Estratto conto parsing, mid-tier Modelli like Gemini 3.6 Flash, Claude Sonnet 5, o GPT-5.6 Terra sono recommended. Estratto conto parsing requires understanding complex document structures e extracting accurate data, che benefits da Altro capable Modelli. However, cheaper Modelli like Gemini 3.5 Flash Lite o Claude Haiku 4.5 può anche work well per simpler Estratti conto."
+        },
+        "howItWorks": {
+          "title": "come it works",
+          "points": {
+            "upload": "Carica un banca Estratto conto (PDF, CSV, o TXT) e AI sarà extract tutti Transazioni automaticamente.",
+            "analysis": "il AI analyzes il document structure un identify data, descriptions, amounts, e Transazione tipi.",
+            "review": "Puoi revisione e correct qualsiasi extracted data prima di importazione in Il tuo Conto.",
+            "cost": "costo è estimated prima di elaborazione, ancora it solo reflects il approximate costo."
+          }
+        },
+        "loading": "Caricamento Modelli..."
+      },
+      "modelSelector": {
+        "badges": {
+          "yourKey": "Il tuo chiave",
+          "yourKeyTooltip": "questo feature uses Il tuo personal Chiave API. Hai full control over usage e costs, con nessun Tasso limits da nostro server.",
+          "server": "server",
+          "serverTooltip": "questo feature uses nostro server's condiviso Chiave API. It's Gratis but potrebbe hai Tasso limits durante high demand. Aggiungi Il tuo propri Chiave API per unlimited accesso."
+        },
+        "modelLabel": "Modello",
+        "resetButton": "Reimposta un Predefinito",
+        "noApiKey": "(nessun Chiave API)",
+        "modelInfo": {
+          "context": "Context:",
+          "capabilities": "Capabilities:",
+          "estimatedCost": "Est. costo:",
+          "per100Transactions": "per 100 txns",
+          "unknown": "Sconosciuto"
+        },
+        "rateLimitWarning": "usando server-fornito AI con Gratis-tier Tasso limiting. Feature availability depends su demand da Altro utenti. per reliable accesso, Aggiungi Il tuo propri Chiave API in il Chiavi API tab.",
+        "groupLabels": {
+          "recommended": "⭐ Recommended",
+          "openai": "OpenAI",
+          "anthropic": "Anthropic",
+          "google": "Google",
+          "groq": "Groq",
+          "openrouter": "OpenRouter",
+          "deepseek": "DeepSeek"
+        },
+        "costLabels": {
+          "free": "Gratis",
+          "low": "Low costo",
+          "medium": "Medium costo",
+          "high": "High costo",
+          "unknown": "Costo sconosciuto"
+        },
+        "capabilities": {
+          "textGeneration": "Text",
+          "structuredOutput": "Structured",
+          "functionCalling": "Functions",
+          "vision": "Vision",
+          "fastInference": "Fast",
+          "agents": "Agents"
+        },
+        "notifications": {
+          "updateSuccess": "Modello aggiornato correttamente",
+          "updateFailed": "Impossibile Aggiorna Modello",
+          "resetSuccess": "Reimposta un Modello predefinito",
+          "resetFailed": "Impossibile Reimposta Modello"
+        },
+        "addKeyHint": "Aggiungi Il tuo propri Chiave API un Seleziona da tutti disponibile Modelli.",
+        "addKeyHintLink": "Aggiungi Chiave API →",
+        "customModel": {
+          "nameLabel": "Modello Nome",
+          "applyButton": "Applica",
+          "hint": "inviata come-è un {baseUrl}.",
+          "endpointOption": "{endpoint} — {model}",
+          "unknownEndpoint": "endpoint personalizzato",
+          "missingModelName": "questo endpoint ha nessun Modello Nome configured — inserisci uno primo",
+          "endpointsLoadError": "Il tuo endpoint Impossibile essere caricato, so il Modello Nome può't essere modificato in questo momento."
+        }
+      },
+      "customEndpoint": {
+        "title": "Personalizzato endpoint",
+        "description": "Connetti Il tuo propri compatibile con OpenAI servers e Usa loro Modelli per qualsiasi AI feature.",
+        "loading": "Caricamento endpoint…",
+        "addButton": "Aggiungi endpoint",
+        "empty": {
+          "title": "nessun Personalizzato endpoint ancora",
+          "description": "Connetti un compatibile con OpenAI server — un local Ollama, LM Studio, o un hosted gateway — un Usa its Modelli per qualsiasi AI feature."
+        },
+        "loadError": {
+          "title": "non è stato possibile carica Il tuo endpoint",
+          "description": "Il tuo salvato endpoint sono ancora there — we just non è stato possibile fetch li in questo momento. Check Il tuo connessione e Riprova.",
+          "retry": "Riprova"
+        },
+        "status": {
+          "model": "Modello: {model}"
+        },
+        "actions": {
+          "menuAriaLabel": "endpoint azioni",
+          "reconnect": "ricollega"
+        },
+        "form": {
+          "titleAdd": "Aggiungi endpoint",
+          "titleEdit": "Modifica endpoint",
+          "nameLabel": "Nome",
+          "namePlaceholder": "Home Ollama",
+          "baseUrlLabel": "Base URL",
+          "baseUrlPlaceholder": "http://localhost:11434/v1",
+          "modelLabel": "Modello Nome",
+          "modelPlaceholder": "llama3.2",
+          "apiKeyLabel": "Chiave API (Facoltativo)",
+          "apiKeyPlaceholder": "inserisci Chiave API",
+          "apiKeySavedHint": "un chiave è salvato. lasciare blank un Mantieni it.",
+          "apiKeyOptionalHint": "lasciare blank se Il tuo endpoint needs nessun Autenticazione.",
+          "removeApiKeyButton": "Rimuovi salvato chiave",
+          "saveButton": "Salva",
+          "testButton": "Testa connessione",
+          "removeButton": "Rimuovi"
+        },
+        "compatibilityHint": "il endpoint deve essere compatibile con OpenAI. Works con Ollama, vLLM, OpenRouter, LM Studio, e qualsiasi /v1 proxy.",
+        "test": {
+          "success": "connessione successful.",
+          "failed": "Impossibile reach il endpoint."
+        },
+        "notifications": {
+          "saveSuccess": "endpoint personalizzato salvato",
+          "saveFailed": "Impossibile Salva il endpoint personalizzato",
+          "removeSuccess": "endpoint personalizzato rimosso",
+          "removeFailed": "Impossibile Rimuovi il endpoint personalizzato",
+          "removeKeySuccess": "salvato chiave rimosso",
+          "removeKeyFailed": "Impossibile Rimuovi il salvato chiave",
+          "removeKeyInvalid": "Chiave API rimosso, but il endpoint non riuscito validation senza it: {reason}",
+          "editedEndpointGone": "questo endpoint era rimosso, so il editor era closed."
+        },
+        "removeDialog": {
+          "title": "Rimuovi endpoint personalizzato?",
+          "descriptionNamed": "\"{name}\" sarà essere rimosso. qualsiasi feature usando it falls Indietro un un altro disponibile Modello. Questa azione non può essere annullata.",
+          "confirm": "Rimuovi"
+        },
+        "removeKeyDialog": {
+          "title": "Rimuovi salvato chiave?",
+          "description": "il endpoint è re-tested senza un chiave. se it requires Autenticazione, il Cambia è rejected.",
+          "confirm": "Rimuovi chiave"
+        },
+        "setupHelp": {
+          "trigger": "Where do I trova questi?",
+          "rule": "il Base URL è everything su un, but non including, {path}. per almost ogni fornitore quello means it ends in {suffix}.",
+          "ruleCheck": "Quick check: opening {url} dovrebbe Rendimento un JSON elenco di Modelli.",
+          "apiKeyEmpty": "lasciare empty.",
+          "lmStudio": {
+            "startServer": "Inizio il local server primo (Developer tab → Inizio server).",
+            "baseUrl": "il indirizzo LM Studio shows, plus {suffix}. per example {example}.",
+            "model": "il Modello's API identifier. It's shown in il Developer tab, o listed a {url}."
+          },
+          "ollama": {
+            "model": "il exact Etichetta da {command}, per example {example}."
+          },
+          "openRouter": {
+            "model": "il full Modello id da loro Modelli Pagina, per example {example}.",
+            "apiKeyRequired": "Obbligatorio."
+          },
+          "other": {
+            "tabLabel": "Altro",
+            "title": "{name} o qualsiasi Altro compatibile con OpenAI server",
+            "baseUrl": "il server indirizzo, plus {suffix}.",
+            "model": "Whatever {request} returns come il {field}.",
+            "apiKey": "solo se il server era imposta su un require uno."
+          },
+          "localNetworkOnly": "un server running su Il tuo propri computer ({ip} o {hostname}) solo works quando questa app runs su Il tuo propri machine o Il tuo propri network. il hosted Versione può't reach it, because privato addresses sono blocked there.",
+          "dockerHost": "se tu run questa app in Docker su il same machine come il Modello server, Usa {dockerHost} instead di {ip}."
+        }
+      },
+      "customInstructions": {
+        "title": "Personalizzato Instructions",
+        "description": "Provide context un aiuto AI categorize Il tuo Transazioni. questi instructions sono included quando categorizing Transazioni durante banca sincronizzazione e manuale Importa.",
+        "placeholder": "e.g., Transazioni da 'Starbucks' dovrebbe essere 'Coffee'. My freelance Entrate comes da 'Acme Corp'.",
+        "requiresOwnCredentials": "Aggiungi Il tuo propri Chiave API o un endpoint personalizzato un Usa Personalizzato instructions.",
+        "credentialsCheckFailed": "We non è stato possibile check whether Hai Il tuo propri AI credenziali. Riprova un unlock Personalizzato instructions.",
+        "retryCredentialsCheck": "Riprova",
+        "save": "Salva",
+        "saved": "salvato!",
+        "saveFailed": "Impossibile Salva Personalizzato instructions. Riprova."
+      }
+    }
+  }
+}

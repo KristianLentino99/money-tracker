@@ -31,4 +31,8 @@ export enum AI_MODEL_ID {
   'groq/openai/gpt-oss-120b' = 'groq/openai/gpt-oss-120b',
   'groq/openai/gpt-oss-20b' = 'groq/openai/gpt-oss-20b',
   'groq/llama-3.3-70b-versatile' = 'groq/llama-3.3-70b-versatile',
+
+  // DeepSeek direct API
+  'deepseek/deepseek-v4-flash' = 'deepseek/deepseek-v4-flash',
+  'deepseek/deepseek-v4-pro' = 'deepseek/deepseek-v4-pro',
 }

@@ -1,0 +1,324 @@
+{
+  "navigation": {
+    "dashboard": "Riepilogo",
+    "accounts": "Conti",
+    "accountsList": "Tutti i conti",
+    "investments": "Investimenti",
+    "loans": "Prestiti",
+    "allTransactions": "Tutto Transazioni",
+    "transactions": "Transazioni",
+    "transactionGroups": "gruppi",
+    "analytics": "Analisi",
+    "optimizations": "Optimizations",
+    "accountDetails": "Conto Dettagli",
+    "logout": "disconnetti",
+    "settings": "Impostazioni",
+    "planned": {
+      "planned": "Pianificato",
+      "subscriptions": "Ricorrente Pagamenti",
+      "budgets": "budget"
+    },
+    "venture": "Venture"
+  },
+  "sidebar": {
+    "settings": {
+      "title": "Impostazioni",
+      "sections": {
+        "label": "Sidebar sections",
+        "description": "scegli che sections appear in il sidebar.",
+        "alwaysVisibleTooltip": "questo section è sempre visible."
+      },
+      "hideZeroBalances": {
+        "label": "Nascondi zero saldi",
+        "description": "Nascondi Conti e gruppi con a zero Saldo"
+      }
+    },
+    "accountsView": {
+      "title": "Conti",
+      "bankAccounts": "banca Conti",
+      "newAccount": "Nuovo Conto",
+      "newAccountsGroup": "Nuovo Conti gruppo",
+      "portfolios": "portafogli",
+      "newPortfolio": "Nuovo Portafoglio",
+      "noPortfolios": "nessun portafogli ancora",
+      "ventures": "Ventures",
+      "cars": "Cars",
+      "loans": "Prestiti",
+      "collapseNavigation": "Collapse navigation",
+      "viaHousehold": "condiviso via {handle}'s Famiglia",
+      "sharedBy": "condiviso da {handle}",
+      "needsReauthTooltip": "connessione scaduto. ricollega a resume syncing."
+    }
+  },
+  "header": {
+    "add": "Aggiungi",
+    "importData": "Importa dati",
+    "language": "Lingua",
+    "newTransaction": "Aggiungi transazione",
+    "settings": "Impostazioni",
+    "feedback": "Invia feedback",
+    "support": "Supporto",
+    "sync": {
+      "syncing": "Syncing",
+      "synchronizing": "Synchronizing...",
+      "syncedTime": "Synced {time}",
+      "connectBank": "connetti banca",
+      "syncingAccounts": "Syncing {count} Conti",
+      "stuck": "sincronizzazione stuck"
+    },
+    "categorization": {
+      "title": "AI Categorizzazione",
+      "categorizing": "Categorizing...",
+      "completed": "AI categorized {count} Transazione | AI categorized {count} Transazioni",
+      "completedShort": "Categorizzazione complete",
+      "completedWithSkipped": "Categorized {count} Transazione ({skipped} Saltato) | Categorized {count} Transazioni ({skipped} Saltato)",
+      "failed": "Categorizzazione non riuscito",
+      "failedShort": "non riuscito",
+      "allSkipped": "AI non è stato possibile confidently categorize il Transazione | AI non è stato possibile confidently categorize qualsiasi di il {count} Transazioni",
+      "queued": "Waiting a inizio...",
+      "transactions": "Transazioni"
+    }
+  },
+  "themeSelector": {
+    "light": "chiaro",
+    "dark": "scuro",
+    "system": "System"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "lasciare feedback",
+      "description": "Tell us what è working e what è non.",
+      "typeLabel": "Tipo",
+      "typePlaceholder": "scegli a Tipo",
+      "types": {
+        "bug": "Something è broken",
+        "featureRequest": "I vuoi a feature",
+        "other": "Something else"
+      },
+      "messageLabel": "il tuo feedback",
+      "messagePlaceholder": "What happened, Oppure what would tu like a Visualizza?",
+      "messageRequired": "Per favore scrivi a messaggio prima di invio.",
+      "submit": "Invia",
+      "thanks": "Thanks, we Leggi ogni messaggio.",
+      "unavailable": "invio è non disponibile in questo momento. Usa il board sotto instead.",
+      "or": "Oppure",
+      "board": {
+        "title": "Post it su il pubblico board",
+        "description": "Vote su Altro people's ideas, Visualizza what è già Pianificato, e ottieni a reply su yours."
+      }
+    }
+  },
+  "syncStatusTooltip": {
+    "title": "banche connessioni sincronizzazione Stato",
+    "syncedSuccessfully": "Synced correttamente",
+    "syncCompletedWithErrors": "alcuni Conti Impossibile sincronizzazione",
+    "syncStuckTitle": "sincronizzazione seems stuck",
+    "syncStuckDescription": "alcuni banca connessioni didn't respond in ora. riprova di nuovo, Oppure ricollega li da il integrations Pagina.",
+    "progress": "{current} di {total} synced",
+    "progressPercentage": "{percentage}%",
+    "statuses": {
+      "syncing": "Syncing",
+      "queued": "Queued",
+      "synced": "Synced",
+      "failed": "non riuscito",
+      "idle": "Idle"
+    },
+    "lastSynced": "ultimo synced:",
+    "neverSynced": "Never synced",
+    "syncNowButton": "sincronizzazione ora",
+    "noBankAccounts": "nessun banca Conti connesso",
+    "connectButton": "connetti",
+    "retrySyncButton": "Riprova sincronizzazione",
+    "manageConnectionsButton": "gestisci connessioni",
+    "needsReauthTitle": "connessioni serve reconnecting",
+    "needsReauthDescription": "questi banca sessioni scaduto. ricollega a resume syncing.",
+    "reconnectButton": "ricollega",
+    "affectedAccounts": "1 Conto | {count} Conti",
+    "timeAgo": {
+      "justNow": "Just ora",
+      "secondsAgo": "{count} secondo fa | {count} secondi fa",
+      "minutesAgo": "{count} minuto fa | {count} minuti fa",
+      "hoursAgo": "{count} ora fa | {count} ore fa",
+      "daysAgo": "{count} giorno fa | {count} giorni fa",
+      "weeksAgo": "{count} Settimana fa | {count} settimane fa",
+      "monthsAgo": "{count} Mese fa | {count} mesi fa",
+      "yearsAgo": "{count} Anno fa | {count} anni fa"
+    }
+  },
+  "banners": {
+    "recoveryMethod": {
+      "title": "Aggiungi a backup accesso metodo",
+      "description": "Protect il tuo Conto da adding Google Accesso Oppure a passkey. questo ensures Puoi sempre accesso il tuo Conto.",
+      "actionButton": "Go a Titolo Impostazioni"
+    }
+  },
+  "relinkWarning": {
+    "buttonLabel": "{count} Conto Richiede attenzione | {count} Conti serve attention",
+    "title": "Abilita Banking: Azione obbligatorio",
+    "description": "questi Abilita Banking Conti serve a essere aggiornato due a a data schema change. questo è a uno-ora Azione a improve synchronization reliability.",
+    "step1Full": "a Salva il tuo ora, firstly riprova reconnecting il whole banca connessione. Puoi trova a {reconnect} button under il {connectionValidity} section su ogni connessione Pagina:",
+    "reconnectButton": "ricollega",
+    "connectionValiditySection": "connessione Validity",
+    "connectionLabel": "connessione #{id}",
+    "step2Full": "se qualsiasi Conti remain listed sotto dopo reconnection, go a ogni Conto e manualmente {unlink} then {link} di nuovo.",
+    "unlinkAction": "scollega",
+    "linkAction": "Collega"
+  },
+  "pages": {
+    "integrations": {
+      "providers": {
+        "monobank": {
+          "name": "Monobank"
+        },
+        "enableBanking": {
+          "name": "Abilita Banking"
+        },
+        "lunchflow": {
+          "name": "Lunch Flow"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "onboarding": {
+      "title": "Benvenuto a MoneyMatter",
+      "subtitle": "ottieni started da setting su il tuo primo Conto",
+      "createManualAccount": {
+        "title": "Crea manuale Conto",
+        "description": "traccia Contanti, savings, Oppure qualsiasi Conto manualmente"
+      },
+      "connectBank": {
+        "title": "connetti il tuo banca",
+        "description": "automaticamente sincronizzazione Transazioni da il tuo banca"
+      },
+      "divider": "Oppure Importa esistente data",
+      "importFile": {
+        "title": "Importa da file",
+        "description": "Importa transazioni da banca Estratti conto (PDF) Oppure CSV file"
+      },
+      "quickStart": {
+        "categories": {
+          "getting-started": {
+            "title": "Getting Started"
+          },
+          "advanced-transactions": {
+            "title": "Avanzato Transazioni"
+          },
+          "organization": {
+            "title": "Organize il tuo Finances"
+          },
+          "bank-import": {
+            "title": "connetti & Importa"
+          },
+          "analytics": {
+            "title": "Explore Analisi"
+          },
+          "ai-settings": {
+            "title": "funzionalità di IA"
+          },
+          "sharing": {
+            "title": "Sharing & Famiglia"
+          }
+        },
+        "tasks": {
+          "create-account": {
+            "title": "Crea il tuo primo Conto",
+            "description": "Aggiungi a banca Conto Oppure wallet a traccia"
+          },
+          "add-transaction": {
+            "title": "Aggiungi il tuo primo Transazione",
+            "description": "registrazione an Entrate Oppure Uscita"
+          },
+          "create-transfer": {
+            "title": "Crea a Trasferimento",
+            "description": "Move money tra il tuo Conti"
+          },
+          "link-refund": {
+            "title": "Collega a Rimborso",
+            "description": "connetti Rimborsi a originale purchases"
+          },
+          "link-transactions": {
+            "title": "Collega esistente Transazioni",
+            "description": "connetti related Transazioni together"
+          },
+          "split-transaction": {
+            "title": "Suddivisione a Transazione",
+            "description": "Divide Uscite across Categorie"
+          },
+          "mark-transfer-out": {
+            "title": "Mark Trasferimento Fuori portafoglio",
+            "description": "traccia money leaving il tuo Conti"
+          },
+          "create-category": {
+            "title": "Crea a Personalizzato Categoria",
+            "description": "Organize il tuo Transazioni da Tipo"
+          },
+          "create-tag": {
+            "title": "Crea a Etichetta",
+            "description": "Aggiungi Etichette a gruppo related Transazioni"
+          },
+          "create-budget": {
+            "title": "imposta su a budget",
+            "description": "Crea spesa limits per Categorie"
+          },
+          "create-subscription": {
+            "title": "Crea a abbonamento",
+            "description": "imposta su Ricorrente Pagamenti a traccia il tuo Abbonamenti"
+          },
+          "create-account-group": {
+            "title": "Crea an Conto gruppo",
+            "description": "Organize Conti da Tipo Oppure purpose"
+          },
+          "setup-tag-reminder": {
+            "title": "imposta su a Etichetta reminder",
+            "description": "ottieni notified about Ricorrente Uscite"
+          },
+          "connect-bank": {
+            "title": "connetti a banca Conto",
+            "description": "sincronizzazione Transazioni automaticamente"
+          },
+          "import-csv": {
+            "title": "Importa da qualsiasi text origine",
+            "description": "Importa da CSV, PDF, Oppure banca Estratti conto"
+          },
+          "view-annual-overview": {
+            "title": "Check annual overview",
+            "description": "Visualizza Annuale trends e patterns"
+          },
+          "view-cash-flow": {
+            "title": "visualizza Flusso di cassa Analisi",
+            "description": "Understand il tuo Entrate vs Uscite"
+          },
+          "review-ai-features": {
+            "title": "revisione funzionalità di IA",
+            "description": "Explore disponibile AI capabilities"
+          },
+          "configure-ai": {
+            "title": "imposta il tuo propri Chiave API",
+            "description": "Usa il tuo AI Chiave API per il unlimited e uninterrupted accesso"
+          },
+          "invite-household-member": {
+            "title": "invita a Famiglia membro",
+            "description": "Azione il tuo whole financial life con someone — they ottieni accesso a ogni Conto Hai ora e Aggiungi più tardi."
+          },
+          "share-account": {
+            "title": "Azione an Conto",
+            "description": "apri qualsiasi Conto e Usa il Azione Azione a Concedi a single utente Leggi Oppure scrivi accesso."
+          }
+        },
+        "ui": {
+          "title": "Quick inizio",
+          "subtitle": "Usa our Quick inizio guide a learn about everything MoneyMatter può do per tu.",
+          "dismissButton": "Dismiss definitivamente",
+          "dismissConfirmTitle": "Dismiss Quick inizio?",
+          "dismissConfirmDescription": "Puoi sempre reopen il Quick inizio guide da Impostazioni se tu change il tuo mind.",
+          "dismissConfirmButton": "Dismiss",
+          "triggerTooltip": "Quick inizio - {count} tasks rimanente",
+          "srDescription": "Complete questi tasks a ottieni started con il app",
+          "progressText": "{completed} di {total} complete",
+          "categoryProgress": "{completed} di {total} complete"
+        }
+      }
+    }
+  }
+}

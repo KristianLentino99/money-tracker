@@ -47,6 +47,11 @@ export async function resolveAIConfiguration({
   const aiSettings = await getStoredAiSettings({ userId });
   const endpoints = aiSettings?.customEndpoints ?? [];
   const storedKeyProviders = (aiSettings?.apiKeys ?? []).map((key) => key.provider);
+  const providerModels = new Map<AIKeyProvider, string>();
+  const openRouterModel = aiSettings?.apiKeys?.find((key) => key.provider === AI_PROVIDER.openrouter)?.model;
+  if (openRouterModel) {
+    providerModels.set(AI_PROVIDER.openrouter, `${AI_PROVIDER.openrouter}/${openRouterModel}`);
+  }
 
   if (config && !getProviderFromModelId({ modelId: config.modelId })) {
     logger.warn('Unknown model ID in user feature config', { userId, feature, modelId: config.modelId });
@@ -63,6 +68,8 @@ export async function resolveAIConfiguration({
       feature,
       config,
       keyProviders: new Set(storedKeyProviders.filter((provider) => !unreadableKeyProviders.has(provider))),
+      providerModels,
+      defaultProvider: aiSettings?.defaultProvider,
       endpoints,
       excludedEndpointIds,
     });

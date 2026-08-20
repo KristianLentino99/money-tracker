@@ -1,0 +1,114 @@
+{
+  "budgets": {
+    "title": "budget",
+    "description": "traccia spesa e monitor financial events",
+    "notFound": "budget Non trovato",
+    "notFoundDescription": "We non è stato possibile trova questo budget. It potrebbe hai been eliminato o tu might non hai accesso un it.",
+    "backToList": "Indietro un budget",
+    "newBudget": "Nuovo budget",
+    "createBudget": "Crea budget",
+    "creation": {
+      "success": "budget creato",
+      "error": "Errore imprevisto!",
+      "nameLabel": "budget Nome",
+      "namePlaceholder": "inserisci il Nome",
+      "typeLabel": "budget Tipo",
+      "typeManual": "manuale",
+      "typeManualDescription": "manualmente Aggiungi Transazioni un questo budget",
+      "typeCategory": "Categoria-based",
+      "typeCategoryDescription": "Auto-traccia spesa da Categorie",
+      "categoriesLabel": "Categorie un traccia",
+      "categoriesRequired": "Seleziona almeno uno Categoria",
+      "fromDateLabel": "Dalla data",
+      "toDateLabel": "Alla data",
+      "autoIncludeLabel": "Auto Includi Transazioni",
+      "limitLabel": "budget limite",
+      "limitPlaceholder": "inserisci il limite",
+      "submitButton": "Aggiungi budget"
+    },
+    "list": {
+      "tabCategory": "Categoria budget",
+      "tabManual": "manuale budget",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "deleteSuccess": "budget eliminato correttamente!",
+      "deleteError": "Errore imprevisto!",
+      "updateSuccess": "budget aggiornato correttamente!",
+      "updateError": "Impossibile Aggiorna budget",
+      "unlinkTransactionsSuccess": "Transazioni unlinked correttamente!",
+      "deleteDialog": {
+        "title": "Do tu vuoi un Elimina questo budget?",
+        "description": "da clicking \"accetta\", tutti associated Transazioni sarà essere unlinked da il budget but sarà remain in il system."
+      },
+      "limitLabel": "limite: {amount}",
+      "transactionsCount": "{count} Transazioni",
+      "categoriesCount": "{count} Categorie",
+      "noTransactions": "Nessuna transazione ancora",
+      "noTimePeriod": "nessun ora Periodo",
+      "autoTracked": "Auto-tracked",
+      "status": {
+        "ended": "Ended",
+        "lastDay": "ultimo giorno",
+        "oneDayLeft": "1 giorno left",
+        "daysLeft": "{count} giorni left",
+        "startsToday": "Starts Oggi",
+        "startsTomorrow": "Starts Domani",
+        "startsInDays": "Starts in {count} giorni"
+      },
+      "income": "Entrate",
+      "expenses": "Uscite",
+      "net": "Net",
+      "used": "utilizzato",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "archivedLabel": "Archived",
+      "archiveError": "Impossibile Aggiorna archive Stato",
+      "showArchived": "Mostra archived",
+      "hideArchived": "Nascondi archived",
+      "emptyState": {
+        "title": "nessun budget ancora",
+        "description": "Crea un budget un Inizio tracking Il tuo spesa o monitoring specific events."
+      }
+    },
+    "settings": {
+      "nameLabel": "budget Nome",
+      "namePlaceholder": "inserisci budget Nome",
+      "limitLabel": "budget limite",
+      "limitPlaceholder": "inserisci limite Importo (Facoltativo)",
+      "startDateLabel": "Data di inizio",
+      "endDateLabel": "Data di fine",
+      "notSet": "non imposta"
+    },
+    "addTransactionsDialog": {
+      "title": "Aggiungi Transazioni un budget",
+      "addSelected": "Aggiungi Selezionato",
+      "clearSelection": "Cancella selection"
+    },
+    "categoryBudget": {
+      "trackedCategories": "Tracked Categorie",
+      "categoriesCount": "{count} Categorie tracked",
+      "autoTrackedInfo": "Transazioni sono automaticamente tracked based su Categorie",
+      "transactionsTitle": "Transazioni",
+      "transactionsCount": "{count} Transazioni",
+      "noTransactions": "Nessuna transazione ancora",
+      "noTransactionsDescription": "Transazioni corrispondente Il tuo tracked Categorie sarà appear qui automaticamente.",
+      "transactionsLoadError": "Impossibile carica Transazioni",
+      "categoryBreakdown": "Categoria Breakdown",
+      "edit": "Modifica",
+      "editTitle": "Modifica budget",
+      "showMore": "Mostra Altro",
+      "showLess": "Mostra Meno",
+      "loadMore": "carica Altro",
+      "settings": {
+        "categoriesLabel": "Tracked Categorie"
+      }
+    },
+    "manualBudget": {
+      "edit": "Modifica",
+      "editTitle": "Modifica budget"
+    },
+    "share": {
+      "sharedByBadge": "condiviso da {handle}"
+    }
+  }
+}

@@ -1,0 +1,471 @@
+{
+  "pages": {
+    "integrations": {
+      "addDialog": {
+        "titleSelect": "Aggiungi Integration",
+        "titleConnect": "Connetti {provider}",
+        "selectProviderHint": "Where do tu banca? scegli un region un Visualizza what works there.",
+        "betaBadge": "Beta"
+      },
+      "providers": {
+        "monobank": {
+          "name": "Monobank",
+          "description": "Ucraino digital banca"
+        },
+        "enableBanking": {
+          "name": "Abilita Banking",
+          "description": "accesso 6000+ European banche via PSD2 Apri banking"
+        },
+        "lunchflow": {
+          "name": "Lunch Flow",
+          "description": "sincronizzazione Transazioni da 20,000+ banche worldwide via LunchFlow"
+        },
+        "simplefin": {
+          "name": "SimpleFIN",
+          "description": "sincronizzazione Transazioni da US & Canadian banche via il SimpleFIN Bridge"
+        },
+        "walutomat": {
+          "name": "Walutomat",
+          "description": "Polish Valuta cambio piattaforma con 23 Valute"
+        }
+      },
+      "monobank": {
+        "apiTokenLabel": "token API",
+        "connectionNameLabel": "connessione Nome (Facoltativo)",
+        "tokenPlaceholder": "inserisci Il tuo Monobank token API",
+        "accountNamePlaceholder": "e.g., Personal Conto",
+        "help": {
+          "trigger": "Where do I ottieni un token API?",
+          "title": "ottieni Il tuo Monobank token API",
+          "step1": "Visit {link} e follow il instructions un generate un personal token.",
+          "step2": "Store il token safely e paste it in il Campo.",
+          "note": "non worry — il token API è strictly Leggi-solo."
+        },
+        "backButton": "Indietro",
+        "connectingButton": "Connecting...",
+        "connectButton": "Connetti",
+        "loadingAccounts": "Caricamento Conti...",
+        "selectAccountsHint": "Seleziona il Conti tu vuoi un sincronizzazione con MoneyMatter",
+        "syncingButton": "Syncing...",
+        "syncButton": "sincronizzazione {count} Conto(s)",
+        "syncSuccess": "correttamente synced {count} Conto(s)",
+        "errors": {
+          "connectFailed": "Impossibile Connetti fornitore",
+          "syncFailed": "Impossibile sincronizzazione Conti"
+        }
+      },
+      "enableBankingConnector": {
+        "beta": {
+          "title": "Beta Feature - Developer-Oriented",
+          "description": "questo integration requires technical knowledge un imposta su. tu'll serve un register Il tuo propri Abilita Banking applicazione e provide API credenziali. il setup process e API potrebbe Cambia in future updates."
+        },
+        "credentials": {
+          "appIdLabel": "applicazione ID",
+          "appIdHint": "ottieni da Abilita Banking portal dopo uploading Il tuo certificate",
+          "privateKeyLabel": "privato chiave",
+          "privateKeyHint": "Il tuo PEM-encoded RSA privato chiave (stored encrypted)",
+          "bicLabel": "BIC:"
+        },
+        "steps": {
+          "loadingCountries": "Caricamento countries...",
+          "selectCountryHint": "Seleziona Il tuo banca's country",
+          "countryLabel": "Country",
+          "loadingBanks": "Caricamento banche...",
+          "selectBankHint": "Seleziona Il tuo banca in {country}",
+          "bankLabel": "banca",
+          "connectingToBank": "Connecting un {bank}...",
+          "authDescription": "fai clic il button sotto un authorize accesso un Il tuo {bank} Conto.",
+          "authWarning": "tu sarà essere redirected un {bank}'s sito web un Accedi e Approva il connessione.",
+          "authorizeButton": "Authorize con {bank}",
+          "loadingAccounts": "Caricamento Conti...",
+          "selectAccountsHint": "Seleziona il Conti tu vuoi un sincronizzazione con MoneyMatter"
+        },
+        "buttons": {
+          "back": "Indietro",
+          "loading": "Caricamento...",
+          "next": "Successivo",
+          "syncing": "Syncing...",
+          "sync": "sincronizzazione {count} Conto | sincronizzazione {count} Conti"
+        },
+        "errors": {
+          "loadCountriesFailed": "Impossibile carica countries. per favore check Il tuo credenziali.",
+          "loadAccountsFailed": "Impossibile carica Conti",
+          "syncFailed": "Impossibile sincronizzazione Conti"
+        },
+        "syncSuccess": "correttamente synced {count} Conto(s)"
+      },
+      "instructionsDialog": {
+        "title": "come un Obtain Abilita Banking credenziali",
+        "overview": {
+          "title": "Panoramica",
+          "text": "Abilita Banking requires tu un register un applicazione e generate Titolo credenziali un accesso banking data. Follow questi passaggi un ottieni Il tuo applicazione ID e privato chiave."
+        },
+        "step1": {
+          "title": "Register & Crea applicazione",
+          "intro": "Visit {link} e Crea un Conto se tu non hai uno già.",
+          "createApp": "Then Crea un applicazione:",
+          "steps": {
+            "login": "Accedi un il Abilita Banking portal",
+            "navigate": "Navigate un {link}",
+            "lookForm": "Look a il \"Crea applicazione\" form",
+            "selectEnv": "Seleziona {strong} environment",
+            "selectEnvStrong": "\"Production\"",
+            "generateKey": "Check il {strong} checkbox. Once applicazione è creato, il .pem chiave sarà essere salvato un Il tuo computer automaticamente come un file. {warning} per whatever motivo – tu sarà serve un recreate il applicazione",
+            "generateKeyStrong": "\"Generate privato RSA chiave in il browser\"",
+            "generateKeyWarning": "se file era non salvato",
+            "fillForm": "Fill fuori form con il Successivo valori:",
+            "appName": "applicazione Nome:",
+            "redirectUrls": "consentito redirect URLs:",
+            "appDescription": "applicazione Descrizione:",
+            "emailProtection": "email per data protection matters:",
+            "privacyUrl": "privacy URL:",
+            "termsUrl": "termini URL:",
+            "clickRegister": "fai clic \"Register\"",
+            "downloadKey": "tu sarà essere suggested un Scarica un file. It's Il tuo RSA chiave quello tu deve Salva somewhere since questo è part di Il tuo credenziali"
+          }
+        },
+        "step2": {
+          "title": "collega Il tuo banca Conti",
+          "intro": "prima di usando il applicazione con MoneyMatter, tu deve primo collega Il tuo banca Conti fino a il Abilita Banking portal. Look per il \"collega Conti\" button inside il creato applicazione's tile e follow tutti il passaggi Obbligatorio there.",
+          "breakdown": "qui's il Dettagli breakdown:",
+          "steps": {
+            "clickLink": "fai clic \"collega Conti\", wait per spinner un finish Caricamento",
+            "newFields": "Nuovo Campi sarà appear in il same spot: \"Country\", \"ASPSP\", \"Usage Tipo\"",
+            "country": "Country:",
+            "countryValue": "Il tuo banca's country",
+            "aspsp": "ASPSP:",
+            "aspspValue": "Il tuo banca Nome",
+            "usageType": "Usage Tipo:",
+            "usageTypeValue": "privato",
+            "clickSave": "fai clic \"Salva\"",
+            "redirect": "tu sarà essere redirected un Il tuo banche' auth Pagina. accesso, e Seleziona tutto il Conti tu vuoi un Connetti",
+            "finishAuth": "Once tu finish auth flow, tu sarà essere redirected Indietro un EnableBanking",
+            "waitAccounts": "Wait until Selezionato Conti sono displayed in il applicazione's card under \"collegato Conti\" Campo"
+          },
+          "warningNotLinked": "It might essere il case quello alcuni Selezionato Conti sono non collegato. questo è il problem su Il tuo banca's side che Non puoi resolve da te stesso. Puoi solo wait un few ore/giorni until issue è resolved. se issue non è resolved, il solo way è un Report un EnableBanking.",
+          "infoAddMore": "In case in il future tu would like un Connetti Altro Conti, tu sarà serve un repeat il flow di linking Conti di nuovo. {strong} quello quando adding Nuovo Conti tu ancora serve un Seleziona Vecchio Conti – basically tu serve un Seleziona Tutti i conti tu vuoi un essere connesso.",
+          "infoAddMoreStrong": "Mantieni in mind"
+        },
+        "step3": {
+          "title": "ottieni Il tuo credenziali",
+          "intro": "da il Abilita Banking portal:",
+          "appId": "{strong} Copia il {code} da Il tuo applicazione Dettagli",
+          "appIdStrong": "applicazione ID:",
+          "appIdCode": "app_id",
+          "appIdExample": "Example:",
+          "privateKey": "{strong} Apri Il tuo salvato {code} file via alcuni text editor (TextEdit su MacOS o Notepad su Windows) e Copia its entire contenuto (including il BEGIN e Fine lines)",
+          "privateKeyStrong": "privato chiave:",
+          "privateKeyCode": "privato.pem"
+        },
+        "securityNote": {
+          "title": "Titolo Nota",
+          "text": "Il tuo privato chiave è stored encrypted in nostro database e è solo utilizzato un authenticate con Abilita Banking su Il tuo behalf. token è limited un Leggi-solo data. ancora, never Azione Il tuo privato chiave con anyone else."
+        },
+        "gotItButton": "Got it"
+      },
+      "enableBanking": {
+        "instructions": {},
+        "placeholders": {
+          "appId": "inserisci Il tuo Abilita Banking app_id",
+          "privateKey": "-----BEGIN privato chiave-----\n...\n-----Fine privato chiave-----",
+          "searchCountries": "Cerca countries...",
+          "searchBanks": "Cerca banche..."
+        },
+        "errors": {
+          "noAuthUrl": "nessun Autorizzazione URL received da server",
+          "failedToLoadBanks": "Impossibile carica banche",
+          "failedToConnectProvider": "Impossibile Connetti fornitore"
+        },
+        "help": {
+          "trigger": "Where do I ottieni Abilita Banking credenziali?"
+        }
+      },
+      "lunchflow": {
+        "apiKeyLabel": "Chiave API",
+        "apiKeyPlaceholder": "inserisci Il tuo LunchFlow Chiave API",
+        "help": {
+          "trigger": "Where do I trova my Chiave API?",
+          "title": "ottieni Il tuo Lunch Flow Chiave API",
+          "step1": "Apri Il tuo {link}.",
+          "step2": "Go un Impostazioni → API Destinations.",
+          "step3": "Copia il Chiave API e paste it in il Campo."
+        },
+        "backButton": "Indietro",
+        "connectingButton": "Connecting...",
+        "connectButton": "Connetti",
+        "loadingAccounts": "Caricamento Conti...",
+        "accountsPreviewHint": "trovato {count} Conto(s). Tutti i conti sarà essere importato.",
+        "importingButton": "importazione...",
+        "importButton": "Importa {count} Conto(s)",
+        "importSuccess": "correttamente importato {count} Conto(s)",
+        "skipButton": "Skip",
+        "skipTooltip": "Skip importazione un Connetti solo specific Conti più tardi, o un relink esistente Conti da loro Impostazioni.",
+        "errors": {
+          "connectFailed": "Impossibile Connetti un LunchFlow",
+          "importFailed": "Impossibile Importa Conti"
+        }
+      },
+      "common": {
+        "selectAll": "Seleziona tutto",
+        "availableLabel": "disponibile",
+        "clearAll": "Cancella tutti",
+        "noCurrencyBadge": "nessun Valuta",
+        "currencyPicker": {
+          "placeholder": "Scegli Valuta",
+          "missingCount": "{count} Selezionato Conto ancora needs un Valuta — it può't essere modificato dopo Importa. | {count} Selezionato Conti ancora serve un Valuta — it può't essere modificato dopo Importa."
+        }
+      },
+      "help": {
+        "openSite": "Apri {site}"
+      },
+      "simplefin": {
+        "setupTokenLabel": "Setup token",
+        "setupTokenPlaceholder": "Paste Il tuo SimpleFIN setup token",
+        "help": {
+          "trigger": "Where do I ottieni un setup token?",
+          "title": "ottieni Il tuo SimpleFIN setup token",
+          "step1": "Crea un SimpleFIN Bridge Conto a {link} e Connetti Il tuo banca.",
+          "step2": "Generate un Nuovo setup token su il Bridge Riepilogo.",
+          "step3": "Paste il token in il Campo."
+        },
+        "connectButton": "Connetti",
+        "connectingButton": "Connecting…",
+        "backButton": "Indietro",
+        "loadingAccounts": "Caricamento Conti…",
+        "backfillNote": "We'll carica il ultimo 6 mesi di Transazioni ora. Puoi carica older Cronologia anytime da il Conto's Pagina usando il Data-range picker.",
+        "importButton": "Seleziona Conti | Importa 1 Conto | Importa {count} Conti",
+        "importingButton": "importazione…",
+        "errors": {
+          "connectFailed": "Impossibile Connetti un SimpleFIN. Check Il tuo setup token e Riprova.",
+          "importFailed": "Impossibile Importa Conti. Riprova."
+        }
+      },
+      "walutomat": {
+        "help": {
+          "trigger": "come do I imposta su Walutomat API accesso?"
+        },
+        "apiKeyLabel": "Chiave API",
+        "apiKeyPlaceholder": "inserisci Il tuo Walutomat Chiave API",
+        "apiKeyHint": "trovato in Il tuo Walutomat Riepilogo under Impostazioni → API",
+        "privateKeyLabel": "privato chiave (PEM)",
+        "privateKeyPlaceholder": "-----BEGIN RSA privato chiave-----\n...\n-----Fine RSA privato chiave-----",
+        "privateKeyHint": "Paste il contenuti di Il tuo privato.chiave file (RSA 4096-bit PEM formato)",
+        "backButton": "Indietro",
+        "connectButton": "Connetti",
+        "connectingButton": "Connecting...",
+        "loadingWallets": "Caricamento wallets...",
+        "selectWalletsHint": "Seleziona che Valuta wallets un sincronizzazione ({count} disponibile)",
+        "selectAll": "Seleziona tutto",
+        "importButton": "Importa {count} wallet(s)",
+        "importingButton": "importazione...",
+        "importSuccess": "correttamente importato {count} Walutomat wallet(s)",
+        "errors": {
+          "connectFailed": "Impossibile Connetti un Walutomat. Check Il tuo credenziali.",
+          "importFailed": "Impossibile Importa wallets."
+        },
+        "instructions": {
+          "title": "Walutomat API Setup Instructions",
+          "overviewTitle": "Panoramica",
+          "overviewText": "un Connetti Walutomat, tu serve un Chiave API e un RSA privato chiave. il Chiave API authenticates Il tuo Conto, while il privato chiave signs ogni richiesta per Titolo.",
+          "step1Title": "Generate RSA chiave Pair",
+          "step1Intro": "Apri un terminal e run questi commands:",
+          "step1FilesCreated": "questo creates two file: {privateKey} (Mantieni secret!) e {publicKey} (Carica un Walutomat).",
+          "step2Title": "Carica pubblico chiave un Walutomat",
+          "step2Login": "1. Accedi un",
+          "step2GoToSettings": "2. Go un {settings} → {api}",
+          "step2Upload": "3. Carica Il tuo {publicKey} file",
+          "step2ApiKeyGenerated": "4. Walutomat sarà generate un Chiave API per tu",
+          "step3Title": "inserisci credenziali qui",
+          "step3Intro": "tu serve two things:",
+          "step3ApiKeyDesc": "{apiKey} — Copia it da il Walutomat API Impostazioni Pagina",
+          "step3PrivateKeyDesc": "{privateKey} — Apri {filename} in un text editor e Copia il entire contenuti (including il BEGIN/Fine lines)",
+          "securityNoteTitle": "Titolo Nota",
+          "securityNoteText": "Il tuo privato chiave è encrypted prima di storage e è solo utilizzato un accesso API requests. It è never exposed o transmitted un anyone Altro di Walutomat.",
+          "closeButton": "Got it"
+        }
+      },
+      "notifications": {
+        "disconnectSuccess": "Integration disconnesso correttamente",
+        "disconnectFailed": "Impossibile Disconnetti integration",
+        "connectAccountsSuccess": "Conti connesso correttamente",
+        "connectAccountsFailed": "Impossibile Connetti Conti",
+        "updateNameSuccess": "connessione Nome aggiornato correttamente",
+        "updateNameFailed": "Impossibile Aggiorna connessione Nome",
+        "connectionEstablished": "banca connessione established correttamente!"
+      },
+      "details": {
+        "error": {
+          "notFoundTitle": "Integration Non trovato",
+          "notFoundDescription": "questo integration potrebbe hai been rimosso o il collega è incorrect. Check Il tuo integrations elenco un trova what tu're looking per.",
+          "unexpectedTitle": "Qualcosa è andato storto",
+          "unexpectedDescription": "We non è stato possibile carica questo connessione. Riprova più tardi.",
+          "backButton": "Indietro un Integrations"
+        },
+        "connectionDetails": {
+          "statusActive": "attivo",
+          "statusInactive": "inattivo",
+          "autoSync": "Auto-sincronizzazione"
+        },
+        "connectionValidity": {
+          "statusExpired": "scaduto",
+          "statusActive": "attivo",
+          "daysCount": "{count} giorno | {count} giorni",
+          "notAvailable": "N/un",
+          "reconnectButton": "ricollega ora"
+        },
+        "connectedAccounts": {
+          "title": "connesso Conti",
+          "empty": "nessun Conti connesso ancora.",
+          "connectButton": "Connetti Conti",
+          "currencyFallback": "il banca didn't Report un Valuta per questo Conto — {currency} era assigned quando it era connesso e può't essere modificato.",
+          "columnAccount": "Conto",
+          "columnExternalId": "External ID",
+          "columnBalance": "Saldo",
+          "currencyFallbackChip": "Valuta: {currency}",
+          "syncNow": "sincronizzazione ora",
+          "connectRemainingWithCount": "Connetti rimanente Conti ({count})",
+          "needsAttention": "{count} needs attention | {count} serve attention",
+          "totalLabel": "{amount} Totale",
+          "syncStarted": "sincronizzazione started",
+          "syncFailed": "Impossibile Inizio sincronizzazione"
+        },
+        "actions": {
+          "renameButton": "Rename connessione",
+          "disconnectButton": "Disconnetti Integration",
+          "manage": "Gestisci"
+        },
+        "fetchAccountsDialog": {
+          "title": "Connetti rimanente Conti",
+          "description": "Seleziona disponibile Conti da {providerName} quello sono non ancora connesso.",
+          "missingAccountsQuestion": "non Visualizza Il tuo Conti?",
+          "missingAccountsHint": "se Non puoi Visualizza alcuni di Il tuo Conti, riprova reconnecting Il tuo banca connessione da il {section} section da clicking {button}.",
+          "missingAccountsSectionName": "connessione Validity",
+          "missingAccountsButtonName": "ricollega ora",
+          "missingAccountsPersist": "se il issue persists, per favore Report it per further investigation.",
+          "sessionExpired": "Il tuo sessione ha scaduto. per favore ricollega Il tuo banca connessione un Continua.",
+          "loadFailed": "Impossibile carica disponibile Conti. Riprova.",
+          "noAdditionalAccounts": "nessun aggiuntiva Conti disponibile un Connetti.",
+          "connectSelectedButton": "Connetti Selezionato Conti ({count})",
+          "selectAccountsButton": "Seleziona Conti",
+          "alreadyConnected": "già connesso",
+          "creditLimitMeta": "limite {amount}"
+        },
+        "meta": {
+          "connectedSince": "connesso {date}"
+        },
+        "summary": {
+          "totalBalance": "Totale Saldo",
+          "accounts": "Conti",
+          "accountsCount": "nessun Conti | {count} Conto | {count} Conti",
+          "lastSync": "ultimo sincronizzazione",
+          "consent": "Consent",
+          "every": "ogni {hours}h",
+          "autoSyncOff": "disattivato",
+          "connectedOf": "{connected} di {total}",
+          "connectedSub": "connesso",
+          "accountsFailed": "{count} Conto non riuscito | {count} Conti non riuscito"
+        },
+        "consentStrip": {
+          "expiring": "Consent expires in {days} giorno · {date} | Consent expires in {days} giorni · {date}",
+          "expired": "Consent ha scaduto. ricollega un resume syncing."
+        },
+        "relativeTime": {
+          "never": "never"
+        },
+        "errors": {
+          "reauthorizationFailed": "Impossibile Inizio reauthorization"
+        }
+      },
+      "dialogs": {
+        "disconnect": {
+          "title": "Disconnetti Integration",
+          "description": "Sei sicuro tu vuoi un Disconnetti questo integration? Questa azione non può essere annullata.",
+          "removeAccounts": "anche Rimuovi associated Conti",
+          "removeAccountsHint": "questo sarà definitivamente Elimina Tutti i conti collegato un questo integration",
+          "disconnecting": "Disconnecting...",
+          "disconnect": "Disconnetti"
+        },
+        "editName": {
+          "title": "Modifica connessione Nome",
+          "description": "Give Il tuo connessione un Personalizzato Nome un easily identify it.",
+          "label": "connessione Nome",
+          "saving": "salvataggio...",
+          "save": "Salva"
+        },
+        "reconnect": {
+          "title": "ricollega Integration",
+          "description": "da starting il reconnection flow, {warning}. tu deve finish il flow un make il connessione attivo di nuovo.",
+          "warning": "Il tuo Attuale connessione sarà immediately become Non valido",
+          "preparing": "Preparing...",
+          "continue": "Continua"
+        }
+      },
+      "authFailure": {
+        "description": "questo connessione needs un essere reconnected prima di it può sincronizzazione di nuovo.",
+        "updateButton": "Aggiorna credenziali"
+      },
+      "updateCredentials": {
+        "title": "Aggiorna credenziali",
+        "apiKeyLabel": "Chiave API",
+        "apiKeyPlaceholder": "inserisci Il tuo Chiave API",
+        "updatingButton": "Updating...",
+        "updateButton": "Aggiorna",
+        "success": "credenziali aggiornato correttamente",
+        "failed": "Impossibile Aggiorna credenziali"
+      },
+      "labels": {
+        "free": "Gratis",
+        "paid": "pagato",
+        "easySetup": "Easy un setup",
+        "mediumSetup": "Medium setup",
+        "veryDifficultSetup": "Very difficult un setup"
+      },
+      "regions": {
+        "ukraine": "Ukraine",
+        "eu": "EU",
+        "uk": "UK",
+        "usa": "USA",
+        "poland": "Poland",
+        "canada": "Canada",
+        "australia": "Australia",
+        "newZealand": "Nuovo Zealand"
+      },
+      "filters": {
+        "all": "tutti",
+        "usCanada": "US & Canada",
+        "euUk": "EU & UK"
+      },
+      "tooltips": {
+        "monobank": "Requires manualmente copying un token API da il Monobank mobile app",
+        "enableBanking": "Since smooth integration requires several thousands $ per Mese un essere pagato, it's solo possible un Connetti da creazione propri EnableBanking dev Conto, e setting su \"test\" applicazione con real connessione un propri banche, storing certificates e chiavi e uploading li qui. Moderate technical knowledge Obbligatorio",
+        "lunchflow": "Just Connetti Il tuo banche su il LunchFlow side, then Crea e paste Il tuo LunchFlow Chiave API",
+        "simplefin": "SimpleFIN Bridge è un pagato servizio. tu Crea un bridge Conto, collega Il tuo banca, e paste un setup token — nessun developer setup Obbligatorio.",
+        "walutomat": "Requires generating un RSA chiave pair e uploading il pubblico chiave un Walutomat Riepilogo"
+      }
+    },
+    "connectionName": {
+      "placeholder": "e.g., Personal Conto"
+    },
+    "bankCallback": {
+      "processing": {
+        "title": "Completing Autorizzazione...",
+        "description": "Attendi while we verifica Il tuo banca connessione"
+      },
+      "error": {
+        "title": "Autorizzazione non riuscito",
+        "backToIntegrations": "Indietro un Integrations"
+      },
+      "success": {
+        "title": "connessione Successful!",
+        "description": "Il tuo banca Conto ha been connesso correttamente.",
+        "viewAccounts": "Visualizza Conti"
+      },
+      "errors": {
+        "authorizationDenied": "Autorizzazione era negato o non riuscito",
+        "missingParameters": "mancante Obbligatorio parameters (code o stato)",
+        "connectionIdNotFound": "connessione ID Non trovato. per favore Inizio il connessione process di nuovo.",
+        "failedToComplete": "Impossibile complete Autorizzazione"
+      }
+    }
+  }
+}

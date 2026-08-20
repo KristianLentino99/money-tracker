@@ -1,13 +1,14 @@
 import {
   AIFeatureConfig,
   AI_FEATURE,
+  AI_PROVIDER,
   buildCustomModelId,
   getModelNameFromModelId,
   isCustomModelId,
 } from '@bt/shared/types';
 import type { StoredAiSettings } from '@models/user-settings.model';
 
-import { getDefaultModelForFeature, getModelInfo } from '../ai/models-config';
+import { getDefaultModelForFeature, getModelInfo, isOpenRouterModelId } from '../ai/models-config';
 import { pickResolutionStep, type LadderEndpoint } from '../ai/resolution-ladder';
 
 interface FeatureModelDisplay {
@@ -26,7 +27,9 @@ function describeModel({ modelId, usingUserKey }: { modelId: string; usingUserKe
     modelId,
     modelName: isCustomModelId({ modelId })
       ? getModelNameFromModelId({ modelId })
-      : (getModelInfo({ modelId })?.name ?? modelId),
+      : isOpenRouterModelId({ modelId })
+        ? getModelNameFromModelId({ modelId })
+        : (getModelInfo({ modelId })?.name ?? modelId),
     usingUserKey,
   };
 }
@@ -65,6 +68,12 @@ export function resolveFeatureModelDisplay({
     feature,
     config,
     keyProviders: new Set((aiSettings?.apiKeys ?? []).map((key) => key.provider)),
+    providerModels: new Map(
+      aiSettings?.apiKeys
+        ?.filter((key) => key.provider === AI_PROVIDER.openrouter && key.model)
+        .map((key) => [key.provider, `${key.provider}/${key.model}`] as const) ?? [],
+    ),
+    defaultProvider: aiSettings?.defaultProvider,
     endpoints: aiSettings?.customEndpoints ?? [],
   });
 

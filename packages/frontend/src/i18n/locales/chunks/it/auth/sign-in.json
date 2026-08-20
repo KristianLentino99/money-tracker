@@ -1,0 +1,36 @@
+{
+  "auth": {
+    "login": {
+      "title": "Accedi al conto",
+      "divider": "Oppure continua con l'email",
+      "submitButton": "Accedi",
+      "noAccount": "Non hai un conto?",
+      "signupsDisabledTooltip": "Le nuove registrazioni sono disabilitate dall’amministratore di questa istanza",
+      "errors": {
+        "incorrectEmailOrPassword": "Email o password non corrette.",
+        "incorrectPassword": "Password non corretta.",
+        "userNotFound": "Utente non trovato.",
+        "emailNotVerified": "Verifica la tua email prima di accedere.",
+        "sessionExpired": "La sessione è scaduta. Accedi di nuovo.",
+        "noPasswordSet": "Non è stata impostata una password per questo conto. Prova ad accedere con Google.",
+        "passwordInvalid": "Password non valida.",
+        "genericError": "Si è verificato un errore.",
+        "genericErrorRetry": "Si è verificato un errore. Riprova.",
+        "oauthFailed": "Impossibile accedere con {provider}. Riprova.",
+        "oauthNotConfigured": "L'accesso con {provider} non è configurato su questo server.",
+        "passkeyFailed": "Impossibile accedere con la passkey. Riprova."
+      }
+    },
+    "shared": {
+      "divider": "Oppure continua con",
+      "passkeyButton": {
+        "signIn": "Accedi con passkey",
+        "register": "Aggiungi una passkey"
+      },
+      "oauthButton": {
+        "signIn": "Accedi con {provider}",
+        "signUp": "Registrati con {provider}"
+      }
+    }
+  }
+}

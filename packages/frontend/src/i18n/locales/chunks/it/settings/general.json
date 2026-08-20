@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "general": {
+      "title": "Generale",
+      "description": "Controlla come vengono calcolati e visualizzati i tuoi dati finanziari nell'app.",
+      "creditLimit": {
+        "label": "Includi i limiti di credito nel saldo",
+        "description": "Quando abilitato, i limiti di credito vengono sottratti dai saldi dei conti nelle statistiche e nel grafico dell'andamento del saldo. In questo modo visualizzi la tua situazione finanziaria effettiva anziché il credito disponibile.",
+        "successNotification": "Impostazione aggiornata correttamente",
+        "errorNotification": "Impossibile aggiornare l'impostazione"
+      },
+      "manualTransferMatching": {
+        "label": "Abbina i trasferimenti ai conti manuali",
+        "description": "Consenti di collegare automaticamente i trasferimenti rilevati a una transazione bancaria sincronizzata con una transazione creata manualmente.",
+        "successNotification": "Impostazione di abbinamento dei trasferimenti aggiornata",
+        "errorNotification": "Impossibile aggiornare l'impostazione di abbinamento dei trasferimenti"
+      },
+      "accountDropdowns": {
+        "defaultAccount": {
+          "label": "Conto predefinito",
+          "description": "Preselezionato quando crei una transazione.",
+          "placeholder": "Nessun predefinito — primo conto"
+        },
+        "showArchived": {
+          "label": "Mostra i conti archiviati",
+          "description": "Quando disattivato, i conti archiviati vengono nascosti dai selettori dei conti."
+        },
+        "successNotification": "Impostazioni del selettore dei conti aggiornate",
+        "errorNotification": "Impossibile aggiornare le impostazioni del selettore dei conti"
+      }
+    }
+  }
+}

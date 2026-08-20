@@ -1,0 +1,76 @@
+{
+  "pages": {
+    "importExport": {
+      "progress": {
+        "jobExpired": "Il processo di importazione è scaduto o non è stato trovato.",
+        "lostContact": "È stato perso il contatto con il processo di importazione."
+      }
+    }
+  },
+  "importShared": {
+    "action": {
+      "createNew": "Crea nuovo",
+      "linkExisting": "Collega esistente",
+      "skip": "Salta"
+    },
+    "selectAction": "Seleziona azione",
+    "resolvedCounterWord": "risolti",
+    "columns": {
+      "sourceName": "Nome origine",
+      "currency": "Valuta",
+      "action": "azione",
+      "target": "Destinazione"
+    },
+    "account": {
+      "selectTarget": "Seleziona conto",
+      "noMatchingCurrency": "Nessun conto con Valuta {currency}",
+      "willCreate": "Verrà creato {name} ({currency})",
+      "empty": "Nessun conto da abbinare",
+      "willSkip": "Non verrà importato"
+    },
+    "category": {
+      "selectTarget": "Seleziona categoria",
+      "willCreate": "Verrà creata {name}",
+      "empty": "Nessuna categoria da abbinare"
+    },
+    "recalculateBalance": {
+      "label": "Aggiorna i saldi dei conti dalle transazioni importate",
+      "hint": "Le transazioni precedenti alla transazione esistente più recente di un conto vengono trattate come arretrati e non modificano il saldo attuale.",
+      "loadFailedHint": "Impossibile caricare la preferenza salvata: verrà disattivata."
+    },
+    "balanceChanges": {
+      "title": "Variazioni del saldo del conto",
+      "columns": {
+        "account": "Conto",
+        "before": "prima di",
+        "after": "dopo",
+        "delta": "Variazione",
+        "newRows": "Nuove righe",
+        "backfillRows": "Righe arretrate"
+      },
+      "newAccount": "Nuovo Conto"
+    },
+    "duplicatesTable": {
+      "columnHeaders": {
+        "row": "riga",
+        "match": "corrispondenza",
+        "csvTransaction": "Transazione CSV",
+        "existingTransaction": "Transazione esistente",
+        "csvShort": "CSV",
+        "existingShort": "esistente"
+      },
+      "matchTypeLabels": {
+        "exact": "Esatta",
+        "idMatch": "Corrispondenza ID",
+        "fuzzy": "Approssimativa"
+      },
+      "fieldLabels": {
+        "amount": "Importo",
+        "date": "Data",
+        "note": "Nota",
+        "category": "Categoria"
+      },
+      "importAnywayAriaLabel": "Importa comunque la riga {row}"
+    }
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "analytics": {
+    "backToAnalytics": "Indietro un Analisi",
+    "timePeriods": {},
+    "navigation": {
+      "cashFlow": "Flusso di cassa",
+      "trendsComparison": "Trends Comparison",
+      "investmentCalculator": "Investimento Projection",
+      "pivotReport": "Pivot",
+      "netWorthDrivers": "Patrimonio netto Drivers",
+      "investmentContributions": "Contributions",
+      "netWorthHistory": "Patrimonio netto Cronologia",
+      "collapse": "Collapse",
+      "sections": {
+        "investments": "Investimenti"
+      }
+    },
+    "cashFlow": {
+      "income": "Entrate",
+      "expenses": "Uscite",
+      "netSavings": "Net Savings",
+      "netFlow": "Net Flow",
+      "savingsRate": "Savings Tasso",
+      "loadError": "Impossibile carica Flusso di cassa data",
+      "noData": "Nessuna transazione trovato",
+      "noDataHint": "riprova selecting un different Periodo o check se Hai qualsiasi Transazioni",
+      "showTrendLine": "Mostra Andamento line",
+      "showTrendLineHint": "Smoothed Media di net Flusso di cassa",
+      "trendLine": "Andamento Line",
+      "vsPreviousPeriod": "vs Precedente Periodo",
+      "chartTypes": {
+        "stacked": "Stacked",
+        "mirrored": "Mirrored",
+        "grouped": "Grouped"
+      },
+      "granularity": {
+        "monthly": "Mensile",
+        "biweekly": "Bi-Settimanale",
+        "weekly": "Settimanale"
+      },
+      "periods": {
+        "last3Months": "ultimo 3 mesi",
+        "last6Months": "ultimo 6 mesi",
+        "last12Months": "ultimo 12 mesi",
+        "thisYear": "Quest’anno",
+        "previousYear": "Precedente Anno",
+        "allTime": "Sempre"
+      }
+    },
+    "trends": {
+      "metrics": {
+        "expenses": "Uscite",
+        "income": "Entrate",
+        "savings": "Savings"
+      },
+      "chart": {
+        "selectedPeriod": "Selezionato Periodo",
+        "comparisonPeriod": "Precedente Periodo",
+        "cumulativeNote": "Cumulative Totale su un questo point"
+      },
+      "categoryBreakdown": {
+        "title": "Categoria Breakdown",
+        "noData": "Nessun dato per questo Periodo",
+        "viewAll": "Visualizza Tutte le categorie",
+        "moreCount": "{count} Altro"
+      },
+      "monthlyComparison": {
+        "title": "Mensile Comparison",
+        "allCategories": "Tutte le categorie",
+        "average": "Media",
+        "total": "Totale",
+        "vsLastMonth": "vs Mese precedente",
+        "viewTransactions": "Visualizza Transazioni"
+      },
+      "cumulativeProgress": {
+        "title": "Cumulative Progress"
+      },
+      "vsPreviousPeriod": "vs Precedente Periodo",
+      "loadError": "Impossibile carica data",
+      "noData": "Nessun dato disponibile",
+      "noDataHint": "Nessuna transazione recorded per questo Periodo"
+    },
+    "investmentCalculator": {
+      "initialBalance": "Initial Saldo",
+      "useCurrentBalance": "Usa Attuale Saldo",
+      "monthlyContribution": "Mensile contribution",
+      "useAvgNetIncome": "Usa avg Reddito netto →",
+      "timeHorizon": "ora horizon (anni)",
+      "annualReturn": "Annual Rendimento (%)",
+      "annualReturnPlaceholder": "Seleziona preset",
+      "annualInflation": "Annual inflation (%)",
+      "totalInvested": "Totale invested",
+      "nominalFinalValue": "Nominal final valore",
+      "growth": "growth",
+      "realFinalValue": "Real final valore",
+      "realGrowth": "real growth",
+      "realMultiplier": "Real multiplier",
+      "realMultiplierTooltip": "come much Il tuo Totale Investimento grows dopo accounting per inflation. Unlike nominal returns, questo shows real purchasing power. 1.5x means ogni $1 invested becomes $1.50 in Oggi's money.",
+      "ofMoneyInvested": "di money invested",
+      "customIndicator": "Personalizzato",
+      "customReturnRate": "inserisci Tasso (%)",
+      "inflationAdjustedSuffix": "(Inflation Adjusted)",
+      "yearN": "Anno {n}",
+      "disclaimer": "Based su constant {rate}%/yr Rendimento. S&P 500 historical Media è ~10%/yr. fa non Conto per taxes o fees.",
+      "useAvgNetIncomeTooltip": "Il tuo Media Mensile Reddito netto (Entrate minus Uscite) over il Selezionato Periodo, based su Il tuo Transazione Cronologia",
+      "inflationTooltip": "come fast prices rise ogni Anno, reducing Il tuo money's real valore.\n\n~1–2% — very low, stable economy\n~2–3% — normal (typical obiettivo)\n~4–6% — above Media\n~7%+ — crisis-level inflation",
+      "totalInvestedBreakdown": "{initial} initial + {contributions} contributions",
+      "configure": "Configura",
+      "hideInputs": "Nascondi",
+      "portfolioReturnOption": "{name} (Il tuo ~{rate}%/yr)",
+      "portfolioNoHistoryOption": "{name} — non enough Cronologia"
+    },
+    "portfolioFilter": {
+      "all": "tutti portafogli",
+      "selectedOne": "1 Portafoglio",
+      "selectedMany": "{n} portafogli",
+      "searchPlaceholder": "Cerca portafogli",
+      "noResults": "nessun portafogli corrispondenza Il tuo Cerca"
+    }
+  },
+  "pivotReport": {
+    "title": "Pivot Report",
+    "subtitle": "Break spesa down da qualsiasi dimension, lay it across ora, e compare.",
+    "controls": {
+      "rows": "righe",
+      "columns": "colonne",
+      "measure": "Measure",
+      "settings": "Impostazioni"
+    },
+    "dimensions": {
+      "category": "Categoria",
+      "subcategory": "+ Subcategory",
+      "payee": "Beneficiario",
+      "tag": "Etichetta"
+    },
+    "granularity": {
+      "yearly": "anni",
+      "quarterly": "Quarters",
+      "monthly": "mesi",
+      "weekly": "settimane"
+    },
+    "measure": {
+      "expense": "Uscite",
+      "income": "Entrate"
+    },
+    "display": {
+      "title": "visualizzato Opzioni"
+    },
+    "toggles": {
+      "heatmap": "Heatmap",
+      "percentChange": "% Cambia"
+    },
+    "filters": {
+      "period": "Periodo",
+      "allCategories": "tutti",
+      "accounts": "Conti",
+      "reset": "Reimposta",
+      "resetTooltip": "Reimposta un defaults"
+    },
+    "periods": {
+      "last6Months": "ultimo 6 mesi",
+      "last12Months": "ultimo 12 mesi",
+      "thisYear": "Quest’anno",
+      "previousYear": "Precedente Anno",
+      "last3Years": "ultimo 3 anni",
+      "last5Years": "ultimo 5 anni",
+      "allTime": "Sempre"
+    },
+    "savedViews": {
+      "trigger": "Views",
+      "empty": "nessun salvato views ancora",
+      "saveCurrent": "Salva Attuale Visualizza",
+      "customView": "Personalizzato Visualizza",
+      "dialogTitle": "Salva Visualizza",
+      "dialogDescription": "Salva il Attuale layout e filtri come un reusable Visualizza.",
+      "nameLabel": "Visualizza Nome",
+      "namePlaceholder": "e.g. Grocery watch",
+      "savedToast": "Visualizza salvato",
+      "deletedToast": "Visualizza eliminato",
+      "saveError": "Impossibile Salva il Visualizza"
+    },
+    "table": {
+      "total": "Totale",
+      "collapseAll": "Collapse tutti",
+      "expandAll": "Expand tutti",
+      "expandRow": "Expand",
+      "collapseRow": "Collapse"
+    },
+    "states": {
+      "emptyTitle": "Nessun dato per questo selection",
+      "emptyHint": "riprova un wider Periodo o different filtri.",
+      "errorTitle": "non è stato possibile carica il Report",
+      "errorHint": "Qualcosa è andato storto. Riprova."
+    }
+  },
+  "netWorthDrivers": {
+    "title": "Patrimonio netto Drivers",
+    "subtitle": "come much di Il tuo growth tu salvato, e come much il market returned. Trasferimenti tra Il tuo propri Conti count come neither.",
+    "portfolioFilter": {
+      "scopeHint": "filtri Investimento Posizioni e growth solo. salvato amounts e Conto cash sono non affected."
+    },
+    "calcInfo": {
+      "trigger": "come questo è calcolato",
+      "title": "come questo è calcolato",
+      "savedHeading": "salvato",
+      "savedBody": "Money tu imposta aside — Entrate minus spesa. Moving money tra Il tuo propri Conti, o in un Investimento Portafoglio, non count come salvataggio.",
+      "grownHeading": "Grown",
+      "grownBody": "What il market did un Il tuo Posizioni — Prezzo changes, plus dividends, minus fees. Money tu put in è never counted come growth.",
+      "exampleHeading": "Example",
+      "exampleBody": "tu earn $10,000, invest it, e it grows un $12,000. quello's $10,000 salvato e $2,000 Grown — il $10,000 è counted once, come salvato, e solo il $2,000 counts come Grown.",
+      "noteBody": "Growth è counted come prices move ogni Periodo, non solo quando tu sell. Selling something quello già rose non Aggiungi un Grown un secondo ora."
+    },
+    "granularity": {
+      "monthly": "Mensile",
+      "quarterly": "Quarterly",
+      "yearly": "Annuale"
+    },
+    "chart": {
+      "title": "salvato vs. grown",
+      "subtitle": "Cumulative totals over il Selezionato Periodo.",
+      "saved": "salvato",
+      "grown": "Grown",
+      "totalGained": "Totale gained",
+      "thisPeriod": "questo Periodo",
+      "periodSavings": "Savings",
+      "periodGrowth": "Growth",
+      "allocationContext": "{share}% di Il tuo Patrimonio netto sits in Investimenti (era {reference}% in {date})",
+      "allocationContextNoReference": "{share}% di Il tuo Patrimonio netto sits in Investimenti"
+    },
+    "breakdownChart": {
+      "title": "per-Periodo breakdown",
+      "subtitle": "come much tu salvato e come much il market returned in ogni Periodo.",
+      "periodTotal": "Gained questo Periodo",
+      "others": "Others",
+      "grownTotal": "Grown Totale"
+    },
+    "degraded": {
+      "title": "alcuni valori sono estimated",
+      "unpricedSecurities": "nessun recent Prezzo data per {securities}, so loro growth è estimated da costo.",
+      "unpricedSecuritiesTruncated": "nessun recent Prezzo data per {securities} e others ({count} Titoli Totale); loro growth è estimated da costo.",
+      "fxFallback": "mancante Tassi di cambio per {currencies}; quelli amounts Usa un 1:1 Tasso."
+    },
+    "states": {
+      "loadError": "non è stato possibile carica il Report",
+      "noData": "Nothing un Mostra per questo Periodo",
+      "noDataHint": "Once Hai Entrate, Uscite, o Investimenti in questo range, they'll appear qui.",
+      "noPortfoliosHint": "Investimento growth appears once tu Aggiungi un Portafoglio con priced Posizioni.",
+      "noPortfoliosTitle": "nessun Investimenti ancora",
+      "noPortfoliosPlaceholder": "questo Report Suddivisioni Il tuo net-worth Cambia in what tu salvato e what Il tuo Investimenti grew. Aggiungi un Portafoglio un Inizio tracking growth.",
+      "noPortfoliosAction": "Aggiungi un Portafoglio"
+    },
+    "target": {
+      "title": "Growth crossover",
+      "subtitle": "il Portafoglio size where market growth — non Il tuo salvataggio — fa most di il work.",
+      "targetShareLabel": "Growth's Azione di Il tuo Mensile gain",
+      "savingsLabel": "Expected Mensile salvataggio",
+      "savingsPlaceholder": "e.g. 1,000",
+      "savingsResetToAverage": "Usa my Media ({amount})",
+      "currentShareLine": "Oggi growth covers ~{current}% di Il tuo Mensile gain — tu're aiming per {target}%.",
+      "valueNeeded": "Portafoglio valore needed",
+      "progressLine": "tu're {pct}% di il way — {current} di {needed}.",
+      "progressReached": "obiettivo reached — Il tuo Portafoglio è già there.",
+      "gapLabel": "Gap",
+      "gapValue": "{amount} Altro needed",
+      "reached": "obiettivo reached",
+      "timeLabel": "ora un obiettivo",
+      "etaValue": "~{years} yr",
+      "etaReached": "Reached",
+      "etaHint": "se tu Mantieni salvataggio e il Rendimento holds.",
+      "noReturn": "scegli un positive expected Rendimento un Visualizza un obiettivo valore.",
+      "assumptionsLabel": "Assumptions",
+      "disclaimer": "un straight projection da Oggi's valori e Il tuo assumptions — non financial advice."
+    }
+  },
+  "investmentContributions": {
+    "title": "Investimento Contributions",
+    "subtitle": "come much cash tu've moved in Il tuo portafogli over ora, e where it went.",
+    "average": "Media",
+    "portfolioFilter": {
+      "scopeHint": "filtri che portafogli count toward contributions."
+    },
+    "granularity": {
+      "monthly": "Mensile",
+      "quarterly": "Quarterly",
+      "yearly": "Annuale"
+    },
+    "cards": {
+      "totalContributed": "Totale contributed",
+      "shareOfSavings": "Azione di savings",
+      "averagePerPeriod": "Media per Periodo"
+    },
+    "chart": {
+      "vsPrevious": "vs Precedente"
+    },
+    "states": {
+      "noData": "nessun contributions in questo range",
+      "noDataHint": "Move Entrate un Portafoglio durante questo Periodo un Visualizza it qui.",
+      "noPortfoliosTitle": "nessun portafogli ancora",
+      "noPortfoliosPlaceholder": "Crea un Portafoglio e Inizio investing un traccia Il tuo contributions qui.",
+      "noPortfoliosAction": "Aggiungi un Portafoglio",
+      "loadError": "non è stato possibile carica contributions"
+    }
+  },
+  "netWorthHistory": {
+    "title": "Patrimonio netto Cronologia",
+    "subtitle": "come Il tuo assets, liabilities e Patrimonio netto modificato over ora",
+    "granularity": {
+      "weekly": "Settimanale",
+      "monthly": "Mensile",
+      "quarterly": "Quarterly",
+      "yearly": "Annuale"
+    },
+    "kindFilter": {
+      "all": "tutti liabilities",
+      "scopeHint": "Scegli che debt tipi count come liabilities in questo Report.",
+      "selectedOne": "1 Tipo",
+      "selectedMany": "{n} tipi"
+    },
+    "assetKinds": {
+      "cash": "Cash & Conti",
+      "investments": "Investimenti",
+      "vehicles": "Veicoli",
+      "ventures": "Ventures"
+    },
+    "assetFilter": {
+      "all": "tutti assets",
+      "scopeHint": "Scegli che asset tipi count in questo Report.",
+      "selectedOne": "1 Tipo",
+      "selectedMany": "{n} tipi"
+    },
+    "cards": {
+      "currentNetWorth": "Attuale Patrimonio netto",
+      "periodChange": "Periodo Cambia",
+      "annualized": "≈ {pct} / yr",
+      "averageLiabilities": "Hai un Media di {amount} in liabilities durante il Selezionato Periodo.",
+      "noLiabilities": "tu had nessun liabilities durante il Selezionato Periodo."
+    },
+    "chart": {
+      "assets": "Assets",
+      "liabilities": "Liabilities",
+      "netWorth": "Patrimonio netto",
+      "averageLiabilities": "Avg. liabilities",
+      "liabilitiesZoomed": "Liabilities scale zoomed"
+    },
+    "settings": {
+      "title": "Grafico Impostazioni",
+      "zoomLiabilities": "Zoom liabilities scale",
+      "zoomLiabilitiesHint": "Enlarge small debts so they stay visible Successivo un large assets."
+    },
+    "degraded": {
+      "title": "alcuni valori sono estimated",
+      "unpricedSecurities": "nessun recent Prezzo data per {securities}, so sono shown a costo e potrebbe understate Il tuo Patrimonio netto.",
+      "unpricedSecuritiesTruncated": "nessun recent Prezzo data per {securities} e others ({count} Titoli Totale); sono shown a costo e potrebbe understate Il tuo Patrimonio netto.",
+      "fxFallback": "mancante Tassi di cambio per {currencies}; quelli amounts Usa un 1:1 Tasso."
+    },
+    "states": {
+      "loadError": "Impossibile carica Patrimonio netto Cronologia. Riprova più tardi.",
+      "noData": "nessun Cronologia per questo Periodo",
+      "noDataHint": "riprova un longer Periodo, o Aggiungi Conti e Transazioni so there sono saldi un snapshot."
+    }
+  }
+}

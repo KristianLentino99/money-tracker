@@ -1,0 +1,16 @@
+{
+  "pages": {
+    "importExport": {
+      "importHistory": {
+        "pageTitle": "Cronologia importazioni",
+        "pageDescription": "Visualizza Il tuo past imports e drill in exactly what Conti e Transazioni ogni uno creato.",
+        "loadError": "non è stato possibile carica Il tuo Cronologia importazioni.",
+        "emptyTitle": "nessun imports ancora",
+        "emptyDescription": "Once tu Importa transazioni, they'll Mostra su qui.",
+        "emptyAction": "Importa dati",
+        "transactionCount": "{count} Transazione | {count} Transazioni",
+        "accountCount": "{count} Conto | {count} Conti"
+      }
+    }
+  }
+}

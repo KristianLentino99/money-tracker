@@ -20,6 +20,7 @@
           "setDefault": "Jadikan Default"
         },
         "invalidKeyHelp": "Tambahkan kunci baru di bawah untuk mengganti yang ini, atau hapus jika tidak diperlukan lagi.",
+        "modelValue": "Model: {model}",
         "deleteDialog": {
           "title": "Hapus kunci API?",
           "description": "Yakin ingin menghapus kunci API {provider}?",
@@ -33,6 +34,10 @@
           "titleAddAnother": "Tambah Penyedia Lain",
           "providerLabel": "Penyedia",
           "apiKeyLabel": "Kunci API",
+          "modelLabel": "ID model OpenRouter",
+          "modelPlaceholder": "deepseek/deepseek-v4-flash",
+          "modelDescription": "Masukkan pengenal model yang tepat dari",
+          "modelListLink": "daftar model OpenRouter",
           "buttonSaving": "Memvalidasi...",
           "buttonSave": "Simpan Kunci"
         },
@@ -55,6 +60,16 @@
           "groq": {
             "label": "Groq (Llama, Mixtral)",
             "placeholder": "gsk_...",
+            "description": "Dapatkan kunci API dari"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "placeholder": "sk-or-v1-...",
+            "description": "Dapatkan kunci API dari"
+          },
+          "deepseek": {
+            "label": "DeepSeek",
+            "placeholder": "sk-...",
             "description": "Dapatkan kunci API dari"
           }
         },
@@ -117,7 +132,8 @@
           "context": "Konteks:",
           "capabilities": "Kemampuan:",
           "estimatedCost": "Perkiraan biaya:",
-          "per100Transactions": "per 100 transaksi"
+          "per100Transactions": "per 100 transaksi",
+          "unknown": "Tidak diketahui"
         },
         "rateLimitWarning": "Menggunakan AI yang disediakan server dengan batasan jumlah gratis. Ketersediaan fitur tergantung pada permintaan pengguna lain. Untuk akses yang andal, tambahkan kunci API Anda sendiri di tab Kunci API.",
         "groupLabels": {
@@ -125,13 +141,16 @@
           "openai": "OpenAI",
           "anthropic": "Anthropic",
           "google": "Google",
-          "groq": "Groq"
+          "groq": "Groq",
+          "openrouter": "OpenRouter",
+          "deepseek": "DeepSeek"
         },
         "costLabels": {
           "free": "Gratis",
           "low": "Biaya rendah",
           "medium": "Biaya sedang",
-          "high": "Biaya tinggi"
+          "high": "Biaya tinggi",
+          "unknown": "Biaya tidak diketahui"
         },
         "capabilities": {
           "textGeneration": "Teks",

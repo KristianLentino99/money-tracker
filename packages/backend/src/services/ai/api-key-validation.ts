@@ -11,11 +11,12 @@ import { AI_MODEL_ID } from './models-config';
  * model is rejected, because providers gate newer models per account. Google leads with
  * gemini-3.5-flash-lite because the free gemma-4-31b-it is rate-limited into flaky runs.
  */
-const VALIDATION_MODELS: Record<AIKeyProvider, AI_MODEL_ID[]> = {
+const VALIDATION_MODELS: Partial<Record<AIKeyProvider, AI_MODEL_ID[]>> = {
   [AI_PROVIDER.openai]: [AI_MODEL_ID['openai/gpt-5.4-nano'], AI_MODEL_ID['openai/gpt-5.6-luna']],
   [AI_PROVIDER.anthropic]: [AI_MODEL_ID['anthropic/claude-haiku-4-5'], AI_MODEL_ID['anthropic/claude-sonnet-5']],
   [AI_PROVIDER.google]: [AI_MODEL_ID['google/gemini-3.5-flash-lite'], AI_MODEL_ID['google/gemini-3.6-flash']],
   [AI_PROVIDER.groq]: [AI_MODEL_ID['groq/openai/gpt-oss-20b'], AI_MODEL_ID['groq/llama-3.3-70b-versatile']],
+  [AI_PROVIDER.deepseek]: [AI_MODEL_ID['deepseek/deepseek-v4-flash'], AI_MODEL_ID['deepseek/deepseek-v4-pro']],
 };
 
 /** Kept to one word so call sites can cap output at a few tokens. */
@@ -37,13 +38,22 @@ const GENERIC_INVALID_KEY_MESSAGE =
 export async function validateApiKey({
   provider,
   apiKey,
+  model: selectedModel,
 }: {
   provider: AIKeyProvider;
   apiKey: string;
+  /** Required for OpenRouter because its model catalog is user-selected. */
+  model?: string;
 }): Promise<APIKeyValidationResult> {
-  const modelFailures: { modelId: AI_MODEL_ID; error: unknown }[] = [];
+  const modelIds: string[] =
+    provider === AI_PROVIDER.openrouter
+      ? selectedModel
+        ? [`${AI_PROVIDER.openrouter}/${selectedModel}`]
+        : []
+      : (VALIDATION_MODELS[provider] ?? []);
+  const modelFailures: { modelId: string; error: unknown }[] = [];
 
-  for (const modelId of VALIDATION_MODELS[provider]) {
+  for (const modelId of modelIds) {
     try {
       const model = createAIClientWithConfig({
         provider,

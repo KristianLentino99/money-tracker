@@ -117,6 +117,7 @@ export async function wipeUserData({
 
 interface AiApiKeyInfo {
   provider: AIKeyProvider;
+  model?: string;
   createdAt: string;
 }
 
@@ -131,16 +132,18 @@ export async function getAiApiKeyStatus<R extends boolean | undefined = undefine
 export async function setAiApiKey<R extends boolean | undefined = undefined>({
   apiKey,
   provider,
+  model,
   raw,
 }: {
   apiKey: string;
   provider: AIKeyProvider;
+  model?: string;
   raw?: R;
 }) {
   return makeRequest<{ success: boolean }, R>({
     method: 'put',
     url: '/user/settings/ai/api-keys',
-    payload: { apiKey, provider },
+    payload: { apiKey, provider, model },
     raw,
   });
 }

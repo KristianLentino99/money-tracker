@@ -1,0 +1,47 @@
+{
+  "auth": {
+    "welcome": {
+      "title": "Seleziona Valuta principale",
+      "description": "La valuta principale dovrebbe essere quella che usi più spesso. Tutte le transazioni in altre valute verranno convertite in base a questa.",
+      "submitButton": "Conferma Valuta",
+      "logout": "Disconnetti",
+      "labels": {
+        "baseCurrency": "Valuta principale"
+      },
+      "placeholders": {
+        "loading": "Caricamento..."
+      },
+      "errors": {
+        "unableToLoadCurrencies": "Impossibile caricare l'elenco delle valute. Riprova più tardi.",
+        "unableToSetCurrency": "Errore imprevisto. Impossibile impostare la valuta principale. Riprova più tardi oppure contatta il supporto."
+      }
+    },
+    "oauthCallback": {
+      "completingSignIn": "Completamento dell'accesso…",
+      "errors": {
+        "accessDenied": {
+          "signIn": "L’accesso è stato annullato oppure negato",
+          "signUp": "La registrazione è stata annullata oppure negata",
+          "link": "Il collegamento è stato annullato oppure negato"
+        },
+        "userAlreadyExists": {
+          "signIn": "Esiste già un conto con questo indirizzo email",
+          "signUp": "Esiste già un conto con questo indirizzo email",
+          "link": "Questo conto è già collegato a un altro utente"
+        },
+        "accountNotLinked": {
+          "signIn": "Nessun conto trovato con questo indirizzo email. Registrati prima.",
+          "signUp": "Impossibile creare il conto. Riprova.",
+          "link": "Impossibile collegare il conto. Riprova."
+        },
+        "genericError": {
+          "signIn": "Impossibile accedere. Riprova.",
+          "signUp": "Impossibile registrarsi. Riprova.",
+          "link": "Impossibile collegare il conto. Riprova."
+        },
+        "unauthorizedClient": "Questa applicazione non è autorizzata a usare questo metodo di autenticazione",
+        "temporarilyUnavailable": "Il servizio di autenticazione è temporaneamente non disponibile. Riprova più tardi."
+      }
+    }
+  }
+}

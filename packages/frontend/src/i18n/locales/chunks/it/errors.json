@@ -1,0 +1,18 @@
+{
+  "errors": {
+    "api": {
+      "failedToFetch": "Impossibile recuperare i dati dal server.",
+      "failedToFetchSelfHost": "Impossibile raggiungere il server. Il backend potrebbe essere ancora in avvio (circa 30 secondi dopo l'avvio), oppure la variabile d'ambiente ALLOWED_ORIGINS potrebbe non includere questo URL.",
+      "unexpectedError": "Errore imprevisto.",
+      "sessionExpired": "La sessione è scaduta. Accedi di nuovo.",
+      "payloadTooLarge": "La richiesta è troppo grande. Riprova importando meno elementi alla volta."
+    },
+    "notFound": {
+      "title": "Questa pagina è stata spostata",
+      "description": "Non è stato possibile trovare ciò che stavi cercando. Il collegamento potrebbe essere danneggiato oppure la pagina potrebbe essere stata spostata.",
+      "attemptedLabel": "Hai provato a visitare: ",
+      "goBack": "Torna indietro",
+      "goHome": "Torna alla home"
+    }
+  }
+}

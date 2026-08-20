@@ -19,9 +19,11 @@ import { AI_PROVIDER } from '@bt/shared/types';
 import { logger } from '@js/utils/logger';
 import { APICallError, generateText } from 'ai';
 
+import { createAIClientWithConfig } from './ai-client-factory';
 import { validateApiKey } from './api-key-validation';
 
 const generateTextMock = generateText as unknown as jest.Mock<() => Promise<unknown>>;
+const createAIClientWithConfigMock = createAIClientWithConfig as unknown as jest.Mock;
 
 // Minimal fields required by the APICallError constructor; url/requestBodyValues
 // are irrelevant to the classifier but the SDK type requires them.
@@ -89,5 +91,22 @@ describe('validateApiKey', () => {
 
     expect(result).toEqual({ isValid: true });
     expect(generateTextMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('validates OpenRouter with the user-selected upstream model ID', async () => {
+    generateTextMock.mockResolvedValueOnce({});
+
+    const result = await validateApiKey({
+      provider: AI_PROVIDER.openrouter,
+      apiKey: 'sk-or-test',
+      model: 'anthropic/claude-sonnet-5',
+    });
+
+    expect(result).toEqual({ isValid: true });
+    expect(createAIClientWithConfigMock).toHaveBeenCalledWith({
+      provider: AI_PROVIDER.openrouter,
+      modelId: 'openrouter/anthropic/claude-sonnet-5',
+      apiKey: 'sk-or-test',
+    });
   });
 });

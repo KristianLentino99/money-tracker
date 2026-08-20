@@ -7,7 +7,7 @@ import {
   buildCustomModelId,
 } from '@bt/shared/types';
 
-import { getDefaultModelForFeature, getProviderFromModelId } from './models-config';
+import { getDefaultModelForFeature, getFirstModelForProvider, getProviderFromModelId } from './models-config';
 
 // The one place that decides which model answers an AI feature. The runtime resolver and
 // the settings screens both walk this ladder, so what runs and what the UI names cannot
@@ -23,6 +23,10 @@ export function getServerApiKey({ provider }: { provider: AI_PROVIDER }): string
       return process.env.ANTHROPIC_API_KEY || null;
     case AI_PROVIDER.groq:
       return process.env.GROQ_API_KEY || null;
+    case AI_PROVIDER.openrouter:
+      return process.env.OPENROUTER_API_KEY || null;
+    case AI_PROVIDER.deepseek:
+      return process.env.DEEPSEEK_API_KEY || null;
     default:
       return null;
   }
@@ -60,6 +64,8 @@ export function pickResolutionStep<E extends LadderEndpoint>({
   feature,
   config,
   keyProviders,
+  providerModels,
+  defaultProvider,
   endpoints,
   excludedEndpointIds,
 }: {
@@ -67,6 +73,10 @@ export function pickResolutionStep<E extends LadderEndpoint>({
   /** Must already be upgraded past retired model IDs. */
   config: AIFeatureConfig | null;
   keyProviders: ReadonlySet<AIKeyProvider>;
+  /** User-selected model IDs for providers whose catalogs are dynamic, currently OpenRouter. */
+  providerModels?: ReadonlyMap<AIKeyProvider, string>;
+  /** User's preferred provider, used when it has a dynamic model selection. */
+  defaultProvider?: AIKeyProvider;
   /** In saved order: the first dialable one wins. */
   endpoints: readonly E[];
   excludedEndpointIds?: ReadonlySet<string>;
@@ -97,14 +107,27 @@ export function pickResolutionStep<E extends LadderEndpoint>({
   }
 
   const defaultModelId = getDefaultModelForFeature({ feature });
-  const defaultProvider = getProviderFromModelId({ modelId: defaultModelId });
+  const catalogDefaultProvider = getProviderFromModelId({ modelId: defaultModelId });
 
-  if (!defaultProvider || defaultProvider === AI_PROVIDER.custom) {
+  const selectedProviderModel =
+    defaultProvider && keyProviders.has(defaultProvider)
+      ? (providerModels?.get(defaultProvider) ?? getFirstModelForProvider({ provider: defaultProvider }))
+      : undefined;
+  if (selectedProviderModel && defaultProvider) {
+    return {
+      kind: 'default-catalog',
+      provider: defaultProvider,
+      modelId: selectedProviderModel,
+      usingUserKey: true,
+    };
+  }
+
+  if (!catalogDefaultProvider || catalogDefaultProvider === AI_PROVIDER.custom) {
     return { kind: 'unserved', reason: 'invalid-default' };
   }
 
-  if (keyProviders.has(defaultProvider)) {
-    return { kind: 'default-catalog', provider: defaultProvider, modelId: defaultModelId, usingUserKey: true };
+  if (keyProviders.has(catalogDefaultProvider)) {
+    return { kind: 'default-catalog', provider: catalogDefaultProvider, modelId: defaultModelId, usingUserKey: true };
   }
 
   const dialable = endpoints.find((candidate) => candidate.status !== 'invalid' && !excluded.has(candidate.id));
@@ -119,8 +142,8 @@ export function pickResolutionStep<E extends LadderEndpoint>({
     return { kind: 'all-endpoints-down', endpoint: endpoints[0]! };
   }
 
-  if (getServerApiKey({ provider: defaultProvider })) {
-    return { kind: 'default-catalog', provider: defaultProvider, modelId: defaultModelId, usingUserKey: false };
+  if (getServerApiKey({ provider: catalogDefaultProvider })) {
+    return { kind: 'default-catalog', provider: catalogDefaultProvider, modelId: defaultModelId, usingUserKey: false };
   }
 
   return { kind: 'unserved', reason: 'no-credentials' };

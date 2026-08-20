@@ -1,0 +1,132 @@
+{
+  "optimizations": {
+    "title": "Optimizations",
+    "landingDescription": "Tools un aiuto tu organize e clean su Il tuo dati finanziari.",
+    "backToOptimizations": "Indietro un optimizations",
+    "cards": {
+      "transfers": {
+        "title": "Trasferimento corrispondente",
+        "description": "trova Uscita-Entrate pairs quello might essere Trasferimenti tra Il tuo Conti e collega li automaticamente."
+      },
+      "aiCategorization": {
+        "title": "AI categorizzazione",
+        "description": "Let AI Ordina uncategorized Transazioni e revisione past runs."
+      }
+    },
+    "aiCategorization": {
+      "title": "AI categorizzazione",
+      "description": "Run AI over Transazioni quello sono ancora in Il tuo Predefinito Categoria e let it scegli un better uno. Puoi sempre Cambia un Categoria afterwards.",
+      "tabs": {
+        "categorize": "Categorize",
+        "history": "Cronologia"
+      },
+      "count": {
+        "capNote": "uno run covers il {limit} most recent. Run it di nuovo un work fino a il rest.",
+        "allDoneTitle": "Everything è categorized",
+        "allDoneDescription": "Nessuna transazione sono sitting in Il tuo Predefinito Categoria in questo momento."
+      },
+      "bar": {
+        "uncategorizedCount": "{count} uncategorized",
+        "capChip": "{limit} per run"
+      },
+      "table": {
+        "selectionHint": "Seleziona righe un categorize solo quelli.",
+        "loadError": "non è stato possibile carica il Transazioni waiting per categorizzazione."
+      },
+      "history": {
+        "emptyTitle": "nessun AI categorizzazione runs ancora",
+        "emptyDescription": "Once tu run AI categorizzazione, ogni run shows su qui so Puoi revisione what it modificato.",
+        "loadError": "non è stato possibile carica il run Cronologia.",
+        "runLoadError": "non è stato possibile carica questo run's Transazioni.",
+        "backToRuns": "Indietro un tutti runs",
+        "runEmptyTitle": "Nothing left da questo run",
+        "runEmptyDescription": "ogni Transazione questo run categorized ha since been re-categorized o eliminato.",
+        "transactionCount": "{count} Transazione | {count} Transazioni",
+        "trigger": {
+          "manual": "manuale",
+          "import": "Importazione dati",
+          "sync": "banca sincronizzazione",
+          "unknown": "Sconosciuto"
+        },
+        "triggerTooltip": {
+          "manual": "tu started questo run manualmente",
+          "import": "Started automaticamente dopo un Importazione dati",
+          "sync": "Started automaticamente dopo un banca sincronizzazione",
+          "unknown": "questo run's origin wasn't recorded"
+        }
+      },
+      "setup": {
+        "title": "Run setup",
+        "model": "Modello",
+        "notConfigured": "non configured",
+        "endpoint": "endpoint",
+        "limits": "Limits",
+        "limitsSharedKey": "3 runs per ora",
+        "limitsOwnCredentials": "Unlimited — runs su Il tuo propri chiave",
+        "changeModel": "Cambia in Impostazioni AI",
+        "errorChip": "AI setup problem",
+        "loadError": "non è stato possibile carica Il tuo AI setup."
+      },
+      "run": {
+        "button": "Categorize con AI (tutti)",
+        "categorizeSelected": "Categorize {count} Selezionato",
+        "inProgress": "Categorizing…",
+        "progressLabel": "AI categorizzazione progress",
+        "processed": "{processed} di {total} Transazioni processed"
+      },
+      "confirm": {
+        "title": "Categorize tutti uncategorized Transazioni?",
+        "description": "AI sarà look a {count} Transazione quello è ancora in Il tuo Predefinito Categoria e scegli un Categoria per it. Puoi Cambia it afterwards. | AI sarà look a {count} Transazioni quello sono ancora in Il tuo Predefinito Categoria e scegli un Categoria per ogni uno. Puoi Cambia qualsiasi di li afterwards.",
+        "action": "Categorize tutti"
+      },
+      "notifications": {
+        "started": "Categorizing {count} Transazione con AI | Categorizing {count} Transazioni con AI",
+        "nothingToCategorize": "Everything è già categorized — nothing left per AI un do",
+        "alreadyRunning": "AI categorizzazione è già running",
+        "rateLimited": "tu've reached il manuale categorizzazione limite. Riprova in {time}.",
+        "failed": "Impossibile Inizio AI categorizzazione"
+      }
+    },
+    "transferSuggestions": {
+      "description": "trova Transazioni quello dovrebbe essere collegato come Trasferimenti tra Il tuo Conti",
+      "suggestionsFor": "Suggestions per",
+      "selectExpense": "Seleziona un Transazione un Visualizza suggestions",
+      "potentialTransfersFound": "potential Trasferimenti trovato",
+      "empty": {
+        "title": "nessun Trasferimento suggestions trovato",
+        "description": "riprova adjusting il Intervallo di data"
+      },
+      "initial": {
+        "title": "trova Trasferimento suggestions",
+        "description": "Scan Il tuo Transazioni un trova Entrate e Uscita pairs quello dovrebbe essere collegato come Trasferimenti tra Conti"
+      },
+      "scanning": "Scanning Transazioni...",
+      "confirmLink": {
+        "title": "collega come Trasferimento?",
+        "description": "Both Transazioni sarà essere collegato come un Trasferimento tra Conti. questo sarà correct Il tuo statistics e Analisi da excluding li da Entrate e Uscita totals."
+      },
+      "presets": {
+        "last3Months": "ultimo 3 mesi",
+        "last6Months": "ultimo 6 mesi",
+        "lastYear": "Anno scorso",
+        "thisYear": "Quest’anno",
+        "previousYear": "Precedente Anno"
+      },
+      "includeOutOfWallet": "Includi fuori-di-wallet Trasferimenti",
+      "skip": {
+        "action": "Skip",
+        "title": "Skip questo suggestion?",
+        "description": "questo pair sarà essere hidden da future scan results. il Transazioni themselves non sarà essere modificato.",
+        "dontShowAgain": "non Mostra questo conferma di nuovo"
+      },
+      "notifications": {
+        "loadError": "Impossibile carica Altro suggestions",
+        "scanError": "Impossibile scan per Trasferimento suggestions",
+        "linkSuccess": "Transazioni collegato come Trasferimento",
+        "linkError": "Impossibile collega Transazioni",
+        "skipSuccess": "Suggestion dismissed",
+        "skipError": "Impossibile skip suggestion"
+      }
+    }
+  }
+}

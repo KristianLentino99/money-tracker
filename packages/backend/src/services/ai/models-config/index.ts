@@ -2,6 +2,7 @@ import {
   AIKeyProvider,
   AIModelInfo,
   AIModelPricing,
+  AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
   AI_FEATURE,
   AI_PROVIDER,
   getModelNameFromModelId,
@@ -10,7 +11,7 @@ import {
 import { logger } from '@js/utils/logger';
 
 import { AI_MODEL_ID } from './model-ids';
-import { ANTHROPIC_MODELS, GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS } from './providers';
+import { ANTHROPIC_MODELS, DEEPSEEK_MODELS, GOOGLE_MODELS, GROQ_MODELS, OPENAI_MODELS } from './providers';
 import { FEATURE_DEFAULTS, FEATURE_RECOMMENDATIONS } from './recommendations';
 import { RETIRED_MODELS } from './retired-models';
 
@@ -25,6 +26,7 @@ const AVAILABLE_MODELS: Record<AI_MODEL_ID, AIModelInfo> = {
   ...ANTHROPIC_MODELS,
   ...GOOGLE_MODELS,
   ...GROQ_MODELS,
+  ...DEEPSEEK_MODELS,
 };
 
 /**
@@ -45,6 +47,11 @@ export function getAvailableModels({ provider }: { provider?: AIKeyProvider } = 
   return models;
 }
 
+/** First catalog model for a provider, used when the user sets that provider as default. */
+export function getFirstModelForProvider({ provider }: { provider: AIKeyProvider }): string | null {
+  return Object.values(AVAILABLE_MODELS).find((model) => model.provider === provider)?.id ?? null;
+}
+
 /**
  * Get model info by model ID
  */
@@ -52,18 +59,28 @@ export function getModelInfo({ modelId }: { modelId: string }): AIModelInfo | nu
   return AVAILABLE_MODELS[modelId as AI_MODEL_ID] ?? null;
 }
 
+/** OpenRouter accepts the upstream model identifier chosen by the user. */
+export function isOpenRouterModelId({ modelId }: { modelId: string }): boolean {
+  const prefix = `${AI_PROVIDER.openrouter}/`;
+  return (
+    modelId.startsWith(prefix) &&
+    modelId.length > prefix.length &&
+    modelId.length <= prefix.length + AI_CUSTOM_MODEL_NAME_MAX_LENGTH
+  );
+}
+
 const DEFAULT_CONTEXT_WINDOW = 100_000;
 
 /**
- * The catalog holds neither a price nor a context window for a `custom/*` model, so both
- * have to reach the screen as unknown rather than as a made-up zero.
+ * The catalog holds neither a price nor a context window for a `custom/*` or dynamic
+ * OpenRouter model, so both have to reach the screen as unknown rather than as a made-up zero.
  */
 type ModelCostProfile =
   | { isCustom: true; name: string }
   | { isCustom: false; name: string; contextWindow: number; pricing: AIModelPricing | null };
 
 export function getModelCostProfile({ modelId }: { modelId: string }): ModelCostProfile | null {
-  if (isCustomModelId({ modelId })) {
+  if (isCustomModelId({ modelId }) || isOpenRouterModelId({ modelId })) {
     return { isCustom: true, name: getModelNameFromModelId({ modelId }) };
   }
 
@@ -103,6 +120,7 @@ export function estimateModelCostUsd({
 /** A `custom/*` ID has nothing to check against the catalog, so the endpoint decides at call time. */
 export function isValidModelId({ modelId }: { modelId: string }): boolean {
   if (isCustomModelId({ modelId })) return true;
+  if (isOpenRouterModelId({ modelId })) return true;
   return modelId in AVAILABLE_MODELS;
 }
 
@@ -125,6 +143,7 @@ export function isModelRecommendedForFeature({ modelId, feature }: { modelId: st
  */
 export function getProviderFromModelId({ modelId }: { modelId: string }): AI_PROVIDER | null {
   if (isCustomModelId({ modelId })) return AI_PROVIDER.custom;
+  if (isOpenRouterModelId({ modelId })) return AI_PROVIDER.openrouter;
   const model = AVAILABLE_MODELS[modelId as AI_MODEL_ID];
   return model?.provider ?? null;
 }
@@ -134,6 +153,7 @@ export function getProviderFromModelId({ modelId }: { modelId: string }): AI_PRO
 // pass through.
 export function resolveLiveModelId({ modelId, feature }: { modelId: string; feature: AI_FEATURE }): string {
   if (isCustomModelId({ modelId })) return modelId;
+  if (isOpenRouterModelId({ modelId })) return modelId;
   if (modelId in AVAILABLE_MODELS) return modelId as AI_MODEL_ID;
 
   const replacement = RETIRED_MODELS[modelId];

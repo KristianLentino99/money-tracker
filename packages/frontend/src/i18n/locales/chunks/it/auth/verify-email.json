@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "verifyEmail": {
+      "title": "Controlla la tua email",
+      "description": "Abbiamo inviato un link di verifica a",
+      "descriptionYourEmail": "il tuo indirizzo email",
+      "descriptionContinued": ". Fai clic sul collegamento per verificare il tuo conto.",
+      "didntReceive": "Non hai ricevuto l’email? Controlla la cartella spam oppure",
+      "resend": "fai clic qui per inviarla di nuovo",
+      "sending": "Invio in corso…",
+      "resendIn": "Invia di nuovo tra {count} s",
+      "backToSignIn": "Torna alla schermata di accesso",
+      "resendSuccess": "Email di verifica inviata! Controlla la posta in arrivo.",
+      "resendError": "Impossibile inviare di nuovo l'email di verifica. Riprova."
+    }
+  }
+}

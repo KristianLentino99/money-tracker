@@ -1,4 +1,10 @@
-import { AIApiKeyInfo, AIApiKeyStatus, AIKeyProvider, AI_PROVIDER } from '@bt/shared/types';
+import {
+  AIApiKeyInfo,
+  AIApiKeyStatus,
+  AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
+  AIKeyProvider,
+  AI_PROVIDER,
+} from '@bt/shared/types';
 import { decryptToken, encryptToken } from '@common/utils/encryption';
 import { t } from '@i18n/index';
 import { ValidationError } from '@js/errors';
@@ -57,13 +63,24 @@ export const setAiApiKey = withTransaction(
     userId,
     apiKey,
     provider,
+    model,
   }: {
     userId: number;
     apiKey: string | null;
     provider: AIKeyProvider;
+    model?: string;
   }): Promise<void> => {
+    const normalizedModel = model?.trim();
+    if (
+      apiKey &&
+      provider === AI_PROVIDER.openrouter &&
+      (!normalizedModel || normalizedModel.length > AI_CUSTOM_MODEL_NAME_MAX_LENGTH)
+    ) {
+      throw new ValidationError({ message: t({ key: 'ai.customModelNameInvalidLength' }) });
+    }
+
     if (apiKey) {
-      const validationResult = await validateApiKey({ provider, apiKey });
+      const validationResult = await validateApiKey({ provider, apiKey, model: normalizedModel });
       if (!validationResult.isValid) {
         throw new ValidationError({
           message: validationResult.error ?? t({ key: 'ai.apiKeyValidationFailed' }),
@@ -85,6 +102,7 @@ export const setAiApiKey = withTransaction(
       const now = new Date().toISOString();
       apiKeys.push({
         provider,
+        ...(provider === AI_PROVIDER.openrouter ? { model: normalizedModel } : {}),
         keyEncrypted: encryptToken(apiKey),
         createdAt: now,
         status: 'valid' as AIApiKeyStatus,
@@ -198,6 +216,7 @@ export const getAiApiKeyInfo = withTransaction(
     return {
       providers: aiSettings.apiKeys.map((k) => ({
         provider: k.provider,
+        model: k.model,
         createdAt: k.createdAt,
         status: k.status ?? ('valid' as AIApiKeyStatus), // Default for migration
         lastValidatedAt: k.lastValidatedAt ?? k.createdAt, // Default for migration

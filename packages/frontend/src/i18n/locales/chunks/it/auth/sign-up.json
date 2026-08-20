@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "signup": {
+      "title": "Crea un conto",
+      "divider": "Oppure continua con l'email",
+      "submitButton": "Registrati",
+      "alreadyHaveAccount": "Hai già un conto?",
+      "signInLink": "Accedi",
+      "labels": {
+        "displayName": "Nome visualizzato",
+        "verifyPassword": "Conferma password"
+      },
+      "placeholders": {
+        "displayName": "es. Mario Rossi",
+        "verifyPassword": "Conferma password"
+      },
+      "errors": {
+        "invalidEmail": "Inserisci un indirizzo email valido.",
+        "passwordTooShort": "La password è troppo breve.",
+        "passwordTooLong": "La password è troppo lunga.",
+        "invalidPassword": "Password non valida.",
+        "userExists": "Esiste già un utente con questo indirizzo email.",
+        "signupsDisabled": "Le registrazioni sono disabilitate dall’amministratore di questa istanza.",
+        "genericErrorRetry": "Si è verificato un errore. Riprova.",
+        "oauthFailed": "Impossibile registrarsi con {provider}. Riprova.",
+        "oauthNotConfigured": "La registrazione con {provider} non è configurata su questo server."
+      }
+    },
+    "shared": {
+      "divider": "Oppure continua con",
+      "passkeyButton": {
+        "signIn": "Accedi con passkey",
+        "register": "Aggiungi una passkey"
+      },
+      "oauthButton": {
+        "signIn": "Accedi con {provider}",
+        "signUp": "Registrati con {provider}"
+      }
+    }
+  }
+}

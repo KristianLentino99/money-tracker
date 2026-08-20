@@ -1,4 +1,4 @@
-import { AI_CUSTOM_MODEL_PREFIX, AI_FEATURE, AI_CUSTOM_MODEL_NAME_MAX_LENGTH } from '@bt/shared/types';
+import { AI_CUSTOM_MODEL_PREFIX, AI_FEATURE, AI_CUSTOM_MODEL_NAME_MAX_LENGTH, AI_PROVIDER } from '@bt/shared/types';
 import { createController } from '@controllers/helpers/controller-factory';
 import { ValidationError } from '@js/errors';
 import { isRetiredModelId, isValidModelId } from '@services/ai';
@@ -16,7 +16,9 @@ const schema = z.object({
     modelId: z
       .string()
       .min(1)
-      .max(AI_CUSTOM_MODEL_PREFIX.length + AI_CUSTOM_MODEL_NAME_MAX_LENGTH),
+      .max(
+        Math.max(AI_CUSTOM_MODEL_PREFIX.length, AI_PROVIDER.openrouter.length + 1) + AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
+      ),
     // Required alongside a 'custom/*' model ID, ignored for catalog models
     customEndpointId: z.uuid().optional(),
   }),

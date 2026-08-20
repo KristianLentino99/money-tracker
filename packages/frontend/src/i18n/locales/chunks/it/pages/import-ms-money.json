@@ -1,0 +1,139 @@
+{
+  "pages": {
+    "importExport": {
+      "msMoneyImport": {
+        "pageTitle": "Importa da Microsoft Money",
+        "pageDescription": "Bring Il tuo Conti, Categorie e Transazioni across da un Microsoft Money .mny file.",
+        "stepper": {
+          "steps": {
+            "upload": "Carica",
+            "resolve": "mappa data",
+            "review": "revisione",
+            "execute": "Importa",
+            "done": "Fatto"
+          }
+        },
+        "fileUpload": {
+          "stepTitle": "Carica Il tuo Money file",
+          "description": "scegli il .mny file Microsoft Money salvato su Il tuo computer.",
+          "maxSize": ".mny file, su un 50 MB",
+          "passwordLabel": "file password (Facoltativo)",
+          "passwordPlaceholder": "inserisci il file password",
+          "passwordHint": "lasciare blank unless tu imposta un password in Microsoft Money.",
+          "parsing": "Reading file…",
+          "continue": "Continua",
+          "errors": {
+            "invalidFormatNamed": "\"{name}\" non è un .mny file.",
+            "passwordUnsupportedChars": "questo password contiene characters we può't Invia. riprova un password senza emoji o non-Latin letters."
+          }
+        },
+        "errors": {
+          "uploadUnavailable": "il uploaded file è nessun longer disponibile. per favore Carica Il tuo Money file di nuovo."
+        },
+        "resolve": {
+          "prepareFailed": "Impossibile prepare il Conto e Categoria mapping. Reload il Pagina e Riprova.",
+          "accounts": {
+            "sectionTitle": "Conti",
+            "currentBalanceLabel": "Attuale Saldo",
+            "currentBalancePlaceholder": "lasciare blank un Usa il importato Totale",
+            "willCreateHint": "sarà essere creato in {currency}.",
+            "skippedNote": "{count} Conto(s) sarà essere skipped. loro Transazioni — e qualsiasi Trasferimenti un o da li — sarà non essere importato."
+          },
+          "categories": {
+            "sectionTitle": "Categorie"
+          },
+          "quickActions": {
+            "mapExactMatches": "mappa exact corrisponde",
+            "createNewForUnmatched": "Crea nuovo per unmatched",
+            "reset": "Reimposta",
+            "tooltips": {
+              "mapExactMatchesAccounts": "collega ogni Conto whose Nome exactly corrisponde uno tu già hai.",
+              "mapExactMatchesCategories": "collega ogni Categoria whose Nome exactly corrisponde uno tu già hai.",
+              "createNewForUnmatched": "imposta ogni undecided riga un \"Crea nuovo\".",
+              "reset": "Cancella tutti choices e corrispondenza di nuovo."
+            }
+          },
+          "footer": {
+            "back": "Indietro",
+            "continue": "Continua"
+          }
+        },
+        "review": {
+          "transactions": "Transazioni",
+          "transfersDetected": "Trasferimenti",
+          "outOfWallet": "fuori-di-wallet",
+          "duplicatesSkipped": "duplicati skipped",
+          "willImport": "sarà Importa",
+          "dateRange": "Intervallo di data: {from} — {to}",
+          "warningsTitle": "alcuni things erano left fuori",
+          "warningsHint": "questi righe sono non part di il Importa.",
+          "warnings": {
+            "accountTypeUnsupported": "{count} Conto(s) skipped",
+            "orphanRowSkipped": "{count} Transazione(s) skipped",
+            "transferCounterpartNotImported": "{count} Trasferimento leg(s) importato come fuori-di-wallet",
+            "rowLimitReached": "{count} Transazione(s) over il limite erano dropped",
+            "accountCurrencyDefaulted": "{count} Conto(s) had nessun Valuta in il file, so USD era assumed — check il Valuta su il Conti passaggio prima di continuing",
+            "rowMissingDate": "{count} Transazione(s) con nessun readable Data erano skipped",
+            "accountNameMissing": "{count} Conto(s) had nessun Nome",
+            "accountNameDuplicated": "{count} Conto(s) condiviso un Nome",
+            "rowAmountUnreadable": "{count} Transazione(s) con nessun readable Importo erano skipped",
+            "fileSchemaUnexpected": "{count} imprevista file structure issue(s) trovato"
+          },
+          "includeVoided": {
+            "label": "Importa {count} voided Transazione(s)",
+            "hint": "Microsoft Money keeps voided voci in il register but never applies li un Il tuo Saldo, so sono importato a zero e tagged \"Void\" — keeping loro Data, Beneficiario, Categoria, memo e cheque numero."
+          },
+          "duplicatesTitle": "{count} possible duplicate(s)",
+          "duplicatesHint": "questi già look like Transazioni Hai. Un-check uno un Importa it anyway.",
+          "back": "Indietro",
+          "importing": "Starting Importa…",
+          "importButton": "Importa {count} Transazioni"
+        },
+        "execute": {
+          "starting": "Starting il Importa…",
+          "progressCount": "{processed} di {total}",
+          "failed": "il Importa non riuscito.",
+          "partialImportNote": "alcuni Transazioni potrebbe già hai been importato.",
+          "statusQueued": "Queued",
+          "statusRunning": "importazione",
+          "statusCompleted": "completato",
+          "statusFailed": "non riuscito"
+        },
+        "done": {
+          "successTitle": "Importa finished",
+          "successDescription": "Everything da Il tuo Money file è ora in Il tuo Conto.",
+          "partialTitle": "importato con {count} issue(s)",
+          "partialDescription": "Most righe landed. il elenco sotto shows what didn't.",
+          "emptyTitle": "Nothing Nuovo un Importa",
+          "emptyDescription": "ogni riga era either skipped o già in Il tuo ledger, so Nessuna transazione erano creato.",
+          "allFailedTitle": "Nothing era importato",
+          "allFailedDescription": "Nessuna transazione potrebbe essere creato. Visualizza il errori sotto.",
+          "accountsCreated": "Conti creato",
+          "accountsLinked": "Conti collegato",
+          "accountsSkipped": "Conti skipped",
+          "categoriesCreated": "Categorie creato",
+          "payeesCreated": "Beneficiari creato",
+          "transactionsImported": "Transazioni importato",
+          "transfersImported": "Trasferimenti importato",
+          "outOfWalletImported": "fuori-di-wallet Trasferimenti",
+          "duplicatesSkipped": "duplicati skipped",
+          "voidedImported": "Voided importato",
+          "mergedIntoPlanned": "Merged in Pianificato",
+          "balanceWarningTitle": "alcuni saldi potrebbe essere disattivato",
+          "balanceWarningBody": "We non è stato possibile imposta il final Saldo su ogni Conto. Check li e adjust se needed.",
+          "errorsTitle": "{count} riga(s) Impossibile essere importato",
+          "errorsOverflow": "…e {count} Altro",
+          "rowPrefix": "riga {rowIndex}:",
+          "viewTransactions": "Visualizza Transazioni",
+          "importAnother": "Importa un altro file"
+        },
+        "leaseExpired": {
+          "title": "Il tuo uploaded file è nessun longer disponibile",
+          "description": "il parsed Copia di Il tuo Money file era released dopo un Periodo di inactivity. Il tuo mapping choices Impossibile essere kept, so il Importa needs un Inizio da il Carica passaggio di nuovo.",
+          "action": "Inizio over"
+        },
+        "leaseResourceLabel": "Il tuo uploaded file"
+      }
+    }
+  }
+}

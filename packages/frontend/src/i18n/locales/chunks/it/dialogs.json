@@ -1,0 +1,563 @@
+{
+  "dialogs": {
+    "linkAccountGroup": {
+      "title": "Collega Conto gruppo",
+      "createNewGroup": "Crea Nuovo gruppo",
+      "noGroup": "nessun gruppo",
+      "noGroupDescription": "Mantieni questo Conto ungrouped",
+      "current": "Corrente",
+      "syncHint": "gruppi solo organize il tuo Conti — moving an Conto never affects banca syncing.",
+      "accountsCount": "{count} Conto | {count} Conti"
+    },
+    "reassignCategory": {
+      "title": "Reassign Transazioni",
+      "description": "questo Categoria ha {count} Transazione(s). Seleziona a Nuovo Categoria per \"{categoryName}\" Transazioni prima di eliminazione.",
+      "newCategoryLabel": "Nuovo Categoria",
+      "newCategoryPlaceholder": "Seleziona a Categoria",
+      "cancelButton": "Annulla",
+      "reassignButton": "Reassign & Elimina",
+      "reassignButtonLoading": "Reassigning...",
+      "notifications": {
+        "success": "{count} Transazione(s) reassigned a {newCategoryName}",
+        "error": "Impossibile reassign Transazioni"
+      }
+    },
+    "syncConfirmation": {
+      "title": "sincronizzazione Recently completato",
+      "description": "tu synchronized il tuo Conti {time} fa. sono tu sure tu vuoi a sincronizzazione di nuovo?",
+      "syncAnyway": "sincronizzazione Anyway",
+      "cancel": "Annulla",
+      "timeUnits": {
+        "someTime": "alcuni ora",
+        "hours": "{count} ora | {count} ore",
+        "minutes": "{count} minuto | {count} minuti"
+      }
+    },
+    "createPortfolio": {
+      "title": "Crea Portafoglio",
+      "description": "Crea a Nuovo Investimento Portafoglio a traccia il tuo Posizioni e Transazioni.",
+      "assetSupportNotice": "attualmente supports stocks, ETFs e crypto. Bonds, Opzioni & Altro Titoli sono su il {roadmapLink} – Azione what tu serve via {feedbackLink}.",
+      "assetSupportRoadmapLink": "vote per what's Avanti",
+      "assetSupportFeedbackLink": "richiesta a feature",
+      "form": {
+        "nameLabel": "Portafoglio Nome",
+        "namePlaceholder": "My Investimento Portafoglio",
+        "typeLabel": "Portafoglio Tipo",
+        "typePlaceholder": "Seleziona Portafoglio Tipo",
+        "portfolioTypes": {
+          "investment": "Investimento",
+          "retirement": "Retirement",
+          "savings": "Savings",
+          "other": "Altro"
+        },
+        "descriptionLabel": "Descrizione (Facoltativo)",
+        "descriptionPlaceholder": "A brief Descrizione di questo Portafoglio...",
+        "submitButton": "Crea Portafoglio",
+        "submitButtonLoading": "creazione..."
+      },
+      "notifications": {
+        "success": "Portafoglio creato correttamente.",
+        "error": "Impossibile Crea Portafoglio. Per favore riprova di nuovo."
+      }
+    },
+    "editPortfolio": {
+      "title": "Modifica Portafoglio",
+      "description": "aggiorna Nome, Tipo Oppure Descrizione di il tuo Portafoglio."
+    },
+    "deletePortfolio": {
+      "title": "Elimina Portafoglio",
+      "description": "questo Portafoglio sarà essere moved a cestino e può essere restored within 30 giorni. dopo quello, it sarà essere definitivamente Eliminato along con Tutto Posizioni e Transazioni.",
+      "cancelButton": "Annulla",
+      "deleteButton": "Move a cestino",
+      "deleteButtonLoading": "Moving...",
+      "notifications": {
+        "success": "Portafoglio moved a cestino. Puoi ripristina it within 30 giorni da il Investimenti Pagina.",
+        "error": "Impossibile Elimina Portafoglio."
+      }
+    },
+    "manageTransaction": {
+      "addTitle": "Aggiungi transazione",
+      "editTitle": "Modifica transazione",
+      "detailsTitle": "Transazione Dettagli",
+      "title": "gestisci Transazione",
+      "description": "Crea Oppure Modifica a Transazione",
+      "linkSection": {
+        "linkButton": "Collega il Altro side",
+        "title": "trova il Altro side di questo Trasferimento",
+        "description": "scegli il corrispondente Transazione da il Altro Conto. il two registrazioni become uno Trasferimento — nothing è Eliminato.",
+        "orDivider": "Oppure",
+        "linkHint": "già recorded in un altro Conto? Join il two registrazioni instead.",
+        "unlinkButton": "scollega Transazioni",
+        "cancelLinkingAriaLabel": "Annulla linking",
+        "linkedTransactionLabel": "collegato Transazione"
+      },
+      "typeSelector": {
+        "expense": "Uscita",
+        "income": "Entrate",
+        "transfer": "Trasferimento",
+        "selectExpense": "Seleziona Uscita",
+        "selectIncome": "Seleziona Entrate",
+        "selectTransfer": "Seleziona Trasferimento"
+      },
+      "recordList": {},
+      "form": {
+        "payeeLabel": "Beneficiario",
+        "destinationGroupLabel": "Where il money goes",
+        "paymentTypeLabel": "Pagamento Tipo",
+        "noteLabel": "Nota",
+        "notePlaceholder": "Nota",
+        "tagsLabel": "Etichette",
+        "originalAmountLabel": "originale Importo",
+        "originalAmountPlaceholder": "Importo in foreign Valuta",
+        "originalAmountTooltip": "quando a Transazione era made in a Valuta different da il Conto's, questo è il actual Importo pagato in quello Valuta. il main Importo stays in il Conto's Valuta. non affect statistics.",
+        "originalCurrencyLabel": "originale Valuta",
+        "originalCurrencyTriggerEmpty": "Valuta",
+        "originalCurrencyNone": "nessun Valuta",
+        "originalAmountSuggestHint": "{amount} — Tasso per {date}",
+        "originalAmountSuggestApply": "Applica",
+        "amountLabel": "Importo",
+        "amountPlaceholder": "Importo",
+        "categoryLabel": "Categoria",
+        "targetAmountLabel": "obiettivo Importo",
+        "targetAmountPlaceholder": "obiettivo Importo",
+        "plannedLabel": "Pianificato",
+        "plannedUnavailableNotification": "Pianificato Transazioni aren't disponibile qui, so il option era turned disattivato.",
+        "plannedTooltip": "registrazione an upcoming Transazione. il tuo Saldo stays unchanged until it goes fino a.",
+        "plannedConnectedAccountTooltip": "solo Pianificato Transazioni può sit su a banca-connesso Conto. Switching questo disattivato clears il Conto e il Data.",
+        "plannedAccountsUnlockedHint": "banca-connesso Conti sono ora selectable",
+        "plannedDatesUnlockedHint": "future data unlocked",
+        "datetimeLabel": "Datetime",
+        "splitInfo": "Suddivisione in {count} Categorie",
+        "editSplit": "Modifica",
+        "splitPillLabel": "Suddivisione",
+        "moreOptionsButton": "Altro Opzioni",
+        "closeButton": "Chiudi",
+        "deleteButton": "Elimina",
+        "deleteAriaLabel": "Elimina transazione",
+        "createAriaLabel": "Crea transazione",
+        "editAriaLabel": "Modifica transazione",
+        "loadingButton": "Caricamento...",
+        "createButton": "Crea",
+        "editButton": "Modifica",
+        "fromAccountLabel": "da Conto",
+        "toAccountLabel": "a Conto",
+        "accountLabel": "Conto",
+        "selectAccountPlaceholder": "Seleziona Conto",
+        "noAccountExists": "nessun Conto exists",
+        "addNewAccountButton": "Aggiungi Nuovo Conto",
+        "createAccountLink": "Crea Conto",
+        "destinationTypeAccount": "Conto",
+        "destinationTypePortfolio": "Portafoglio",
+        "toPortfolioLabel": "a Portafoglio",
+        "selectPortfolioPlaceholder": "Seleziona Portafoglio",
+        "noPortfoliosExist": "nessun portafogli exist",
+        "destinationTypeLoan": "prestito",
+        "toLoanLabel": "a prestito",
+        "selectLoanPlaceholder": "Seleziona prestito",
+        "noLoansExist": "nessun Prestiti exist",
+        "validation": {
+          "required": "questo campo è obbligatorio",
+          "minValue": "Importo deve essere 0 Oppure maggiore",
+          "futureDate": "Data deve essere Oggi Oppure earlier."
+        }
+      },
+      "refundRecordsList": {
+        "filtersDialogTitle": "Seleziona filtri",
+        "fromDateLabel": "Dalla data",
+        "toDateLabel": "Alla data",
+        "amountFromLabel": "Importo da (gte)",
+        "amountFromPlaceholder": ">= di",
+        "amountToLabel": "a (lte)",
+        "amountToPlaceholder": "<= di",
+        "resetButton": "Reimposta",
+        "applyButton": "Applica",
+        "noMoreTransactions": "nessun Altro Transazioni a carica",
+        "noIncomeTransactions": "There's nessun Entrate Transazioni in il system quello sono non già marked come Rimborsi. Crea alcuni a proceed",
+        "noExpenseTransactions": "There's nessun Uscita Transazioni in il system quello sono non già marked come Rimborsi. Crea alcuni a proceed",
+        "noTransactions": "There's Nessuna transazione a Seleziona. Crea alcuni a proceed",
+        "resetFiltersButton": "Reimposta filtri",
+        "recommendedLabel": "Recommended",
+        "allTransactionsLabel": "Tutto Transazioni",
+        "searchPlaceholder": "Cerca Nota…",
+        "filtersLabel": "filtri",
+        "noSearchResults": "Nothing corrisponde “{query}”",
+        "clearSearchButton": "Cancella Cerca"
+      },
+      "splitDialog": {
+        "title": "Suddivisione in Categorie",
+        "description": "Distribute questo Transazione across multiple Categorie. il main Categoria keeps qualsiasi unallocated Importo.",
+        "mainCategoryLabel": "Main Categoria",
+        "selectCategoryPlaceholder": "Seleziona Categoria",
+        "amountPlaceholder": "0",
+        "addCategoryButton": "Aggiungi Categoria",
+        "removeRowLabel": "rimuovi Categoria",
+        "totalAmountLabel": "Totale Importo",
+        "splitTotalLabel": "Suddivisione Totale",
+        "mainCategoryKeepsLabel": "Main Categoria keeps",
+        "exceedsTransactionTotal": "Suddivisione amounts exceed Transazione Totale",
+        "cancelButton": "Annulla",
+        "removeSplitsButton": "rimuovi Suddivisioni",
+        "saveSplitsButton": "Salva Suddivisioni",
+        "errors": {
+          "amountMustBePositive": "Importo deve essere positive",
+          "duplicateCategory": "Duplicate Categoria",
+          "cannotUseMainCategory": "Impossibile Usa main Categoria in Suddivisioni"
+        }
+      },
+      "markAsRefund": {
+        "linkRefund": "Collega Rimborso",
+        "selectTransaction": "Seleziona Transazione",
+        "selectRefundingTransaction": "Seleziona il originale Transazione quello questo voce è refunding.",
+        "selectRefundedByTransactions": "Seleziona Transazioni che Rimborso Corrente voce.",
+        "refundsLabel": "Rimborsi",
+        "refundedByLabel": "Refunded da",
+        "refundedByCreationHint": "\"Refunded da\" becomes disponibile dopo il Transazione è creato.",
+        "saveButton": "Salva",
+        "confirmButton": "Conferma",
+        "linkedRefunds": "collegato Rimborsi",
+        "unlinkRefund": "scollega Rimborso",
+        "refundsPortion": "Rimborsi {name} portion",
+        "selectOnlyOne": "* Puoi Seleziona solo uno Transazione",
+        "selectMultipleWithLimit": "* Puoi Seleziona multiple Transazioni, but loro Totale Importo non può essere maggiore di il originale Transazione Importo",
+        "selectWhichPartToRefund": "Seleziona che part a Rimborso",
+        "transactionSplitInfo": "questo Transazione è Suddivisione across multiple Categorie. Seleziona che part tu vuoi a Rimborso.",
+        "amountTooSmallWarning": "Opzioni smaller di il tuo Rimborso Importo",
+        "amountDisabled": "sono Disabilitato.",
+        "amountMayBeSmaller": "alcuni Opzioni potrebbe essere smaller di il tuo Rimborso Importo",
+        "finalValidationWarning": "Final validation sarà Usa convertito amounts.",
+        "mainCategoryLabel": "(main)",
+        "linkRemovedOnTypeChange": "Rimborso Collega rimosso because il Tipo di transazione modificato.",
+        "modeRefunds": "Rimborsi a Transazione",
+        "helperRefunds": "questo voce è il Rimborso — scegli il uno Transazione it Rimborsi.",
+        "helperRefundedBy": "Altro voci Rimborso questo uno — scegli qualsiasi numero, together su a {amount}.",
+        "helperRefundedByNoLimit": "Altro voci Rimborso questo uno — Puoi scegli several.",
+        "thisEntry": "questo voce",
+        "linkWordRefunds": "Rimborsi",
+        "linkWordRefundedBy": "refunded da",
+        "slotEmptyRefunds": "Seleziona il originale Transazione sotto",
+        "slotEmptyRefundedBy": "Seleziona il refunding Transazioni sotto",
+        "slotSelectedCount": "{count} Transazione | {count} Transazioni",
+        "clearSelection": "Cancella Selezione",
+        "linkedAmountLabel": "{amount} collegato",
+        "linkedOfLimit": "di {amount}",
+        "limitExceeded": "limite {amount} exceeded",
+        "summaryEmpty": "Nothing Selezionato ancora",
+        "summaryCountOnly": "{count} Selezionato",
+        "summarySelected": "{count} Selezionato · {amount}",
+        "summaryOfLimit": "{count} Selezionato · {amount} di {limit}",
+        "summaryExceedsBy": "{count} Selezionato · {amount} — exceeds il originale da {excess}",
+        "summaryExceeds": "{count} Selezionato · {amount} — exceeds il originale Importo"
+      },
+      "refundInfo": {
+        "trigger": "come it works?",
+        "title": "About Rimborso Transazioni",
+        "description": "questo Azione links il Corrente Transazione [Uscita/Entrate] come a Rimborso a a Precedente esistente Transazione.",
+        "howItWorks": {
+          "title": "come it works:",
+          "expenseRefund": "per an Uscita Rimborso: Seleziona il originale Entrate Transazione.",
+          "incomeRefund": "per an Entrate Rimborso: Seleziona il originale Uscita Transazione.",
+          "noOriginal": "Puoi mark qualsiasi Transazione come a Rimborso even se there's nessun \"originale\" Transazione in il system. Useful in case tu non ha Conto con il originale Transazione in il system."
+        },
+        "benefits": {
+          "title": "Benefits:",
+          "accuracy": "Enhances financial accuracy da adjusting spesa Oppure Entrate statistics a Escludi refunded amounts.",
+          "tracking": "Helps traccia related Transazioni a improve il tuo feed."
+        },
+        "notes": {
+          "title": "Important Nota:",
+          "recordKeeping": "questo Collega è per registrazione-keeping purposes solo.",
+          "noBalanceAdjust": "It fa non adjust il Saldo di il originale Transazione in qualsiasi way.",
+          "canUnlink": "Puoi sempre scollega Transazioni Indietro."
+        },
+        "examples": {
+          "title": "Examples:",
+          "customerPayment": "Refunding a customer Pagamento: Crea an Uscita e Collega it a il originale Entrate.",
+          "vendorRefund": "Receiving a Rimborso da a vendor: Crea an Entrate e Collega it a il originale Uscita.",
+          "noOriginalTx": "Recording a Rimborso senza an originale Transazione: Sometimes tu might serve a registrazione a Rimborso per a Transazione quello isn't in il tuo system. per instance, se tu're recording a Rimborso per a Contanti Pagamento quello wasn't initially logged, Puoi ancora Crea a Rimborso voce. questo helps maintain accurate registrazioni even quando il originale Transazione isn't digitally tracked."
+        }
+      },
+      "transferRecordsList": {
+        "filtersDialogTitle": "filtri",
+        "fromDateLabel": "Dalla data",
+        "toDateLabel": "Alla data",
+        "amountFromLabel": "Importo da",
+        "amountFromPlaceholder": "Min",
+        "amountToLabel": "Importo a",
+        "amountToPlaceholder": "Max",
+        "resetButton": "Reimposta",
+        "applyButton": "Applica",
+        "recommendedLabel": "Recommended",
+        "allTransactionsLabel": "Tutto Transazioni",
+        "loadMoreButton": "carica Altro",
+        "noMoreTransactions": "nessun Altro Transazioni",
+        "noIncomeTransactions": "nessun Entrate Transazioni trovato. riprova adjusting il filtri.",
+        "noExpenseTransactions": "nessun Uscita Transazioni trovato. riprova adjusting il filtri.",
+        "noTransactions": "Nessuna transazione trovato. riprova adjusting il filtri.",
+        "resetFiltersButton": "Reimposta filtri"
+      },
+      "portfolioLinked": {
+        "title": "Portafoglio-collegato Transazione",
+        "linkedAs": "questo Transazione è collegato come a {type} a",
+        "deposit": "deposit",
+        "withdrawal": "withdrawal",
+        "unlinkButton": "scollega da Portafoglio",
+        "unlinkWarning": "Unlinking sarà reduce il Contanti Saldo di {portfolio} Portafoglio.",
+        "unlinkDescription": "originale Transazione Dettagli sarà essere restored.",
+        "cancelButton": "Annulla",
+        "confirmUnlink": "Conferma scollega"
+      },
+      "ventureLinked": {
+        "title": "Venture-collegato Transazione",
+        "description": "questo Transazione è collegato a a venture event.",
+        "editHint": "Modifica Oppure scollega it da il related venture deal's events timeline.",
+        "openVenture": "apri Venture"
+      },
+      "vehicleLinked": {
+        "title": "Veicolo adjustment",
+        "description": "questo Transazione è il audit trail di a manuale valore override per {name}.",
+        "editHint": "a change il valore, Data, Oppure Elimina questo override, gestisci it da il Veicolo's dettaglio Pagina.",
+        "openVehicle": "apri {name}"
+      }
+    },
+    "portfolioTransfer": {
+      "portfolio": {
+        "title": "Trasferimento da Portafoglio",
+        "description": "Trasferimento funds da questo Portafoglio a un altro Portafoglio Oppure Conto."
+      },
+      "account": {
+        "title": "Trasferimento da Conto",
+        "description": "Trasferimento funds da questo Conto a a Portafoglio."
+      }
+    },
+    "addSymbols": {
+      "title": "Aggiungi Symbols",
+      "searchLabel": "Cerca symbol Oppure Nome",
+      "searchPlaceholder": "AAPL",
+      "searchError": "Impossibile Cerca Titoli.",
+      "addedIndicator": "(aggiunto)",
+      "noResults": "Nessun risultato.",
+      "emptyState": {
+        "title": "Cerca per a symbol",
+        "description": "Tipo a ticker Oppure Nome a trova stocks Oppure crypto Puoi Aggiungi a questo Portafoglio."
+      },
+      "noResultsHint": "riprova a different ticker, full Nome, Oppure switch il filtra above.",
+      "clearSearch": "Cancella Cerca",
+      "endOfList": "quello's Tutto",
+      "assetClass": {
+        "crypto": "Crypto"
+      },
+      "filters": {
+        "all": "Tutto",
+        "stocks": "Stocks",
+        "crypto": "Crypto"
+      },
+      "marketCapRank": "#{rank}",
+      "notifications": {
+        "success": "Posizione aggiunto.",
+        "error": "Impossibile Aggiungi Posizione."
+      },
+      "cryptoProviderNotConfigured": "Crypto Cerca è non disponibile. imposta COINGECKO_API_KEY in il tuo environment a Abilita it."
+    },
+    "deleteInvestmentTransaction": {
+      "title": "Elimina transazione",
+      "description": "Sei sicuro di voler eliminare questo Transazione? Questa azione non può essere annullata.",
+      "cancelButton": "Annulla",
+      "deleteButton": "Elimina",
+      "deleteButtonLoading": "eliminazione...",
+      "notifications": {
+        "success": "Transazione Eliminato correttamente.",
+        "error": "Impossibile Elimina transazione."
+      }
+    },
+    "categoryForm": {
+      "title": {
+        "edit": "Modifica Categoria",
+        "add": "Aggiungi Categoria"
+      },
+      "description": {
+        "addSubcategory": "Adding subcategory a {parentName}",
+        "edit": "aggiorna Categoria Nome Oppure Impostazioni",
+        "add": "Crea a Nuovo Categoria"
+      },
+      "nameLabel": "Categoria Nome",
+      "namePlaceholder": "inserisci Categoria Nome",
+      "colorLabel": "Colore",
+      "iconLabel": "Icon",
+      "iconPlaceholder": "Seleziona icon",
+      "settingsDivider": "Impostazioni",
+      "saveButton": "Salva",
+      "createButton": "Crea",
+      "notifications": {
+        "updated": "Categoria aggiornato",
+        "created": "Categoria creato",
+        "saveFailed": "Impossibile Salva Categoria",
+        "unexpectedError": "imprevista Errore"
+      }
+    },
+    "addCurrency": {
+      "title": "Aggiungi Nuovo Valuta",
+      "description": "Seleziona uno Valuta a Aggiungi",
+      "selectPlaceholder": "Seleziona Valuta",
+      "addButton": "Aggiungi",
+      "notifications": {
+        "success": "Valuta correttamente aggiunto!",
+        "error": "imprevista Errore. Valuta è non aggiunto."
+      }
+    },
+    "accountGroups": {
+      "createDialog": {
+        "title": "Crea gruppo",
+        "nameLabel": "gruppo Nome",
+        "namePlaceholder": "Investimenti",
+        "createButton": "Crea"
+      }
+    },
+    "directCashTransaction": {
+      "title": "Contanti Transazione",
+      "description": "Aggiungi a deposit Oppure withdrawal a il Portafoglio"
+    },
+    "pickTransaction": {
+      "title": "Seleziona Transazione"
+    },
+    "exchangeCurrency": {
+      "title": "cambio Valuta",
+      "description": "cambio Contanti tra different valute within il tuo Portafoglio"
+    },
+    "shareAccountDialog": {
+      "title": "Azione Conto",
+      "description": "invita someone a accesso {name}.",
+      "emailLabel": "Recipient email",
+      "emailPlaceholder": "nome{'@'}example.com",
+      "permissionLabel": "autorizzazione",
+      "permissions": {
+        "read": "Leggi-solo",
+        "write": "Leggi & Aggiungi Transazioni",
+        "manage": "Full accesso"
+      },
+      "writeScopeLabel": "Transazione Modifica scope",
+      "writeScope": {
+        "all": "Tutto Transazioni su il Conto",
+        "own": "solo Transazioni they creato"
+      },
+      "householdOverrideHint": "{invitee} è già in il tuo Famiglia con {permission} accesso. questo Azione sarà override il Famiglia Concedi per questo specific Conto.",
+      "householdLookupFailed": "non è stato possibile check Famiglia membership – proceeding senza il override hint.",
+      "cancel": "Annulla",
+      "send": "Invia invito",
+      "success": "invito richiesta submitted. se a utente con quello indirizzo è registered, they'll ricevi an invito.",
+      "error": "Impossibile Invia invito. Per favore riprova di nuovo.",
+      "emailSendFailedWarning": "invito salvato, but il email Impossibile essere inviata. il recipient potrebbe non ha received a notifica – riprova di nuovo più tardi."
+    },
+    "shareBudgetDialog": {
+      "title": "Azione budget",
+      "description": "invita someone a visualizza questo budget e contribute loro propri Transazioni a it. {name}.",
+      "emailLabel": "email",
+      "emailPlaceholder": "Recipient email",
+      "permissionLabel": "autorizzazione",
+      "permissions": {
+        "read": "visualizza solo",
+        "write": "Attach propri Transazioni",
+        "manage": "gestisci"
+      },
+      "cancel": "Annulla",
+      "send": "Invia invito",
+      "success": "invito inviata.",
+      "error": "non è stato possibile Invia invito.",
+      "emailSendFailedWarning": "invito creato, but il email non è stato possibile essere delivered."
+    },
+    "shareInvitationDialog": {
+      "titlePending": "{owner} vuole a Azione con tu",
+      "titleAccepted": "invito accepted",
+      "titleDeclined": "invito declined",
+      "titleCurrencyMismatch": "Valuta principale non corrispondenza",
+      "titleLoading": "Caricamento invito…",
+      "titleLoadError": "non è stato possibile carica invito",
+      "titleNotFound": "invito non disponibile",
+      "loadErrorBody": "Something went wrong while fetching questo invito. Check il tuo connessione e riprova di nuovo.",
+      "retry": "riprova di nuovo",
+      "pendingMessage": "tu've been invitato a accesso {resource}. revisione il Dettagli sotto e scegli come a respond.",
+      "acceptedBody": "tu ora ha accesso a questo condiviso resource. apri it a inizio working together.",
+      "declinedBody": "abbiamo let il sender know.",
+      "currencyMismatch": "il tuo Valuta principale deve essere {currency} a Accetta questo invito. aggiorna il tuo Valuta principale, then riprova di nuovo.",
+      "currencyMismatchUnknown": "il tuo Valuta principale deve corrispondenza il inviter's a Accetta questo invito.",
+      "acceptDataRefreshFailed": "invito accepted, but refreshing il tuo Conti non riuscito. Ricarica il Pagina se anything looks stale.",
+      "notFoundBody": "questo invito potrebbe ha scaduto, been revoked, Oppure già been actioned. Ask il sender per a Nuovo uno se tu ancora serve accesso.",
+      "unexpectedError": "Something went wrong. riprova di nuovo in a moment.",
+      "loading": "Fetching invito…",
+      "householdResourceLabel": "Tutto il tuo Conti e condiviso Transazioni",
+      "permissionLabel": "accesso level",
+      "expiresLabel": "Expires",
+      "permissions": {
+        "read": "Leggi-solo",
+        "write": "Leggi + scrivi",
+        "manage": "gestisci"
+      },
+      "unknownOwner": "A MoneyMatter utente",
+      "unknownResource": "a condiviso resource",
+      "accept": "Accetta",
+      "decline": "Decline",
+      "close": "Chiudi",
+      "goToAccount": "Go a Conto",
+      "goToBudget": "Go a budget",
+      "updateBaseCurrency": "aggiorna Valuta principale",
+      "acceptSuccess": "tu're ora part di questo condiviso resource.",
+      "acceptError": "non è stato possibile Accetta il invito. riprova di nuovo.",
+      "declineSuccess": "invito declined.",
+      "declineError": "non è stato possibile decline il invito. riprova di nuovo.",
+      "backInvite": {
+        "prompt": "vuoi a Azione il tuo Famiglia con {owner} come well? They'll essere able a Visualizza e act su il tuo Conti.",
+        "permissionLabel": "loro autorizzazione",
+        "writeScopeLabel": "scrivi scope",
+        "permissions": {
+          "read": "Leggi solo",
+          "write": "scrivi"
+        },
+        "writeScope": {
+          "all": "qualsiasi Conto",
+          "own": "solo Transazioni they Crea"
+        },
+        "send": "Azione Indietro",
+        "notNow": "non ora",
+        "done": "Fatto",
+        "sentTitle": "invito inviata",
+        "sentBody": "We inviata an invito a {owner}. They'll ottieni accesso once they Accetta.",
+        "success": "invito inviata.",
+        "deliveryFailed": "invito creato, but il email Impossibile essere inviata. riprova di nuovo più tardi.",
+        "error": "Impossibile Invia il invito."
+      }
+    },
+    "categoryExclusions": {
+      "title": "Escludi Categorie",
+      "description": "Hidden da questo widget's Grafico e totals",
+      "menuItem": "Escludi Categorie",
+      "nothingExcluded": "Nothing excluded. ogni Categoria counts toward questo widget.",
+      "excludedTag": "Excluded",
+      "stopExcluding": "Stop excluding {name}",
+      "badgeTooltip": "1 Categoria excluded da questo widget | {count} Categorie excluded da questo widget",
+      "andMore": "e {count} Altro",
+      "clearAll": "Cancella Tutto",
+      "countExcluded": "1 Categoria excluded | {count} Categorie excluded"
+    },
+    "subscriptionMarkPaid": {
+      "title": "Mark Pagamento",
+      "description": "registrazione a Pagamento per {name}",
+      "chooseDescription": "come do tu vuoi a registrazione questo Pagamento per {name}?",
+      "amountLabel": "Importo",
+      "amountPlaceholder": "0.00",
+      "estimateLoading": "Caricamento estimate…",
+      "crossCurrencyEstimate": "~{sourceAmount} {sourceCurrency} → {accountCurrency} (estimated)",
+      "dateLabel": "Pagamento Data",
+      "accountLabel": "Conto",
+      "accountPlaceholder": "Seleziona an Conto",
+      "confirm": "Conferma",
+      "confirmMarkOnly": "Mark come pagato",
+      "recordModeMarkTitle": "Just mark come pagato",
+      "recordModeMarkDescription": "Updates il schedule solo — nessun Transazione è creato.",
+      "recordModeTransactionTitle": "Crea a Transazione",
+      "recordModeTransactionDescription": "Book a real Uscita in an Conto. It's collegato per future Pagamenti too.",
+      "notifications": {
+        "markedAsPaid": "Pagamento recorded",
+        "markAsPaidFailed": "Impossibile registrazione Pagamento"
+      }
+    }
+  }
+}

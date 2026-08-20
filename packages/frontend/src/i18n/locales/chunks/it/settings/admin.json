@@ -1,0 +1,118 @@
+{
+  "settings": {
+    "admin": {
+      "title": "amministratore Panel",
+      "description": "Administrative tools e system management",
+      "priceSync": {
+        "title": "Titoli Prezzo sincronizzazione",
+        "description": "manualmente trigger Prezzo synchronization per tutti Titoli con Posizioni",
+        "button": "Trigger Prezzo sincronizzazione",
+        "buttonLoading": "Syncing...",
+        "notifications": {
+          "success": "Titoli prices sincronizzazione completato correttamente",
+          "failed": "Impossibile trigger Prezzo sincronizzazione",
+          "rateLimited": "non consentito. Riprova in {time}.",
+          "adminRequired": "amministratore privileges Obbligatorio per questo azione"
+        }
+      },
+      "priceUpload": {
+        "title": "manuale Titolo Prezzo Carica",
+        "description": "Carica historical Prezzo data per Titoli via CSV o JSON file",
+        "button": "Carica Titolo Prices",
+        "dialogTitle": "Carica Titolo Prices",
+        "selectSecurity": {
+          "searchLabel": "Cerca symbol o Nome",
+          "searchPlaceholder": "AAPL",
+          "searching": "Searching…",
+          "failed": "Impossibile Cerca Titoli.",
+          "noResults": "Nessun risultato.",
+          "changeButton": "Cambia"
+        },
+        "dateRangeInfo": {
+          "loading": "Caricamento Intervallo di data Informazione...",
+          "title": "disponibile Tassi di cambio Intervallo di data ({currency}):",
+          "tooltipText": "Puoi Carica Titolo prices solo per data per che we hai Tassi di cambio disponibile. Otherwise it non sarà essere possible un converti Titolo Prezzo un Altro Valute. se tu serve older data, Carica Tassi di cambio primo. Otherwise depending su che option tu sarà chose su il Successivo passaggi registrazione sarà essere auto-filtered (omitted) o uploading richiesta sarà fail."
+        },
+        "fileUpload": {
+          "title": "Carica file",
+          "supportedFormats": "CSV o JSON file supported",
+          "errors": {
+            "unsupportedFormat": "Unsupported file formato. per favore Carica CSV o JSON file.",
+            "parseFailed": "Impossibile parse {fileType} file: {error}"
+          }
+        },
+        "fieldMapper": {
+          "title": "mappa Campi",
+          "description": "corrispondenza Il tuo file's Campi un il Obbligatorio Campi sotto.",
+          "selectField": "Seleziona Campo...",
+          "dateFormatLabel": "Data formato",
+          "dateFormatDescription": "Seleziona il Data formato utilizzato in Il tuo file",
+          "dateFormats": {
+            "ddMMyyyySlash": "DD/MM/YYYY (e.g., 31/12/2024)",
+            "MMddyyyySlash": "MM/DD/YYYY (e.g., 12/31/2024)",
+            "yyyyMMddDash": "YYYY-MM-DD (e.g., 2024-12-31)",
+            "ddMMyyyyDash": "DD-MM-YYYY (e.g., 31-12-2024)",
+            "MMddyyyyDash": "MM-DD-YYYY (e.g., 12-31-2024)"
+          },
+          "mappingComplete": "tutti Obbligatorio Campi mapped",
+          "mappingIncomplete": "per favore mappa tutti Obbligatorio Campi un Continua",
+          "fileInfo": "file:",
+          "records": "{count} registrazione",
+          "changeFileButton": "Cambia file",
+          "continueButton": "Continua un Preview"
+        },
+        "preview": {
+          "title": "Data Preview",
+          "recordsCount": "{count} registrazione sarà essere uploaded | {count} registrazione sarà essere uploaded",
+          "recordsPeriod": "per Periodo tra {oldest} e {newest}",
+          "loadingExisting": "Caricamento esistente prices per comparison...",
+          "warnings": {
+            "significantDifferences": "Significant Prezzo differences detected",
+            "differencesDetails": "{count} registrazione ha un Prezzo difference maggiore di 4% compared un esistente data. per favore revisione carefully. | {count} registrazione hai un Prezzo difference maggiore di 4% compared un esistente data. per favore revisione carefully."
+          },
+          "filterCheckbox": "Mostra solo registrazione con significant differences (>4%)",
+          "tableHeaders": {
+            "date": "Data",
+            "newPrice": "Nuovo Prezzo",
+            "existingPrice": "esistente Prezzo",
+            "difference": "Difference (%)"
+          },
+          "noExistingPrice": "N/un",
+          "scrollForMore": "Scroll per Altro...",
+          "noDifferences": "nessun registrazione con significant differences trovato.",
+          "backButton": "Indietro un Mapping",
+          "continueButton": "Continua un Opzioni"
+        },
+        "options": {
+          "title": "Carica Opzioni",
+          "autoFilter": {
+            "title": "Auto-Filtra data outside disponibile range",
+            "description": "automaticamente Rimuovi data quello sono outside il disponibile Tasso di cambio range"
+          },
+          "override": {
+            "title": "Override esistente registrazione",
+            "description": "Aggiorna esistente Prezzo registrazione instead di skipping duplicati"
+          },
+          "backButton": "Indietro",
+          "uploadButton": "Carica Prices",
+          "uploadingButton": "Uploading..."
+        },
+        "result": {
+          "title": "Carica Complete!",
+          "inserted": "✓ {count} Nuovo registrazione inserted | ✓ {count} Nuovo registrazione inserted",
+          "duplicates": "• {count} duplicate {action}",
+          "duplicatesUpdated": "aggiornato",
+          "duplicatesSkipped": "skipped",
+          "filtered": "• {count} Data filtered (outside range) | • {count} data filtered (outside range)",
+          "closeButton": "Chiudi",
+          "uploadMoreButton": "Carica Altro"
+        },
+        "notifications": {
+          "dateInfoLoadFailed": "Impossibile carica Data informazioni: {error}",
+          "uploadSuccess": "correttamente uploaded {count} Prezzo registrazione | correttamente uploaded {count} Prezzo registrazione",
+          "uploadFailed": "Carica non riuscito: {error}"
+        }
+      }
+    }
+  }
+}

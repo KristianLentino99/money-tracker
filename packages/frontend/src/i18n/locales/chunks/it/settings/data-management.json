@@ -1,0 +1,94 @@
+{
+  "settings": {
+    "dataManagement": {
+      "title": "Importa dati",
+      "description": "Importa i tuoi dati finanziari da diverse fonti",
+      "tabs": {
+        "import": "Importa",
+        "export": "Esporta"
+      },
+      "textSource": {
+        "title": "Importa da qualsiasi origine testuale",
+        "aiBadge": "Basato sull'IA",
+        "listDescription": "Estratti conto bancari, email o qualsiasi testo"
+      },
+      "csv": {
+        "title": "Importa CSV",
+        "description": "Importa le transazioni da un file CSV. Puoi mappare le colonne, gestire i duplicati e creare nuovi conti o categorie secondo necessità.",
+        "button": "Importa file CSV",
+        "cta": "Importa file CSV",
+        "listDescription": "Mappa le colonne e gestisci i duplicati"
+      },
+      "ynab": {
+        "title": "Importa da YNAB",
+        "listDescription": "Conti, transazioni, categorie e beneficiari"
+      },
+      "budget-bakers-wallet": {
+        "title": "Wallet (BudgetBakers)",
+        "listDescription": "Multivaluta con abbinamento automatico dei trasferimenti"
+      },
+      "ms-money": {
+        "title": "Microsoft Money",
+        "listDescription": "Importa un file .mny da Microsoft Money"
+      },
+      "importHistory": {
+        "title": "Cronologia importazioni",
+        "listDescription": "Visualizza le importazioni precedenti e ciò che hanno creato"
+      },
+      "import": {
+        "back": "Torna alle importazioni",
+        "groups": {
+          "filesAndText": "File e testo",
+          "fromOtherApps": "Da altre app",
+          "history": "Cronologia"
+        },
+        "requestMore": {
+          "title": "Vuoi altre opzioni? Richiedile qui"
+        }
+      },
+      "export": {
+        "cardTitle": "Esporta i tuoi dati",
+        "form": {
+          "title": "Esporta i tuoi dati",
+          "description": "Scegli un formato e quali parti dei tuoi dati vuoi esportare. Il download inizierà non appena confermi.",
+          "confirmLabel": "Scarica",
+          "confirmLoading": "Preparazione…",
+          "back": "Torna all'esportazione"
+        },
+        "format": {
+          "label": "Formato",
+          "json": "JSON",
+          "csv": "CSV",
+          "xlsx": "Excel"
+        },
+        "groups": {
+          "label": "Cosa includere",
+          "selectAll": "Seleziona tutto",
+          "deselectAll": "Deseleziona tutto",
+          "transactions": "Transazioni e conti",
+          "transactionsDescription": "Transazioni, conti, cronologia dei saldi, categorie, etichette e veicoli",
+          "budgets": "Budget",
+          "budgetsDescription": "Budget personalizzati con categorie collegate e totali delle spese",
+          "subscriptions": "Abbonamenti e promemoria",
+          "subscriptionsDescription": "Abbonamenti ricorrenti e promemoria delle fatture",
+          "investments": "Investimenti",
+          "investmentsDescription": "Portafogli, posizioni, transazioni di investimento e trasferimenti"
+        },
+        "notifications": {
+          "success": "Esportazione pronta: il download dovrebbe iniziare a breve.",
+          "successWithCount": "Esportazione pronta: {count} righe esportate.",
+          "failed": "Impossibile esportare i tuoi dati. Riprova.",
+          "downloadBlocked": "Esportazione pronta, ma il browser ha bloccato il download. Controlla la barra degli indirizzi per avviarlo.",
+          "tooLarge": "I tuoi dati sono troppo grandi per una singola esportazione. Contatta il supporto."
+        },
+        "dateRange": {
+          "label": "Intervallo di data (Facoltativo)",
+          "helper": "Solo alcune tabelle degli eventi (transazioni, cronologia dei saldi e attività di investimento) vengono filtrate. Conti, categorie e altre tabelle di riferimento restano complete.",
+          "placeholder": "Sempre",
+          "clear": "Cancella Intervallo di data"
+        },
+        "listDescription": "Scarica un file ZIP per fogli di calcolo, imposte o migrazioni"
+      }
+    }
+  }
+}

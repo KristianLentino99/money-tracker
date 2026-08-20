@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "accountGroups": {
+      "page": {
+        "title": "Conto gruppi",
+        "description": "Organize Conti in gruppi. banca connessioni Crea e Gestisci loro propri gruppi automaticamente.",
+        "addButton": "Aggiungi gruppo"
+      },
+      "empty": {
+        "title": "Nessun conto gruppi ancora",
+        "description": "gruppo Conti da banca, Valuta o purpose un Mantieni Il tuo Conti elenco tidy."
+      },
+      "loadError": {
+        "title": "non è stato possibile carica Il tuo gruppi",
+        "description": "Qualcosa è andato storto while fetching Il tuo Conto gruppi. Check Il tuo connessione e Riprova.",
+        "retry": "Riprova"
+      },
+      "row": {
+        "bankBadge": "creato da banca connessione",
+        "bankBadgeShort": "connessione",
+        "bankBadgeTooltip": "questo gruppo era creato quando tu connesso il banca, but it non represent il connessione itself — tu're Gratis un rename it, move Conti, o Elimina it. Conti sarà stay synced regardless.",
+        "accountsCount": "{count} Conto | {count} Conti",
+        "noAccounts": "nessun Conti",
+        "accountsElsewhere": "{count} synced Conto in Altro gruppi | {count} synced Conti in Altro gruppi",
+        "inParent": "in {name}",
+        "manageConnection": "Gestisci connessione"
+      },
+      "update": {
+        "label": "gruppo Nome",
+        "placeholder": "inserisci gruppo Nome",
+        "saveButton": "Salva",
+        "emptyNameError": "gruppo Nome può't essere empty"
+      },
+      "accounts": {
+        "heading": "Conti in questo gruppo",
+        "empty": "nessun Conti in questo gruppo ancora. Aggiungi Conti un un gruppo da il Conto Pagina.",
+        "emptyBankLinked": "questo connessione's Conti sono organized in Altro gruppi — moving li non affect syncing.",
+        "unlinkTooltip": "Rimuovi da gruppo",
+        "removeConfirmTitle": "Rimuovi \"{name}\" da questo gruppo?",
+        "removeConfirmDescription": "il Conto isn't eliminato — it solo leaves questo gruppo.",
+        "removeConfirmAction": "Rimuovi"
+      },
+      "delete": {
+        "button": "Elimina gruppo",
+        "confirmTitle": "Elimina \"{name}\"?",
+        "accountsKept": "Conti sono kept — they simply become ungrouped.",
+        "syncContinues": "banca syncing continues — il connessione è separate da questo gruppo.",
+        "ungroupedHeading": "Becoming ungrouped"
+      }
+    }
+  }
+}

@@ -20,6 +20,7 @@
           "setDefault": "Establecer como predeterminado"
         },
         "invalidKeyHelp": "Añada una nueva clave a continuación para reemplazar esta, o elimínela si ya no la necesita.",
+        "modelValue": "Modelo: {model}",
         "deleteDialog": {
           "title": "¿Eliminar clave de API?",
           "description": "¿Está seguro de que desea eliminar la clave de API de {provider}?",
@@ -33,6 +34,10 @@
           "titleAddAnother": "Añadir otro proveedor",
           "providerLabel": "Proveedor",
           "apiKeyLabel": "Clave de API",
+          "modelLabel": "ID del modelo de OpenRouter",
+          "modelPlaceholder": "deepseek/deepseek-v4-flash",
+          "modelDescription": "Introduzca el identificador exacto del modelo de",
+          "modelListLink": "la lista de modelos de OpenRouter",
           "buttonSaving": "Validando...",
           "buttonSave": "Guardar clave"
         },
@@ -55,6 +60,16 @@
           "groq": {
             "label": "Groq (Llama, Mixtral)",
             "placeholder": "gsk_...",
+            "description": "Obtenga su clave de API en"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "placeholder": "sk-or-v1-...",
+            "description": "Obtenga su clave de API en"
+          },
+          "deepseek": {
+            "label": "DeepSeek",
+            "placeholder": "sk-...",
             "description": "Obtenga su clave de API en"
           }
         },
@@ -117,7 +132,8 @@
           "context": "Contexto:",
           "capabilities": "Capacidades:",
           "estimatedCost": "Coste est.:",
-          "per100Transactions": "por 100 transacciones"
+          "per100Transactions": "por 100 transacciones",
+          "unknown": "Desconocido"
         },
         "rateLimitWarning": "Usando IA del servidor con límites de velocidad del nivel gratuito. La disponibilidad de la función depende de la demanda de otros usuarios. Para acceso fiable, añada su propia clave de API en la pestaña Claves de API.",
         "groupLabels": {
@@ -125,13 +141,16 @@
           "openai": "OpenAI",
           "anthropic": "Anthropic",
           "google": "Google",
-          "groq": "Groq"
+          "groq": "Groq",
+          "openrouter": "OpenRouter",
+          "deepseek": "DeepSeek"
         },
         "costLabels": {
           "free": "Gratuito",
           "low": "Coste bajo",
           "medium": "Coste medio",
-          "high": "Coste alto"
+          "high": "Coste alto",
+          "unknown": "Coste desconocido"
         },
         "capabilities": {
           "textGeneration": "Texto",

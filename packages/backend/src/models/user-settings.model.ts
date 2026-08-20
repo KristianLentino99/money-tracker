@@ -2,6 +2,7 @@ import { SUPPORTED_LOCALES } from '@bt/shared/i18n/locales';
 import {
   AICustomEndpointInfo,
   AI_CUSTOM_INSTRUCTIONS_MAX_LENGTH,
+  AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
   AI_FEATURE,
   AI_KEY_PROVIDERS,
   NOTIFICATION_TYPES,
@@ -26,6 +27,7 @@ const ZodAiApiKeyStatusSchema = z.enum(['valid', 'invalid']);
 
 const ZodAiApiKeySchema = z.object({
   provider: z.enum(AI_KEY_PROVIDERS),
+  model: z.string().trim().min(1).max(AI_CUSTOM_MODEL_NAME_MAX_LENGTH).optional(),
   keyEncrypted: z.string(),
   createdAt: z.string().datetime(),
   status: ZodAiApiKeyStatusSchema.optional(),
@@ -237,7 +239,12 @@ const ZodSavedPivotViewSchema = z.object({
 
 export const ZodSettingsSchema = z.object({
   locale: z
-    .enum([SUPPORTED_LOCALES.ENGLISH, SUPPORTED_LOCALES.UKRAINIAN, SUPPORTED_LOCALES.SPANISH])
+    .enum([
+      SUPPORTED_LOCALES.ENGLISH,
+      SUPPORTED_LOCALES.UKRAINIAN,
+      SUPPORTED_LOCALES.SPANISH,
+      SUPPORTED_LOCALES.ITALIAN,
+    ])
     .default(SUPPORTED_LOCALES.ENGLISH),
   ai: ZodAiSettingsSchema.optional(),
   notifications: ZodNotificationPreferencesSchema.optional(),
@@ -275,7 +282,14 @@ export type StoredAiSettings = NonNullable<SettingsSchema['ai']>;
  * with empty ones. Arrays stay non-partial because the merge replaces them wholesale.
  */
 export const ZodSettingsPatchSchema = z.object({
-  locale: z.enum([SUPPORTED_LOCALES.ENGLISH, SUPPORTED_LOCALES.UKRAINIAN, SUPPORTED_LOCALES.SPANISH]).optional(),
+  locale: z
+    .enum([
+      SUPPORTED_LOCALES.ENGLISH,
+      SUPPORTED_LOCALES.UKRAINIAN,
+      SUPPORTED_LOCALES.SPANISH,
+      SUPPORTED_LOCALES.ITALIAN,
+    ])
+    .optional(),
   ai: z
     .object({
       apiKeys: z.array(ZodAiApiKeySchema).optional(),

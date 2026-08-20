@@ -8,7 +8,7 @@ import enCommon from './locales/chunks/en/common.json';
 import type { ChunkRegistry, I18nChunkName, LoadedChunksMap } from './types';
 
 // Supported locales
-const SUPPORTED_LOCALES = ['en', 'uk', 'es', 'id'] as const;
+const SUPPORTED_LOCALES = ['en', 'uk', 'es', 'id', 'it'] as const;
 const DEFAULT_LOCALE: SupportedLocale = 'en';
 
 // Type for supported locales
@@ -233,6 +233,57 @@ const chunkRegistry: ChunkRegistry = {
     'settings/ai-integrations': () => import('./locales/chunks/id/settings/ai-integrations.json'),
     'settings/subscriptions': () => import('./locales/chunks/id/settings/subscriptions.json'),
   },
+  it: {
+    common: () => import('./locales/chunks/it/common.json'),
+    layout: () => import('./locales/chunks/it/layout.json'),
+    dialogs: () => import('./locales/chunks/it/dialogs.json'),
+    forms: () => import('./locales/chunks/it/forms.json'),
+    errors: () => import('./locales/chunks/it/errors.json'),
+    'auth/sign-in': () => import('./locales/chunks/it/auth/sign-in.json'),
+    'auth/sign-up': () => import('./locales/chunks/it/auth/sign-up.json'),
+    'auth/verify-email': () => import('./locales/chunks/it/auth/verify-email.json'),
+    'auth/welcome': () => import('./locales/chunks/it/auth/welcome.json'),
+    'auth/oauth-authorize': () => import('./locales/chunks/it/auth/oauth-authorize.json'),
+    'pages/dashboard': () => import('./locales/chunks/it/pages/dashboard.json'),
+    'pages/accounts': () => import('./locales/chunks/it/pages/accounts.json'),
+    'pages/account': () => import('./locales/chunks/it/pages/account.json'),
+    'pages/account-integrations': () => import('./locales/chunks/it/pages/account-integrations.json'),
+    'pages/import-shared': () => import('./locales/chunks/it/pages/import-shared.json'),
+    'pages/transactions': () => import('./locales/chunks/it/pages/transactions.json'),
+    'pages/budgets': () => import('./locales/chunks/it/pages/budgets.json'),
+    'pages/budget-details': () => import('./locales/chunks/it/pages/budget-details.json'),
+    'pages/analytics': () => import('./locales/chunks/it/pages/analytics.json'),
+    'pages/investments': () => import('./locales/chunks/it/pages/investments.json'),
+    'pages/loans': () => import('./locales/chunks/it/pages/loans.json'),
+    'pages/portfolio-detail': () => import('./locales/chunks/it/pages/portfolio-detail.json'),
+    'pages/venture': () => import('./locales/chunks/it/pages/venture.json'),
+    'pages/import-csv': () => import('./locales/chunks/it/pages/import-csv.json'),
+    'pages/import-statement': () => import('./locales/chunks/it/pages/import-statement.json'),
+    'pages/import-ynab': () => import('./locales/chunks/it/pages/import-ynab.json'),
+    'pages/import-history': () => import('./locales/chunks/it/pages/import-history.json'),
+    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/it/pages/import-budget-bakers-wallet.json'),
+    'pages/import-ms-money': () => import('./locales/chunks/it/pages/import-ms-money.json'),
+    'pages/investments-import': () => import('./locales/chunks/it/pages/investments-import.json'),
+    'pages/planned': () => import('./locales/chunks/it/pages/planned.json'),
+    'pages/optimizations': () => import('./locales/chunks/it/pages/optimizations.json'),
+    'pages/shared-with-me': () => import('./locales/chunks/it/pages/shared-with-me.json'),
+    'pages/household': () => import('./locales/chunks/it/pages/household.json'),
+    'pages/payees': () => import('./locales/chunks/it/pages/payees.json'),
+    'settings/index': () => import('./locales/chunks/it/settings/index.json'),
+    'settings/categories': () => import('./locales/chunks/it/settings/categories.json'),
+    'settings/tags': () => import('./locales/chunks/it/settings/tags.json'),
+    'settings/currencies': () => import('./locales/chunks/it/settings/currencies.json'),
+    'settings/accounts-groups': () => import('./locales/chunks/it/settings/accounts-groups.json'),
+    'settings/data-management': () => import('./locales/chunks/it/settings/data-management.json'),
+    'settings/appearance': () => import('./locales/chunks/it/settings/appearance.json'),
+    'settings/language': () => import('./locales/chunks/it/settings/language.json'),
+    'settings/general': () => import('./locales/chunks/it/settings/general.json'),
+    'settings/ai': () => import('./locales/chunks/it/settings/ai.json'),
+    'settings/security': () => import('./locales/chunks/it/settings/security.json'),
+    'settings/admin': () => import('./locales/chunks/it/settings/admin.json'),
+    'settings/ai-integrations': () => import('./locales/chunks/it/settings/ai-integrations.json'),
+    'settings/subscriptions': () => import('./locales/chunks/it/settings/subscriptions.json'),
+  },
 };
 
 // A broken translation string (e.g. an unescaped "@", which vue-i18n reads as
@@ -425,6 +476,10 @@ export async function setLocale(locale: string): Promise<void> {
   // Switch to the new locale
   i18n.global.locale.value = locale as SupportedLocale;
 
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = locale;
+  }
+
   // Persist to localStorage
   localStorage.setItem('preferred-locale', locale);
 }
@@ -435,11 +490,14 @@ export async function setLocale(locale: string): Promise<void> {
  */
 export function initializeLocale(): string {
   const storedLocale = localStorage.getItem('preferred-locale');
-  const browserLocale = navigator.language.split('-')[0];
+  const browserLocales = navigator.languages?.length ? navigator.languages : [navigator.language];
+  const browserLocale = browserLocales
+    .map((locale) => locale.toLowerCase().split('-')[0])
+    .find((locale) => SUPPORTED_LOCALES.includes(locale as SupportedLocale));
 
   const locale =
     (storedLocale && SUPPORTED_LOCALES.includes(storedLocale as SupportedLocale) ? storedLocale : null) ||
-    (SUPPORTED_LOCALES.includes(browserLocale as SupportedLocale) ? browserLocale : null) ||
+    browserLocale ||
     DEFAULT_LOCALE;
 
   return locale;

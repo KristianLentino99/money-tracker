@@ -59,6 +59,18 @@ function createProviderModel(spec: ProviderModelSpec): LanguageModel {
       const groq = createGroq({ apiKey });
       return groq(modelName);
     }
+    case AI_PROVIDER.openrouter: {
+      const openrouter = createOpenAI({
+        apiKey,
+        baseURL: 'https://openrouter.ai/api/v1',
+        headers: { 'X-Title': 'Money Tracker' },
+      });
+      return openrouter.chat(modelName);
+    }
+    case AI_PROVIDER.deepseek: {
+      const deepseek = createOpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
+      return deepseek.chat(modelName);
+    }
     default: {
       const _exhaustiveCheck: never = provider;
       throw new Error(`Unsupported AI provider: ${_exhaustiveCheck}`);

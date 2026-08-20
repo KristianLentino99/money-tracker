@@ -1,0 +1,154 @@
+{
+  "payees": {
+    "title": "Beneficiari",
+    "subtitle": "Master elenco di merchants tu transact con",
+    "newPayeeButton": "Nuovo Beneficiario",
+    "searchPlaceholder": "Cerca Beneficiari…",
+    "columns": {
+      "name": "Nome",
+      "transactionCount": "# tx",
+      "netFlow": "Net flow",
+      "category": "Categoria",
+      "categoryHint": "Effective Categoria per questo Beneficiario. Shows il Predefinito se tu've imposta uno — otherwise il Categoria most frequently utilizzato in past Transazioni. Auto-filled quando creazione un Nuovo Transazione.",
+      "topCategory": "Top Categoria",
+      "defaultCategory": "Predefinito Categoria"
+    },
+    "sort": {
+      "label": "Ordina da",
+      "transactionCount": "Tx Importo",
+      "netFlow": "Net flow",
+      "name": "Nome",
+      "lastSeen": "Recent activity"
+    },
+    "actions": {
+      "menu": "azioni",
+      "rename": "Rename",
+      "merge": "Merge in…",
+      "delete": "Elimina",
+      "deleteAndIgnore": "Elimina & ignore"
+    },
+    "emptyState": {
+      "title": "Nessun beneficiario ancora",
+      "description": "Connetti un banca un detect Beneficiari automaticamente, o Crea uno manualmente."
+    },
+    "form": {
+      "namePlaceholder": "inserisci Beneficiario Nome",
+      "categoryPlaceholder": "Seleziona un Categoria",
+      "categorizationMode": {
+        "label": "AI categorizzazione",
+        "enforce": {
+          "label": "sempre Usa Beneficiario Categoria",
+          "hint": "Beneficiario's Predefinito Categoria è sempre utilizzato. AI categorizzazione è skipped per questo Beneficiario."
+        },
+        "hint": {
+          "label": "Usa come un hint",
+          "hint": "Sets il Beneficiario's Predefinito Categoria, but AI può ancora override it based su il Transazione Dettagli."
+        },
+        "off": {
+          "label": "disattivato",
+          "hint": "Beneficiario's Predefinito Categoria è ignored. categorizzazione è handled da AI o Il tuo Altro rules."
+        }
+      }
+    },
+    "detail": {
+      "categorizationSection": "categorizzazione",
+      "aliasesHeading": "Aliases",
+      "aliasesEmpty": "nessun aliases ancora. Nuovo variants sarà appear qui quando questo Beneficiario corrisponde un altro Esercente Nome.",
+      "cannotDeleteCanonicalAlias": "Impossibile Elimina il alias corrispondente il Beneficiario's Nome. Rename il Beneficiario instead.",
+      "deleteAliasConfirm": "Rimuovi questo alias?",
+      "addAlias": "Aggiungi",
+      "addAliasTitle": "Aggiungi alias",
+      "addAliasDescription": "future Transazioni whose Esercente text normalizes un questo alias sarà automaticamente collega un questo Beneficiario. Past Transazioni sono unchanged.",
+      "addAliasInputLabel": "Esercente Nome",
+      "addAliasPlaceholder": "e.g. ACME STORE #1234",
+      "aliasDuplicate": "questo alias è già attached un questo Beneficiario.",
+      "aliasUsedByOtherPayee": "questo alias è già utilizzato da \"{name}\".",
+      "deletePayeeTitle": "Elimina Beneficiario?",
+      "deletePayeeDescription": "collegato Transazioni Mantieni loro Categoria but lose il Beneficiario collega. questo non può essere undone.",
+      "deleteAndIgnoreTitle": "Elimina questo Beneficiario e ignore future corrisponde?",
+      "deleteAndIgnoreDescription": "Deletes questo Beneficiario e adds its nomi (canonical + tutti aliases) un il ignored-nomi blocklist. future syncs non sarà recreate it da raw Esercente text. collegato Transazioni stay but lose loro Beneficiario collega.",
+      "mergeTitle": "Merge in un altro Beneficiario",
+      "mergeDescription": "scegli il obiettivo Beneficiario. tutti Transazioni e aliases move un il obiettivo; questo Beneficiario è eliminato.",
+      "confirmMerge": "Merge",
+      "topCategoryHint": "il Categoria most frequently utilizzato in Transazioni collegato un questo Beneficiario. utilizzato come un fallback quando nessun Predefinito Categoria è imposta.",
+      "defaultCategoryPlaceholder": "Seleziona un Categoria",
+      "defaultTagsLabel": "Auto-Applica Etichette",
+      "defaultTagsPlaceholder": "Seleziona Etichette un auto-Applica",
+      "defaultTagsHint": "questi Etichette sono automaticamente aggiunto un Nuovo Transazioni collegato un questo Beneficiario (banca syncs e imports).",
+      "applyTagsToExisting": "Applica un esistente Transazioni"
+    },
+    "logo": {
+      "change": "Cambia logo",
+      "dialogTitle": "Cambia Logo",
+      "dialogDescription": "Cerca per un brand logo un represent questo Beneficiario.",
+      "resetToAuto": "Reimposta un automatico",
+      "updatedToast": "Logo aggiornato.",
+      "resetToast": "Logo Reimposta un automatico.",
+      "fieldLabel": "Logo",
+      "domainHint": "un trova il exact brand, Tipo il company's sito web dominio (e.g. amazon.com) — quello sempre corrisponde il right logo."
+    },
+    "transactionsDialog": {
+      "title": "{name} — Transazioni",
+      "empty": "Nessuna transazione collegato un questo Beneficiario.",
+      "unlink": "scollega da Beneficiario",
+      "unlinked": "Transazione unlinked da Beneficiario",
+      "unlinkConfirmTitle": "scollega Transazione?",
+      "unlinkConfirmDescription": "questo Transazione sarà nessun longer essere collegato un {name}. future banca syncs non sarà re-collega it automaticamente.",
+      "unlinkConfirmLabel": "scollega"
+    },
+    "toasts": {
+      "created": "Beneficiario creato",
+      "updated": "Beneficiario aggiornato",
+      "deleted": "Beneficiario eliminato",
+      "merged": "Beneficiari merged",
+      "aliasDeleted": "Alias rimosso",
+      "aliasAdded": "Alias aggiunto",
+      "deletedAndIgnored": "Beneficiario eliminato e aggiunto un ignored-nomi elenco",
+      "tagsAppliedToExisting": "Etichette applied un {count} Transazioni"
+    },
+    "errors": {
+      "collision": "un Beneficiario con questo Nome esiste già. Merge instead.",
+      "generic": "Qualcosa è andato storto, Riprova."
+    },
+    "tabs": {
+      "manage": "Gestisci",
+      "settings": "Impostazioni"
+    },
+    "settings": {
+      "title": "Beneficiario detection Impostazioni",
+      "description": "Control come il app auto-detects Beneficiari da Il tuo synced Transazioni.",
+      "payeeFromDescription": {
+        "label": "Detect Beneficiari da Transazione descriptions",
+        "description": "quando Il tuo banca non provide un dedicated Esercente Campo, fall Indietro un il Transazione Descrizione (Nota) un auto-detect Beneficiari. Useful per banca connessioni quello hai Esercente Campi empty o absent. potrebbe produce noisier Beneficiario nomi (e.g. installment-Pagamento prefixes) che Puoi rename o merge afterwards.",
+        "successNotification": "Preference aggiornato",
+        "errorNotification": "Impossibile Aggiorna preference"
+      },
+      "bulkCategorizationMode": {
+        "label": "Applica categorizzazione mode un tutti Beneficiari",
+        "description": "Scegli come il categorizzazione dovrebbe behave per ogni esistente Beneficiario. questo overrides ogni Beneficiario's individual setting.",
+        "applyButton": "Applica un tutti",
+        "confirmTitle": "Applica un tutti Beneficiari?",
+        "confirmDescription": "tutti Beneficiari sarà essere switched un {mode}. Puoi ancora Cambia ogni Beneficiario individually più tardi.",
+        "successNotification": "aggiornato {count} Beneficiari.",
+        "errorNotification": "Impossibile Aggiorna Beneficiari. Riprova."
+      }
+    },
+    "ignoredNames": {
+      "title": "Ignored Esercente nomi",
+      "description": "Raw Esercente strings quello dovrebbe never automaticamente Crea un Beneficiario. Useful per noise like 'Card Trasferimento', 'da: <nome>', o Rimborso prefixes. Puoi ancora collega questi nomi un un Beneficiario manualmente — solo automatico corrispondente è blocked.",
+      "addPlaceholder": "e.g. Spotify",
+      "addButton": "Aggiungi",
+      "addedToast": "aggiunto un ignored nomi",
+      "addError": "Impossibile Aggiungi un ignored nomi",
+      "removeTooltip": "Rimuovi da ignored elenco",
+      "removedToast": "rimosso da ignored nomi",
+      "removeError": "Impossibile Rimuovi",
+      "empty": "nessun ignored nomi ancora.",
+      "normalizedLabel": "Normalized",
+      "conflictTitle": "un esistente Beneficiario corrisponde",
+      "conflictDescription": "un Beneficiario con il same normalized Nome come \"{name}\" esiste già. Continuing sarà Elimina quello Beneficiario (Transazioni stay, lose collega).",
+      "forceConfirm": "Elimina Beneficiario e ignore"
+    },
+    "loadingMore": "Caricamento Altro…"
+  }
+}

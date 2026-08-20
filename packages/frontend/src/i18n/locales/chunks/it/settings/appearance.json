@@ -1,0 +1,22 @@
+{
+  "settings": {
+    "appearance": {
+      "title": "Aspetto",
+      "description": "Personalizza l'aspetto dell'app e le sezioni visualizzate nella barra laterale.",
+      "theme": {
+        "title": "Tema",
+        "description": "Scegli l'aspetto dell'app. L'opzione Sistema segue le impostazioni del dispositivo."
+      },
+      "sidebar": {
+        "title": "Sezioni della barra laterale",
+        "description": "Scegli quali sezioni visualizzare nella barra laterale.",
+        "alwaysVisibleTooltip": "Questa sezione è sempre visibile."
+      },
+      "header": {
+        "title": "Intestazione",
+        "description": "Scegli quali azioni visualizzare nell'intestazione.",
+        "supportButton": "Pulsante Supporto"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "pages": {
+    "sharedWithMe": {
+      "title": "condiviso con me",
+      "loadError": "Impossibile carica condiviso resources.",
+      "empty": {
+        "title": "Nothing condiviso con tu ancora",
+        "description": "quando someone Azioni un Conto con tu, it'll Mostra su qui."
+      },
+      "sections": {
+        "account": "Conti",
+        "household": "Households",
+        "budget": "budget condiviso con tu"
+      },
+      "sharedBy": "condiviso da {handle}",
+      "viaHousehold": "Via {handle} Famiglia",
+      "unnamedResource": "Untitled",
+      "permissions": {
+        "read": "Leggi",
+        "write": "scrivi",
+        "manage": "Gestisci"
+      },
+      "leave": "lasciare",
+      "leaveTitle": "lasciare Azione?",
+      "leaveDescription": "tu'll lose accesso un {resource} owned da {owner}. il proprietario non sarà essere notified.",
+      "leaveConfirm": "lasciare",
+      "leaveSuccess": "tu've left il Azione.",
+      "leaveError": "Impossibile lasciare il Azione.",
+      "pending": {
+        "heading": "in sospeso invitations",
+        "review": "revisione"
+      }
+    }
+  }
+}

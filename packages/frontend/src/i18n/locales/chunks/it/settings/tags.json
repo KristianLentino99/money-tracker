@@ -1,0 +1,98 @@
+{
+  "settings": {
+    "tags": {
+      "title": "Etichette",
+      "addButton": "Aggiungi Etichetta",
+      "empty": "Nessuna etichetta ancora. Crea Il tuo primo Etichetta un organize Il tuo Transazioni.",
+      "tabs": {
+        "details": "Dettagli",
+        "reminders": "Reminders"
+      },
+      "form": {
+        "createTitle": "Crea Etichetta",
+        "editTitle": "Modifica Etichetta",
+        "name": "Nome",
+        "namePlaceholder": "Etichetta Nome",
+        "color": "Color",
+        "icon": "Icon",
+        "iconPlaceholder": "Seleziona icon",
+        "iconSearchPlaceholder": "Cerca icons...",
+        "clearIcon": "Cancella icon",
+        "description": "Descrizione",
+        "descriptionPlaceholder": "Facoltativo Descrizione",
+        "saveButton": "Salva",
+        "previewPlaceholder": "Etichetta Nome"
+      },
+      "delete": {
+        "title": "Elimina Etichetta?",
+        "description": "questo sarà definitivamente Elimina \"{name}\" e Rimuovi it da tutti Transazioni. Questa azione non può essere annullata.",
+        "deleteButton": "Elimina",
+        "cancelButton": "Annulla"
+      },
+      "notifications": {
+        "createSuccess": "Etichetta creato",
+        "createFailed": "Impossibile Crea Etichetta",
+        "updateSuccess": "Etichetta aggiornato",
+        "updateFailed": "Impossibile Aggiorna Etichetta",
+        "deleteSuccess": "Etichetta eliminato",
+        "deleteFailed": "Impossibile Elimina Etichetta"
+      },
+      "reminders": {
+        "addButton": "Aggiungi Reminder",
+        "empty": "nessun reminders ancora. Crea un reminder un ottieni notified about questo Etichetta's activity.",
+        "enabled": "Abilitato",
+        "disabled": "Disabilitato",
+        "form": {
+          "createTitle": "Crea Reminder",
+          "editTitle": "Modifica Reminder",
+          "type": "Reminder Tipo",
+          "typePlaceholder": "Seleziona Tipo",
+          "amountThreshold": "Importo soglia",
+          "amountThresholdPlaceholder": "inserisci soglia Importo",
+          "amountThresholdHint": "ottieni notified quando spesa su questo Etichetta exceeds questo Importo",
+          "frequency": "Frequenza",
+          "frequencyPlaceholder": "Seleziona Frequenza",
+          "dayOfMonth": "giorno di Mese",
+          "dayOfMonthPlaceholder": "Seleziona giorno",
+          "dayOfMonthHint": "per mesi con fewer giorni, il ultimo giorno sarà essere utilizzato",
+          "isEnabled": "Abilitato",
+          "saveButton": "Salva"
+        },
+        "types": {
+          "amountThreshold": "Importo soglia",
+          "amountThresholdDescription": "Notify quando spesa exceeds un certain Importo",
+          "existenceCheck": "Activity Check",
+          "existenceCheckDescription": "Notify quando there sono Transazioni con questo Etichetta"
+        },
+        "frequencies": {
+          "immediate": "Immediate",
+          "immediateDescription": "Triggers quando Transazioni sono tagged (24h cooldown)",
+          "daily": "Giornaliero",
+          "dailyDescription": "Check ogni giorno",
+          "weekly": "Settimanale",
+          "weeklyDescription": "Check ogni Monday",
+          "monthly": "Mensile",
+          "monthlyDescription": "Check su un specific giorno ogni Mese",
+          "quarterly": "Quarterly",
+          "quarterlyDescription": "Check ogni 3 mesi (Jan, Apr, Jul, Oct)",
+          "yearly": "Annuale",
+          "yearlyDescription": "Check once per Anno in January"
+        },
+        "delete": {
+          "title": "Elimina reminder?",
+          "description": "questo sarà definitivamente Elimina questo reminder. Questa azione non può essere annullata.",
+          "deleteButton": "Elimina",
+          "cancelButton": "Annulla"
+        },
+        "notifications": {
+          "createSuccess": "Reminder creato",
+          "createFailed": "Impossibile Crea reminder",
+          "updateSuccess": "Reminder aggiornato",
+          "updateFailed": "Impossibile Aggiorna reminder",
+          "deleteSuccess": "Reminder eliminato",
+          "deleteFailed": "Impossibile Elimina reminder"
+        }
+      }
+    }
+  }
+}

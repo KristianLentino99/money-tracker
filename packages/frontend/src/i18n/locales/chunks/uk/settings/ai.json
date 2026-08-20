@@ -20,6 +20,7 @@
           "setDefault": "Встановити за замовчуванням"
         },
         "invalidKeyHelp": "Додайте новий ключ нижче, щоб замінити цей, або видаліть його, якщо він вам більше не потрібен.",
+        "modelValue": "Модель: {model}",
         "deleteDialog": {
           "title": "Видалити API ключ?",
           "description": "Ви впевнені, що хочете видалити API ключ {provider}?",
@@ -33,6 +34,10 @@
           "titleAddAnother": "Додати іншого провайдера",
           "providerLabel": "Провайдер",
           "apiKeyLabel": "API ключ",
+          "modelLabel": "Ідентифікатор моделі OpenRouter",
+          "modelPlaceholder": "deepseek/deepseek-v4-flash",
+          "modelDescription": "Введіть точний ідентифікатор моделі з",
+          "modelListLink": "переліку моделей OpenRouter",
           "buttonSaving": "Перевірка...",
           "buttonSave": "Зберегти ключ"
         },
@@ -55,6 +60,16 @@
           "groq": {
             "label": "Groq (Llama, Mixtral)",
             "placeholder": "gsk_...",
+            "description": "Отримайте API ключ на"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "placeholder": "sk-or-v1-...",
+            "description": "Отримайте API ключ на"
+          },
+          "deepseek": {
+            "label": "DeepSeek",
+            "placeholder": "sk-...",
             "description": "Отримайте API ключ на"
           }
         },
@@ -117,7 +132,8 @@
           "context": "Контекст:",
           "capabilities": "Можливості:",
           "estimatedCost": "Орієнт. вартість:",
-          "per100Transactions": "за 100 транзакцій"
+          "per100Transactions": "за 100 транзакцій",
+          "unknown": "Невідомо"
         },
         "rateLimitWarning": "Використовується ШІ сервера з обмеженням безкоштовного рівня. Доступність функцій залежить від попиту інших користувачів. Для надійного доступу додайте власний API ключ у вкладці API ключі.",
         "groupLabels": {
@@ -125,13 +141,16 @@
           "openai": "OpenAI",
           "anthropic": "Anthropic",
           "google": "Google",
-          "groq": "Groq"
+          "groq": "Groq",
+          "openrouter": "OpenRouter",
+          "deepseek": "DeepSeek"
         },
         "costLabels": {
           "free": "Безкоштовно",
           "low": "Низька вартість",
           "medium": "Середня вартість",
-          "high": "Висока вартість"
+          "high": "Висока вартість",
+          "unknown": "Невідома вартість"
         },
         "capabilities": {
           "textGeneration": "Текст",

@@ -1,0 +1,256 @@
+{
+  "loans": {
+    "title": "Prestiti",
+    "loadError": "Impossibile carica Prestiti.",
+    "tryAgain": "Riprova",
+    "addButton": {
+      "label": "Aggiungi Prestito"
+    },
+    "actions": {
+      "more": "Altro",
+      "moreAriaLabel": "Altro azioni",
+      "excludeFromStats": "Escludi da stats",
+      "linkPayments": "collega Precedente Pagamenti"
+    },
+    "linkPayments": {
+      "title": "collega Precedente Pagamenti",
+      "description": "Seleziona Transazioni tu've già pagato toward questo Prestito un registrazione li come Pagamenti.",
+      "emptyTitle": "nessun corrispondente Transazioni",
+      "emptyDescription": "Nessuna transazione corrispondenza questi filtri. riprova widening il Intervallo di data o clearing filtri.",
+      "selectedCount": "{count} Selezionato",
+      "clearSelection": "Cancella",
+      "linkSelected": "collega {count}",
+      "success": "collegato {count} Pagamento un il Prestito. | collegato {count} Pagamenti un il Prestito.",
+      "error": "non è stato possibile collega il Selezionato Pagamenti. Riprova.",
+      "overpayTitle": "Pagamenti exceed il Saldo",
+      "overpayDescription": "il Selezionato Pagamenti Aggiungi su un {amount} Altro di il rimanente Prestito Saldo. collega li anyway?",
+      "overpayConfirmButton": "collega anyway"
+    },
+    "dialog": {
+      "createTitle": "Aggiungi un Prestito",
+      "createDescription": "traccia un mortgage, auto Prestito, student Prestito, o qualsiasi Altro liability. Puoi Modifica anything più tardi.",
+      "editTitle": "Modifica Prestito",
+      "editDescription": "Aggiorna il Prestito's termini. Changes un il Tasso, term, o Pianificato Pagamento sono recorded in il events timeline."
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "editTitle": "Modifica Prestito Dettagli",
+      "editDescription": "Aggiorna il Nome, Saldo, Tasso, term, Pagamento Campi, o lender informazioni.",
+      "editButton": "Modifica",
+      "excludeFromStatsTitle": "Escludi da statistics",
+      "excludeFromStatsDescription": "Nascondi questo Prestito da Patrimonio netto, Grafici, e Report senza archiving it.",
+      "archiveTitle": "Archive Prestito",
+      "archiveDescription": "Hides il Prestito da il sidebar e Conto lists. Puoi ripristina it qualsiasi ora.",
+      "archiveButton": "Archive",
+      "archivedTitle": "questo Prestito è archived",
+      "archivedDescription": "It's hidden da il sidebar e Conto pickers e listed under Archived su il Prestiti Pagina. ripristina it un resume tracking.",
+      "unarchiveButton": "ripristina",
+      "archiveConfirmTitle": "Archive questo Prestito?",
+      "archiveConfirmDescription": "{name} sarà move un il Archived section su questo Pagina e essere hidden da il sidebar e Conto pickers.",
+      "archiveAlsoExclude": "anche Escludi da statistics",
+      "deleteTitle": "Elimina Prestito",
+      "deleteDescription": "definitivamente removes il Prestito e its Cronologia. questo non può essere undone.",
+      "deleteButton": "Elimina",
+      "deleteConfirmTitle": "Elimina questo Prestito definitivamente?",
+      "deleteConfirmDescription": "{name} e tutti its events sarà essere definitivamente rimosso. questo non può essere undone.",
+      "toggleSuccess": "Setting aggiornato",
+      "toggleError": "Impossibile Aggiorna il setting",
+      "archiveSuccess": "Prestito archived",
+      "archiveError": "Impossibile archive il Prestito",
+      "unarchiveSuccess": "Prestito restored",
+      "deleteSuccess": "Prestito eliminato",
+      "deleteError": "Impossibile Elimina il Prestito",
+      "deleteBlockedByPayments": "questo Prestito ha recorded Pagamenti. Elimina li primo, then Puoi Elimina il Prestito."
+    },
+    "empty": {
+      "title": "nessun Prestiti ancora",
+      "description": "traccia mortgages, auto Prestiti, student Prestiti, e Altro liabilities qui.",
+      "createFirstButton": "Aggiungi Il tuo primo Prestito"
+    },
+    "paidOff": {
+      "sectionTitle": "pagato disattivato",
+      "repaid": "Repaid",
+      "opened": "Opened",
+      "closed": "Closed",
+      "interestPaid": "Interesse pagato (est.)"
+    },
+    "archivedList": {
+      "sectionTitle": "Archived",
+      "badge": "Archived",
+      "outstanding": "Outstanding"
+    },
+    "aggregate": {
+      "avgApr": "Avg APR",
+      "monthlyObligation": "Mensile obligation",
+      "interestProjected": "Interesse Previsto",
+      "totalOutstanding": "Totale outstanding",
+      "principalRepaid": "{percent}% di {amount} Capitale repaid",
+      "debtFree": "Debt-Gratis"
+    },
+    "list": {
+      "columns": {
+        "loan": "Prestito",
+        "progress": "Progress",
+        "balance": "Saldo",
+        "apr": "APR",
+        "monthly": "Mensile",
+        "payoff": "Payoff",
+        "interestLeft": "Interesse left"
+      },
+      "paidPercent": "{value}% pagato",
+      "monthsLeft": "{count} mo left",
+      "ofPrincipal": "di {amount}"
+    },
+    "types": {
+      "mortgage": "Mortgage",
+      "auto": "Veicolo",
+      "student": "Student",
+      "personal": "Personal",
+      "heloc": "HELOC",
+      "business": "Business",
+      "medical": "Medical",
+      "other": "Altro"
+    },
+    "warnings": {
+      "no_planned_payment": "nessun Pianificato Pagamento imposta – Previsto payoff non disponibile.",
+      "payment_below_interest": "Pianificato Pagamento non cover Mensile Interesse – Prestito would grow."
+    },
+    "detail": {
+      "backToList": "Indietro un Prestiti",
+      "loadError": "Impossibile carica questo Prestito.",
+      "paidOffBadge": "pagato disattivato",
+      "summary": {
+        "outstanding": "Attuale Saldo",
+        "principalOnlyTooltip": "Saldo reflects Capitale Pagamenti solo. Interesse non è accrued automaticamente – Il tuo lender's Estratto conto è il origine di truth.",
+        "apr": "APR",
+        "originalPrincipal": "originale Capitale",
+        "term": "Term",
+        "termMonths": "{count} Mese | {count} mesi",
+        "startDate": "Data di inizio",
+        "paymentDay": "Pagamento giorno",
+        "dayOfMonth": "{day} di ogni Mese",
+        "accountNumber": "Conto numero",
+        "balanceAnchor": "Saldo come di",
+        "balanceAnchorTooltip": "il outstanding Saldo è fixed come di questo Data. Pagamenti dated prima di it sono kept per Cronologia but non Cambia il pagato progress.",
+        "actualDuration": "Actual duration"
+      },
+      "paidOff": {
+        "bannerTitle": "{name} — Estinto completamente",
+        "bannerSubline": "{type} · Opened {opened} · Closed {closed}",
+        "took": "Took",
+        "monthsEarly": "{count} mo early",
+        "duration": {
+          "full": "{years} yrs {months} mo",
+          "years": "{years} yrs",
+          "months": "{months} mo"
+        },
+        "cost": {
+          "title": "What questo Prestito costo",
+          "totalLabel": "Totale costo",
+          "principal": "Capitale",
+          "interest": "Interesse (est.)",
+          "estimateFootnote": "Interesse è un amortization-schedule estimate — Pagamenti sono recorded come Capitale, so nessun exact Interesse Suddivisione è stored.",
+          "effectiveCost": "Effective costo: {cents}¢ di Interesse per $1 borrowed"
+        },
+        "chart": {
+          "title": "Saldo journey",
+          "titleHint": "Il tuo Prestito's actual recorded Saldo over ora, against il originale amortization schedule.",
+          "noData": "non enough Cronologia un Grafico questo Prestito's Saldo journey."
+        }
+      },
+      "projection": {
+        "title": "Projection",
+        "paidLabel": "pagato",
+        "paidOfOriginal": "{paid} di {original} pagato",
+        "payoffDate": "Payoff Data",
+        "monthsRemaining": "mesi rimanente",
+        "totalInterestRemaining": "Totale Interesse rimanente",
+        "nextMonthInterest": "Successivo Mese's Interesse",
+        "nextMonthPrincipal": "Successivo Mese's Capitale",
+        "plannedPayment": "Pianificato Pagamento"
+      },
+      "events": {
+        "title": "Timeline",
+        "empty": "nessun Cronologia ancora – Tasso changes, Saldo corrections, e Nota sarà appear qui.",
+        "rateChange": "Tasso modificato da {from}% un {to}%",
+        "termChange": "Term modificato da {from} un {to} mesi",
+        "plannedPaymentChange": "Pianificato Pagamento modificato da {from} un {to}",
+        "paidOff": "Prestito pagato disattivato",
+        "balanceCorrection": "Outstanding Saldo corrected da {from} un {to}"
+      },
+      "payments": {
+        "title": "Recent Pagamenti",
+        "empty": "nessun Pagamenti recorded against questo Prestito ancora.",
+        "loadError": "Impossibile carica recent Pagamenti.",
+        "seeAll": "Visualizza tutti",
+        "allTitle": "tutti Pagamenti",
+        "loadMore": "carica Altro"
+      },
+      "recordPayment": "registrazione Pagamento",
+      "payment": {
+        "title": "Prestito Pagamento",
+        "description": "registrazione o Modifica un Pagamento against questo Prestito.",
+        "createTitle": "registrazione Pagamento",
+        "editTitle": "Modifica Prestito Pagamento",
+        "payingTo": "Paying un",
+        "fromAccountLabel": "da Conto",
+        "fromAccountPlaceholder": "Seleziona Conto",
+        "amountLabel": "Importo",
+        "amountPlaceholder": "0.00",
+        "targetAmountLabel": "Importo applied un Prestito",
+        "targetAmountPlaceholder": "0.00",
+        "targetAmountTooltip": "origine Conto è in {source}, Prestito è in {loan}. We pre-fill il convertito Importo usando il Attuale Tasso di cambio – adjust se Il tuo banca applied un different Tasso.",
+        "saveButton": "Salva",
+        "recordButton": "registrazione",
+        "overdrawWarning": "questo è Altro di {account}'s Saldo e sarà overdraw il Conto.",
+        "overpayError": "Pagamento exceeds il rimanente Prestito Saldo ({max}).",
+        "deleteConfirmTitle": "Elimina questo Pagamento?",
+        "deleteConfirmDescription": "Both sides di il Trasferimento sarà essere rimosso e il Prestito Saldo sarà essere restored. questo non può essere undone.",
+        "preAnchorHint": "questo Data è prima di il Prestito's Saldo snapshot, so questo Pagamento non sarà Cambia il outstanding Saldo – it's già included in il opening Saldo.",
+        "unlinkButton": "scollega",
+        "unlinkConfirmTitle": "scollega questo Pagamento?",
+        "unlinkConfirmDescription": "il Transazione sarà essere kept come un regular Uscita but rimosso da questo Prestito. il Prestito Saldo sarà essere recalculated.",
+        "unlinkSuccess": "Pagamento unlinked",
+        "unlinkError": "non è stato possibile scollega il Pagamento. Riprova.",
+        "syncedAccountHint": "Paying da un synced Conto? Usa collega Pagamenti un attach il importato Uscita instead.",
+        "sourceInfo": {
+          "trigger": "Altro Dettagli",
+          "title": "Why solo questi Conti?",
+          "manualOnly": "questo picker lists solo Il tuo manualmente-managed Conti.",
+          "whySynced": "Transazioni su banca-synced Conti sono importato directly da Il tuo banca. Recording un Prestito Pagamento da uno qui would Crea un duplicate di il Transazione Il tuo banca sarà Invia.",
+          "howToLink": "Instead, once il banca Transazione appears, Apri it e Scegli collega Pagamenti un attach it un questo Prestito. quello keeps un single origine di truth e updates il Prestito Saldo correttamente."
+        }
+      },
+      "payoffChart": {
+        "title": "Payoff projection",
+        "titleHint": "Projects quando Il tuo Prestito sarà essere completamente pagato under il minimo, Pianificato, e un Personalizzato Mensile Pagamento, con ogni scenario's payoff Data e Totale Interesse. Tipo qualsiasi Importo in il Personalizzato Pagamento Campo un play con il numeri e instantly Visualizza come it changes Il tuo payoff Data e Totale Interesse.",
+        "customPaymentLabel": "Personalizzato Pagamento",
+        "applyAsPlanned": "Applica come Pianificato Pagamento",
+        "applyConfirmTitle": "Applica come Pianificato Pagamento?",
+        "applyConfirmDescription": "questo sets il Prestito's Pianificato Mensile Pagamento un {amount}.",
+        "applySuccess": "Pianificato Pagamento aggiornato.",
+        "applyError": "non è stato possibile Aggiorna il Pianificato Pagamento. Riprova.",
+        "belowInterest": "questo Pagamento non cover il Mensile Interesse, so il Saldo never goes down.",
+        "paidOff": "questo Prestito è pagato disattivato — there's nothing left un project.",
+        "enterPaymentPrompt": "inserisci un Pagamento Importo above un project il payoff.",
+        "paidOffShort": "pagato disattivato",
+        "neverPaysOff": "Never",
+        "interestVsPlanned": "Interesse vs Pianificato",
+        "payoffVsPlanned": "Payoff vs Pianificato",
+        "sameAsPlanned": "Same come Pianificato",
+        "earlierBy": "{time} earlier",
+        "laterBy": "{time} più tardi",
+        "monthsLabel": "{n} mo",
+        "yearsLabel": "{n} yr",
+        "yearsMonthsLabel": "{y} yr {m} mo",
+        "legend": {
+          "minimum": "minimo Pagamento",
+          "planned": "Pianificato Pagamento",
+          "custom": "Personalizzato Pagamento",
+          "actual": "Actual Saldo",
+          "schedule": "originale schedule"
+        }
+      }
+    }
+  }
+}

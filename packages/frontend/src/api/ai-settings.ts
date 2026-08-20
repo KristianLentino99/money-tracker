@@ -23,11 +23,13 @@ export const getAiApiKeyStatus = async (): Promise<AiApiKeyStatusResponse> => {
 export const setAiApiKey = async ({
   provider,
   apiKey,
+  model,
 }: {
   provider: AIKeyProvider;
   apiKey: string;
+  model?: string;
 }): Promise<{ success: boolean }> => {
-  return api.put('/user/settings/ai/api-keys', { provider, apiKey });
+  return api.put('/user/settings/ai/api-keys', { provider, apiKey, model });
 };
 
 export const deleteAiApiKey = async ({ provider }: { provider: AIKeyProvider }): Promise<{ success: boolean }> => {

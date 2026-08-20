@@ -1,0 +1,41 @@
+{
+  "investments": {
+    "title": "Investimenti",
+    "createButton": "Crea Portafoglio",
+    "loadError": "Impossibile carica portafogli",
+    "tryAgain": "Riprova",
+    "menu": {
+      "view": "Visualizza",
+      "delete": "Elimina"
+    },
+    "card": {
+      "hidden": "Hidden",
+      "portfolioType": "{type} Portafoglio",
+      "costBasis": "costo basis"
+    },
+    "empty": {
+      "title": "nessun portafogli ancora",
+      "description": "Crea Il tuo primo Investimento Portafoglio un Inizio tracking Il tuo Posizioni, Transazioni, e performance.",
+      "createFirstButton": "Crea Il tuo primo Portafoglio"
+    },
+    "trash": {
+      "title": "cestino",
+      "retentionHint": "elementi qui sono definitivamente eliminato dopo {days} giorni",
+      "loadError": "non è stato possibile carica trashed portafogli.",
+      "deletedAgo": "eliminato {time}",
+      "restoreButton": "ripristina",
+      "restoringButton": "Restoring…",
+      "purgeButton": "Elimina ora",
+      "purgingButton": "eliminazione…",
+      "confirmPurgeTitle": "Elimina Portafoglio definitivamente?",
+      "confirmPurge": "definitivamente Elimina \"{name}\"? questo non può essere undone.",
+      "tryAgain": "Riprova",
+      "notifications": {
+        "restored": "Portafoglio restored",
+        "restoreError": "Impossibile ripristina Portafoglio",
+        "purged": "Portafoglio definitivamente eliminato",
+        "purgeError": "Impossibile Elimina Portafoglio"
+      }
+    }
+  }
+}

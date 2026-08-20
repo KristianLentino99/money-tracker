@@ -1,0 +1,258 @@
+{
+  "dashboard": {
+    "editMode": {
+      "customize": "Customize",
+      "addWidgets": "Aggiungi widgets",
+      "emptyState": "fai clic Customize un Aggiungi widgets"
+    },
+    "widgets": {
+      "common": {
+        "includePlanned": "Includi Pianificato Transazioni",
+        "includePlannedTooltip": "Count in sospeso Pianificato Transazioni in questo widget's numeri.",
+        "includePlannedSaveError": "non è stato possibile Salva il Pianificato Transazioni setting. Riprova."
+      },
+      "balanceTrend": {
+        "title": "Saldo Andamento",
+        "balanceTypes": {
+          "total": "Totale",
+          "accounts": "Conti",
+          "portfolios": "portafogli",
+          "ventures": "Ventures",
+          "vehicles": "Veicoli",
+          "loans": "Prestiti"
+        },
+        "tooltip": {
+          "accounts": "Conti:",
+          "portfolios": "portafogli:",
+          "total": "Totale:",
+          "ventures": "Ventures:",
+          "vehicles": "Veicoli:",
+          "loans": "Prestiti:"
+        },
+        "today": "Oggi",
+        "vsPreviousPeriod": "vs Precedente Periodo",
+        "spikePanel": {
+          "accounts": "Conti",
+          "portfolios": "portafogli",
+          "priceDrivenChange": "Prezzo-driven Cambia — Transazione Dettagli Prossimamente",
+          "noSignificantTransactions": "nessun significant Transazioni per questo Data.",
+          "seeAllTransactions": "Visualizza tutti Transazioni"
+        },
+        "spikeSettings": {
+          "showMarkers": "Mostra spike markers",
+          "showMarkersTooltip": "Toggle colored markers su il Grafico quello highlight significant Saldo changes.",
+          "percentThreshold": "Min Cambia %",
+          "percentThresholdTooltip": "minimo percentuale Cambia in Saldo tra two consecutive giorni un mark come un spike. Either questo o il absolute soglia deve essere exceeded. Low valori Mostra Altro markers.",
+          "absoluteThreshold": "Min Cambia $",
+          "absoluteThresholdTooltip": "minimo absolute Saldo Cambia (in Il tuo Valuta principale) un qualify come un spike. Either questo o il % soglia deve essere exceeded.",
+          "maxMarkers": "Max markers",
+          "maxMarkersTooltip": "massimo numero di spike markers shown su il Grafico. quando there sono Altro spikes di questo limite, solo il most significant ones sono displayed.",
+          "resetDefaults": "Reimposta defaults",
+          "accept": "accetta",
+          "validation": {
+            "outOfRange": "valore è fuori di consentito range",
+            "integer": "deve essere un whole numero"
+          }
+        },
+        "settings": {
+          "title": "Impostazioni",
+          "spikeMarkers": "Spike markers",
+          "fitToLatestData": "Fit un più recente data",
+          "fitToLatestDataTooltip": "quando su, il Grafico solo spans su un Il tuo più recente data point. quando disattivato, il x-axis covers il full Selezionato Periodo, leaving empty space per qualsiasi future data.",
+          "fitToLatestDataLockedTooltip": "Turn disattivato Pianificato Transazioni un Cambia questo — loro projection sempre extends il Grafico un il Fine di il Periodo.",
+          "on": "su",
+          "off": "disattivato",
+          "includeInTotal": "Includi in Totale",
+          "includePlannedTooltip": "Mostra un dashed projection di in sospeso Pianificato Transazioni su top di il Andamento."
+        },
+        "componentsSettings": {
+          "description": "Scegli che components count toward il Totale Saldo line.",
+          "vehicles": "Veicoli",
+          "ventures": "Ventures",
+          "loans": "Prestiti",
+          "loansTooltip": "quando su, Il tuo outstanding Prestito saldi sono subtracted da il Totale (true Patrimonio netto). quando disattivato, Prestiti sono ignored so il Totale shows assets solo.",
+          "allIncluded": "tutti components",
+          "excluding": "Excluding {items}"
+        },
+        "projection": {
+          "summary": "{amount} Previsto · {count} Pianificato voce fino a {date} | {amount} Previsto · {count} Pianificato voci fino a {date}"
+        }
+      },
+      "expensesStructure": {
+        "title": "Uscite Structure",
+        "today": "Oggi",
+        "vsPreviousPeriod": "vs Precedente Periodo",
+        "viewButton": "Visualizza"
+      },
+      "latestTransactions": {
+        "title": "più recente Transazioni",
+        "showAll": "Visualizza tutti"
+      },
+      "subscriptions": {
+        "title": "Abbonamenti & Bills",
+        "titleSubscriptions": "Abbonamenti",
+        "titleBills": "Bills",
+        "titleAll": "Ricorrente Pagamenti",
+        "titleInstallments": "Installments",
+        "configTypeAll": "tutti",
+        "configTypeSubscriptions": "Abbonamenti",
+        "configTypeBills": "Bills",
+        "configTypeInstallments": "Installments",
+        "activeSummary": "{count} attivo",
+        "perYear": " per Anno",
+        "incomeSummary": "{count} attivo · {amount}/Mese Entrate",
+        "percentOfIncome": "{percent}% di avg Entrate",
+        "settings": {
+          "title": "Impostazioni",
+          "show": "Mostra",
+          "incomeWindow": "Entrate window",
+          "incomeWindowTooltip": "We Media Il tuo incoming Transazioni over questo Periodo un compute il % di Entrate Speso su Ricorrente Pagamenti.",
+          "lookbackOption": {
+            "1": "Mese scorso",
+            "3": "ultimo 3 mesi",
+            "6": "ultimo 6 mesi",
+            "12": "ultimo 12 mesi"
+          }
+        }
+      },
+      "categoryTracker": {
+        "title": "Categorie Watchlist",
+        "addCategory": "Aggiungi Categoria",
+        "selectCategories": "Seleziona Categorie"
+      },
+      "cashFlow": {
+        "title": "Flusso di cassa",
+        "description": "Shows Il tuo net savings: Entrate minus Uscite per il Selezionato Periodo, con un Andamento di Precedente periods",
+        "vsPrevious": "vs Precedente",
+        "income": "Entrate",
+        "expenses": "Uscite",
+        "saved": "salvato",
+        "previousPeriodsTrend": "Precedente periods Andamento",
+        "viewDetails": "Visualizza dettagli"
+      },
+      "netWorth": {
+        "title": "Patrimonio netto",
+        "description": "come Il tuo Patrimonio netto modificato over il Selezionato Periodo. Counts ogni Saldo Cambia: Conti, Investimenti, Prestiti, e asset valori.",
+        "vsPrevious": "vs Precedente",
+        "start": "Inizio",
+        "end": "Fine",
+        "growth": "Growth",
+        "previousPeriodsTrend": "Precedente periods Andamento",
+        "excludedTooltip": "Excluded da Patrimonio netto: {components}",
+        "viewHistory": "Visualizza Cronologia",
+        "loadFailed": "non è stato possibile carica Patrimonio netto data.",
+        "components": {
+          "ventures": "Ventures",
+          "vehicles": "Veicoli",
+          "loans": "Prestiti"
+        },
+        "settings": {
+          "title": "Includi in Patrimonio netto",
+          "loans": "Prestiti",
+          "vehicles": "Veicoli",
+          "ventures": "Ventures"
+        },
+        "trendTooltip": {
+          "change": "Cambia",
+          "netWorth": "Patrimonio netto",
+          "noData": "Nessun dato per questo Periodo"
+        }
+      },
+      "creditUtilization": {
+        "title": "Credit Utilization",
+        "description": "Shows come much di Il tuo credit limits sono attualmente utilizzato across Tutti i conti",
+        "utilized": "utilized",
+        "noAccounts": "nessun Conti con credit limits"
+      },
+      "plannedOverview": {
+        "title": "Pianificato",
+        "projectedTotal": "Previsto Saldo",
+        "pendingCount": "{count} Pianificato voce | {count} Pianificato voci",
+        "through": "fino a {date}",
+        "loadFailed": "non è stato possibile carica Pianificato Transazioni"
+      },
+      "emptyState": "There sono Nessun dato in Selezionato ora Intervallo.",
+      "registry": {
+        "balanceTrend": {
+          "name": "Saldo Andamento",
+          "description": "traccia Il tuo Saldo over ora"
+        },
+        "categoryTracker": {
+          "name": "Categorie Watchlist",
+          "description": "Watch spesa e Entrate per Selezionato Categorie"
+        },
+        "spendingCategories": {
+          "name": "spesa da Categorie",
+          "description": "Visualizza where Il tuo money goes"
+        },
+        "latestRecords": {
+          "name": "più recente registrazione",
+          "description": "Il tuo most recent Transazioni"
+        },
+        "subscriptions": {
+          "name": "Abbonamenti & Bills",
+          "description": "Panoramica di Ricorrente Pagamenti"
+        },
+        "cashFlow": {
+          "name": "Flusso di cassa",
+          "description": "Entrate vs uscite con savings Tasso"
+        },
+        "netWorth": {
+          "name": "Patrimonio netto",
+          "description": "come Il tuo Totale Patrimonio netto changes over ora, including Investimenti, Prestiti, e assets."
+        },
+        "creditUtilization": {
+          "name": "Credit Utilization",
+          "description": "Credit limite usage across Il tuo Conti"
+        },
+        "plannedOverview": {
+          "name": "Pianificato Panoramica",
+          "description": "in sospeso Pianificato Transazioni e Il tuo Previsto Saldo"
+        }
+      }
+    },
+    "periodSelector": {
+      "presets": {
+        "currentMonth": "Attuale Mese",
+        "last3Months": "ultimo 3 mesi",
+        "last6Months": "ultimo 6 mesi",
+        "lastYear": "ultimo 12 mesi",
+        "thisYear": "Quest’anno",
+        "previousYear": "Precedente Anno"
+      }
+    }
+  },
+  "widgets": {
+    "subscriptionsOverview": {
+      "upcoming": {
+        "collapsed": "{count} upcoming Pagamenti",
+        "collapsedAction": "Apri"
+      },
+      "empty": "tutti caught su — nothing due in il Successivo 3 giorni.",
+      "overdueBadge": "Overdue",
+      "payAction": "Mark pagato"
+    },
+    "latestRecords": {
+      "config": {
+        "includeScheduled": {
+          "label": "Includi programmato Pagamenti",
+          "on": "su",
+          "off": "disattivato"
+        }
+      },
+      "settings": {
+        "excludeTitle": "Escludi Transazioni",
+        "excludeTransfersDescription": "Nascondi Trasferimenti tra Il tuo propri Conti",
+        "excludeOutOfWalletDescription": "Nascondi Trasferimenti un e da Conti tu non traccia",
+        "balanceAdjustmentsTitle": "Saldo adjustments",
+        "excludeBalanceAdjustmentsDescription": "Nascondi Saldo adjustment Transazioni",
+        "plannedTitle": "Pianificato Transazioni",
+        "excludePlannedDescription": "Nascondi in sospeso Pianificato Transazioni da il elenco",
+        "nothingExcluded": "Nothing excluded"
+      },
+      "overdueBadge": "Overdue",
+      "scheduledBadge": "programmato",
+      "payAction": "Mark pagato"
+    }
+  }
+}

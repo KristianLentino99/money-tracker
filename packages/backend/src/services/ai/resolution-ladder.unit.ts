@@ -17,11 +17,15 @@ const ANTHROPIC_CONFIG: AIFeatureConfig = { feature: FEATURE, modelId: 'anthropi
 function pick({
   config = null,
   keyProviders = [],
+  providerModels,
+  defaultProvider,
   endpoints = [],
   excludedEndpointIds,
 }: {
   config?: AIFeatureConfig | null;
   keyProviders?: AIKeyProvider[];
+  providerModels?: ReadonlyMap<AIKeyProvider, string>;
+  defaultProvider?: AIKeyProvider;
   endpoints?: LadderEndpoint[];
   excludedEndpointIds?: ReadonlySet<string>;
 } = {}) {
@@ -29,6 +33,8 @@ function pick({
     feature: FEATURE,
     config,
     keyProviders: new Set(keyProviders),
+    providerModels,
+    defaultProvider,
     endpoints,
     excludedEndpointIds,
   });
@@ -108,6 +114,31 @@ describe('pickResolutionStep', () => {
   });
 
   describe('no usable config', () => {
+    it('uses the selected OpenRouter model when OpenRouter is the default provider', () => {
+      const step = pick({
+        keyProviders: [AI_PROVIDER.openrouter],
+        defaultProvider: AI_PROVIDER.openrouter,
+        providerModels: new Map([[AI_PROVIDER.openrouter, 'openrouter/anthropic/claude-sonnet-5']]),
+      });
+
+      expect(step).toEqual({
+        kind: 'default-catalog',
+        provider: AI_PROVIDER.openrouter,
+        modelId: 'openrouter/anthropic/claude-sonnet-5',
+        usingUserKey: true,
+      });
+    });
+
+    it('uses the first DeepSeek catalog model when DeepSeek is the default provider', () => {
+      const step = pick({ keyProviders: [AI_PROVIDER.deepseek], defaultProvider: AI_PROVIDER.deepseek });
+
+      expect(step).toMatchObject({
+        kind: 'default-catalog',
+        provider: AI_PROVIDER.deepseek,
+        usingUserKey: true,
+      });
+    });
+
     it('prefers the feature default on the user key over the user endpoints', () => {
       const step = pick({ keyProviders: [AI_PROVIDER.google], endpoints: [ENDPOINT] });
 

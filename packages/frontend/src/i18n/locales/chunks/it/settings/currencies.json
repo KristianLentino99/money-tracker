@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "currencies": {
+      "page": {
+        "title": "Valute",
+        "description": "Gestisci il Valute tu traccia e il Tassi di cambio utilizzato across Il tuo Conti."
+      },
+      "addNew": {
+        "loading": "Caricamento...",
+        "selectCurrency": "Seleziona Valuta",
+        "addButton": "Aggiungi",
+        "sectionLabel": "Aggiungi un Valuta",
+        "successfullyAdded": "Valuta aggiunto",
+        "errors": {
+          "addFailed": "Errore imprevisto. Valuta non è aggiunto."
+        }
+      },
+      "howItWorks": {
+        "trigger": "come it works?",
+        "body": "Il tuo Valuta principale è il uno ogni Saldo è convertito in per totals e Report. ogni aggiunto Valuta updates automaticamente da live market rates, o Puoi imposta un Personalizzato Tasso un override it."
+      },
+      "row": {
+        "baseBadge": "Base",
+        "custom": "Personalizzato",
+        "live": "Live",
+        "unused": "Unused",
+        "accountsCount": "{count} Conto | {count} Conti"
+      },
+      "empty": {
+        "title": "nessun Altro Valute ancora",
+        "description": "Aggiungi un Valuta above un traccia saldi e Tassi di cambio alongside Il tuo Valuta principale."
+      },
+      "exchangeRate": {
+        "disableLiveUpdate": "Disabilita live updation un essere able un imposta Personalizzato Tasso di cambio.",
+        "liveUpdateInfo": "quando Abilitato, Personalizzato Tasso è ignored.",
+        "liveUpdateLabel": "Live Aggiorna",
+        "ratePlaceholder": "0.00",
+        "saveButton": "Salva",
+        "successfullyUpdated": "correttamente aggiornato.",
+        "balancesNotRefreshed": "{count} Conto Saldo(s) Impossibile essere refreshed con il Nuovo Tasso ancora — they'll Aggiorna automaticamente once un Tasso è disponibile.",
+        "errors": {
+          "unexpectedError": "Errore imprevisto",
+          "updateFailed": "Errore imprevisto. Valuta non è aggiornato."
+        }
+      },
+      "delete": {
+        "confirmTitle": "Elimina Valuta?",
+        "description": "Valuta può solo essere eliminato/disconnesso se there's nessun Conti e/o Transazioni associated con it.",
+        "button": "Elimina Valuta",
+        "buttonShort": "Elimina",
+        "disabledTooltip": "Non puoi Elimina questo Valuta because it è ancora connesso un Conto(s).",
+        "successfullyDeleted": "correttamente eliminato.",
+        "errors": {
+          "deleteFailed": "Errore imprevisto. Valuta non è eliminato."
+        }
+      },
+      "setBase": {
+        "button": "imposta come Valuta principale",
+        "buttonShort": "imposta come base",
+        "processing": "elaborazione...",
+        "tooltip": "Mark come un Valuta principale. tutti statistics e Riepilogo Informazione sarà essere displayed in questo Valuta.\n\nTransazioni sarà essere recalculated da Tasso di cambio come di Data di quando Transazione era recorded.",
+        "dialog": {
+          "title": "Cambia Valuta principale?",
+          "warningTitle": "avviso:",
+          "warningText": "Changing il Valuta principale dovrebbe essere un very well-considered decision. Ideally, questo azione dovrebbe essere performed solo once, even though there sono nessun actual restrictions.",
+          "descriptionText": "ogni ora tu Cambia il Valuta principale, tutti Transazioni sarà essere recalculated usando historical Tassi di cambio. Because di floating-point arithmetic e normal variations tra base e quote Valuta rates, repeated recalculations potrebbe introduce small discrepancies in Il tuo reference amounts over ora. Reference amounts sono utilizzato un visualizzato statistics e un imposta Il tuo budget limits.",
+          "roundingTitle": "come exactly è rounding calcolato?",
+          "roundingIntro": "Valuta conversions Usa Banker's Rounding (IEEE 754 standard), anche known come \"round half un even\". questo minimizes cumulative rounding errori over many calculations.",
+          "roundingHow": "come it works:",
+          "roundingRule1": "quando un valore è exactly halfway (e.g., 0.5), it rounds un il nearest even numero",
+          "roundingRule2": "Example: 0.5 → 0, 1.5 → 2, 2.5 → 2, 3.5 → 4",
+          "roundingStandard": "questo metodo è recommended da IFRS/GAAP accounting standards e utilizzato da major financial systems un prevent systematic bias in Valuta conversions.",
+          "untouchedWarning": "originale Transazioni Importo sarà sempre remain untouched!",
+          "processingTimeInfo": "questo might take un while se Il tuo Valuta non è widely-common.",
+          "restrictionWarning": "tu non sarà essere able un Crea nuovo Conti, Transazioni, e anything related un \"amounts\" while il process è in progress.",
+          "confirmation": "Sei sicuro tu vuoi un proceed?",
+          "changeButton": "Cambia Valuta principale",
+          "cancelButton": "Annulla"
+        },
+        "successMessage": "Valuta principale modificato correttamente.",
+        "errors": {
+          "changeFailed": "Errore imprevisto. Impossibile Cambia Valuta principale.",
+          "lockedHousehold": "tu're in {count} attivo Famiglia membership. lasciare it da Impostazioni → Famiglia primo. | tu're in {count} attivo Famiglia memberships. lasciare li da Impostazioni → Famiglia primo.",
+          "lockedShares": "Hai {count} attivo Conto Azione. revocare it da il Conto primo. | Hai {count} attivo Conto Azioni. revocare li da ogni Conto primo."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "settings": {
+    "categories": {
+      "title": "Categorie",
+      "addButton": "Aggiungi Categoria",
+      "empty": "nessun Categorie ancora. Crea Il tuo primo Categoria un Inizia.",
+      "delete": {
+        "title": "Elimina Categoria?",
+        "description": "questo sarà definitivamente Elimina \"{name}\". Questa azione non può essere annullata.",
+        "deleteButton": "Elimina",
+        "cancelButton": "Annulla"
+      },
+      "errors": {
+        "cannotLoad": "Impossibile carica Categorie"
+      },
+      "notifications": {
+        "deleteSuccess": "Categoria eliminato",
+        "deleteFailed": "Impossibile Elimina Categoria",
+        "checkFailed": "Impossibile check Categoria"
+      }
+    }
+  }
+}

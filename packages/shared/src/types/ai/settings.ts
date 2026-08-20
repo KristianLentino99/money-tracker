@@ -9,7 +9,7 @@ export type AIModelCapability =
   | 'fast-inference'
   | 'agents';
 
-export type AIModelCostTier = 'free' | 'low' | 'medium' | 'high';
+export type AIModelCostTier = 'free' | 'low' | 'medium' | 'high' | 'unknown';
 
 export interface AIModelPricing {
   /** Cost per 1M input tokens in USD */
@@ -61,6 +61,8 @@ export const AI_KEY_PROVIDERS = [
   AI_PROVIDER.openai,
   AI_PROVIDER.google,
   AI_PROVIDER.groq,
+  AI_PROVIDER.openrouter,
+  AI_PROVIDER.deepseek,
 ] as const satisfies readonly AIKeyProvider[];
 
 /**
@@ -74,6 +76,8 @@ export type AIApiKeyStatus = 'valid' | 'invalid';
 /** API key info returned to frontend, never the key value itself */
 export interface AIApiKeyInfo {
   provider: AIKeyProvider;
+  /** OpenRouter's upstream model identifier, e.g. `deepseek/deepseek-v4-flash`. */
+  model?: string;
   createdAt: string;
   status: AIApiKeyStatus;
   lastValidatedAt: string;

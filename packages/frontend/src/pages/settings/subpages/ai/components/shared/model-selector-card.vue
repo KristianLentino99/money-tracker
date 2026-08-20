@@ -265,6 +265,8 @@ const PROVIDER_LABELS = computed<Record<AIKeyProvider, string>>(() => ({
   [AI_PROVIDER.anthropic]: t('settings.ai.modelSelector.groupLabels.anthropic'),
   [AI_PROVIDER.google]: t('settings.ai.modelSelector.groupLabels.google'),
   [AI_PROVIDER.groq]: t('settings.ai.modelSelector.groupLabels.groq'),
+  [AI_PROVIDER.openrouter]: t('settings.ai.modelSelector.groupLabels.openrouter'),
+  [AI_PROVIDER.deepseek]: t('settings.ai.modelSelector.groupLabels.deepseek'),
 }));
 
 const COST_LABELS = computed<Record<AIModelCostTier, string>>(() => ({
@@ -272,6 +274,7 @@ const COST_LABELS = computed<Record<AIModelCostTier, string>>(() => ({
   low: t('settings.ai.modelSelector.costLabels.low'),
   medium: t('settings.ai.modelSelector.costLabels.medium'),
   high: t('settings.ai.modelSelector.costLabels.high'),
+  unknown: t('settings.ai.modelSelector.costLabels.unknown'),
 }));
 
 const { addErrorNotification, addSuccessNotification } = useNotificationCenter();
@@ -382,6 +385,7 @@ const getGroupLabel = (provider: AIKeyProvider | 'recommended') => {
 const getCostLabel = (tier: AIModelCostTier) => COST_LABELS.value[tier] ?? tier;
 
 const formatContextWindow = (tokens: number) => {
+  if (tokens <= 0) return t('settings.ai.modelSelector.modelInfo.unknown');
   if (tokens >= 1_000_000) {
     return `${(tokens / 1_000_000).toFixed(1)}M tokens`;
   }

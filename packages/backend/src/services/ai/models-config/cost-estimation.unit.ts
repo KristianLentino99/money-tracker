@@ -12,6 +12,12 @@ describe('estimateModelCostUsd', () => {
     expect(estimateModelCostUsd({ profile: profile!, inputTokens: 10_000, outputTokens: 2_000 })).toBeNull();
   });
 
+  it('returns an unknown-cost profile for a dynamic OpenRouter model', () => {
+    const profile = getModelCostProfile({ modelId: 'openrouter/anthropic/claude-sonnet-5' });
+    expect(profile).toEqual({ isCustom: true, name: 'anthropic/claude-sonnet-5' });
+    expect(estimateModelCostUsd({ profile: profile!, inputTokens: 10_000, outputTokens: 2_000 })).toBeNull();
+  });
+
   it('returns null, not 0, for a catalog model without pricing', () => {
     const profile = {
       isCustom: false as const,

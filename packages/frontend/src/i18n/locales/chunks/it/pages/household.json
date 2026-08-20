@@ -1,0 +1,76 @@
+{
+  "pages": {
+    "household": {
+      "title": "Famiglia",
+      "description": "invita trusted people un Azione accesso un tutti il Conti tu propri. membri Visualizza Il tuo Conti e (con scrivi accesso) può registrazione Transazioni su li.",
+      "myHousehold": {
+        "title": "My Famiglia",
+        "description": "People qui ottieni accesso un ogni Conto tu propri. per-Conto Azioni sempre override Famiglia accesso."
+      },
+      "youOwner": "tu — proprietario",
+      "noMembers": "nessun uno ha joined Il tuo Famiglia ancora.",
+      "loadMembersError": "non è stato possibile carica Famiglia membri. riprova refreshing.",
+      "permissions": {
+        "read": "Leggi",
+        "write": "scrivi",
+        "manage": "Gestisci"
+      },
+      "writeScope": {
+        "all": "può Modifica qualsiasi Transazione",
+        "own": "può Modifica solo loro propri Transazioni"
+      },
+      "invite": {
+        "emailLabel": "email",
+        "emailPlaceholder": "person{'@'}example.com",
+        "permissionLabel": "autorizzazione",
+        "writeScopeLabel": "scrivi scope",
+        "submit": "Invia Famiglia invita",
+        "sent": "invito inviata.",
+        "error": "non è stato possibile Invia il invito.",
+        "emailDeliveryFailed": "invito creato, but il email non è stato possibile essere delivered. Puoi invia di nuovo it da il invitations panel."
+      },
+      "revoke": {
+        "action": "Rimuovi",
+        "title": "Rimuovi Famiglia membro?",
+        "description": "{handle} sarà lose accesso un ogni Conto in Il tuo Famiglia. per-Conto Azioni (se qualsiasi) sono unaffected.",
+        "confirm": "Rimuovi",
+        "success": "membro rimosso.",
+        "error": "non è stato possibile Rimuovi questo membro."
+      },
+      "permissionChange": {
+        "setRead": "Make Leggi-solo",
+        "setWrite": "Allow writes",
+        "success": "autorizzazione aggiornato.",
+        "error": "non è stato possibile Aggiorna autorizzazione."
+      },
+      "imIn": {
+        "title": "Households I'm in",
+        "description": "Altro people's households tu've joined. Leaving drops Il tuo accesso un ogni Conto they condiviso questo way.",
+        "empty": "tu haven't joined anyone else's Famiglia.",
+        "unnamedHousehold": "{'@'}{handle}'s Famiglia",
+        "loadError": "non è stato possibile carica il households tu're in. Riprova più tardi."
+      },
+      "leave": {
+        "action": "lasciare",
+        "title": "lasciare questo Famiglia?",
+        "description": "tu'll lose accesso un ogni Conto {owner} Azioni fino a loro Famiglia. per-Conto Azioni (se qualsiasi) sono unaffected.",
+        "confirm": "lasciare",
+        "success": "tu left il Famiglia.",
+        "error": "non è stato possibile lasciare il Famiglia."
+      },
+      "pending": {
+        "badge": "in sospeso",
+        "resend": "invia di nuovo",
+        "cancel": "Annulla",
+        "cancelTitle": "Annulla invito?",
+        "cancelDescription": "Annulla il in sospeso invito inviata un {email}? They sarà nessun longer essere able un accetta it.",
+        "cancelConfirm": "Annulla invito",
+        "cancelSuccess": "invito annullato.",
+        "cancelError": "Impossibile Annulla invito.",
+        "resendSuccess": "invito resent.",
+        "resendError": "Impossibile invia di nuovo invito.",
+        "resendDeliveryFailed": "invito aggiornato, but il email Impossibile essere inviata. Riprova più tardi."
+      }
+    }
+  }
+}

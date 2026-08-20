@@ -52,6 +52,7 @@ export const useAiSettings = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.apiKeyStatus });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.featuresStatus });
+      queryClient.invalidateQueries({ queryKey: ['ai-settings', 'models'] });
 
       const onboardingStore = useOnboardingStore();
       onboardingStore.completeTask('configure-ai');
@@ -63,6 +64,7 @@ export const useAiSettings = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.apiKeyStatus });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.featuresStatus });
+      queryClient.invalidateQueries({ queryKey: ['ai-settings', 'models'] });
     },
   });
 

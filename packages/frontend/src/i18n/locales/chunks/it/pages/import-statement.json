@@ -1,0 +1,158 @@
+{
+  "pages": {
+    "statementParser": {
+      "pageTitle": "Estratto conto Parser",
+      "pageDescription": "Carica un banca Estratto conto (PDF, CSV, o TXT) un extract Transazioni usando AI. Requires un AI Chiave API configured in Impostazioni.",
+      "stepper": {
+        "steps": {
+          "upload": "Carica",
+          "account": "Conto",
+          "review": "revisione",
+          "results": "Importa"
+        }
+      },
+      "steps": {
+        "accountTitle": "Seleziona Conto",
+        "accountDescription": "Scegli o Crea un Conto per il Transazioni"
+      },
+      "selectCurrency": "Seleziona Valuta",
+      "selectExistingAccount": "Seleziona esistente Conto",
+      "accountNamePlaceholder": "e.g., Main banca Conto",
+      "selectAccount": "Seleziona un Conto",
+      "searchAccounts": "Cerca conti...",
+      "uploadExtract": {
+        "supportedFormats": "Supported formats: PDF, CSV, TXT (max 10MB)",
+        "analyzeButton": "Analyze file",
+        "tryAgain": "Riprova",
+        "modelLabel": "Modello",
+        "estimatedCostLabel": "Estimated costo",
+        "estimatedTokensLabel": "Estimated Tokens",
+        "extractButton": "Extract Transazioni",
+        "progressMessage": "questo potrebbe take 30-60 secondi depending su il document size",
+        "foundLabel": "trovato:",
+        "transactions": "Transazioni",
+        "fromLabel": "da",
+        "inLabel": "in",
+        "continueMessage": "Continua un Seleziona un Conto per questi Transazioni.",
+        "tokenWarning": {
+          "medium": {
+            "title": "Large file detected",
+            "description": "elaborazione potrebbe take 1-2 minuti. per favore essere patient."
+          },
+          "high": {
+            "title": "Very large file detected",
+            "description": "elaborazione potrebbe take several minuti due un il file size."
+          },
+          "extreme": {
+            "title": "Extremely large file",
+            "description": "elaborazione potrebbe take 5+ minuti. Consider splitting il file in smaller parts per faster elaborazione."
+          }
+        },
+        "freeApiWarning": "tu're usando Gratis AI accesso che ha Giornaliero Tasso limits. per il fast e uninterrupted servizio, Aggiungi Il tuo propri Chiave API.",
+        "addApiKeyLink": "Aggiungi Il tuo Chiave API in Impostazioni →",
+        "status": {
+          "sendingFile": "invio file un AI...",
+          "readingDocument": "AI è reading il document...",
+          "analyzingStructure": "Analyzing Estratto conto structure...",
+          "extractingData": "Extracting Transazione data...",
+          "processingTransactions": "elaborazione Transazioni...",
+          "finalizing": "Finalizing extraction...",
+          "almostDone": "Almost Fatto..."
+        },
+        "tokenFormat": "{inputTokens}K input, ~{outputTokens}K output",
+        "pdfPasswordLabel": "PDF password",
+        "pdfPasswordPlaceholder": "inserisci il document password",
+        "pdfPasswordSubmit": "Unlock e analyze"
+      },
+      "accountSelect": {
+        "newlyCreated": "(newly creato)",
+        "differentCurrency": "Different Valuta",
+        "linkedToBanks": "collegato un banche",
+        "linkedToBanksTooltip": "per ora, Estratto conto Importa è limited un system Conti solo.",
+        "noAccountsFound": "nessun Conti trovato",
+        "currencyAccounts": "{currency} Conti"
+      },
+      "accountSelection": {
+        "transactions": "Transazioni:",
+        "bank": "banca:",
+        "currency": "Valuta:",
+        "currencyNotDetected": "Impossibile detect Estratto conto Valuta. per favore Seleziona il Valuta manualmente:",
+        "currencyMismatch": "il Estratto conto Valuta ({statementCurrency}) differs da il Conto Valuta ({accountCurrency}). Transazioni sarà essere importato usando il Conto Valuta.",
+        "yourCurrenciesGroup": "Il tuo Valute",
+        "allCurrenciesGroup": "tutti Valute",
+        "createNew": "Crea nuovo",
+        "back": "Indietro",
+        "importTransactions": "Importa transazioni",
+        "checkForDuplicates": "Check per duplicati"
+      },
+      "createAccountDialog": {
+        "title": "Crea Conto per Importa",
+        "description": "Crea un Nuovo Conto un Importa Il tuo Estratto conto Transazioni.",
+        "accountNameLabel": "Conto Nome",
+        "currencyLabel": "Valuta",
+        "fromStatement": "(da Estratto conto)",
+        "currencyLocked": "Valuta è bloccato un corrispondenza il Estratto conto ({currency}).",
+        "currencyWillBeAdded": "Nota: {currency} sarà essere aggiunto un Il tuo Valute.",
+        "cancel": "Annulla",
+        "creating": "creazione...",
+        "createAccount": "Crea Conto",
+        "validation": {
+          "nameRequired": "Conto Il nome è obbligatorio",
+          "currencyRequired": "per favore Seleziona un Valuta"
+        },
+        "success": "Conto creato correttamente",
+        "error": "Impossibile Crea Conto"
+      },
+      "transactionReview": {
+        "checkingDuplicates": "Checking per duplicati...",
+        "extractedLabel": "Extracted:",
+        "duplicatesLabel": "Potential duplicati:",
+        "willImportLabel": "sarà Importa:",
+        "alreadyInAccountLabel": "già in Conto:",
+        "timelineTitle": "Transazione Timeline",
+        "legendNew": "Nuovo",
+        "legendDuplicate": "Duplicate",
+        "legendExisting": "esistente",
+        "statusDup": "Dup",
+        "statusImport": "Importa",
+        "statusExists": "Exists",
+        "duplicateInfoSkipped": "{count} Transazioni sarà essere skipped come duplicati.",
+        "duplicateInfoOverridden": "{count} duplicati hai been overridden e sarà essere importato.",
+        "toggleInfo": "fai clic su un riga un toggle:",
+        "toggleWillImport": "sarà Importa,",
+        "toggleWillSkip": "sarà skip.",
+        "backButton": "Indietro",
+        "continueButton": "Continua un Importa",
+        "transactionCount": "({count} Transazioni)",
+        "duplicateCheckFailed": "We non è stato possibile check questo Estratto conto against Il tuo esistente Transazioni, so il duplicate count sotto è non disponibile. revisione il elenco prima di importazione."
+      },
+      "droppedRowsWarning": "{count} line da il AI risposta non è stato possibile essere Leggi e era skipped. il importato count sotto potrebbe essere lower di what's in Il tuo file. | {count} lines da il AI risposta non è stato possibile essere Leggi e erano skipped. il importato count sotto potrebbe essere lower di what's in Il tuo file.",
+      "importResults": {
+        "readyTitle": "Ready un Importa",
+        "readyDescription": "revisione il riepilogo sotto e fai clic \"Importa transazioni\" un proceed.",
+        "accountLabel": "Conto:",
+        "toImportLabel": "Transazioni un Importa:",
+        "toSkipLabel": "Transazioni un skip:",
+        "backButton": "Indietro",
+        "importButton": "Importa {count} Transazioni",
+        "importingTitle": "importazione Transazioni",
+        "importingDescription": "Attendi while we Importa Il tuo Transazioni...",
+        "failedTitle": "Importa non riuscito",
+        "failedDescription": "Nothing era importato. il Dettagli sotto come da il server.",
+        "tryAgainButton": "Riprova",
+        "completeTitle": "Importa Complete!",
+        "completeWithIssuesTitle": "Importa completato con Issues",
+        "successDescription": "Il tuo Transazioni hai been correttamente importato.",
+        "partialDescription": "alcuni Transazioni Impossibile essere importato.",
+        "importedLabel": "importato:",
+        "skippedLabel": "Skipped:",
+        "errorsTitle": "Importa errori",
+        "transactionNumberHeader": "Transazione #",
+        "errorHeader": "errore",
+        "batchIdNote": "Importa Batch ID: {batchId}. Puoi Usa questo ID un trova e Gestisci tutti importato Transazioni.",
+        "viewTransactionsButton": "Visualizza Transazioni",
+        "startNewImportButton": "Inizio Nuovo Importa"
+      }
+    }
+  }
+}

@@ -19,6 +19,12 @@ describe('getModelNameFromModelId', () => {
   it('strips only the provider segment for a single-slash ID', () => {
     expect(getModelNameFromModelId({ modelId: 'google/gemini-3.6-flash' })).toBe('gemini-3.6-flash');
   });
+
+  it('keeps the upstream provider prefix inside an OpenRouter model ID', () => {
+    expect(getModelNameFromModelId({ modelId: 'openrouter/anthropic/claude-sonnet-5' })).toBe(
+      'anthropic/claude-sonnet-5',
+    );
+  });
 });
 
 describe('getProviderFromModelId (strict, AVAILABLE_MODELS-backed)', () => {
@@ -41,6 +47,10 @@ describe('getProviderFromModelId (strict, AVAILABLE_MODELS-backed)', () => {
 
   it('returns null for a string with no registered provider prefix', () => {
     expect(getProviderFromModelId({ modelId: 'not-a-model-id-at-all' })).toBeNull();
+  });
+
+  it('resolves any bounded OpenRouter upstream model ID to OpenRouter', () => {
+    expect(getProviderFromModelId({ modelId: 'openrouter/anthropic/claude-sonnet-5' })).toBe(AI_PROVIDER.openrouter);
   });
 
   it.each(Object.values(AI_MODEL_ID))('assigns %s a provider whose prefix matches the ID itself', (modelId) => {
