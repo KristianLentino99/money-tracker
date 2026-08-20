@@ -9,6 +9,7 @@ import getPeriods from '@controllers/subscriptions/get-periods';
 import { getSubscriptionById, getSubscriptions } from '@controllers/subscriptions/get-subscriptions';
 import getSubscriptionsSummary from '@controllers/subscriptions/get-subscriptions-summary';
 import getUpcomingPayments from '@controllers/subscriptions/get-upcoming-payments';
+import { linkInstallment, unlinkInstallment } from '@controllers/subscriptions/link-installment-to-loan';
 import linkTransactions from '@controllers/subscriptions/link-transactions';
 import markPeriodPaid from '@controllers/subscriptions/mark-period-paid';
 import resetLogo from '@controllers/subscriptions/reset-logo';
@@ -110,6 +111,21 @@ router.delete(
   checkBaseCurrencyLock,
   validateEndpoint(unlinkTransactions.schema),
   unlinkTransactions.handler,
+);
+
+router.post(
+  '/:id/loan',
+  authenticateSession,
+  checkBaseCurrencyLock,
+  validateEndpoint(linkInstallment.schema),
+  linkInstallment.handler,
+);
+router.delete(
+  '/:id/loan',
+  authenticateSession,
+  checkBaseCurrencyLock,
+  validateEndpoint(unlinkInstallment.schema),
+  unlinkInstallment.handler,
 );
 
 router.get(

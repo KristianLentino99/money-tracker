@@ -4,6 +4,7 @@ import {
   type LoanEvent,
   type LoanEventApi,
   type LoanProjection,
+  type LoanInstallmentApiResponse,
 } from '@bt/shared/types';
 import { centsToApiDecimal, centsToApiDecimalOrNull } from '@common/types/money';
 import type LoanDetails from '@models/loan-details.model';
@@ -69,10 +70,12 @@ export function serializeLoan({
   loanDetails,
   projection,
   paymentsCount,
+  loanInstallments = [],
 }: {
   loanDetails: LoanDetails;
   projection: LoanProjection;
   paymentsCount: number;
+  loanInstallments?: LoanInstallmentApiResponse[];
 }): LoanApiResponse {
   const account = loanDetails.account;
   if (!account) {
@@ -83,6 +86,7 @@ export function serializeLoan({
     loanDetails: serializeLoanDetails(loanDetails),
     projection,
     paymentsCount,
+    loanInstallments,
   };
 }
 

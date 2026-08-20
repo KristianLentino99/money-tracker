@@ -40,6 +40,8 @@ const FORM_ID = 'quick-add-subscription-form';
 const props = defineProps<{
   /** Seeds the form each time the dialog opens (e.g. from a discovered candidate). */
   prefill?: Partial<QuickAddFormState> | null;
+  /** Keeps the caller in control of navigation after creation. */
+  stayOnPage?: boolean;
 }>();
 
 const isOpen = defineModel<boolean>('open', { required: true });
@@ -165,7 +167,9 @@ const { mutate: submit, isPending } = useMutation({
     // its `created` listener still needs (e.g. a pending candidate id).
     emit('created', created);
     isOpen.value = false;
-    router.push({ name: ROUTES_NAMES.plannedSubscriptionDetails, params: { id: created.id } });
+    if (!props.stayOnPage) {
+      router.push({ name: ROUTES_NAMES.plannedSubscriptionDetails, params: { id: created.id } });
+    }
   },
   onError: (error) => {
     formError.value =

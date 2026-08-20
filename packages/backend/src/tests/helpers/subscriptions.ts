@@ -216,6 +216,37 @@ export async function unlinkTransactionsFromSubscription<R extends boolean | und
   });
 }
 
+export async function linkInstallmentToLoan<R extends boolean | undefined = undefined>({
+  id,
+  loanAccountId,
+  raw,
+}: {
+  id: string;
+  loanAccountId: string;
+  raw?: R;
+}) {
+  return makeRequest<{ linked: boolean; loanAccountId: string }, R>({
+    method: 'post',
+    url: `/subscriptions/${id}/loan`,
+    payload: { loanAccountId },
+    raw,
+  });
+}
+
+export async function unlinkInstallmentFromLoan<R extends boolean | undefined = undefined>({
+  id,
+  raw,
+}: {
+  id: string;
+  raw?: R;
+}) {
+  return makeRequest<{ unlinked: boolean }, R>({
+    method: 'delete',
+    url: `/subscriptions/${id}/loan`,
+    raw,
+  });
+}
+
 export async function getSuggestedMatches<R extends boolean | undefined = undefined>({
   id,
   raw,

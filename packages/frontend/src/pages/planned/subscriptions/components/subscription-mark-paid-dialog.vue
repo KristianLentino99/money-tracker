@@ -6,6 +6,7 @@ import {
 } from '@/api/subscriptions';
 import { VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
 import { getAccountDisplayLabel } from '@/common/utils/account-display';
+import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import ResponsiveDialog from '@/components/common/responsive-dialog.vue';
 import AccountSelectField from '@/components/fields/account-select-field.vue';
 import DateField from '@/components/fields/date-field.vue';
@@ -15,11 +16,12 @@ import { Label } from '@/components/lib/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/lib/ui/radio-group';
 import { useNotificationCenter } from '@/components/notification-center';
 import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
+import { useFormatCurrency } from '@/composable/formatters';
 import { useAccountDropdownPrefs } from '@/composable/use-account-dropdown-prefs';
-import { ApiErrorResponseError } from '@/js/errors';
+import { ApiErrorResponseError, isApiErrorWithCode } from '@/js/errors';
 import { cn } from '@/lib/utils';
 import { useAccountsStore } from '@/stores';
-import type { AccountModel } from '@bt/shared/types';
+import { API_ERROR_CODES, type AccountModel, type LoanPaymentOverpayDetails } from '@bt/shared/types';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
@@ -37,6 +39,7 @@ interface PayableSubscription {
   expectedCurrencyCode: string | null;
   /** Account the generated expense is booked against. null = no account yet. */
   accountId: string | null;
+  loan?: { currencyCode: string } | null;
 }
 
 /** How an account-less payment is recorded: status-only vs. a booked expense. */
@@ -65,6 +68,13 @@ const { mutate: markPaid, isPending } = useMutation({
     emit('paid');
   },
   onError(error) {
+    if (isApiErrorWithCode(error, API_ERROR_CODES.loanPaymentOverpayConfirmationRequired)) {
+      overpayDetails.value = (error.data.details as LoanPaymentOverpayDetails | undefined) ?? null;
+      isOverpayConfirmOpen.value = true;
+      return;
+    }
+
+    isOverpayConfirmOpen.value = false;
     const message =
       error instanceof ApiErrorResponseError
         ? error.data.message
@@ -78,6 +88,7 @@ const { mutate: markPaid, isPending } = useMutation({
 const isDialogOpen = ref(false);
 const activeSubscription = ref<PayableSubscription | null>(null);
 const activePeriodId = ref<string | null>(null);
+const pendingPayPayload = ref<Parameters<typeof markSubscriptionPeriodPaid>[0] | null>(null);
 const amount = ref<string>('');
 const paidDate = ref<Date>(new Date());
 const isEstimateLoading = ref(false);
@@ -87,6 +98,21 @@ const today = new Date();
 // Account-less flow only: the user's choice + the account they pick to book against.
 const recordMode = ref<RecordMode>('mark');
 const selectedAccountId = ref<string | null>(null);
+const isOverpayConfirmOpen = ref(false);
+const overpayDetails = ref<LoanPaymentOverpayDetails | null>(null);
+const { formatAmountByCurrencyCode } = useFormatCurrency();
+
+function submitPay(payload: Parameters<typeof markSubscriptionPeriodPaid>[0]) {
+  pendingPayPayload.value = payload;
+  markPaid(payload);
+}
+
+const overpayAmountDisplay = computed(() => {
+  const currencyCode = activeSubscription.value?.loan?.currencyCode ?? activeSubscription.value?.expectedCurrencyCode;
+  return overpayDetails.value && currencyCode
+    ? formatAmountByCurrencyCode(overpayDetails.value.overpayBy, currencyCode)
+    : '';
+});
 
 /** A subscription that already has an account skips the choice UI entirely. */
 const hasAccount = computed(() => activeSubscription.value?.accountId != null);
@@ -176,7 +202,9 @@ async function triggerPay({ subscription, periodId }: { subscription: PayableSub
 
   // Fixed amount in the account's own currency: book in one click.
   if (subscription.expectedAmount != null && !crossCurrency) {
-    markPaid({ id: subscription.id, periodId, createTransaction: true, time: new Date() });
+    activeSubscription.value = subscription;
+    activePeriodId.value = periodId;
+    submitPay({ id: subscription.id, periodId, createTransaction: true, time: new Date() });
     return;
   }
 
@@ -222,11 +250,11 @@ function confirmPay() {
 
   // Account-less, user chose to only update the schedule.
   if (!isBooking.value) {
-    markPaid({ id, periodId });
+    submitPay({ id, periodId });
     return;
   }
 
-  markPaid({
+  submitPay({
     id,
     periodId,
     createTransaction: true,
@@ -236,6 +264,11 @@ function confirmPay() {
     // it to the subscription so future payments reuse it.
     ...(!hasAccount.value && selectedAccountId.value ? { accountId: selectedAccountId.value } : {}),
   });
+}
+
+function confirmOverpay() {
+  if (!pendingPayPayload.value) return;
+  submitPay({ ...pendingPayPayload.value, confirmOverpay: true });
 }
 
 defineExpose({ triggerPay, isPending });
@@ -357,4 +390,17 @@ defineExpose({ triggerPay, isPending });
       </div>
     </template>
   </ResponsiveDialog>
+
+  <ResponsiveAlertDialog
+    v-model:open="isOverpayConfirmOpen"
+    :confirm-label="$t('planned.subscriptions.markPaid.overpayConfirmButton')"
+    :confirm-disabled="isPending"
+    confirm-variant="destructive"
+    @confirm="confirmOverpay"
+  >
+    <template #title>{{ $t('planned.subscriptions.markPaid.overpayTitle') }}</template>
+    <template #description>
+      {{ $t('planned.subscriptions.markPaid.overpayDescription', { amount: overpayAmountDisplay }) }}
+    </template>
+  </ResponsiveAlertDialog>
 </template>

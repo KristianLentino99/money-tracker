@@ -7,6 +7,8 @@ import {
   SubscriptionMatchingRules,
 } from '@bt/shared/types';
 import { Money, centsToApiDecimalOrNull } from '@common/types/money';
+import { t } from '@i18n/index';
+import { ValidationError } from '@js/errors';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import Subscriptions from '@models/subscriptions.model';
 import { resolveManualLogoFields } from '@services/brand-logos';
@@ -113,6 +115,16 @@ export const updateSubscription = withTransaction(
       subscriptionId: id,
       maxOccurrences: fields.maxOccurrences !== undefined ? fields.maxOccurrences : subscription.maxOccurrences,
     });
+
+    if (subscription.loanAccountId != null) {
+      const nextType = fields.type ?? subscription.type;
+      if (nextType !== SUBSCRIPTION_TYPES.installment) {
+        throw new ValidationError({ message: t({ key: 'loans.loanInstallmentOnly' }) });
+      }
+      if (fields.accountId === subscription.loanAccountId) {
+        throw new ValidationError({ message: t({ key: 'loans.loanInstallmentSourceAccount' }) });
+      }
+    }
 
     // The summary endpoint converts expectedAmount into the user's base currency,
     // which requires a UsersCurrencies row for the subscription's currency —

@@ -176,6 +176,11 @@
       "suggestError": "Failed to load suggested matches",
       "linkSuccess": "Transactions linked successfully",
       "linkError": "Failed to link transactions",
+      "markPaid": {
+        "overpayTitle": "Payment exceeds the balance",
+        "overpayDescription": "This payment exceeds the remaining balance by {amount}. Mark it as paid anyway?",
+        "overpayConfirmButton": "Mark as paid anyway"
+      },
       "emptyState": {
         "title": "No recurring payments yet",
         "description": "Add your first recurring charge or bill to start tracking recurring payments"

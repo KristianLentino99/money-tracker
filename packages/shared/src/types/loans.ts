@@ -1,5 +1,5 @@
 import type { AccountApiResponse } from './db-models';
-import type { LOAN_TYPE } from './enums';
+import type { LOAN_TYPE, SUBSCRIPTION_FREQUENCIES } from './enums';
 import type { RecordId } from './record-id';
 
 /**
@@ -161,6 +161,7 @@ export type LoanApiResponse = AccountApiResponse & {
   projection: LoanProjection;
   /** Payment-leg count; the frontend warns that deletion is blocked before the user confirms. */
   paymentsCount: number;
+  loanInstallments: LoanInstallmentApiResponse[];
 };
 
 /** One point in a loan's outstanding-balance series, in the loan's native currency. */
@@ -172,4 +173,19 @@ export interface LoanBalanceHistoryPoint {
    * negative while debt is outstanding, 0 once settled (never positive).
    */
   amount: number;
+}
+
+/** Installment schedules owned by a loan and applied only to future periods. */
+export interface LoanInstallmentApiResponse {
+  id: RecordId;
+  name: string;
+  expectedAmount: number | null;
+  expectedCurrencyCode: string | null;
+  frequency: SUBSCRIPTION_FREQUENCIES;
+  startDate: string;
+  dueDate: string | null;
+  maxOccurrences: number | null;
+  paidPeriodsCount: number;
+  isActive: boolean;
+  completedAt: string | null;
 }

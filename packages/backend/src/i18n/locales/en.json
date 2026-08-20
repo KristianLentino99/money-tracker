@@ -174,7 +174,12 @@
     "unlinkPaymentNotFound": "Loan payment not found.",
     "unlinkPaymentInvalidSelection": "This transaction is not a payment on this loan.",
     "correctionAsOfBeforeStartDate": "currentBalanceAsOf cannot be earlier than the loan start date",
-    "correctionOverpay": "Corrected balance would overpay the loan by {{overpayAmount}}: payments totaling {{paymentsTotal}} are dated on/after {{asOfDate}}"
+    "correctionOverpay": "Corrected balance would overpay the loan by {{overpayAmount}}: payments totaling {{paymentsTotal}} are dated on/after {{asOfDate}}",
+    "loanNotActive": "This loan is no longer active or has already been paid off.",
+    "loanInstallmentOnly": "Only expense installments can be linked to a loan.",
+    "loanInstallmentAlreadyLinked": "This installment is already linked to a loan.",
+    "loanInstallmentSourceAccount": "The installment source account cannot be the loan account.",
+    "loanInstallmentRequiresTransaction": "A loan-linked installment must create or link a real transaction."
   },
   "errors": {
     "connectionNotFound": "Connection not found",

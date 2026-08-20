@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading...",
+    "cancel": "Cancel",
     "new": "New",
     "actions": {
       "loading": "Loading...",

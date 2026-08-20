@@ -136,6 +136,20 @@ export const unlinkTransactionsFromSubscription = async ({
   });
 };
 
+export const linkInstallmentToLoan = async ({
+  id,
+  loanAccountId,
+}: {
+  id: string;
+  loanAccountId: string;
+}): Promise<{ linked: boolean; loanAccountId: string }> => {
+  return api.post(`/subscriptions/${id}/loan`, { loanAccountId });
+};
+
+export const unlinkInstallmentFromLoan = async ({ id }: { id: string }): Promise<{ unlinked: boolean }> => {
+  return api.delete(`/subscriptions/${id}/loan`);
+};
+
 export const loadSuggestedMatches = async ({ id }: { id: string }): Promise<TransactionModel[]> => {
   return api.get(`/subscriptions/${id}/suggest-matches`);
 };
@@ -213,6 +227,7 @@ export const markSubscriptionPeriodPaid = async ({
   amount,
   time,
   accountId,
+  confirmOverpay,
 }: {
   id: string;
   periodId: string;
@@ -230,6 +245,7 @@ export const markSubscriptionPeriodPaid = async ({
    * "create a transaction" flow for account-less subscriptions.
    */
   accountId?: string | null;
+  confirmOverpay?: boolean;
 }): Promise<SubscriptionPeriodModel> => {
   const payload: Record<string, unknown> = {};
   if (transactionId !== undefined) payload.transactionId = transactionId;
@@ -238,6 +254,7 @@ export const markSubscriptionPeriodPaid = async ({
   if (amount !== undefined) payload.amount = amount;
   if (time !== undefined) payload.time = time.toISOString();
   if (accountId !== undefined) payload.accountId = accountId;
+  if (confirmOverpay !== undefined) payload.confirmOverpay = confirmOverpay;
 
   return api.post(`/subscriptions/${id}/periods/${periodId}/pay`, Object.keys(payload).length ? payload : undefined);
 };

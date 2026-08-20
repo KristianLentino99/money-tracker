@@ -58,6 +58,7 @@
               <EventsTimeline :events="loan.loanDetails.events" :currency-code="loan.currencyCode" />
             </div>
           </div>
+          <LoanInstallmentsCard :loan="loan" :can-manage="canManageInstallments" />
         </div>
 
         <!-- Narrow layout: projection and chart share one card, chart tucked into a collapsible section. -->
@@ -96,6 +97,7 @@
 
           <RecentPayments :loan="loan" />
           <EventsTimeline :events="loan.loanDetails.events" :currency-code="loan.currencyCode" />
+          <LoanInstallmentsCard :loan="loan" :can-manage="canManageInstallments" />
         </div>
       </div>
     </template>
@@ -121,6 +123,7 @@ import BalanceJourneyChart from './components/balance-journey-chart.vue';
 import EventsTimeline from './components/events-timeline.vue';
 import LoanActionsMenu from './components/loan-actions-menu.vue';
 import LoanCostCard from './components/loan-cost-card.vue';
+import LoanInstallmentsCard from './components/loan-installments-card.vue';
 import PayoffProjectionChart from './components/payoff-projection-chart.vue';
 import ProjectionCard from './components/projection-card.vue';
 import ProjectionCardContent from './components/projection-card-content.vue';
@@ -140,6 +143,9 @@ const loan = computed(() => loanQuery.data.value ?? null);
 const isPaidOff = computed(() => loan.value?.projection.isPaidOff ?? false);
 
 const isArchived = computed(() => loan.value?.status === ACCOUNT_STATUSES.archived);
+const canManageInstallments = computed(() =>
+  Boolean(loan.value && !loan.value.projection.isPaidOff && !isArchived.value),
+);
 
 // Restructuring (merge + reorder cards) below this width can't be expressed in pure CSS, so JS-measured
 // width drives the switch. The loading skeleton uses a CSS `@3xl/loans-detail` query for the same 768px —

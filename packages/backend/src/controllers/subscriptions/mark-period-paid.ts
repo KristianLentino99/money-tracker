@@ -24,6 +24,9 @@ const schema = z.object({
       // linked to the subscription so future payments reuse it. Used by the
       // pay-time "create a transaction" flow for account-less subscriptions.
       accountId: recordId().nullable().optional(),
+      // Loan-linked installments require a real transaction and may ask for
+      // explicit confirmation when the payment would settle beyond zero.
+      confirmOverpay: z.boolean().optional(),
     })
     .optional()
     // Create-mode and link-mode can't be combined: the user either links an
@@ -45,6 +48,7 @@ export default createController(schema, async ({ user, params, body }) => {
     amount: body?.amount,
     time: body?.time,
     accountId: body?.accountId,
+    confirmOverpay: body?.confirmOverpay,
   });
 
   return { data: period };

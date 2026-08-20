@@ -1,11 +1,12 @@
 import { api } from '@/api/_api';
-import type { LoanApiResponse, LoanBalanceHistoryPoint } from '@bt/shared/types';
+import type { LoanApiResponse, LoanBalanceHistoryPoint, LoanInstallmentApiResponse } from '@bt/shared/types';
 import { LOAN_TYPE } from '@bt/shared/types';
 
 // The loan/balance-history wire shapes live in @bt/shared/types, shared with the
 // backend serializer so the two can't drift. `LoanApi` keeps the frontend-local
 // name every consumer already imports.
 export type { LoanApiResponse as LoanApi, LoanBalanceHistoryPoint };
+export type { LoanInstallmentApiResponse };
 
 export const getLoans = async (): Promise<LoanApiResponse[]> => {
   return api.get('/loans');

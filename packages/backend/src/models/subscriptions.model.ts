@@ -94,6 +94,13 @@ export default class Subscriptions extends Model {
   })
   accountId!: RecordId | null;
 
+  @ForeignKey(() => Accounts)
+  @Column({
+    type: DataType.UUID,
+    allowNull: true,
+  })
+  loanAccountId!: RecordId | null;
+
   @ForeignKey(() => Categories)
   @Column({
     type: DataType.UUID,
@@ -225,6 +232,9 @@ export default class Subscriptions extends Model {
 
   @BelongsTo(() => Accounts)
   account!: Accounts;
+
+  @BelongsTo(() => Accounts, { foreignKey: 'loanAccountId', as: 'loan' })
+  loan!: Accounts | null;
 
   @BelongsTo(() => Categories)
   category!: Categories;

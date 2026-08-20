@@ -48,6 +48,7 @@ interface SubscriptionBase extends Pick<
   | 'startDate'
   | 'endDate'
   | 'accountId'
+  | 'loanAccountId'
   | 'categoryId'
   | 'payeeId'
   | 'matchingRules'
@@ -69,6 +70,7 @@ interface SubscriptionBase extends Pick<
   expectedAmount: number | null;
   tagIds: string[];
   account: SubscriptionAccount | null;
+  loan: SubscriptionAccount | null;
   category: SubscriptionCategory | null;
 }
 
@@ -169,7 +171,8 @@ export const getSubscriptions = async ({
       ],
     },
     include: [
-      { model: Accounts, attributes: ['id', 'name', 'currencyCode'] },
+      { model: Accounts, as: 'account', attributes: ['id', 'name', 'currencyCode'] },
+      { model: Accounts, as: 'loan', attributes: ['id', 'name', 'currencyCode'] },
       { model: Categories, attributes: ['id', 'name', 'color', 'icon'] },
       transactionsInclude({
         planned: 'exclude',
@@ -180,7 +183,7 @@ export const getSubscriptions = async ({
         required: false,
       }),
     ],
-    group: ['Subscriptions.id', 'account.id', 'category.id'],
+    group: ['Subscriptions.id', 'account.id', 'loan.id', 'category.id'],
     order: [['createdAt', 'DESC']],
     subQuery: false,
   });
@@ -193,6 +196,7 @@ export const getSubscriptions = async ({
     };
     return {
       ...plain,
+      loanAccountId: plain.loanAccountId ?? plain.loan?.id ?? null,
       expectedAmount: centsToApiDecimalOrNull(plain.expectedAmount),
       linkedTransactionsCount: Number(plain.linkedTransactionsCount ?? 0),
     };
@@ -297,7 +301,8 @@ export const getSubscriptionById = async ({
     query: Subscriptions.findOne({
       where: { id, userId },
       include: [
-        { model: Accounts, attributes: ['id', 'name', 'currencyCode'] },
+        { model: Accounts, as: 'account', attributes: ['id', 'name', 'currencyCode'] },
+        { model: Accounts, as: 'loan', attributes: ['id', 'name', 'currencyCode'] },
         { model: Categories, attributes: ['id', 'name', 'color', 'icon'] },
         // The detail dialog is the only place a planned link can be unlinked, so its
         // payload keeps planned rows.
@@ -349,6 +354,7 @@ export const getSubscriptionById = async ({
 
   return {
     ...raw,
+    loanAccountId: raw.loanAccountId ?? raw.loan?.id ?? null,
     expectedAmount: centsToApiDecimalOrNull(raw.expectedAmount),
     tagIds: await getSubscriptionTagIds({ subscriptionId: id }),
     transactions,

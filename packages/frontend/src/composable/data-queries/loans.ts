@@ -97,6 +97,14 @@ export const useUnlinkLoanPayment = () => {
   });
 };
 
+export const useInvalidateLoanQueries = () => {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.loansList });
+    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.loanDetail });
+  };
+};
+
 export const useLoanById = ({ id }: { id: MaybeRef<string> }) => {
   const queryClient = useQueryClient();
 

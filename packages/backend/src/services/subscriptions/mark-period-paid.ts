@@ -5,6 +5,7 @@ import { ConflictError, ValidationError } from '@js/errors';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import { findOneTransaction } from '@models/transactions-query';
 import { withTransaction } from '@services/common/with-transaction';
+import { linkLoanPayments } from '@services/loans/link-loan-payments.service';
 import { createTransaction } from '@services/transactions/create-transaction';
 
 import { buildTransactionFromSubscription } from './build-transaction-from-subscription';
@@ -32,6 +33,8 @@ interface MarkPeriodPaidParams {
    * once, at the first pay, rather than every cycle).
    */
   accountId?: string | null;
+  /** Confirm an explicit overpayment when this installment settles a Loan. */
+  confirmOverpay?: boolean;
 }
 
 export const markPeriodPaid = withTransaction(
@@ -45,6 +48,7 @@ export const markPeriodPaid = withTransaction(
     amount,
     time,
     accountId,
+    confirmOverpay = false,
   }: MarkPeriodPaidParams) => {
     const subscription = await findSubscriptionOrThrow({ id: subscriptionId, userId });
 
@@ -61,6 +65,14 @@ export const markPeriodPaid = withTransaction(
 
     if (period.status === SUBSCRIPTION_PERIOD_STATUSES.skipped) {
       throw new ConflictError({ message: 'This period was skipped — undo the skip first.' });
+    }
+
+    if (subscription.loanAccountId != null && transactionId == null && !shouldCreateTransaction) {
+      throw new ValidationError({ message: t({ key: 'loans.loanInstallmentRequiresTransaction' }) });
+    }
+
+    if (subscription.loanAccountId != null && accountId === subscription.loanAccountId) {
+      throw new ValidationError({ message: t({ key: 'loans.loanInstallmentSourceAccount' }) });
     }
 
     // Pay-time account selection: an account-less subscription can name an account
@@ -118,6 +130,15 @@ export const markPeriodPaid = withTransaction(
           message: 'This transaction is already linked to another subscription period.',
         });
       }
+    }
+
+    if (subscription.loanAccountId != null && linkedTransactionId != null) {
+      await linkLoanPayments({
+        userId,
+        accountId: subscription.loanAccountId,
+        transactionIds: [linkedTransactionId],
+        confirmOverpay,
+      });
     }
 
     await period.update({

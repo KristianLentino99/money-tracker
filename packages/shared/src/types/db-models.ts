@@ -634,6 +634,10 @@ export interface SubscriptionModel extends EntityLogoFields {
   startDate: string;
   endDate: string | null;
   accountId: RecordId | null;
+  /** Loan account settled by future installment payments; only installment expenses may set this. */
+  loanAccountId?: RecordId | null;
+  /** Lightweight owner loan summary included by subscription reads. */
+  loan?: SubscriptionLoanSummary | null;
   categoryId: RecordId | null;
   /** Payee stamped onto transactions matched or booked by this subscription,
    *  unless the transaction already carries a payee or the user locked it. */
@@ -671,6 +675,12 @@ export interface SubscriptionModel extends EntityLogoFields {
   logoSource: LogoResolutionState;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface SubscriptionLoanSummary {
+  id: RecordId;
+  name: string;
+  currencyCode: string;
 }
 
 export interface SubscriptionPeriodModel {

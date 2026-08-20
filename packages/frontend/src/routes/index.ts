@@ -73,7 +73,7 @@ const routes: RouteRecordRaw[] = [
         path: '/loans/:id',
         name: ROUTES_NAMES.loanDetail,
         component: () => import('@/pages/loans/detail.vue'),
-        meta: { i18nChunks: ['pages/loans', 'pages/transactions'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/loans', 'pages/planned', 'pages/transactions'] as I18nChunkName[] },
       },
       {
         path: '/investments',
