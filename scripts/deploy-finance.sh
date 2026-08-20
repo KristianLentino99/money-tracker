@@ -15,6 +15,8 @@ readonly FINANCE_USER="${FINANCE_USER:-ubuntu}"
 readonly APP_DIR="${FINANCE_APP_DIR:-/opt/money-tracker}"
 readonly REMOTE="${FINANCE_USER}@${FINANCE_HOST}"
 readonly ALLOW_REMOTE_DIRTY="${FINANCE_ALLOW_REMOTE_DIRTY:-0}"
+readonly GOOGLE_OAUTH_SECRET_ID="${FINANCE_GOOGLE_OAUTH_SECRET_ID:-money-tracker/finance/google-oauth}"
+readonly SYNC_GOOGLE_OAUTH="${FINANCE_SYNC_GOOGLE_OAUTH:-1}"
 # Vite + vue-tsc exceed Node's ~2 GB default heap on this project. This is used
 # only for the local, disposable image build; the runtime containers keep
 # Node's normal memory settings. Override only if the build machine has a
@@ -34,6 +36,11 @@ require_command git
 require_command gzip
 require_command ssh
 
+if [[ "$SYNC_GOOGLE_OAUTH" != '0' && "$SYNC_GOOGLE_OAUTH" != '1' ]]; then
+  echo "FINANCE_SYNC_GOOGLE_OAUTH must be 0 or 1" >&2
+  exit 1
+fi
+
 cd "$REPO_DIR"
 
 # Build a committed, remote-tracked revision in an isolated worktree. This
@@ -46,6 +53,20 @@ readonly BUILD_DIR="$(mktemp -d "${TMPDIR:-/tmp}/money-tracker-finance-build.XXX
 readonly SSH_KEY="$(mktemp "${TMPDIR:-/tmp}/money-tracker-finance-key.XXXXXX")"
 
 cleanup() {
+  if [[ "${SYNC_GOOGLE_OAUTH:-0}" == '1' && -n "${REMOTE_GOOGLE_OAUTH_FILE:-}" ]]; then
+    # The remote activation script also removes the file. This second cleanup
+    # covers failures between the upload SSH session and the activation SSH
+    # session, so a transient deployment error cannot leave the secret in /run.
+    ssh \
+      -i "$SSH_KEY" \
+      -o BatchMode=yes \
+      -o StrictHostKeyChecking=accept-new \
+      -o UserKnownHostsFile="${TMPDIR:-/tmp}/money-tracker-finance-known-hosts" \
+      -o ConnectTimeout=20 \
+      "$REMOTE" \
+      "sudo rm -f -- '$REMOTE_GOOGLE_OAUTH_FILE'" \
+      >/dev/null 2>&1 || true
+  fi
   rm -f -- "$SSH_KEY"
   git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || rm -rf -- "$BUILD_DIR"
 }
@@ -70,6 +91,7 @@ readonly SSH_OPTIONS=(
 )
 readonly BACKEND_IMAGE="money-tracker-finance-backend:finance-${TARGET_SHORT_SHA}"
 readonly FRONTEND_IMAGE="money-tracker-finance-frontend:finance-${TARGET_SHORT_SHA}"
+readonly REMOTE_GOOGLE_OAUTH_FILE="/run/money-tracker-finance-google-oauth-${TARGET_SHORT_SHA}.json"
 
 echo "Building linux/amd64 images for ${TARGET_SHA}..."
 docker buildx build \
@@ -91,10 +113,30 @@ docker buildx build \
 echo "Uploading release images to ${FINANCE_HOST}..."
 docker image save "$BACKEND_IMAGE" "$FRONTEND_IMAGE" | gzip | ssh "${SSH_OPTIONS[@]}" "$REMOTE" 'gzip -d | sudo docker image load'
 
+if [[ "$SYNC_GOOGLE_OAUTH" == '1' ]]; then
+  echo "Synchronizing Google OAuth credentials from AWS Secrets Manager..."
+  # SecretString is streamed through SSH stdin. It is never put in this
+  # script's command arguments, repository, or deployment logs.
+  aws secretsmanager get-secret-value \
+    --region "$AWS_REGION" \
+    --secret-id "$GOOGLE_OAUTH_SECRET_ID" \
+    --query SecretString \
+    --output text |
+    ssh "${SSH_OPTIONS[@]}" "$REMOTE" \
+      "sudo install -m 600 /dev/stdin '$REMOTE_GOOGLE_OAUTH_FILE'"
+fi
+
 echo "Activating ${TARGET_SHORT_SHA} on the server..."
 ssh "${SSH_OPTIONS[@]}" "$REMOTE" \
-  "TARGET_SHA='$TARGET_SHA' BACKEND_IMAGE='$BACKEND_IMAGE' FRONTEND_IMAGE='$FRONTEND_IMAGE' APP_DIR='$APP_DIR' ALLOW_REMOTE_DIRTY='$ALLOW_REMOTE_DIRTY' bash -s" <<'REMOTE_SCRIPT'
+  "TARGET_SHA='$TARGET_SHA' BACKEND_IMAGE='$BACKEND_IMAGE' FRONTEND_IMAGE='$FRONTEND_IMAGE' APP_DIR='$APP_DIR' ALLOW_REMOTE_DIRTY='$ALLOW_REMOTE_DIRTY' SYNC_GOOGLE_OAUTH='$SYNC_GOOGLE_OAUTH' REMOTE_GOOGLE_OAUTH_FILE='$REMOTE_GOOGLE_OAUTH_FILE' bash -s" <<'REMOTE_SCRIPT'
 set -Eeuo pipefail
+
+cleanup_google_oauth_secret() {
+  if [[ "$SYNC_GOOGLE_OAUTH" == '1' ]]; then
+    sudo rm -f -- "$REMOTE_GOOGLE_OAUTH_FILE"
+  fi
+}
+trap cleanup_google_oauth_secret EXIT
 
 if [[ ! -d "$APP_DIR/.git" ]]; then
   echo "Missing Git checkout at $APP_DIR" >&2
@@ -119,6 +161,15 @@ if [[ -n "$remote_dirty" ]]; then
   sudo git -C "$APP_DIR" reset --hard "$TARGET_SHA"
 fi
 sudo git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
+
+if [[ "$SYNC_GOOGLE_OAUTH" == '1' ]]; then
+  if ! sudo test -s "$REMOTE_GOOGLE_OAUTH_FILE"; then
+    echo "Google OAuth secret was not transferred to the server." >&2
+    exit 1
+  fi
+  sudo python3 "$APP_DIR/scripts/sync-finance-google-secret.py" \
+    "$APP_DIR/self-hosting/.env" < "$REMOTE_GOOGLE_OAUTH_FILE"
+fi
 
 sudo docker tag "$BACKEND_IMAGE" money-tracker-finance-backend:latest
 sudo docker tag "$FRONTEND_IMAGE" money-tracker-finance-frontend:latest

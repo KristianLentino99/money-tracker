@@ -20,7 +20,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y ca-certificates curl git
+apt-get install -y ca-certificates curl git python3
 
 install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -77,6 +77,9 @@ APPLICATION_REDIS_HOST=redis
 APPLICATION_HOST=0.0.0.0
 APPLICATION_PORT=8081
 SYSTEM_DEMO_DISABLED=true
+# Google OAuth is intentionally not stored in Lightsail user-data. After the
+# host is bootstrapped, scripts/deploy-finance.sh reads it from AWS Secrets
+# Manager and injects it into this .env over SSH. Never add either value here.
 # The 2 GB Lightsail plan is enough at runtime; Vite's source build needs a
 # larger temporary V8 heap. The instance's 2 GB swap absorbs that peak.
 FRONTEND_BUILD_NODE_OPTIONS=--max-old-space-size=3072

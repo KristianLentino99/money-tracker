@@ -124,6 +124,7 @@ export class YahooDataProvider extends BaseSecurityDataProvider {
           client: this.client,
           isin: normalizedQuery,
           seenSymbolsFromPrimary: seenSymbols,
+          nameFromPrimary: results.find((result) => result.name)?.name,
         });
         for (const r of fallbackResults) {
           if (!seenSymbols.has(r.symbol)) {

@@ -213,6 +213,38 @@ describe('GET /investments/securities/search', () => {
     expect(results[0]!.isInPortfolio).toBe(false);
   });
 
+  it('prioritizes the portfolio display currency without hiding other listings', async () => {
+    const portfolio = await helpers.createPortfolio({
+      payload: { displayCurrencyCode: 'EUR' },
+      raw: true,
+    });
+
+    mockedFmpSearch.mockResolvedValue([
+      {
+        symbol: 'USSC.L',
+        name: 'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc',
+        currency: 'USD',
+        stockExchange: 'London',
+        exchangeShortName: 'LSE',
+      },
+      {
+        symbol: 'ZPRV.DE',
+        name: 'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc',
+        currency: 'EUR',
+        stockExchange: 'XETRA',
+        exchangeShortName: 'GER',
+      },
+    ]);
+
+    const results = await helpers.searchSecurities({
+      payload: { query: 'IE00BSPLC413', portfolioId: portfolio.id },
+      raw: true,
+    });
+
+    expect(results.map((result) => result.symbol)).toEqual(['ZPRV.DE', 'USSC.L']);
+    expect(results.map((result) => result.currencyCode)).toEqual(['EUR', 'USD']);
+  });
+
   it('drops crypto results from stock providers (CoinGecko owns crypto)', async () => {
     // FmpDataProvider.mapToAssetClass marks anything BTC/ETH/CRYPTO as crypto.
     // Since CoinGecko is the single source of truth for crypto, those entries

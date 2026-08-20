@@ -4,10 +4,13 @@ import type YahooFinance from 'yahoo-finance2';
 
 import { ISIN_EXCHANGE_SUFFIXES, isExpectedNotFoundError, mapYahooTypeToAssetClass, remapUcitsType } from './utils';
 
-// Cap on the number of additional local-ticker candidates we'll quote per ISIN
-// search – guards against a name-match search returning dozens of distantly
-// related funds and triggering a quote storm.
-const MAX_LOCAL_TICKER_CANDIDATES = 6;
+// Yahoo's search endpoint returns only six quote rows by default. That is too
+// small for multi-listed UCITS ETFs: the USD London listing can occupy the
+// first row while the EUR Xetra listing is further down the same response.
+// Keep an explicit cap so a broad name match cannot trigger an unbounded quote
+// storm, but fetch enough candidates to cover the normal European venues.
+const LOCAL_TICKER_SEARCH_QUOTES_COUNT = 25;
+const MAX_LOCAL_TICKER_CANDIDATES = 20;
 
 type YahooClient = InstanceType<typeof YahooFinance>;
 type YahooQuoteResult = Awaited<ReturnType<YahooClient['quote']>>;
@@ -21,12 +24,13 @@ type YahooQuoteResult = Awaited<ReturnType<YahooClient['quote']>>;
  *     `.IR` for Irish-domiciled funds) – that's the "primary" listing we find
  *     this way. It has sparse historical data on Yahoo's chart endpoint.
  *
- *  2. Take the resolved fund's longName and `search()` Yahoo by it. The same
- *     ETF trades on multiple exchanges under local tickers (e.g. `MEUD.PA`
- *     Paris, `CS51.DE` Xetra, `EUNL.L` London) – those local-ticker listings
- *     usually carry full daily history. We quote each candidate to confirm
- *     currency and venue, then surface them alongside the ISIN-suffix row so
- *     the user picks the one matching their broker.
+ *  2. Take the resolved fund's longName – or the primary search hit's name
+ *     when no ISIN-suffix quote resolves – and `search()` Yahoo by it. The
+ *     same ETF trades on multiple exchanges under local tickers (e.g.
+ *     `MEUD.PA` Paris, `CS51.DE` Xetra, `EUNL.L` London) – those local-ticker
+ *     listings usually carry full daily history. We quote each candidate to
+ *     confirm currency and venue, then surface them alongside the ISIN-suffix
+ *     row so the user picks the one matching their broker.
  *
  * Phase-1 (ISIN-suffix) rows then have `priceSourceSymbol` set to the first
  * same-currency local-ticker symbol from phase 2. That preserves the row's
@@ -37,10 +41,12 @@ export async function resolveByIsinFallback({
   client,
   isin,
   seenSymbolsFromPrimary,
+  nameFromPrimary,
 }: {
   client: YahooClient;
   isin: string;
   seenSymbolsFromPrimary: Set<string>;
+  nameFromPrimary?: string;
 }): Promise<SecuritySearchResult[]> {
   const suffixSymbols = ISIN_EXCHANGE_SUFFIXES.map((suffix) => `${isin}${suffix}`);
   const suffixQuotes = await Promise.allSettled(suffixSymbols.map((symbol) => client.quote(symbol)));
@@ -50,7 +56,10 @@ export async function resolveByIsinFallback({
   // doesn't waste a `quote()` round-trip on a candidate the caller would
   // discard anyway.
   const seenSymbols = new Set<string>(seenSymbolsFromPrimary);
-  let nameForLookup: string | undefined;
+  // A primary ISIN search may already resolve to a local ticker (for example
+  // USSC.L) while every `<ISIN>.<suffix>` probe misses. Keep that primary
+  // name so the multi-venue lookup still runs in this common Yahoo shape.
+  let nameForLookup = nameFromPrimary;
   let resolvedCount = 0;
   let emptyCount = 0;
 
@@ -194,7 +203,11 @@ async function findLocalTickersByName({
 }): Promise<SecuritySearchResult[]> {
   let candidateSymbols: string[];
   try {
-    const lookup = (await client.search(name, { newsCount: 0 }, { validateResult: false })) as {
+    const lookup = (await client.search(
+      name,
+      { quotesCount: LOCAL_TICKER_SEARCH_QUOTES_COUNT, newsCount: 0 },
+      { validateResult: false },
+    )) as {
       quotes?: unknown[];
     };
     const quotes = Array.isArray(lookup.quotes) ? (lookup.quotes as Array<Record<string, unknown>>) : [];

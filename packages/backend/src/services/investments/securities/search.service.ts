@@ -10,6 +10,7 @@ import { logger } from '@js/utils';
 import Holdings from '@models/investments/holdings.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Securities from '@models/investments/securities.model';
+import { getBaseCurrency } from '@models/users-currencies.model';
 
 import { dataProviderFactory } from '../data-providers';
 import { securityIdentityKey } from './identity';
@@ -42,6 +43,36 @@ interface HoldingProviderLookup {
   };
 }
 
+/**
+ * The portfolio's display currency is the user's clearest signal for which
+ * listing they want to buy. It is only a ranking preference: securities in
+ * other currencies remain available because the same fund may be traded in
+ * multiple currencies and the user may intentionally choose one of them.
+ *
+ * A null display currency means "use the user's base currency", matching the
+ * portfolio summary semantics.
+ */
+const getPreferredSearchCurrency = async ({
+  portfolioId,
+  userId,
+}: {
+  portfolioId?: string;
+  userId: number;
+}): Promise<string | undefined> => {
+  if (!portfolioId) return undefined;
+
+  const portfolio = await Portfolios.findOne({
+    where: { id: portfolioId, userId },
+    attributes: ['displayCurrencyCode'],
+  });
+
+  if (!portfolio) return undefined;
+  if (portfolio.displayCurrencyCode) return portfolio.displayCurrencyCode.toUpperCase();
+
+  const baseCurrency = await getBaseCurrency({ userId });
+  return baseCurrency?.currencyCode?.toUpperCase();
+};
+
 export const searchSecurities = async ({
   query,
   limit = 20,
@@ -58,6 +89,7 @@ export const searchSecurities = async ({
   }
 
   try {
+    const preferredCurrencyCode = await getPreferredSearchCurrency({ portfolioId, userId: user.id });
     const provider = dataProviderFactory.getProvider();
     const searchResults = await provider.searchSecurities(query, { assetClass });
 
@@ -69,12 +101,28 @@ export const searchSecurities = async ({
       (r) => SUPPORTED_ASSET_CLASSES.includes(r.assetClass) && (!assetClass || r.assetClass === assetClass),
     );
 
+    // Keep all currencies available, but place the portfolio's selected
+    // currency first before applying the per-provider cap. This matters for
+    // multi-listed ETFs such as USSC.L (USD) / ZPRV.DE (EUR): the preferred
+    // venue must not be pushed out by the provider result limit.
+    const orderedResults = preferredCurrencyCode
+      ? supportedResults.toSorted(
+          (a, b) =>
+            Number(b.currencyCode.toUpperCase() === preferredCurrencyCode) -
+            Number(a.currencyCode.toUpperCase() === preferredCurrencyCode),
+        )
+      : supportedResults;
+
+    if (preferredCurrencyCode) {
+      logger.info(`Prioritizing ${preferredCurrencyCode} listings for portfolio ${portfolioId}`);
+    }
+
     // Apply the cap per provider so a high-volume catalog cannot hide every
     // other provider's match. The UI groups this flat response by provider.
-    let limitedResults = supportedResults;
+    let limitedResults = orderedResults;
     if (limit) {
       const resultsByProvider = new Map<SECURITY_PROVIDER, SecuritySearchResultFormatted[]>();
-      for (const result of supportedResults) {
+      for (const result of orderedResults) {
         const providerResults = resultsByProvider.get(result.providerName);
         if (providerResults) providerResults.push(result);
         else resultsByProvider.set(result.providerName, [result]);

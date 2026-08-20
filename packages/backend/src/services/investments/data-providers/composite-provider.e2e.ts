@@ -308,6 +308,89 @@ describe('GET /investments/securities/search - Yahoo ISIN fallback', () => {
     expect(meud?.priceSourceSymbol).toBeUndefined();
   });
 
+  it('finds a EUR listing when Yahoo ranks it after the first six name-search candidates', async () => {
+    // Yahoo defaults quotesCount to 6. For IE00BSPLC413 that can return the
+    // USD London listing first while the EUR Xetra listing is ZPRV.DE further
+    // down the same response.
+    mockedYahooSearch.mockResolvedValueOnce({ quotes: [] }).mockResolvedValueOnce({
+      quotes: [
+        { symbol: 'AAA.DE', isYahooFinance: true },
+        { symbol: 'BBB.DE', isYahooFinance: true },
+        { symbol: 'CCC.DE', isYahooFinance: true },
+        { symbol: 'DDD.DE', isYahooFinance: true },
+        { symbol: 'EEE.DE', isYahooFinance: true },
+        { symbol: 'FFF.DE', isYahooFinance: true },
+        { symbol: 'ZPRV.DE', isYahooFinance: true },
+      ],
+    });
+
+    mockedYahooQuote.mockResolvedValueOnce({
+      symbol: 'IE00BSPLC413.IR',
+      longName: 'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc',
+      currency: 'USD',
+      exchange: 'ISE',
+      quoteType: 'MUTUALFUND',
+    });
+    rejectRemainingQuotesAsNotFound(5); // remaining ISIN-suffix probes
+    rejectRemainingQuotesAsNotFound(6); // candidates ranked before ZPRV.DE
+    mockedYahooQuote.mockResolvedValueOnce({
+      symbol: 'ZPRV.DE',
+      longName: 'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc',
+      currency: 'EUR',
+      exchange: 'GER',
+      fullExchangeName: 'XETRA',
+      quoteType: 'ETF',
+    });
+
+    const results = await helpers.searchSecurities({ payload: { query: 'IE00BSPLC413' }, raw: true });
+
+    expect(results.map((r) => r.symbol).toSorted()).toEqual(['IE00BSPLC413.IR', 'ZPRV.DE']);
+    expect(results.find((r) => r.symbol === 'ZPRV.DE')).toMatchObject({
+      providerSymbol: 'ZPRV.DE',
+      currencyCode: 'EUR',
+      exchangeAcronym: 'GER',
+      isin: 'IE00BSPLC413',
+    });
+    expect(mockedYahooSearch).toHaveBeenNthCalledWith(
+      2,
+      'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc',
+      { quotesCount: 25, newsCount: 0 },
+      { validateResult: false },
+    );
+  });
+
+  it('uses the primary Yahoo name when ISIN-suffix probes do not resolve', async () => {
+    const fundName = 'State Street SPDR MSCI USA Small Cap Value Weighted UCITS ETF USD Acc';
+
+    mockedYahooSearch
+      .mockResolvedValueOnce({
+        quotes: [{ symbol: 'USSC.L', longname: fundName, typeDisp: 'MUTUALFUND', isYahooFinance: true }],
+      })
+      .mockResolvedValueOnce({ quotes: [{ symbol: 'ZPRV.DE', longname: fundName, isYahooFinance: true }] });
+
+    mockedYahooQuote.mockResolvedValueOnce({ symbol: 'USSC.L', currency: 'USD' });
+    rejectRemainingQuotesAsNotFound(6); // no `<ISIN>.<suffix>` quote resolves
+    mockedYahooQuote.mockResolvedValueOnce({
+      symbol: 'ZPRV.DE',
+      longName: fundName,
+      currency: 'EUR',
+      exchange: 'GER',
+      fullExchangeName: 'XETRA',
+      quoteType: 'ETF',
+    });
+
+    const results = await helpers.searchSecurities({ payload: { query: 'IE00BSPLC413' }, raw: true });
+
+    expect(results.map((r) => r.symbol).toSorted()).toEqual(['USSC.L', 'ZPRV.DE']);
+    expect(results.find((r) => r.symbol === 'ZPRV.DE')?.currencyCode).toBe('EUR');
+    expect(mockedYahooSearch).toHaveBeenNthCalledWith(
+      2,
+      fundName,
+      { quotesCount: 25, newsCount: 0 },
+      { validateResult: false },
+    );
+  });
+
   it('does NOT attach a cross-currency local ticker as priceSourceSymbol', async () => {
     // The ISIN-suffix row is EUR; the only name-lookup hit is GBP (London).
     // Storing GBP prices against an EUR row would silently corrupt the chart,
