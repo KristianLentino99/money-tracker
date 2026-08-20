@@ -186,6 +186,24 @@
         "allTitle": "Tutti i pagamenti",
         "loadMore": "Carica altri"
       },
+      "installments": {
+        "title": "Rate del prestito",
+        "description": "I pagamenti futuri di queste rate contribuiranno a estinguere questo prestito.",
+        "linkAction": "Collega rata",
+        "emptyTitle": "Nessuna rata collegata",
+        "emptyDescription": "Collega una rata per fare in modo che ogni pagamento futuro riduca questo prestito.",
+        "progress": "{progress} pagamenti",
+        "paused": "In pausa",
+        "linkSuccess": "Rata collegata al prestito.",
+        "linkError": "Impossibile collegare la rata.",
+        "dialogTitle": "Collega rate",
+        "dialogDescription": "Scegli una o più rate di spesa. Il collegamento riguarda solo i pagamenti futuri.",
+        "searchLabel": "Cerca rate",
+        "searchPlaceholder": "Cerca per nome",
+        "loading": "Caricamento rate...",
+        "noResults": "Nessuna rata idonea trovata.",
+        "confirmLink": "Collega {count} rate"
+      },
       "recordPayment": "Registra pagamento",
       "payment": {
         "title": "Pagamento del prestito",
