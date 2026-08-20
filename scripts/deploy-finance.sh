@@ -100,20 +100,19 @@ if [[ ! -d "$APP_DIR/.git" ]]; then
   exit 1
 fi
 
-cd "$APP_DIR"
-if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+if [[ -n "$(sudo git -C "$APP_DIR" status --porcelain --untracked-files=no)" ]]; then
   echo "Refusing to overwrite tracked edits on the production host." >&2
   exit 1
 fi
 
 # Fetch the branch once and assert it is still the revision used for the local
 # image build. A concurrent push cannot cause a mixed code/config deployment.
-git fetch --depth=1 origin dev
-if [[ "$(git rev-parse FETCH_HEAD)" != "$TARGET_SHA" ]]; then
+sudo git -C "$APP_DIR" fetch --depth=1 origin dev
+if [[ "$(sudo git -C "$APP_DIR" rev-parse FETCH_HEAD)" != "$TARGET_SHA" ]]; then
   echo "origin/dev changed while the images were being built; rerun deployment." >&2
   exit 1
 fi
-git checkout --detach "$TARGET_SHA"
+sudo git -C "$APP_DIR" checkout --detach "$TARGET_SHA"
 
 sudo docker tag "$BACKEND_IMAGE" money-tracker-finance-backend:latest
 sudo docker tag "$FRONTEND_IMAGE" money-tracker-finance-frontend:latest
