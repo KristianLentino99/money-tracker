@@ -9,6 +9,7 @@ import Portfolios from '@models/investments/portfolios.model';
 import * as Transactions from '@models/transactions.model';
 import { withTransaction } from '@services/common/with-transaction';
 import { updatePortfolioBalance } from '@services/investments/portfolios/balances';
+import { getManualPortfolioOverview } from '@services/investments/portfolios/manual-values.service';
 
 import {
   computeRefAmount,
@@ -44,7 +45,10 @@ const portfolioToAccountTransferImpl = async ({
 }: PortfolioToAccountTransferParams) => {
   validatePositiveAmount({ amount });
 
-  await findPortfolioOrThrow({ portfolioId, userId, role: 'source' });
+  const portfolio = await findPortfolioOrThrow({ portfolioId, userId, role: 'source' });
+  if (portfolio.isManualTracking && portfolio.displayCurrencyCode !== currencyCode) {
+    throw new ValidationError({ message: `Manual portfolio transfers must use ${portfolio.displayCurrencyCode}.` });
+  }
   const account = await findAccountOrThrow({ accountId, userId, role: 'destination' });
   await findCurrencyOrThrow({ currencyCode });
 
@@ -134,15 +138,17 @@ const portfolioToAccountTransferImpl = async ({
     transactionId: linkedTransactionId,
   });
 
-  // Update portfolio cash balance (decrease)
-  const negated = negateAmount({ amount });
-  await updatePortfolioBalance({
-    userId,
-    portfolioId,
-    currencyCode,
-    availableCashDelta: negated,
-    totalCashDelta: negated,
-  });
+  if (!portfolio.isManualTracking) {
+    const negated = negateAmount({ amount });
+    await updatePortfolioBalance({
+      userId,
+      portfolioId,
+      currencyCode,
+      availableCashDelta: negated,
+      totalCashDelta: negated,
+    });
+  }
+  if (portfolio.isManualTracking) await getManualPortfolioOverview({ userId, portfolioId });
 
   return transfer.reload({
     include: [

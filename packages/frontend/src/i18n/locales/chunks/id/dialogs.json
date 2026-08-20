@@ -44,6 +44,8 @@
         "namePlaceholder": "Portofolio Investasi Saya",
         "typeLabel": "Jenis Portofolio",
         "typePlaceholder": "Pilih jenis portofolio",
+        "manualTrackingLabel": "Lacak nilai secara manual",
+        "manualTrackingDescription": "Gunakan nilai yang dilaporkan berdasarkan tanggal, bukan kepemilikan dan harga pasar. Mata uang tampilan akan dikunci setelah pencatatan pertama.",
         "portfolioTypes": {
           "investment": "Investasi",
           "retirement": "Pensiun",

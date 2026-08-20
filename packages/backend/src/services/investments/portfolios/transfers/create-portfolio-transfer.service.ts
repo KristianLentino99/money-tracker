@@ -39,8 +39,10 @@ const createPortfolioTransferImpl = async ({
 
   validatePositiveAmount({ amount });
 
-  await findPortfolioOrThrow({ portfolioId: fromPortfolioId, userId, role: 'source' });
-  await findPortfolioOrThrow({ portfolioId: toPortfolioId, userId, role: 'destination' });
+  const fromPortfolio = await findPortfolioOrThrow({ portfolioId: fromPortfolioId, userId, role: 'source' });
+  const toPortfolio = await findPortfolioOrThrow({ portfolioId: toPortfolioId, userId, role: 'destination' });
+  if (fromPortfolio.isManualTracking || toPortfolio.isManualTracking)
+    throw new ValidationError({ message: 'Manual portfolios only support transfers to and from accounts.' });
   await findCurrencyOrThrow({ currencyCode });
 
   const refAmount = await computeRefAmount({ amount, currencyCode, userId, date });

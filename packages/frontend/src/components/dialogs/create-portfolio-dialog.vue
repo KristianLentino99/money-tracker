@@ -6,12 +6,16 @@ import InputField from '@/components/fields/input-field.vue';
 import TextareaField from '@/components/fields/textarea-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Callout } from '@/components/lib/ui/callout';
+import { Checkbox } from '@/components/lib/ui/checkbox';
+import { resolvePortfolioDisplayCurrencyCode } from '@/common/utils/portfolio-display-currency';
 import * as Select from '@/components/lib/ui/select';
 import { NotificationType, useNotificationCenter } from '@/components/notification-center';
 import { useCreatePortfolio } from '@/composable/data-queries/portfolios';
+import { useCurrenciesStore } from '@/stores';
 import { EXTERNAL_URLS } from '@bt/shared/const/external-urls';
 import { PORTFOLIO_TYPE } from '@bt/shared/types/investments';
 import { CheckIcon } from '@lucide/vue';
+import { storeToRefs } from 'pinia';
 import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -27,6 +31,7 @@ const form = reactive({
   portfolioType: PORTFOLIO_TYPE.investment,
   description: '',
   displayCurrencyCode: null as string | null,
+  isManualTracking: false,
 });
 
 // Portfolio type options for the select dropdown
@@ -38,14 +43,29 @@ const portfolioTypeOptions = computed(() => [
 ]);
 
 const createPortfolioMutation = useCreatePortfolio();
+const { baseCurrency } = storeToRefs(useCurrenciesStore());
 
-const isSubmitDisabled = computed(() => createPortfolioMutation.isPending.value || !form.name.trim());
+const submittedDisplayCurrencyCode = computed(() =>
+  resolvePortfolioDisplayCurrencyCode({
+    isManualTracking: form.isManualTracking,
+    displayCurrencyCode: form.displayCurrencyCode,
+    baseCurrencyCode: baseCurrency.value?.currencyCode,
+  }),
+);
+
+const isSubmitDisabled = computed(
+  () =>
+    createPortfolioMutation.isPending.value ||
+    !form.name.trim() ||
+    (form.isManualTracking && !submittedDisplayCurrencyCode.value),
+);
 
 const resetForm = () => {
   form.name = '';
   form.portfolioType = PORTFOLIO_TYPE.investment;
   form.description = '';
   form.displayCurrencyCode = null;
+  form.isManualTracking = false;
 };
 
 const onPortfolioCreation = () => {
@@ -60,7 +80,8 @@ const createPortfolio = async () => {
       name: form.name.trim(),
       portfolioType: form.portfolioType,
       description: form.description.trim() || undefined,
-      displayCurrencyCode: form.displayCurrencyCode,
+      displayCurrencyCode: submittedDisplayCurrencyCode.value,
+      isManualTracking: form.isManualTracking,
       isEnabled: true,
     });
 
@@ -138,6 +159,16 @@ const createPortfolio = async () => {
       </div>
 
       <DisplayCurrencySelect v-model="form.displayCurrencyCode" :disabled="createPortfolioMutation.isPending.value" />
+
+      <label class="flex items-start gap-3 rounded-md border p-3 text-sm">
+        <Checkbox v-model="form.isManualTracking" class="mt-1" :disabled="createPortfolioMutation.isPending.value" />
+        <span
+          ><span class="font-medium">{{ $t('dialogs.createPortfolio.form.manualTrackingLabel') }}</span
+          ><span class="text-muted-foreground mt-1 block">{{
+            $t('dialogs.createPortfolio.form.manualTrackingDescription')
+          }}</span></span
+        >
+      </label>
 
       <TextareaField
         v-model="form.description"

@@ -42,7 +42,9 @@ const exchangeCurrencyImpl = async ({
   validatePositiveAmount({ amount: fromAmount });
   validatePositiveAmount({ amount: toAmount });
 
-  await findPortfolioOrThrow({ portfolioId, userId, role: 'generic' });
+  const portfolio = await findPortfolioOrThrow({ portfolioId, userId, role: 'generic' });
+  if (portfolio.isManualTracking)
+    throw new ValidationError({ message: 'Manual portfolios use one display currency and cannot exchange cash.' });
   await findCurrencyOrThrow({ currencyCode: fromCurrencyCode });
   await findCurrencyOrThrow({ currencyCode: toCurrencyCode });
 

@@ -55,6 +55,8 @@
       }
     },
     "portfolioSettings": {
+      "manualTrackingLabel": "Lacak nilai secara manual",
+      "manualTrackingDescription": "Gunakan mata uang tampilan portofolio ini untuk nilai yang dilaporkan. Pilihan ini dikunci setelah riwayat portofolio tersedia.",
       "nameLabel": "Nama Portofolio",
       "namePlaceholder": "Portofolio Investasi Saya",
       "nameRequired": "Nama wajib diisi",

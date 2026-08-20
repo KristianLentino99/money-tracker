@@ -12,6 +12,7 @@ interface CreatePortfolioParams {
   description?: string | null;
   displayCurrencyCode?: string | null;
   isEnabled?: boolean;
+  isManualTracking?: boolean;
 }
 
 const createPortfolioImpl = async ({
@@ -21,6 +22,7 @@ const createPortfolioImpl = async ({
   description = null,
   displayCurrencyCode = null,
   isEnabled = true,
+  isManualTracking = false,
 }: CreatePortfolioParams) => {
   // Display currency must be connected to the user, otherwise the summary and
   // holdings endpoints could not resolve an exchange rate for it.
@@ -30,6 +32,8 @@ const createPortfolioImpl = async ({
       throw new ValidationError({ message: t({ key: 'currencies.currencyNotConnected' }) });
     }
   }
+  if (isManualTracking && !displayCurrencyCode)
+    throw new ValidationError({ message: 'Manual portfolios require a display currency.' });
 
   // Duplicate names are allowed — the (userId, name) DB constraint was dropped
   // because it collided with soft-delete and the product call is to not bother
@@ -41,6 +45,7 @@ const createPortfolioImpl = async ({
     description,
     displayCurrencyCode,
     isEnabled,
+    isManualTracking,
   });
 
   return portfolio;

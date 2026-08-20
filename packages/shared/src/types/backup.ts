@@ -56,6 +56,8 @@ export const BACKUP_FILE_NAMES = [
   'balances',
   'holdings',
   'investment-transactions',
+  'manual-portfolio-transactions',
+  'manual-portfolio-valuations',
   'portfolio-balances',
   'portfolio-transfers',
   'venture-events',

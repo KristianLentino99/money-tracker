@@ -44,6 +44,8 @@
         "namePlaceholder": "Mi cartera de inversión",
         "typeLabel": "Tipo de cartera",
         "typePlaceholder": "Seleccione el tipo de cartera",
+        "manualTrackingLabel": "Seguimiento manual del valor",
+        "manualTrackingDescription": "Usa valores declarados con fecha en lugar de posiciones y precios de mercado. La moneda de visualización se bloquea después del primer registro.",
         "portfolioTypes": {
           "investment": "Inversión",
           "retirement": "Jubilación",

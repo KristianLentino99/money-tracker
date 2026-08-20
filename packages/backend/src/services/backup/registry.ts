@@ -13,6 +13,8 @@ import Currencies from '@models/currencies.model';
 import ExchangeRates from '@models/exchange-rates.model';
 import Holdings from '@models/investments/holdings.model';
 import InvestmentTransaction from '@models/investments/investment-transaction.model';
+import ManualPortfolioTransactions from '@models/investments/manual-portfolio-transaction.model';
+import ManualPortfolioValuations from '@models/investments/manual-portfolio-valuation.model';
 import PortfolioBalances from '@models/investments/portfolio-balances.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -340,6 +342,20 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
   {
     fileName: 'investment-transactions',
     model: InvestmentTransaction,
+    tier: 4,
+    scope: { strategy: 'viaParent', fk: 'portfolioId', parent: 'portfolios' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'manual-portfolio-transactions',
+    model: ManualPortfolioTransactions,
+    tier: 4,
+    scope: { strategy: 'viaParent', fk: 'portfolioId', parent: 'portfolios' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'manual-portfolio-valuations',
+    model: ManualPortfolioValuations,
     tier: 4,
     scope: { strategy: 'viaParent', fk: 'portfolioId', parent: 'portfolios' },
     restoreMode: 'insert',

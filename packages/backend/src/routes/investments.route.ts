@@ -21,6 +21,20 @@ import getPortfolioSummaryController from '@controllers/investments/portfolios/g
 import getPortfoliosAnnualizedReturnsController from '@controllers/investments/portfolios/get-portfolios-annualized-returns.controller';
 import listPortfolioTransfersController from '@controllers/investments/portfolios/list-portfolio-transfers';
 import listPortfoliosController from '@controllers/investments/portfolios/list-portfolios';
+import {
+  createManualTransactionController,
+  createManualValuationController,
+  deleteManualTransactionController,
+  deleteManualValuationController,
+  getManualValuesController,
+  importManualPortfolioJsonController,
+  updateManualTransactionController,
+  updateManualValuationController,
+} from '@controllers/investments/portfolios/manual-values';
+import {
+  executeManualImportController,
+  extractManualImportController,
+} from '@controllers/investments/portfolios/manual-values-import';
 import portfolioToAccountTransferController from '@controllers/investments/portfolios/portfolio-to-account-transfer';
 import restorePortfolioController from '@controllers/investments/portfolios/restore-portfolio';
 import setTransferAdjustmentController from '@controllers/investments/portfolios/set-transfer-adjustment';
@@ -74,6 +88,68 @@ router.get(
   '/portfolios/:id/summary',
   validateEndpoint(getPortfolioSummaryController.schema),
   getPortfolioSummaryController.handler,
+);
+
+router.get(
+  '/portfolios/:id/manual-values',
+  validateEndpoint(getManualValuesController.schema),
+  getManualValuesController.handler,
+);
+router.post(
+  '/portfolios/:id/manual-transactions',
+  checkBaseCurrencyLock,
+  validateEndpoint(createManualTransactionController.schema),
+  createManualTransactionController.handler,
+);
+router.delete(
+  '/portfolios/:id/manual-transactions/:recordId',
+  checkBaseCurrencyLock,
+  validateEndpoint(deleteManualTransactionController.schema),
+  deleteManualTransactionController.handler,
+);
+router.put(
+  '/portfolios/:id/manual-transactions/:recordId',
+  checkBaseCurrencyLock,
+  validateEndpoint(updateManualTransactionController.schema),
+  updateManualTransactionController.handler,
+);
+// Manual imports never create bank transactions or balances: this review/execute
+// pair persists only confirmed manual timeline records.
+router.post(
+  '/portfolios/:id/manual-import/extract',
+  checkBaseCurrencyLock,
+  validateEndpoint(extractManualImportController.schema),
+  extractManualImportController.handler,
+);
+router.post(
+  '/portfolios/:id/manual-import/execute',
+  checkBaseCurrencyLock,
+  validateEndpoint(executeManualImportController.schema),
+  executeManualImportController.handler,
+);
+router.post(
+  '/portfolios/:id/manual-json/import',
+  checkBaseCurrencyLock,
+  validateEndpoint(importManualPortfolioJsonController.schema),
+  importManualPortfolioJsonController.handler,
+);
+router.post(
+  '/portfolios/:id/manual-valuations',
+  checkBaseCurrencyLock,
+  validateEndpoint(createManualValuationController.schema),
+  createManualValuationController.handler,
+);
+router.delete(
+  '/portfolios/:id/manual-valuations/:valuationId',
+  checkBaseCurrencyLock,
+  validateEndpoint(deleteManualValuationController.schema),
+  deleteManualValuationController.handler,
+);
+router.put(
+  '/portfolios/:id/manual-valuations/:valuationId',
+  checkBaseCurrencyLock,
+  validateEndpoint(updateManualValuationController.schema),
+  updateManualValuationController.handler,
 );
 
 // Test-only cash seeding: writes `PortfolioBalances` directly, bypassing the

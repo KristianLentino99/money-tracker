@@ -11,6 +11,7 @@ export default createController(
       portfolioType: z.nativeEnum(PORTFOLIO_TYPE).default(PORTFOLIO_TYPE.investment),
       description: z.string().max(500, 'Description must be 500 characters or less').optional(),
       displayCurrencyCode: currencyCode().nullable().optional(),
+      isManualTracking: z.boolean().default(false),
       isEnabled: z.boolean().default(true),
     }),
   }),

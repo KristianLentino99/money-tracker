@@ -1,3 +1,4 @@
+import { ValidationError } from '@js/errors';
 import Currencies from '@models/currencies.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -40,7 +41,9 @@ const directCashTransactionImpl = async ({
 }: DirectCashTransactionParams) => {
   validatePositiveAmount({ amount });
 
-  await findPortfolioOrThrow({ portfolioId, userId, role: 'generic' });
+  const portfolio = await findPortfolioOrThrow({ portfolioId, userId, role: 'generic' });
+  if (portfolio.isManualTracking)
+    throw new ValidationError({ message: 'Use a manual transaction for a manually tracked portfolio.' });
   await findCurrencyOrThrow({ currencyCode });
 
   const refAmount = await computeRefAmount({ amount, currencyCode, userId, date });

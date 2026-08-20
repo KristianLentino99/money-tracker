@@ -4,6 +4,9 @@ import {
   PortfolioBalanceModel,
   PortfolioModel,
   PortfolioTransferModel,
+  MANUAL_PORTFOLIO_TRANSACTION_CATEGORY,
+  ManualPortfolioJsonExport,
+  ManualPortfolioOverviewModel,
 } from '@bt/shared/types/investments';
 import type { PortfolioAnnualizedReturnModel } from '@bt/shared/types/investments/portfolio-annualized-return.model';
 import type { PortfolioSummaryModel } from '@bt/shared/types/investments/portfolio-summary.model';
@@ -15,6 +18,7 @@ interface CreatePortfolioRequest {
   /** Currency for displaying portfolio summary/stats. Null/omitted = user's base currency. */
   displayCurrencyCode?: string | null;
   isEnabled?: boolean;
+  isManualTracking?: boolean;
 }
 
 export const createPortfolio = async (params: CreatePortfolioRequest): Promise<PortfolioModel> => {
@@ -252,3 +256,130 @@ export const getPortfoliosAnnualizedReturns = async (): Promise<PortfolioAnnuali
   const result = await api.get('/investments/portfolios/annualized-returns');
   return result;
 };
+
+export const getManualPortfolioValues = async ({
+  portfolioId,
+}: {
+  portfolioId: string;
+}): Promise<ManualPortfolioOverviewModel> => api.get(`/investments/portfolios/${portfolioId}/manual-values`);
+export const createManualPortfolioTransaction = async ({
+  portfolioId,
+  ...params
+}: {
+  portfolioId: string;
+  category: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
+  amount: string | number;
+  date: string;
+  note?: string | null;
+  source?: string | null;
+}): Promise<void> => api.post(`/investments/portfolios/${portfolioId}/manual-transactions`, params);
+export const createManualPortfolioValuation = async ({
+  portfolioId,
+  ...params
+}: {
+  portfolioId: string;
+  value: string | number;
+  date: string;
+  note?: string | null;
+  source?: string | null;
+}): Promise<void> => api.post(`/investments/portfolios/${portfolioId}/manual-valuations`, params);
+export const updateManualPortfolioTransaction = async ({
+  portfolioId,
+  recordId,
+  ...params
+}: {
+  portfolioId: string;
+  recordId: string;
+  category: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
+  amount: string | number;
+  date: string;
+  note?: string | null;
+  source?: string | null;
+}): Promise<void> => api.put(`/investments/portfolios/${portfolioId}/manual-transactions/${recordId}`, params);
+export const deleteManualPortfolioTransaction = async ({
+  portfolioId,
+  recordId,
+}: {
+  portfolioId: string;
+  recordId: string;
+}): Promise<void> => api.delete(`/investments/portfolios/${portfolioId}/manual-transactions/${recordId}`);
+export const updateManualPortfolioValuation = async ({
+  portfolioId,
+  valuationId,
+  ...params
+}: {
+  portfolioId: string;
+  valuationId: string;
+  value: string | number;
+  date: string;
+  note?: string | null;
+  source?: string | null;
+}): Promise<void> => api.put(`/investments/portfolios/${portfolioId}/manual-valuations/${valuationId}`, params);
+export const deleteManualPortfolioValuation = async ({
+  portfolioId,
+  valuationId,
+}: {
+  portfolioId: string;
+  valuationId: string;
+}): Promise<void> => api.delete(`/investments/portfolios/${portfolioId}/manual-valuations/${valuationId}`);
+
+export interface ManualPortfolioImportRecord {
+  tempId: string;
+  kind: 'transaction' | 'valuation';
+  date: string | null;
+  amount: string | null;
+  category?: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY | null;
+  currencyCode?: string | null;
+  currencyMismatch?: boolean;
+  note?: string | null;
+  confidence: number;
+  sourceContext?: string | null;
+  warnings: string[];
+  possibleDuplicate: boolean;
+}
+
+export interface ManualPortfolioImportResult {
+  records: ManualPortfolioImportRecord[];
+  warnings: string[];
+  tokenCount?: { input: number; output: number };
+}
+
+export const extractManualPortfolioImport = async ({
+  portfolioId,
+  ...payload
+}:
+  | {
+      portfolioId: string;
+      source: 'ai';
+      text?: string;
+      fileBase64?: string;
+    }
+  | {
+      portfolioId: string;
+      source: 'csv';
+      csv: string;
+    }): Promise<ManualPortfolioImportResult> =>
+  api.post(`/investments/portfolios/${portfolioId}/manual-import/extract`, payload);
+
+export const executeManualPortfolioImport = async ({
+  portfolioId,
+  records,
+  skipTempIds,
+}: {
+  portfolioId: string;
+  records: ManualPortfolioImportRecord[];
+  skipTempIds: string[];
+}): Promise<{ imported: number; skipped: number }> =>
+  api.post(`/investments/portfolios/${portfolioId}/manual-import/execute`, {
+    records,
+    skipTempIds,
+  });
+
+export const importManualPortfolioJson = async ({
+  portfolioId,
+  payload,
+}: {
+  portfolioId: string;
+  payload: ManualPortfolioJsonExport;
+}): Promise<{ imported: number; skipped: number }> =>
+  api.post(`/investments/portfolios/${portfolioId}/manual-json/import`, payload);

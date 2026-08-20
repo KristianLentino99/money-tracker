@@ -44,6 +44,8 @@
         "namePlaceholder": "My Investment Portfolio",
         "typeLabel": "Portfolio Type",
         "typePlaceholder": "Select portfolio type",
+        "manualTrackingLabel": "Track value manually",
+        "manualTrackingDescription": "Use dated reported values instead of holdings and market prices. The display currency becomes locked after your first record.",
         "portfolioTypes": {
           "investment": "Investment",
           "retirement": "Retirement",

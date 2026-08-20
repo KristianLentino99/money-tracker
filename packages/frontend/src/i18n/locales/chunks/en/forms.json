@@ -55,6 +55,8 @@
       }
     },
     "portfolioSettings": {
+      "manualTrackingLabel": "Track value manually",
+      "manualTrackingDescription": "Uses this portfolio display currency for reported valuations. This choice is locked after portfolio history exists.",
       "nameLabel": "Portfolio Name",
       "namePlaceholder": "My Investment Portfolio",
       "nameRequired": "Name is required",

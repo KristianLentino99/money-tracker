@@ -38,6 +38,12 @@
           </div>
 
           <div v-if="portfolio" class="flex flex-wrap items-center gap-2">
+            <PortfolioJsonDialog
+              v-if="portfolio.isManualTracking"
+              :portfolio-id="portfolio.id"
+              :portfolio-name="portfolio.name"
+            />
+
             <EditPortfolioDialog :portfolio="portfolio" @updated="refetch">
               <UiButton variant="outline" size="sm">
                 <PencilIcon class="size-4" />
@@ -57,9 +63,12 @@
 
       <!-- Main Content -->
       <div v-if="portfolio" class="grid gap-6">
-        <PortfolioBalance :portfolio-id="portfolioId" />
-        <HoldingsSummary :portfolio-id="portfolioId" />
-        <PortfolioCashBalances :portfolio-id="portfolioId" :portfolio="portfolio" />
+        <ManualPortfolioDashboard v-if="portfolio.isManualTracking" :portfolio-id="portfolioId" />
+        <template v-else>
+          <PortfolioBalance :portfolio-id="portfolioId" />
+          <HoldingsSummary :portfolio-id="portfolioId" />
+          <PortfolioCashBalances :portfolio-id="portfolioId" :portfolio="portfolio" />
+        </template>
       </div>
 
       <!-- Loading State -->
@@ -100,6 +109,8 @@ import { useRoute, useRouter } from 'vue-router';
 import HoldingsSummary from './components/holdings-summary.vue';
 import PortfolioBalance from './components/portfolio-balance.vue';
 import PortfolioCashBalances from './components/portfolio-cash-balances.vue';
+import ManualPortfolioDashboard from './components/manual-portfolio-dashboard.vue';
+import PortfolioJsonDialog from './components/portfolio-json-dialog.vue';
 
 const route = useRoute();
 const router = useRouter();

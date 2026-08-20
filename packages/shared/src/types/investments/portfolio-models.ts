@@ -33,6 +33,8 @@ export interface PortfolioModel {
   description: string | null;
   /** Currency for displaying portfolio summary/stats. Null = user's base currency. */
   displayCurrencyCode: string | null;
+  /** When enabled, value is reported by dated manual valuations instead of holdings prices. */
+  isManualTracking: boolean;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -44,6 +46,90 @@ export interface PortfolioModel {
   holdings?: HoldingModel[];
   investmentTransactions?: InvestmentTransactionModel[];
   balances?: PortfolioBalanceModel[];
+}
+
+export enum MANUAL_PORTFOLIO_TRANSACTION_CATEGORY {
+  contribution = 'contribution',
+  withdrawal = 'withdrawal',
+  fee = 'fee',
+  tax = 'tax',
+  other_income = 'other_income',
+  distribution = 'distribution',
+}
+
+export interface ManualPortfolioTransactionModel {
+  id: string;
+  portfolioId: string;
+  category: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
+  amount: string;
+  date: string;
+  note: string | null;
+  source: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ManualPortfolioValuationModel {
+  id: string;
+  portfolioId: string;
+  value: string;
+  date: string;
+  note: string | null;
+  source: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const MANUAL_PORTFOLIO_JSON_FORMAT = 'money-tracker.manual-portfolio' as const;
+export const MANUAL_PORTFOLIO_JSON_VERSION = 1 as const;
+
+export interface ManualPortfolioJsonExport {
+  format: typeof MANUAL_PORTFOLIO_JSON_FORMAT;
+  version: typeof MANUAL_PORTFOLIO_JSON_VERSION;
+  portfolioName: string;
+  currencyCode: string;
+  transactions: Array<{
+    category: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
+    amount: string;
+    date: string;
+    note: string | null;
+    source: string | null;
+  }>;
+  valuations: Array<{
+    value: string;
+    date: string;
+    note: string | null;
+    source: string | null;
+  }>;
+}
+
+export interface ManualPortfolioOverviewModel {
+  currencyCode: string;
+  openingValue: string | null;
+  openingDate: string | null;
+  lastReportedValue: string | null;
+  valuationDate: string | null;
+  /** Null until the user has supplied an end-of-day valuation. */
+  netActivitySinceValuation: string | null;
+  currentValue: string | null;
+  gain: string | null;
+  gainPercent: string | null;
+  isStale: boolean;
+  /** Dated points for the manual dashboard's value / invested-capital chart. */
+  history: Array<{ date: string; reportedValue: string; investedCapital: string }>;
+  totals: Record<MANUAL_PORTFOLIO_TRANSACTION_CATEGORY, string>;
+  timeline: Array<
+    | (ManualPortfolioTransactionModel & { kind: 'transaction' })
+    | (ManualPortfolioValuationModel & { kind: 'valuation' })
+    | {
+        id: string;
+        kind: 'linked-transfer';
+        date: string;
+        amount: string;
+        category: 'contribution' | 'withdrawal';
+        note: string | null;
+      }
+  >;
 }
 
 export interface PortfolioTransferModel {

@@ -4,10 +4,14 @@ import FieldLabel from '@/components/fields/components/field-label.vue';
 import InputField from '@/components/fields/input-field.vue';
 import TextareaField from '@/components/fields/textarea-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
+import { Checkbox } from '@/components/lib/ui/checkbox';
+import { resolvePortfolioDisplayCurrencyCode } from '@/common/utils/portfolio-display-currency';
 import * as Select from '@/components/lib/ui/select';
 import { NotificationType, useNotificationCenter } from '@/components/notification-center';
 import { useUpdatePortfolio } from '@/composable/data-queries/portfolios';
+import { useCurrenciesStore } from '@/stores';
 import { PORTFOLIO_TYPE, PortfolioModel } from '@bt/shared/types/investments';
+import { storeToRefs } from 'pinia';
 import { computed, reactive, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -40,6 +44,7 @@ const form = reactive({
   portfolioType: PORTFOLIO_TYPE.investment as PORTFOLIO_TYPE,
   description: '',
   displayCurrencyCode: null as string | null,
+  isManualTracking: false,
 });
 
 watch(
@@ -50,12 +55,22 @@ watch(
       form.portfolioType = p.portfolioType;
       form.description = p.description ?? '';
       form.displayCurrencyCode = p.displayCurrencyCode ?? null;
+      form.isManualTracking = p.isManualTracking;
     }
   },
   { immediate: true },
 );
 
 const updateMutation = useUpdatePortfolio();
+const { baseCurrency } = storeToRefs(useCurrenciesStore());
+
+const submittedDisplayCurrencyCode = computed(() =>
+  resolvePortfolioDisplayCurrencyCode({
+    isManualTracking: form.isManualTracking,
+    displayCurrencyCode: form.displayCurrencyCode,
+    baseCurrencyCode: baseCurrency.value?.currencyCode,
+  }),
+);
 
 const isSubmitDisabled = computed(
   () =>
@@ -65,7 +80,9 @@ const isSubmitDisabled = computed(
     (form.name.trim() === props.portfolio.name &&
       form.portfolioType === props.portfolio.portfolioType &&
       (form.description ?? '') === (props.portfolio.description ?? '') &&
-      form.displayCurrencyCode === (props.portfolio.displayCurrencyCode ?? null)),
+      form.displayCurrencyCode === (props.portfolio.displayCurrencyCode ?? null) &&
+      form.isManualTracking === props.portfolio.isManualTracking) ||
+    (form.isManualTracking && !submittedDisplayCurrencyCode.value),
 );
 
 const onSubmit = async () => {
@@ -75,7 +92,8 @@ const onSubmit = async () => {
       name: form.name.trim(),
       portfolioType: form.portfolioType,
       description: form.description?.trim() || undefined,
-      displayCurrencyCode: form.displayCurrencyCode,
+      displayCurrencyCode: submittedDisplayCurrencyCode.value,
+      isManualTracking: form.isManualTracking,
     });
 
     addNotification({
@@ -119,6 +137,16 @@ const onSubmit = async () => {
     </div>
 
     <DisplayCurrencySelect v-model="form.displayCurrencyCode" :disabled="updateMutation.isPending.value || disabled" />
+
+    <label class="flex items-start gap-3 rounded-md border p-3 text-sm">
+      <Checkbox v-model="form.isManualTracking" class="mt-1" :disabled="updateMutation.isPending.value || disabled" />
+      <span
+        ><span class="font-medium">{{ $t('forms.portfolioSettings.manualTrackingLabel') }}</span
+        ><span class="text-muted-foreground mt-1 block">{{
+          $t('forms.portfolioSettings.manualTrackingDescription')
+        }}</span></span
+      >
+    </label>
 
     <TextareaField
       v-model="form.description"

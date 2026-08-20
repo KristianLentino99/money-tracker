@@ -17,6 +17,8 @@ import CurrenciesModel from './currencies.model';
 import ExchangeRatesModel from './exchange-rates.model';
 import HoldingsModel from './investments/holdings.model';
 import InvestmentTransactionModel from './investments/investment-transaction.model';
+import ManualPortfolioTransactionModel from './investments/manual-portfolio-transaction.model';
+import ManualPortfolioValuationModel from './investments/manual-portfolio-valuation.model';
 import PortfolioBalancesModel from './investments/portfolio-balances.model';
 import PortfolioTransfersModel from './investments/portfolio-transfers.model';
 import PortfoliosModel from './investments/portfolios.model';
@@ -105,6 +107,8 @@ const models = [
   TransactionGroupItemsModel,
   HoldingsModel,
   InvestmentTransactionModel,
+  ManualPortfolioTransactionModel,
+  ManualPortfolioValuationModel,
   SecuritiesModel,
   SecurityCurrencyCacheModel,
   SecurityPricingModel,

@@ -12,9 +12,10 @@ export default createController(
     body: z
       .object({
         name: z.string().min(1).max(255).optional(),
-        portfolioType: z.nativeEnum(PORTFOLIO_TYPE).optional(),
+        portfolioType: z.enum(PORTFOLIO_TYPE).optional(),
         description: z.string().nullable().optional(),
         displayCurrencyCode: currencyCode().nullable().optional(),
+        isManualTracking: z.boolean().optional(),
         isEnabled: z.boolean().optional(),
       })
       .strict()

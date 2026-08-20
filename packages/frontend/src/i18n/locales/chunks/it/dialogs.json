@@ -44,6 +44,8 @@
         "namePlaceholder": "Il mio portafoglio di investimento",
         "typeLabel": "Tipo di portafoglio",
         "typePlaceholder": "Seleziona il tipo di portafoglio",
+        "manualTrackingLabel": "Monitora il valore manualmente",
+        "manualTrackingDescription": "Usa i valori dichiarati per data invece delle posizioni e dei prezzi di mercato. La valuta di visualizzazione viene bloccata dopo la prima registrazione.",
         "portfolioTypes": {
           "investment": "Investimento",
           "retirement": "Pensione",

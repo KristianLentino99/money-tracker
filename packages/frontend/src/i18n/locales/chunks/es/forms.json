@@ -55,6 +55,8 @@
       }
     },
     "portfolioSettings": {
+      "manualTrackingLabel": "Seguimiento manual del valor",
+      "manualTrackingDescription": "Usa la moneda de visualización de esta cartera para las valoraciones declaradas. Esta opción se bloquea cuando existe historial.",
       "nameLabel": "Nombre de la cartera",
       "namePlaceholder": "Mi cartera de inversión",
       "nameRequired": "El nombre es obligatorio",

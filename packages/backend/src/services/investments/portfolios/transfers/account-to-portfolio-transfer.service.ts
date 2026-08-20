@@ -1,5 +1,6 @@
 import { PAYMENT_TYPES, TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES } from '@bt/shared/types';
 import { Money } from '@common/types/money';
+import { ValidationError } from '@js/errors';
 import Currencies from '@models/currencies.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -38,7 +39,10 @@ const accountToPortfolioTransferImpl = async ({
   const account = await findAccountOrThrow({ accountId, userId, role: 'source' });
   const currencyCode = account.currencyCode;
 
-  await findPortfolioOrThrow({ portfolioId, userId, role: 'destination' });
+  const portfolio = await findPortfolioOrThrow({ portfolioId, userId, role: 'destination' });
+  if (portfolio.isManualTracking && portfolio.displayCurrencyCode !== currencyCode) {
+    throw new ValidationError({ message: `Manual portfolio transfers must use ${portfolio.displayCurrencyCode}.` });
+  }
   await findCurrencyOrThrow({ currencyCode });
 
   const txAmount = Money.fromDecimal(amount);
@@ -76,14 +80,15 @@ const accountToPortfolioTransferImpl = async ({
     transactionId: newTx!.id,
   });
 
-  // Update portfolio cash balance
-  await updatePortfolioBalance({
-    userId,
-    portfolioId,
-    currencyCode,
-    availableCashDelta: amount,
-    totalCashDelta: amount,
-  });
+  if (!portfolio.isManualTracking) {
+    await updatePortfolioBalance({
+      userId,
+      portfolioId,
+      currencyCode,
+      availableCashDelta: amount,
+      totalCashDelta: amount,
+    });
+  }
 
   return transfer.reload({
     include: [

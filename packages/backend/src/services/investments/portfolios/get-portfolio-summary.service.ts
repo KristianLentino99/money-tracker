@@ -10,6 +10,8 @@ import { withTransaction } from '@services/common/with-transaction';
 import { getHoldingValues } from '@services/investments/holdings/get-holding-values.service';
 import * as userExchangeRateService from '@services/user-exchange-rate';
 
+import { getManualPortfolioOverview } from './manual-values.service';
+
 interface GetPortfolioSummaryParams {
   userId: number;
   portfolioId: string;
@@ -110,6 +112,58 @@ const getPortfolioSummaryImpl = async ({
   });
 
   const baseCurrencyCode = userCurrency.currency.code;
+
+  // Manual portfolios are valued from their dated reports, never from holdings
+  // or portfolio cash. Their locked currency is deliberately the summary
+  // currency so every caller (cards, sidebar and net worth) sees one coherent
+  // amount rather than a market-price estimate.
+  if (portfolio.isManualTracking) {
+    const manual = await getManualPortfolioOverview({ userId, portfolioId });
+    // The detail API deliberately exposes this state as null. The legacy
+    // summary contract is string-only, so an unvalued manual portfolio is
+    // excluded from aggregate/net-worth arithmetic until it has a report.
+    if (manual.currentValue === null) {
+      return {
+        portfolioId,
+        portfolioName: portfolio.name,
+        totalCurrentValue: '0.00',
+        totalCostBasis: manual.totals.contribution,
+        unrealizedGainValue: '0.00',
+        unrealizedGainPercent: '0.00',
+        realizedGainValue: '0.00',
+        realizedGainPercent: '0.00',
+        currencyCode: manual.currencyCode,
+        totalCashInBaseCurrency: '0.00',
+        availableCashInBaseCurrency: '0.00',
+        totalPortfolioValue: '0.00',
+        baseCurrencyCode,
+        totalPortfolioValueInBaseCurrency: '0.00',
+      };
+    }
+    const currentInBase = await calculateRefAmount({
+      amount: Money.fromDecimal(manual.currentValue),
+      userId,
+      date: date || new Date(),
+      baseCode: manual.currencyCode,
+      quoteCode: baseCurrencyCode,
+    });
+    return {
+      portfolioId,
+      portfolioName: portfolio.name,
+      totalCurrentValue: manual.currentValue,
+      totalCostBasis: manual.totals.contribution,
+      unrealizedGainValue: manual.gain || '0.00',
+      unrealizedGainPercent: manual.gainPercent || '0.00',
+      realizedGainValue: '0.00',
+      realizedGainPercent: '0.00',
+      currencyCode: manual.currencyCode,
+      totalCashInBaseCurrency: '0.00',
+      availableCashInBaseCurrency: '0.00',
+      totalPortfolioValue: manual.currentValue,
+      baseCurrencyCode,
+      totalPortfolioValueInBaseCurrency: currentInBase.toNumber().toFixed(2),
+    };
+  }
 
   const conversionDate = date || new Date();
   const display = await resolveDisplayCurrency({ userId, portfolio, baseCurrencyCode, date: conversionDate });
