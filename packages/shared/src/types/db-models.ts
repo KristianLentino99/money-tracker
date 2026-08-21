@@ -16,6 +16,9 @@ import {
   NotificationStatus,
   NotificationType,
   PAYMENT_TYPES,
+  PlanAllocationAction,
+  PlanStatus,
+  PlanVisibility,
   RemindBeforePreset,
   ResourceType,
   SharePermission,
@@ -296,7 +299,7 @@ export interface TransactionModel {
   originalAmount: number | null;
   originalCurrencyCode: string | null;
   refundLinked: boolean;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
   /** Serializer-derived: set when a bank transaction merged into this row while it was planned. */
   plannedMerge?: { mergedAt: string } | null;
   /** Metadata about how this transaction was categorized */
@@ -374,6 +377,75 @@ export interface ExchangeRatesModel {
 export interface UserExchangeRatesModel extends ExchangeRatesModel {
   userId: number;
   custom?: boolean;
+}
+
+export interface PlanModel {
+  id: RecordId;
+  ownerUserId: number;
+  name: string;
+  visibility: PlanVisibility;
+  status: PlanStatus;
+  isDefault: boolean;
+  baseCurrencyCode: string;
+  periodStartDay: number;
+  includeHistoricalTransactions: boolean;
+  archivedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PlanCategoryMembershipModel {
+  id: RecordId;
+  planId: RecordId;
+  categoryId: RecordId | null;
+  active: boolean;
+  detachedAt: Date | null;
+  categoryNameSnapshot: string;
+  categoryGroupNameSnapshot: string | null;
+}
+
+export interface PlanAccountMembershipModel {
+  id: RecordId;
+  planId: RecordId;
+  accountId: RecordId | null;
+  active: boolean;
+  detachedAt: Date | null;
+  accountNameSnapshot: string;
+  currencyCodeSnapshot: string | null;
+}
+
+export interface PlanPeriodModel {
+  id: RecordId;
+  planId: RecordId;
+  periodStart: string;
+  revision: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PlanAssignmentModel {
+  id: RecordId;
+  planId: RecordId;
+  periodStart: string;
+  categoryIdentity: RecordId;
+  categoryId: RecordId | null;
+  categoryNameSnapshot: string;
+  assignedCents: number;
+}
+
+export interface PlanAllocationEventModel {
+  id: RecordId;
+  planId: RecordId;
+  periodStart: string;
+  actorUserId: number;
+  action: PlanAllocationAction;
+  requestId: string;
+  payloadFingerprint: string;
+  before: Record<string, number>;
+  after: Record<string, number>;
+  expectedRevision: number;
+  resultRevision: number;
+  createdAt: Date;
 }
 
 export interface BudgetModel {

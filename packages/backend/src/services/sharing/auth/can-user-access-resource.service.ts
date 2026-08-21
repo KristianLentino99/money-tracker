@@ -11,6 +11,7 @@ import { UnexpectedError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
 import Budgets from '@models/budget.model';
+import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
 import Users from '@models/users.model';
 import { Op } from 'sequelize';
@@ -90,6 +91,14 @@ const RESOURCE_OWNER_RESOLVERS: Record<ResourceType, ResourceOwnerResolver> = {
     })) as { userId: number } | null;
     return budget?.userId ?? null;
   },
+  [RESOURCE_TYPES.plan]: async (resourceId) => {
+    const plan = (await Plans.findOne({
+      where: { id: resourceId },
+      attributes: ['ownerUserId'],
+      raw: true,
+    })) as { ownerUserId: number } | null;
+    return plan?.ownerUserId ?? null;
+  },
 };
 
 type ResourceNameResolver = (resourceId: string) => Promise<string | null>;
@@ -124,6 +133,14 @@ const RESOURCE_NAME_RESOLVERS: Record<ResourceType, ResourceNameResolver> = {
       raw: true,
     })) as { name: string } | null;
     return budget?.name ?? null;
+  },
+  [RESOURCE_TYPES.plan]: async (resourceId) => {
+    const plan = (await Plans.findOne({
+      where: { id: resourceId },
+      attributes: ['name'],
+      raw: true,
+    })) as { name: string } | null;
+    return plan?.name ?? null;
   },
 };
 
@@ -252,7 +269,7 @@ export const canUserAccessResource = async ({
   // future direction; "all-or-nothing" auto-grant is the wrong primitive for budgets,
   // so we don't wire the fallthrough at all.) Stop here when no per-resource share
   // exists for a budget request.
-  if (resourceType === RESOURCE_TYPES.budget) {
+  if (resourceType === RESOURCE_TYPES.budget || resourceType === RESOURCE_TYPES.plan) {
     return denied(ownerUserId);
   }
 

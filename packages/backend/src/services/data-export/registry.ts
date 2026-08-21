@@ -123,7 +123,7 @@ export const EXPORT_DOMAINS: ReadonlyArray<ExportDomainBase> = [
       { header: 'RefundOf', field: 'refundOf', kind: 'text' },
       { header: 'LinkedTransfer', field: 'linkedTransfer', kind: 'text' },
       { header: 'Subscription', field: 'subscription', kind: 'text' },
-      { header: 'Planned', field: 'isPlanned', kind: 'boolean' },
+      { header: 'Planned', field: 'isForecastOnly', kind: 'boolean' },
     ],
   }),
   defineDomain({

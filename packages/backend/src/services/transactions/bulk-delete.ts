@@ -37,13 +37,13 @@ const bulkDeleteImpl = async ({ userId, transactionIds }: BulkDeleteParams): Pro
 
   const rows = (await Transactions.default.findAll({
     where: { id: { [Op.in]: uniqueIds }, userId },
-    attributes: ['id', 'accountType', 'transferId', 'isPlanned'],
+    attributes: ['id', 'accountType', 'transferId', 'isForecastOnly'],
     raw: true,
   })) as unknown as Array<{
     id: string;
     accountType: ACCOUNT_TYPES;
     transferId: string | null;
-    isPlanned: boolean;
+    isForecastOnly: boolean;
   }>;
 
   if (rows.length === 0) {
@@ -51,7 +51,7 @@ const bulkDeleteImpl = async ({ userId, transactionIds }: BulkDeleteParams): Pro
   }
 
   const disallowedIds = rows
-    .filter((row) => row.accountType !== ACCOUNT_TYPES.system && !row.isPlanned)
+    .filter((row) => row.accountType !== ACCOUNT_TYPES.system && !row.isForecastOnly)
     .map((row) => row.id);
   if (disallowedIds.length > 0) {
     throw new ValidationError({

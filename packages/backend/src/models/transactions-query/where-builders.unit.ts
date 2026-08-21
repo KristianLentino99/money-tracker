@@ -22,11 +22,11 @@ const isEmptyObject = (fragment: object): boolean =>
 
 describe('plannedWhere', () => {
   it('excludes planned rows', () => {
-    expect(plannedWhere({ policy: 'exclude' })).toEqual({ isPlanned: false });
+    expect(plannedWhere({ policy: 'exclude' })).toEqual({ isForecastOnly: false });
   });
 
   it('keeps planned rows only', () => {
-    expect(plannedWhere({ policy: 'only' })).toEqual({ isPlanned: true });
+    expect(plannedWhere({ policy: 'only' })).toEqual({ isForecastOnly: true });
   });
 
   it('produces an empty fragment for "include"', () => {
@@ -34,7 +34,10 @@ describe('plannedWhere', () => {
   });
 
   it("maps { visibleTo } to real rows OR the user's own plans", () => {
-    expect(orBranches(plannedWhere({ policy: { visibleTo: 42 } }))).toEqual([{ isPlanned: false }, { userId: 42 }]);
+    expect(orBranches(plannedWhere({ policy: { visibleTo: 42 } }))).toEqual([
+      { isForecastOnly: false },
+      { userId: 42 },
+    ]);
   });
 });
 
@@ -84,7 +87,7 @@ describe('composeWhere', () => {
     const composed = composeWhere({ fragments: [plannedWhere({ policy: { visibleTo: 7 } })], where: callerWhere });
 
     expect(composed[Op.and]).toHaveLength(2);
-    expect(orBranches(composed[Op.and][0])).toEqual([{ isPlanned: false }, { userId: 7 }]);
+    expect(orBranches(composed[Op.and][0])).toEqual([{ isForecastOnly: false }, { userId: 7 }]);
     expect(orBranches(composed[Op.and][1])).toEqual([{ accountId: 'acc-1' }, { accountId: 'acc-2' }]);
   });
 
@@ -118,7 +121,7 @@ describe('composeWhere', () => {
     });
 
     expect(composed[Op.and]).toHaveLength(4);
-    expect(composed[Op.and][0]).toEqual({ isPlanned: false });
+    expect(composed[Op.and][0]).toEqual({ isForecastOnly: false });
     expect(composed[Op.and][1]).toEqual({ userId: 5 });
     expect(literalSql(composed[Op.and][2])).toBe(NOT_BALANCE_ADJUSTMENT_SQL);
     expect(composed[Op.and][3]).toEqual({ categoryId: 'cat-1' });

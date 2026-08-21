@@ -37,7 +37,7 @@ export const buildOptimisticTransaction = ({
     ...rawTransaction,
     note: form.note ?? '',
     paymentType: form.paymentType!.value,
-    isPlanned: resolveFormIsPlanned({ form }),
+    isForecastOnly: resolveFormIsPlanned({ form }),
     updatedAt: new Date(),
   };
 

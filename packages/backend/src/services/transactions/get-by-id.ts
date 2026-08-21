@@ -103,7 +103,7 @@ export const getTransactionById = withTransaction(
     if (!tx) return null;
 
     // Planned rows belong to their creator only; nobody reaches them through a share.
-    if (tx.isPlanned) return null;
+    if (tx.isForecastOnly) return null;
 
     const access = await canUserAccessResource({
       userId,

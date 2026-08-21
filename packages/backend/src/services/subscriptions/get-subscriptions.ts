@@ -349,7 +349,7 @@ export const getSubscriptionById = async ({
   const nextExpectedDate = computeNextExpectedDate({
     startDate: raw.startDate,
     frequency: raw.frequency,
-    transactions: transactions.filter((tx) => !tx.isPlanned),
+    transactions: transactions.filter((tx) => !tx.isForecastOnly),
   });
 
   return {

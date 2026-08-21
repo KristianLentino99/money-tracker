@@ -495,14 +495,14 @@ describe('components/modals/modify-record/helpers', () => {
     });
 
     it('returns true for a planned row on a provider-linked account', () => {
-      const transaction = buildSystemExpenseTransaction({ accountId: destMonobankAccount.id, isPlanned: true });
+      const transaction = buildSystemExpenseTransaction({ accountId: destMonobankAccount.id, isForecastOnly: true });
       expect(canDeleteTransaction({ transaction, oppositeTransaction: undefined, accounts, canMutate: true })).toBe(
         true,
       );
     });
 
     it('returns false for a planned row the caller cannot mutate', () => {
-      const transaction = buildSystemExpenseTransaction({ accountId: destMonobankAccount.id, isPlanned: true });
+      const transaction = buildSystemExpenseTransaction({ accountId: destMonobankAccount.id, isForecastOnly: true });
       expect(canDeleteTransaction({ transaction, oppositeTransaction: undefined, accounts, canMutate: false })).toBe(
         false,
       );
@@ -525,7 +525,7 @@ describe('components/modals/modify-record/helpers', () => {
     it('is true for a planned transaction on a synced account', () => {
       expect(
         isTxEditableAsManual({
-          transaction: buildSystemExpenseTransaction({ isPlanned: true }),
+          transaction: buildSystemExpenseTransaction({ isForecastOnly: true }),
           isRecordExternal: true,
         }),
       ).toBe(true);
@@ -541,11 +541,13 @@ describe('components/modals/modify-record/helpers', () => {
     });
 
     it('is true for a non-transfer form with the flag set', () => {
-      expect(resolveFormIsPlanned({ form: buildForm({ isPlanned: true }) })).toBe(true);
+      expect(resolveFormIsPlanned({ form: buildForm({ isForecastOnly: true }) })).toBe(true);
     });
 
     it('is false for a transfer form even when the flag survived the type switch', () => {
-      expect(resolveFormIsPlanned({ form: buildForm({ type: FORM_TYPES.transfer, isPlanned: true }) })).toBe(false);
+      expect(resolveFormIsPlanned({ form: buildForm({ type: FORM_TYPES.transfer, isForecastOnly: true }) })).toBe(
+        false,
+      );
     });
   });
 

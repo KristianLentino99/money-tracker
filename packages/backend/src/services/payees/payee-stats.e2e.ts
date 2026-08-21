@@ -159,7 +159,7 @@ describe('Payee stats — rows that must not be counted', () => {
         raw: true,
       });
       const plannedAfterCreate = await helpers.getTransactionById({ id: planned!.id, raw: true });
-      expect(plannedAfterCreate!.isPlanned).toBe(true);
+      expect(plannedAfterCreate!.isForecastOnly).toBe(true);
       expect(plannedAfterCreate!.payeeId).toBe(payee.id);
 
       const { detail, list } = await readStats({ payeeId: payee.id });

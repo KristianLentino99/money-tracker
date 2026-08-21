@@ -21,7 +21,7 @@ const buildTx = (overrides: Partial<TestPayment> = {}): TestPayment => ({
   refCurrencyCode: 'UAH',
   time: '2025-01-12T10:00:00.000Z',
   note: 'wFirma',
-  isPlanned: false,
+  isForecastOnly: false,
   ...overrides,
 });
 
@@ -486,7 +486,13 @@ describe('buildLinkedPaymentsSummary', () => {
         transactions: [
           buildTx({ id: 'a', amount: 700, refAmount: 700, time: '2026-01-12T10:00:00.000Z' }),
           buildTx({ id: 'b', amount: 800, refAmount: 800, time: '2026-02-12T10:00:00.000Z' }),
-          buildTx({ id: 'planned', amount: 900, refAmount: 900, time: '2026-03-12T10:00:00.000Z', isPlanned: true }),
+          buildTx({
+            id: 'planned',
+            amount: 900,
+            refAmount: 900,
+            time: '2026-03-12T10:00:00.000Z',
+            isForecastOnly: true,
+          }),
         ],
       });
 
@@ -501,7 +507,13 @@ describe('buildLinkedPaymentsSummary', () => {
       const summary = buildSummary({
         transactions: [
           buildTx({ id: 'a', amount: 700, refAmount: 700, time: '2026-01-12T10:00:00.000Z' }),
-          buildTx({ id: 'planned', amount: 900, refAmount: 900, time: '2026-03-12T10:00:00.000Z', isPlanned: true }),
+          buildTx({
+            id: 'planned',
+            amount: 900,
+            refAmount: 900,
+            time: '2026-03-12T10:00:00.000Z',
+            isForecastOnly: true,
+          }),
         ],
       });
 
@@ -520,7 +532,7 @@ describe('buildLinkedPaymentsSummary', () => {
             currencyCode: 'PLN',
             refAmount: 715.3,
             time: '2026-02-12T10:00:00.000Z',
-            isPlanned: true,
+            isForecastOnly: true,
           }),
         ],
       });
@@ -536,7 +548,12 @@ describe('buildLinkedPaymentsSummary', () => {
         buildTx({ id: 'p2', refAmount: 600, time: '2026-02-12T10:00:00.000Z' }),
         buildTx({ id: 'p3', refAmount: 800, time: '2026-03-12T10:00:00.000Z' }),
       ];
-      const planned = buildTx({ id: 'planned', refAmount: 5000, time: '2026-05-12T10:00:00.000Z', isPlanned: true });
+      const planned = buildTx({
+        id: 'planned',
+        refAmount: 5000,
+        time: '2026-05-12T10:00:00.000Z',
+        isForecastOnly: true,
+      });
 
       expect(buildSummary({ transactions: [...settledRun, planned] }).chart).toBeNull();
 
@@ -561,7 +578,7 @@ describe('buildLinkedPaymentsSummary', () => {
           buildTx({ id: 'a', refAmount: 1000, time: '2025-01-12T10:00:00.000Z' }),
           buildTx({ id: 'b', refAmount: 1100, time: '2025-02-12T10:00:00.000Z' }),
           buildTx({ id: 'c', refAmount: 1250, time: '2025-03-12T10:00:00.000Z' }),
-          buildTx({ id: 'planned', refAmount: 5000, time: '2025-04-12T10:00:00.000Z', isPlanned: true }),
+          buildTx({ id: 'planned', refAmount: 5000, time: '2025-04-12T10:00:00.000Z', isForecastOnly: true }),
         ],
       });
 
@@ -577,7 +594,7 @@ describe('buildLinkedPaymentsSummary', () => {
         transactions: [
           buildTx({ id: 'a', refAmount: 1000, time: '2025-01-12T10:00:00.000Z' }),
           buildTx({ id: 'b', refAmount: 1250, time: '2025-02-12T10:00:00.000Z' }),
-          buildTx({ id: 'planned', refAmount: 1500, time: '2025-03-12T10:00:00.000Z', isPlanned: true }),
+          buildTx({ id: 'planned', refAmount: 1500, time: '2025-03-12T10:00:00.000Z', isForecastOnly: true }),
         ],
       });
 
@@ -587,8 +604,20 @@ describe('buildLinkedPaymentsSummary', () => {
     it('reports empty aggregates when every linked row is planned', () => {
       const summary = buildSummary({
         transactions: [
-          buildTx({ id: 'planned-1', amount: 700, refAmount: 700, time: '2026-01-12T10:00:00.000Z', isPlanned: true }),
-          buildTx({ id: 'planned-2', amount: 800, refAmount: 800, time: '2026-02-12T10:00:00.000Z', isPlanned: true }),
+          buildTx({
+            id: 'planned-1',
+            amount: 700,
+            refAmount: 700,
+            time: '2026-01-12T10:00:00.000Z',
+            isForecastOnly: true,
+          }),
+          buildTx({
+            id: 'planned-2',
+            amount: 800,
+            refAmount: 800,
+            time: '2026-02-12T10:00:00.000Z',
+            isForecastOnly: true,
+          }),
         ],
       });
 

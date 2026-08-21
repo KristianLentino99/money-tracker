@@ -165,7 +165,7 @@ describe('GET /transactions/planned-summary', () => {
   });
 });
 
-describe('GET /transactions isPlanned filter', () => {
+describe('GET /transactions isForecastOnly filter', () => {
   const seedMixedRows = async () => {
     const account = await createOwnedAccount();
     const [real] = await helpers.createTransaction({
@@ -180,18 +180,18 @@ describe('GET /transactions isPlanned filter', () => {
     return { realId: real.id, plannedId: planned.id };
   };
 
-  it('returns only planned rows when isPlanned=true', async () => {
+  it('returns only planned rows when isForecastOnly=true', async () => {
     const { plannedId } = await seedMixedRows();
 
-    const transactions = await helpers.getTransactions({ isPlanned: true, raw: true });
+    const transactions = await helpers.getTransactions({ isForecastOnly: true, raw: true });
 
     expect(transactions.map((tx) => tx.id)).toEqual([plannedId]);
   });
 
-  it('excludes planned rows when isPlanned=false', async () => {
+  it('excludes planned rows when isForecastOnly=false', async () => {
     const { realId } = await seedMixedRows();
 
-    const transactions = await helpers.getTransactions({ isPlanned: false, raw: true });
+    const transactions = await helpers.getTransactions({ isForecastOnly: false, raw: true });
 
     expect(transactions.map((tx) => tx.id)).toEqual([realId]);
   });

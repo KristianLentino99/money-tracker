@@ -28,6 +28,12 @@ import PayeeAliases from '@models/payee-aliases.model';
 import PayeeIgnoredNames from '@models/payee-ignored-names.model';
 import PayeeTags from '@models/payee-tags.model';
 import Payees from '@models/payees.model';
+import PlanAccountMemberships from '@models/plan-account-memberships.model';
+import PlanAllocationEvents from '@models/plan-allocation-events.model';
+import PlanAssignments from '@models/plan-assignments.model';
+import PlanCategoryMemberships from '@models/plan-category-memberships.model';
+import PlanPeriods from '@models/plan-periods.model';
+import Plans from '@models/plan.model';
 import RefundTransactions from '@models/refund-transactions.model';
 import ResourceShares from '@models/resource-shares.model';
 import ShareInvitations from '@models/share-invitations.model';
@@ -71,6 +77,7 @@ export type BackupParentScope =
   | 'transactions'
   | 'transactionGroups'
   | 'budgets'
+  | 'plans'
   | 'subscriptions'
   | 'ventureEvents'
   | 'subscriptionPeriods';
@@ -316,6 +323,14 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
   },
+  {
+    fileName: 'plans',
+    model: Plans,
+    tier: 3,
+    scope: { strategy: 'userColumn', column: 'ownerUserId' },
+    restoreMode: 'insert',
+    requireSeededCurrency: true,
+  },
 
   // tier 4
   {
@@ -390,6 +405,34 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
   },
 
   // tier 5
+  {
+    fileName: 'plan-periods',
+    model: PlanPeriods,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'plan-category-memberships',
+    model: PlanCategoryMemberships,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'plan-account-memberships',
+    model: PlanAccountMemberships,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'plan-assignments',
+    model: PlanAssignments,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
   {
     fileName: 'transaction-splits',
     model: TransactionSplits,
@@ -469,6 +512,13 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
   },
 
   // tier 6
+  {
+    fileName: 'plan-allocation-events',
+    model: PlanAllocationEvents,
+    tier: 6,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
   {
     fileName: 'subscription-period-notifications',
     model: SubscriptionPeriodNotifications,

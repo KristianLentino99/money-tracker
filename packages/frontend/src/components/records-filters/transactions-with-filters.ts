@@ -14,7 +14,7 @@ import { MaybeRef, Ref, computed, ref } from 'vue';
 
 const filterOrUndefined = (value: FILTER_OPERATION) => (value === FILTER_OPERATION.all ? undefined : value);
 
-/** `isPlanned` is a tri-state boolean param: true = only plans, false = exclude them, absent = both. */
+/** `isForecastOnly` is a tri-state boolean param: true = only plans, false = exclude them, absent = both. */
 export const buildIsPlannedParam = ({ value }: { value: FILTER_OPERATION }): boolean | undefined => {
   if (value === FILTER_OPERATION.only) return true;
   if (value === FILTER_OPERATION.exclude) return false;
@@ -97,7 +97,7 @@ export const useTransactionsWithFilters = ({
           noteSearch: filter.noteIncludes,
           transferFilter: filterOrUndefined(filter.transferFilter),
           refundFilter: filterOrUndefined(filter.refundFilter),
-          isPlanned: buildIsPlannedParam({ value: filter.plannedFilter }),
+          isForecastOnly: buildIsPlannedParam({ value: filter.plannedFilter }),
           transferNatures: buildTransferNaturesParam(filter),
           sortBy: sorting?.value.sortBy,
           order: sorting?.value.order,

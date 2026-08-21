@@ -16,6 +16,7 @@ import { logger } from '@js/utils/logger';
 import * as Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
+import PlanAccountMemberships from '@models/plan-account-memberships.model';
 import { countTransactions } from '@models/transactions-query';
 import { getBaseCurrency } from '@models/users-currencies.model';
 import Users from '@models/users.model';
@@ -466,6 +467,11 @@ const deleteAccountByIdInTx = withTransaction(
     // about-to-be-cascaded leg on this account. Same transaction as the destroy, so a
     // failure rolls everything back together.
     await convertCrossUserTransfersForAccountIds({ accountIds: [id], ownerUserId: userId });
+
+    await PlanAccountMemberships.update(
+      { active: false, detachedAt: new Date() },
+      { where: { accountId: id, active: true } },
+    );
 
     // The destroy cascades `Subscriptions.accountId` to NULL at the DB level, which trips
     // the auto-record check constraint on any subscription still booking into this account.

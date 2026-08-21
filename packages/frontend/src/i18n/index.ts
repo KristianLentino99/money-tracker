@@ -34,6 +34,7 @@ const chunkRegistry: ChunkRegistry = {
     'auth/oauth-authorize': () => import('./locales/chunks/en/auth/oauth-authorize.json'),
     // Page chunks
     'pages/dashboard': () => import('./locales/chunks/en/pages/dashboard.json'),
+    'pages/plan': () => import('./locales/chunks/en/pages/plan.json'),
     'pages/accounts': () => import('./locales/chunks/en/pages/accounts.json'),
     'pages/account': () => import('./locales/chunks/en/pages/account.json'),
     'pages/account-integrations': () => import('./locales/chunks/en/pages/account-integrations.json'),

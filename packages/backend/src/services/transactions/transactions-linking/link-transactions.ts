@@ -115,7 +115,7 @@ export const linkTransactions = withTransaction(
           ignoreBaseTxTypeValidation,
         });
 
-        if (base.isPlanned || opposite.isPlanned) {
+        if (base.isForecastOnly || opposite.isForecastOnly) {
           throw new ValidationError({
             message: t({ key: 'transactions.linkPlannedNotAllowed' }),
           });

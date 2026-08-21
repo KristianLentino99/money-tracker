@@ -51,6 +51,7 @@ export const BACKUP_FILE_NAMES = [
   'loan-details',
   'transaction-groups',
   'budgets',
+  'plans',
   // tier 4
   'transactions',
   'balances',
@@ -63,6 +64,9 @@ export const BACKUP_FILE_NAMES = [
   'venture-events',
   'subscription-candidates',
   // tier 5
+  'plan-periods',
+  'plan-category-memberships',
+  'plan-account-memberships',
   'transaction-splits',
   'transaction-tags',
   'transaction-group-items',
@@ -75,6 +79,8 @@ export const BACKUP_FILE_NAMES = [
   'transfer-suggestion-dismissals',
   'venture-event-links',
   // tier 6
+  'plan-assignments',
+  'plan-allocation-events',
   'subscription-period-notifications',
   // exported but skipped on restore (counterpart users don't exist cross-instance)
   'resource-shares',

@@ -29,7 +29,7 @@ const bodyZodSchema = z
     tagIds: z.array(recordId()).max(20, 'Maximum 20 tags allowed').nullish(),
     payeeId: recordId().nullable().optional(),
     payeeLocked: z.boolean().optional(),
-    isPlanned: z.boolean().optional(),
+    isForecastOnly: z.boolean().optional(),
     originalAmount: nonNegativeAmountSchema().nullable().optional(),
     originalCurrencyCode: currencyCode().nullable().optional(),
   })
@@ -143,7 +143,7 @@ export default createController(schema, async ({ user, params, body }) => {
     tagIds,
     payeeId,
     payeeLocked,
-    isPlanned,
+    isForecastOnly,
     originalAmount,
     originalCurrencyCode,
   } = body;
@@ -176,7 +176,7 @@ export default createController(schema, async ({ user, params, body }) => {
       refundsTxId,
       refundsSplitId,
       payeeLocked,
-      isPlanned,
+      isForecastOnly,
     }),
     // payeeId can be null to clear the link, so don't strip undefined here.
     ...(payeeId !== undefined ? { payeeId } : {}),

@@ -111,7 +111,7 @@ export const markPeriodPaid = withTransaction(
         message: 'Transaction not found.',
       });
 
-      if (linkedTransaction.isPlanned) {
+      if (linkedTransaction.isForecastOnly) {
         throw new ValidationError({
           message: t({ key: 'transactions.plannedCannotConfirmPayment' }),
         });

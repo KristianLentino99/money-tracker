@@ -1,6 +1,144 @@
-import { AccountModel, CategoryModel, EntityLogoPayload, TransactionModel } from './db-models';
-import { ACCOUNT_CATEGORIES, ACCOUNT_STATUSES, TRANSACTION_TYPES } from './enums';
+import { AccountModel, CategoryModel, EntityLogoPayload, PlanModel, TransactionModel } from './db-models';
+import {
+  PLAN_ALLOCATION_ACTIONS,
+  PLAN_STATUSES,
+  PLAN_VISIBILITIES,
+  ACCOUNT_CATEGORIES,
+  ACCOUNT_STATUSES,
+  TRANSACTION_TYPES,
+} from './enums';
+import type { Decimal } from './money';
 import { RecordId } from './record-id';
+
+export interface PlanSummaryResponse extends PlanModel {
+  canAllocate: boolean;
+  canManage: boolean;
+  canArchive: boolean;
+  canShare: boolean;
+}
+
+export interface PlanPeriodResponse {
+  start: string;
+  end: string;
+  isCurrent: boolean;
+  previousStart: string | null;
+  nextStart: string;
+  revision: number;
+}
+
+export type PlanCategoryStatus = 'none' | 'funded' | 'underfunded' | 'overspent';
+
+export interface PlanCategoryRowResponse {
+  id: RecordId;
+  name: string;
+  color: string;
+  icon: string | null;
+  parentId: RecordId | null;
+  assigned: Decimal;
+  activity: Decimal;
+  available: Decimal;
+  status: PlanCategoryStatus;
+  upcomingObligation: Decimal | null;
+  underfundedBy: Decimal | null;
+}
+
+export interface PlanCategoryGroupResponse {
+  id: RecordId | null;
+  name: string;
+  categories: PlanCategoryRowResponse[];
+}
+
+export interface PlanUpcomingObligationResponse {
+  categoryId: RecordId;
+  amount: Decimal;
+  dueDate: string;
+  count: number;
+}
+
+export interface PlanViewResponse {
+  plan: PlanSummaryResponse;
+  period: PlanPeriodResponse;
+  readyToAssign: Decimal;
+  readyToAssignState: 'positive' | 'zero' | 'negative';
+  readyToAssignDeficit: Decimal | null;
+  groups: PlanCategoryGroupResponse[];
+  upcomingObligations: PlanUpcomingObligationResponse[];
+  undo: {
+    eventId: RecordId;
+    action: (typeof PLAN_ALLOCATION_ACTIONS)[keyof typeof PLAN_ALLOCATION_ACTIONS];
+    canUndo: boolean;
+  } | null;
+}
+
+export interface PlanMutationResponse {
+  view: PlanViewResponse;
+  mutation: {
+    requestId: string;
+    action: (typeof PLAN_ALLOCATION_ACTIONS)[keyof typeof PLAN_ALLOCATION_ACTIONS];
+    eventId: RecordId;
+    revision: number;
+    recomputedFromPeriodStart: string;
+    recomputedThroughPeriodStart: string;
+  };
+}
+
+export interface CreatePlanBody {
+  name: string;
+  baseCurrencyCode: string;
+  periodStartDay?: number;
+  includeHistoricalTransactions?: boolean;
+  templateId?: string;
+  categoryIds?: RecordId[];
+  accountIds?: RecordId[];
+  isDefault?: boolean;
+}
+
+export interface UpdatePlanBody {
+  name?: string;
+  periodStartDay?: number;
+  isDefault?: boolean;
+}
+
+export interface AddPlanCategoryBody {
+  categoryId: RecordId;
+}
+
+export interface SetPlanAssignmentBody {
+  assigned: number;
+  expectedRevision: number;
+  requestId: string;
+}
+
+export interface MovePlanMoneyBody {
+  sourceCategoryId: RecordId;
+  destinationCategoryId: RecordId;
+  amount: number;
+  expectedRevision: number;
+  requestId: string;
+}
+
+export interface BulkPlanAssignment {
+  categoryId: RecordId;
+  assigned: number;
+}
+
+export interface BulkPlanAssignmentBody {
+  assignments: BulkPlanAssignment[];
+  expectedRevision: number;
+  requestId: string;
+}
+
+export interface PlanMutationBody {
+  expectedRevision: number;
+  requestId: string;
+}
+
+export interface PlanUndoBody extends PlanMutationBody {
+  eventId: RecordId;
+}
+
+export type PlanLifecycle = (typeof PLAN_STATUSES)[keyof typeof PLAN_STATUSES];
+export type PlanVisibilityValue = (typeof PLAN_VISIBILITIES)[keyof typeof PLAN_VISIBILITIES];
 
 export type BodyPayload = {
   [key: string | number]: string | number | boolean | undefined;
@@ -111,7 +249,7 @@ export interface CreateTransactionBody {
   payeeId?: RecordId | null;
   /** True when the caller wants future syncs to leave this row's Payee link alone. */
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   originalAmount?: number;
   /** Any ISO 4217 code; it does not have to be connected to the user. */
   originalCurrencyCode?: string;
@@ -143,7 +281,7 @@ export interface UpdateTransactionBody {
   tagIds?: string[] | null;
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   /** Send both fields as `null` to clear the pair. */
   originalAmount?: number | null;
   originalCurrencyCode?: string | null;

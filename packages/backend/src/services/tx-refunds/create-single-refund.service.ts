@@ -62,7 +62,7 @@ export const createSingleRefund = withTransaction(
         });
       }
 
-      if (originalTx?.isPlanned || refundTx.isPlanned) {
+      if (originalTx?.isForecastOnly || refundTx.isForecastOnly) {
         throw new ValidationError({
           message: t({ key: 'transactions.plannedCannotBeRefundLinked' }),
         });

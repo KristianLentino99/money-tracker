@@ -2,6 +2,7 @@ import { API_ERROR_CODES } from '@bt/shared/types';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { ConflictError, ValidationError } from '@js/errors';
 import * as Categories from '@models/categories.model';
+import PlanCategoryMemberships from '@models/plan-category-memberships.model';
 import { countTransactions, updateTransactions } from '@models/transactions-query';
 import { withTransaction } from '@services/common/with-transaction';
 
@@ -59,6 +60,11 @@ export const deleteCategory = withTransaction(async (payload: DeleteCategoryPayl
       balanceAdjustments: 'include',
     });
   }
+
+  await PlanCategoryMemberships.update(
+    { active: false, detachedAt: new Date() },
+    { where: { categoryId: payload.categoryId, active: true } },
+  );
 
   await Categories.deleteCategory(payload);
 });

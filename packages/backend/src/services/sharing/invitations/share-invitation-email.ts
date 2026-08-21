@@ -23,6 +23,7 @@ const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
   account: 'account',
   household: 'household',
   budget: 'budget',
+  plan: 'plan',
 };
 
 const policySummary = ({ permission, policy }: { permission: SharePermission; policy: SharePolicy | null }) => {
@@ -92,7 +93,8 @@ export const sendInvitationEmail = async ({
   // the share-invitation dialog. The landing path matches the resource flavour so the
   // recipient lands somewhere they expect to see this share even before opening the
   // dialog; the dialog itself overlays whatever route the user ended up on.
-  const landingPath = resourceType === RESOURCE_TYPES.budget ? '/budgets' : '/accounts';
+  const landingPath =
+    resourceType === RESOURCE_TYPES.budget ? '/budgets' : resourceType === RESOURCE_TYPES.plan ? '/plan' : '/accounts';
   const acceptUrl = `${appUrl}${landingPath}?invitation_token=${encodeURIComponent(token)}`;
   const summaryLine = policySummary({ permission, policy });
   const html = buildEmailHtml({

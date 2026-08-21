@@ -67,7 +67,7 @@ const { data: transactions, isFetching: isTxFetching } = useQuery({
       includeGroups: true,
       transferNatures: transferNatures.value,
       excludeBalanceAdjustments: excludeBalanceAdjustments.value || undefined,
-      ...(includePlanned.value ? {} : { isPlanned: false }),
+      ...(includePlanned.value ? {} : { isForecastOnly: false }),
       to: new Date().toISOString(),
     }),
   staleTime: Infinity,

@@ -21,7 +21,7 @@ export const useSidebarNavCollapse = createSharedComposable(() => {
   return {
     isAccountsOpen: sectionOpen('accounts'),
     isTransactionsOpen: sectionOpen('transactions'),
-    isPlannedOpen: sectionOpen('planned'),
+    isForecastOnlyOpen: sectionOpen('planned'),
     hasAnyOpen: computed(() => openSection.value !== null),
     collapseAll: () => {
       openSection.value = null;

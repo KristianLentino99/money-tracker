@@ -64,7 +64,7 @@ describe('Enable Banking reconcile and planned transactions', () => {
    * Written straight onto the model because `externalData` has no API surface, mirroring
    * how the neighbouring reconcile suite seeds the population reconcile exists to clean.
    * Every scalar is cloned from the synced row so the pair lands in the same bucket and
-   * clears every conflict gate — leaving `isPlanned` as the only reason to refuse deletion.
+   * clears every conflict gate — leaving `isForecastOnly` as the only reason to refuse deletion.
    */
   const insertPlannedOrphan = async ({ accountId }: { accountId: RecordId }) => {
     const reference = await syncedRow({ accountId });
@@ -87,7 +87,7 @@ describe('Enable Banking reconcile and planned transactions', () => {
       currencyCode: reference.currencyCode,
       refCurrencyCode: reference.refCurrencyCode,
       externalData: { creditorAccount: IBAN },
-      isPlanned: true,
+      isForecastOnly: true,
     });
   };
 
@@ -110,7 +110,7 @@ describe('Enable Banking reconcile and planned transactions', () => {
 
     const survivor = await helpers.getTransactionById({ id: plan.id, raw: true });
     expect(survivor).not.toBeNull();
-    expect(survivor!.isPlanned).toBe(true);
+    expect(survivor!.isForecastOnly).toBe(true);
     expect(survivor!.note).toBe('Season ticket');
   });
 
@@ -127,7 +127,7 @@ describe('Enable Banking reconcile and planned transactions', () => {
 
     const survivor = await Transactions.findByPk(plan.id);
     expect(survivor).not.toBeNull();
-    expect(survivor!.isPlanned).toBe(true);
+    expect(survivor!.isForecastOnly).toBe(true);
     expect(await Transactions.findByPk(canonical.id)).not.toBeNull();
   });
 

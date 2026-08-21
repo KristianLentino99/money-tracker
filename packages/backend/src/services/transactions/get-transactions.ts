@@ -13,7 +13,7 @@ const DEFAULT_PAGE_SIZE = 20;
 
 /** This service owns the policy axes: it resolves the caller's visible rows itself
  * (`access: 'pre-scoped'`), speaks the HTTP pagination vocabulary (`from`/`limit`), and
- * translates the endpoint's `isPlanned` / `excludeBalanceAdjustments` query params. */
+ * translates the endpoint's `isForecastOnly` / `excludeBalanceAdjustments` query params. */
 type GetTransactionsParams = Omit<
   FindWithFiltersParams,
   'isRaw' | 'access' | 'planned' | 'completeness' | 'balanceAdjustments'
@@ -22,7 +22,7 @@ type GetTransactionsParams = Omit<
   from?: number;
   limit?: number;
   /** Absent = real rows + the caller's own plans; `true` = only the caller's plans; `false` = real rows only. */
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   excludeBalanceAdjustments?: boolean;
 };
 
@@ -60,7 +60,7 @@ interface TransactionAddedBy {
  * stats, etc.) call `Transactions.findWithFilters` directly with `access: { creator }`.
  */
 export const getTransactions = async (params: GetTransactionsParams) => {
-  const { userId, accountIds, budgetIds, from, limit, isPlanned, excludeBalanceAdjustments, ...rest } = params;
+  const { userId, accountIds, budgetIds, from, limit, isForecastOnly, excludeBalanceAdjustments, ...rest } = params;
 
   // Budget-share path: when the caller asks for transactions in specific budgets, we
   // scope visibility through budget-share (in addition to any account-share lookup,
@@ -106,14 +106,14 @@ export const getTransactions = async (params: GetTransactionsParams) => {
   // Raw mode flattens nested includes into dot-notation keys which breaks access
   const isRaw = !rest.includeSplits && !rest.includeTags && !rest.includeGroups;
 
-  // `isPlanned: true` means "only the plans I authored": creator scope is what reproduces
+  // `isForecastOnly: true` means "only the plans I authored": creator scope is what reproduces
   // that, on top of the account/budget ids resolved above.
   const transactions = await Transactions.findWithFilters({
     ...rest,
     accountIds: scopedAccountIds,
     budgetIds: scopedBudgetIds,
-    planned: isPlanned === undefined ? { visibleTo: userId } : isPlanned ? 'only' : 'exclude',
-    access: isPlanned === true ? { creator: userId } : 'pre-scoped',
+    planned: isForecastOnly === undefined ? { visibleTo: userId } : isForecastOnly ? 'only' : 'exclude',
+    access: isForecastOnly === true ? { creator: userId } : 'pre-scoped',
     // A non-finite limit is the callers' "fetch everything" sentinel and must not
     // reach Sequelize as a literal page limit.
     completeness: Number.isFinite(limit ?? DEFAULT_PAGE_SIZE)

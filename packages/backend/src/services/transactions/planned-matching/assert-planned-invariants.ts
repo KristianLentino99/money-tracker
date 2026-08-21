@@ -32,7 +32,7 @@ export const assertAccountCanHoldPlans = async ({
 };
 
 /**
- * Service-level creation invariants for `isPlanned: true`. Lives outside the zod schemas
+ * Service-level creation invariants for `isForecastOnly: true`. Lives outside the zod schemas
  * because MCP callers reach `createTransaction` without them.
  */
 export const assertPlannedCreateAllowed = async ({
@@ -138,7 +138,7 @@ export const assertPlannedStandalone = async ({
 };
 
 /**
- * Invariants for flipping an existing row to `isPlanned: true`. A row that records money
+ * Invariants for flipping an existing row to `isForecastOnly: true`. A row that records money
  * which already moved must not turn back into an intention: that would reverse a real
  * balance or make a confirmed bank row un-confirmable.
  */
@@ -171,7 +171,7 @@ export const assertPlannedWriteAllowed = ({
   transaction: Transactions;
   callerUserId: number;
 }): void => {
-  if (!transaction.isPlanned) return;
+  if (!transaction.isForecastOnly) return;
   if (transaction.userId === callerUserId) return;
 
   throw new ForbiddenError({ message: t({ key: 'transactions.plannedCreatorOnly' }) });

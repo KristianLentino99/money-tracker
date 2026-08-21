@@ -9,6 +9,7 @@ const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
   account: 'account',
   household: 'household',
   budget: 'budget',
+  plan: 'plan',
 };
 
 // Owners managing a resource land on the dashboard surface that lists that
@@ -17,12 +18,14 @@ const RESOURCE_OWNER_MANAGE_PATHS: Record<ResourceType, string> = {
   account: '/accounts',
   budget: '/budgets',
   household: '/settings/household',
+  plan: '/plan',
 };
 
 const RESOURCE_OWNER_MANAGE_CTA: Record<ResourceType, string> = {
   account: 'Manage your accounts',
   budget: 'Manage your budgets',
   household: 'Manage your household',
+  plan: 'Manage your plans',
 };
 
 interface SendShareRevokedEmailParams {

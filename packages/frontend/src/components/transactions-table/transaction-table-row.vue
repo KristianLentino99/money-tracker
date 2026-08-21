@@ -1,7 +1,7 @@
 <template>
   <!-- Borders live on cells, not the row: the table uses border-separate, where <tr> borders don't render -->
   <tr
-    :class="['hover:bg-muted/50 h-10 cursor-pointer divide-x transition-colors', isPlannedRow && 'bg-muted']"
+    :class="['hover:bg-muted/50 h-10 cursor-pointer divide-x transition-colors', isForecastOnlyRow && 'bg-muted']"
     aria-haspopup="true"
     :data-index="index"
     @click="emitRecordClick"
@@ -11,7 +11,7 @@
     <td
       :class="[
         'sticky left-0 z-1 w-8 border-b px-1',
-        isPlannedRow ? 'bg-muted border-l-primary/60 border-l-2 [border-left-style:dashed]' : 'bg-card',
+        isForecastOnlyRow ? 'bg-muted border-l-primary/60 border-l-2 [border-left-style:dashed]' : 'bg-card',
       ]"
       @click.stop
     >
@@ -235,7 +235,7 @@ const isOutOfWalletTransfer = computed(
 );
 const isPortfolioLinked = computed(() => props.tx.transferNature === TRANSACTION_TRANSFER_NATURE.transfer_to_portfolio);
 const isTransferRow = computed(() => isCommonTransfer.value || isOutOfWalletTransfer.value || isPortfolioLinked.value);
-const isPlannedRow = computed(() => props.tx.isPlanned);
+const isForecastOnlyRow = computed(() => props.tx.isForecastOnly);
 
 // Opposite leg lookup is only meaningful for common transfers; the composable
 // no-ops for other natures.

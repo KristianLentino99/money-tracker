@@ -54,7 +54,7 @@ export interface TransactionApiResponse {
   transferId: string | null;
   originalId: string | null;
   refundLinked: boolean;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
   /** Set when a bank transaction merged into this row while it was planned. */
   plannedMerge: { mergedAt: string } | null;
   payeeId: string | null;
@@ -118,7 +118,7 @@ interface CreateTransactionRequest {
   tagIds?: string[];
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   originalAmount?: number; // decimal from API
   originalCurrencyCode?: string;
 }
@@ -151,7 +151,7 @@ interface CreateTransactionInternal {
   userId: number;
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   originalAmount?: Money;
   originalCurrencyCode?: string;
 }
@@ -223,7 +223,7 @@ export function serializeTransaction(
     transferId: tx.transferId,
     originalId: tx.originalId,
     refundLinked: tx.refundLinked,
-    isPlanned: tx.isPlanned ?? false,
+    isForecastOnly: tx.isForecastOnly ?? false,
     plannedMerge: extractPlannedMerge({ externalData: tx.externalData }),
     payeeId: tx.payeeId ?? null,
     payeeLocked: tx.payeeLocked ?? false,
@@ -329,7 +329,7 @@ export function deserializeCreateTransaction(req: CreateTransactionRequest, user
     userId,
     payeeId: req.payeeId,
     payeeLocked: req.payeeLocked,
-    isPlanned: req.isPlanned,
+    isForecastOnly: req.isForecastOnly,
     originalAmount: req.originalAmount !== undefined ? Money.fromDecimal(req.originalAmount) : undefined,
     originalCurrencyCode: req.originalCurrencyCode,
   };

@@ -61,7 +61,7 @@ describe('Refund links against planned transactions', () => {
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       expect(errorMessage({ response })).toBe(PLANNED_REFUND_MESSAGE);
       await expectNothingLinked({ ids: [original.id, planned.id] });
-      expect((await getTx({ id: planned.id })).isPlanned).toBe(true);
+      expect((await getTx({ id: planned.id })).isForecastOnly).toBe(true);
       expect((await helpers.getAccount({ id: accountId, raw: true })).currentBalance).toBe(900);
     });
 
@@ -128,7 +128,7 @@ describe('Refund links against planned transactions', () => {
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       expect(errorMessage({ response })).toBe(PLANNED_REFUND_MESSAGE);
       await expectNothingLinked({ ids: [real.id, planned.id] });
-      expect((await getTx({ id: planned.id })).isPlanned).toBe(true);
+      expect((await getTx({ id: planned.id })).isForecastOnly).toBe(true);
     });
 
     it('rejects a planned row being pointed at a real original', async () => {
@@ -142,7 +142,7 @@ describe('Refund links against planned transactions', () => {
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       await expectNothingLinked({ ids: [original.id, planned.id] });
-      expect((await getTx({ id: planned.id })).isPlanned).toBe(true);
+      expect((await getTx({ id: planned.id })).isForecastOnly).toBe(true);
     });
 
     it('rejects a planned row being marked as refunded by a real row', async () => {
@@ -156,7 +156,7 @@ describe('Refund links against planned transactions', () => {
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       await expectNothingLinked({ ids: [real.id, planned.id] });
-      expect((await getTx({ id: planned.id })).isPlanned).toBe(true);
+      expect((await getTx({ id: planned.id })).isForecastOnly).toBe(true);
     });
   });
 
@@ -176,7 +176,7 @@ describe('Refund links against planned transactions', () => {
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       expect(errorMessage({ response })).toBe(PLANNED_REFUND_MESSAGE);
       await expectNothingLinked({ ids: [planned.id] });
-      expect((await getTx({ id: planned.id })).isPlanned).toBe(true);
+      expect((await getTx({ id: planned.id })).isForecastOnly).toBe(true);
     });
   });
 

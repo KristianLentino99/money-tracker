@@ -47,7 +47,7 @@ const props = withDefaults(
 const mergedAt = computed(() => props.transaction.plannedMerge?.mergedAt);
 
 const marker = computed(() => {
-  if (props.transaction.isPlanned) {
+  if (props.transaction.isForecastOnly) {
     const time = props.transaction.time;
 
     if (isPlanMatchWindowExpired({ time })) {

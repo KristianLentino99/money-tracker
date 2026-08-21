@@ -65,7 +65,7 @@ interface UpdateParams {
   tagIds?: string[] | null; // null to clear all tags
   payeeId?: string | null;
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   /** `null` clears the stored metadata; both fields move together. */
   originalAmount?: Money | null;
   originalCurrencyCode?: string | null;

@@ -64,18 +64,18 @@ type CreateTxResult = [baseTx: Transactions.default, oppositeTx?: Transactions.d
 const resolveAccountTypeForManualWrite = async ({
   accountId,
   accountOwnerUserId,
-  isPlanned,
+  isForecastOnly,
 }: {
   accountId: string;
   accountOwnerUserId: number;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
 }): Promise<ACCOUNT_TYPES> => {
   const account = await findOrThrowNotFound({
     query: Accounts.getAccountById({ id: accountId, userId: accountOwnerUserId }),
     message: t({ key: 'accounts.accountNotFoundForTransaction' }),
   });
 
-  if (account.type !== ACCOUNT_TYPES.system && !isPlanned) {
+  if (account.type !== ACCOUNT_TYPES.system && !isForecastOnly) {
     throw new ValidationError({ message: t({ key: 'transactions.manualOnConnectedAccount' }) });
   }
 
@@ -385,7 +385,7 @@ export const createTransaction = withTransaction(
         involvesRefund: refundsTxId !== undefined && refundsTxId !== null,
       });
 
-      if (payload.isPlanned) {
+      if (payload.isForecastOnly) {
         await assertPlannedCreateAllowed({
           callerUserId: userId,
           accountId,
@@ -405,7 +405,7 @@ export const createTransaction = withTransaction(
         (await resolveAccountTypeForManualWrite({
           accountId,
           accountOwnerUserId,
-          isPlanned: Boolean(payload.isPlanned),
+          isForecastOnly: Boolean(payload.isForecastOnly),
         }));
 
       if (payload.categoryId !== undefined && payload.categoryId !== null) {
@@ -432,7 +432,7 @@ export const createTransaction = withTransaction(
         await ensureUserCurrencyConnected({ userId, currencyCode: generalTxCurrency.code });
       }
 
-      if (matchPlanned && transferNature === TRANSACTION_TRANSFER_NATURE.not_transfer && !payload.isPlanned) {
+      if (matchPlanned && transferNature === TRANSACTION_TRANSFER_NATURE.not_transfer && !payload.isForecastOnly) {
         const merged = await tryMergeIntoPlanned({
           accountId,
           amount,

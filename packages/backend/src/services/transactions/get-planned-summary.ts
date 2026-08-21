@@ -30,7 +30,7 @@ export const getPlannedSummary = async ({
            MAX("time") AS "latestTime"
       FROM "Transactions"
      WHERE "userId" = :userId
-       AND "isPlanned" = true
+       AND "isForecastOnly" = true
      GROUP BY "accountId", "currencyCode"
      ORDER BY "accountId"
     `,

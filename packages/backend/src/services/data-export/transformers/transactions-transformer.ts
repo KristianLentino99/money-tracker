@@ -55,7 +55,7 @@ export async function transformTransactions({
   dateRange?: ExportDateRange;
 }): Promise<TransactionRow[]> {
   // An export is the user's own copy of their data: everything they can see in the app
-  // ships, plans included (the row carries an `isPlanned` column so they stay readable
+  // ships, plans included (the row carries an `isForecastOnly` column so they stay readable
   // as plans), balance adjustments included.
   const transactions = await findTransactions({
     where: buildDateRangeClause({ field: 'time', dateRange }),
@@ -284,7 +284,7 @@ export async function transformTransactions({
       refundOf,
       linkedTransfer,
       subscription: subNameByTxId.get(tx.id) ?? '',
-      isPlanned: tx.isPlanned,
+      isForecastOnly: tx.isForecastOnly,
     };
   });
 }

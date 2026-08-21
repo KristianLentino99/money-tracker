@@ -622,7 +622,7 @@ const { data: pendingPlans } = useQuery({
   queryKey: [...VUE_QUERY_CACHE_KEYS.widgetBalanceTrendPlanned, periodQueryKey, includePlanned],
   queryFn: () =>
     loadTransactions({
-      isPlanned: true,
+      isForecastOnly: true,
       offset: 0,
       limit: PENDING_PLANS_LIMIT,
       order: SORT_DIRECTIONS.asc,

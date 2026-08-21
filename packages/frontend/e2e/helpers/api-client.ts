@@ -1,4 +1,5 @@
 import type { APIRequestContext } from '@playwright/test';
+import { randomUUID } from 'node:crypto';
 
 const API_BASE_URL = process.env.PLAYWRIGHT_API_BASE_URL || 'https://localhost:8081';
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || 'https://localhost:8100';
@@ -334,6 +335,45 @@ export async function createCategory({
     request,
     path: '/api/v1/categories',
     data: { name, ...(color !== undefined && { color }) },
+  });
+}
+
+// ─── Plans ────────────────────────────────────────────────────────────
+
+export async function createPlan({
+  request,
+  payload,
+}: {
+  request: APIRequestContext;
+  payload: {
+    name: string;
+    baseCurrencyCode: string;
+    categoryIds?: string[];
+    accountIds?: string[];
+    periodStartDay?: number;
+    isDefault?: boolean;
+  };
+}) {
+  return apiPost({ request, path: '/api/v1/plans', data: payload });
+}
+
+export async function assignPlanCategory({
+  request,
+  planId,
+  periodStart,
+  categoryId,
+  assigned,
+}: {
+  request: APIRequestContext;
+  planId: string;
+  periodStart: string;
+  categoryId: string;
+  assigned: number;
+}) {
+  return apiPut({
+    request,
+    path: `/api/v1/plans/${planId}/periods/${periodStart}/assignments/${categoryId}`,
+    data: { assigned, expectedRevision: 0, requestId: randomUUID() },
   });
 }
 

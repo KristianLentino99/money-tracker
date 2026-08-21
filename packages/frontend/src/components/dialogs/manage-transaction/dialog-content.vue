@@ -161,7 +161,7 @@ const form = ref<UI_FORM_STRUCT>({
   tagIds: [],
   payeeId: null,
   categoryUserTouched: false,
-  isPlanned: false,
+  isForecastOnly: false,
   originalAmount: null,
   originalCurrency: null,
 });
@@ -437,7 +437,7 @@ const isAmountFieldDisabled = computed(() => {
 // Planned mode is chosen once, at creation: un-planning a row means deleting the plan.
 // Loan and vehicle balances are recomputed by replaying transactions, and plans on
 // accounts shared *with* the caller belong to the owner only.
-const isPlannedToggleVisible = computed(() => {
+const isForecastOnlyToggleVisible = computed(() => {
   if (!isFormCreation.value) return false;
   if (isTransferTx.value) return false;
   if (isAccountSharedWithCaller.value) return false;
@@ -449,7 +449,7 @@ const isPlannedToggleVisible = computed(() => {
   return !isDedicatedFlowAccountCategory(account.accountCategory);
 });
 
-const isPlannedBadgeVisible = computed(() => !isFormCreation.value && Boolean(form.value.isPlanned));
+const isForecastOnlyBadgeVisible = computed(() => !isFormCreation.value && Boolean(form.value.isForecastOnly));
 
 // Real transactions on a bank-connected account come from the sync, so the account picker
 // only offers those once the row is a plan.
@@ -460,7 +460,7 @@ const isSelectedAccountConnected = computed(() => {
 });
 
 const nonTransferSourceAccounts = computed(() =>
-  form.value.isPlanned ? plannedTargetableAccountsActiveFirst.value : txTargetableSourceAccountsActiveFirst.value,
+  form.value.isForecastOnly ? plannedTargetableAccountsActiveFirst.value : txTargetableSourceAccountsActiveFirst.value,
 );
 
 const hasConnectedAccountsToOffer = computed(() =>
@@ -473,19 +473,19 @@ const plannedTooltipOverride = computed(() =>
   isSelectedAccountConnected.value ? t('dialogs.manageTransaction.form.plannedConnectedAccountTooltip') : undefined,
 );
 
-watch(isPlannedToggleVisible, (isVisible) => {
-  if (isVisible || !form.value.isPlanned) return;
-  form.value.isPlanned = false;
+watch(isForecastOnlyToggleVisible, (isVisible) => {
+  if (isVisible || !form.value.isForecastOnly) return;
+  form.value.isForecastOnly = false;
   addInfoNotification(t('dialogs.manageTransaction.form.plannedUnavailableNotification'));
 });
 
-// In edit mode `isPlanned` mirrors the saved row, so nothing here may touch it. The accounts
+// In edit mode `isForecastOnly` mirrors the saved row, so nothing here may touch it. The accounts
 // store resolves the account after mount, and stamping the flag on an already-saved
 // bank-synced row makes the update fail.
 watch(isSelectedAccountConnected, (isConnected) => {
   if (!isFormCreation.value) return;
-  if (!isConnected || !isPlannedToggleVisible.value) return;
-  form.value.isPlanned = true;
+  if (!isConnected || !isForecastOnlyToggleVisible.value) return;
+  form.value.isForecastOnly = true;
 });
 
 // A future date is legitimate on a planned row, and plain rows in the wild already carry
@@ -497,9 +497,9 @@ const wasPlannedUnchecked = ref(false);
 // unlocked: a connected account the picker no longer offers, and a future date. Clear both
 // so the user re-picks deliberately instead of submitting a shape the backend rejects.
 watch(
-  () => form.value.isPlanned,
-  (isPlanned, wasPlanned) => {
-    if (isPlanned) return;
+  () => form.value.isForecastOnly,
+  (isForecastOnly, wasPlanned) => {
+    if (isForecastOnly) return;
     if (wasPlanned) wasPlannedUnchecked.value = true;
 
     if (isSelectedAccountConnected.value) {
@@ -513,7 +513,7 @@ watch(
 );
 
 const isPastDateRequired = computed(
-  () => wasPlannedUnchecked.value && isDateUserTouched.value && !form.value.isPlanned,
+  () => wasPlannedUnchecked.value && isDateUserTouched.value && !form.value.isForecastOnly,
 );
 
 const isCurrenciesDifferent = computed(() => {
@@ -1050,7 +1050,7 @@ onUnmounted(() => {
         currentTxType === FORM_TYPES.income && 'bg-app-income-color',
         currentTxType === FORM_TYPES.expense && 'bg-app-expense-color',
         currentTxType === FORM_TYPES.transfer && 'bg-app-transfer-color',
-        form.isPlanned &&
+        form.isForecastOnly &&
           'bg-[repeating-linear-gradient(115deg,transparent_0_7px,var(--planned-stripe)_7px_14px)] bg-size-[14px_14px]',
       ]"
     />
@@ -1080,7 +1080,7 @@ onUnmounted(() => {
             :transaction="transaction"
             :account="transaction ? accountsRecord[transaction.accountId] : undefined"
             :disabled="isFormFieldsDisabled"
-            :is-transfer-disabled="Boolean(form.isPlanned)"
+            :is-transfer-disabled="Boolean(form.isForecastOnly)"
             class="mb-6"
             @change-tx-type="selectTransactionType"
           />
@@ -1125,32 +1125,32 @@ onUnmounted(() => {
               :portfolios="portfolios ?? []"
               :loan-accounts="loanDestinationAccounts"
             >
-              <template v-if="isPlannedToggleVisible || isPlannedBadgeVisible" #account-field-right>
+              <template v-if="isForecastOnlyToggleVisible || isForecastOnlyBadgeVisible" #account-field-right>
                 <PlannedToggle
                   variant="addon"
-                  :model-value="Boolean(form.isPlanned)"
-                  :readonly="isPlannedBadgeVisible"
+                  :model-value="Boolean(form.isForecastOnly)"
+                  :readonly="isForecastOnlyBadgeVisible"
                   :disabled="isFormFieldsDisabled"
-                  :tooltip-override="isPlannedBadgeVisible ? undefined : plannedTooltipOverride"
-                  @update:model-value="(value) => (form.isPlanned = value)"
+                  :tooltip-override="isForecastOnlyBadgeVisible ? undefined : plannedTooltipOverride"
+                  @update:model-value="(value) => (form.isForecastOnly = value)"
                 />
               </template>
 
               <!-- The zero-accounts fallback renders an input-field, which has no field-right
                    slot — the toggle stays in its label row (and toggling planned there is the
                    path that unlocks connected accounts). -->
-              <template v-if="isPlannedToggleVisible || isPlannedBadgeVisible" #account-label-right>
+              <template v-if="isForecastOnlyToggleVisible || isForecastOnlyBadgeVisible" #account-label-right>
                 <PlannedToggle
-                  :model-value="Boolean(form.isPlanned)"
-                  :readonly="isPlannedBadgeVisible"
+                  :model-value="Boolean(form.isForecastOnly)"
+                  :readonly="isForecastOnlyBadgeVisible"
                   :disabled="isFormFieldsDisabled"
-                  :tooltip-override="isPlannedBadgeVisible ? undefined : plannedTooltipOverride"
-                  @update:model-value="(value) => (form.isPlanned = value)"
+                  :tooltip-override="isForecastOnlyBadgeVisible ? undefined : plannedTooltipOverride"
+                  @update:model-value="(value) => (form.isForecastOnly = value)"
                 />
               </template>
 
               <template #account-hint>
-                <PlannedUnlockHint v-if="isFormCreation && form.isPlanned && hasConnectedAccountsToOffer">
+                <PlannedUnlockHint v-if="isFormCreation && form.isForecastOnly && hasConnectedAccountsToOffer">
                   {{ $t('dialogs.manageTransaction.form.plannedAccountsUnlockedHint') }}
                 </PlannedUnlockHint>
               </template>
@@ -1283,12 +1283,12 @@ onUnmounted(() => {
                 :label="$t('dialogs.manageTransaction.form.datetimeLabel')"
                 :error-message="timeErrorMessage"
                 :calendar-options="{
-                  maxDate: form.isPlanned ? undefined : new Date(),
+                  maxDate: form.isForecastOnly ? undefined : new Date(),
                 }"
                 @update:model-value="onDateUpdate"
               />
 
-              <PlannedUnlockHint v-if="isFormCreation && form.isPlanned">
+              <PlannedUnlockHint v-if="isFormCreation && form.isForecastOnly">
                 {{ $t('dialogs.manageTransaction.form.plannedDatesUnlockedHint') }}
               </PlannedUnlockHint>
             </form-row>

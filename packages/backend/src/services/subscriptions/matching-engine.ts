@@ -87,7 +87,7 @@ export const matchTransactionToSubscriptions = withTransaction(
 
     // On a planned row the user picked the category, payee and tags on purpose, so the
     // match only records the link.
-    if (transaction.isPlanned) {
+    if (transaction.isForecastOnly) {
       logger.info(
         `Subscription "${best.subscription.name}" linked planned transaction ${transaction.id} (score: ${best.score.toFixed(3)}, candidates: ${candidates.length})`,
       );

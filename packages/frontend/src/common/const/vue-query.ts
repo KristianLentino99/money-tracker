@@ -125,6 +125,11 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   exchangeRates: ['exchange-rates'] as const,
   accountGroups: [transactionChange, 'account-groups'] as const,
 
+  plansList: ['plans-list'] as const,
+  planDetails: ['plan-details'] as const,
+  planViews: [transactionChange, 'plan-views'] as const,
+  planAutoAssignPreview: [transactionChange, 'plan-auto-assign-preview'] as const,
+
   budgetsList: ['budgets-list'] as const,
   budgetsListItem: ['budgets-list-item'] as const,
   budgetTransactionList: [transactionChange, 'budget-transaction-list'] as const,

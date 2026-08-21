@@ -280,10 +280,10 @@ export const prepareTxUpdationParams = ({
   }
 
   // Delta only: an unrelated edit must not re-assert the flag, and the backend
-  // rejects `isPlanned: true` on rows that can't hold it.
+  // rejects `isForecastOnly: true` on rows that can't hold it.
   const formIsPlanned = resolveFormIsPlanned({ form });
-  if (formIsPlanned !== Boolean(transaction.isPlanned)) {
-    editionParams.isPlanned = formIsPlanned;
+  if (formIsPlanned !== Boolean(transaction.isForecastOnly)) {
+    editionParams.isForecastOnly = formIsPlanned;
   }
 
   return editionParams;

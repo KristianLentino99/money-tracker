@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     name: ROUTES_NAMES.dashboard,
     component: () => import('@/layouts/dashboard.vue'),
     beforeEnter: [redirectRouteGuard, baseCurrencyExists],
-    redirect: () => ({ name: ROUTES_NAMES.home }),
+    redirect: () => ({ name: ROUTES_NAMES.plan }),
     meta: {
       // Layout chunks loaded for all dashboard pages. `pages/payees` is in here
       // because PayeeSelectField / the New Payee dialog can be reached from any
@@ -28,6 +28,12 @@ const routes: RouteRecordRaw[] = [
         name: ROUTES_NAMES.home,
         component: () => import('@/pages/dashboard/dashboard.vue'),
         meta: { i18nChunks: ['pages/dashboard', 'pages/transactions'] as I18nChunkName[] },
+      },
+      {
+        path: '/plan',
+        name: ROUTES_NAMES.plan,
+        component: () => import('@/pages/plan/index.vue'),
+        meta: { i18nChunks: ['pages/plan'] as I18nChunkName[] },
       },
       {
         path: '/accounts',

@@ -38,7 +38,7 @@ export const deleteTransaction = withTransaction(
 
       // A plan on a provider account is the user's own row that the bank has never reported,
       // so deleting it takes nothing away from the sync.
-      if (accountType !== ACCOUNT_TYPES.system && !tx.isPlanned) {
+      if (accountType !== ACCOUNT_TYPES.system && !tx.isForecastOnly) {
         throw new ValidationError({
           message: t({ key: 'transactions.cannotDeleteExternal' }),
         });

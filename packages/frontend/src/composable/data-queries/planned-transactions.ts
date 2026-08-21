@@ -11,7 +11,7 @@ const PENDING_PLANNED_KEY = VUE_QUERY_CACHE_KEYS.pendingPlannedTransactions;
 
 /**
  * Planned rows the bank hasn't confirmed yet, oldest first: a merge clears the
- * `isPlanned` flag, so everything this returns is still pending. Oldest-first puts
+ * `isForecastOnly` flag, so everything this returns is still pending. Oldest-first puts
  * the plans whose match window has run out at the top, where they need attention.
  *
  * No `placeholderData`: it parks the query in `success`, leaving callers unable to tell
@@ -22,7 +22,7 @@ export const usePendingPlannedTransactions = ({ enabled }: { enabled?: MaybeRefO
     queryKey: PENDING_PLANNED_KEY,
     queryFn: () =>
       loadTransactions({
-        isPlanned: true,
+        isForecastOnly: true,
         limit: PENDING_PLANNED_LIMIT,
         offset: 0,
         sortBy: TRANSACTION_SORT_FIELD.time,

@@ -98,7 +98,7 @@ export const prepareTxCreationParams = ({
     }
 
     if (resolveFormIsPlanned({ form })) {
-      creationParams.isPlanned = true;
+      creationParams.isForecastOnly = true;
     }
 
     const originalPair = resolveOriginalCurrencyPair({ form });

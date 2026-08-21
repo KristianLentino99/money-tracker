@@ -5,10 +5,10 @@ import { BalanceAdjustmentsPolicy, CapPolicy, CompletenessPolicy, PlannedPolicy,
 
 export const plannedWhere = ({ policy }: { policy: PlannedPolicy }): WhereOptions => {
   if (policy === 'include') return {};
-  if (policy === 'exclude') return { isPlanned: false };
-  if (policy === 'only') return { isPlanned: true };
+  if (policy === 'exclude') return { isForecastOnly: false };
+  if (policy === 'only') return { isForecastOnly: true };
 
-  return { [Op.or]: [{ isPlanned: false }, { userId: policy.visibleTo }] };
+  return { [Op.or]: [{ isForecastOnly: false }, { userId: policy.visibleTo }] };
 };
 
 export const balanceAdjustmentsWhere = ({ policy }: { policy: BalanceAdjustmentsPolicy }): WhereOptions => {

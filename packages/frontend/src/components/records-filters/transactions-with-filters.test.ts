@@ -87,7 +87,7 @@ describe('buildIsPlannedParam', () => {
   });
 });
 
-describe('loadTransactions isPlanned query param', () => {
+describe('loadTransactions isForecastOnly query param', () => {
   beforeEach(() => {
     apiGet.mockClear();
   });
@@ -97,20 +97,20 @@ describe('loadTransactions isPlanned query param', () => {
   // `false` is falsy and the api client strips falsy query values, so the
   // "exclude planned" filter only survives the trip as a string.
   it('sends "false" so the exclude-planned filter is not stripped', async () => {
-    await loadTransactions({ isPlanned: buildIsPlannedParam({ value: FILTER_OPERATION.exclude }) });
+    await loadTransactions({ isForecastOnly: buildIsPlannedParam({ value: FILTER_OPERATION.exclude }) });
 
-    expect(queryOf()).toHaveProperty('isPlanned', 'false');
+    expect(queryOf()).toHaveProperty('isForecastOnly', 'false');
   });
 
   it('sends "true" for the only-planned filter', async () => {
-    await loadTransactions({ isPlanned: buildIsPlannedParam({ value: FILTER_OPERATION.only }) });
+    await loadTransactions({ isForecastOnly: buildIsPlannedParam({ value: FILTER_OPERATION.only }) });
 
-    expect(queryOf()).toHaveProperty('isPlanned', 'true');
+    expect(queryOf()).toHaveProperty('isForecastOnly', 'true');
   });
 
-  it('leaves isPlanned absent when the filter is not narrowing', async () => {
-    await loadTransactions({ isPlanned: buildIsPlannedParam({ value: FILTER_OPERATION.all }) });
+  it('leaves isForecastOnly absent when the filter is not narrowing', async () => {
+    await loadTransactions({ isForecastOnly: buildIsPlannedParam({ value: FILTER_OPERATION.all }) });
 
-    expect(queryOf().isPlanned).toBeUndefined();
+    expect(queryOf().isForecastOnly).toBeUndefined();
   });
 });

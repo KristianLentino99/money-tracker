@@ -90,7 +90,7 @@ export const mergeIntoPlanned = async ({
       plannedMerge: { mergedAt: new Date().toISOString() },
     },
     payeeId,
-    isPlanned: false,
+    isForecastOnly: false,
   });
 
   return planned;

@@ -237,6 +237,30 @@ export enum BUDGET_TYPES {
   category = 'category',
 }
 
+export const PLAN_VISIBILITIES = {
+  private: 'private',
+  shared: 'shared',
+} as const;
+
+export type PlanVisibility = (typeof PLAN_VISIBILITIES)[keyof typeof PLAN_VISIBILITIES];
+
+export const PLAN_STATUSES = {
+  active: 'active',
+  archived: 'archived',
+} as const;
+
+export type PlanStatus = (typeof PLAN_STATUSES)[keyof typeof PLAN_STATUSES];
+
+export const PLAN_ALLOCATION_ACTIONS = {
+  assignment: 'assignment',
+  move: 'move',
+  bulkAssignment: 'bulk_assignment',
+  autoAssign: 'auto_assign',
+  undo: 'undo',
+} as const;
+
+export type PlanAllocationAction = (typeof PLAN_ALLOCATION_ACTIONS)[keyof typeof PLAN_ALLOCATION_ACTIONS];
+
 /**
  * Tag reminder trigger types
  */
@@ -555,6 +579,7 @@ export const RESOURCE_TYPES = {
   account: 'account',
   household: 'household',
   budget: 'budget',
+  plan: 'plan',
 } as const;
 
 export type ResourceType = (typeof RESOURCE_TYPES)[keyof typeof RESOURCE_TYPES];

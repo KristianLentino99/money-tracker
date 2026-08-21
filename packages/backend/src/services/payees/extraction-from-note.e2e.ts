@@ -187,7 +187,7 @@ describe('Payee extraction — description/note fallback flag', () => {
         helpers.getTransactionById({ id: secondReal!.id, raw: true }),
       ]);
 
-      expect(plannedAfter!.isPlanned).toBe(true);
+      expect(plannedAfter!.isForecastOnly).toBe(true);
       expect(plannedAfter!.payeeId).toBeNull();
       expect(firstRealAfter!.payeeId).toBe(promoted!.id);
       expect(secondRealAfter!.payeeId).toBe(promoted!.id);

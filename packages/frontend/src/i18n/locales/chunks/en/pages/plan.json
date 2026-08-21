@@ -1,0 +1,116 @@
+{
+  "navigation": {
+    "plan": "Plan"
+  },
+  "plan": {
+    "header": {
+      "subtitle": "Give every euro a job before the month gets busy."
+    },
+    "error": {
+      "title": "Unable to load your Plan",
+      "description": "We couldn't load your Plan right now. Please try again."
+    },
+    "empty": {
+      "title": "No Plans yet",
+      "description": "Create a Plan to decide where your money should go before you spend it."
+    },
+    "actions": {
+      "create": "Create Plan",
+      "template": "Use starter template",
+      "newCategory": "New category",
+      "toggleCategory": "Toggle category",
+      "previousPeriod": "Previous period",
+      "nextPeriod": "Next period",
+      "delete": "Delete Plan",
+      "autoAssign": "Auto-Assign",
+      "moveMoney": "Move money",
+      "undo": "Undo"
+    },
+    "readyToAssign": {
+      "label": "Ready to Assign",
+      "positive": "Available to assign",
+      "zero": "Fully assigned",
+      "negative": "Over-assigned",
+      "overAssigned": "Over-assigned by {amount}"
+    },
+    "columns": {
+      "category": "Category",
+      "assigned": "Assigned",
+      "activity": "Activity",
+      "available": "Available"
+    },
+    "status": {
+      "funded": "Funded",
+      "underfunded": "Underfunded",
+      "overspent": "Overspent"
+    },
+    "assignment": {
+      "ariaLabel": "Assigned amount for {category}",
+      "placeholder": "Enter amount"
+    },
+    "filters": {
+      "label": "Filter categories",
+      "searchLabel": "Search categories",
+      "searchPlaceholder": "Search categories…",
+      "all": "All",
+      "attention": "Needs attention",
+      "funded": "Funded",
+      "unassigned": "Unassigned",
+      "activity": "Has activity",
+      "clear": "Clear",
+      "noResults": "No categories match",
+      "noResultsDescription": "Try a different search or clear the filters."
+    },
+    "categoryInspector": {
+      "description": "Review this category and make changes without leaving your Plan.",
+      "noStatus": "No activity yet",
+      "upcoming": "Upcoming obligation",
+      "edit": "Edit category",
+      "addSubcategory": "Add subcategory",
+      "hint": "Click any category row to keep its details close while you work through the month."
+    },
+    "delete": {
+      "title": "Delete this Plan?",
+      "description": "This permanently deletes {name}, its assignments, and its allocation history. This cannot be undone.",
+      "defaultDescription": "The default Plan cannot be deleted. Set another Plan as default first.",
+      "confirm": "Delete Plan"
+    },
+    "move": {
+      "title": "Move money",
+      "description": "Move available money from one category to another.",
+      "source": "From",
+      "sourcePlaceholder": "Select a source category",
+      "destination": "To",
+      "destinationPlaceholder": "Select a destination category",
+      "amount": "Amount",
+      "amountPlaceholder": "Enter an amount"
+    },
+    "autoAssign": {
+      "title": "Auto-Assign",
+      "description": "Preview assignments based on the previous period before applying them.",
+      "remaining": "Ready to Assign after changes: {amount}",
+      "noChanges": "No changes to apply.",
+      "confirm": "Apply changes"
+    },
+    "create": {
+      "title": "Create a Plan",
+      "description": "Give your Plan a name. You can add categories and accounts after creating it.",
+      "freshStartDescription": "Transactions from before you create this Plan will not be imported into its Activity or rollover.",
+      "includeHistoricalLabel": "Include past transactions",
+      "includeHistoricalDescription": "Include transactions from before this Plan was created in its Activity and rollover. This can make Ready to Assign negative if past spending was not assigned.",
+      "nameLabel": "Plan name",
+      "namePlaceholder": "e.g. Monthly Plan",
+      "currency": "This Plan uses your base currency: {currency}"
+    },
+    "notifications": {
+      "moved": "Money moved",
+      "autoAssigned": "Plan updated",
+      "undone": "Allocation undone",
+      "categoryAdded": "Category added to your Plan",
+      "categoryAddFailed": "The category was created but couldn't be added to this Plan.",
+      "categoryUpdated": "Category updated",
+      "deleted": "Plan deleted",
+      "deleteFailed": "The Plan couldn't be deleted."
+    }
+  }
+}

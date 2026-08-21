@@ -177,7 +177,7 @@ describe('Planned transactions – merge on import', () => {
       expect(summary.errors).toEqual([]);
 
       const merged = await helpers.getTransactionById({ id: plan.id, includeSplits: true, raw: true });
-      expect(merged!.isPlanned).toBe(false);
+      expect(merged!.isForecastOnly).toBe(false);
       expect(merged!.categoryId).toBe(planCategory.id);
       expect(merged!.paymentType).toBe(PAYMENT_TYPES.bankTransfer);
       expect(merged!.payeeId).toBe(payee.id);
@@ -228,7 +228,7 @@ describe('Planned transactions – merge on import', () => {
 
       const rows = await listAccountTransactions({ accountId: account.id });
       expect(rows).toHaveLength(2);
-      expect(rows.find((row) => row.id === plan.id)!.isPlanned).toBe(true);
+      expect(rows.find((row) => row.id === plan.id)!.isForecastOnly).toBe(true);
     });
 
     it('creates a new row when the plan sits outside the seven-day window', async () => {
@@ -259,7 +259,7 @@ describe('Planned transactions – merge on import', () => {
 
       const rows = await listAccountTransactions({ accountId: account.id });
       expect(rows).toHaveLength(2);
-      expect(rows.find((row) => row.id === plan.id)!.isPlanned).toBe(true);
+      expect(rows.find((row) => row.id === plan.id)!.isForecastOnly).toBe(true);
     });
   });
 
@@ -297,8 +297,8 @@ describe('Planned transactions – merge on import', () => {
 
       const rows = await listAccountTransactions({ accountId: account.id });
       expect(rows).toHaveLength(2);
-      expect(rows.find((row) => row.id === nearPlan.id)!.isPlanned).toBe(false);
-      expect(rows.find((row) => row.id === farPlan.id)!.isPlanned).toBe(true);
+      expect(rows.find((row) => row.id === nearPlan.id)!.isForecastOnly).toBe(false);
+      expect(rows.find((row) => row.id === farPlan.id)!.isForecastOnly).toBe(true);
     });
 
     it('lets only the first of two identical rows consume the plan', async () => {
@@ -338,7 +338,7 @@ describe('Planned transactions – merge on import', () => {
 
       const rows = await listAccountTransactions({ accountId: account.id });
       expect(rows).toHaveLength(2);
-      expect(rows.every((row) => row.isPlanned === false)).toBe(true);
+      expect(rows.every((row) => row.isForecastOnly === false)).toBe(true);
       expect(rows.find((row) => row.id === plan.id)!.note).toBe('Plan | CHARGE ONE');
     });
   });
@@ -454,7 +454,7 @@ describe('Planned transactions – merge on import', () => {
       const { files } = helpers.parseBackupArchive({ buffer: exported.body });
       const rows = JSON.parse(files.get('data/transactions.json')!.toString('utf8')) as Record<string, unknown>[];
       expect(rows.length).toBeGreaterThan(0);
-      for (const row of rows) delete row.isPlanned;
+      for (const row of rows) delete row.isForecastOnly;
       files.set('data/transactions.json', Buffer.from(JSON.stringify(rows)));
 
       const restore = await helpers.restoreBackup({ fileContent: await helpers.repackBackup({ files }) });
@@ -465,7 +465,7 @@ describe('Planned transactions – merge on import', () => {
 
       const restored = await helpers.getTransactions({ raw: true });
       expect(restored.length).toBe(rows.length);
-      expect(restored.every((row) => row.isPlanned === false)).toBe(true);
+      expect(restored.every((row) => row.isForecastOnly === false)).toBe(true);
     });
   });
 });

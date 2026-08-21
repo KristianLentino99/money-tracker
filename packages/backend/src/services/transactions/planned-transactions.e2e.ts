@@ -46,7 +46,7 @@ const createMonobankAccount = async () => {
 };
 
 describe('Planned transactions', () => {
-  describe('POST /transactions with isPlanned', () => {
+  describe('POST /transactions with isForecastOnly', () => {
     it('creates a planned transaction without moving any balance', async () => {
       const account = await createOwnedAccount({ initialBalance: 1000 });
       const historyBefore = await helpers.getBalanceHistory({ accountId: account.id, raw: true });
@@ -56,7 +56,7 @@ describe('Planned transactions', () => {
         raw: true,
       });
 
-      expect(tx.isPlanned).toBe(true);
+      expect(tx.isForecastOnly).toBe(true);
       expect(await getBalance({ accountId: account.id })).toBe(1000);
       expect(await helpers.getBalanceHistory({ accountId: account.id, raw: true })).toEqual(historyBefore);
     });
@@ -71,7 +71,7 @@ describe('Planned transactions', () => {
           transferNature: TRANSACTION_TRANSFER_NATURE.common_transfer,
           destinationAccountId: destination.id,
           destinationAmount: 100,
-          isPlanned: true,
+          isForecastOnly: true,
         }),
       });
 
@@ -95,7 +95,7 @@ describe('Planned transactions', () => {
           amount: 100,
           transactionType: TRANSACTION_TYPES.income,
           refundForTxId: original.id,
-          isPlanned: true,
+          isForecastOnly: true,
         }),
       });
 
@@ -189,7 +189,7 @@ describe('Planned transactions', () => {
       const updated = await helpers.getTransactionById({ id: planned.id, raw: true });
       expect(updated!.amount).toBe(310);
       expect(updated!.note).toBe('rent');
-      expect(updated!.isPlanned).toBe(true);
+      expect(updated!.isForecastOnly).toBe(true);
     });
 
     it('deletes a planned row and leaves the account balance alone', async () => {
@@ -250,12 +250,12 @@ describe('Planned transactions', () => {
         raw: true,
       });
 
-      const response = await helpers.updateTransaction({ id: planned.id, payload: { isPlanned: false } });
+      const response = await helpers.updateTransaction({ id: planned.id, payload: { isForecastOnly: false } });
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
 
       const updated = await helpers.getTransactionById({ id: planned.id, raw: true });
-      expect(updated!.isPlanned).toBe(true);
+      expect(updated!.isForecastOnly).toBe(true);
       expect(Number(await getBalance({ accountId: account.id }))).toBe(balanceBefore);
     });
 
@@ -300,13 +300,13 @@ describe('Planned transactions', () => {
 
       const response = await helpers.updateTransaction({
         id: planned.id,
-        payload: { isPlanned: false, accountId: manualAccount.id, time: new Date().toISOString() },
+        payload: { isForecastOnly: false, accountId: manualAccount.id, time: new Date().toISOString() },
       });
 
       expect(response.statusCode).toBe(200);
 
       const updated = await helpers.getTransactionById({ id: planned.id, raw: true });
-      expect(updated!.isPlanned).toBe(false);
+      expect(updated!.isForecastOnly).toBe(false);
       expect(updated!.accountId).toBe(manualAccount.id);
       expect(updated!.accountType).toBe(ACCOUNT_TYPES.system);
       // The row is real money now, so it lands on the manual account it moved to.
@@ -328,11 +328,11 @@ describe('Planned transactions', () => {
 
       const response = await helpers.updateTransaction({
         id: planned.id,
-        payload: { isPlanned: false, accountId: bankAccount.id },
+        payload: { isForecastOnly: false, accountId: bankAccount.id },
       });
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
-      expect((await helpers.getTransactionById({ id: planned.id, raw: true }))!.isPlanned).toBe(true);
+      expect((await helpers.getTransactionById({ id: planned.id, raw: true }))!.isForecastOnly).toBe(true);
     });
   });
 
@@ -359,7 +359,7 @@ describe('Planned transactions', () => {
 
       const untouched = await helpers.getTransactionById({ id: planned.id, raw: true });
       expect(untouched!.accountId).toBe(account.id);
-      expect(untouched!.isPlanned).toBe(true);
+      expect(untouched!.isForecastOnly).toBe(true);
       expect(await getBalance({ accountId: account.id })).toBe(1000);
       expect((await helpers.getLoanById({ id: loan.id, raw: true })).currentBalance).toBe(loanBalanceBefore);
     });
@@ -393,7 +393,7 @@ describe('Planned transactions', () => {
 
       const untouched = await helpers.getTransactionById({ id: planned.id, raw: true });
       expect(untouched!.transferNature).toBe(TRANSACTION_TRANSFER_NATURE.not_transfer);
-      expect(untouched!.isPlanned).toBe(true);
+      expect(untouched!.isForecastOnly).toBe(true);
       expect(await getBalance({ accountId: source.id })).toBe(1000);
       expect(await getBalance({ accountId: destination.id })).toBe(1000);
     });
@@ -426,7 +426,7 @@ describe('Planned transactions', () => {
 
       const untouched = await helpers.getTransactionById({ id: planned.id, raw: true });
       expect(untouched!.transferNature).toBe(TRANSACTION_TRANSFER_NATURE.not_transfer);
-      expect(untouched!.isPlanned).toBe(true);
+      expect(untouched!.isForecastOnly).toBe(true);
       expect(await getBalance({ accountId: account.id })).toBe(1000);
     });
   });
@@ -450,7 +450,7 @@ describe('Planned transactions', () => {
       });
 
       for (const leg of [baseTx, oppositeTx!]) {
-        const response = await helpers.updateTransaction({ id: leg.id, payload: { isPlanned: true } });
+        const response = await helpers.updateTransaction({ id: leg.id, payload: { isForecastOnly: true } });
         expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       }
 
@@ -479,7 +479,7 @@ describe('Planned transactions', () => {
       });
       await helpers.createSingleRefund({ originalTxId: original.id, refundTxId: refund.id });
 
-      const response = await helpers.updateTransaction({ id: refund.id, payload: { isPlanned: true } });
+      const response = await helpers.updateTransaction({ id: refund.id, payload: { isForecastOnly: true } });
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
       expect(await getBalance({ accountId: account.id })).toBe(1000);
@@ -495,7 +495,7 @@ describe('Planned transactions', () => {
 
       const response = await helpers.asUser({
         cookies: member.cookies,
-        fn: () => helpers.updateTransaction({ id: tx.id, payload: { isPlanned: true } }),
+        fn: () => helpers.updateTransaction({ id: tx.id, payload: { isForecastOnly: true } }),
       });
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
@@ -519,7 +519,7 @@ describe('Planned transactions', () => {
       const response = await helpers.updateTransaction({
         id: tx.id,
         payload: {
-          isPlanned: true,
+          isForecastOnly: true,
           transferNature: TRANSACTION_TRANSFER_NATURE.common_transfer,
           destinationAccountId: destination.id,
           destinationAmount: 250,
@@ -529,7 +529,7 @@ describe('Planned transactions', () => {
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
 
       const untouched = await helpers.getTransactionById({ id: tx.id, raw: true });
-      expect(untouched!.isPlanned).toBe(false);
+      expect(untouched!.isForecastOnly).toBe(false);
       expect(untouched!.transferNature).toBe(TRANSACTION_TRANSFER_NATURE.not_transfer);
       expect(await getBalance({ accountId: source.id })).toBe(750);
       expect(await getBalance({ accountId: destination.id })).toBe(1000);
@@ -553,13 +553,13 @@ describe('Planned transactions', () => {
 
       const response = await helpers.updateTransaction({
         id: tx.id,
-        payload: { isPlanned: true, accountId: loan.id as RecordId },
+        payload: { isForecastOnly: true, accountId: loan.id as RecordId },
       });
 
       expect(response.statusCode).toBe(ERROR_CODES.ValidationError);
 
       const untouched = await helpers.getTransactionById({ id: tx.id, raw: true });
-      expect(untouched!.isPlanned).toBe(false);
+      expect(untouched!.isForecastOnly).toBe(false);
       expect(untouched!.accountId).toBe(account.id);
       expect(await getBalance({ accountId: account.id })).toBe(750);
       expect((await helpers.getLoanById({ id: loan.id, raw: true })).currentBalance).toBe(loanBalanceBefore);
@@ -578,10 +578,10 @@ describe('Planned transactions', () => {
       });
       expect(await getBalance({ accountId: account.id })).toBe(750);
 
-      await helpers.updateTransaction({ id: tx.id, payload: { isPlanned: true }, raw: true });
+      await helpers.updateTransaction({ id: tx.id, payload: { isForecastOnly: true }, raw: true });
       expect(await getBalance({ accountId: account.id })).toBe(1000);
 
-      await helpers.updateTransaction({ id: tx.id, payload: { isPlanned: false }, raw: true });
+      await helpers.updateTransaction({ id: tx.id, payload: { isForecastOnly: false }, raw: true });
       expect(await getBalance({ accountId: account.id })).toBe(750);
     });
   });
@@ -627,8 +627,8 @@ describe('Planned transactions', () => {
       const transactions = await helpers.getTransactions({ raw: true });
       const byId = new Map(transactions.map((item) => [item.id, item]));
 
-      expect(byId.get(real.id)!.isPlanned).toBe(false);
-      expect(byId.get(planned.id)!.isPlanned).toBe(true);
+      expect(byId.get(real.id)!.isForecastOnly).toBe(false);
+      expect(byId.get(planned.id)!.isForecastOnly).toBe(true);
     });
 
     it('leaves the balance untouched when a planned row is deleted', async () => {

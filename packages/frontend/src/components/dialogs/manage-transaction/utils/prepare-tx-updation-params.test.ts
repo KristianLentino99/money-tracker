@@ -375,14 +375,14 @@ describe('prepareTxUpdationParams', () => {
     });
 
     it('keeps amount and date in the payload for a planned row on a synced account', () => {
-      const plannedTx = buildExternalExpenseTransaction({ isPlanned: true });
+      const plannedTx = buildExternalExpenseTransaction({ isForecastOnly: true });
       const formMock: UI_FORM_STRUCT = {
         ...buildBaseFormMock(plannedTx),
         type: FORM_TYPES.expense,
         account: sourceAccount as AccountModel,
         amount: 1500,
         category: USER_CATEGORIES[0]!,
-        isPlanned: true,
+        isForecastOnly: true,
       };
 
       const result = prepareTxUpdationParams({
@@ -408,7 +408,7 @@ describe('prepareTxUpdationParams', () => {
       });
     });
 
-    it('sends isPlanned: true when the flag is checked on an existing manual row', () => {
+    it('sends isForecastOnly: true when the flag is checked on an existing manual row', () => {
       const expenseTx = buildSystemExpenseTransaction();
       const formMock: UI_FORM_STRUCT = {
         ...buildBaseFormMock(expenseTx),
@@ -416,7 +416,7 @@ describe('prepareTxUpdationParams', () => {
         account: sourceAccount as AccountModel,
         amount: 1500,
         category: USER_CATEGORIES[0]!,
-        isPlanned: true,
+        isForecastOnly: true,
       };
 
       const result = prepareTxUpdationParams({
@@ -429,18 +429,18 @@ describe('prepareTxUpdationParams', () => {
         isOriginalRefundsOverriden: false,
       });
 
-      expect(result.isPlanned).toBe(true);
+      expect(result.isForecastOnly).toBe(true);
     });
 
-    it('sends isPlanned: false when the flag is unchecked on a planned row', () => {
-      const plannedTx = buildSystemExpenseTransaction({ isPlanned: true });
+    it('sends isForecastOnly: false when the flag is unchecked on a planned row', () => {
+      const plannedTx = buildSystemExpenseTransaction({ isForecastOnly: true });
       const formMock: UI_FORM_STRUCT = {
         ...buildBaseFormMock(plannedTx),
         type: FORM_TYPES.expense,
         account: sourceAccount as AccountModel,
         amount: 1500,
         category: USER_CATEGORIES[0]!,
-        isPlanned: false,
+        isForecastOnly: false,
       };
 
       const result = prepareTxUpdationParams({
@@ -453,11 +453,11 @@ describe('prepareTxUpdationParams', () => {
         isOriginalRefundsOverriden: false,
       });
 
-      expect(result.isPlanned).toBe(false);
+      expect(result.isForecastOnly).toBe(false);
     });
 
-    it('omits isPlanned when an unrelated edit leaves the flag untouched', () => {
-      const plannedTx = buildSystemExpenseTransaction({ isPlanned: true });
+    it('omits isForecastOnly when an unrelated edit leaves the flag untouched', () => {
+      const plannedTx = buildSystemExpenseTransaction({ isForecastOnly: true });
       const formMock: UI_FORM_STRUCT = {
         ...buildBaseFormMock(plannedTx),
         type: FORM_TYPES.expense,
@@ -465,7 +465,7 @@ describe('prepareTxUpdationParams', () => {
         amount: 1500,
         note: 'Fixed a typo',
         category: USER_CATEGORIES[0]!,
-        isPlanned: true,
+        isForecastOnly: true,
       };
 
       const result = prepareTxUpdationParams({
@@ -478,10 +478,10 @@ describe('prepareTxUpdationParams', () => {
         isOriginalRefundsOverriden: false,
       });
 
-      expect(result).not.toHaveProperty('isPlanned');
+      expect(result).not.toHaveProperty('isForecastOnly');
     });
 
-    it('never sends isPlanned: true in a transfer payload', () => {
+    it('never sends isForecastOnly: true in a transfer payload', () => {
       const expenseTx = buildSystemExpenseTransaction();
       const formMock: UI_FORM_STRUCT = {
         ...buildBaseFormMock(expenseTx),
@@ -491,7 +491,7 @@ describe('prepareTxUpdationParams', () => {
         targetAmount: 2000,
         toAccount: getUah2Account() as AccountModel,
         // Stale flag the reset watch would have cleared already.
-        isPlanned: true,
+        isForecastOnly: true,
       };
 
       const result = prepareTxUpdationParams({
@@ -504,7 +504,7 @@ describe('prepareTxUpdationParams', () => {
         isOriginalRefundsOverriden: false,
       });
 
-      expect(result).not.toHaveProperty('isPlanned');
+      expect(result).not.toHaveProperty('isForecastOnly');
     });
   });
 

@@ -78,7 +78,7 @@ const schema = z.object({
         keepRefundsForTxId: recordId().optional(),
         excludeBalanceAdjustments: booleanQuery().optional(),
         // Absent = both, true = only planned, false = exclude planned.
-        isPlanned: booleanQuery().optional(),
+        isForecastOnly: booleanQuery().optional(),
         transferFilter: z.nativeEnum(FILTER_OPERATION).optional(),
         refundFilter: z.nativeEnum(FILTER_OPERATION).optional(),
         // Amount filters now accept decimals from API

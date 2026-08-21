@@ -122,7 +122,7 @@ describe('Planned transactions – merge on sync', () => {
       expect(rows).toHaveLength(2);
 
       const merged = rows.find((row) => row.id === plan.id)!;
-      expect(merged.isPlanned).toBe(false);
+      expect(merged.isForecastOnly).toBe(false);
       expect(merged.accountType).toBe(ACCOUNT_TYPES.monobank);
       expect(merged.categoryId).toBe(categoryId);
       expect(merged.originalId).toBe(incoming.id);
@@ -165,7 +165,7 @@ describe('Planned transactions – merge on sync', () => {
       await syncAccount({ connectionId, accountId, transactions: [merging, plain] });
 
       const rows = await listAccountTransactions({ accountId });
-      expect(rows.find((row) => row.id === plan.id)!.isPlanned).toBe(false);
+      expect(rows.find((row) => row.id === plan.id)!.isForecastOnly).toBe(false);
 
       const history = await helpers.getBalanceHistory({ accountId, raw: true });
       const amountOn = ({ day }: { day: Date }) =>
@@ -283,7 +283,7 @@ describe('Planned transactions – merge on sync', () => {
       const rows = await listAccountTransactions({ accountId });
       expect(rows).toHaveLength(2);
       expect(rows.filter((row) => row.originalId === incoming.id)).toHaveLength(1);
-      expect(rows.find((row) => row.id === plan.id)!.isPlanned).toBe(false);
+      expect(rows.find((row) => row.id === plan.id)!.isForecastOnly).toBe(false);
     });
 
     it('does not merge when the historical backfill endpoint loads the period', async () => {
@@ -314,7 +314,7 @@ describe('Planned transactions – merge on sync', () => {
 
       const rows = await listAccountTransactions({ accountId });
       expect(rows).toHaveLength(3);
-      expect(rows.find((row) => row.id === plan.id)!.isPlanned).toBe(true);
+      expect(rows.find((row) => row.id === plan.id)!.isForecastOnly).toBe(true);
       expect(rows.find((row) => row.originalId === incoming.id)!.id).not.toBe(plan.id);
     });
 
@@ -368,7 +368,7 @@ describe('Planned transactions – merge on sync', () => {
         });
         const visible = afterSync.find((row) => row.id === plan.id);
         expect(visible).toBeDefined();
-        expect(visible!.isPlanned).toBe(false);
+        expect(visible!.isForecastOnly).toBe(false);
         expect(visible!.originalId).toBe(incoming.id);
       });
     });
@@ -449,7 +449,7 @@ describe('Planned transactions – merge on sync', () => {
       const rows = await listAccountTransactions({ accountId });
       expect(rows).toHaveLength(2);
       const merged = rows.find((row) => row.id === plan.id)!;
-      expect(merged.isPlanned).toBe(false);
+      expect(merged.isForecastOnly).toBe(false);
       expect(merged.amount).toBe(50);
       expect((await readExternalData({ id: plan.id })).plannedMerge?.mergedAt).toBeTruthy();
 
@@ -479,7 +479,7 @@ describe('Planned transactions – merge on sync', () => {
 
       const survivor = await helpers.getTransactionById({ id: planId, includeSplits: true, raw: true });
       expect(survivor).not.toBeNull();
-      expect(survivor!.isPlanned).toBe(false);
+      expect(survivor!.isForecastOnly).toBe(false);
       expect(survivor!.splits).toHaveLength(1);
       expect(await listAccountTransactions({ accountId })).toHaveLength(2);
     });
@@ -528,7 +528,7 @@ describe('Planned transactions – merge on sync', () => {
 
       const merged = rows.find((row) => row.id === planId)!;
       expect(merged.amount).toBe(50);
-      expect(merged.isPlanned).toBe(false);
+      expect(merged.isForecastOnly).toBe(false);
       expect((await readExternalData({ id: planId })).plannedMerge?.mergedAt).toBeTruthy();
 
       const booked = rows.find((row) => row.note === 'CARD CAPTURE')!;

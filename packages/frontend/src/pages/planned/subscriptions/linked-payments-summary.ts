@@ -45,7 +45,7 @@ export interface LinkedPaymentLike {
   currencyCode: string;
   refCurrencyCode: string;
   time: Date | string;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
 }
 
 export interface LinkedPaymentsCurrencyTotal {
@@ -136,7 +136,7 @@ const toDate = ({ time }: { time: Date | string }): Date => (time instanceof Dat
 
 /** A planned row is a commitment, not spend, so no amount aggregate may count it. */
 const settledOnly = <T extends LinkedPaymentLike>({ payments }: { payments: T[] }): T[] =>
-  payments.filter((payment) => !payment.isPlanned);
+  payments.filter((payment) => !payment.isForecastOnly);
 
 const sumRefAmounts = <T extends LinkedPaymentLike>({ payments }: { payments: T[] }): number =>
   payments.reduce((sum, payment) => sum + payment.refAmount, 0);

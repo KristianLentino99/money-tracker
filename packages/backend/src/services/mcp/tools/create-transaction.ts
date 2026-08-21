@@ -62,7 +62,7 @@ export function registerCreateTransaction(server: McpServer) {
           .optional()
           .describe('Split the transaction across multiple categories'),
         tagIds: z.array(recordId()).optional().describe('Tag IDs to assign to this transaction'),
-        isPlanned: z
+        isForecastOnly: z
           .boolean()
           .optional()
           .describe('Mark the transaction as planned rather than an already-happened record'),
@@ -88,7 +88,7 @@ export function registerCreateTransaction(server: McpServer) {
           transferNature: args.transferNature,
           splits: args.splits,
           tagIds: args.tagIds,
-          isPlanned: args.isPlanned,
+          isForecastOnly: args.isForecastOnly,
         },
         userId,
       );

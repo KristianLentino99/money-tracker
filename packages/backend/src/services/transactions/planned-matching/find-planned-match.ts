@@ -7,12 +7,12 @@ import { addDays, subDays } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 
 /**
- * EXISTS probe against the partial `(accountId, time) WHERE isPlanned` index, so a sync or
+ * EXISTS probe against the partial `(accountId, time) WHERE isForecastOnly` index, so a sync or
  * import run can skip the matcher entirely instead of paying one candidate query per row.
  */
 export const accountHasPlannedRows = async ({ accountId }: { accountId: string }): Promise<boolean> => {
   const row = await Transactions.findOne({
-    where: { accountId, isPlanned: true },
+    where: { accountId, isForecastOnly: true },
     attributes: ['id'],
   });
 
@@ -61,7 +61,7 @@ export const findPlannedMatch = async ({
   return Transactions.findOne({
     where: {
       accountId,
-      isPlanned: true,
+      isForecastOnly: true,
       transactionType,
       currencyCode,
       transferNature: TRANSACTION_TRANSFER_NATURE.not_transfer,

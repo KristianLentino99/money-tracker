@@ -113,7 +113,7 @@ describe('updateTransactions', () => {
     const fragments = composedAnd(lastUpdateOptions().where);
 
     expect(fragments).toHaveLength(4);
-    expect(fragments[0]).toEqual({ isPlanned: false });
+    expect(fragments[0]).toEqual({ isForecastOnly: false });
     expect(fragments[1]).toEqual({ userId: 7 });
     expect(literalSql(fragments[2])).toBe(NOT_BALANCE_ADJUSTMENT_SQL);
     expect(fragments[3]).toEqual({ id: 'tx-1' });
@@ -230,7 +230,7 @@ describe('destroyTransactions', () => {
     const fragments = composedAnd(lastDestroyOptions().where);
 
     expect(fragments).toHaveLength(4);
-    expect(fragments[0]).toEqual({ isPlanned: true });
+    expect(fragments[0]).toEqual({ isForecastOnly: true });
     expect(fragments[1]).toEqual({ userId: 7 });
     expect(literalSql(fragments[2])).toBe(NOT_BALANCE_ADJUSTMENT_SQL);
     expect(fragments[3]).toEqual({ id: { [Op.in]: ['tx-1', 'tx-2'] } });
@@ -300,7 +300,7 @@ describe('transactionsInclude', () => {
 
     expect(include.model).toBe(Transactions);
     expect(include.required).toBe(true);
-    expect(composedAnd(include.where)).toEqual([{ isPlanned: false }]);
+    expect(composedAnd(include.where)).toEqual([{ isForecastOnly: false }]);
   });
 
   it('still states the join type when the policy filters nothing', () => {

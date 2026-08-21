@@ -74,6 +74,9 @@ const acceptMutation = useMutation({
       // before the list refetches).
       queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetsList });
       queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetsListItem });
+    } else if (data.share.resourceType === RESOURCE_TYPES.plan) {
+      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.plansList });
+      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.planViews });
     } else {
       queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
     }
@@ -126,12 +129,19 @@ const goToResource = () => {
     router.push({ name: ROUTES_NAMES.plannedBudgetDetails, params: { id: accepted.id } });
     return;
   }
+  if (accepted.type === RESOURCE_TYPES.plan) {
+    router.push({ name: ROUTES_NAMES.plan, query: { planId: accepted.id } });
+    return;
+  }
   emit('close');
 };
 
 const goToResourceLabel = computed(() => {
   if (acceptedResource.value?.type === RESOURCE_TYPES.budget) {
     return t('dialogs.shareInvitationDialog.goToBudget');
+  }
+  if (acceptedResource.value?.type === RESOURCE_TYPES.plan) {
+    return t('navigation.plan');
   }
   return t('dialogs.shareInvitationDialog.goToAccount');
 });

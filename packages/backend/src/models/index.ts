@@ -32,6 +32,12 @@ import PayeeAliasesModel from './payee-aliases.model';
 import PayeeIgnoredNamesModel from './payee-ignored-names.model';
 import PayeeTagsModel from './payee-tags.model';
 import PayeesModel from './payees.model';
+import PlanAccountMembershipsModel from './plan-account-memberships.model';
+import PlanAllocationEventsModel from './plan-allocation-events.model';
+import PlanAssignmentsModel from './plan-assignments.model';
+import PlanCategoryMembershipsModel from './plan-category-memberships.model';
+import PlanPeriodsModel from './plan-periods.model';
+import PlanModel from './plan.model';
 import RefundTransactionsModel from './refund-transactions.model';
 import ResourceSharesModel from './resource-shares.model';
 import ShareInvitationsModel from './share-invitations.model';
@@ -99,6 +105,12 @@ const models = [
   BudgetModel,
   BudgetCategoriesModel,
   BudgetTransactionsModel,
+  PlanModel,
+  PlanCategoryMembershipsModel,
+  PlanAccountMembershipsModel,
+  PlanPeriodsModel,
+  PlanAssignmentsModel,
+  PlanAllocationEventsModel,
   TagsModel,
   TagRemindersModel,
   TransactionTagsModel,

@@ -39,29 +39,29 @@ describe('buildOptimisticTransaction', () => {
   });
 
   it('applies amount and time for a planned transaction on a synced account', () => {
-    const transaction = buildTransaction({ time: new Date('2024-01-01T00:00:00.000Z'), isPlanned: true });
+    const transaction = buildTransaction({ time: new Date('2024-01-01T00:00:00.000Z'), isForecastOnly: true });
 
     const result = buildOptimisticTransaction({
-      form: buildForm({ isPlanned: true }),
+      form: buildForm({ isForecastOnly: true }),
       transaction,
       isRecordExternal: true,
     });
 
     expect(result.amount).toBe(250);
     expect(result.time).toEqual(new Date('2030-01-15T10:00:00.000Z'));
-    expect(result.isPlanned).toBe(true);
+    expect(result.isForecastOnly).toBe(true);
   });
 
-  it('clears isPlanned when the form flag is unchecked', () => {
-    const transaction = buildTransaction({ isPlanned: true });
+  it('clears isForecastOnly when the form flag is unchecked', () => {
+    const transaction = buildTransaction({ isForecastOnly: true });
 
     const result = buildOptimisticTransaction({
-      form: buildForm({ isPlanned: false }),
+      form: buildForm({ isForecastOnly: false }),
       transaction,
       isRecordExternal: false,
     });
 
-    expect(result.isPlanned).toBe(false);
+    expect(result.isForecastOnly).toBe(false);
   });
 
   it('carries a complete original-currency pair onto the row', () => {

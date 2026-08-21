@@ -74,13 +74,13 @@ export const loadTransactions = async ({
   includeTags?: boolean;
   includeGroups?: boolean;
   /** true = only planned rows, false = exclude them, absent = both. */
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
 }): Promise<endpointsTypes.GetTransactionsResponse> => {
   return api.get('/transactions', {
     ...params,
-    // The client drops falsy query values, which would swallow `isPlanned: false`.
+    // The client drops falsy query values, which would swallow `isForecastOnly: false`.
     // Stringifying keeps the "exclude planned" intent on the wire.
-    isPlanned: params.isPlanned === undefined ? undefined : String(params.isPlanned),
+    isForecastOnly: params.isForecastOnly === undefined ? undefined : String(params.isForecastOnly),
     from: from ? new Date(from).toISOString() : undefined,
     to: to ? new Date(to).toISOString() : undefined,
   });

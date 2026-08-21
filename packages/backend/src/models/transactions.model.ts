@@ -123,7 +123,7 @@ export interface TransactionsAttributes {
   originalAmount: Money | null;
   originalCurrencyCode: string | null;
   refundLinked: boolean;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
   categorizationMeta: CategorizationMeta | null;
   payeeId: string | null;
   payeeLocked: boolean;
@@ -293,7 +293,7 @@ export default class Transactions extends Model {
     allowNull: false,
     defaultValue: false,
   })
-  declare isPlanned: boolean;
+  declare isForecastOnly: boolean;
 
   // Metadata about how this transaction was categorized (manual, ai, mcc_rule, user_rule, subscription_rule, payee_rule)
   @Column({
@@ -462,7 +462,7 @@ export default class Transactions extends Model {
     const { accountType, accountId, amount, transactionType } = instance;
 
     // A planned row records money that hasn't moved yet.
-    if (instance.isPlanned) return;
+    if (instance.isForecastOnly) return;
 
     if (accountType === ACCOUNT_TYPES.system) {
       await updateAccountBalanceForChangedTx({
@@ -480,7 +480,7 @@ export default class Transactions extends Model {
   }
 
   /**
-   * Balance effect of an `isPlanned` flip: becoming real applies the amount exactly as
+   * Balance effect of an `isForecastOnly` flip: becoming real applies the amount exactly as
    * `@AfterCreate` does, going back to planned withdraws it exactly as `@BeforeDestroy`
    * does. The reverse works off `prevData` — the money sat on the pre-update account.
    */
@@ -542,16 +542,16 @@ export default class Transactions extends Model {
       prevRaw[field] = Money.fromCents(prevRaw[field]);
     }
 
-    const wasPlanned = Boolean(prevData.isPlanned);
-    const isPlanned = Boolean(newData.isPlanned);
+    const wasPlanned = Boolean(prevData.isForecastOnly);
+    const isForecastOnly = Boolean(newData.isForecastOnly);
 
-    if (wasPlanned !== isPlanned) {
+    if (wasPlanned !== isForecastOnly) {
       await Transactions.applyPlannedFlipBalanceChange({ newData, prevData, becameReal: wasPlanned });
       return;
     }
 
     // Editing a planned row moves nothing: the money still hasn't happened.
-    if (isPlanned) return;
+    if (isForecastOnly) return;
 
     const isAccountChanged = newData.accountId !== prevData.accountId;
 
@@ -614,7 +614,7 @@ export default class Transactions extends Model {
 
     // Planned rows never moved a balance, so there is nothing to take back. Group
     // bookkeeping below still has to run so groups keep auto-dissolving.
-    if (!instance.isPlanned) {
+    if (!instance.isForecastOnly) {
       if (accountType === ACCOUNT_TYPES.system) {
         await updateAccountBalanceForChangedTx({
           accountId,
@@ -1280,7 +1280,7 @@ type CreateTxOptionalParams = Partial<
     | 'categorizationMeta'
     | 'payeeId'
     | 'payeeLocked'
-    | 'isPlanned'
+    | 'isForecastOnly'
     | 'originalAmount'
     | 'originalCurrencyCode'
   >
@@ -1318,7 +1318,7 @@ export interface UpdateTransactionByIdParams {
   categorizationMeta?: CategorizationMeta | null;
   payeeId?: string | null;
   payeeLocked?: boolean;
-  isPlanned?: boolean;
+  isForecastOnly?: boolean;
   originalAmount?: Money | null;
   originalCurrencyCode?: string | null;
 }
@@ -1379,7 +1379,7 @@ export const deleteTransactionById = async ({ id, userId }: { id: string; userId
 
   // A plan on a provider account is the user's own row that the bank has never reported,
   // so deleting it takes nothing away from the sync.
-  if (tx.accountType !== ACCOUNT_TYPES.system && !tx.isPlanned) {
+  if (tx.accountType !== ACCOUNT_TYPES.system && !tx.isForecastOnly) {
     throw new ValidationError({
       message: t({ key: 'transactions.cannotDeleteExternal' }),
     });

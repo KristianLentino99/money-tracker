@@ -28,7 +28,7 @@ const schema = z.object({
       tagIds: z.array(recordId()).max(20, 'Maximum 20 tags allowed').optional(),
       payeeId: recordId().nullable().optional(),
       payeeLocked: z.boolean().optional(),
-      isPlanned: z.boolean().optional().default(false),
+      isForecastOnly: z.boolean().optional().default(false),
       originalAmount: nonNegativeAmountSchema().optional(),
       originalCurrencyCode: currencyCode().optional(),
     })

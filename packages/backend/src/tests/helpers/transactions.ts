@@ -82,7 +82,7 @@ export function createPlannedTransaction({
   return makeRequest({
     method: 'post',
     url: '/transactions',
-    payload: buildTransactionPayload({ ...payload, isPlanned: true }),
+    payload: buildTransactionPayload({ ...payload, isForecastOnly: true }),
     raw,
   });
 }

@@ -49,7 +49,7 @@ export interface TransactionRow {
   refundOf: string;
   linkedTransfer: string;
   subscription: string;
-  isPlanned: boolean;
+  isForecastOnly: boolean;
 }
 
 export interface AccountRow {

@@ -23,6 +23,7 @@ const ICON_BY_RESOURCE_TYPE: Record<ResourceType, typeof LandmarkIcon> = {
   [RESOURCE_TYPES.account]: LandmarkIcon,
   [RESOURCE_TYPES.household]: HomeIcon,
   [RESOURCE_TYPES.budget]: WalletIcon,
+  [RESOURCE_TYPES.plan]: WalletIcon,
 };
 
 const sharesQuery = useQuery({
@@ -62,6 +63,7 @@ const groupedShares = computed(() => {
     [RESOURCE_TYPES.account]: [],
     [RESOURCE_TYPES.household]: [],
     [RESOURCE_TYPES.budget]: [],
+    [RESOURCE_TYPES.plan]: [],
   };
   for (const row of sharesQuery.data.value ?? []) {
     (groups[row.resourceType] ??= []).push({ ...row, route: routeForRow(row) });
@@ -114,6 +116,9 @@ const routeForRow = (row: SharedWithMeRow) => {
   }
   if (row.resourceType === RESOURCE_TYPES.budget) {
     return { name: ROUTES_NAMES.plannedBudgetDetails, params: { id: row.resourceId } };
+  }
+  if (row.resourceType === RESOURCE_TYPES.plan) {
+    return { name: ROUTES_NAMES.plan, query: { planId: row.resourceId } };
   }
   return null;
 };

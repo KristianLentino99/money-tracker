@@ -39,7 +39,7 @@ const seedLoanWithPlannedLeg = async ({ paymentAmount }: { paymentAmount: number
   const transactions = JSON.parse(files.get('data/transactions.json')!.toString('utf8')) as Row[];
   const loanLeg = transactions.find((row) => row.accountId === loan.id);
   expect(loanLeg).toBeDefined();
-  loanLeg!.isPlanned = true;
+  loanLeg!.isForecastOnly = true;
   files.set('data/transactions.json', Buffer.from(JSON.stringify(transactions)));
 
   const restore = await helpers.restoreBackup({ fileContent: await helpers.repackBackup({ files }) });

@@ -110,7 +110,7 @@ export default createController(schema, async ({ user, query }) => {
     excludeRefundTxs: true,
     keepRefundsForTxId: query.transactionId,
     // Planned rows can't be refund-linked, so they are not valid candidates either.
-    isPlanned: false,
+    isForecastOnly: false,
     includeSplits: true,
     startDate: startDate.toISOString(),
     endDate: endDate.toISOString(),

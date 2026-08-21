@@ -80,7 +80,7 @@ const validateTransaction = async (
 
   // A planned row holds user-entered intent, not provider data, so the provider-account
   // field locks stay off until it merges into a real transaction.
-  const isExternalAccount = account.type !== ACCOUNT_TYPES.system && !prevData.isPlanned;
+  const isExternalAccount = account.type !== ACCOUNT_TYPES.system && !prevData.isForecastOnly;
 
   if (isExternalAccount) {
     if (EXTERNAL_ACCOUNT_RESTRICTED_UPDATION_FIELDS.some((field) => newData[field] !== undefined)) {
@@ -103,8 +103,8 @@ const validateTransaction = async (
   const isMovingToAnotherAccount = Boolean(newData.accountId && newData.accountId !== prevData.accountId);
 
   if (
-    newData.isPlanned === false &&
-    prevData.isPlanned &&
+    newData.isForecastOnly === false &&
+    prevData.isForecastOnly &&
     account.type !== ACCOUNT_TYPES.system &&
     !isMovingToAnotherAccount
   ) {
@@ -170,7 +170,7 @@ const makeBasicBaseTxUpdation = async (
   });
 
   // Planned rows stay editable like manual ones until they merge — see `validateTransaction`.
-  const isSystemAccount = account?.type === ACCOUNT_TYPES.system || prevData.isPlanned;
+  const isSystemAccount = account?.type === ACCOUNT_TYPES.system || prevData.isForecastOnly;
 
   // Never update "transactionType" of non-system transactions. Just an additional guard
   const transactionType = isSystemAccount ? newData.transactionType : prevData.transactionType;
@@ -197,7 +197,7 @@ const makeBasicBaseTxUpdation = async (
     transferNature: newData.transferNature,
     currencyCode: prevData.currencyCode,
     refundLinked: prevData.refundLinked,
-    isPlanned: newData.isPlanned,
+    isForecastOnly: newData.isForecastOnly,
     originalAmount: newData.originalAmount,
     originalCurrencyCode: newData.originalCurrencyCode,
   };
@@ -254,7 +254,7 @@ const makeBasicBaseTxUpdation = async (
 
     baseTransactionUpdateParams.currencyCode = destinationAccount.currency.code;
 
-    const staysPlanned = newData.isPlanned ?? prevData.isPlanned;
+    const staysPlanned = newData.isForecastOnly ?? prevData.isForecastOnly;
 
     if (destinationAccount.type !== ACCOUNT_TYPES.system && !staysPlanned) {
       throw new ValidationError({ message: t({ key: 'transactions.manualOnConnectedAccount' }) });
@@ -313,13 +313,13 @@ const makeBasicBaseTxUpdation = async (
               [Op.in]: refundedByTxIds,
             },
           },
-          attributes: ['refAmount', 'isPlanned'],
+          attributes: ['refAmount', 'isForecastOnly'],
         });
 
         // A plan holds no money, so its refAmount must never take part in the
         // sum check below — otherwise an oversized plan is rejected for the
         // wrong reason and the caller never learns plans cannot be linked.
-        if (newTransactions.some((tx) => tx.isPlanned)) {
+        if (newTransactions.some((tx) => tx.isForecastOnly)) {
           throw new ValidationError({
             message: t({ key: 'transactions.plannedCannotBeRefundLinked' }),
           });
@@ -599,7 +599,7 @@ export const updateTransaction = withTransaction(
 
       assertPlannedWriteAllowed({ transaction: prevData, callerUserId: payload.userId });
 
-      if (payload.isPlanned === true && !prevData.isPlanned) {
+      if (payload.isForecastOnly === true && !prevData.isForecastOnly) {
         await assertPlannedFlipAllowed({ transaction: prevData, callerUserId: payload.userId });
       }
 
@@ -607,7 +607,7 @@ export const updateTransaction = withTransaction(
       // planned before or flips in this request: the same edit can move it onto an account
       // whose balance is replayed from its transactions, or pair it with another row
       // (loan linking reaches this path with transfer fields).
-      const endsPlanned = payload.isPlanned ?? prevData.isPlanned;
+      const endsPlanned = payload.isForecastOnly ?? prevData.isForecastOnly;
 
       if (endsPlanned) {
         if (payload.accountId && payload.accountId !== prevData.accountId) {

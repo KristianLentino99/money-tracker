@@ -361,8 +361,8 @@ describe('prepareTxCreationParams', () => {
   });
 
   describe('planned transactions', () => {
-    it('sends isPlanned when the flag is checked', () => {
-      const form = createBaseForm({ type: FORM_TYPES.expense, isPlanned: true });
+    it('sends isForecastOnly when the flag is checked', () => {
+      const form = createBaseForm({ type: FORM_TYPES.expense, isForecastOnly: true });
 
       const result = prepareTxCreationParams({
         form,
@@ -370,10 +370,10 @@ describe('prepareTxCreationParams', () => {
         isCurrenciesDifferent: false,
       });
 
-      expect(result.isPlanned).toBe(true);
+      expect(result.isForecastOnly).toBe(true);
     });
 
-    it('omits isPlanned when the flag is not set', () => {
+    it('omits isForecastOnly when the flag is not set', () => {
       const form = createBaseForm({ type: FORM_TYPES.expense });
 
       const result = prepareTxCreationParams({
@@ -382,15 +382,15 @@ describe('prepareTxCreationParams', () => {
         isCurrenciesDifferent: false,
       });
 
-      expect(result).not.toHaveProperty('isPlanned');
+      expect(result).not.toHaveProperty('isForecastOnly');
     });
 
-    it('never sends isPlanned in a transfer payload', () => {
+    it('never sends isForecastOnly in a transfer payload', () => {
       const form = createBaseForm({
         type: FORM_TYPES.transfer,
         toAccount: createMockAccount({ id: '00000000-0000-0000-0000-000000000002' as RecordId }),
         // Stale flag the reset watch would have cleared already.
-        isPlanned: true,
+        isForecastOnly: true,
       });
 
       const result = prepareTxCreationParams({
@@ -399,7 +399,7 @@ describe('prepareTxCreationParams', () => {
         isCurrenciesDifferent: false,
       });
 
-      expect(result).not.toHaveProperty('isPlanned');
+      expect(result).not.toHaveProperty('isForecastOnly');
     });
   });
 
