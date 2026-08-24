@@ -2,26 +2,33 @@ import { getExpensesAmountForPeriod, getSpendingsByCategories } from '@/api';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import { useAnimatedNumber } from '@/composable/use-animated-number';
 import { calculatePercentageDifference } from '@/js/helpers';
+import type { CategoryModel, endpointsTypes } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
 import { differenceInDays, endOfMonth, format, isSameMonth, startOfMonth, subDays, subMonths } from 'date-fns';
 import { type Ref, computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export interface ChartDataItem {
-  categoryId: string;
-  name: string;
-  color: string;
-  amount: number;
-}
+import {
+  buildExpenseStructureBreakdown,
+  getExpenseStructureBreakdownCategoryIds,
+  getImmediateChildCategoryIds,
+  type ExpenseStructureChartDataItem,
+} from './expense-structure-breakdown';
+
+export type ChartDataItem = ExpenseStructureChartDataItem;
 
 export function useExpensesStructureData({
   selectedPeriod,
   excludedCategoryIds,
   includePlanned,
+  categoriesMap,
+  drilldownCategoryId,
 }: {
   selectedPeriod: () => { from: Date; to: Date };
   excludedCategoryIds: Ref<string[]>;
   includePlanned: Ref<boolean>;
+  categoriesMap: Readonly<Ref<Record<string, CategoryModel>>>;
+  drilldownCategoryId: Readonly<Ref<string | null>>;
 }) {
   const { t } = useI18n();
 
@@ -63,6 +70,47 @@ export function useExpensesStructureData({
 
   const excludedKey = computed(() => `${excludedCategoryIds.value.join(',')}:planned-${includePlanned.value}`);
   const excludePlannedParam = computed(() => !includePlanned.value || undefined);
+
+  const immediateChildCategoryIds = computed(() => {
+    const categoryId = drilldownCategoryId.value;
+    if (!categoryId) return [];
+
+    return getImmediateChildCategoryIds({
+      categoryId,
+      categories: Object.values(categoriesMap.value),
+    });
+  });
+
+  const breakdownCategoryIds = computed(() => {
+    const categoryId = drilldownCategoryId.value;
+    if (!categoryId) return [];
+
+    return getExpenseStructureBreakdownCategoryIds({
+      categoryId,
+      categories: Object.values(categoriesMap.value),
+    });
+  });
+
+  const breakdownQuery = useQuery({
+    queryKey: [
+      ...VUE_QUERY_CACHE_KEYS.widgetExpensesStructureBreakdown,
+      periodQueryKey,
+      excludedKey,
+      drilldownCategoryId,
+      breakdownCategoryIds,
+    ],
+    queryFn: () =>
+      getSpendingsByCategories({
+        from: selectedPeriod().from,
+        to: selectedPeriod().to,
+        categoryIds: breakdownCategoryIds.value,
+        excludedCategoryIds: excludedCategoryIds.value.length > 0 ? excludedCategoryIds.value : undefined,
+        excludePlanned: excludePlannedParam.value,
+      }),
+    enabled: computed(() => breakdownCategoryIds.value.length > 0),
+    retry: false,
+    staleTime: Infinity,
+  });
 
   const { data: spendingsByCategories, isFetching: isSpendingsByCategoriesFetching } = useQuery({
     queryKey: [...VUE_QUERY_CACHE_KEYS.widgetExpensesStructureTotal, periodQueryKey, excludedKey],
@@ -125,7 +173,10 @@ export function useExpensesStructureData({
 
   const isWidgetDataFetching = computed(
     () =>
-      isSpendingsByCategoriesFetching.value || isCurrentMonthExpenseFetching.value || isPrevMonthExpenseFetching.value,
+      isSpendingsByCategoriesFetching.value ||
+      isCurrentMonthExpenseFetching.value ||
+      isPrevMonthExpenseFetching.value ||
+      breakdownQuery.isFetching.value,
   );
 
   const { displayValue: animatedExpense } = useAnimatedNumber({
@@ -139,7 +190,7 @@ export function useExpensesStructureData({
     return Number(percentage);
   });
 
-  const chartData = computed<ChartDataItem[]>(() => {
+  const topLevelChartData = computed<ChartDataItem[]>(() => {
     const excludedSet = new Set(excludedCategoryIds.value);
     return Object.entries(spendingsByCategories.value || {})
       .filter(([id]) => !excludedSet.has(id))
@@ -151,9 +202,33 @@ export function useExpensesStructureData({
       }));
   });
 
+  const breakdownSpendings = computed<Record<string, endpointsTypes.SpendingStructure>>(() =>
+    Object.fromEntries(Object.entries(breakdownQuery.data.value ?? {})),
+  );
+
+  const breakdownChartData = computed<ChartDataItem[]>(() => {
+    const categoryId = drilldownCategoryId.value;
+    if (!categoryId || !breakdownQuery.data.value) return [];
+
+    return buildExpenseStructureBreakdown({
+      parentCategoryId: categoryId,
+      childCategoryIds: immediateChildCategoryIds.value,
+      spendings: breakdownSpendings.value,
+      otherLabel: t('common.ui.other'),
+    });
+  });
+
+  const chartData = computed<ChartDataItem[]>(() =>
+    drilldownCategoryId.value ? breakdownChartData.value : topLevelChartData.value,
+  );
+  const isBreakdownLoading = computed(
+    () => drilldownCategoryId.value !== null && breakdownQuery.isFetching.value && !breakdownQuery.data.value,
+  );
+  const isBreakdownError = computed(() => drilldownCategoryId.value !== null && breakdownQuery.isError.value);
   const isDataEmpty = computed(() => chartData.value.length === 0);
   const hasData = computed(() => currentMonthExpense.value !== undefined && prevMonthExpense.value !== undefined);
-  const totalAmount = computed(() => chartData.value.reduce((sum, item) => sum + item.amount, 0));
+  const totalAmount = computed(() => topLevelChartData.value.reduce((sum, item) => sum + item.amount, 0));
+  const chartTotalAmount = computed(() => chartData.value.reduce((sum, item) => sum + item.amount, 0));
 
   return {
     excludedCategoryIds,
@@ -164,8 +239,12 @@ export function useExpensesStructureData({
     animatedExpense,
     expensesDiff,
     chartData,
+    isBreakdownLoading,
+    isBreakdownError,
+    refetchBreakdown: breakdownQuery.refetch,
     isDataEmpty,
     hasData,
     totalAmount,
+    chartTotalAmount,
   };
 }

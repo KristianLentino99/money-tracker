@@ -80,9 +80,11 @@
       },
       "expensesStructure": {
         "title": "Expenses Structure",
+        "allExpenses": "All expenses",
         "today": "Today",
         "vsPreviousPeriod": "vs previous period",
-        "viewButton": "View"
+        "viewButton": "View",
+        "loadFailed": "Couldn't load the category breakdown."
       },
       "latestTransactions": {
         "title": "Latest Transactions",

@@ -61,13 +61,51 @@
     <template v-if="isWidgetDataFetching && !hasData">
       <LoadingState />
     </template>
-    <template v-else-if="isDataEmpty">
+    <template v-else-if="isDataEmpty && drilldownPath.length === 0">
       <EmptyState>
         <ChartPieIcon class="size-32" />
       </EmptyState>
     </template>
     <template v-else>
-      <DonutChart :data="chartData" :total-amount="totalAmount" @category-click="navigateToTransactions" />
+      <div v-if="drilldownPath.length > 0" class="mb-1 flex min-w-0 items-center gap-1">
+        <Button variant="ghost" size="sm" class="shrink-0 px-2" @click="goBack">
+          <ArrowLeftIcon class="size-4" />
+          {{ $t('common.actions.back') }}
+        </Button>
+        <ChevronRightIcon class="text-muted-foreground size-4 shrink-0" />
+        <div class="flex min-w-0 items-center gap-1 overflow-hidden text-xs">
+          <Button variant="ghost" size="sm" class="h-7 shrink-0 px-1.5 font-normal" @click="goToRoot">
+            {{ $t('dashboard.widgets.expensesStructure.allExpenses') }}
+          </Button>
+          <ChevronRightIcon class="text-muted-foreground size-3 shrink-0" />
+          <template v-for="(categoryId, index) in drilldownPath" :key="categoryId">
+            <Button
+              variant="ghost"
+              size="sm"
+              class="h-7 min-w-0 shrink truncate px-1.5 font-normal"
+              :class="cn(index === drilldownPath.length - 1 && 'text-foreground font-medium')"
+              :aria-current="index === drilldownPath.length - 1 ? 'page' : undefined"
+              @click="goToPath(index)"
+            >
+              {{ categoriesMap[categoryId]?.name ?? $t('common.labels.unknown') }}
+            </Button>
+            <ChevronRightIcon v-if="index < drilldownPath.length - 1" class="text-muted-foreground size-3 shrink-0" />
+          </template>
+        </div>
+      </div>
+
+      <template v-if="isBreakdownLoading">
+        <ChartSkeleton />
+      </template>
+      <template v-else-if="isBreakdownError">
+        <ErrorState :message="$t('dashboard.widgets.expensesStructure.loadFailed')" @retry="refetchBreakdown()" />
+      </template>
+      <template v-else-if="isDataEmpty">
+        <EmptyState>
+          <ChartPieIcon class="size-32" />
+        </EmptyState>
+      </template>
+      <DonutChart v-else :data="chartData" :total-amount="chartTotalAmount" @category-click="onCategoryClick" />
     </template>
   </WidgetWrapper>
 </template>
@@ -76,21 +114,27 @@
 import ExcludeCategoriesMenu from '@/components/common/category-exclusions/exclude-categories-menu.vue';
 import ExcludedCountBadge from '@/components/common/category-exclusions/excluded-count-badge.vue';
 import { useCategoryExclusionsConfig } from '@/components/common/category-exclusions/use-category-exclusions-config';
+import Button from '@/components/lib/ui/button/Button.vue';
 import IncludePlannedMenuItem from '@/components/widgets/components/include-planned-menu-item.vue';
 import { useIncludePlannedConfig } from '@/components/widgets/use-include-planned-config';
 import { useFormatCurrency } from '@/composable';
+import { cn } from '@/lib/utils';
 import { ROUTES_NAMES } from '@/routes';
 import { useCategoriesStore } from '@/stores';
 import { TRANSACTION_TYPES } from '@bt/shared/types';
-import { ChartPieIcon } from '@lucide/vue';
+import { ArrowLeftIcon, ChartPieIcon, ChevronRightIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import EmptyState from '../components/empty-state.vue';
+import ErrorState from '../components/error-state.vue';
 import LoadingState from '../components/loading-state.vue';
 import WidgetWrapper from '../components/widget-wrapper.vue';
 
+import ChartSkeleton from './chart-skeleton.vue';
 import DonutChart from './donut-chart.vue';
+import { resolveExpenseStructureClick } from './expense-structure-breakdown';
 import { useExpensesStructureData } from './use-expenses-structure-data';
 
 defineOptions({
@@ -108,6 +152,8 @@ const router = useRouter();
 
 const { widgetConfigRef, excludedCategoryIds, persistExcludedCategories } = useCategoryExclusionsConfig();
 const { includePlanned } = useIncludePlannedConfig();
+const drilldownPath = ref<string[]>([]);
+const drilldownCategoryId = computed(() => drilldownPath.value.at(-1) ?? null);
 
 const {
   hasExcludedStats,
@@ -116,43 +162,74 @@ const {
   animatedExpense,
   expensesDiff,
   chartData,
+  isBreakdownLoading,
+  isBreakdownError,
+  refetchBreakdown,
   isDataEmpty,
   hasData,
   totalAmount,
+  chartTotalAmount,
 } = useExpensesStructureData({
   selectedPeriod: () => props.selectedPeriod,
   excludedCategoryIds,
   includePlanned,
+  categoriesMap,
+  drilldownCategoryId,
 });
 
-const getAllCategoryIds = (rootCategoryId: string): string[] => {
-  const result = [rootCategoryId];
-  const categories = Object.values(categoriesMap.value);
-
-  const findChildren = (parentId: string) => {
-    categories.forEach((cat) => {
-      if (cat.parentId === parentId && !result.includes(cat.id)) {
-        result.push(cat.id);
-        findChildren(cat.id);
-      }
-    });
-  };
-
-  findChildren(rootCategoryId);
-  return result;
-};
+const hasChildren = (categoryId: string) =>
+  Object.values(categoriesMap.value).some((category) => category.parentId === categoryId);
 
 const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
-  const allCategoryIds = getAllCategoryIds(categoryId);
+  const categoryIds = [categoryId];
 
   router.push({
     name: ROUTES_NAMES.transactions,
     query: {
-      categoryIds: allCategoryIds.map(String),
+      categoryIds: categoryIds.map(String),
       start: props.selectedPeriod.from.toISOString(),
       end: props.selectedPeriod.to.toISOString(),
       transactionType: TRANSACTION_TYPES.expense,
     },
   });
 };
+
+const onCategoryClick = ({ categoryId, isOther = false }: { categoryId: string; isOther?: boolean }) => {
+  const action = resolveExpenseStructureClick({
+    categoryId,
+    hasChildren: hasChildren(categoryId),
+    isOther,
+  });
+
+  if (action.type === 'drilldown') {
+    drilldownPath.value.push(action.categoryId);
+    return;
+  }
+
+  navigateToTransactions({ categoryId: action.categoryId });
+};
+
+const goBack = () => {
+  drilldownPath.value.pop();
+};
+
+const goToRoot = () => {
+  drilldownPath.value = [];
+};
+
+const goToPath = (index: number) => {
+  drilldownPath.value = drilldownPath.value.slice(0, index + 1);
+};
+
+watch(
+  [
+    () => props.selectedPeriod.from.getTime(),
+    () => props.selectedPeriod.to.getTime(),
+    excludedCategoryIds,
+    includePlanned,
+  ],
+  () => {
+    drilldownPath.value = [];
+  },
+);
 </script>
