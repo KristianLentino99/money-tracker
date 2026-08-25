@@ -20,6 +20,13 @@ MCP_BASE_URL="${MCP_BASE_URL:-}"
 POSTHOG_KEY="${POSTHOG_KEY:-}"
 POSTHOG_HOST="${POSTHOG_HOST:-}"
 LOGO_DEV_TOKEN="${LOGO_DEV_TOKEN:-}"
+PWA_ENABLED="${PWA_ENABLED:-true}"
+PWA_APP_NAME="${PWA_APP_NAME:-MoneyMatter}"
+PWA_SHORT_NAME="${PWA_SHORT_NAME:-MoneyMatter}"
+PWA_THEME_COLOR="${PWA_THEME_COLOR:-#7355be}"
+PWA_BACKGROUND_COLOR="${PWA_BACKGROUND_COLOR:-#ffffff}"
+PWA_ICON_192="${PWA_ICON_192:-/web-app-manifest-192x192.png}"
+PWA_ICON_512="${PWA_ICON_512:-/web-app-manifest-512x512.png}"
 SENTRY_DSN="${SENTRY_DSN:-}"
 SENTRY_RELEASE="${SENTRY_RELEASE:-${DEFAULT_SENTRY_RELEASE:-}}"
 CSP_EXTRA_CONNECT="${CSP_EXTRA_CONNECT:-}"
@@ -39,6 +46,36 @@ case "$API_HTTP" in
     exit 1
     ;;
 esac
+
+case "$PWA_ENABLED" in
+  true | false ) : ;;
+  * )
+    echo "ERROR: PWA_ENABLED must be true or false (got: $PWA_ENABLED)" >&2
+    exit 1
+    ;;
+esac
+
+for color_name in PWA_THEME_COLOR PWA_BACKGROUND_COLOR; do
+  eval "color_value=\${$color_name}"
+  case "$color_value" in
+    \#[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F] ) : ;;
+    * )
+      echo "ERROR: $color_name must be a six-digit hex color (got: $color_value)" >&2
+      exit 1
+      ;;
+  esac
+done
+
+for icon_name in PWA_ICON_192 PWA_ICON_512; do
+  eval "icon_value=\${$icon_name}"
+  case "$icon_value" in
+    /* ) : ;;
+    * )
+      echo "ERROR: $icon_name must be a same-origin absolute path beginning with / (got: $icon_value)" >&2
+      exit 1
+      ;;
+  esac
+done
 
 # BACKEND_URL feeds nginx proxy_pass. A trailing slash gives proxy_pass a URI
 # part, which makes nginx replace the matched /api/ prefix instead of passing
@@ -72,9 +109,53 @@ window.__APP_CONFIG__ = {
   POSTHOG_KEY: "$(js_escape "$POSTHOG_KEY")",
   POSTHOG_HOST: "$(js_escape "$POSTHOG_HOST")",
   LOGO_DEV_TOKEN: "$(js_escape "$LOGO_DEV_TOKEN")",
+  PWA_ENABLED: "$(js_escape "$PWA_ENABLED")",
+  PWA_APP_NAME: "$(js_escape "$PWA_APP_NAME")",
+  PWA_SHORT_NAME: "$(js_escape "$PWA_SHORT_NAME")",
+  PWA_THEME_COLOR: "$(js_escape "$PWA_THEME_COLOR")",
+  PWA_BACKGROUND_COLOR: "$(js_escape "$PWA_BACKGROUND_COLOR")",
+  PWA_ICON_192: "$(js_escape "$PWA_ICON_192")",
+  PWA_ICON_512: "$(js_escape "$PWA_ICON_512")",
   SENTRY_DSN: "$(js_escape "$SENTRY_DSN")",
   SENTRY_RELEASE: "$(js_escape "$SENTRY_RELEASE")",
 };
+EOF
+
+PWA_DISPLAY="standalone"
+if [ "$PWA_ENABLED" = "false" ]; then
+  PWA_DISPLAY="browser"
+fi
+
+cat > /app/site.webmanifest <<EOF
+{
+  "id": "/",
+  "name": "$(js_escape "$PWA_APP_NAME")",
+  "short_name": "$(js_escape "$PWA_SHORT_NAME")",
+  "description": "Track spending, plan budgets, and understand your financial future while keeping control of your data.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "$PWA_DISPLAY",
+  "theme_color": "$(js_escape "$PWA_THEME_COLOR")",
+  "background_color": "$(js_escape "$PWA_BACKGROUND_COLOR")",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {"src": "$(js_escape "$PWA_ICON_192")", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "$(js_escape "$PWA_ICON_192")", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "$(js_escape "$PWA_ICON_512")", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "$(js_escape "$PWA_ICON_512")", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [
+    {"src": "/pwa-screenshot-narrow.png", "sizes": "1024x1536", "type": "image/png", "form_factor": "narrow", "label": "MoneyMatter mobile financial overview"},
+    {"src": "/pwa-screenshot-wide.png", "sizes": "1536x1024", "type": "image/png", "form_factor": "wide", "label": "MoneyMatter desktop financial overview"}
+  ],
+  "shortcuts": [
+    {"name": "Add transaction", "short_name": "Add", "description": "Record a new transaction", "url": "/transactions?action=new", "icons": [{"src": "$(js_escape "$PWA_ICON_192")", "sizes": "192x192", "type": "image/png"}]},
+    {"name": "Transactions", "short_name": "Transactions", "description": "Review your transactions", "url": "/transactions", "icons": [{"src": "$(js_escape "$PWA_ICON_192")", "sizes": "192x192", "type": "image/png"}]},
+    {"name": "Plan", "short_name": "Plan", "description": "Open your financial plan", "url": "/plan", "icons": [{"src": "$(js_escape "$PWA_ICON_192")", "sizes": "192x192", "type": "image/png"}]}
+  ]
+}
 EOF
 
 # --- CSP + nginx config -----------------------------------------------------

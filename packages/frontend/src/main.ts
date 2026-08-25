@@ -1,11 +1,12 @@
 import '@/styles/global.css';
-import './registerServiceWorker';
 
 import { installChunkReloadHandler } from '@/common/utils/chunk-reload-handler';
 import { identifyCurrentTheme } from '@/common/utils/color-theme';
 import { patchMetaViewportMaxScaleForiOS } from '@/common/utils/meta-viewport-max-scale';
+import { applyRuntimePwaBranding } from '@/common/utils/pwa-branding';
 import { i18n, initializeLocale, loadChunks } from '@/i18n';
 import { initPostHog, trackPageviews } from '@/lib/posthog';
+import { initializePwa } from '@/lib/pwa';
 import { queryClient } from '@/lib/query-client';
 import { initSentry } from '@/lib/sentry';
 import { router } from '@/routes';
@@ -17,6 +18,7 @@ import { createApp } from 'vue';
 import App from './app.vue';
 
 identifyCurrentTheme();
+applyRuntimePwaBranding();
 patchMetaViewportMaxScaleForiOS();
 if (!import.meta.env.DEV) {
   installChunkReloadHandler({ router });
@@ -41,12 +43,13 @@ initI18n()
   .catch((err) => {
     console.warn('i18n initialization failed, using defaults:', err);
   })
-  .finally(() => {
+  .finally(async () => {
     const app = createApp(App);
     const head = createHead();
 
     // Initialize Sentry before mounting (must be early to catch errors)
     initSentry({ app, router });
+    await initializePwa();
 
     initPostHog();
     trackPageviews({ router });

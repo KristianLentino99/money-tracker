@@ -6,7 +6,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import svgLoader from 'vite-svg-loader';
+
+import { pwaManifest, pwaWorkbox } from './pwa-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -83,7 +86,21 @@ export default async ({ mode }) => {
     define: {
       __APP_VERSION__: JSON.stringify(appVersion),
     },
-    plugins: [vue(), tailwind(), svgLoader(), versionJsonPlugin({ version: appVersion }), sentryPlugin].filter(Boolean),
+    plugins: [
+      vue(),
+      tailwind(),
+      svgLoader(),
+      VitePWA({
+        strategies: 'generateSW',
+        registerType: 'prompt',
+        injectRegister: null,
+        manifestFilename: 'site.webmanifest',
+        manifest: pwaManifest,
+        workbox: pwaWorkbox,
+      }),
+      versionJsonPlugin({ version: appVersion }),
+      sentryPlugin,
+    ].filter(Boolean),
     build: {
       sourcemap: true,
       rollupOptions: {
