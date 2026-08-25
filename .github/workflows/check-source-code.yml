@@ -5,9 +5,13 @@ on:
     # Post-merge run on main only. dev is intentionally excluded: it is a PR head
     # branch (dev -> main release PRs), so listing it here would fire push AND
     # pull_request on the same head SHA, double-running every check on the PR.
-    # Commits reaching dev already passed the unfiltered pull_request trigger below.
+    # Commits reaching dev already passed the pull_request trigger below.
     branches: [main]
   pull_request:
+    # Run CI for feature PRs into dev and for the dev -> main release PR.
+    # Keeping both targets explicit avoids silently widening this workflow to
+    # unrelated base branches while preserving the existing release gate.
+    branches: [dev, main]
   # enable manual triggers
   workflow_dispatch:
 
@@ -49,7 +53,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        task: [lint, test, build, knip]
+        # `build` runs vue-tsc, vite build, and assert-pwa-build.mjs, so the
+        # matrix covers the frontend typecheck and production/PWA contract
+        # without introducing a duplicate standalone typecheck job.
+        task: [lint, 'test:unit', build, knip]
     steps:
       - name: Skip – no frontend changes
         if: needs.detect-changes.outputs.backend-only == 'true'
