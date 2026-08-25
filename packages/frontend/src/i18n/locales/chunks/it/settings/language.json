@@ -2,14 +2,7 @@
   "settings": {
     "language": {
       "title": "Lingua",
-      "description": "Lingua visualizzata nell'interfaccia dell'app.",
-      "contribute": {
-        "title": "Mancano traduzioni o ci sono errori?",
-        "description": "Tutte le lingue diverse dall'inglese sono tradotte dalla community su Crowdin. Puoi richiedere una nuova lingua, suggerire correzioni oppure tradurre tu stesso le stringhe: non è richiesta alcuna programmazione.",
-        "requestNote": "Preferisci non usare Crowdin? Richiedi una lingua sulla nostra {boardLink}.",
-        "requestNoteLink": "bacheca delle funzionalità",
-        "action": "Contribuisci su Crowdin"
-      }
+      "description": "Lingua visualizzata nell'interfaccia dell'app."
     }
   }
 }

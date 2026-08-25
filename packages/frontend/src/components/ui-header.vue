@@ -3,7 +3,19 @@
     <DemoBanner />
     <div class="shadow-header border-border flex items-center justify-between border-b px-4 py-2 sm:px-6">
       <div class="flex items-center gap-4">
-        <ManageTransactionDialog v-if="!isMobileView">
+        <ManageTransactionDialog v-if="isMobileView">
+          <Button
+            data-testid="mobile-add-transaction"
+            variant="default"
+            size="icon"
+            class="max-md:min-h-11 max-md:min-w-11"
+            :aria-label="$t('header.newTransaction')"
+          >
+            <PlusIcon class="size-4" aria-hidden="true" />
+          </Button>
+        </ManageTransactionDialog>
+
+        <ManageTransactionDialog v-else>
           <Button variant="default" size="sm">
             <PlusIcon class="size-4" />
             {{ $t('header.newTransaction') }}

@@ -20,7 +20,20 @@ test.describe('@mobile-shell mobile application shell', () => {
       const navigation = page.getByTestId('mobile-primary-navigation');
       await expect(navigation).toBeVisible();
       await expect(navigation.locator('[data-mobile-tab]')).toHaveCount(5);
-      await expect(page.getByTestId('mobile-add-transaction')).toBeVisible();
+
+      const addTransactionButton = page.getByTestId('mobile-add-transaction');
+      await expect(addTransactionButton).toBeVisible();
+      const positions = await page.evaluate(() => {
+        const addButton = document.querySelector('[data-testid="mobile-add-transaction"]');
+        const navigation = document.querySelector('[data-testid="mobile-primary-navigation"]');
+        if (!addButton || !navigation) return null;
+        return {
+          addButtonTop: addButton.getBoundingClientRect().top,
+          navigationTop: navigation.getBoundingClientRect().top,
+        };
+      });
+      if (!positions) throw new Error('Mobile add transaction button or navigation is missing');
+      expect(positions.addButtonTop).toBeLessThan(positions.navigationTop);
 
       const tabRows = await navigation
         .locator('[data-mobile-tab]')

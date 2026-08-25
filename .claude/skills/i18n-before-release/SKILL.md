@@ -61,4 +61,4 @@ Must print "All locales are complete". If keys remain, re-spawn the affected loc
 
 ### 6. Wrap up
 
-Report: keys stripped, keys pruned, keys translated per locale. Remind the user to review `git diff`, commit themselves (never commit for them), and run `npm run i18n:crowdin:upload` to sync translations to Crowdin.
+Report: keys stripped, keys pruned, and keys translated per locale. Remind the user to review `git diff` and commit the repository-owned locale JSON changes themselves (never commit for them).
