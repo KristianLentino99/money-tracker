@@ -47,6 +47,13 @@ test.describe('Plan workspace', () => {
     await expect(page.getByText(/60[.,]00/)).toBeVisible({ timeout: 15_000 });
     await expect(page.getByRole('spinbutton').first()).toHaveValue('40');
 
+    await page.getByRole('button', { name: new RegExp(`Plan UI Category ${testUser.name}`) }).click();
+    await expect(page.getByRole('heading', { name: new RegExp(`Plan UI Category ${testUser.name}`) })).toBeVisible();
+    await page.getByRole('button', { name: /add target/i }).click();
+    await page.getByLabel(/target amount/i).fill('400');
+    await page.getByRole('button', { name: /save target/i }).click();
+    await expect(page.getByText(/33[.,]34/)).toBeVisible({ timeout: 15_000 });
+
     // The category input must remain keyboard-addressable at the narrow responsive layout.
     await page.setViewportSize({ width: 420, height: 900 });
     await page.reload();

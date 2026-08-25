@@ -426,6 +426,18 @@ export interface PlanAssignmentModel {
   assignedCents: number;
 }
 
+export interface PlanCategoryTargetModel {
+  id: RecordId;
+  planId: RecordId;
+  categoryIdentity: RecordId;
+  categoryId: RecordId | null;
+  categoryNameSnapshot: string;
+  targetAmountCents: number;
+  dueDate: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface PlanAllocationEventModel {
   id: RecordId;
   planId: RecordId;

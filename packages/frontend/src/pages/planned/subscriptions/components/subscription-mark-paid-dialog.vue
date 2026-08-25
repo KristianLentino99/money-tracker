@@ -8,6 +8,7 @@ import { VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
 import { getAccountDisplayLabel } from '@/common/utils/account-display';
 import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import ResponsiveDialog from '@/components/common/responsive-dialog.vue';
+import PickTransactionDialog from '@/components/dialogs/pick-transaction-dialog.vue';
 import AccountSelectField from '@/components/fields/account-select-field.vue';
 import DateField from '@/components/fields/date-field.vue';
 import InputField from '@/components/fields/input-field.vue';
@@ -18,13 +19,20 @@ import { useNotificationCenter } from '@/components/notification-center';
 import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
 import { useFormatCurrency } from '@/composable/formatters';
 import { useAccountDropdownPrefs } from '@/composable/use-account-dropdown-prefs';
+import { isTransactionOnDate } from '@/components/dialogs/pick-transaction-dialog.helpers';
 import { ApiErrorResponseError, isApiErrorWithCode } from '@/js/errors';
 import { cn } from '@/lib/utils';
 import { useAccountsStore } from '@/stores';
-import { API_ERROR_CODES, type AccountModel, type LoanPaymentOverpayDetails } from '@bt/shared/types';
+import {
+  API_ERROR_CODES,
+  TRANSACTION_TYPES,
+  type AccountModel,
+  type LoanPaymentOverpayDetails,
+  type TransactionModel,
+} from '@bt/shared/types';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /**
@@ -37,13 +45,15 @@ interface PayableSubscription {
   /** Decimal expected amount; null means the amount varies per payment. */
   expectedAmount: number | null;
   expectedCurrencyCode: string | null;
+  transactionType: TRANSACTION_TYPES;
   /** Account the generated expense is booked against. null = no account yet. */
   accountId: string | null;
   loan?: { currencyCode: string } | null;
+  periodDueDate?: string;
 }
 
 /** How an account-less payment is recorded: status-only vs. a booked expense. */
-type RecordMode = 'mark' | 'transaction';
+type RecordMode = 'mark' | 'transaction' | 'link';
 
 const { t } = useI18n();
 const queryClient = useQueryClient();
@@ -88,6 +98,7 @@ const { mutate: markPaid, isPending } = useMutation({
 const isDialogOpen = ref(false);
 const activeSubscription = ref<PayableSubscription | null>(null);
 const activePeriodId = ref<string | null>(null);
+const activePeriodDueDate = ref<string | null>(null);
 const pendingPayPayload = ref<Parameters<typeof markSubscriptionPeriodPaid>[0] | null>(null);
 const amount = ref<string>('');
 const paidDate = ref<Date>(new Date());
@@ -95,8 +106,9 @@ const isEstimateLoading = ref(false);
 const estimate = ref<SubscriptionPayPreview | null>(null);
 const today = new Date();
 
-// Account-less flow only: the user's choice + the account they pick to book against.
+// The user's payment choice and, for account-less subscriptions, the account used to book it.
 const recordMode = ref<RecordMode>('mark');
+const isLinkTransactionDialogOpen = ref(false);
 const selectedAccountId = ref<string | null>(null);
 const isOverpayConfirmOpen = ref(false);
 const overpayDetails = ref<LoanPaymentOverpayDetails | null>(null);
@@ -114,11 +126,11 @@ const overpayAmountDisplay = computed(() => {
     : '';
 });
 
-/** A subscription that already has an account skips the choice UI entirely. */
+/** A subscription with an account starts in transaction mode; linking stays available from the same dialog. */
 const hasAccount = computed(() => activeSubscription.value?.accountId != null);
 
 /** Whether the account/amount/date fields are shown (booking a real transaction). */
-const isBooking = computed(() => hasAccount.value || recordMode.value === 'transaction');
+const isBooking = computed(() => recordMode.value === 'transaction');
 
 const allAccounts = computed(() => accountsStore.accounts ?? []);
 
@@ -164,6 +176,7 @@ const dialogAmountCurrency = computed(() => {
 
 const isConfirmDisabled = computed(() => {
   if (isPending.value) return true;
+  if (recordMode.value === 'link') return true;
   // Plain "just mark as paid" needs no input.
   if (!isBooking.value) return false;
   // Booking against a not-yet-linked account requires picking one.
@@ -177,50 +190,63 @@ const confirmLabel = computed(() =>
 
 /**
  * Entry point.
- *  - No account: open the dialog so the user chooses between a plain mark-paid
- *    and booking a real transaction (which needs an account).
- *  - Fixed same-currency amount: book in one click, no dialog.
- *  - Variable / cross-currency amount: open the dialog to capture the amount.
+ * Opens the payment choices. Existing transactions are linked through the same
+ * period-payment request as generated transactions, so marking the period paid
+ * and advancing the schedule remain atomic.
  */
-async function triggerPay({ subscription, periodId }: { subscription: PayableSubscription; periodId: string }) {
-  if (subscription.accountId == null) {
-    activeSubscription.value = subscription;
-    activePeriodId.value = periodId;
-    recordMode.value = 'mark';
-    selectedAccountId.value =
-      resolveDefaultAccount({ accounts: allAccounts.value, fallbackToFirst: false })?.id ?? null;
-    // Seed with the plan's expected amount as a convenience; the user confirms or
-    // edits it, and it is booked in the chosen account's currency.
-    amount.value = subscription.expectedAmount != null ? String(subscription.expectedAmount) : '';
-    paidDate.value = new Date();
-    estimate.value = null;
-    isDialogOpen.value = true;
-    return;
-  }
-
-  const crossCurrency = isCrossCurrency(subscription);
-
-  // Fixed amount in the account's own currency: book in one click.
-  if (subscription.expectedAmount != null && !crossCurrency) {
-    activeSubscription.value = subscription;
-    activePeriodId.value = periodId;
-    submitPay({ id: subscription.id, periodId, createTransaction: true, time: new Date() });
-    return;
-  }
-
-  // Variable amount or cross-currency: open the dialog. For cross-currency,
-  // pre-fill with the app-converted estimate so the user can adjust if their
-  // bank charged a different rate.
+async function triggerPay({
+  subscription,
+  periodId,
+  periodDueDate,
+}: {
+  subscription: PayableSubscription;
+  periodId: string;
+  periodDueDate?: string;
+}) {
   activeSubscription.value = subscription;
   activePeriodId.value = periodId;
-  amount.value = '';
+  activePeriodDueDate.value = periodDueDate ?? subscription.periodDueDate ?? null;
+  recordMode.value = subscription.accountId == null ? 'mark' : 'transaction';
+  selectedAccountId.value = resolveDefaultAccount({ accounts: allAccounts.value, fallbackToFirst: false })?.id ?? null;
+  amount.value = subscription.expectedAmount != null ? String(subscription.expectedAmount) : '';
   paidDate.value = new Date();
   estimate.value = null;
+  isLinkTransactionDialogOpen.value = false;
   isDialogOpen.value = true;
 
+  const crossCurrency = isCrossCurrency(subscription);
   if (crossCurrency) {
     await loadPreviewEstimate({ subscriptionId: subscription.id });
   }
+}
+
+watch(recordMode, (mode) => {
+  if (mode === 'link' && activePeriodDueDate.value) {
+    isLinkTransactionDialogOpen.value = true;
+  }
+});
+
+watch(isDialogOpen, (open) => {
+  if (!open) isLinkTransactionDialogOpen.value = false;
+});
+
+function handleLinkedTransaction(transaction: TransactionModel) {
+  if (!activeSubscription.value || !activePeriodId.value) return;
+
+  if (
+    !activePeriodDueDate.value ||
+    !isTransactionOnDate({ transactionTime: transaction.time, transactionDate: activePeriodDueDate.value })
+  ) {
+    addErrorNotification(t('dialogs.subscriptionMarkPaid.notifications.linkTransactionDateMismatch'));
+    return;
+  }
+
+  isLinkTransactionDialogOpen.value = false;
+  submitPay({
+    id: activeSubscription.value.id,
+    periodId: activePeriodId.value,
+    transactionId: transaction.id,
+  });
 }
 
 async function loadPreviewEstimate({ subscriptionId }: { subscriptionId: string }) {
@@ -249,7 +275,7 @@ function confirmPay() {
   const periodId = activePeriodId.value;
 
   // Account-less, user chose to only update the schedule.
-  if (!isBooking.value) {
+  if (recordMode.value === 'mark') {
     submitPay({ id, periodId });
     return;
   }
@@ -287,9 +313,10 @@ defineExpose({ triggerPay, isPending });
     </template>
 
     <div class="grid gap-4">
-      <!-- Account-less: choose how to record the payment. -->
-      <RadioGroup v-if="!hasAccount" v-model="recordMode" class="grid gap-3">
+      <!-- Choose whether to create a payment, only advance the schedule, or link an existing payment. -->
+      <RadioGroup v-model="recordMode" class="grid gap-3">
         <Label
+          v-if="!hasAccount"
           :class="
             cn(
               'border-input hover:bg-accent hover:text-accent-foreground flex cursor-pointer flex-col gap-1 rounded-md border p-3 transition-colors',
@@ -321,6 +348,23 @@ defineExpose({ triggerPay, isPending });
           </div>
           <span class="text-muted-foreground pl-6 text-xs">
             {{ $t('dialogs.subscriptionMarkPaid.recordModeTransactionDescription') }}
+          </span>
+        </Label>
+        <Label
+          :class="
+            cn(
+              'border-input hover:bg-accent hover:text-accent-foreground flex cursor-pointer flex-col gap-1 rounded-md border p-3 transition-colors',
+              recordMode === 'link' && 'border-primary bg-primary/5',
+              !activePeriodDueDate && 'cursor-not-allowed opacity-50',
+            )
+          "
+        >
+          <div class="flex items-center gap-2">
+            <RadioGroupItem value="link" :disabled="!activePeriodDueDate" />
+            <span class="font-medium">{{ $t('dialogs.subscriptionMarkPaid.recordModeLinkTitle') }}</span>
+          </div>
+          <span class="text-muted-foreground pl-6 text-xs">
+            {{ $t('dialogs.subscriptionMarkPaid.recordModeLinkDescription') }}
           </span>
         </Label>
       </RadioGroup>
@@ -384,12 +428,19 @@ defineExpose({ triggerPay, isPending });
         <UiButton variant="outline" :disabled="isPending" @click="isDialogOpen = false">
           {{ $t('common.actions.cancel') }}
         </UiButton>
-        <UiButton :disabled="isConfirmDisabled" :loading="isPending" @click="confirmPay">
+        <UiButton v-if="recordMode !== 'link'" :disabled="isConfirmDisabled" :loading="isPending" @click="confirmPay">
           {{ confirmLabel }}
         </UiButton>
       </div>
     </template>
   </ResponsiveDialog>
+
+  <PickTransactionDialog
+    v-model:open="isLinkTransactionDialogOpen"
+    :transaction-type="activeSubscription?.transactionType"
+    :transaction-date="activePeriodDueDate ?? undefined"
+    @select="handleLinkedTransaction"
+  />
 
   <ResponsiveAlertDialog
     v-model:open="isOverpayConfirmOpen"

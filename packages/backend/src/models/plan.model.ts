@@ -7,6 +7,7 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from '
 import PlanAccountMemberships from './plan-account-memberships.model';
 import PlanAllocationEvents from './plan-allocation-events.model';
 import PlanCategoryMemberships from './plan-category-memberships.model';
+import PlanCategoryTargets from './plan-category-targets.model';
 import PlanPeriods from './plan-periods.model';
 
 @Table({ tableName: 'Plans', timestamps: true, freezeTableName: true })
@@ -62,6 +63,9 @@ export default class Plans extends Model implements PlanModel {
 
   @HasMany(() => PlanCategoryMemberships)
   categoryMemberships!: PlanCategoryMemberships[];
+
+  @HasMany(() => PlanCategoryTargets)
+  categoryTargets!: PlanCategoryTargets[];
 
   @HasMany(() => PlanAccountMemberships)
   accountMemberships!: PlanAccountMemberships[];

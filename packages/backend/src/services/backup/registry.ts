@@ -29,6 +29,7 @@ import PlanAccountMemberships from '@models/plan-account-memberships.model';
 import PlanAllocationEvents from '@models/plan-allocation-events.model';
 import PlanAssignments from '@models/plan-assignments.model';
 import PlanCategoryMemberships from '@models/plan-category-memberships.model';
+import PlanCategoryTargets from '@models/plan-category-targets.model';
 import PlanPeriods from '@models/plan-periods.model';
 import Plans from '@models/plan.model';
 import RefundTransactions from '@models/refund-transactions.model';
@@ -422,6 +423,13 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
   {
     fileName: 'plan-category-memberships',
     model: PlanCategoryMemberships,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'plan-category-targets',
+    model: PlanCategoryTargets,
     tier: 5,
     scope: { strategy: 'viaParent', fk: 'planId', parent: 'plans' },
     restoreMode: 'insert',

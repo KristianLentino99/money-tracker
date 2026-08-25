@@ -35,6 +35,20 @@ export interface PlanPeriodResponse {
 
 export type PlanCategoryStatus = 'none' | 'funded' | 'underfunded' | 'overspent';
 
+export interface PlanCategoryTargetConfig {
+  id: RecordId;
+  amount: Decimal;
+  dueDate: string;
+}
+
+export interface PlanCategoryTargetView extends PlanCategoryTargetConfig {
+  savedAmount: Decimal;
+  remaining: Decimal;
+  monthlyAmount: Decimal;
+  progressPercent: number;
+  isOnTrack: boolean;
+}
+
 export interface PlanCategoryRowResponse {
   id: RecordId;
   name: string;
@@ -47,6 +61,7 @@ export interface PlanCategoryRowResponse {
   status: PlanCategoryStatus;
   upcomingObligation: Decimal | null;
   underfundedBy: Decimal | null;
+  target: PlanCategoryTargetView | null;
 }
 
 export interface PlanCategoryGroupResponse {
@@ -108,6 +123,11 @@ export interface UpdatePlanBody {
 
 export interface AddPlanCategoryBody {
   categoryId: RecordId;
+}
+
+export interface SetPlanCategoryTargetBody {
+  amount: Decimal;
+  dueDate: string;
 }
 
 export interface SetPlanAssignmentBody {

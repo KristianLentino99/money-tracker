@@ -10,7 +10,7 @@ import {
 import { keepPreviousData, useInfiniteQuery, useQueryClient } from '@tanstack/vue-query';
 import isDate from 'date-fns/isDate';
 import { isEqual, isNil, omitBy } from 'lodash-es';
-import { MaybeRef, Ref, computed, ref } from 'vue';
+import { MaybeRef, Ref, computed, ref, unref, watch } from 'vue';
 
 const filterOrUndefined = (value: FILTER_OPERATION) => (value === FILTER_OPERATION.all ? undefined : value);
 
@@ -53,24 +53,33 @@ export const useTransactionsWithFilters = ({
   limit?: number;
   appendQueryKey?: unknown[];
   queryEnabled?: MaybeRef<boolean>;
-  staticFilters?: Partial<FiltersStruct>;
+  staticFilters?: MaybeRef<Partial<FiltersStruct>>;
   /** Backend-side sorting. When omitted, defaults to time DESC. */
   sorting?: Ref<TransactionsSorting>;
 } = {}) => {
   const queryClient = useQueryClient();
-  const defaultWithStatic = { ...DEFAULT_FILTERS, ...staticFilters };
-  const filters = ref<FiltersStruct>({ ...defaultWithStatic });
-  const appliedFilters = ref<FiltersStruct>({ ...defaultWithStatic });
+  const defaultWithStatic = computed<FiltersStruct>(() => ({ ...DEFAULT_FILTERS, ...unref(staticFilters) }));
+  const filters = ref<FiltersStruct>({ ...defaultWithStatic.value });
+  const appliedFilters = ref<FiltersStruct>({ ...defaultWithStatic.value });
+
+  watch(
+    defaultWithStatic,
+    (nextStaticFilters) => {
+      filters.value = { ...nextStaticFilters };
+      appliedFilters.value = { ...nextStaticFilters };
+    },
+    { deep: true },
+  );
 
   const transactionsListRef = ref<{ scrollToIndex: (index: number) => void } | null>(null);
 
-  const isResetButtonDisabled = computed(() => isEqual(filters.value, defaultWithStatic));
-  const isAnyFiltersApplied = computed(() => !isEqual(appliedFilters.value, defaultWithStatic));
+  const isResetButtonDisabled = computed(() => isEqual(filters.value, defaultWithStatic.value));
+  const isAnyFiltersApplied = computed(() => !isEqual(appliedFilters.value, defaultWithStatic.value));
   const isFiltersOutOfSync = computed(() => !isEqual(filters.value, appliedFilters.value));
 
   const resetFilters = () => {
-    filters.value = { ...defaultWithStatic };
-    appliedFilters.value = { ...defaultWithStatic };
+    filters.value = { ...defaultWithStatic.value };
+    appliedFilters.value = { ...defaultWithStatic.value };
   };
 
   const applyFilters = () => {

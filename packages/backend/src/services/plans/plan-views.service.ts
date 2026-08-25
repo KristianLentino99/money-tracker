@@ -12,6 +12,7 @@ import PlanAccountMemberships from '@models/plan-account-memberships.model';
 import PlanAllocationEvents from '@models/plan-allocation-events.model';
 import PlanAssignments from '@models/plan-assignments.model';
 import PlanCategoryMemberships from '@models/plan-category-memberships.model';
+import PlanCategoryTargets from '@models/plan-category-targets.model';
 import PlanPeriods from '@models/plan-periods.model';
 import Plans from '@models/plan.model';
 import TransactionSplits from '@models/transaction-splits.model';
@@ -29,6 +30,7 @@ import {
   PlanEngineUpcomingObligation,
 } from './plan-engine';
 import { isPeriodStart, nextPeriodStart, periodEnd, periodStartForDate, previousPeriodStart } from './plan-periods';
+import { calculatePlanTarget } from './plan-target-math';
 
 const signedTransactionCents = ({ transaction }: { transaction: Transactions }): number => {
   const cents = transaction.refAmount.toCents();
@@ -95,6 +97,8 @@ export const buildPlanView = async ({
     }));
 
   const assignments = await PlanAssignments.findAll({ where: { planId: plan.id } });
+  const targets = await PlanCategoryTargets.findAll({ where: { planId: plan.id, categoryIdentity: categoryIds } });
+  const targetByCategory = new Map(targets.map((target) => [target.categoryIdentity, target]));
   const assignmentRows: PlanEngineAssignment[] = assignments
     .filter((assignment) => categoryIds.includes(assignment.categoryIdentity as RecordId))
     .map((assignment) => ({
@@ -193,6 +197,16 @@ export const buildPlanView = async ({
     name: groupId === '__root__' ? 'Categories' : (categoryMap.get(groupId)?.name ?? 'Categories'),
     categories: groupCategories.map((category) => {
       const upcoming = upcomingByCategory.get(category.id);
+      const target = targetByCategory.get(category.id as RecordId);
+      const targetMath = target
+        ? calculatePlanTarget({
+            targetAmountCents: target.targetAmountCents.toCents(),
+            dueDate: target.dueDate,
+            periodStart,
+            availableCents: category.availableCents,
+            assignedCents: category.assignedCents,
+          })
+        : null;
       return {
         id: category.id as RecordId,
         name: category.name,
@@ -205,6 +219,19 @@ export const buildPlanView = async ({
         status: category.status,
         upcomingObligation: upcoming ? toDecimal({ cents: upcoming.amountCents }) : null,
         underfundedBy: category.underfundedByCents > 0 ? toDecimal({ cents: category.underfundedByCents }) : null,
+        target:
+          target && targetMath
+            ? {
+                id: target.id,
+                amount: target.targetAmountCents.toNumber(),
+                dueDate: target.dueDate,
+                savedAmount: toDecimal({ cents: targetMath.savedAmountCents }),
+                remaining: toDecimal({ cents: targetMath.remainingCents }),
+                monthlyAmount: toDecimal({ cents: targetMath.monthlyAmountCents }),
+                progressPercent: targetMath.progressPercent,
+                isOnTrack: targetMath.isOnTrack,
+              }
+            : null,
       };
     }),
   }));

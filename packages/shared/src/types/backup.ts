@@ -67,6 +67,7 @@ export const BACKUP_FILE_NAMES = [
   // tier 5
   'plan-periods',
   'plan-category-memberships',
+  'plan-category-targets',
   'plan-account-memberships',
   'transaction-splits',
   'transaction-tags',

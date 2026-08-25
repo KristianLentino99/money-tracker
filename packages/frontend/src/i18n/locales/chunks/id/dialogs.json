@@ -476,7 +476,8 @@
       "description": "Tambahkan deposit atau penarikan ke portofolio"
     },
     "pickTransaction": {
-      "title": "Pilih transaksi"
+      "title": "Pilih transaksi",
+      "empty": "Tidak ada transaksi yang cocok dengan filter ini."
     },
     "exchangeCurrency": {
       "title": "Tukar Mata Uang",
@@ -594,11 +595,14 @@
       "confirmMarkOnly": "Tandai sudah dibayar",
       "recordModeMarkTitle": "Tandai saja sudah dibayar",
       "recordModeMarkDescription": "Memperbarui jadwal saja — tidak ada transaksi yang dibuat.",
+      "recordModeLinkTitle": "Tautkan transaksi",
+      "recordModeLinkDescription": "Gunakan transaksi yang sudah tercatat pada tanggal pembayaran yang diharapkan.",
       "recordModeTransactionTitle": "Buat transaksi",
       "recordModeTransactionDescription": "Catat pengeluaran nyata di akun. Ini akan ditautkan untuk pembayaran mendatang juga.",
       "notifications": {
         "markedAsPaid": "Pembayaran tercatat",
-        "markAsPaidFailed": "Gagal mencatat pembayaran"
+        "markAsPaidFailed": "Gagal mencatat pembayaran",
+        "linkTransactionDateMismatch": "Pilih transaksi yang tercatat pada tanggal pembayaran yang diharapkan."
       }
     }
   }

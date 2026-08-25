@@ -5,12 +5,14 @@ import {
   autoAssign,
   bulkAssignPlanCategories,
   createPlan,
+  deletePlanCategoryTarget,
   deletePlan,
   getPlan,
   getPlanView,
   listPlans,
   movePlanMoney,
   previewAutoAssign,
+  setPlanCategoryTarget,
   undoPlanAllocation,
   updatePlan,
 } from '@controllers/plans.controller';
@@ -39,6 +41,22 @@ router.post(
   checkBaseCurrencyLock,
   validateEndpoint(addPlanCategory.schema),
   addPlanCategory.handler,
+);
+router.put(
+  '/:id/categories/:categoryId/target',
+  authenticateSession,
+  blockDemoUsers,
+  checkBaseCurrencyLock,
+  validateEndpoint(setPlanCategoryTarget.schema),
+  setPlanCategoryTarget.handler,
+);
+router.delete(
+  '/:id/categories/:categoryId/target',
+  authenticateSession,
+  blockDemoUsers,
+  checkBaseCurrencyLock,
+  validateEndpoint(deletePlanCategoryTarget.schema),
+  deletePlanCategoryTarget.handler,
 );
 router.get('/:id', authenticateSession, validateEndpoint(getPlan.schema), getPlan.handler);
 router.patch(

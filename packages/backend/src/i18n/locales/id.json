@@ -486,6 +486,9 @@
   "vehicles": {
     "notFound": "Kendaraan tidak ditemukan"
   },
+  "plans": {
+    "targetAmountMustBePositive": "Jumlah target harus lebih besar dari nol."
+  },
   "urlGuard": {
     "invalidUrl": "Ini bukan URL yang valid.",
     "unsupportedProtocol": "Hanya URL http:// dan https:// yang diizinkan.",

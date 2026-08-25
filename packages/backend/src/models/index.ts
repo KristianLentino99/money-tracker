@@ -33,6 +33,7 @@ import PlanAccountMembershipsModel from './plan-account-memberships.model';
 import PlanAllocationEventsModel from './plan-allocation-events.model';
 import PlanAssignmentsModel from './plan-assignments.model';
 import PlanCategoryMembershipsModel from './plan-category-memberships.model';
+import PlanCategoryTargetsModel from './plan-category-targets.model';
 import PlanPeriodsModel from './plan-periods.model';
 import PlanModel from './plan.model';
 import RefundTransactionsModel from './refund-transactions.model';
@@ -104,6 +105,7 @@ const models = [
   AccountGroupsModel,
   PlanModel,
   PlanCategoryMembershipsModel,
+  PlanCategoryTargetsModel,
   PlanAccountMembershipsModel,
   PlanPeriodsModel,
   PlanAssignmentsModel,

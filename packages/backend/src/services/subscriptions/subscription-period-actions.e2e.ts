@@ -243,6 +243,7 @@ describe('POST /subscriptions/:id/periods/:periodId/revert (create-mode)', () =>
 
 describe('POST /subscriptions/:id/periods/:periodId/revert (link-mode)', () => {
   it('clears the period link but does NOT delete the user-supplied transaction', async () => {
+    const dueDate = futureDate({ monthsAhead: 1, day: 15 });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ initialBalance: 1000 }),
       raw: true,
@@ -250,13 +251,16 @@ describe('POST /subscriptions/:id/periods/:periodId/revert (link-mode)', () => {
 
     // User creates their own transaction.
     const [manualTx] = await helpers.createTransaction({
-      payload: helpers.buildTransactionPayload({ accountId: account.id, amount: 20 }),
+      payload: helpers.buildTransactionPayload({
+        accountId: account.id,
+        amount: 20,
+        time: `${dueDate}T12:00:00.000Z`,
+      }),
       raw: true,
     });
 
     const balanceAfterManual = (await helpers.getAccount({ id: account.id, raw: true })).currentBalance;
 
-    const dueDate = futureDate({ monthsAhead: 1, day: 15 });
     const sub = await helpers.createSubscription({
       name: 'Link Mode Sub',
       frequency: SUBSCRIPTION_FREQUENCIES.monthly,
@@ -280,6 +284,12 @@ describe('POST /subscriptions/:id/periods/:periodId/revert (link-mode)', () => {
     });
     expect(paid.transactionId).toBe(manualTx!.id);
     expect(paid.transactionAutoCreated).toBe(false);
+
+    // Linking the payment settles this period and advances the recurring schedule.
+    const periodsAfterLink = await helpers.getSubscriptionPeriods({ id: sub.id, raw: true });
+    const nextPeriod = periodsAfterLink.periods.find((p) => p.status === SUBSCRIPTION_PERIOD_STATUSES.upcoming);
+    expect(nextPeriod).toBeDefined();
+    expect(nextPeriod!.dueDate).toBe(format(addMonths(new Date(dueDate + 'T00:00:00Z'), 1), 'yyyy-MM-dd'));
 
     // Revert the period.
     const reverted = await helpers.revertSubscriptionPeriod({

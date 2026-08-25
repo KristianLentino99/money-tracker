@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "target": {
+      "title": "Target kategori",
+      "description": "Tetapkan target untuk kategori ini dan pantau progresnya.",
+      "edit": "Edit target",
+      "saved": "Tersimpan",
+      "toGo": "Sisa",
+      "progress": "Progres target",
+      "by": "pada",
+      "perMonth": "per bulan",
+      "onTrack": "Sesuai rencana",
+      "needsAttention": "Perlu perhatian",
+      "empty": "Belum ada target untuk kategori ini.",
+      "add": "Tambah target",
+      "editor": {
+        "title": "Tetapkan target kategori",
+        "amount": "Jumlah target",
+        "amountPlaceholder": "mis. 1200",
+        "dueDate": "Tanggal target",
+        "monthlyHint": "Sisihkan {amount} per bulan."
+      },
+      "delete": "Hapus target",
+      "save": "Simpan target"
+    },
+    "notifications": {
+      "targetSaved": "Target disimpan",
+      "targetSaveFailed": "Target tidak dapat disimpan.",
+      "targetDeleted": "Target dihapus",
+      "targetDeleteFailed": "Target tidak dapat dihapus."
+    }
+  }
+}

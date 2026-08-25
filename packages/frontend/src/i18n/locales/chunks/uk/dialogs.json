@@ -488,7 +488,8 @@
       "description": "Додайте поповнення або зняття до портфеля"
     },
     "pickTransaction": {
-      "title": "Обрати транзакцію"
+      "title": "Обрати транзакцію",
+      "empty": "Жодна транзакція не відповідає цим фільтрам."
     },
     "exchangeCurrency": {
       "title": "Обмін валют",
@@ -594,11 +595,14 @@
       "confirmMarkOnly": "Позначити як сплачено",
       "recordModeMarkTitle": "Просто позначити як сплачено",
       "recordModeMarkDescription": "Оновлює лише розклад — транзакція не створюється.",
+      "recordModeLinkTitle": "Прив'язати транзакцію",
+      "recordModeLinkDescription": "Використайте наявну транзакцію, записану в очікувану дату платежу.",
       "recordModeTransactionTitle": "Створити транзакцію",
       "recordModeTransactionDescription": "Зафіксуйте реальну витрату на рахунку. Вона також буде пов'язана з майбутніми платежами.",
       "notifications": {
         "markedAsPaid": "Платіж зафіксовано",
-        "markAsPaidFailed": "Не вдалося зафіксувати платіж"
+        "markAsPaidFailed": "Не вдалося зафіксувати платіж",
+        "linkTransactionDateMismatch": "Виберіть транзакцію, записану в очікувану дату платежу."
       }
     }
   }

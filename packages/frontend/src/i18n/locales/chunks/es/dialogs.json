@@ -476,7 +476,8 @@
       "description": "Añadir un depósito o retirada a la cartera"
     },
     "pickTransaction": {
-      "title": "Seleccionar transacción"
+      "title": "Seleccionar transacción",
+      "empty": "Ninguna transacción coincide con estos filtros."
     },
     "exchangeCurrency": {
       "title": "Cambiar moneda",
@@ -594,11 +595,14 @@
       "confirmMarkOnly": "Marcar como pagado",
       "recordModeMarkTitle": "Solo marcar como pagado",
       "recordModeMarkDescription": "Actualiza solo el calendario — no se crea ninguna transacción.",
+      "recordModeLinkTitle": "Vincular transacción",
+      "recordModeLinkDescription": "Usa una transacción existente registrada en la fecha de pago prevista.",
       "recordModeTransactionTitle": "Crear una transacción",
       "recordModeTransactionDescription": "Registra un gasto real en una cuenta. También quedará vinculada a pagos futuros.",
       "notifications": {
         "markedAsPaid": "Pago registrado",
-        "markAsPaidFailed": "Error al registrar el pago"
+        "markAsPaidFailed": "Error al registrar el pago",
+        "linkTransactionDateMismatch": "Elige una transacción registrada en la fecha de pago prevista."
       }
     }
   }

@@ -212,6 +212,48 @@ module.exports = {
       });
 
       await queryInterface.createTable(
+        'PlanCategoryTargets',
+        {
+          id: { type: DataTypes.UUID, primaryKey: true, allowNull: false },
+          planId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: { model: 'Plans', key: 'id' },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
+          categoryIdentity: { type: DataTypes.UUID, allowNull: false },
+          categoryId: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            references: { model: 'Categories', key: 'id' },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+          },
+          categoryNameSnapshot: { type: DataTypes.STRING, allowNull: false },
+          targetAmountCents: { type: DataTypes.BIGINT, allowNull: false },
+          dueDate: { type: DataTypes.DATEONLY, allowNull: false },
+          createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+          updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+        },
+        { transaction },
+      );
+      await queryInterface.sequelize.query(
+        `ALTER TABLE "PlanCategoryTargets" ADD CONSTRAINT "plan_category_targets_amount_check" CHECK ("targetAmountCents" > 0);`,
+        { transaction },
+      );
+      await queryInterface.addConstraint('PlanCategoryTargets', {
+        fields: ['planId', 'categoryIdentity'],
+        type: 'unique',
+        name: 'plan_category_targets_plan_category_uq',
+        transaction,
+      });
+      await queryInterface.addIndex('PlanCategoryTargets', ['planId'], {
+        name: 'plan_category_targets_plan_idx',
+        transaction,
+      });
+
+      await queryInterface.createTable(
         'PlanAccountMemberships',
         {
           id: { type: DataTypes.UUID, primaryKey: true, allowNull: false },
@@ -393,6 +435,7 @@ module.exports = {
       await queryInterface.dropTable('PlanAllocationEvents', { transaction });
       await queryInterface.dropTable('PlanAssignments', { transaction });
       await queryInterface.dropTable('PlanPeriods', { transaction });
+      await queryInterface.dropTable('PlanCategoryTargets', { transaction });
       await queryInterface.dropTable('PlanAccountMemberships', { transaction });
       await queryInterface.dropTable('PlanCategoryMemberships', { transaction });
       await queryInterface.dropTable('Plans', { transaction });

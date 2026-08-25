@@ -3,12 +3,14 @@ import {
   addPlanCategory,
   autoAssign,
   createPlan,
+  deletePlanCategoryTarget,
   deletePlan,
   movePlanMoney,
   loadPlanView,
   loadPlans,
   previewAutoAssign,
   setPlanAssignment,
+  setPlanCategoryTarget,
   undoPlanAllocation,
 } from '@/api/plans';
 import { loadUserBaseCurrency } from '@/api/currencies';
@@ -39,6 +41,7 @@ import {
   SearchIcon,
   SparklesIcon,
   TagIcon,
+  TargetIcon,
   Trash2Icon,
   WalletIcon,
   XIcon,
@@ -48,7 +51,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { FormattedCategory } from '@/common/types';
-import { CATEGORY_TYPES, type endpointsTypes, type RecordId } from '@bt/shared/types';
+import { asDecimal, CATEGORY_TYPES, type endpointsTypes, type RecordId } from '@bt/shared/types';
 
 import CategoryInspectorContent from './components/category-inspector-content.vue';
 
@@ -264,9 +267,9 @@ const formatMoney = (amount: number) =>
 const coveragePercent = ({
   category,
 }: {
-  category: Pick<AggregateCategory, 'assigned' | 'available' | 'upcomingObligation'>;
+  category: Pick<AggregateCategory, 'assigned' | 'available' | 'upcomingObligation' | 'target'>;
 }) => {
-  const target = category.upcomingObligation ?? Math.max(category.assigned, 0);
+  const target = category.target?.amount ?? category.upcomingObligation ?? Math.max(category.assigned, 0);
   if (target <= 0) return category.available > 0 ? 100 : 0;
   return Math.min(100, Math.max(0, (category.available / target) * 100));
 };
@@ -407,6 +410,38 @@ const assignmentMutation = useMutation({
   },
 });
 
+const targetMutation = useMutation({
+  mutationFn: ({ categoryId, amount, dueDate }: { categoryId: string; amount: number; dueDate: string }) =>
+    setPlanCategoryTarget({
+      planId: selectedPlanId.value!,
+      categoryId,
+      payload: { amount: asDecimal(amount), dueDate },
+    }),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.planViews });
+    addSuccessNotification(t('plan.notifications.targetSaved'));
+  },
+  onError: (error) => {
+    const message =
+      error instanceof ApiErrorResponseError ? error.data.message : t('plan.notifications.targetSaveFailed');
+    addErrorNotification(message ?? t('plan.notifications.targetSaveFailed'));
+  },
+});
+
+const deleteTargetMutation = useMutation({
+  mutationFn: ({ categoryId }: { categoryId: string }) =>
+    deletePlanCategoryTarget({ planId: selectedPlanId.value!, categoryId }),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.planViews });
+    addSuccessNotification(t('plan.notifications.targetDeleted'));
+  },
+  onError: (error) => {
+    const message =
+      error instanceof ApiErrorResponseError ? error.data.message : t('plan.notifications.targetDeleteFailed');
+    addErrorNotification(message ?? t('plan.notifications.targetDeleteFailed'));
+  },
+});
+
 const moveMutation = useMutation({
   mutationFn: () =>
     movePlanMoney({
@@ -502,6 +537,16 @@ const startEditCategory = () => {
   categoryFormParent.value = undefined;
   categoryFormCategory.value = planCategoryToFormatted(selectedCategory.value);
   isCategoryFormOpen.value = true;
+};
+
+const saveSelectedCategoryTarget = (payload: { amount: number; dueDate: string }) => {
+  if (!selectedCategory.value) return;
+  targetMutation.mutate({ categoryId: selectedCategory.value.id, ...payload });
+};
+
+const deleteSelectedCategoryTarget = () => {
+  if (!selectedCategory.value) return;
+  deleteTargetMutation.mutate({ categoryId: selectedCategory.value.id });
 };
 
 const handleCategorySaved = async (category: FormattedCategory) => {
@@ -846,6 +891,10 @@ const startCreate = ({ withTemplate }: { withTemplate: boolean }) => {
                           :style="{ width: `${coveragePercent({ category })}%` }"
                         />
                       </div>
+                      <p v-if="category.target" class="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
+                        <TargetIcon class="size-3" aria-hidden="true" />
+                        {{ formatMoney(category.target.monthlyAmount) }} {{ $t('plan.target.perMonth') }}
+                      </p>
                     </div>
                     <InputField
                       :model-value="editingAssignments[category.id] ?? category.assigned"
@@ -886,9 +935,13 @@ const startCreate = ({ withTemplate }: { withTemplate: boolean }) => {
               :category="selectedCategory"
               :parent-name="selectedParentName"
               :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+              :period-start="periodStart"
+              :can-allocate="planViewQuery.data.value.plan.canAllocate"
               @close="selectedCategoryId = null"
               @edit="startEditCategory"
               @add-subcategory="startCreateCategory({ parent: selectedCategory ?? undefined })"
+              @save-target="saveSelectedCategoryTarget"
+              @delete-target="deleteSelectedCategoryTarget"
             />
           </aside>
         </div>
@@ -902,9 +955,13 @@ const startCreate = ({ withTemplate }: { withTemplate: boolean }) => {
         :category="selectedCategory"
         :parent-name="selectedParentName"
         :currency-code="planViewQuery.data.value?.plan.baseCurrencyCode ?? 'EUR'"
+        :period-start="periodStart"
+        :can-allocate="planViewQuery.data.value?.plan.canAllocate ?? false"
         @close="isCategoryInspectorOpen = false"
         @edit="startEditCategory"
         @add-subcategory="startCreateCategory({ parent: selectedCategory ?? undefined })"
+        @save-target="saveSelectedCategoryTarget"
+        @delete-target="deleteSelectedCategoryTarget"
       />
     </ResponsiveDialog>
 

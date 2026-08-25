@@ -16,6 +16,7 @@ import PlanAccountMemberships from '@models/plan-account-memberships.model';
 import PlanAllocationEvents from '@models/plan-allocation-events.model';
 import PlanAssignments from '@models/plan-assignments.model';
 import PlanCategoryMemberships from '@models/plan-category-memberships.model';
+import PlanCategoryTargets from '@models/plan-category-targets.model';
 import PlanPeriods from '@models/plan-periods.model';
 import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
@@ -281,6 +282,62 @@ export const addPlanCategory = withTransaction(
       }
       throw error;
     }
+  },
+);
+
+const serializeCategoryTarget = (target: PlanCategoryTargets) => ({
+  id: target.id,
+  amount: target.targetAmountCents.toNumber(),
+  dueDate: target.dueDate,
+});
+
+export const setPlanCategoryTarget = withTransaction(
+  async ({
+    userId,
+    planId,
+    categoryId,
+    amount,
+    dueDate,
+  }: {
+    userId: number;
+    planId: string;
+    categoryId: string;
+    amount: Money;
+    dueDate: string;
+  }) => {
+    const { plan } = await authorizePlan({ userId, planId, requiredPermission: 'write' });
+    if (plan.status === PLAN_STATUSES.archived) {
+      throw new ValidationError({ message: t({ key: 'plans.archivedCannotEdit' }) });
+    }
+    if (amount.toCents() <= 0) {
+      throw new ValidationError({ message: t({ key: 'plans.targetAmountMustBePositive' }) });
+    }
+    const membership = await ensureCategoryInPlan({ planId, categoryId });
+    const existing = await PlanCategoryTargets.findOne({ where: { planId, categoryIdentity: categoryId } });
+    const target = existing
+      ? await existing.update({ targetAmountCents: amount, dueDate, categoryId })
+      : await PlanCategoryTargets.create({
+          id: uuidv7(),
+          planId,
+          categoryIdentity: categoryId,
+          categoryId,
+          categoryNameSnapshot: membership.categoryNameSnapshot,
+          targetAmountCents: amount,
+          dueDate,
+        });
+    return serializeCategoryTarget(target);
+  },
+);
+
+export const deletePlanCategoryTarget = withTransaction(
+  async ({ userId, planId, categoryId }: { userId: number; planId: string; categoryId: string }) => {
+    const { plan } = await authorizePlan({ userId, planId, requiredPermission: 'write' });
+    if (plan.status === PLAN_STATUSES.archived) {
+      throw new ValidationError({ message: t({ key: 'plans.archivedCannotEdit' }) });
+    }
+    await ensureCategoryInPlan({ planId, categoryId });
+    await PlanCategoryTargets.destroy({ where: { planId, categoryIdentity: categoryId } });
+    return null;
   },
 );
 

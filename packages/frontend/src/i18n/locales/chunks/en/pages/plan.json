@@ -69,6 +69,29 @@
       "addSubcategory": "Add subcategory",
       "hint": "Click any category row to keep its details close while you work through the month."
     },
+    "target": {
+      "title": "Category target",
+      "description": "Set a goal for this category and track your progress.",
+      "edit": "Edit target",
+      "saved": "Saved",
+      "toGo": "To go",
+      "progress": "Target progress",
+      "by": "by",
+      "perMonth": "per month",
+      "onTrack": "On track",
+      "needsAttention": "Needs attention",
+      "empty": "No target set for this category yet.",
+      "add": "Add target",
+      "editor": {
+        "title": "Set a category target",
+        "amount": "Target amount",
+        "amountPlaceholder": "e.g. 1200",
+        "dueDate": "Target date",
+        "monthlyHint": "Plan to set aside {amount} per month."
+      },
+      "delete": "Delete target",
+      "save": "Save target"
+    },
     "delete": {
       "title": "Delete this Plan?",
       "description": "This permanently deletes {name}, its assignments, and its allocation history. This cannot be undone.",
@@ -110,7 +133,11 @@
       "categoryAddFailed": "The category was created but couldn't be added to this Plan.",
       "categoryUpdated": "Category updated",
       "deleted": "Plan deleted",
-      "deleteFailed": "The Plan couldn't be deleted."
+      "deleteFailed": "The Plan couldn't be deleted.",
+      "targetSaved": "Target saved",
+      "targetSaveFailed": "The target couldn't be saved.",
+      "targetDeleted": "Target deleted",
+      "targetDeleteFailed": "The target couldn't be deleted."
     }
   }
 }

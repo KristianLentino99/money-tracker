@@ -1,4 +1,4 @@
-import { RESOURCE_TYPES, SHARE_PERMISSIONS, TRANSACTION_TYPES } from '@bt/shared/types';
+import { asDecimal, RESOURCE_TYPES, SHARE_PERMISSIONS, TRANSACTION_TYPES } from '@bt/shared/types';
 import { generateRandomRecordId } from '@common/lib/record-id-helpers';
 import { describe, expect, it } from '@jest/globals';
 import * as helpers from '@tests/helpers';
@@ -150,6 +150,53 @@ describe('Plan endpoints', () => {
     expect(row?.assigned).toBe(40);
     expect(result.view.readyToAssign).toBe(60);
     expect(result.mutation.revision).toBe(1);
+  });
+
+  it('persists category targets and derives the monthly amount from available money', async () => {
+    const category = await helpers.addCustomCategory({ name: 'Annual Gym Target', color: '#456789', raw: true });
+    const plan = await helpers.createPlan({
+      payload: {
+        name: 'Target Plan',
+        baseCurrencyCode: global.BASE_CURRENCY.code,
+        categoryIds: [category.id],
+        accountIds: [],
+      },
+      raw: true,
+    });
+    const periodStart = currentPeriodStart();
+    const dueDate = `${new Date().getUTCFullYear() + 1}-${String(new Date().getUTCMonth() + 1).padStart(2, '0')}-28`;
+
+    const invalid = await helpers.setPlanCategoryTarget({
+      planId: plan.id,
+      categoryId: category.id,
+      payload: { amount: asDecimal(0), dueDate },
+      raw: false,
+    });
+    expect(invalid.status).toBe(422);
+
+    await helpers.setPlanCategoryTarget({
+      planId: plan.id,
+      categoryId: category.id,
+      payload: { amount: asDecimal(400), dueDate },
+      raw: true,
+    });
+
+    const view = await helpers.getPlanView({ planId: plan.id, periodStart, raw: true });
+    const row = view.groups.flatMap((group) => group.categories).find((item) => item.id === category.id);
+    expect(row?.target).toMatchObject({
+      amount: 400,
+      dueDate,
+      savedAmount: 0,
+      remaining: 400,
+      monthlyAmount: 33.34,
+      progressPercent: 0,
+      isOnTrack: false,
+    });
+
+    await helpers.deletePlanCategoryTarget({ planId: plan.id, categoryId: category.id, raw: true });
+    const deletedView = await helpers.getPlanView({ planId: plan.id, periodStart, raw: true });
+    const deletedRow = deletedView.groups.flatMap((group) => group.categories).find((item) => item.id === category.id);
+    expect(deletedRow?.target).toBeNull();
   });
 
   it('calculates decimal assignments, signed activity, and forecast funding through HTTP endpoints', async () => {

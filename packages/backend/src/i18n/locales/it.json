@@ -499,6 +499,9 @@
   "vehicles": {
     "notFound": "Veicolo non trovato."
   },
+  "plans": {
+    "targetAmountMustBePositive": "L'importo obiettivo deve essere maggiore di zero."
+  },
   "stats": {
     "netWorthHistoryTooManyPoints": "Questo intervallo di date e questa granularità producono troppi punti dati. Scegli una granularità più ampia o un intervallo più breve."
   }

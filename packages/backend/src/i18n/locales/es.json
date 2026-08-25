@@ -486,6 +486,9 @@
   "vehicles": {
     "notFound": "Vehículo no encontrado"
   },
+  "plans": {
+    "targetAmountMustBePositive": "El importe objetivo debe ser mayor que cero."
+  },
   "urlGuard": {
     "invalidUrl": "Esto no es una URL válida.",
     "unsupportedProtocol": "Solo se permiten URLs http:// y https://.",

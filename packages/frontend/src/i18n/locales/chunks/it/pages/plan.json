@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "target": {
+      "title": "Obiettivo della categoria",
+      "description": "Imposta un obiettivo per questa categoria e segui i tuoi progressi.",
+      "edit": "Modifica obiettivo",
+      "saved": "Accantonato",
+      "toGo": "Da accantonare",
+      "progress": "Avanzamento dell'obiettivo",
+      "by": "entro",
+      "perMonth": "al mese",
+      "onTrack": "In linea",
+      "needsAttention": "Richiede attenzione",
+      "empty": "Non hai ancora impostato un obiettivo per questa categoria.",
+      "add": "Aggiungi obiettivo",
+      "editor": {
+        "title": "Imposta un obiettivo per la categoria",
+        "amount": "Importo obiettivo",
+        "amountPlaceholder": "es. 1.200",
+        "dueDate": "Data obiettivo",
+        "monthlyHint": "Accantona {amount} al mese."
+      },
+      "delete": "Elimina obiettivo",
+      "save": "Salva obiettivo"
+    },
+    "notifications": {
+      "targetSaved": "Obiettivo salvato",
+      "targetSaveFailed": "Non è stato possibile salvare l'obiettivo.",
+      "targetDeleted": "Obiettivo eliminato",
+      "targetDeleteFailed": "Non è stato possibile eliminare l'obiettivo."
+    }
+  }
+}

@@ -485,7 +485,8 @@
       "description": "Add a deposit or withdrawal to the portfolio"
     },
     "pickTransaction": {
-      "title": "Select transaction"
+      "title": "Select transaction",
+      "empty": "No transactions match these filters."
     },
     "exchangeCurrency": {
       "title": "Exchange Currency",
@@ -603,11 +604,14 @@
       "confirmMarkOnly": "Mark as paid",
       "recordModeMarkTitle": "Just mark as paid",
       "recordModeMarkDescription": "Updates the schedule only — no transaction is created.",
+      "recordModeLinkTitle": "Link transaction",
+      "recordModeLinkDescription": "Use an existing transaction recorded on the expected payment date.",
       "recordModeTransactionTitle": "Create a transaction",
       "recordModeTransactionDescription": "Book a real expense in an account. It's linked for future payments too.",
       "notifications": {
         "markedAsPaid": "Payment recorded",
-        "markAsPaidFailed": "Failed to record payment"
+        "markAsPaidFailed": "Failed to record payment",
+        "linkTransactionDateMismatch": "Choose a transaction recorded on the expected payment date."
       }
     }
   }

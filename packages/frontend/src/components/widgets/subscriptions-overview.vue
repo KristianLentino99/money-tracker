@@ -172,7 +172,11 @@ const isMarkingPaid = computed(() => markPaidRef.value?.isPending ?? false);
 
 function payPeriod({ subscription }: { subscription: SubscriptionListItem }) {
   if (!subscription.currentPeriod) return;
-  markPaidRef.value?.triggerPay({ subscription, periodId: subscription.currentPeriod.id });
+  markPaidRef.value?.triggerPay({
+    subscription,
+    periodId: subscription.currentPeriod.id,
+    periodDueDate: subscription.currentPeriod.dueDate,
+  });
 }
 
 function openSubscriptionsList() {

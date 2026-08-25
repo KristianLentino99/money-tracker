@@ -430,7 +430,8 @@
       "description": "Aggiungi un deposito o un prelievo al portafoglio"
     },
     "pickTransaction": {
-      "title": "Seleziona transazione"
+      "title": "Seleziona transazione",
+      "empty": "Nessuna transazione corrisponde a questi filtri."
     },
     "exchangeCurrency": {
       "title": "Cambio valuta",
@@ -547,11 +548,14 @@
       "confirmMarkOnly": "Contrassegna come pagato",
       "recordModeMarkTitle": "Contrassegna solo come pagato",
       "recordModeMarkDescription": "Aggiorna solo la pianificazione — non viene creata alcuna transazione.",
+      "recordModeLinkTitle": "Collega transazione",
+      "recordModeLinkDescription": "Usa una transazione esistente registrata nella data di pagamento prevista.",
       "recordModeTransactionTitle": "Crea una transazione",
       "recordModeTransactionDescription": "Registra un'uscita reale su un conto. Verrà collegata anche ai pagamenti futuri.",
       "notifications": {
         "markedAsPaid": "Pagamento registrato",
-        "markAsPaidFailed": "Impossibile registrare il pagamento"
+        "markAsPaidFailed": "Impossibile registrare il pagamento",
+        "linkTransactionDateMismatch": "Scegli una transazione registrata nella data di pagamento prevista."
       }
     }
   }

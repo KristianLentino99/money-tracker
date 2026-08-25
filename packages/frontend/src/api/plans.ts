@@ -32,6 +32,27 @@ export const addPlanCategory = async ({
   await api.post(`/plans/${planId}/categories`, { categoryId });
 };
 
+export const setPlanCategoryTarget = async ({
+  planId,
+  categoryId,
+  payload,
+}: {
+  planId: string;
+  categoryId: string;
+  payload: endpointsTypes.SetPlanCategoryTargetBody;
+}): Promise<endpointsTypes.PlanCategoryTargetConfig> =>
+  api.put(`/plans/${planId}/categories/${categoryId}/target`, payload);
+
+export const deletePlanCategoryTarget = async ({
+  planId,
+  categoryId,
+}: {
+  planId: string;
+  categoryId: string;
+}): Promise<void> => {
+  await api.delete(`/plans/${planId}/categories/${categoryId}/target`);
+};
+
 export const setPlanAssignment = async ({
   planId,
   periodStart,

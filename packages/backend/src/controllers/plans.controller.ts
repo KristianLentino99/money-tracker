@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 const planIdParams = z.object({ id: recordId() });
 const periodParams = z.object({ id: recordId(), periodStart: dateBound() });
+const categoryTargetParams = z.object({ id: recordId(), categoryId: recordId() });
 const mutationFields = {
   expectedRevision: z.number().int().nonnegative(),
   requestId: z.uuid(),
@@ -45,6 +46,35 @@ export const addPlanCategory = createController(
   z.object({ params: planIdParams, body: z.object({ categoryId: recordId() }) }),
   async ({ user, params, body }) => ({
     data: await plansService.addPlanCategory({ userId: user.id, planId: params.id, ...body }),
+  }),
+);
+
+export const setPlanCategoryTarget = createController(
+  z.object({
+    params: categoryTargetParams,
+    body: z.object({
+      amount: decimalMoney().refine((value) => value.toCents() > 0, { message: 'Target amount must be positive' }),
+      dueDate: dateBound(),
+    }),
+  }),
+  async ({ user, params, body }) => ({
+    data: await plansService.setPlanCategoryTarget({
+      userId: user.id,
+      planId: params.id,
+      categoryId: params.categoryId,
+      ...body,
+    }),
+  }),
+);
+
+export const deletePlanCategoryTarget = createController(
+  z.object({ params: categoryTargetParams }),
+  async ({ user, params }) => ({
+    data: await plansService.deletePlanCategoryTarget({
+      userId: user.id,
+      planId: params.id,
+      categoryId: params.categoryId,
+    }),
   }),
 );
 

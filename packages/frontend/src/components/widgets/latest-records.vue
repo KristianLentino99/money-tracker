@@ -131,7 +131,9 @@ function handleMarkPaid({ subscription }: { subscription: SubscriptionListItem }
       name: subscription.name,
       expectedAmount: subscription.expectedAmount ?? null,
       expectedCurrencyCode: subscription.expectedCurrencyCode ?? null,
+      transactionType: subscription.transactionType,
       accountId: subscription.accountId ?? null,
+      periodDueDate: period.dueDate,
     },
     periodId: period.id,
   });

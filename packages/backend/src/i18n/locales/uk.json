@@ -497,6 +497,9 @@
   "vehicles": {
     "notFound": "Транспортний засіб не знайдено"
   },
+  "plans": {
+    "targetAmountMustBePositive": "Цільова сума має бути більшою за нуль."
+  },
   "urlGuard": {
     "invalidUrl": "Це недійсна URL-адреса.",
     "unsupportedProtocol": "Дозволені лише URL-адреси http:// та https://.",

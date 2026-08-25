@@ -47,6 +47,34 @@ export const addPlanCategory = async <R extends boolean | undefined = undefined>
   raw?: R;
 }) => makeRequest<null, R>({ method: 'post', url: `/plans/${planId}/categories`, payload, raw });
 
+export const setPlanCategoryTarget = async <R extends boolean | undefined = undefined>({
+  planId,
+  categoryId,
+  payload,
+  raw,
+}: {
+  planId: string;
+  categoryId: string;
+  payload: endpointsTypes.SetPlanCategoryTargetBody;
+  raw?: R;
+}) =>
+  makeRequest<endpointsTypes.PlanCategoryTargetConfig, R>({
+    method: 'put',
+    url: `/plans/${planId}/categories/${categoryId}/target`,
+    payload,
+    raw,
+  });
+
+export const deletePlanCategoryTarget = async <R extends boolean | undefined = undefined>({
+  planId,
+  categoryId,
+  raw,
+}: {
+  planId: string;
+  categoryId: string;
+  raw?: R;
+}) => makeRequest<null, R>({ method: 'delete', url: `/plans/${planId}/categories/${categoryId}/target`, raw });
+
 export const getPlan = async <R extends boolean | undefined = undefined>({
   planId,
   raw,
