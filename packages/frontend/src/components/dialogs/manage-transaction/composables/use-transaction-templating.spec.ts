@@ -91,7 +91,7 @@ const createForm = (): UI_FORM_STRUCT => ({
   tagIds: [],
   payeeId: null,
   categoryUserTouched: false,
-  isPlanned: false,
+  isForecastOnly: false,
   originalAmount: null,
   originalCurrency: null,
 });

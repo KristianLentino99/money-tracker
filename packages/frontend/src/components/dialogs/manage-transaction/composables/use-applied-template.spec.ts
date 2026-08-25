@@ -74,7 +74,7 @@ const createPreTemplateForm = (): UI_FORM_STRUCT => ({
   tagIds: ['tag-a'],
   payeeId: null,
   categoryUserTouched: true,
-  isPlanned: true,
+  isForecastOnly: true,
   originalAmount: null,
   originalCurrency: null,
 });

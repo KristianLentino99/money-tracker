@@ -13,4 +13,3 @@ export { getUpcomingPayments } from './get-upcoming-payments';
 export { detectCandidates } from './detect-candidates';
 export { getCandidates } from './get-candidates';
 export { dismissCandidate } from './dismiss-candidate';
-export { linkInstallmentToLoan, unlinkInstallmentFromLoan } from './link-installment-to-loan';

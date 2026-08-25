@@ -52,7 +52,7 @@ const createForm = (overrides: Partial<UI_FORM_STRUCT> = {}): UI_FORM_STRUCT => 
   tagIds: ['tag-a'],
   payeeId: PAYEE_ID,
   categoryUserTouched: true,
-  isPlanned: false,
+  isForecastOnly: false,
   originalAmount: null,
   originalCurrency: null,
   ...overrides,

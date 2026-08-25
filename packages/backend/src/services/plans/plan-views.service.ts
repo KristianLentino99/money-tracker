@@ -30,21 +30,6 @@ import {
 } from './plan-engine';
 import { isPeriodStart, nextPeriodStart, periodEnd, periodStartForDate, previousPeriodStart } from './plan-periods';
 
-const SPENDABLE_ACCOUNT_CATEGORIES = [
-  ACCOUNT_CATEGORIES.general,
-  ACCOUNT_CATEGORIES.cash,
-  ACCOUNT_CATEGORIES.currentAccount,
-  ACCOUNT_CATEGORIES.creditCard,
-  ACCOUNT_CATEGORIES.saving,
-  ACCOUNT_CATEGORIES.bonus,
-  ACCOUNT_CATEGORIES.insurance,
-  ACCOUNT_CATEGORIES.overdraft,
-  ACCOUNT_CATEGORIES.crypto,
-];
-
-export const isSpendableAccountCategory = ({ accountCategory }: { accountCategory: ACCOUNT_CATEGORIES }) =>
-  SPENDABLE_ACCOUNT_CATEGORIES.includes(accountCategory);
-
 const signedTransactionCents = ({ transaction }: { transaction: Transactions }): number => {
   const cents = transaction.refAmount.toCents();
   return transaction.transactionType === TRANSACTION_TYPES.income ? cents : -cents;
