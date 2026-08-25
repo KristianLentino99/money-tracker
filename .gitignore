@@ -138,8 +138,8 @@ self-hosting/.env
 # TernJS port file
 .tern-port
 
-# Local Claude Code settings
-.claude/settings.local.json
+# Local Pi settings
+.pi/settings.local.json
 
 # Different kinds of data
 packages/backend/data
@@ -154,8 +154,10 @@ scripts/local/*
 
 docs/prds/*
 
-# i18n hook bypass flag
-.claude/i18n-bypass
+# Pi runtime data
+.pi/sessions/
+.pi/npm/
+.pi/git/
 
 # Playwright
 packages/frontend/playwright-report/
@@ -169,6 +171,6 @@ packages/landing/.astro/
 # i18next dev-mode auto-written files for keys missing from the base locale
 packages/backend/src/i18n/locales/*.missing.json
 
-# Python bytecode from the .claude hook scripts
+# Python bytecode from local tooling
 __pycache__/
 .scratch

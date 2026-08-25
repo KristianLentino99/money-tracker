@@ -6,7 +6,7 @@
  * parse step happens client-side (papaparse) so there's no backend endpoint to
  * test there.
  *
- * Pattern follows CLAUDE.md: every assertion runs through the HTTP test
+ * Pattern follows AGENTS.md: every assertion runs through the HTTP test
  * helpers — no direct service calls.
  */
 import {

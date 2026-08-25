@@ -5,7 +5,7 @@ import { DataTypes, QueryInterface, Transaction } from 'sequelize';
  *
  * 1. Migrate `Accounts.accountCategory` from a Postgres ENUM to VARCHAR(50). The
  *    project convention is VARCHAR + TS-side enums (see
- *    `.claude/memory/feedback_no_db_enums.md`); converting now lets us add the
+ *    repository convention for avoiding database enums); converting now lets us add the
  *    `'vehicle'` value and any future categories with a single shared-enums
  *    edit instead of a schema migration each time.
  * 2. Create the `Vehicles` table — 1:1 sidecar to the underlying `Accounts`
