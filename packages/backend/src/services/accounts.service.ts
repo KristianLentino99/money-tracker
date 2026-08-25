@@ -17,6 +17,7 @@ import * as Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
 import PlanAccountMemberships from '@models/plan-account-memberships.model';
+import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import { countTransactions } from '@models/transactions-query';
 import { getBaseCurrency } from '@models/users-currencies.model';
 import Users from '@models/users.model';
@@ -36,11 +37,13 @@ import {
   getSharedAccountsForUser,
 } from '@services/sharing/get-shared-accounts.service';
 import { convertCrossUserTransfersForAccountIds } from '@services/sharing/household/convert-cross-user-transfers.service';
+import { pauseAutomationsReferencing } from '@services/transaction-automations/references';
 import { Op } from 'sequelize';
 
 import { archiveAccount as performArchiveSideEffects } from './accounts/archive-account';
 import { restampRefInitialBalance } from './accounts/restamp-ref-initial-balance';
 import { unlinkSubscriptionsFromAccount } from './accounts/unlink-subscriptions-from-account';
+import { unlinkTemplatesFromAccount } from './accounts/unlink-templates-from-account';
 import { withTransaction } from './common/with-transaction';
 
 type AccountWithRelinkStatus = Accounts.default & {
@@ -436,7 +439,15 @@ interface DeleteAccountByIdInTxResult {
 }
 
 const deleteAccountByIdInTx = withTransaction(
-  async ({ id, userId }: { id: string; userId: number }): Promise<DeleteAccountByIdInTxResult> => {
+  async ({
+    id,
+    userId,
+    removePortfolioTransfers = false,
+  }: {
+    id: string;
+    userId: number;
+    removePortfolioTransfers?: boolean;
+  }): Promise<DeleteAccountByIdInTxResult> => {
     const account = await Accounts.default.findOne({ where: { id, userId } });
     if (!account) {
       throw new NotFoundError({ message: t({ key: 'accounts.accountNotFound' }) });
@@ -477,6 +488,19 @@ const deleteAccountByIdInTx = withTransaction(
     // the auto-record check constraint on any subscription still booking into this account.
     // Clearing both columns first is the only way to satisfy it — the cascade can't.
     await unlinkSubscriptionsFromAccount({ accountId: id });
+    await unlinkTemplatesFromAccount({ accountId: id });
+
+    await pauseAutomationsReferencing({ userId, refType: 'account', refId: account.id, label: account.name });
+
+    // Must run before the account destroy — the FK is ON DELETE SET NULL, so afterwards
+    // these rows would no longer reference the account and couldn't be targeted. Without
+    // this opt-in they survive as orphaned contributions and double-count if the user
+    // re-creates the account and re-links the same transfers.
+    if (removePortfolioTransfers) {
+      await PortfolioTransfers.destroy({
+        where: { userId, [Op.or]: [{ fromAccountId: id }, { toAccountId: id }] },
+      });
+    }
 
     const affectedRows = await Accounts.deleteAccountById({ id, userId });
     if (affectedRows === 0) {
@@ -494,8 +518,16 @@ const deleteAccountByIdInTx = withTransaction(
   },
 );
 
-export const deleteAccountById = async ({ id, userId }: { id: string; userId: number }) => {
-  const result = await deleteAccountByIdInTx({ id, userId });
+export const deleteAccountById = async ({
+  id,
+  userId,
+  removePortfolioTransfers,
+}: {
+  id: string;
+  userId: number;
+  removePortfolioTransfers?: boolean;
+}) => {
+  const result = await deleteAccountByIdInTx({ id, userId, removePortfolioTransfers });
 
   // Post-commit fan-out: the durable changes (share rows deleted, invitations revoked,
   // account row destroyed) committed in the transaction above. Notifications are

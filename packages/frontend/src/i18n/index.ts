@@ -17,275 +17,16 @@ type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 // Track which chunks have been loaded per locale
 const loadedChunks: LoadedChunksMap = new Map([['en', new Set<I18nChunkName>(['common'])]]);
 
-// Chunk registry - maps locale + chunk name to dynamic import
-const chunkRegistry: ChunkRegistry = {
-  en: {
-    // Core chunks
-    common: () => import('./locales/chunks/en/common.json'),
-    layout: () => import('./locales/chunks/en/layout.json'),
-    dialogs: () => import('./locales/chunks/en/dialogs.json'),
-    forms: () => import('./locales/chunks/en/forms.json'),
-    errors: () => import('./locales/chunks/en/errors.json'),
-    // Auth chunks
-    'auth/sign-in': () => import('./locales/chunks/en/auth/sign-in.json'),
-    'auth/sign-up': () => import('./locales/chunks/en/auth/sign-up.json'),
-    'auth/verify-email': () => import('./locales/chunks/en/auth/verify-email.json'),
-    'auth/welcome': () => import('./locales/chunks/en/auth/welcome.json'),
-    'auth/oauth-authorize': () => import('./locales/chunks/en/auth/oauth-authorize.json'),
-    // Page chunks
-    'pages/dashboard': () => import('./locales/chunks/en/pages/dashboard.json'),
-    'pages/plan': () => import('./locales/chunks/en/pages/plan.json'),
-    'pages/accounts': () => import('./locales/chunks/en/pages/accounts.json'),
-    'pages/account': () => import('./locales/chunks/en/pages/account.json'),
-    'pages/account-integrations': () => import('./locales/chunks/en/pages/account-integrations.json'),
-    'pages/import-shared': () => import('./locales/chunks/en/pages/import-shared.json'),
-    'pages/transactions': () => import('./locales/chunks/en/pages/transactions.json'),
-    'pages/budgets': () => import('./locales/chunks/en/pages/budgets.json'),
-    'pages/budget-details': () => import('./locales/chunks/en/pages/budget-details.json'),
-    'pages/analytics': () => import('./locales/chunks/en/pages/analytics.json'),
-    'pages/investments': () => import('./locales/chunks/en/pages/investments.json'),
-    'pages/loans': () => import('./locales/chunks/en/pages/loans.json'),
-    'pages/portfolio-detail': () => import('./locales/chunks/en/pages/portfolio-detail.json'),
-    'pages/venture': () => import('./locales/chunks/en/pages/venture.json'),
-    'pages/import-csv': () => import('./locales/chunks/en/pages/import-csv.json'),
-    'pages/import-statement': () => import('./locales/chunks/en/pages/import-statement.json'),
-    'pages/import-ynab': () => import('./locales/chunks/en/pages/import-ynab.json'),
-    'pages/import-history': () => import('./locales/chunks/en/pages/import-history.json'),
-    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/en/pages/import-budget-bakers-wallet.json'),
-    'pages/import-ms-money': () => import('./locales/chunks/en/pages/import-ms-money.json'),
-    'pages/investments-import': () => import('./locales/chunks/en/pages/investments-import.json'),
-    'pages/planned': () => import('./locales/chunks/en/pages/planned.json'),
-    'pages/optimizations': () => import('./locales/chunks/en/pages/optimizations.json'),
-    'pages/shared-with-me': () => import('./locales/chunks/en/pages/shared-with-me.json'),
-    'pages/household': () => import('./locales/chunks/en/pages/household.json'),
-    'pages/payees': () => import('./locales/chunks/en/pages/payees.json'),
-    // Settings chunks
-    'settings/index': () => import('./locales/chunks/en/settings/index.json'),
-    'settings/categories': () => import('./locales/chunks/en/settings/categories.json'),
-    'settings/tags': () => import('./locales/chunks/en/settings/tags.json'),
-    'settings/currencies': () => import('./locales/chunks/en/settings/currencies.json'),
-    'settings/accounts-groups': () => import('./locales/chunks/en/settings/accounts-groups.json'),
-    'settings/data-management': () => import('./locales/chunks/en/settings/data-management.json'),
-    'settings/appearance': () => import('./locales/chunks/en/settings/appearance.json'),
-    'settings/language': () => import('./locales/chunks/en/settings/language.json'),
-    'settings/general': () => import('./locales/chunks/en/settings/general.json'),
-    'settings/ai': () => import('./locales/chunks/en/settings/ai.json'),
-    'settings/security': () => import('./locales/chunks/en/settings/security.json'),
-    'settings/admin': () => import('./locales/chunks/en/settings/admin.json'),
-    'settings/ai-integrations': () => import('./locales/chunks/en/settings/ai-integrations.json'),
-    'settings/subscriptions': () => import('./locales/chunks/en/settings/subscriptions.json'),
-  },
-  uk: {
-    // Core chunks
-    common: () => import('./locales/chunks/uk/common.json'),
-    layout: () => import('./locales/chunks/uk/layout.json'),
-    dialogs: () => import('./locales/chunks/uk/dialogs.json'),
-    forms: () => import('./locales/chunks/uk/forms.json'),
-    errors: () => import('./locales/chunks/uk/errors.json'),
-    // Auth chunks
-    'auth/sign-in': () => import('./locales/chunks/uk/auth/sign-in.json'),
-    'auth/sign-up': () => import('./locales/chunks/uk/auth/sign-up.json'),
-    'auth/verify-email': () => import('./locales/chunks/uk/auth/verify-email.json'),
-    'auth/welcome': () => import('./locales/chunks/uk/auth/welcome.json'),
-    'auth/oauth-authorize': () => import('./locales/chunks/uk/auth/oauth-authorize.json'),
-    // Page chunks
-    'pages/dashboard': () => import('./locales/chunks/uk/pages/dashboard.json'),
-    'pages/accounts': () => import('./locales/chunks/uk/pages/accounts.json'),
-    'pages/account': () => import('./locales/chunks/uk/pages/account.json'),
-    'pages/account-integrations': () => import('./locales/chunks/uk/pages/account-integrations.json'),
-    'pages/import-shared': () => import('./locales/chunks/uk/pages/import-shared.json'),
-    'pages/transactions': () => import('./locales/chunks/uk/pages/transactions.json'),
-    'pages/budgets': () => import('./locales/chunks/uk/pages/budgets.json'),
-    'pages/budget-details': () => import('./locales/chunks/uk/pages/budget-details.json'),
-    'pages/analytics': () => import('./locales/chunks/uk/pages/analytics.json'),
-    'pages/investments': () => import('./locales/chunks/uk/pages/investments.json'),
-    'pages/loans': () => import('./locales/chunks/uk/pages/loans.json'),
-    'pages/portfolio-detail': () => import('./locales/chunks/uk/pages/portfolio-detail.json'),
-    'pages/venture': () => import('./locales/chunks/uk/pages/venture.json'),
-    'pages/import-csv': () => import('./locales/chunks/uk/pages/import-csv.json'),
-    'pages/import-statement': () => import('./locales/chunks/uk/pages/import-statement.json'),
-    'pages/import-ynab': () => import('./locales/chunks/uk/pages/import-ynab.json'),
-    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/uk/pages/import-budget-bakers-wallet.json'),
-    'pages/investments-import': () => import('./locales/chunks/uk/pages/investments-import.json'),
-    'pages/planned': () => import('./locales/chunks/uk/pages/planned.json'),
-    'pages/optimizations': () => import('./locales/chunks/uk/pages/optimizations.json'),
-    'pages/shared-with-me': () => import('./locales/chunks/uk/pages/shared-with-me.json'),
-    'pages/household': () => import('./locales/chunks/uk/pages/household.json'),
-    'pages/payees': () => import('./locales/chunks/uk/pages/payees.json'),
-    // Settings chunks
-    'settings/index': () => import('./locales/chunks/uk/settings/index.json'),
-    'settings/categories': () => import('./locales/chunks/uk/settings/categories.json'),
-    'settings/tags': () => import('./locales/chunks/uk/settings/tags.json'),
-    'settings/currencies': () => import('./locales/chunks/uk/settings/currencies.json'),
-    'settings/accounts-groups': () => import('./locales/chunks/uk/settings/accounts-groups.json'),
-    'settings/data-management': () => import('./locales/chunks/uk/settings/data-management.json'),
-    'settings/appearance': () => import('./locales/chunks/uk/settings/appearance.json'),
-    'settings/language': () => import('./locales/chunks/uk/settings/language.json'),
-    'settings/general': () => import('./locales/chunks/uk/settings/general.json'),
-    'settings/ai': () => import('./locales/chunks/uk/settings/ai.json'),
-    'settings/security': () => import('./locales/chunks/uk/settings/security.json'),
-    'settings/admin': () => import('./locales/chunks/uk/settings/admin.json'),
-    'settings/ai-integrations': () => import('./locales/chunks/uk/settings/ai-integrations.json'),
-    'settings/subscriptions': () => import('./locales/chunks/uk/settings/subscriptions.json'),
-  },
-  es: {
-    // Core chunks
-    common: () => import('./locales/chunks/es/common.json'),
-    layout: () => import('./locales/chunks/es/layout.json'),
-    dialogs: () => import('./locales/chunks/es/dialogs.json'),
-    forms: () => import('./locales/chunks/es/forms.json'),
-    errors: () => import('./locales/chunks/es/errors.json'),
-    // Auth chunks
-    'auth/sign-in': () => import('./locales/chunks/es/auth/sign-in.json'),
-    'auth/sign-up': () => import('./locales/chunks/es/auth/sign-up.json'),
-    'auth/verify-email': () => import('./locales/chunks/es/auth/verify-email.json'),
-    'auth/welcome': () => import('./locales/chunks/es/auth/welcome.json'),
-    'auth/oauth-authorize': () => import('./locales/chunks/es/auth/oauth-authorize.json'),
-    // Page chunks
-    'pages/dashboard': () => import('./locales/chunks/es/pages/dashboard.json'),
-    'pages/accounts': () => import('./locales/chunks/es/pages/accounts.json'),
-    'pages/account': () => import('./locales/chunks/es/pages/account.json'),
-    'pages/account-integrations': () => import('./locales/chunks/es/pages/account-integrations.json'),
-    'pages/import-shared': () => import('./locales/chunks/es/pages/import-shared.json'),
-    'pages/transactions': () => import('./locales/chunks/es/pages/transactions.json'),
-    'pages/budgets': () => import('./locales/chunks/es/pages/budgets.json'),
-    'pages/budget-details': () => import('./locales/chunks/es/pages/budget-details.json'),
-    'pages/analytics': () => import('./locales/chunks/es/pages/analytics.json'),
-    'pages/investments': () => import('./locales/chunks/es/pages/investments.json'),
-    'pages/loans': () => import('./locales/chunks/es/pages/loans.json'),
-    'pages/portfolio-detail': () => import('./locales/chunks/es/pages/portfolio-detail.json'),
-    'pages/venture': () => import('./locales/chunks/es/pages/venture.json'),
-    'pages/import-csv': () => import('./locales/chunks/es/pages/import-csv.json'),
-    'pages/import-statement': () => import('./locales/chunks/es/pages/import-statement.json'),
-    'pages/import-ynab': () => import('./locales/chunks/es/pages/import-ynab.json'),
-    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/es/pages/import-budget-bakers-wallet.json'),
-    'pages/investments-import': () => import('./locales/chunks/es/pages/investments-import.json'),
-    'pages/planned': () => import('./locales/chunks/es/pages/planned.json'),
-    'pages/optimizations': () => import('./locales/chunks/es/pages/optimizations.json'),
-    'pages/shared-with-me': () => import('./locales/chunks/es/pages/shared-with-me.json'),
-    'pages/household': () => import('./locales/chunks/es/pages/household.json'),
-    'pages/payees': () => import('./locales/chunks/es/pages/payees.json'),
-    // Settings chunks
-    'settings/index': () => import('./locales/chunks/es/settings/index.json'),
-    'settings/categories': () => import('./locales/chunks/es/settings/categories.json'),
-    'settings/tags': () => import('./locales/chunks/es/settings/tags.json'),
-    'settings/currencies': () => import('./locales/chunks/es/settings/currencies.json'),
-    'settings/accounts-groups': () => import('./locales/chunks/es/settings/accounts-groups.json'),
-    'settings/data-management': () => import('./locales/chunks/es/settings/data-management.json'),
-    'settings/appearance': () => import('./locales/chunks/es/settings/appearance.json'),
-    'settings/language': () => import('./locales/chunks/es/settings/language.json'),
-    'settings/general': () => import('./locales/chunks/es/settings/general.json'),
-    'settings/ai': () => import('./locales/chunks/es/settings/ai.json'),
-    'settings/security': () => import('./locales/chunks/es/settings/security.json'),
-    'settings/admin': () => import('./locales/chunks/es/settings/admin.json'),
-    'settings/ai-integrations': () => import('./locales/chunks/es/settings/ai-integrations.json'),
-    'settings/subscriptions': () => import('./locales/chunks/es/settings/subscriptions.json'),
-  },
-  id: {
-    // Core chunks
-    common: () => import('./locales/chunks/id/common.json'),
-    layout: () => import('./locales/chunks/id/layout.json'),
-    dialogs: () => import('./locales/chunks/id/dialogs.json'),
-    forms: () => import('./locales/chunks/id/forms.json'),
-    errors: () => import('./locales/chunks/id/errors.json'),
-    // Auth chunks
-    'auth/sign-in': () => import('./locales/chunks/id/auth/sign-in.json'),
-    'auth/sign-up': () => import('./locales/chunks/id/auth/sign-up.json'),
-    'auth/verify-email': () => import('./locales/chunks/id/auth/verify-email.json'),
-    'auth/welcome': () => import('./locales/chunks/id/auth/welcome.json'),
-    'auth/oauth-authorize': () => import('./locales/chunks/id/auth/oauth-authorize.json'),
-    // Page chunks
-    'pages/dashboard': () => import('./locales/chunks/id/pages/dashboard.json'),
-    'pages/accounts': () => import('./locales/chunks/id/pages/accounts.json'),
-    'pages/account': () => import('./locales/chunks/id/pages/account.json'),
-    'pages/account-integrations': () => import('./locales/chunks/id/pages/account-integrations.json'),
-    'pages/import-shared': () => import('./locales/chunks/id/pages/import-shared.json'),
-    'pages/transactions': () => import('./locales/chunks/id/pages/transactions.json'),
-    'pages/budgets': () => import('./locales/chunks/id/pages/budgets.json'),
-    'pages/budget-details': () => import('./locales/chunks/id/pages/budget-details.json'),
-    'pages/analytics': () => import('./locales/chunks/id/pages/analytics.json'),
-    'pages/investments': () => import('./locales/chunks/id/pages/investments.json'),
-    'pages/loans': () => import('./locales/chunks/id/pages/loans.json'),
-    'pages/portfolio-detail': () => import('./locales/chunks/id/pages/portfolio-detail.json'),
-    'pages/venture': () => import('./locales/chunks/id/pages/venture.json'),
-    'pages/import-csv': () => import('./locales/chunks/id/pages/import-csv.json'),
-    'pages/import-statement': () => import('./locales/chunks/id/pages/import-statement.json'),
-    'pages/import-ynab': () => import('./locales/chunks/id/pages/import-ynab.json'),
-    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/id/pages/import-budget-bakers-wallet.json'),
-    'pages/investments-import': () => import('./locales/chunks/id/pages/investments-import.json'),
-    'pages/planned': () => import('./locales/chunks/id/pages/planned.json'),
-    'pages/optimizations': () => import('./locales/chunks/id/pages/optimizations.json'),
-    'pages/shared-with-me': () => import('./locales/chunks/id/pages/shared-with-me.json'),
-    'pages/household': () => import('./locales/chunks/id/pages/household.json'),
-    'pages/payees': () => import('./locales/chunks/id/pages/payees.json'),
-    // Settings chunks
-    'settings/index': () => import('./locales/chunks/id/settings/index.json'),
-    'settings/categories': () => import('./locales/chunks/id/settings/categories.json'),
-    'settings/tags': () => import('./locales/chunks/id/settings/tags.json'),
-    'settings/currencies': () => import('./locales/chunks/id/settings/currencies.json'),
-    'settings/accounts-groups': () => import('./locales/chunks/id/settings/accounts-groups.json'),
-    'settings/data-management': () => import('./locales/chunks/id/settings/data-management.json'),
-    'settings/appearance': () => import('./locales/chunks/id/settings/appearance.json'),
-    'settings/language': () => import('./locales/chunks/id/settings/language.json'),
-    'settings/general': () => import('./locales/chunks/id/settings/general.json'),
-    'settings/ai': () => import('./locales/chunks/id/settings/ai.json'),
-    'settings/security': () => import('./locales/chunks/id/settings/security.json'),
-    'settings/admin': () => import('./locales/chunks/id/settings/admin.json'),
-    'settings/ai-integrations': () => import('./locales/chunks/id/settings/ai-integrations.json'),
-    'settings/subscriptions': () => import('./locales/chunks/id/settings/subscriptions.json'),
-  },
-  it: {
-    common: () => import('./locales/chunks/it/common.json'),
-    layout: () => import('./locales/chunks/it/layout.json'),
-    dialogs: () => import('./locales/chunks/it/dialogs.json'),
-    forms: () => import('./locales/chunks/it/forms.json'),
-    errors: () => import('./locales/chunks/it/errors.json'),
-    'auth/sign-in': () => import('./locales/chunks/it/auth/sign-in.json'),
-    'auth/sign-up': () => import('./locales/chunks/it/auth/sign-up.json'),
-    'auth/verify-email': () => import('./locales/chunks/it/auth/verify-email.json'),
-    'auth/welcome': () => import('./locales/chunks/it/auth/welcome.json'),
-    'auth/oauth-authorize': () => import('./locales/chunks/it/auth/oauth-authorize.json'),
-    'pages/dashboard': () => import('./locales/chunks/it/pages/dashboard.json'),
-    'pages/accounts': () => import('./locales/chunks/it/pages/accounts.json'),
-    'pages/account': () => import('./locales/chunks/it/pages/account.json'),
-    'pages/account-integrations': () => import('./locales/chunks/it/pages/account-integrations.json'),
-    'pages/import-shared': () => import('./locales/chunks/it/pages/import-shared.json'),
-    'pages/transactions': () => import('./locales/chunks/it/pages/transactions.json'),
-    'pages/budgets': () => import('./locales/chunks/it/pages/budgets.json'),
-    'pages/budget-details': () => import('./locales/chunks/it/pages/budget-details.json'),
-    'pages/analytics': () => import('./locales/chunks/it/pages/analytics.json'),
-    'pages/investments': () => import('./locales/chunks/it/pages/investments.json'),
-    'pages/loans': () => import('./locales/chunks/it/pages/loans.json'),
-    'pages/portfolio-detail': () => import('./locales/chunks/it/pages/portfolio-detail.json'),
-    'pages/venture': () => import('./locales/chunks/it/pages/venture.json'),
-    'pages/import-csv': () => import('./locales/chunks/it/pages/import-csv.json'),
-    'pages/import-statement': () => import('./locales/chunks/it/pages/import-statement.json'),
-    'pages/import-ynab': () => import('./locales/chunks/it/pages/import-ynab.json'),
-    'pages/import-history': () => import('./locales/chunks/it/pages/import-history.json'),
-    'pages/import-budget-bakers-wallet': () => import('./locales/chunks/it/pages/import-budget-bakers-wallet.json'),
-    'pages/import-ms-money': () => import('./locales/chunks/it/pages/import-ms-money.json'),
-    'pages/investments-import': () => import('./locales/chunks/it/pages/investments-import.json'),
-    'pages/planned': () => import('./locales/chunks/it/pages/planned.json'),
-    'pages/optimizations': () => import('./locales/chunks/it/pages/optimizations.json'),
-    'pages/shared-with-me': () => import('./locales/chunks/it/pages/shared-with-me.json'),
-    'pages/household': () => import('./locales/chunks/it/pages/household.json'),
-    'pages/payees': () => import('./locales/chunks/it/pages/payees.json'),
-    'settings/index': () => import('./locales/chunks/it/settings/index.json'),
-    'settings/categories': () => import('./locales/chunks/it/settings/categories.json'),
-    'settings/tags': () => import('./locales/chunks/it/settings/tags.json'),
-    'settings/currencies': () => import('./locales/chunks/it/settings/currencies.json'),
-    'settings/accounts-groups': () => import('./locales/chunks/it/settings/accounts-groups.json'),
-    'settings/data-management': () => import('./locales/chunks/it/settings/data-management.json'),
-    'settings/appearance': () => import('./locales/chunks/it/settings/appearance.json'),
-    'settings/language': () => import('./locales/chunks/it/settings/language.json'),
-    'settings/general': () => import('./locales/chunks/it/settings/general.json'),
-    'settings/ai': () => import('./locales/chunks/it/settings/ai.json'),
-    'settings/security': () => import('./locales/chunks/it/settings/security.json'),
-    'settings/admin': () => import('./locales/chunks/it/settings/admin.json'),
-    'settings/ai-integrations': () => import('./locales/chunks/it/settings/ai-integrations.json'),
-    'settings/subscriptions': () => import('./locales/chunks/it/settings/subscriptions.json'),
-  },
-};
+// Built from the filesystem so new chunks are handled automatically
+const chunkModules = import.meta.glob<{ default: Record<string, unknown> }>('./locales/chunks/*/**/*.json');
+
+const chunkRegistry: ChunkRegistry = {};
+for (const [path, loader] of Object.entries(chunkModules)) {
+  const match = path.match(/^\.\/locales\/chunks\/([^/]+)\/(.+)\.json$/);
+  if (!match) continue;
+  const [, locale = '', chunk = ''] = match;
+  (chunkRegistry[locale] ??= {})[chunk as I18nChunkName] = loader;
+}
 
 // A broken translation string (e.g. an unescaped "@", which vue-i18n reads as
 // special syntax) throws while rendering and takes the whole page down. Catch
@@ -307,6 +48,9 @@ export const resilientMessageCompiler: MessageCompiler = (message, context) => {
   }
 };
 
+const ukPluralRules = new Intl.PluralRules('uk');
+const UK_PLURAL_INDEX: Record<string, number> = { one: 0, few: 1, many: 2 };
+
 // Create i18n instance with common chunk pre-loaded
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const i18n: I18n<any, {}, {}, string, false> = createI18n<{}, string, false>({
@@ -317,6 +61,13 @@ export const i18n: I18n<any, {}, {}, string, false> = createI18n<{}, string, fal
     en: enCommon,
   },
   messageCompiler: resilientMessageCompiler,
+  pluralRules: {
+    // vue-i18n's default three-branch rule is [zero, one, many]; the uk files are
+    // written [one, few, many]. Clamping covers keys with fewer branches than
+    // that, which would otherwise resolve to a branch vue-i18n throws on.
+    uk: (choice: number, choicesLength: number) =>
+      Math.min(UK_PLURAL_INDEX[ukPluralRules.select(Math.abs(choice))] ?? 2, choicesLength - 1),
+  },
   globalInjection: true,
   missingWarn: process.env.NODE_ENV === 'development',
   fallbackWarn: process.env.NODE_ENV === 'development',
@@ -348,7 +99,12 @@ async function loadChunk({ locale, chunk }: { locale: string; chunk: I18nChunkNa
 
   const loader = chunkRegistry[locale]?.[chunk];
   if (!loader) {
+    // Same user-visible failure as a failed fetch (raw key paths), so report it the same way.
     console.warn(`Chunk "${chunk}" not found for locale "${locale}".`);
+    captureException({
+      error: new Error(`i18n chunk "${chunk}" missing for locale "${locale}"`),
+      context: { chunk, locale },
+    });
     return;
   }
 
@@ -477,10 +233,6 @@ export async function setLocale(locale: string): Promise<void> {
   // Switch to the new locale
   i18n.global.locale.value = locale as SupportedLocale;
 
-  if (typeof document !== 'undefined') {
-    document.documentElement.lang = locale;
-  }
-
   // Persist to localStorage
   localStorage.setItem('preferred-locale', locale);
 }
@@ -491,14 +243,11 @@ export async function setLocale(locale: string): Promise<void> {
  */
 export function initializeLocale(): string {
   const storedLocale = localStorage.getItem('preferred-locale');
-  const browserLocales = navigator.languages?.length ? navigator.languages : [navigator.language];
-  const browserLocale = browserLocales
-    .map((locale) => locale.toLowerCase().split('-')[0])
-    .find((locale) => SUPPORTED_LOCALES.includes(locale as SupportedLocale));
+  const browserLocale = navigator.language.split('-')[0];
 
   const locale =
     (storedLocale && SUPPORTED_LOCALES.includes(storedLocale as SupportedLocale) ? storedLocale : null) ||
-    browserLocale ||
+    (SUPPORTED_LOCALES.includes(browserLocale as SupportedLocale) ? browserLocale : null) ||
     DEFAULT_LOCALE;
 
   return locale;

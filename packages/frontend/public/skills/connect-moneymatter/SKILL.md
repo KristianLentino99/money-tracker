@@ -2,10 +2,11 @@
 
 MoneyMatter exposes a remote Model Context Protocol (MCP) server. Connecting an
 agent to this server gives the agent OAuth-secured access to the user's
-financial data (accounts, transactions, budgets, subscriptions, categories,
-tags, cash flow, balance history, investment portfolios, holdings, and
-investment transactions). The agent can read these records and — when the
-user grants the corresponding scopes — create, edit, and delete them.
+financial data (accounts, transactions, budgets, subscriptions, transaction
+automations, categories, tags, cash flow, balance history, investment
+portfolios, holdings, and investment transactions). The agent can read these
+records and — when the user grants the corresponding scopes — create, edit,
+and delete them.
 
 Use this skill when the user asks to "connect Claude to my budget", "hook up
 ChatGPT to MoneyMatter", "let my AI see my finances", or similar.
@@ -79,6 +80,12 @@ page.
 | `create_investment_transaction`         | Record a buy/sell/dividend/fee transaction (`finance:write`)                                                     |
 | `update_investment_transaction`         | Correct a transaction's date, quantity, price, or fees (`finance:write`)                                         |
 | `delete_investment_transaction`         | Delete an investment transaction (`finance:delete`)                                                              |
+| `link_transaction_to_portfolio`         | Link an existing transaction to a portfolio as a cash transfer (`finance:write`)                                 |
+| `unlink_transaction_from_portfolio`     | Remove a transaction's portfolio link and reverse the cash change (`finance:write`)                              |
+| `transfer_account_to_portfolio`         | Move cash from an account into a portfolio (`finance:write`)                                                     |
+| `transfer_portfolio_to_account`         | Withdraw portfolio cash into an account (`finance:write`)                                                        |
+| `create_portfolio_cash_transaction`     | Direct portfolio cash deposit/withdrawal, no account involved (`finance:write`)                                  |
+| `list_portfolio_transfers`              | Cash movement history of a portfolio (transfers, deposits, exchanges)                                            |
 | `adjust_account_balance`                | Set an account to a target balance via an adjustment transaction (`finance:write`)                               |
 | `archive_account`                       | Archive or unarchive an account; handles side effects (`finance:write`)                                          |
 | `get_transaction_groups`                | List transaction groups with counts/dates or full embedded transactions                                          |
@@ -100,6 +107,12 @@ page.
 | `unlink_transactions_from_subscription` | Remove transaction links from a subscription (`finance:write`)                                                   |
 | `get_upcoming_subscription_payments`    | Upcoming payments sorted by next expected date                                                                   |
 | `get_subscriptions_summary`             | Monthly/yearly cost, expected monthly income, and per-direction active counts in base currency                   |
+| `get_transaction_automations`           | List automation rules with evaluation order, enabled state, match counts, and pause reason                       |
+| `preview_transaction_automation`        | Dry-run automation conditions against recent transactions; nothing is modified                                   |
+| `create_transaction_automation`         | Create a rule that sets category, tags, payee, or note on matching transactions (`finance:write`)                |
+| `update_transaction_automation`         | Change a rule name, conditions, actions, or enabled state (`finance:write`)                                      |
+| `delete_transaction_automation`         | Permanently delete an automation rule (`finance:delete`)                                                         |
+| `reorder_transaction_automations`       | Set the top-to-bottom evaluation order of the automation rules (`finance:write`)                                 |
 | `create_transaction`                    | Create an income, expense, or transfer transaction with optional splits/tags (`finance:write`)                   |
 | `update_transaction`                    | Update amount, date, category, tags, note, or splits on a transaction (`finance:write`)                          |
 | `delete_transaction`                    | Permanently delete a transaction; transfer pairs are deleted together (`finance:delete`)                         |
@@ -134,9 +147,20 @@ multi-currency data.
   `search_transactions` returns regular (spending) transactions; investment
   activity (buy/sell/dividend/fee) lives in `get_investment_transactions` and
   does not appear in `search_transactions`.
+- Transaction automations are rules evaluated top to bottom by `position` on
+  new transactions on bank-connected accounts or imported rows — never on
+  transfers, planned ones, or transactions on manual (non-bank) accounts, and
+  never retroactively on existing transactions. The first rule that applies an
+  action wins. Test conditions with `preview_transaction_automation` before
+  saving a rule, and pass the full current id set to
+  `reorder_transaction_automations`.
 - Portfolio queries are gated by `portfolioId`. Call `get_portfolios` first
   to discover ids before calling `get_portfolio_summary`,
   `get_portfolio_holdings`, or `get_portfolio_balances`.
+- Portfolio cash moves via transfers: `link_transaction_to_portfolio` when the
+  bank transaction already exists, `transfer_account_to_portfolio` /
+  `transfer_portfolio_to_account` to create the transaction alongside the
+  transfer, `create_portfolio_cash_transaction` when no account is involved.
 
 ## Troubleshooting
 

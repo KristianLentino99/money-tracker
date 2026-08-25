@@ -225,8 +225,8 @@ export interface BalanceModel {
  */
 export interface CategorizationMeta {
   source: CATEGORIZATION_SOURCE;
-  /** Rule ID for user_rule categorization */
-  ruleId?: number;
+  /** TransactionAutomations.id for user_rule categorization */
+  ruleId?: RecordId;
   /** Subscription ID for subscription_rule categorization */
   subscriptionId?: RecordId;
   /** Payee ID for payee_rule categorization */
@@ -840,6 +840,14 @@ export interface ResourceShareModel {
 }
 
 /**
+ * Outcome of the invitation email send attempt, reported to the inviter on the
+ * create/resend/back-invite responses. `skipped` means no email provider is
+ * configured on the server (the invite link must be shared manually);
+ * `failed` means the provider was configured but the send errored.
+ */
+export type ShareInvitationEmailOutcome = 'sent' | 'skipped' | 'failed';
+
+/**
  * Pending offer to share a resource. Distinct from `ResourceShareModel` because
  * invitations may expire, be declined, or be revoked before acceptance, and we
  * want a separate audit trail.
@@ -991,6 +999,27 @@ export interface LoanDetailsModel {
   accountNumber: string | null;
   /** Append-only audit/timeline; see LoanEvent. */
   events: LoanEvent[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TransactionTemplateModel {
+  id: RecordId;
+  userId: number;
+  name: string;
+  transactionType: TRANSACTION_TYPES;
+  /** Pinned amount as a decimal (e.g. 9.99); null means the user types it each time. Persisted as cents. */
+  amount: number | null;
+  /**
+   * Null keeps whatever account the form already has selected.
+   * A non-null `amount` requires this: the account supplies the currency.
+   */
+  accountId: RecordId | null;
+  categoryId: RecordId | null;
+  payeeId: RecordId | null;
+  paymentType: PAYMENT_TYPES | null;
+  note: string | null;
+  tagIds: RecordId[];
   createdAt: Date;
   updatedAt: Date;
 }

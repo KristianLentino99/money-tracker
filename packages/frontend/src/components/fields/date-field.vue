@@ -104,6 +104,13 @@ const props = withDefaults(
 
 const { isSafariMobile } = useSafariDetection();
 
+// Typing a year in a datetime-local input emits parseable intermediate values
+// (0026 while aiming for 2026). Dates before 2000 are those or typos, never real.
+const MIN_DATE = new Date('2000-01-01T00:00:00');
+
+const isValidDate = (value: unknown): value is Date =>
+  value instanceof Date && !isNaN(value.getTime()) && value >= MIN_DATE;
+
 const formatToInput = (value: Date) => format(value, 'yyyy-MM-dd HH:mm');
 
 const inputValue = ref(props.modelValue ? formatToInput(props.modelValue) : '');
@@ -121,7 +128,7 @@ const handleLocalInputUpdate = (event: Event) => {
   inputValue.value = inputVal;
 
   // Only emit the date if it's a valid date string
-  if (inputVal && !isNaN(new Date(inputVal).getTime())) {
+  if (inputVal && isValidDate(new Date(inputVal))) {
     emit('update:modelValue', new Date(inputVal));
   }
   // For invalid intermediate states, don't emit anything
@@ -132,7 +139,7 @@ const handleBlur = (event: FocusEvent) => {
   const inputVal = (event.target as HTMLInputElement).value;
 
   // On blur, validate the final input value
-  if (inputVal && !isNaN(new Date(inputVal).getTime())) {
+  if (inputVal && isValidDate(new Date(inputVal))) {
     // Valid date - emit it
     emit('update:modelValue', new Date(inputVal));
   } else if (inputVal) {
@@ -146,12 +153,21 @@ watch(
   () => props.modelValue,
   (value) => {
     inputValue.value = value ? formatToInput(value) : '';
-    localValue.value = value!;
+    if (isValidDate(value)) localValue.value = value;
   },
 );
 
-watch(localValue, () => {
-  emit('update:modelValue', localValue.value);
+watch(localValue, (value, previousValue) => {
+  // v-calendar clears its model when the already-selected day is tapped. The emit
+  // contract is a Date, so put the selection back instead of passing null on.
+  if (!isValidDate(value)) {
+    localValue.value = isValidDate(previousValue) ? previousValue : (props.modelValue ?? new Date());
+    return;
+  }
+  // That restore re-enters this watcher; it is not a user pick.
+  if (!isValidDate(previousValue)) return;
+
+  emit('update:modelValue', value);
   isPopoverOpen.value = false;
 });
 </script>
