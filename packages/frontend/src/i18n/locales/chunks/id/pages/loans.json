@@ -30,7 +30,13 @@
       "createTitle": "Tambah pinjaman",
       "createDescription": "Lacak KPR, pinjaman mobil, pinjaman mahasiswa, atau kewajiban lainnya. Anda dapat mengeditnya nanti.",
       "editTitle": "Edit pinjaman",
-      "editDescription": "Perbarui ketentuan pinjaman. Perubahan pada suku bunga, jangka waktu, atau pembayaran yang direncanakan dicatat dalam linimasa peristiwa."
+      "editDescription": "Perbarui ketentuan pinjaman. Perubahan pada suku bunga, jangka waktu, atau pembayaran yang direncanakan dicatat dalam linimasa peristiwa.",
+      "termRecalcConfirm": {
+        "title": "Hitung ulang saldo terutang?",
+        "description": "Dengan jangka waktu baru {term} bulan, perkiraan saldo terutang adalah {balance} dan tanggal berakhir pinjaman adalah {endDate}. Terapkan penghitungan ulang ini?",
+        "applyButton": "Gunakan saldo perkiraan",
+        "keepButton": "Pertahankan saldo saat ini"
+      }
     },
     "settings": {
       "title": "Pengaturan",
@@ -127,6 +133,7 @@
         "term": "Jangka waktu",
         "termMonths": "{count} bulan | {count} bulan",
         "startDate": "Tanggal mulai",
+        "endDate": "Tanggal berakhir",
         "paymentDay": "Hari pembayaran",
         "dayOfMonth": "Tanggal {day} setiap bulan",
         "accountNumber": "Nomor akun",

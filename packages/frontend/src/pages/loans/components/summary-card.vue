@@ -62,6 +62,10 @@
           <div class="mt-0.5 font-medium">{{ startDateDisplay }}</div>
         </div>
         <div>
+          <div class="text-muted-foreground text-xs">{{ $t('loans.detail.summary.endDate') }}</div>
+          <div class="mt-0.5 font-medium">{{ endDateDisplay }}</div>
+        </div>
+        <div>
           <div class="text-muted-foreground flex items-center gap-1 text-xs">
             <span>{{ $t('loans.detail.summary.balanceAnchor') }}</span>
             <DesktopOnlyTooltip :content="$t('loans.detail.summary.balanceAnchorTooltip')" side="top">
@@ -109,6 +113,7 @@ import { parseISO } from 'date-fns';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { getLoanEndDate } from '../utils/loan-amortization';
 import { getLoanDurationParts, getMonthsEarly } from '../utils/paid-off-stats';
 import { outstandingAmount } from '../utils/outstanding-amount';
 import { getLoanTypeEmoji, getLoanTypeSolidBadgeClass } from '../loan-type-presentation';
@@ -136,6 +141,14 @@ const termDisplay = computed(() => {
 });
 
 const startDateDisplay = computed(() => formatDate(parseISO(props.loan.loanDetails.startDate), 'MMM d, yyyy'));
+
+const endDateDisplay = computed(() => {
+  const endDate = getLoanEndDate({
+    startDate: parseISO(props.loan.loanDetails.startDate),
+    termMonths: props.loan.loanDetails.termMonths,
+  });
+  return endDate === null ? '—' : formatDate(endDate, 'MMM d, yyyy');
+});
 
 const balanceAnchorDisplay = computed(() =>
   formatDate(parseISO(props.loan.loanDetails.balanceAnchorDate), 'MMM d, yyyy'),

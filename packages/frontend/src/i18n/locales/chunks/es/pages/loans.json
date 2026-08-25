@@ -30,7 +30,13 @@
       "createTitle": "Añadir un préstamo",
       "createDescription": "Haga seguimiento de una hipoteca, préstamo de auto, préstamo estudiantil o cualquier otra deuda. Puede editar los datos en cualquier momento.",
       "editTitle": "Editar préstamo",
-      "editDescription": "Actualice las condiciones del préstamo. Los cambios en la tasa, el plazo o la cuota planificada quedan registrados en el historial de eventos."
+      "editDescription": "Actualice las condiciones del préstamo. Los cambios en la tasa, el plazo o la cuota planificada quedan registrados en el historial de eventos.",
+      "termRecalcConfirm": {
+        "title": "¿Recalcular el saldo pendiente?",
+        "description": "Con el nuevo plazo de {term} meses, el saldo pendiente estimado es {balance} y la fecha de finalización del préstamo es {endDate}. ¿Aplicar este recálculo?",
+        "applyButton": "Usar saldo estimado",
+        "keepButton": "Mantener saldo actual"
+      }
     },
     "settings": {
       "title": "Configuración",
@@ -127,6 +133,7 @@
         "term": "Plazo",
         "termMonths": "{count} mes | {count} meses",
         "startDate": "Fecha de inicio",
+        "endDate": "Fecha de finalización",
         "paymentDay": "Día de pago",
         "dayOfMonth": "El {day} de cada mes",
         "accountNumber": "Número de cuenta",

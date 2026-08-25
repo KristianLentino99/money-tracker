@@ -30,7 +30,13 @@
       "createTitle": "Add a loan",
       "createDescription": "Track a mortgage, auto loan, student loan, or any other liability. You can edit anything later.",
       "editTitle": "Edit loan",
-      "editDescription": "Update the loan's terms. Changes to the rate, term, or planned payment are recorded in the events timeline."
+      "editDescription": "Update the loan's terms. Changes to the rate, term, or planned payment are recorded in the events timeline.",
+      "termRecalcConfirm": {
+        "title": "Recalculate outstanding balance?",
+        "description": "Using the new {term} month term, the estimated outstanding balance is {balance} and the loan end date is {endDate}. Apply this recalculation?",
+        "applyButton": "Use estimated balance",
+        "keepButton": "Keep current balance"
+      }
     },
     "settings": {
       "title": "Settings",
@@ -127,6 +133,7 @@
         "term": "Term",
         "termMonths": "{count} month | {count} months",
         "startDate": "Start date",
+        "endDate": "End date",
         "paymentDay": "Payment day",
         "dayOfMonth": "{day} of each month",
         "accountNumber": "Account number",

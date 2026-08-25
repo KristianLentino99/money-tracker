@@ -30,7 +30,13 @@
       "createTitle": "Aggiungi un prestito",
       "createDescription": "Tieni traccia di un mutuo, un prestito auto, un prestito studentesco o qualsiasi altra passività. Potrai modificare tutto in seguito.",
       "editTitle": "Modifica prestito",
-      "editDescription": "Aggiorna i termini del prestito. Le modifiche al tasso, alla durata o alla rata pianificata vengono registrate nella cronologia eventi."
+      "editDescription": "Aggiorna i termini del prestito. Le modifiche al tasso, alla durata o alla rata pianificata vengono registrate nella cronologia eventi.",
+      "termRecalcConfirm": {
+        "title": "Ricalcolare il saldo residuo?",
+        "description": "Con la nuova durata di {term} mesi, il saldo residuo stimato è {balance} e la data di fine prestito è {endDate}. Applicare questo ricalcolo?",
+        "applyButton": "Usa saldo stimato",
+        "keepButton": "Mantieni saldo attuale"
+      }
     },
     "settings": {
       "title": "Impostazioni",
@@ -127,6 +133,7 @@
         "term": "Durata",
         "termMonths": "{count} mese | {count} mesi",
         "startDate": "Data di inizio",
+        "endDate": "Data di fine",
         "paymentDay": "Giorno di pagamento",
         "dayOfMonth": "Il {day} di ogni mese",
         "accountNumber": "Numero conto",

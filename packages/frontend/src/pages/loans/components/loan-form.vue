@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { type CreateLoanPayload, type LoanApi, type UpdateLoanPayload } from '@/api/loans';
 import HintIcon from '@/components/common/hint-icon.vue';
+import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import DateField from '@/components/fields/date-field.vue';
 import InputField from '@/components/fields/input-field.vue';
 import SelectField from '@/components/fields/select-field.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useCurrencyName, useFormatCurrency } from '@/composable';
+import { useDateLocale } from '@/composable/use-date-locale';
 import { useFormValidation } from '@/composable/form-validator';
 import { useCurrenciesStore } from '@/stores';
 import { type CurrencyModel, LOAN_TYPE, SUPPORTED_LOAN_TYPES } from '@bt/shared/types';
@@ -14,10 +16,11 @@ import { between, helpers, integer, maxLength, required } from '@vuelidate/valid
 import { differenceInCalendarMonths, format, parseISO } from 'date-fns';
 import { InfoIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import FormattedAmountField from '@/components/fields/formatted-amount-field.vue';
+import { computeLoanScheduleSnapshot, type LoanScheduleSnapshot } from '../utils/loan-amortization';
 import TermMonthsField from './term-months-field.vue';
 
 const MIN_INTEREST_RATE = 0;
@@ -47,6 +50,7 @@ const { t } = useI18n();
 const currenciesStore = useCurrenciesStore();
 const { formatCurrencyLabel } = useCurrencyName();
 const { formatAmountByCurrencyCode } = useFormatCurrency();
+const { format: formatDate } = useDateLocale();
 const { baseCurrency, systemCurrenciesVerbose } = storeToRefs(currenciesStore);
 
 const defaultCurrency = computed(
@@ -114,6 +118,66 @@ const buildInitialState = (): FormState => {
 };
 
 const form = reactive<FormState>(buildInitialState());
+
+interface PendingTermRecalculation extends LoanScheduleSnapshot {
+  termMonths: number;
+  balanceAsOf: string;
+}
+
+const lastDecidedTermMonths = ref(form.termMonths);
+const pendingTermRecalculation = ref<PendingTermRecalculation | null>(null);
+const isTermRecalculationOpen = ref(false);
+
+const requestTermRecalculation = (): boolean => {
+  if (!isEdit.value || form.termMonths === lastDecidedTermMonths.value) return false;
+  if (isTermRecalculationOpen.value) return true;
+
+  const termMonths = form.termMonths;
+  const originalPrincipal = props.initialLoan?.loanDetails.originalPrincipal;
+  if (
+    termMonths === null ||
+    !Number.isInteger(termMonths) ||
+    termMonths < MIN_TERM_MONTHS ||
+    termMonths > MAX_TERM_MONTHS ||
+    form.interestRate === null ||
+    originalPrincipal === undefined
+  ) {
+    return false;
+  }
+
+  const balanceAsOf = format(new Date(), 'yyyy-MM-dd');
+  const snapshot = computeLoanScheduleSnapshot({
+    originalPrincipal,
+    interestRate: Number(form.interestRate),
+    termMonths,
+    startDate: form.startDate,
+    asOfDate: parseISO(balanceAsOf),
+  });
+  if (snapshot === null) return false;
+
+  pendingTermRecalculation.value = { ...snapshot, termMonths, balanceAsOf };
+  isTermRecalculationOpen.value = true;
+  return true;
+};
+
+const confirmTermRecalculation = () => {
+  const pending = pendingTermRecalculation.value;
+  if (pending === null) return;
+
+  form.balance = pending.outstandingBalance;
+  form.balanceAsOf = pending.balanceAsOf;
+  lastDecidedTermMonths.value = pending.termMonths;
+  pendingTermRecalculation.value = null;
+  isTermRecalculationOpen.value = false;
+};
+
+const keepCurrentBalance = () => {
+  if (pendingTermRecalculation.value !== null) {
+    lastDecidedTermMonths.value = pendingTermRecalculation.value.termMonths;
+  }
+  pendingTermRecalculation.value = null;
+  isTermRecalculationOpen.value = false;
+};
 
 const loanTypeOptions = computed(() =>
   SUPPORTED_LOAN_TYPES.map((value) => ({
@@ -254,8 +318,14 @@ const validationRules = {
 
 const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation({ form }, { form: validationRules });
 
+const handleTermBlur = () => {
+  touchField('form.termMonths');
+  requestTermRecalculation();
+};
+
 const submit = () => {
   if (props.submitting) return;
+  if (requestTermRecalculation()) return;
   if (!isFormValid()) return;
 
   const commonFields = {
@@ -371,7 +441,7 @@ const submit = () => {
         :label="$t('forms.loan.termMonthsLabel')"
         :placeholder="$t('forms.loan.termMonthsPlaceholder')"
         :error-message="getFieldErrorMessage('form.termMonths')"
-        @blur="touchField('form.termMonths')"
+        @blur="handleTermBlur"
       />
     </div>
 
@@ -447,4 +517,28 @@ const submit = () => {
       />
     </div>
   </form>
+
+  <ResponsiveAlertDialog
+    v-model:open="isTermRecalculationOpen"
+    :cancel-label="$t('loans.dialog.termRecalcConfirm.keepButton')"
+    :confirm-label="$t('loans.dialog.termRecalcConfirm.applyButton')"
+    @cancel="keepCurrentBalance"
+    @confirm="confirmTermRecalculation"
+  >
+    <template #title>{{ $t('loans.dialog.termRecalcConfirm.title') }}</template>
+    <template #description>
+      <span v-if="pendingTermRecalculation">
+        {{
+          $t('loans.dialog.termRecalcConfirm.description', {
+            term: pendingTermRecalculation.termMonths,
+            balance: formatAmountByCurrencyCode(
+              pendingTermRecalculation.outstandingBalance,
+              form.currencyCode || 'USD',
+            ),
+            endDate: formatDate(pendingTermRecalculation.endDate, 'MMM d, yyyy'),
+          })
+        }}
+      </span>
+    </template>
+  </ResponsiveAlertDialog>
 </template>
