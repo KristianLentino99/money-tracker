@@ -7,13 +7,15 @@ description: Disciplined diagnosis loop for hard bugs and performance regression
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
+**Project safety bound:** after one or two unsuccessful attempts, or when a probe behaves unexpectedly, stop and report the blocker. Do not stack speculative workarounds or run an unbounded debugging loop. If the feedback loop uses tests, delegate execution to the `test-runner` agent.
+
 When exploring the codebase, use the project's domain glossary to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
 ## Phase 1 — Build a feedback loop
 
 **This is the skill.** Everything else is mechanical. If you have a fast, deterministic, agent-runnable pass/fail signal for the bug, you will find the cause — bisection, hypothesis-testing, and instrumentation all just consume that signal. If you don't have one, no amount of staring at code will save you.
 
-Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give up.**
+Spend focused effort here. Build the smallest useful feedback loop, then stop if it cannot be made reliable within the project safety bound.
 
 ### Ways to construct one — try them in roughly this order
 
@@ -42,7 +44,7 @@ A 30-second flaky loop is barely better than no loop. A 2-second deterministic l
 
 ### Non-deterministic bugs
 
-The goal is not a clean repro but a **higher reproduction rate**. Loop the trigger 100×, parallelise, add stress, narrow timing windows, inject sleeps. A 50%-flake bug is debuggable; 1% is not — keep raising the rate until it's debuggable.
+The goal is not a clean repro but a **useful reproduction rate**. Repeat the trigger only within the project safety bound; add stress or timing control only when it directly tests a hypothesis. If the bug remains too rare to diagnose, report that limitation instead of iterating indefinitely.
 
 ### When you genuinely cannot build a loop
 

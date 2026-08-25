@@ -1,10 +1,13 @@
 ---
 name: frontend-design
 description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, or applications. Generates creative, polished code that avoids generic AI aesthetics.
-license: Complete terms in LICENSE.txt
 ---
 
 This skill guides creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.
+
+## MoneyMatter compatibility
+
+When this skill is used in this repository, read `.claude/skills/frontend-rules/SKILL.md` first and treat it as authoritative for project conventions. Preserve the existing design system, typography, semantic color tokens, Tailwind usage, shared components, i18n, and container-based responsive behavior unless the user explicitly requests a design-system change. Distinctiveness comes from composition, hierarchy, spacing, motion, and detail within those constraints; do not introduce raw buttons, fields, colors, custom fonts, or viewport breakpoints merely to satisfy this skill's generic aesthetic guidance.
 
 The user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.
 

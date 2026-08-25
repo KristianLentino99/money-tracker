@@ -72,6 +72,13 @@
         />
       </div>
 
+      <div class="mr-2 mb-2 inline-block align-top">
+        <UncategorizedFilter
+          :model-value="filters.uncategorizedOnly"
+          @update:model-value="emitFilters({ ...filters, uncategorizedOnly: $event })"
+        />
+      </div>
+
       <!-- User-added filters: one control per filter, "x" clears it and frees the space -->
       <div
         v-for="filterKey in extraFilters"
@@ -200,6 +207,7 @@ import PayeeMultiSelectField from '@/components/fields/payee-multi-select-field.
 import TagFilter from '@/components/records-filters/filters/tag-filter.vue';
 import TransactionTypeFilter from '@/components/records-filters/filters/transaction-type-filter.vue';
 import TransferNatureFilter from '@/components/records-filters/filters/transfer-nature-filter.vue';
+import UncategorizedFilter from '@/components/records-filters/filters/uncategorized-filter.vue';
 import { trackAnalyticsEvent } from '@/lib/posthog';
 import { CheckIcon, ChevronDownIcon, XIcon } from '@lucide/vue';
 import { computed } from 'vue';

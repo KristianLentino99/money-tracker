@@ -5,6 +5,7 @@
       "selectFilters": "Select filters",
       "reset": "Reset",
       "apply": "Apply",
+      "uncategorized": "Uncategorized",
       "dateRange": {
         "placeholder": "Date or range",
         "presets": {

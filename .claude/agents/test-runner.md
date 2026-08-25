@@ -53,15 +53,15 @@ The main model will decide how to present this to the user and what actions to t
 
 This is a monorepo with backend (Jest), frontend unit (Vitest), and frontend E2E (Playwright):
 
-| Scope              | Command                                                       |
-| ------------------ | ------------------------------------------------------------- |
-| All tests          | `npm test`                                                    |
-| Backend all        | `npm -w packages/backend run test`                            |
-| Backend unit       | `npm -w packages/backend run test:unit`                       |
-| Backend E2E        | `npm -w packages/backend run test:e2e`                        |
-| Frontend unit      | `npm -w packages/frontend run test`                           |
-| Frontend E2E       | `npm run test:e2e -w packages/frontend`                       |
-| Frontend E2E (one) | `npm run test:e2e -w packages/frontend -- --grep "test name"` |
+| Scope              | Command                                                          |
+| ------------------ | ---------------------------------------------------------------- |
+| All tests          | `npm test`                                                       |
+| Backend all        | `cd packages/backend && npm run test`                            |
+| Backend unit       | `cd packages/backend && npm run test:unit`                       |
+| Backend E2E        | `cd packages/backend && npm run test:e2e`                        |
+| Frontend unit      | `cd packages/frontend && npm run test`                           |
+| Frontend E2E       | `cd packages/frontend && npm run test:e2e`                       |
+| Frontend E2E (one) | `cd packages/frontend && npm run test:e2e -- --grep "test name"` |
 
 ## CRITICAL: Test File Patterns
 
@@ -95,16 +95,16 @@ When user asks to run tests for a specific feature (e.g., "refunds tests"):
 
 If user wants to run specific tests:
 
-- Backend unit: `npm -w packages/backend run test:unit -- pattern`
-- Backend E2E: `npm -w packages/backend run test:e2e -- pattern`
-- Frontend unit: `npm -w packages/frontend run test -- pattern`
-- Frontend E2E: `npm run test:e2e -w packages/frontend -- --grep "pattern"`
+- Backend unit: `cd packages/backend && npm run test:unit -- --testPathPattern='<pattern>'`
+- Backend E2E: `cd packages/backend && npm run test:e2e -- --testPathPattern='<pattern>'`
+- Frontend unit: `cd packages/frontend && npm run test -- <pattern>`
+- Frontend E2E: `cd packages/frontend && npm run test:e2e -- --grep "pattern"`
 
 Examples for running feature-specific tests:
 
-- Refunds unit: `npm -w packages/backend run test:unit -- refund`
-- Refunds E2E: `npm -w packages/backend run test:e2e -- tx-refunds`
-- Frontend E2E sign-in: `npm run test:e2e -w packages/frontend -- --grep "Sign in"`
+- Refunds unit: `cd packages/backend && npm run test:unit -- --testPathPattern='refund'`
+- Refunds E2E: `cd packages/backend && npm run test:e2e -- --testPathPattern='tx-refunds'`
+- Frontend E2E sign-in: `cd packages/frontend && npm run test:e2e -- --grep "Sign in"`
 - Both: Run unit command first, then E2E command
 
 ## Frontend E2E Tests (Playwright)
@@ -121,10 +121,10 @@ Frontend E2E tests live in `packages/frontend/e2e/` and use Playwright.
 
 ### Environment variables
 
-Tests default to `https://localhost:8100` (frontend) and `https://localhost:8081` (API). Override with:
+When `.env.development.local` exists, read the worktree's frontend and backend port settings before constructing local URLs. Use those values instead of ports from another checkout. If the file is absent, use the project's configured defaults. Override with:
 
 ```
-PLAYWRIGHT_BASE_URL=https://example.com PLAYWRIGHT_API_BASE_URL=https://api.example.com npm run test:e2e -w packages/frontend
+PLAYWRIGHT_BASE_URL=https://example.com PLAYWRIGHT_API_BASE_URL=https://api.example.com npm run test:e2e
 ```
 
 ### Reading the report
@@ -132,7 +132,7 @@ PLAYWRIGHT_BASE_URL=https://example.com PLAYWRIGHT_API_BASE_URL=https://api.exam
 After a test run, the HTML report is at `packages/frontend/playwright-report/index.html`. Open it with:
 
 ```
-npm run test:e2e:report -w packages/frontend
+cd packages/frontend && npm run test:e2e:report
 ```
 
 Failed test screenshots are saved in `packages/frontend/test-results/`.

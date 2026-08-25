@@ -440,7 +440,11 @@ describe('Plan endpoints', () => {
   });
 
   it('derives actual activity and upcoming obligations without counting forecast-only rows as activity', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Plan Transaction Category', color: '#ABCDEF', raw: true });
+    const category = await helpers.addCustomCategory({
+      name: 'Plan Transaction Category',
+      color: '#ABCDEF',
+      raw: true,
+    });
     const splitCategory = await helpers.addCustomCategory({ name: 'Plan Split Category', color: '#BCDEFA', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Plan Transaction Cash', initialBalance: 100 }),
@@ -494,7 +498,11 @@ describe('Plan endpoints', () => {
   });
 
   it('allows a shared write member to allocate through the same HTTP endpoint', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Shared Write Plan Category', color: '#CDEFAB', raw: true });
+    const category = await helpers.addCustomCategory({
+      name: 'Shared Write Plan Category',
+      color: '#CDEFAB',
+      raw: true,
+    });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Shared Write Plan',

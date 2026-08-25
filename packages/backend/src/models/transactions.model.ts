@@ -817,6 +817,7 @@ export const findWithFilters = async ({
   refAmountGte,
   refAmountLte,
   categoryIds,
+  uncategorizedOnly,
   payeeIds,
   noteSearch,
   attributes,
@@ -877,6 +878,8 @@ export const findWithFilters = async ({
   /** Filter: refAmount <= this value - for cross-currency matching */
   refAmountLte?: Money;
   categoryIds?: string[];
+  /** Only transactions with no main category and no categorized splits. */
+  uncategorizedOnly?: boolean;
   payeeIds?: string[];
   noteSearch?: string[]; // array of keywords
   attributes?: (keyof Transactions)[];
@@ -962,6 +965,15 @@ export const findWithFilters = async ({
         [Op.in]: categoryIds,
       };
     }
+  }
+
+  if (uncategorizedOnly) {
+    const andConditions = (whereClause[Op.and as unknown as string] as unknown[] | undefined) ?? [];
+    andConditions.push(literal('"Transactions"."categoryId" IS NULL'));
+    andConditions.push(
+      literal('NOT EXISTS (SELECT 1 FROM "TransactionSplits" ts WHERE ts."transactionId" = "Transactions"."id")'),
+    );
+    whereClause[Op.and as unknown as string] = andConditions;
   }
 
   if (payeeIds && payeeIds.length > 0) {

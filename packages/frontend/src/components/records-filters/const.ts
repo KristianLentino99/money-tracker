@@ -29,6 +29,7 @@ export interface FiltersStruct {
   excludedBudgetIds?: string[] | null;
   noteIncludes: string;
   categoryIds: string[];
+  uncategorizedOnly: boolean;
   tagIds: string[];
   payeeIds: string[];
   categorizationSource: CATEGORIZATION_SOURCE | null;
@@ -50,6 +51,7 @@ export const DEFAULT_FILTERS: FiltersStruct = {
   excludedBudgetIds: null,
   noteIncludes: '',
   categoryIds: [],
+  uncategorizedOnly: false,
   tagIds: [],
   payeeIds: [],
   categorizationSource: null,

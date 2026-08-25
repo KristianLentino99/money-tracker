@@ -1,7 +1,7 @@
 ---
 name: release-notes-generator
 description: Generates GitHub release notes by comparing commits since the last tag. Use when user says "prepare release", "release notes", "next release", "release text", "prepare next release text", or "create release".
-allowed-tools: Bash, Read, Skill
+allowed-tools: Bash, Read
 ---
 
 # Release Notes Generator
@@ -10,7 +10,7 @@ Generates formatted release notes for the next GitHub release by analyzing commi
 
 ## Mode
 
-This skill is a **direct execution workflow** — no questions needed. Gather all context from git history and PRs, produce the release text, then run it through the `stop-slop` skill (Step 6) before showing it to the user.
+This skill is a **direct execution workflow** — no questions needed. Gather all context from git history and PRs, produce the release text, self-edit the prose using Step 6, then show it to the user.
 
 ## When to Use
 
@@ -170,9 +170,7 @@ Follow the **exact format** observed from recent releases. The format is:
 
 Release notes go out to every user, so the draft gets an editing pass before anyone sees it.
 
-**Invoke the `stop-slop` skill** (`Skill` tool, `skill: "stop-slop"`) and apply its rules to the draft from Step 5. This step is not optional and not something to approximate from memory — load the skill and follow what it says.
-
-Run the pass over the **prose only**: section titles, feature descriptions, and bug-fix lines. Leave these alone:
+Run a self-edit over the **prose only**: section titles, feature descriptions, and bug-fix lines. Leave these alone:
 
 - The "Code Changes" list — commit prefixes, PR titles, and URLs are verbatim by design
 - The Full Changelog link
@@ -187,9 +185,9 @@ Watch for the patterns that show up most in release notes specifically:
 - Three-beat lists where two items would do.
 - Throat-clearing openers: "This release introduces…", "We've also added…".
 
-Where a stop-slop rule collides with a rule from Step 5, **Step 5 wins**. In particular, keep the bug-fix scope requirement (which flow, under what condition, what was unaffected) even when stop-slop's density rule tempts you to cut it — specificity is the point of both rules.
+Where this editing pass collides with a rule from Step 5, **Step 5 wins**. In particular, keep the bug-fix scope requirement (which flow, under what condition, what was unaffected) even when a density edit tempts you to cut it — specificity is the point.
 
-Report the edit briefly to the user after Step 8: what you cut, and the stop-slop score.
+Report the edit briefly to the user after Step 8: what you cut or rewrote.
 
 ### Step 7: Suggest Release Title
 

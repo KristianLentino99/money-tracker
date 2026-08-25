@@ -19,6 +19,7 @@ const NARROWING_EXAMPLES: Record<FilterKey, Partial<FiltersStruct>> = {
   date: { start: new Date('2026-01-01') },
   accounts: { accountIds: ['acc-1'] },
   categories: { categoryIds: ['cat-1'] },
+  uncategorized: { uncategorizedOnly: true },
   categorizationSource: { categorizationSource: CATEGORIZATION_SOURCE.ai },
   batchId: { batchId: 'batch-1' },
   type: { transactionType: TRANSACTION_TYPES.expense },

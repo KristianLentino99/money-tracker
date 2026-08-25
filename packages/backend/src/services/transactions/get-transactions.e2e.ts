@@ -554,6 +554,40 @@ describe('Retrieve transactions with filters', () => {
     });
   });
 
+  it('filters to transactions without a main category or categorized splits', async () => {
+    const account = await helpers.createAccount({ raw: true });
+    const categories = await helpers.getCategoriesList();
+    const categoryId = categories[0]!.id;
+
+    const { categoryId: _uncategorizedCategoryId, ...uncategorizedPayload } = helpers.buildTransactionPayload({
+      accountId: account.id,
+      transferNature: TRANSACTION_TRANSFER_NATURE.transfer_out_wallet,
+    });
+    const [uncategorized] = await helpers.createTransaction({
+      payload: uncategorizedPayload,
+      raw: true,
+    });
+    const [categorized] = await helpers.createTransaction({
+      payload: helpers.buildTransactionPayload({ accountId: account.id, categoryId }),
+      raw: true,
+    });
+    const [split] = await helpers.createTransaction({
+      payload: helpers.buildTransactionPayload({
+        accountId: account.id,
+        categoryId,
+        splits: [{ categoryId, amount: 1000 }],
+      }),
+      raw: true,
+    });
+
+    const result = await helpers.getTransactions({ accountIds: [account.id], uncategorizedOnly: true, raw: true });
+    const ids = result.map((transaction) => transaction.id);
+
+    expect(ids).toContain(uncategorized.id);
+    expect(ids).not.toContain(categorized.id);
+    expect(ids).not.toContain(split.id);
+  });
+
   describe('filter by amount', () => {
     it('`amountLte`', async () => {
       await createMockTransactions();

@@ -16,9 +16,9 @@ Creates a new git worktree for parallel development.
 
 **Examples:**
 
-- `/worktree create fix-bug` - Creates worktree from origin/main
-- `/worktree create fix-bug from main` - Creates worktree from main branch
-- `/worktree create feature-x from develop` - Creates from develop
+- `/worktree create fix-bug` - Creates worktree from origin/dev
+- `/worktree create fix-bug from dev` - Creates worktree from dev branch
+- `/worktree create feature-x from main` - Creates from main when explicitly requested
 
 ### `/worktree list`
 
@@ -36,7 +36,7 @@ Removes a worktree and its local branch.
 
 1. Parse arguments:
    - `<branch-name>`: Required, the new branch name
-   - `<base-branch>`: Optional, defaults to `origin/main`
+   - `<base-branch>`: Optional, defaults to `origin/dev`
 
 2. Determine paths:
 

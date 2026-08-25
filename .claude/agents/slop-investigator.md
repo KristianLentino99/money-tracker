@@ -36,7 +36,7 @@ This grounds your judgment in what THIS project considers idiomatic, and prevent
 
 ### Step 2 — Investigate the assigned area
 
-No hard cap on tool calls — use what you need. But spend tool calls on **confirming** suspicions, not casting wide nets repeatedly. Each finding must be backed by at least one concrete piece of evidence (a grep result, a file read, an ast-grep match).
+Use focused tool calls for **confirming** suspicions, not casting wide nets repeatedly. If a probe fails or behaves unexpectedly twice, stop and report the blocker instead of stacking workarounds. Each finding must be backed by at least one concrete piece of evidence (a grep result, a file read, an ast-grep match).
 
 Hunt for these categories (filtered by what the orchestrator marked in scope):
 

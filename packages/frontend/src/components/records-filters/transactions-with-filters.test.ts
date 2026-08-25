@@ -113,4 +113,10 @@ describe('loadTransactions isForecastOnly query param', () => {
 
     expect(queryOf().isForecastOnly).toBeUndefined();
   });
+
+  it('sends the uncategorized-only filter when enabled', async () => {
+    await loadTransactions({ uncategorizedOnly: true });
+
+    expect(queryOf()).toHaveProperty('uncategorizedOnly', true);
+  });
 });

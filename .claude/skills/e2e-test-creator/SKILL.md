@@ -1,7 +1,7 @@
 ---
 name: e2e-test-creator
 description: Creates backend e2e tests for new or existing endpoints. Auto-triggers after implementing a new API endpoint. Also runs when asked to add test coverage or triggered by "/e2e-test-creator". Follows project conventions for test structure, helpers, and assertions.
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent
 ---
 
 # E2E Test Creator
@@ -20,7 +20,7 @@ This skill is primarily a **reference guide** — read the conventions below and
 
 ## Step 1: Gather Context
 
-Before writing any test, read these files to understand what you're testing:
+Before writing backend test code, read `.claude/docs/backend-conventions.md`. Then read these files to understand what you're testing:
 
 1. The **service** being tested (to understand input/output types and logic)
 2. The **controller** (to understand the Zod schema / endpoint contract)

@@ -28,7 +28,7 @@ Spawn the following reviewers using the `Agent` tool **in a single message with 
 | Name                    | subagent_type                             | Role                                                                                                                      |
 | ----------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `code-simplifier`       | `pr-review-toolkit:code-simplifier`       | Reuse opportunities, unnecessary complexity, dead code                                                                    |
-| `code-reviewer`         | `pr-review-toolkit:code-reviewer`         | Project guidelines, style, best practices, naming, architecture                                                           |
+| `code-change-reviewer`  | `code-change-reviewer`                    | Project guidelines, style, best practices, naming, architecture                                                           |
 | `test-analyzer`         | `pr-review-toolkit:pr-test-analyzer`      | Test coverage quality, missing tests, edge cases                                                                          |
 | `silent-failure-hunter` | `pr-review-toolkit:silent-failure-hunter` | Silent failures, swallowed errors, bad fallbacks, missing error handling                                                  |
 | `type-analyzer`         | `pr-review-toolkit:type-design-analyzer`  | Type design quality, encapsulation, invariant expression                                                                  |
@@ -55,7 +55,7 @@ If no issues found, the reviewer should report "No issues found."
 Once all reviewers have returned, compile into a single organized report:
 
 - **Code Simplification** — from code-simplifier
-- **Code Quality** — from code-reviewer
+- **Code Quality** — from code-change-reviewer
 - **Test Coverage** — from test-analyzer
 - **Silent Failures** — from silent-failure-hunter
 - **Type Design** — from type-analyzer

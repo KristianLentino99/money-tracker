@@ -1,7 +1,7 @@
 ---
 name: prd-creator
 description: Smart PRD generator. Generates comprehensive technical PRDs optimized for task breakdown. Use when user requests "PRD", "product requirements", "regenerate existing PRD", or mentions task-driven development.
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, AskUserQuestion, Agent
 ---
 
 # PRD Generator
@@ -37,7 +37,7 @@ Do NOT activate for:
 
 2. Before creating any document, clarify with user anything that is not clear. For example, how edge cases should be handled, or do user needs some external features.
 
-3. When asking user questions, prepare all questions right away, so user can see the scope of uncertancy, so he can provide answers to specific questions based on other questions.
+3. Prepare the full question backlog internally, but ask one focused clarification question per turn. Let each answer shape the next round; continue until the requirements are unambiguous.
 
 4. By default create a short document with a good structure. By default only these sections should be added:
 
@@ -47,7 +47,7 @@ Do NOT activate for:
 - User Stories
 - Functional Requirements
 
-5. When user asks about new feature, suggest the implementation based on how other similar budget tracking or financial applications do that. When asking clarification questions, let user know how discussed functionality is implemented in other applications.
+5. When user asks about a new feature, suggest the implementation based on how other similar budget tracking or financial applications do that. Delegate any external research or web fetching to the `websearch` agent. When asking clarification questions, let the user know how discussed functionality is implemented in other applications.
 
 6. DO NOT include code examples or implementation details in the document, unless user specifically asks for it.
 

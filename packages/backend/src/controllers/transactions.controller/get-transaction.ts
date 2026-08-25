@@ -61,6 +61,8 @@ const schema = z.object({
         categoryIds: z
           .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
           .optional(),
+        /** Only transactions with no main category and no categorized splits. */
+        uncategorizedOnly: booleanQuery().optional(),
         payeeIds: z
           .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
           .optional(),

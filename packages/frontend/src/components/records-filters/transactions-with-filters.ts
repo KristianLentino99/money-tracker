@@ -103,6 +103,7 @@ export const useTransactionsWithFilters = ({
           order: sorting?.value.order,
           accountIds: filter.accountIds.length ? filter.accountIds : undefined,
           categoryIds: filter.categoryIds.length ? filter.categoryIds : undefined,
+          uncategorizedOnly: filter.uncategorizedOnly || undefined,
           tagIds: filter.tagIds.length ? filter.tagIds : undefined,
           payeeIds: filter.payeeIds.length ? filter.payeeIds : undefined,
           categorizationSource: filter.categorizationSource ?? undefined,

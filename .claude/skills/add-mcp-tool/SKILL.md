@@ -1,7 +1,7 @@
 ---
 name: add-mcp-tool
 description: Add a new tool to the MoneyMatter MCP server. Auto-triggers when the user asks to "add MCP tool", "new MCP tool", "expose X via MCP", or when exposing any existing backend service to MCP clients. Handles every metafile the drift tests check.
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, Agent
 ---
 
 # Add MCP Tool
@@ -15,6 +15,8 @@ Adds a new tool to the MCP server at `https://mcp.moneymatter.app/mcp` without b
 - Any time the tool list at `packages/frontend/public/.well-known/mcp/server-card.json` needs to grow
 
 ## Architecture at a glance
+
+Before writing backend code, read `.claude/docs/backend-conventions.md`.
 
 Each MCP tool is a thin wrapper over an existing backend service:
 
@@ -75,6 +77,7 @@ export function registerMyNewTool(server: McpServer) {
 
 Rules:
 
+- New application functions use object-like parameters. MCP SDK registration methods, framework callbacks, and the existing `registerX(server)` adapter shape are positional API exceptions; preserve those signatures when matching the surrounding MCP implementation.
 - Tool name is **snake_case** (matches MCP convention) and must exactly equal the string in `server-card.json`.
 - Register function is `register<PascalCase>`. File is `<kebab-case>.ts`.
 - `inputSchema` is a **plain object of Zod schemas** (no outer `z.object(...)`), declared as a **module-scope `const`**, never inline inside `registerTool()`. Every MCP session builds its own `McpServer`, so an inline shape is rebuilt per session (zod v4 schemas are ~30 KB each).

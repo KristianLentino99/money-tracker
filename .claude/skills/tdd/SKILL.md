@@ -42,6 +42,8 @@ RIGHT (vertical):
 
 ## Workflow
 
+All test execution is delegated to the `test-runner` agent. The main agent may design tests and edit test files, but must not run the test command directly.
+
 ### 1. Planning
 
 When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.

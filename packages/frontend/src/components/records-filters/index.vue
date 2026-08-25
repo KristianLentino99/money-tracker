@@ -49,6 +49,11 @@
       @update:category-ids="$emit('update:filters', { ...filters, categoryIds: $event })"
     />
 
+    <UncategorizedFilter
+      :model-value="filters.uncategorizedOnly"
+      @update:model-value="$emit('update:filters', { ...filters, uncategorizedOnly: $event })"
+    />
+
     <TagFilter :tag-ids="filters.tagIds" @update:tag-ids="$emit('update:filters', { ...filters, tagIds: $event })" />
 
     <PayeeMultiSelectField
@@ -91,6 +96,7 @@ import PayeeMultiSelectField from '@/components/fields/payee-multi-select-field.
 import TagFilter from './filters/tag-filter.vue';
 import TransactionTypeFilter from './filters/transaction-type-filter.vue';
 import TransferNatureFilter from './filters/transfer-nature-filter.vue';
+import UncategorizedFilter from './filters/uncategorized-filter.vue';
 
 withDefaults(
   defineProps<{

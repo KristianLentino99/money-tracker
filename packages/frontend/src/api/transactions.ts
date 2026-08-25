@@ -39,6 +39,8 @@ export const loadTransactions = async ({
   transactionType?: TRANSACTION_TYPES;
   accountIds?: string[];
   categoryIds?: string[];
+  /** Only transactions with no main category and no categorized splits. */
+  uncategorizedOnly?: boolean;
   tagIds?: string[];
   excludedTagIds?: string[];
   payeeIds?: string[];

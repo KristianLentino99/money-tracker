@@ -43,7 +43,7 @@ Do NOT activate for:
 
 ### Phase 2: Deep-Dive Interviewing
 
-Use `AskUserQuestion` tool repeatedly to probe deeply. Structure your questions across these dimensions:
+Use `AskUserQuestion` repeatedly to probe deeply. Ask one focused question per turn, while keeping the full question backlog internally. Structure questions across these dimensions:
 
 Consult `references/interview-questions.md` for the full question bank. Cover these dimensions:
 
@@ -84,7 +84,7 @@ Only after thorough interviewing, write the specification:
 
 ## Interview Rules
 
-1. **Batch Questions Wisely**: Use AskUserQuestion to present 3-4 related questions at once, not one at a time (avoids fatigue) but not too many (avoids overwhelm).
+1. **Ask one focused question per turn**: Keep each round narrow enough that the user's answer can change the next question. Continue for as many rounds as needed; do not cap discovery at a fixed number of questions.
 
 2. **Build on Answers**: Each round of questions should be informed by previous answers. Don't use a generic checklist.
 
@@ -125,7 +125,7 @@ User says: "I want to plan a recurring transactions feature"
 Actions:
 
 1. Read existing transaction-related code for context
-2. Interview user across all dimensions (3-4 rounds)
+2. Interview the user across all relevant dimensions for as many rounds as needed
 3. Write spec to `docs/prds/recurring-transactions.md`
    Result: Detailed spec covering technical design, edge cases, UI/UX, and implementation notes
 

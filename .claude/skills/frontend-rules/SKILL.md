@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob
 
 # Frontend Rules & Conventions
 
-Reference guide for all frontend code in `packages/frontend/`. Read this before writing or modifying frontend components.
+Reference guide for all frontend code in `packages/frontend/`. Read this before writing or modifying frontend components. These repository-specific rules take precedence over generic frontend design guidance when the two differ.
 
 ---
 

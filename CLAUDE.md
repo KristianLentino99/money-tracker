@@ -1,5 +1,13 @@
 # Project Rules & Conventions
 
+## Instruction precedence
+
+- System and safety instructions take priority over project rules.
+- These project rules take priority over generic skill guidance.
+- A task-specific skill may add constraints, but must not relax a rule here unless the task explicitly requires it and the exception is documented.
+- Ask one focused clarification question per turn when planning or resolving ambiguity; continue for as many rounds as needed.
+- Delegate test execution, linting/type checks, web research, and code reviews to their dedicated project agents. The main agent must not perform those activities directly.
+
 - **Backend work**: Read `.claude/docs/backend-conventions.md` before writing backend code
 - **Frontend work**: Read `.claude/skills/frontend-rules/SKILL.md` before writing frontend code
 
@@ -44,16 +52,16 @@ Always test through the actual API endpoints to ensure full integration testing.
 Other instructions:
 
 1. File names should always be in kebab-case
-2. All functions should _always_ use object-like params.
-   - Never: function(arg1, arg2, arg3)
-   - Always: function({ arg1, arg2, arg3 })
+2. New application functions should use object-like params.
+   - Prefer: `function({ arg1, arg2, arg3 })`
+   - Preserve positional signatures required by third-party libraries, framework callbacks, and existing adapter interfaces; do not wrap those APIs solely to satisfy this convention.
 3. When planning the implementation don't limit yourself to 3-4 questions and 1 round.
    Ask as many questions with as many rounds as needed to collect all important information
-4. Use this map of suagents for different tasks:
-   - running any unit or e2e tests – use test-runner
-   - running any linter – use linter
-     – planning doing any websearch – use websearch
-     – if asked to do any code review – use code-change-reviewer
+4. Use this map of subagents for different tasks:
+   - running any unit or e2e tests – use `test-runner`
+   - running any linter – use `linter`
+   - planning or doing any web search – use `websearch`
+   - if asked to do any code review – use `code-change-reviewer`
 5. **Tool Selection for Code Search:**
 
    **Use ast-grep when:**

@@ -1,9 +1,6 @@
 import { QueryInterface } from 'sequelize';
 
-import {
-  createLegacyRealTransactionsViewSql,
-  dropRealTransactionsViewSql,
-} from './utils/real-transactions-view';
+import { createLegacyRealTransactionsViewSql, dropRealTransactionsViewSql } from './utils/real-transactions-view';
 
 /**
  * Planned-free view of "Transactions" for raw SQL, which no TS-level boundary can police.
