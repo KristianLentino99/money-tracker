@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AccountSelectField from '@/components/fields/account-select-field.vue';
 import InputField from '@/components/fields/input-field.vue';
+import PayeeSelectField from '@/components/fields/payee-select-field.vue';
 import SelectField from '@/components/fields/select-field.vue';
 import Button from '@/components/lib/ui/button/Button.vue';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
@@ -37,6 +38,7 @@ const FIELD_OPTIONS = computed(() => [
   { label: t('planned.subscriptions.rules.fieldOptions.amount'), value: 'amount' },
   { label: t('planned.subscriptions.rules.fieldOptions.transactionType'), value: 'transactionType' },
   { label: t('planned.subscriptions.rules.fieldOptions.account'), value: 'accountId' },
+  { label: t('planned.subscriptions.rules.fieldOptions.payee'), value: 'payeeId' },
 ]);
 
 const TRANSACTION_TYPE_OPTIONS = computed(() => [
@@ -48,6 +50,9 @@ const allAccounts = computed(() => accountsStore.accounts ?? []);
 
 const getSelectedAccount = ({ rule }: { rule: SubscriptionMatchingRule }) =>
   accountsStore.accountsRecord[String(rule.value)] ?? null;
+
+const getSelectedPayeeId = ({ rule }: { rule: SubscriptionMatchingRule }): string | null =>
+  typeof rule.value === 'string' && rule.value.length > 0 ? rule.value : null;
 
 const getOperatorForField = (field: string): string => {
   switch (field) {
@@ -70,6 +75,8 @@ const getDefaultValueForField = (field: string): SubscriptionMatchingRule['value
       return TRANSACTION_TYPES.expense;
     case 'accountId':
       return 0;
+    case 'payeeId':
+      return '';
     default:
       return '';
   }
@@ -274,6 +281,15 @@ const updateAmountMax = ({ index, rule, v }: { index: number; rule: Subscription
           @update:model-value="
             (account: AccountModel | null) => account && updateRuleValue({ index, value: account.id })
           "
+        />
+      </template>
+
+      <template v-else-if="rule.field === 'payeeId'">
+        <PayeeSelectField
+          :model-value="getSelectedPayeeId({ rule })"
+          :label="$t('planned.subscriptions.rules.fieldOptions.payee')"
+          :placeholder="$t('planned.subscriptions.rules.payeePlaceholder')"
+          @update:model-value="(payeeId: string | null) => updateRuleValue({ index, value: payeeId ?? '' })"
         />
       </template>
     </div>

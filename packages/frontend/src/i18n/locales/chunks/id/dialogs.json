@@ -104,6 +104,8 @@
       "recordList": {},
       "form": {
         "payeeLabel": "Penerima",
+        "recurringPaymentLabel": "Pembayaran berulang (opsional)",
+        "recurringPaymentPlaceholder": "Pilih pembayaran berulang",
         "paymentTypeLabel": "Jenis Pembayaran",
         "noteLabel": "Catatan (opsional)",
         "notePlaceholder": "Catatan",

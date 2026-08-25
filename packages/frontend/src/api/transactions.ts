@@ -106,7 +106,9 @@ export const loadTransactionsByIds = async ({ ids }: { ids: string[] }): Promise
   return api.get('/transactions/by-ids', { ids: ids.join(',') });
 };
 
-export const createTransaction = async (params: endpointsTypes.CreateTransactionBody) => {
+export const createTransaction = async (
+  params: endpointsTypes.CreateTransactionBody,
+): Promise<[TransactionModel, TransactionModel?]> => {
   const formattedParams = formatTransactionPayload({
     transferNature: TRANSACTION_TRANSFER_NATURE.not_transfer,
     note: '',

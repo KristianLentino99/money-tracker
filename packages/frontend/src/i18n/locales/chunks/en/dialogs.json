@@ -104,6 +104,8 @@
       "recordList": {},
       "form": {
         "payeeLabel": "Payee",
+        "recurringPaymentLabel": "Recurring payment (optional)",
+        "recurringPaymentPlaceholder": "Select a recurring payment",
         "destinationGroupLabel": "Where the money goes",
         "paymentTypeLabel": "Payment type",
         "noteLabel": "Note",

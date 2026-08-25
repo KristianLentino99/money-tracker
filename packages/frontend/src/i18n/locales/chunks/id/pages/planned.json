@@ -26,6 +26,7 @@
       "linkedTransactionsTitle": "Transaksi Terhubung",
       "noLinkedTransactions": "Belum ada transaksi terhubung",
       "unlinkTransaction": "Lepaskan transaksi",
+      "linkTransaction": "Hubungkan transaksi",
       "suggestMatches": "Sarankan Kecocokan",
       "suggestMatchesTitle": "Kecocokan yang Disarankan",
       "suggestMatchesDescription": "Transaksi yang sesuai dengan aturan langganan Anda",
@@ -148,8 +149,10 @@
           "note": "Catatan",
           "amount": "Jumlah",
           "transactionType": "Jenis Transaksi",
-          "account": "Akun"
+          "account": "Akun",
+          "payee": "Penerima"
         },
+        "payeePlaceholder": "Pilih penerima",
         "transactionTypeOptions": {
           "income": "Pemasukan",
           "expense": "Pengeluaran"

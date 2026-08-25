@@ -23,4 +23,9 @@ export const matchingRuleSchema = z.discriminatedUnion('field', [
     operator: z.literal('equals'),
     value: recordId(),
   }),
+  z.object({
+    field: z.literal('payeeId'),
+    operator: z.literal('equals'),
+    value: recordId(),
+  }),
 ]);

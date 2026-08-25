@@ -118,6 +118,17 @@
         "sharedAccount": "Tidak dapat dipilih: transaksi ini berada di akun yang dibagikan dengan Anda, dan hanya pemiliknya yang dapat mengeditnya."
       }
     },
+    "bulkLinkSubscription": {
+      "button": "Hubungkan ke pembayaran berulang",
+      "title": "Hubungkan transaksi ke pembayaran berulang",
+      "description": "Hubungkan transaksi yang dipilih ke satu pembayaran berulang. Transaksi pemasukan dan pengeluaran tidak dapat dihubungkan bersama.",
+      "selectLabel": "Pembayaran berulang",
+      "selectPlaceholder": "Pilih pembayaran berulang",
+      "mixedTypes": "Transaksi pemasukan dan pengeluaran tidak dapat dihubungkan bersama. Pilih transaksi dengan jenis yang sama.",
+      "confirmButton": "Hubungkan transaksi",
+      "successMessage": "Transaksi yang dipilih berhasil dihubungkan ke pembayaran berulang",
+      "errorMessage": "Gagal menghubungkan transaksi ke pembayaran berulang"
+    },
     "transactionGroups": {
       "bulkActions": {
         "createNewGroup": "Buat grup baru",

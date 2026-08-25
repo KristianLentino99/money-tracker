@@ -9,6 +9,7 @@ import {
 } from './automation-editor-state';
 
 const ACCOUNT_ID = '00000000-0000-0000-0000-0000000000aa' as RecordId;
+const PAYEE_ID = '00000000-0000-0000-0000-0000000000bb' as RecordId;
 
 const noteRule = ({ keywords }: { keywords: string[] }): SubscriptionMatchingRule => ({
   field: 'note',
@@ -30,6 +31,12 @@ const transactionTypeRule = ({ value }: { value: string }): SubscriptionMatching
 
 const accountRule = ({ value }: { value: string | number }): SubscriptionMatchingRule => ({
   field: 'accountId',
+  operator: 'equals',
+  value,
+});
+
+const payeeRule = ({ value }: { value: string }): SubscriptionMatchingRule => ({
+  field: 'payeeId',
   operator: 'equals',
   value,
 });
@@ -92,12 +99,18 @@ describe('filterEmptyMatchingRules', () => {
 
   it('drops scalar rules holding the empty-string or zero placeholder', () => {
     expect(
-      filterEmptyMatchingRules({ rules: [transactionTypeRule({ value: '' }), accountRule({ value: 0 })] }),
+      filterEmptyMatchingRules({
+        rules: [transactionTypeRule({ value: '' }), accountRule({ value: 0 }), payeeRule({ value: '' })],
+      }),
     ).toEqual([]);
   });
 
   it('keeps filled scalar rules', () => {
-    const rules = [transactionTypeRule({ value: TRANSACTION_TYPES.expense }), accountRule({ value: ACCOUNT_ID })];
+    const rules = [
+      transactionTypeRule({ value: TRANSACTION_TYPES.expense }),
+      accountRule({ value: ACCOUNT_ID }),
+      payeeRule({ value: PAYEE_ID }),
+    ];
     expect(filterEmptyMatchingRules({ rules })).toEqual(rules);
   });
 

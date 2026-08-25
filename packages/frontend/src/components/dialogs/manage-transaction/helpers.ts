@@ -221,6 +221,7 @@ export const prepopulateForm = ({
       // Extract tag IDs from transaction tags if present
       tagIds: transaction.tags?.map((tag) => tag.id as string) ?? [],
       payeeId: transaction.payeeId ?? null,
+      recurringPaymentId: null,
       // Existing tx has a categoryId already, so treat the picker as user-touched
       // to prevent later Payee selections from silently overwriting it.
       categoryUserTouched: transaction.categoryId !== null && transaction.categoryId !== undefined,

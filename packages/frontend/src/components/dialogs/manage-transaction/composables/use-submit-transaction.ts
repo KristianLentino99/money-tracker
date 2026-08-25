@@ -1,9 +1,11 @@
 import { createTransaction, editTransaction, linkTransactions } from '@/api';
 import { accountToPortfolioTransfer, linkTransactionToPortfolio } from '@/api/portfolios';
+import { linkTransactionsToSubscription } from '@/api/subscriptions';
 import { OUT_OF_WALLET_ACCOUNT_MOCK, VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
 import { useNotificationCenter } from '@/components/notification-center';
 import { getInvalidationQueryKey } from '@/composable/data-queries/opposite-tx-record';
 import { invalidateTransferRelatedQueries } from '@/composable/data-queries/portfolio-transfers';
+import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
 import { i18n } from '@/i18n';
 import { ApiErrorResponseError } from '@/js/errors';
 import { trackAnalyticsEvent } from '@/lib/posthog';
@@ -39,6 +41,7 @@ interface OptimisticUpdateContext {
 export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
   const queryClient = useQueryClient();
   const { addErrorNotification } = useNotificationCenter();
+  const invalidateSubscriptionQueries = useInvalidateSubscriptionQueries();
 
   return useMutation({
     mutationFn: async (params: SubmitTransactionParams) => {
@@ -121,8 +124,33 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
 
       return context;
     },
-    onSuccess: (_, params) => {
+    onSuccess: async (data, params) => {
       queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
+
+      if (params.form.recurringPaymentId) {
+        const transactionId = params.isFormCreation
+          ? Array.isArray(data)
+            ? data[0]?.id
+            : undefined
+          : params.transaction?.id;
+
+        if (transactionId) {
+          try {
+            await linkTransactionsToSubscription({
+              id: params.form.recurringPaymentId,
+              transactionIds: [transactionId],
+            });
+            queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
+            invalidateSubscriptionQueries();
+          } catch (error) {
+            if (error instanceof ApiErrorResponseError) {
+              addErrorNotification(error.data.message ?? i18n.global.t('common.transactions.submit.unexpectedError'));
+            } else {
+              addErrorNotification(i18n.global.t('common.transactions.submit.unexpectedError'));
+            }
+          }
+        }
+      }
 
       if (params.isTransferTx && params.form.toPortfolio) {
         invalidateTransferRelatedQueries(queryClient);

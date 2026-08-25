@@ -26,6 +26,7 @@
       "linkedTransactionsTitle": "Пов'язані транзакції",
       "noLinkedTransactions": "Ще немає пов'язаних транзакцій",
       "unlinkTransaction": "Від'єднати транзакцію",
+      "linkTransaction": "Прив'язати транзакцію",
       "suggestMatches": "Запропонувати збіги",
       "suggestMatchesTitle": "Запропоновані збіги",
       "suggestMatchesDescription": "Транзакції, що відповідають правилам вашої підписки",
@@ -148,8 +149,10 @@
           "note": "Нотатка",
           "amount": "Сума",
           "transactionType": "Тип транзакції",
-          "account": "Рахунок"
+          "account": "Рахунок",
+          "payee": "Отримувач платежу"
         },
+        "payeePlaceholder": "Виберіть отримувача платежу",
         "transactionTypeOptions": {
           "income": "Дохід",
           "expense": "Видатки"

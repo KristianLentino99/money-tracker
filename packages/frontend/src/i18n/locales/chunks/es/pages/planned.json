@@ -26,6 +26,7 @@
       "linkedTransactionsTitle": "Transacciones vinculadas",
       "noLinkedTransactions": "Aún no hay transacciones vinculadas",
       "unlinkTransaction": "Desvincular transacción",
+      "linkTransaction": "Vincular transacción",
       "suggestMatches": "Sugerir coincidencias",
       "suggestMatchesTitle": "Coincidencias sugeridas",
       "suggestMatchesDescription": "Transacciones que coinciden con sus reglas de suscripción",
@@ -148,8 +149,10 @@
           "note": "Nota",
           "amount": "Importe",
           "transactionType": "Tipo de transacción",
-          "account": "Cuenta"
+          "account": "Cuenta",
+          "payee": "Beneficiario"
         },
+        "payeePlaceholder": "Seleccionar un beneficiario",
         "transactionTypeOptions": {
           "income": "Ingreso",
           "expense": "Gasto"

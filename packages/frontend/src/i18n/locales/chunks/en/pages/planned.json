@@ -26,6 +26,7 @@
       "linkedTransactionsTitle": "Linked Transactions",
       "noLinkedTransactions": "No linked transactions yet",
       "unlinkTransaction": "Unlink transaction",
+      "linkTransaction": "Link transaction",
       "suggestMatches": "Suggest Matches",
       "suggestMatchesTitle": "Suggested Matches",
       "suggestMatchesDescription": "Transactions that match your subscription rules",
@@ -148,8 +149,10 @@
           "note": "Note",
           "amount": "Amount",
           "transactionType": "Transaction Type",
-          "account": "Account"
+          "account": "Account",
+          "payee": "Payee"
         },
+        "payeePlaceholder": "Select a payee",
         "transactionTypeOptions": {
           "income": "Income",
           "expense": "Expense"

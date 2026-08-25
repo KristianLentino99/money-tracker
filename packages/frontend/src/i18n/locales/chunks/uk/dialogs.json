@@ -104,6 +104,8 @@
       "recordList": {},
       "form": {
         "payeeLabel": "Отримувач платежу",
+        "recurringPaymentLabel": "Регулярний платіж (необов'язково)",
+        "recurringPaymentPlaceholder": "Виберіть регулярний платіж",
         "destinationGroupLabel": "Куди йдуть гроші",
         "paymentTypeLabel": "Тип платежу",
         "noteLabel": "Примітка (необов'язково)",

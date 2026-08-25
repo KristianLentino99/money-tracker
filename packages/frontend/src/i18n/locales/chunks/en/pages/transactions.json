@@ -119,6 +119,17 @@
         "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
       }
     },
+    "bulkLinkSubscription": {
+      "button": "Link to recurring payment",
+      "title": "Link transactions to a recurring payment",
+      "description": "Link the selected transactions to one recurring payment. Income and expense transactions cannot be linked together.",
+      "selectLabel": "Recurring payment",
+      "selectPlaceholder": "Select a recurring payment",
+      "mixedTypes": "Income and expense transactions cannot be linked together. Select transactions of the same type.",
+      "confirmButton": "Link transactions",
+      "successMessage": "Selected transactions linked to the recurring payment",
+      "errorMessage": "Failed to link transactions to the recurring payment"
+    },
     "transactionGroups": {
       "bulkActions": {
         "createNewGroup": "Create new group",

@@ -118,6 +118,17 @@
         "sharedAccount": "Non selezionabile: questa transazione è su un conto condiviso con te e solo il proprietario può modificarla."
       }
     },
+    "bulkLinkSubscription": {
+      "button": "Collega a un pagamento ricorrente",
+      "title": "Collega le transazioni a un pagamento ricorrente",
+      "description": "Collega le transazioni selezionate a un unico pagamento ricorrente. Non puoi collegare insieme transazioni di entrata e di uscita.",
+      "selectLabel": "Pagamento ricorrente",
+      "selectPlaceholder": "Seleziona un pagamento ricorrente",
+      "mixedTypes": "Non puoi collegare insieme transazioni di entrata e di uscita. Seleziona transazioni dello stesso tipo.",
+      "confirmButton": "Collega transazioni",
+      "successMessage": "Transazioni selezionate collegate al pagamento ricorrente",
+      "errorMessage": "Impossibile collegare le transazioni al pagamento ricorrente"
+    },
     "transactionGroups": {
       "bulkActions": {
         "createNewGroup": "Crea nuovo gruppo",

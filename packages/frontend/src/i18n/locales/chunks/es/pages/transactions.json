@@ -118,6 +118,17 @@
         "sharedAccount": "No se puede seleccionar: esta transacción pertenece a una cuenta compartida contigo, y solo su propietario puede editarla."
       }
     },
+    "bulkLinkSubscription": {
+      "button": "Vincular a un pago recurrente",
+      "title": "Vincular transacciones a un pago recurrente",
+      "description": "Vincula las transacciones seleccionadas a un único pago recurrente. No se pueden vincular juntas transacciones de ingresos y gastos.",
+      "selectLabel": "Pago recurrente",
+      "selectPlaceholder": "Seleccionar un pago recurrente",
+      "mixedTypes": "No se pueden vincular juntas transacciones de ingresos y gastos. Seleccione transacciones del mismo tipo.",
+      "confirmButton": "Vincular transacciones",
+      "successMessage": "Transacciones seleccionadas vinculadas al pago recurrente",
+      "errorMessage": "No se pudieron vincular las transacciones al pago recurrente"
+    },
     "transactionGroups": {
       "bulkActions": {
         "createNewGroup": "Crear nuevo grupo",

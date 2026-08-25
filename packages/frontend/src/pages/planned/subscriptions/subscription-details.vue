@@ -18,6 +18,7 @@ import Button from '@/components/lib/ui/button/Button.vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/lib/ui/popover';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useNotificationCenter } from '@/components/notification-center';
+import PickTransactionDialog from '@/components/dialogs/pick-transaction-dialog.vue';
 import TransactionDetailsModal from '@/components/transactions-list/transaction-details-modal.vue';
 import { useManageTransactionDialog } from '@/components/transactions-list/use-manage-transaction-dialog';
 import TransactionRecord from '@/components/transactions-list/transaction-record.vue';
@@ -123,9 +124,11 @@ const isAutomationEditorOpen = ref(false);
 const isOrganizeEditorOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const isSuggestDialogOpen = ref(false);
+const isLinkTransactionDialogOpen = ref(false);
 const suggestedMatches = ref<TransactionModel[]>([]);
 const selectedSuggestionIds = ref<Set<string>>(new Set());
 const isSuggestLoading = ref(false);
+const isLinkTransactionLoading = ref(false);
 
 const invalidateSubscriptionQueries = useInvalidateSubscriptionQueries();
 
@@ -198,6 +201,26 @@ const handleLinkSelected = async () => {
     addErrorNotification(t('planned.subscriptions.linkError'));
   }
 };
+
+const handleLinkTransaction = async (tx: TransactionModel) => {
+  if (isLinkTransactionLoading.value) return;
+  isLinkTransactionLoading.value = true;
+  try {
+    await linkTransactionsToSubscription({
+      id: subscriptionId.value,
+      transactionIds: [tx.id],
+    });
+    invalidateQueries();
+    isLinkTransactionDialogOpen.value = false;
+    addSuccessNotification(t('planned.subscriptions.linkSuccess'));
+  } catch {
+    addErrorNotification(t('planned.subscriptions.linkError'));
+  } finally {
+    isLinkTransactionLoading.value = false;
+  }
+};
+
+const linkedTransactionIds = computed(() => subscription.value?.transactions?.map(({ id }) => id) ?? []);
 
 const hasMatchingRules = computed(() => {
   return (subscription.value?.matchingRules?.rules?.length ?? 0) > 0;
@@ -989,6 +1012,7 @@ async function openTransaction({ transactionId }: { transactionId: string }) {
 
     <LinkedTransactionsSection
       :subscription="subscription"
+      @link-transaction="isLinkTransactionDialogOpen = true"
       @suggest-matches="handleSuggestMatches"
       @open-automation="isAutomationEditorOpen = true"
     />
@@ -998,6 +1022,13 @@ async function openTransaction({ transactionId }: { transactionId: string }) {
     <EditScheduleDialog v-model:open="isScheduleEditorOpen" :subscription="subscription" />
     <EditAutomationDialog v-model:open="isAutomationEditorOpen" :subscription="subscription" />
     <EditOrganizeDialog v-model:open="isOrganizeEditorOpen" :subscription="subscription" />
+
+    <PickTransactionDialog
+      v-model:open="isLinkTransactionDialogOpen"
+      :transaction-type="subscription.transactionType"
+      :exclude-ids="linkedTransactionIds"
+      @select="(tx) => handleLinkTransaction(tx)"
+    />
 
     <!-- Delete Confirmation -->
     <ResponsiveAlertDialog

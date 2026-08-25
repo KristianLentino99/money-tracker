@@ -26,6 +26,7 @@
       "linkedTransactionsTitle": "Transazioni collegate",
       "noLinkedTransactions": "Nessuna transazione collegata ancora",
       "unlinkTransaction": "Scollega transazione",
+      "linkTransaction": "Collega transazione",
       "suggestMatches": "Suggerisci corrispondenze",
       "suggestMatchesTitle": "Corrispondenze suggerite",
       "suggestMatchesDescription": "Transazioni che corrispondono alle regole del tuo abbonamento",
@@ -148,8 +149,10 @@
           "note": "Nota",
           "amount": "Importo",
           "transactionType": "Tipo di transazione",
-          "account": "Conto"
+          "account": "Conto",
+          "payee": "Beneficiario"
         },
+        "payeePlaceholder": "Seleziona un beneficiario",
         "transactionTypeOptions": {
           "income": "Entrata",
           "expense": "Uscita"

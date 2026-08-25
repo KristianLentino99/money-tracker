@@ -5,6 +5,7 @@ import type { BulkTransactionActions } from '@/composable/use-bulk-transaction-a
 import AddToGroupDialog from './add-to-group-dialog.vue';
 import BulkEditDialog from './bulk-edit-dialog.vue';
 import CreateGroupDialog from './create-group-dialog.vue';
+import LinkToRecurringPaymentDialog from './link-to-recurring-payment-dialog.vue';
 
 const props = defineProps<{
   /** The shared bulk-operations state from `useBulkTransactionActions` — the toolbar that opens these dialogs must use the same instance. */
@@ -19,6 +20,11 @@ const {
   isCreateGroupDialogOpen,
   isAddToGroupDialogOpen,
   isBulkDeleteDialogOpen,
+  isLinkRecurringPaymentDialogOpen,
+  selectedTransactionType,
+  hasMixedTransactionTypes,
+  linkRecurringPaymentMutation,
+  handleLinkToRecurringPayment,
   bulkUpdateMutation,
   bulkDeleteMutation,
   handleBulkApply,
@@ -56,4 +62,13 @@ const {
     <template #title>{{ $t('transactions.bulkDelete.confirmTitle', { count: selectedCount }) }}</template>
     <template #description>{{ $t('transactions.bulkDelete.confirmDescription') }}</template>
   </ResponsiveAlertDialog>
+
+  <LinkToRecurringPaymentDialog
+    v-model:open="isLinkRecurringPaymentDialogOpen"
+    :transaction-count="selectedCount"
+    :transaction-type="selectedTransactionType"
+    :has-mixed-transaction-types="hasMixedTransactionTypes"
+    :is-loading="linkRecurringPaymentMutation.isPending.value"
+    @link="(subscriptionId) => handleLinkToRecurringPayment({ subscriptionId })"
+  />
 </template>

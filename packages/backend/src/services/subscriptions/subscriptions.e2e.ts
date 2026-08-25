@@ -1031,6 +1031,74 @@ describe('Subscriptions', () => {
   });
 
   describe('Auto-matching on transaction creation', () => {
+    it('matches and suggests transactions by payee rule', async () => {
+      const [account, matchingPayee, otherPayee] = await Promise.all([
+        helpers.createAccount({ raw: true }),
+        helpers.createPayee({ payload: helpers.buildPayeePayload({ name: 'Netflix' }), raw: true }),
+        helpers.createPayee({ payload: helpers.buildPayeePayload({ name: 'Spotify' }), raw: true }),
+      ]);
+      const recentTime = subMonths(new Date(), 6).toISOString();
+
+      const [historicalTransaction] = await helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 1599,
+          note: 'Card payment',
+          payeeId: matchingPayee.id,
+          transactionType: TRANSACTION_TYPES.expense,
+          time: recentTime,
+        }),
+        raw: true,
+      });
+
+      const sub = await helpers.createSubscription({
+        name: 'Netflix',
+        expectedAmount: 15.99,
+        expectedCurrencyCode: 'USD',
+        frequency: SUBSCRIPTION_FREQUENCIES.monthly,
+        startDate: '2025-01-01',
+        raw: true,
+      });
+
+      await helpers.updateSubscription({
+        id: sub.id,
+        matchingRules: {
+          rules: [{ field: 'payeeId', operator: 'equals', value: matchingPayee.id }],
+        },
+        raw: true,
+      });
+
+      const suggestions = await helpers.getSuggestedMatches({ id: sub.id, raw: true });
+      expect(suggestions.map((transaction: { id: string }) => transaction.id)).toContain(historicalTransaction.id);
+
+      const [matchedTransaction] = await helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 1599,
+          note: 'Different note',
+          payeeId: matchingPayee.id,
+          transactionType: TRANSACTION_TYPES.expense,
+        }),
+        raw: true,
+      });
+
+      const [unmatchedTransaction] = await helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 1599,
+          note: 'Netflix payment',
+          payeeId: otherPayee.id,
+          transactionType: TRANSACTION_TYPES.expense,
+        }),
+        raw: true,
+      });
+
+      const detail = await helpers.getSubscriptionById({ id: sub.id, raw: true });
+      const linkedIds = detail.transactions.map((transaction: { id: string }) => transaction.id);
+      expect(linkedIds).toContain(matchedTransaction.id);
+      expect(linkedIds).not.toContain(unmatchedTransaction.id);
+    });
+
     it('auto-matches a new transaction to subscription via rules', async () => {
       const account = await helpers.createAccount({ raw: true });
 

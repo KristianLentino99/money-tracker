@@ -117,6 +117,7 @@ const {
   isCreateGroupDialogOpen,
   isAddToGroupDialogOpen,
   isBulkDeleteDialogOpen,
+  isLinkRecurringPaymentDialogOpen,
   isBulkLoading,
 } = bulkActions;
 
@@ -174,6 +175,7 @@ watchEffect(() => {
       @cancel="clearSelection"
       @edit="isBulkEditDialogOpen = true"
       @delete="isBulkDeleteDialogOpen = true"
+      @link-recurring-payment="isLinkRecurringPaymentDialogOpen = true"
       @create-group="isCreateGroupDialogOpen = true"
       @add-to-group="isAddToGroupDialogOpen = true"
       @select-all="handleSelectAllToggle"

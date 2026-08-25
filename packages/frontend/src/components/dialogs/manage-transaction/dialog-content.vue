@@ -9,6 +9,7 @@ import { captureException } from '@/lib/sentry';
 import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import CategorySelectField from '@/components/fields/category-select-field.vue';
 import PayeeSelectField from '@/components/fields/payee-select-field.vue';
+import RecurringPaymentSelectField from '@/components/fields/recurring-payment-select-field.vue';
 import DateField from '@/components/fields/date-field.vue';
 import InputField from '@/components/fields/input-field.vue';
 import SelectField from '@/components/fields/select-field.vue';
@@ -83,6 +84,7 @@ import { usePayeeTagAutoApply } from '@/composable/use-payee-tag-auto-apply';
 
 import {
   canDeleteTransaction,
+  getTxTypeFromFormType,
   isTxEditableAsManual,
   prepopulateForm,
   resolveInitialTransactionAccount,
@@ -180,6 +182,7 @@ const form = ref<UI_FORM_STRUCT>({
   refundsTx: undefined,
   tagIds: [],
   payeeId: null,
+  recurringPaymentId: null,
   categoryUserTouched: false,
   isForecastOnly: false,
   originalAmount: null,
@@ -400,6 +403,13 @@ const isFormFieldsDisabled = computed(() => isLoading.value || !isInitialRefunds
 
 const currentTxType = computed(() => form.value.type);
 const isTransferTx = computed(() => currentTxType.value === FORM_TYPES.transfer);
+const recurringPaymentTransactionType = computed(() =>
+  isTransferTx.value ? undefined : getTxTypeFromFormType(currentTxType.value),
+);
+
+watch(currentTxType, () => {
+  form.value.recurringPaymentId = null;
+});
 
 // The Loan pill only narrows the picker to loan accounts; the backend stamps transfer_to_loan from the destination's accountCategory.
 const isLoanDestination = computed(() => isTransferTx.value && transferDestinationType.value === 'loan');
@@ -1417,6 +1427,15 @@ onUnmounted(() => {
                   :account-id="resolvedAccountId"
                   :owner-scoped="isAccountSharedWithCaller"
                   @payee-selected="handlePayeeSelected"
+                />
+              </form-row>
+              <form-row>
+                <RecurringPaymentSelectField
+                  v-model="form.recurringPaymentId"
+                  :transaction-type="recurringPaymentTransactionType"
+                  :label="$t('dialogs.manageTransaction.form.recurringPaymentLabel')"
+                  :placeholder="$t('dialogs.manageTransaction.form.recurringPaymentPlaceholder')"
+                  :disabled="isFormFieldsDisabled"
                 />
               </form-row>
             </template>

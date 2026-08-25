@@ -10,6 +10,7 @@ import {
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import {
   GroupIcon,
+  LinkIcon,
   ListOrderedIcon,
   PencilIcon,
   PlusIcon,
@@ -33,6 +34,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   cancel: [];
   edit: [];
+  'link-recurring-payment': [];
   delete: [];
   'create-group': [];
   'add-to-group': [];
@@ -89,6 +91,10 @@ const handleEdit = () => {
             <PencilIcon class="mr-2 size-4" />
             {{ t('transactions.bulkEdit.editButton') }}
           </DropdownMenuItem>
+          <DropdownMenuItem @select="emit('link-recurring-payment')">
+            <LinkIcon class="mr-2 size-4" />
+            {{ t('transactions.bulkLinkSubscription.button') }}
+          </DropdownMenuItem>
           <DropdownMenuItem :disabled="selectedCount < 2" @select="handleCreateGroup">
             <PlusIcon class="mr-2 size-4" />
             {{ t('transactions.transactionGroups.bulkActions.createNewGroup') }}
@@ -110,6 +116,16 @@ const handleEdit = () => {
       <Button variant="outline" size="sm" :disabled="!hasSelection || isLoading" @click="emit('edit')">
         <PencilIcon class="size-4" />
         {{ t('transactions.bulkEdit.editButton') }}
+      </Button>
+
+      <Button
+        variant="outline"
+        size="sm"
+        :disabled="!hasSelection || isLoading"
+        @click="emit('link-recurring-payment')"
+      >
+        <LinkIcon class="size-4" />
+        {{ t('transactions.bulkLinkSubscription.button') }}
       </Button>
 
       <DropdownMenu>

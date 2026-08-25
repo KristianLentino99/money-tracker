@@ -36,6 +36,21 @@
             </Button>
           </DesktopOnlyTooltip>
 
+          <DesktopOnlyTooltip :content="$t('transactions.bulkLinkSubscription.button')" :disabled="!isMobileMode">
+            <Button
+              variant="outline"
+              :size="isMobileMode ? 'icon-sm' : 'sm'"
+              :disabled="isBulkLoading"
+              :aria-label="isMobileMode ? $t('transactions.bulkLinkSubscription.button') : undefined"
+              @click="isLinkRecurringPaymentDialogOpen = true"
+            >
+              <LinkIcon class="size-4" />
+              <template v-if="!isMobileMode">
+                {{ $t('transactions.bulkLinkSubscription.button') }}
+              </template>
+            </Button>
+          </DesktopOnlyTooltip>
+
           <DropdownMenu>
             <!-- Tooltip wraps the trigger (not nested inside) – reka-ui's as-child
                  can't merge a click handler through the tooltip's fragment root. -->
@@ -262,6 +277,7 @@ import {
   ArrowUpIcon,
   GroupIcon,
   ListPlusIcon,
+  LinkIcon,
   PencilIcon,
   PlusIcon,
   SearchXIcon,
@@ -348,6 +364,7 @@ const {
   isCreateGroupDialogOpen,
   isAddToGroupDialogOpen,
   isBulkDeleteDialogOpen,
+  isLinkRecurringPaymentDialogOpen,
   isBulkLoading,
 } = bulkActions;
 

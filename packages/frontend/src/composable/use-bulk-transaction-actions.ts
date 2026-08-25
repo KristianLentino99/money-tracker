@@ -1,6 +1,13 @@
+import { linkTransactionsToSubscription } from '@/api/subscriptions';
+import { VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
+import { useNotificationCenter } from '@/components/notification-center';
 import type { BulkEditFormValues } from '@/components/transactions-list/bulk-edit-dialog.vue';
+import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
+import { i18n } from '@/i18n';
+import { ApiErrorResponseError } from '@/js/errors';
 import { useAccountsStore } from '@/stores';
-import { ACCOUNT_TYPES, type AccountModel, type TransactionModel } from '@bt/shared/types';
+import { ACCOUNT_TYPES, TRANSACTION_TYPES, type AccountModel, type TransactionModel } from '@bt/shared/types';
+import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -32,8 +39,11 @@ export function useBulkTransactionActions({
   getTransactions: () => TransactionModel[];
   getScopeKey?: () => string | undefined;
 }) {
+  const queryClient = useQueryClient();
   const { accountsRecord } = storeToRefs(useAccountsStore());
   const { isBulkSelectable, getUnselectableReason } = useBulkSelectability();
+  const { addErrorNotification, addSuccessNotification } = useNotificationCenter();
+  const invalidateSubscriptionQueries = useInvalidateSubscriptionQueries();
 
   const selection = useTransactionSelection({
     getTransactions,
@@ -70,6 +80,21 @@ export function useBulkTransactionActions({
   const isCreateGroupDialogOpen = ref(false);
   const isAddToGroupDialogOpen = ref(false);
   const isBulkDeleteDialogOpen = ref(false);
+  const isLinkRecurringPaymentDialogOpen = ref(false);
+
+  const selectedTransactions = computed(() => {
+    const selectedIds = new Set(selection.getSelectedTransactionIds());
+    return getTransactions().filter((tx) => selectedIds.has(tx.id));
+  });
+
+  const selectedTransactionTypes = computed(
+    () => new Set(selectedTransactions.value.map((transaction) => transaction.transactionType)),
+  );
+  const selectedTransactionType = computed<TRANSACTION_TYPES | null>(() => {
+    if (selectedTransactionTypes.value.size !== 1) return null;
+    return [...selectedTransactionTypes.value][0] ?? null;
+  });
+  const hasMixedTransactionTypes = computed(() => selectedTransactionTypes.value.size > 1);
 
   const bulkUpdateMutation = useBulkUpdateCategory({
     onSuccess: () => {
@@ -85,7 +110,33 @@ export function useBulkTransactionActions({
     },
   });
 
-  const isBulkLoading = computed(() => bulkUpdateMutation.isPending.value || bulkDeleteMutation.isPending.value);
+  const linkRecurringPaymentMutation = useMutation({
+    mutationFn: ({ subscriptionId, transactionIds }: { subscriptionId: string; transactionIds: string[] }) =>
+      linkTransactionsToSubscription({ id: subscriptionId, transactionIds }),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
+      invalidateSubscriptionQueries();
+      selection.clearSelection();
+      isLinkRecurringPaymentDialogOpen.value = false;
+      addSuccessNotification(
+        i18n.global.t('transactions.bulkLinkSubscription.successMessage', { count: result.linked }),
+      );
+    },
+    onError: (error) => {
+      if (error instanceof ApiErrorResponseError) {
+        addErrorNotification(error.data.message ?? i18n.global.t('transactions.bulkLinkSubscription.errorMessage'));
+      } else {
+        addErrorNotification(i18n.global.t('transactions.bulkLinkSubscription.errorMessage'));
+      }
+    },
+  });
+
+  const isBulkLoading = computed(
+    () =>
+      bulkUpdateMutation.isPending.value ||
+      bulkDeleteMutation.isPending.value ||
+      linkRecurringPaymentMutation.isPending.value,
+  );
 
   const handleBulkApply = (values: BulkEditFormValues) => {
     bulkUpdateMutation.mutate({
@@ -101,6 +152,14 @@ export function useBulkTransactionActions({
     bulkDeleteMutation.mutate({ transactionIds: selection.getSelectedTransactionIds() });
   };
 
+  const handleLinkToRecurringPayment = ({ subscriptionId }: { subscriptionId: string }) => {
+    if (hasMixedTransactionTypes.value) return;
+    linkRecurringPaymentMutation.mutate({
+      subscriptionId,
+      transactionIds: selection.getSelectedTransactionIds(),
+    });
+  };
+
   return {
     ...selection,
     getUnselectableReason,
@@ -111,11 +170,16 @@ export function useBulkTransactionActions({
     isCreateGroupDialogOpen,
     isAddToGroupDialogOpen,
     isBulkDeleteDialogOpen,
+    isLinkRecurringPaymentDialogOpen,
+    selectedTransactionType,
+    hasMixedTransactionTypes,
     bulkUpdateMutation,
     bulkDeleteMutation,
+    linkRecurringPaymentMutation,
     isBulkLoading,
     handleBulkApply,
     handleBulkDelete,
+    handleLinkToRecurringPayment,
   };
 }
 

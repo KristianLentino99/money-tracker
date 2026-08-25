@@ -27,6 +27,7 @@ type LinkedTransaction = NonNullable<SubscriptionDetail['transactions']>[number]
 const props = defineProps<{ subscription: SubscriptionDetail }>();
 
 const emit = defineEmits<{
+  'link-transaction': [];
   'suggest-matches': [];
   'open-automation': [];
 }>();
@@ -192,17 +193,30 @@ const getMatchSourceDotClass = ({ source }: { source: string }): string =>
           {{ summary.payments.length }}
         </span>
       </h2>
-      <DesktopOnlyTooltip :content="$t('planned.subscriptions.suggestMatches')">
-        <Button
-          variant="outline"
-          size="sm"
-          :aria-label="$t('planned.subscriptions.suggestMatches')"
-          @click="emit('suggest-matches')"
-        >
-          <SearchIcon class="size-4" />
-          <span class="hidden @lg/linked:inline">{{ $t('planned.subscriptions.suggestMatches') }}</span>
-        </Button>
-      </DesktopOnlyTooltip>
+      <div class="flex items-center gap-2">
+        <DesktopOnlyTooltip :content="$t('planned.subscriptions.linkTransaction')">
+          <Button
+            variant="outline"
+            size="sm"
+            :aria-label="$t('planned.subscriptions.linkTransaction')"
+            @click="emit('link-transaction')"
+          >
+            <LinkIcon class="size-4" />
+            <span class="hidden @lg/linked:inline">{{ $t('planned.subscriptions.linkTransaction') }}</span>
+          </Button>
+        </DesktopOnlyTooltip>
+        <DesktopOnlyTooltip :content="$t('planned.subscriptions.suggestMatches')">
+          <Button
+            variant="outline"
+            size="sm"
+            :aria-label="$t('planned.subscriptions.suggestMatches')"
+            @click="emit('suggest-matches')"
+          >
+            <SearchIcon class="size-4" />
+            <span class="hidden @lg/linked:inline">{{ $t('planned.subscriptions.suggestMatches') }}</span>
+          </Button>
+        </DesktopOnlyTooltip>
+      </div>
     </div>
 
     <template v-if="summary.payments.length">

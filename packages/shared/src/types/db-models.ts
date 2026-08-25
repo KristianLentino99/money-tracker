@@ -609,7 +609,7 @@ export interface NotificationModel {
  * Rules are evaluated with AND logic (all must pass).
  */
 export interface SubscriptionMatchingRule {
-  field: 'note' | 'amount' | 'transactionType' | 'accountId';
+  field: 'note' | 'amount' | 'transactionType' | 'accountId' | 'payeeId';
   operator: 'contains_any' | 'between' | 'equals';
   value: string[] | { min: number; max: number } | string | number;
   /** Currency code for amount rules (enables cross-currency matching) */

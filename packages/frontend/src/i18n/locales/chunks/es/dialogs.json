@@ -104,6 +104,8 @@
       "recordList": {},
       "form": {
         "payeeLabel": "Beneficiario",
+        "recurringPaymentLabel": "Pago recurrente (opcional)",
+        "recurringPaymentPlaceholder": "Seleccionar un pago recurrente",
         "destinationGroupLabel": "Adónde va el dinero",
         "paymentTypeLabel": "Tipo de pago",
         "noteLabel": "Nota (opcional)",

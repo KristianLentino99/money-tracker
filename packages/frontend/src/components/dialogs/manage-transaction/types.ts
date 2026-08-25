@@ -52,6 +52,8 @@ export interface UI_FORM_STRUCT {
   tagIds?: string[];
   /** Linked Payee id; null = no Payee set. Manual UI assignment also locks the row server-side. */
   payeeId?: string | null;
+  /** Recurring payment to link after this transaction is saved. */
+  recurringPaymentId?: string | null;
   /** True when the form initialized from an existing tx whose category was already user-touched. Used to gate the Payee auto-fill so we don't clobber an explicit category. */
   categoryUserTouched?: boolean;
   /** Entry for money that hasn't moved yet: no balance impact until it's confirmed. */

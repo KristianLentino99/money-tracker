@@ -147,6 +147,12 @@ function buildWhereFromRules({ rules }: { rules: SubscriptionMatchingRule[] }): 
         }
         break;
       }
+      case 'payeeId': {
+        if (rule.operator === 'equals') {
+          sqlConditions.push({ payeeId: rule.value as string });
+        }
+        break;
+      }
     }
   }
 
