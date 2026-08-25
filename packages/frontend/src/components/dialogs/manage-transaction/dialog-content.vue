@@ -65,6 +65,7 @@ import TemplatesDrawer from './components/templates/templates-drawer.vue';
 import TemplatesPanel from './components/templates/templates-panel.vue';
 import { useAccountAccess } from '@/composable/use-account-access';
 import { useAccountDropdownPrefs } from '@/composable/use-account-dropdown-prefs';
+import { ROUTES_NAMES } from '@/routes/constants';
 import { useAccountCategories } from '@/composable/data-queries/categories';
 import { useLoans } from '@/composable/data-queries/loans';
 import { usePortfolios } from '@/composable/data-queries/portfolios';
@@ -80,7 +81,12 @@ import type { TransferDestinationType } from './composables/transfer-form';
 import { useTransactionTemplating } from './composables/use-transaction-templating';
 import { usePayeeTagAutoApply } from '@/composable/use-payee-tag-auto-apply';
 
-import { canDeleteTransaction, isTxEditableAsManual, prepopulateForm } from './helpers';
+import {
+  canDeleteTransaction,
+  isTxEditableAsManual,
+  prepopulateForm,
+  resolveInitialTransactionAccount,
+} from './helpers';
 import { FORM_TYPES, UI_FORM_STRUCT } from './types';
 import { canSuggestOriginalAmount, resolveSuggestedOriginalAmount } from './utils/suggest-original-amount';
 
@@ -131,6 +137,12 @@ const {
   txTargetableSourceAccountsActiveFirst,
   plannedTargetableAccountsActiveFirst,
 } = storeToRefs(useAccountsStore());
+
+const currentAccountFromRoute = computed(() => {
+  if (route.name !== ROUTES_NAMES.account) return null;
+  const accountId = route.params.id;
+  return typeof accountId === 'string' ? (accountsRecord.value[accountId] ?? null) : null;
+});
 
 // Vehicle balance-adjustments are reused `transfer_out_wallet` rows on a
 // vehicle-category account. Editing them in this generic dialog would let the
@@ -949,7 +961,10 @@ const prepopulateIfReady = () => {
   // latching on that empty list leaves the account permanently unresolved.
   if (!isAccountsFetched.value) return;
   if (!transaction.value) {
-    form.value.account = resolveDefaultAccount({ accounts: txTargetableSourceAccountsActiveFirst.value });
+    form.value.account = resolveInitialTransactionAccount({
+      currentAccount: currentAccountFromRoute.value,
+      defaultAccount: resolveDefaultAccount({ accounts: txTargetableSourceAccountsActiveFirst.value }),
+    });
     hasPrepopulated.value = true;
     return;
   }

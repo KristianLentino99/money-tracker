@@ -30,6 +30,7 @@ import {
   isTxEditableAsManual,
   prepopulateForm,
   resolveFormIsPlanned,
+  resolveInitialTransactionAccount,
   resolveOriginalCurrencyPair,
 } from './helpers';
 import { FORM_TYPES, type UI_FORM_STRUCT } from './types';
@@ -85,6 +86,31 @@ describe('components/modals/modify-record/helpers', () => {
       [FORM_TYPES.transfer, TRANSACTION_TYPES.expense],
     ])('%s to be %s', (value, expected) => {
       expect(getTxTypeFromFormType(value)).toBe(expected);
+    });
+  });
+
+  describe('resolveInitialTransactionAccount', () => {
+    it('prefers the account shown on the current account page over the saved default', () => {
+      const currentAccount = getUahAccount() as AccountModel;
+      const defaultAccount = getUah2Account() as AccountModel;
+
+      expect(
+        resolveInitialTransactionAccount({
+          currentAccount,
+          defaultAccount,
+        }),
+      ).toBe(currentAccount);
+    });
+
+    it('uses the saved default when no account page is active', () => {
+      const defaultAccount = getUah2Account() as AccountModel;
+
+      expect(
+        resolveInitialTransactionAccount({
+          currentAccount: null,
+          defaultAccount,
+        }),
+      ).toBe(defaultAccount);
     });
   });
 
