@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - id: prepare-env
         uses: ./.github/actions/prepare-local-env
       - name: Install dependencies
@@ -41,7 +41,7 @@ jobs:
       backend-only: ${{ steps.detect.outputs.backend_only }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Fetch all history for file changes
       - id: detect
@@ -61,7 +61,7 @@ jobs:
       - name: Skip – no frontend changes
         if: needs.detect-changes.outputs.backend-only == 'true'
         run: echo "No frontend changes detected. Skipping."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: needs.detect-changes.outputs.backend-only != 'true'
       - uses: ./.github/actions/prepare-local-env
         if: needs.detect-changes.outputs.backend-only != 'true'
@@ -83,7 +83,7 @@ jobs:
           large-packages: true
           docker-images: true
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - id: frontend-docker-build
         uses: ./.github/actions/frontend-docker-build
       - name: Image digest
@@ -100,7 +100,7 @@ jobs:
       - name: Skip – no backend changes
         if: needs.detect-changes.outputs.frontend-only == 'true'
         run: echo "No backend changes detected. Skipping."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: needs.detect-changes.outputs.frontend-only != 'true'
       - uses: ./.github/actions/prepare-local-env
         if: needs.detect-changes.outputs.frontend-only != 'true'
@@ -138,7 +138,7 @@ jobs:
       # behind a green check. Only test:unit reads them; lint and knip do not.
       - name: Cache MS Money fixtures
         if: needs.detect-changes.outputs.frontend-only != 'true' && matrix.task == 'test:unit'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: packages/backend/src/tests/fixtures/ms-money-import
           key: ms-money-fixtures-${{ hashFiles('packages/backend/src/tests/fixtures/ms-money-fixtures.ts') }}
@@ -176,7 +176,7 @@ jobs:
       - name: Skip – no backend changes
         if: needs.detect-changes.outputs.frontend-only == 'true'
         run: echo "No backend changes detected. Skipping."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: needs.detect-changes.outputs.frontend-only != 'true'
       - uses: ./.github/actions/prepare-local-env
         if: needs.detect-changes.outputs.frontend-only != 'true'
@@ -214,7 +214,7 @@ jobs:
       # image build context is the repo root, so fixtures fetched here get copied in.
       - name: Cache MS Money fixtures
         if: needs.detect-changes.outputs.frontend-only != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: packages/backend/src/tests/fixtures/ms-money-import
           key: ms-money-fixtures-${{ hashFiles('packages/backend/src/tests/fixtures/ms-money-fixtures.ts') }}
@@ -272,7 +272,7 @@ jobs:
           large-packages: true
           docker-images: true
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - id: backend-docker-build
         uses: ./.github/actions/backend-docker-build
       - name: Image digest

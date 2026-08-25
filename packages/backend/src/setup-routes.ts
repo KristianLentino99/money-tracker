@@ -73,7 +73,7 @@ export function setupRoutes(app: Express) {
   // registration with 401 – even when allowUnauthenticatedClientRegistration is true.
   // MCP clients (e.g. Claude.ai) often omit this field, so we default it here.
   //
-  // We can't patch the stream in-place (Node 23's Fetch API reads the internal
+  // We can't patch the stream in-place (Node 25's Fetch API reads the internal
   // buffer directly), so we proxy the request through a local HTTP call with the
   // modified body.
   app.post(`${API_PREFIX}/auth/oauth2/register`, (req: Request, res: Response, next) => {
