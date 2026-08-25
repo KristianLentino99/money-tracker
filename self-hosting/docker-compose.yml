@@ -105,6 +105,13 @@ services:
       POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
       POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
       LOGO_DEV_TOKEN: ${VITE_LOGO_DEV_TOKEN:-}
+      PWA_ENABLED: '${PWA_ENABLED:-true}'
+      PWA_APP_NAME: '${PWA_APP_NAME:-MoneyMatter}'
+      PWA_SHORT_NAME: '${PWA_SHORT_NAME:-MoneyMatter}'
+      PWA_THEME_COLOR: '${PWA_THEME_COLOR:-#7355be}'
+      PWA_BACKGROUND_COLOR: '${PWA_BACKGROUND_COLOR:-#ffffff}'
+      PWA_ICON_192: '${PWA_ICON_192:-/web-app-manifest-192x192.png}'
+      PWA_ICON_512: '${PWA_ICON_512:-/web-app-manifest-512x512.png}'
       SENTRY_DSN: ${VITE_SENTRY_DSN:-}
       SENTRY_RELEASE: ${VITE_SENTRY_RELEASE:-}
       CSP_EXTRA_CONNECT: ${CSP_EXTRA_CONNECT:-}

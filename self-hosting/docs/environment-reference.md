@@ -71,6 +71,10 @@ Interpolated into the frontend container's `environment:` block. Change and
 | `VITE_SENTRY_DSN`                            | Frontend error tracking (Sentry)                                       |
 | `VITE_SENTRY_RELEASE`                        | Release tag Sentry events report — also a build arg, see below         |
 | `VITE_LOGO_DEV_TOKEN`                        | Brand logos for subs, banks, tickers (logo.dev)                        |
+| `PWA_ENABLED`                                | Enable install/offline shell support; `false` unregisters the worker   |
+| `PWA_APP_NAME`, `PWA_SHORT_NAME`             | Install name and compact Home Screen label                             |
+| `PWA_THEME_COLOR`, `PWA_BACKGROUND_COLOR`    | Six-digit hex colors used by the manifest and browser UI               |
+| `PWA_ICON_192`, `PWA_ICON_512`               | Same-origin absolute paths for install icons                           |
 | `MCP_BASE_URL`                               | Backend origin advertised to MCP clients — required for MCP, see below |
 | `API_HTTP`, `API_VER`                        | Point the SPA at a separate API origin (leave unset for same-origin)   |
 | `CSP_EXTRA_CONNECT`, `CSP_EXTRA_FORM_ACTION` | Extra CSP allow-list hosts (default to `API_HTTP`)                     |
@@ -98,6 +102,12 @@ The `VITE_` prefix on the frontend keys above is historical: these are read from
 the container's env at start, not inlined at build time. `docker-compose.yml`
 maps them onto the unprefixed names the image expects (`VITE_POSTHOG_KEY` →
 `POSTHOG_KEY`, and so on).
+
+PWA branding is rendered into `site.webmanifest` when the frontend container
+starts, so it can be changed without rebuilding the image. `PWA_ENABLED=false`
+switches the manifest to browser display mode; the SPA also unregisters the
+MoneyMatter worker and deletes only cache names owned by MoneyMatter. Icon paths
+must begin with `/` and must resolve on the same frontend origin.
 
 ## Build-from-source only
 

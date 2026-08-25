@@ -20,6 +20,13 @@ interface AppRuntimeConfig {
   POSTHOG_KEY?: string;
   POSTHOG_HOST?: string;
   LOGO_DEV_TOKEN?: string;
+  PWA_ENABLED?: string;
+  PWA_APP_NAME?: string;
+  PWA_SHORT_NAME?: string;
+  PWA_THEME_COLOR?: string;
+  PWA_BACKGROUND_COLOR?: string;
+  PWA_ICON_192?: string;
+  PWA_ICON_512?: string;
   SENTRY_DSN?: string;
   SENTRY_RELEASE?: string;
 }
@@ -58,6 +65,21 @@ export const config = {
   },
   get logoDevToken(): string | undefined {
     return runtime().LOGO_DEV_TOKEN ?? import.meta.env.VITE_LOGO_DEV_TOKEN;
+  },
+  get pwaEnabled(): boolean {
+    return runtime().PWA_ENABLED !== 'false';
+  },
+  get pwaAppName(): string {
+    return runtime().PWA_APP_NAME || 'MoneyMatter';
+  },
+  get pwaShortName(): string {
+    return runtime().PWA_SHORT_NAME || 'MoneyMatter';
+  },
+  get pwaThemeColor(): string {
+    return runtime().PWA_THEME_COLOR || '#7355be';
+  },
+  get pwaBackgroundColor(): string {
+    return runtime().PWA_BACKGROUND_COLOR || '#ffffff';
   },
   get sentryDsn(): string | undefined {
     return runtime().SENTRY_DSN ?? import.meta.env.VITE_SENTRY_DSN;

@@ -6,7 +6,7 @@
     leave-to-class="opacity-0 translate-y-4"
   >
     <div
-      v-if="isStale"
+      v-if="isUpdateAvailable"
       role="status"
       aria-live="polite"
       class="bg-popover text-popover-foreground xs:left-auto xs:w-90 fixed inset-x-4 bottom-4 z-(--z-notifications) flex items-start gap-3 rounded-lg border p-4 shadow-lg"
@@ -39,9 +39,9 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/lib/ui/button';
-import { useVersionCheck } from '@/composable/use-version-check';
+import { useAppUpdate } from '@/composable/use-app-update';
 import { RefreshCwIcon } from '@lucide/vue';
 
-const { isStale } = useVersionCheck();
-const reload = () => window.location.reload();
+const { applyUpdate, isUpdateAvailable } = useAppUpdate();
+const reload = () => void applyUpdate();
 </script>
