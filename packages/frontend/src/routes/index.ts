@@ -276,6 +276,23 @@ const routes: RouteRecordRaw[] = [
         meta: { i18nChunks: ['pages/automations'] as I18nChunkName[] },
       },
       {
+        path: '/more',
+        name: ROUTES_NAMES.more,
+        component: () => import('@/pages/mobile/more-hub.vue'),
+        meta: {
+          i18nChunks: [
+            'layout',
+            'pages/analytics',
+            'pages/automations',
+            'pages/optimizations',
+            'pages/planned',
+            'pages/shared-with-me',
+            'pages/transactions',
+            'settings/index',
+          ] as I18nChunkName[],
+        },
+      },
+      {
         path: '/settings',
         name: ROUTES_NAMES.settings,
         component: () => import('@/pages/settings/settings.vue'),

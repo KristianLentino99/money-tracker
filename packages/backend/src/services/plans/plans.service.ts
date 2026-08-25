@@ -499,7 +499,7 @@ const performAllocationMutation = withTransaction(async (mutation: AllocationMut
 const ensureCategoryInPlan = async ({ planId, categoryId }: { planId: string; categoryId: string }) => {
   const membership = await PlanCategoryMemberships.findOne({ where: { planId, categoryId, active: true } });
   if (!membership) throw new ValidationError({ message: t({ key: 'plans.categoryNotInPlan' }) });
-  const category = await Categories.findByPk(categoryId, { attributes: ['id', 'parentId', 'key'] });
+  const category = await Categories.findByPk(categoryId, { attributes: ['id', 'userId', 'parentId', 'key'] });
   if (category) {
     const categories = await Categories.findAll({
       where: { userId: category.userId },

@@ -10,4 +10,5 @@ export const shareableResourceTypeEnum = z.enum([
   RESOURCE_TYPES.account,
   RESOURCE_TYPES.household,
   RESOURCE_TYPES.budget,
+  RESOURCE_TYPES.plan,
 ] as const);

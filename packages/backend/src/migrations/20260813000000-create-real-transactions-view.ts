@@ -1,11 +1,14 @@
 import { QueryInterface } from 'sequelize';
 
-import { createRealTransactionsViewSql, dropRealTransactionsViewSql } from './utils/real-transactions-view';
+import {
+  createLegacyRealTransactionsViewSql,
+  dropRealTransactionsViewSql,
+} from './utils/real-transactions-view';
 
 /**
  * Planned-free view of "Transactions" for raw SQL, which no TS-level boundary can police.
  * Postgres pins the view's column list at creation, so migrations touching "Transactions"
- * must maintain it: one adding a column re-runs `createRealTransactionsViewSql` at the end
+ * must maintain it: one adding a column re-runs the appropriate view creation SQL at the end
  * or the column is absent here, and ALTER COLUMN ... TYPE / DROP COLUMN are refused outright
  * until `dropRealTransactionsViewSql` runs first. Both live in ./utils/real-transactions-view,
  * and models/transactions-query/real-transactions-view-columns.e2e.ts fails when an added
@@ -13,7 +16,7 @@ import { createRealTransactionsViewSql, dropRealTransactionsViewSql } from './ut
  */
 module.exports = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.sequelize.query(createRealTransactionsViewSql);
+    await queryInterface.sequelize.query(createLegacyRealTransactionsViewSql);
   },
 
   down: async (queryInterface: QueryInterface): Promise<void> => {

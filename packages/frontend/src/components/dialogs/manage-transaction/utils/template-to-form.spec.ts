@@ -74,7 +74,7 @@ const createCurrentForm = (overrides: Partial<UI_FORM_STRUCT> = {}): UI_FORM_STR
   tagIds: [],
   payeeId: null,
   categoryUserTouched: false,
-  isPlanned: false,
+  isForecastOnly: false,
   originalAmount: null,
   originalCurrency: null,
   ...overrides,
@@ -104,7 +104,7 @@ describe('templateToForm', () => {
     expect(form.payeeId).toBe(PAYEE_ID);
     expect(form.paymentType?.value).toBe(PAYMENT_TYPES.cash);
     expect(form.note).toBe('Latte');
-    expect(form.isPlanned).toBe(false);
+    expect(form.isForecastOnly).toBe(false);
     expect(form.toAccount).toBeNull();
     expect(form.toPortfolio).toBeNull();
     expect(form.targetAmount).toBeNull();
@@ -259,11 +259,11 @@ describe('templateToForm', () => {
   it('keeps the planned flag of the current form', () => {
     const { form } = templateToForm({
       template: createTemplate(),
-      current: createCurrentForm({ isPlanned: true }),
+      current: createCurrentForm({ isForecastOnly: true }),
       sources: createSources(),
     });
 
-    expect(form.isPlanned).toBe(true);
+    expect(form.isForecastOnly).toBe(true);
   });
 
   it('does not mutate the current form', () => {

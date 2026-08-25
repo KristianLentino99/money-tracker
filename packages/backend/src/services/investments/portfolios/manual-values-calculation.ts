@@ -1,13 +1,13 @@
 import { MANUAL_PORTFOLIO_TRANSACTION_CATEGORY } from '@bt/shared/types/investments';
 import Big from 'big.js';
 
-export type ManualPerformanceActivity = {
+type ManualPerformanceActivity = {
   date: string;
   amount: Big;
   category: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
 };
 
-export type ManualValuationSnapshot = {
+type ManualValuationSnapshot = {
   date: string;
   value: Big;
 };

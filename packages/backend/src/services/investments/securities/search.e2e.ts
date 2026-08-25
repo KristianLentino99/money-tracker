@@ -214,6 +214,8 @@ describe('GET /investments/securities/search', () => {
   });
 
   it('prioritizes the portfolio display currency without hiding other listings', async () => {
+    await helpers.addUserCurrencyByCode({ code: 'EUR', raw: true });
+
     const portfolio = await helpers.createPortfolio({
       payload: { displayCurrencyCode: 'EUR' },
       raw: true,

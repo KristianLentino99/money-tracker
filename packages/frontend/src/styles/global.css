@@ -234,6 +234,22 @@
   body {
     height: 100%;
     overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  #app,
+  #app > main {
+    height: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Safari zooms focused controls below 16px. Keep the shared field components
+     usable in standalone mode without changing their desktop type scale. */
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
   }
 }
 
@@ -243,6 +259,8 @@
       'Manrope Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
       'Segoe UI Symbol', 'Noto Color Emoji';
     --header-height: 69px;
+    --bottom-navbar-height: 0px;
+    --bottom-navbar-height-content-rect: 0px;
 
     --background: rgb(247, 246, 244);
     --foreground: rgb(32, 28, 22);

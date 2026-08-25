@@ -27,7 +27,7 @@ describe('Plan endpoints', () => {
   });
 
   it('starts a new Plan from current balances without importing historical activity', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Fresh Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Fresh Plan Category', color: '#123456', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Fresh Plan Cash', initialBalance: 100 }),
       raw: true,
@@ -61,7 +61,7 @@ describe('Plan endpoints', () => {
   });
 
   it('can opt into importing transactions from before Plan creation', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Historical Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Historical Plan Category', color: '#234567', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Historical Plan Cash', initialBalance: 100 }),
       raw: true,
@@ -123,7 +123,7 @@ describe('Plan endpoints', () => {
   });
 
   it('assigns money through the HTTP endpoint and returns the recomputed view', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Plan Groceries', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Plan Groceries', color: '#345678', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Plan Cash', initialBalance: 100 }),
       raw: true,
@@ -205,8 +205,8 @@ describe('Plan endpoints', () => {
   });
 
   it('moves money and applies bulk assignments atomically', async () => {
-    const source = await helpers.addCustomCategory({ name: 'Move source', raw: true });
-    const destination = await helpers.addCustomCategory({ name: 'Move destination', raw: true });
+    const source = await helpers.addCustomCategory({ name: 'Move source', color: '#456789', raw: true });
+    const destination = await helpers.addCustomCategory({ name: 'Move destination', color: '#56789A', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Move Plan',
@@ -272,7 +272,7 @@ describe('Plan endpoints', () => {
   });
 
   it('attaches newly created top-level and subcategories to the Plan', async () => {
-    const parent = await helpers.addCustomCategory({ name: 'Plan Parent Category', raw: true });
+    const parent = await helpers.addCustomCategory({ name: 'Plan Parent Category', color: '#6789AB', raw: true });
     const child = await helpers.addCustomCategory({ name: 'Plan Child Category', parentId: parent.id, raw: true });
     const plan = await helpers.createPlan({
       payload: {
@@ -294,7 +294,7 @@ describe('Plan endpoints', () => {
   });
 
   it('uses zero assignment to clear the sparse allocation for a category', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Sparse Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Sparse Plan Category', color: '#789ABC', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Sparse Plan',
@@ -328,7 +328,7 @@ describe('Plan endpoints', () => {
   });
 
   it('replays an idempotent allocation request and rejects request-id reuse with a different payload', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Idempotent Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Idempotent Plan Category', color: '#89ABCD', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Idempotent Plan',
@@ -369,7 +369,7 @@ describe('Plan endpoints', () => {
   });
 
   it('previews and applies previous-period Auto-Assign, then supports revision-aware Undo', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Auto Assign Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Auto Assign Category', color: '#9ABCDE', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Auto Assign Cash', initialBalance: 100 }),
       raw: true,
@@ -440,8 +440,8 @@ describe('Plan endpoints', () => {
   });
 
   it('derives actual activity and upcoming obligations without counting forecast-only rows as activity', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Plan Transaction Category', raw: true });
-    const splitCategory = await helpers.addCustomCategory({ name: 'Plan Split Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Plan Transaction Category', color: '#ABCDEF', raw: true });
+    const splitCategory = await helpers.addCustomCategory({ name: 'Plan Split Category', color: '#BCDEFA', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Plan Transaction Cash', initialBalance: 100 }),
       raw: true,
@@ -450,6 +450,7 @@ describe('Plan endpoints', () => {
       payload: {
         name: 'Transaction Integration Plan',
         baseCurrencyCode: global.BASE_CURRENCY.code,
+        includeHistoricalTransactions: true,
         categoryIds: [category.id, splitCategory.id],
         accountIds: [account.id],
       },
@@ -493,7 +494,7 @@ describe('Plan endpoints', () => {
   });
 
   it('allows a shared write member to allocate through the same HTTP endpoint', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Shared Write Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Shared Write Plan Category', color: '#CDEFAB', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Shared Write Plan',
@@ -536,7 +537,7 @@ describe('Plan endpoints', () => {
   });
 
   it('detaches deleted categories and accounts while keeping the Plan and historical assignment view stable', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Detached Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Detached Plan Category', color: '#DEFABC', raw: true });
     const account = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'Detached Plan Account', initialBalance: 25 }),
       raw: true,
@@ -612,7 +613,7 @@ describe('Plan endpoints', () => {
     });
     expect(missingView.status).toBe(404);
 
-    const category = await helpers.addCustomCategory({ name: 'Validation Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Validation Plan Category', color: '#EFABCD', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Validation Plan',
@@ -656,11 +657,11 @@ describe('Plan endpoints', () => {
     expect(currencyMismatch.status).toBeGreaterThanOrEqual(400);
 
     const baseCurrencyChange = await helpers.setBaseCurrencyForActiveUser({ currencyCode: otherCurrency });
-    expect(baseCurrencyChange.statusCode).toBe(409);
+    expect(baseCurrencyChange.statusCode).toBe(422);
   });
 
   it('rejects an allocation based on a stale period revision', async () => {
-    const category = await helpers.addCustomCategory({ name: 'Stale Plan Category', raw: true });
+    const category = await helpers.addCustomCategory({ name: 'Stale Plan Category', color: '#FABCDE', raw: true });
     const plan = await helpers.createPlan({
       payload: {
         name: 'Stale Plan',

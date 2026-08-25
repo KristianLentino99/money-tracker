@@ -20,28 +20,12 @@
       <template v-if="showMobileLayout">
         <div class="flex shrink-0 items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            <div class="bg-card flex items-center gap-0.5 rounded-md border p-0.5">
-              <DesktopOnlyTooltip :content="$t('transactions.table.viewToggle.list')">
-                <Button
-                  :variant="activeView === 'list' ? 'secondary' : 'ghost'"
-                  size="icon-sm"
-                  :aria-label="$t('transactions.table.viewToggle.list')"
-                  @click="setActiveView('list')"
-                >
-                  <ListIcon class="size-4" />
-                </Button>
-              </DesktopOnlyTooltip>
-              <DesktopOnlyTooltip :content="$t('transactions.table.viewToggle.table')">
-                <Button
-                  :variant="activeView === 'table' ? 'secondary' : 'ghost'"
-                  size="icon-sm"
-                  :aria-label="$t('transactions.table.viewToggle.table')"
-                  @click="setActiveView('table')"
-                >
-                  <Table2Icon class="size-4" />
-                </Button>
-              </DesktopOnlyTooltip>
-            </div>
+            <MobileViewSwitcher
+              v-model="mobileView"
+              :label="$t('common.ui.actions')"
+              :list-label="$t('transactions.table.viewToggle.list')"
+              :table-label="$t('transactions.table.viewToggle.table')"
+            />
 
             <!-- Scrolling is handled by ResponsiveDialog's internal scroll wrapper –
                  an extra scroll container here would clip the panel instead -->
@@ -327,6 +311,7 @@
 
 <script lang="ts" setup>
 import PageWrapper from '@/components/common/page-wrapper.vue';
+import MobileViewSwitcher from '@/components/common/mobile-view-switcher.vue';
 import { Button } from '@/components/lib/ui/button';
 import { Card } from '@/components/lib/ui/card';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';

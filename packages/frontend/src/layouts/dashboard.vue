@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-background flex h-screen max-md:flex-col">
+  <div class="bg-background flex h-dvh min-h-0 min-w-0 flex-col md:flex-row">
     <template v-if="!isMobileView">
       <Sidebar />
     </template>
 
-    <ScrollArea ref="scrollAreaRef" class="flex-1" :scroll-area-id="SCROLL_AREA_IDS.dashboard">
-      <ui-header class="bg-background sticky top-0 z-10" />
+    <ScrollArea ref="scrollAreaRef" class="min-h-0 min-w-0 flex-1" :scroll-area-id="SCROLL_AREA_IDS.dashboard">
+      <ui-header class="bg-background sticky top-0 z-10 pt-[env(safe-area-inset-top)]" />
 
       <template v-if="isAppInitialized">
-        <div class="max-md:pb-4">
+        <div class="max-md:pb-10">
           <router-view />
         </div>
       </template>

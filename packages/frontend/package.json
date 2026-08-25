@@ -13,7 +13,7 @@
     "docker-push": "docker push letehaha/budget-tracker-fe",
     "start": "npm run dev",
     "test": "npm run test:unit",
-    "test:unit": "vitest",
+    "test:unit": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",

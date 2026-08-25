@@ -82,7 +82,7 @@ export const templateToForm = ({
       paymentType,
       note: template.note ?? undefined,
       time: new Date(),
-      isPlanned: current.isPlanned,
+      isForecastOnly: current.isForecastOnly,
       toAccount: null,
       toPortfolio: null,
       targetAmount: null,

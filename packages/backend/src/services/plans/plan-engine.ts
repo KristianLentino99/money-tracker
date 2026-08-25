@@ -31,7 +31,7 @@ export interface PlanEngineUpcomingObligation {
   amountCents: number;
 }
 
-export interface PlanEngineInput {
+interface PlanEngineInput {
   periodStart: string;
   periodStartDay: number;
   accounts: PlanEngineAccount[];
@@ -41,7 +41,7 @@ export interface PlanEngineInput {
   upcomingObligations: PlanEngineUpcomingObligation[];
 }
 
-export interface PlanEngineCategoryResult extends PlanEngineCategory {
+interface PlanEngineCategoryResult extends PlanEngineCategory {
   assignedCents: number;
   activityCents: number;
   availableCents: number;
@@ -50,7 +50,7 @@ export interface PlanEngineCategoryResult extends PlanEngineCategory {
   status: 'none' | 'funded' | 'underfunded' | 'overspent';
 }
 
-export interface PlanEngineResult {
+interface PlanEngineResult {
   readyToAssignCents: number;
   categories: PlanEngineCategoryResult[];
 }
