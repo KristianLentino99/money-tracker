@@ -14,10 +14,10 @@
     "accountDetails": "Деталі рахунку",
     "logout": "Вийти",
     "settings": "Налаштування",
+    "plan": "Бюджет",
     "planned": {
-      "planned": "Заплановане",
-      "subscriptions": "Регулярні витрати",
-      "budgets": "Бюджети"
+      "planned": "Прогноз",
+      "subscriptions": "Регулярні витрати"
     },
     "venture": "Венчур"
   },
@@ -225,10 +225,6 @@
           "create-tag": {
             "title": "Створіть тег",
             "description": "Додавайте теги до групування пов'язаних транзакцій"
-          },
-          "create-budget": {
-            "title": "Встановіть бюджет",
-            "description": "Створіть обмеження видатків для категорій"
           },
           "create-subscription": {
             "title": "Створіть підписку",

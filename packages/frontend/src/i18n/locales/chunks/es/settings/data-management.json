@@ -67,8 +67,6 @@
           "deselectAll": "Deseleccionar todo",
           "transactions": "Transacciones y cuentas",
           "transactionsDescription": "Transacciones, cuentas, historial de saldos, categorías, etiquetas, vehículos",
-          "budgets": "Presupuestos",
-          "budgetsDescription": "Presupuestos personalizados con categorías vinculadas y totales de gastos",
           "subscriptions": "Suscripciones y recordatorios",
           "subscriptionsDescription": "Suscripciones recurrentes y recordatorios de facturas",
           "investments": "Inversiones",

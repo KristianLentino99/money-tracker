@@ -351,8 +351,8 @@ const isCategoriesReady = computed(
 const canMutateCurrentTx = computed(() => canMutateTx(transaction.value, currentUser.value?.id));
 
 // Lazy server-side write-access check, used only when the parent account isn't in the
-// caller's local `accountsRecord` — typically when the row is visible via a budget
-// share but the account itself isn't shared with the caller. `useAccountAccess` can't
+// caller's local `accountsRecord` — typically when the row is visible through a shared
+// account but that account isn't in the caller's local store. `useAccountAccess` can't
 // decide that case (it has nothing to read), and the bulk list path intentionally
 // skips `canEdit` to keep common reads cheap. Returns `null` until resolved.
 const isAccountLocallyKnown = computed(() => {

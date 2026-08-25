@@ -100,7 +100,7 @@ interface LinkedPaymentsAverage {
 
 /**
  * Aggregates sum refAmount: it's the only denomination in which a multi-currency
- * history adds up to one number, on the same basis budgets use. Native amounts stay
+ * history adds up to one number using the same base-currency basis as the rest of the app. Native amounts stay
  * available per-currency in `totalsByCurrency` for secondary display.
  */
 interface LinkedPaymentsStats {

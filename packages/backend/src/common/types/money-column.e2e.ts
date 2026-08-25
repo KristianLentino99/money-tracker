@@ -5,7 +5,7 @@
  * Sequelize query patterns: normal queries, raw: true, aggregates,
  * literal updates, and direct model operations.
  */
-import { BUDGET_TYPES, TRANSACTION_TYPES } from '@bt/shared/types';
+import { TRANSACTION_TYPES } from '@bt/shared/types';
 import { describe, expect, it } from '@jest/globals';
 import Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
@@ -389,43 +389,6 @@ describe('MoneyField integration', () => {
   });
 
   describe('Bug regressions', () => {
-    it('budget stats: category budget stats returns correct decimal amounts', async () => {
-      // Bug: getCategoryBudgetStats() accumulated tx.refAmount.toNumber() (decimals)
-      // but serializeBudgetStats.toApiDecimal() treated plain numbers as cents.
-      // Result: 150 cents → .toNumber() = 1.5 → fromCents(1.5) = 0.015 (100x too small)
-      //
-      // Fix: getCategoryBudgetStats() should use .toCents() to keep raw cents,
-      // consistent with getManualBudgetStats() which uses raw: true.
-      const account = await helpers.createAccount({
-        payload: helpers.buildAccountPayload({ initialBalance: 500 }),
-        raw: true,
-      });
-
-      const testCategory = await helpers.addCustomCategory({ name: 'test-cat', color: '#000000', raw: true });
-      const budget = await helpers.createCustomBudget({
-        name: 'test-budget',
-        categoryIds: [testCategory.id],
-        limitAmount: 1000,
-        type: BUDGET_TYPES.category,
-        raw: true,
-      });
-
-      await helpers.createTransaction({
-        payload: helpers.buildTransactionPayload({
-          accountId: account.id,
-          amount: 1.5,
-          categoryId: testCategory.id,
-          transactionType: TRANSACTION_TYPES.expense,
-        }),
-        raw: true,
-      });
-
-      const stats = await helpers.getStats({ id: budget.id, raw: true });
-
-      // Must be 1.5 (decimal), NOT 0.015 (double-converted)
-      expect(stats!.summary.actualExpense).toBeCloseTo(1.5, 2);
-    });
-
     it('tag reminders: amountThreshold stored in JSONB must survive roundtrip', async () => {
       // Bug: deserializer converted amountThreshold to Money, service stored Money
       // in JSONB (serialized via toJSON() → decimal). Serializer read it back as cents

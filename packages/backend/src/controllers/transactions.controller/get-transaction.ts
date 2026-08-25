@@ -46,12 +46,6 @@ const schema = z.object({
         accountIds: z
           .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
           .optional(),
-        budgetIds: z
-          .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
-          .optional(),
-        excludedBudgetIds: z
-          .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
-          .optional(),
         tagIds: z
           .preprocess((val) => (typeof val === 'string' ? parseCommaSeparatedStrings(val) : val), z.array(recordId()))
           .optional(),

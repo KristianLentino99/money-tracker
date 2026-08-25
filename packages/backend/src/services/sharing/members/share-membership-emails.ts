@@ -8,7 +8,6 @@ import { appName, appUrl, buildEmailShell, escapeHtml, fromEmail, resend } from 
 const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
   account: 'account',
   household: 'household',
-  budget: 'budget',
   plan: 'plan',
 };
 
@@ -16,14 +15,12 @@ const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
 // resource type. Mirrors the deep-link strategy in share-invitation-email.ts.
 const RESOURCE_OWNER_MANAGE_PATHS: Record<ResourceType, string> = {
   account: '/accounts',
-  budget: '/budgets',
   household: '/settings/household',
   plan: '/plan',
 };
 
 const RESOURCE_OWNER_MANAGE_CTA: Record<ResourceType, string> = {
   account: 'Manage your accounts',
-  budget: 'Manage your budgets',
   household: 'Manage your household',
   plan: 'Manage your plans',
 };

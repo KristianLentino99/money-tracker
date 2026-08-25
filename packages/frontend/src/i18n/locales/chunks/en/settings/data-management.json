@@ -67,8 +67,6 @@
           "deselectAll": "Deselect all",
           "transactions": "Transactions & accounts",
           "transactionsDescription": "Transactions, accounts, balances history, categories, tags, vehicles",
-          "budgets": "Budgets",
-          "budgetsDescription": "Custom budgets with linked categories and spending totals",
           "subscriptions": "Subscriptions & reminders",
           "subscriptionsDescription": "Recurring subscriptions and bill reminders",
           "investments": "Investments",

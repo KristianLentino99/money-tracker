@@ -2,7 +2,6 @@ import { ACCESS_SOURCES, RESOURCE_TYPES, SHARE_PERMISSIONS, SharePermission } fr
 import { t } from '@i18n/index';
 import { ForbiddenError, NotFoundError } from '@js/errors';
 import Accounts from '@models/accounts.model';
-import BudgetTransactions from '@models/budget-transactions.model';
 import TransactionSplits from '@models/transaction-splits.model';
 import { findOneTransaction } from '@models/transactions-query';
 import * as Transactions from '@models/transactions.model';
@@ -11,8 +10,6 @@ import {
   type GrantedAccessResult,
   canUserAccessResource,
 } from '@services/sharing/auth/can-user-access-resource.service';
-import { getAccessibleBudgetIdsForUser } from '@services/sharing/auth/get-accessible-budget-ids.service';
-import { Op } from 'sequelize';
 
 import { withTransaction } from '../common/with-transaction';
 
@@ -125,48 +122,7 @@ export const getTransactionById = withTransaction(
       return { tx, access };
     }
 
-    // Budget-share visibility fallback. The list endpoint already surfaces tx rows that
-    // a caller can see only because they accepted a budget share — keeping the detail
-    // endpoint blind to that path made GET /transactions/:id 404 for rows the caller
-    // could see in the list, which the dialog's lazy edit-access probe then misread as
-    // "unknown" and unlocked the form. Only meaningful for read requests; write paths
-    // (`requiredPermission: write`) intentionally don't fall through because budget
-    // share grants read-only access on attached txs.
-    if (requiredPermission !== SHARE_PERMISSIONS.read) return null;
-
-    const accessibleBudgetIds = await getAccessibleBudgetIdsForUser({ userId });
-    if (!accessibleBudgetIds.length) return null;
-
-    const budgetAttachment = (await BudgetTransactions.findOne({
-      where: {
-        transactionId: id,
-        budgetId: { [Op.in]: accessibleBudgetIds },
-      },
-      attributes: ['budgetId'],
-      raw: true,
-    })) as { budgetId: string } | null;
-    if (!budgetAttachment) return null;
-
-    const budgetVisibilityAccess: GrantedAccessResult = {
-      granted: true,
-      isOwner: false,
-      effectivePermission: SHARE_PERMISSIONS.read,
-      policy: null,
-      ownerUserId: access.ownerUserId ?? tx.userId,
-      accessSource: ACCESS_SOURCES.budget,
-    };
-
-    if (includeSplits) {
-      const withSplits = await findOneTransaction({
-        planned: 'include',
-        access: 'unscoped-internal',
-        balanceAdjustments: 'include',
-        where: { id },
-        include: [{ model: TransactionSplits, as: 'splits' }],
-      });
-      return withSplits ? { tx: withSplits, access: budgetVisibilityAccess } : null;
-    }
-    return { tx, access: budgetVisibilityAccess };
+    return null;
   },
 );
 
@@ -191,8 +147,7 @@ interface WritableTransactionAuthContext {
  *   - `ForbiddenError` (403) when the row exists but the caller has no claim. Tx ids are
  *     UUIDv7 so existence-leak via 403 vs 404 is not a meaningful side channel; surfacing
  *     "not authorized" gives a less confusing UX than the old "tx doesn't exist" message
- *     when a budget-share recipient tries to edit an owner-only tx (e.g. visible inside
- *     the budget but on an account they don't have write access to).
+ *     when a shared-account recipient tries to edit an owner-only transaction.
  *   - `Unauthorized` (401) when the caller is a recipient on `'own'` scope and didn't
  *     author the row.
  *

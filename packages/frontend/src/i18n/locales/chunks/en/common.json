@@ -145,7 +145,6 @@
         "error": "Failed to unlink transactions!"
       },
       "record": {
-        "addedByTooltip": "This transaction was attached to the budget by {handle}",
         "hiddenAccount": "Hidden account"
       }
     },

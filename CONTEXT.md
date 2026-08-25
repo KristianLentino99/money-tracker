@@ -28,7 +28,7 @@ _Avoid_: Deduplicated search, because cross-provider matches remain visible
 
 ### Plan
 
-A separate zero-based allocation boundary for a user's finances. Users may create, edit, and delete multiple Plans. A Plan owns monthly category assignments and Ready to Assign calculations; it is not the same concept as a reporting Budget. The default Plan automatically includes active categories and spendable on-budget accounts; additional Plans require explicit category and account membership. A spendable account belongs to at most one active Plan. Plan is a top-level primary workspace and is separate from the Planned section for forecast-only transactions and reporting budgets.
+A separate zero-based allocation boundary for a user's finances. Users may create, edit, and delete multiple Plans. A Plan owns monthly category assignments and Ready to Assign calculations. The default Plan automatically includes active categories and spendable on-budget accounts; additional Plans require explicit category and account membership. A spendable account belongs to at most one active Plan. Plan is a top-level primary workspace and is separate from the Planned section for forecast-only transactions.
 
 ### Plan workspace
 
@@ -44,7 +44,7 @@ A static, built-in category structure defined in application code. It can be cop
 
 ### Plan export
 
-A versioned export containing Plan metadata, immutable currency and period settings, membership snapshots, and sparse assignments. It is separate from existing reporting Budget exports.
+A versioned export containing Plan metadata, immutable currency and period settings, membership snapshots, and sparse assignments.
 
 ### Underfunded status
 
@@ -73,10 +73,6 @@ A loan or other debt account that remains outside the Plan's spendable cash pool
 ### Cross-Plan transfer
 
 A transfer between accounts assigned to different Plans. It is a categorized outflow from the source Plan and a Ready to Assign inflow into the destination Plan. Normal transactions cannot combine an account and category from different Plans.
-
-### Reporting Budget
-
-The existing date-, category-, or transaction-scoped object used to analyze spending. Reporting Budgets do not own Plan assignments or determine Ready to Assign.
 
 ### Forecast-only transaction
 
@@ -112,7 +108,7 @@ A negative balance on a spendable account. It reduces Ready to Assign rather tha
 
 ### Active category
 
-A non-archived category in the user's category hierarchy. Active categories are eligible for Plan allocation and inherit the existing category-group structure. An active category belongs to at most one active Plan, although it may appear in multiple reporting Budgets.
+A non-archived category in the user's category hierarchy. Active categories are eligible for Plan allocation and inherit the existing category-group structure. An active category belongs to at most one active Plan.
 
 ### Spendable on-budget account
 

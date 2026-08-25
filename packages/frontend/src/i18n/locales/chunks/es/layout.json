@@ -14,10 +14,10 @@
     "accountDetails": "Detalles de la cuenta",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
+    "plan": "Presupuesto",
     "planned": {
-      "planned": "Planificado",
-      "subscriptions": "Cargos recurrentes",
-      "budgets": "Presupuestos"
+      "planned": "Previsión",
+      "subscriptions": "Cargos recurrentes"
     },
     "venture": "Venture"
   },
@@ -225,10 +225,6 @@
           "create-tag": {
             "title": "Crear una etiqueta",
             "description": "Añada etiquetas para agrupar transacciones relacionadas"
-          },
-          "create-budget": {
-            "title": "Configurar un presupuesto",
-            "description": "Establezca límites de gasto por categorías"
           },
           "create-subscription": {
             "title": "Crear una suscripción",

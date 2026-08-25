@@ -181,35 +181,7 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.plannedSubscriptionDetails,
             component: () => import('@/pages/planned/subscriptions/subscription-details.vue'),
           },
-          {
-            path: 'budgets',
-            name: ROUTES_NAMES.plannedBudgets,
-            component: () => import('@/pages/budgets/budgets.vue'),
-            meta: { i18nChunks: ['pages/budgets'] as I18nChunkName[] },
-          },
-          {
-            path: 'budgets/:id',
-            name: ROUTES_NAMES.plannedBudgetDetails,
-            component: () => import('@/pages/budgets/budgets-info/index.vue'),
-            meta: {
-              i18nChunks: ['pages/budgets', 'pages/budget-details', 'pages/transactions'] as I18nChunkName[],
-            },
-          },
         ],
-      },
-      // Backward-compat redirects for old budget URLs
-      {
-        path: '/budgets',
-        name: ROUTES_NAMES.budgets,
-        redirect: { name: ROUTES_NAMES.plannedBudgets },
-      },
-      {
-        path: '/budgets/:id',
-        name: ROUTES_NAMES.budgetsInfo,
-        redirect: (to) => ({
-          name: ROUTES_NAMES.plannedBudgetDetails,
-          params: { id: to.params.id },
-        }),
       },
       // Backward-compat redirects for the old /planned/subscriptions URLs, so links
       // already sent (e.g. payment reminder emails) still resolve after the rename

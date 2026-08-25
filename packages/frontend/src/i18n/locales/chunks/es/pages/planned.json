@@ -1,8 +1,5 @@
 {
   "planned": {
-    "budgets": {
-      "backToList": "Volver a presupuestos"
-    },
     "subscriptions": {
       "notFound": "Suscripción no encontrada",
       "notFoundDescription": "No pudimos encontrar esta suscripción. Es posible que haya sido eliminada o que no tenga acceso a ella.",

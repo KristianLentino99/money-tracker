@@ -128,66 +128,6 @@ describe('Retrieve transactions with filters', () => {
     };
   };
 
-  it('should retrieve transactions filtered by budgetIds correctly', async () => {
-    const account = await helpers.createAccount({ raw: true });
-    const categories = await helpers.getCategoriesList();
-    const firstCategoryId = categories[0]!.id;
-
-    const transactions = await Promise.all([
-      helpers.createTransaction({
-        payload: helpers.buildTransactionPayload({
-          accountId: account.id,
-          amount: 100,
-          transactionType: TRANSACTION_TYPES.expense,
-          time: '2025-03-02T10:00:00Z',
-          categoryId: firstCategoryId,
-        }),
-        raw: true,
-      }),
-      helpers.createTransaction({
-        payload: helpers.buildTransactionPayload({
-          accountId: account.id,
-          amount: 200,
-          transactionType: TRANSACTION_TYPES.expense,
-          time: '2025-03-03T10:00:00Z',
-          categoryId: firstCategoryId,
-        }),
-        raw: true,
-      }),
-      helpers.createTransaction({
-        payload: helpers.buildTransactionPayload({
-          accountId: account.id,
-          amount: 300,
-          transactionType: TRANSACTION_TYPES.expense,
-          time: '2025-04-01T10:00:00Z',
-          categoryId: firstCategoryId,
-        }),
-        raw: true,
-      }),
-    ]);
-
-    const budget = await helpers.createCustomBudget({
-      name: 'Test Budget',
-      startDate: '2025-03-01T00:00:00Z',
-      endDate: '2025-03-04T23:59:59Z',
-      autoInclude: true,
-      limitAmount: 500,
-      raw: true,
-    });
-
-    const res = await helpers.getTransactions({
-      budgetIds: [budget.id],
-      limit: 30,
-      raw: true,
-    });
-
-    expect(res.length).toBe(2);
-    const transactionIds = res.map((t) => t.id);
-    expect(transactionIds).toContain(transactions[0][0].id);
-    expect(transactionIds).toContain(transactions[1][0].id);
-    expect(transactionIds).not.toContain(transactions[2][0].id);
-  });
-
   describe('filtered by dates', () => {
     it('[success] for `from`', async () => {
       await createMockTransactions();

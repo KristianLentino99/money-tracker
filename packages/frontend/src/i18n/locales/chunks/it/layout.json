@@ -13,10 +13,10 @@
     "accountDetails": "Dettagli conto",
     "logout": "Disconnetti",
     "settings": "Impostazioni",
+    "plan": "Budget",
     "planned": {
-      "planned": "Pianificato",
-      "subscriptions": "Pagamenti ricorrenti",
-      "budgets": "Budget"
+      "planned": "Previsioni",
+      "subscriptions": "Pagamenti ricorrenti"
     },
     "venture": "Venture"
   },
@@ -224,10 +224,6 @@
           "create-tag": {
             "title": "Crea un'etichetta",
             "description": "Aggiungi etichette per raggruppare transazioni correlate"
-          },
-          "create-budget": {
-            "title": "Configura un budget",
-            "description": "Crea limiti di spesa per le categorie"
           },
           "create-subscription": {
             "title": "Crea un abbonamento",

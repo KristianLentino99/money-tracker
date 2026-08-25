@@ -16,15 +16,15 @@
     "scopes": {
       "finance_read": {
         "label": "Visualizza i tuoi dati finanziari",
-        "desc": "Leggi conti, transazioni, budget, categorie, etichette, portafogli e statistiche sulle spese."
+        "desc": "Leggi conti, transazioni, categorie, etichette, portafogli e statistiche sulle spese."
       },
       "finance_write": {
         "label": "Crea e modifica i tuoi dati finanziari",
-        "desc": "Aggiungi e aggiorna transazioni, budget, abbonamenti, posizioni di investimento e altri dati."
+        "desc": "Aggiungi e aggiorna transazioni, abbonamenti, posizioni di investimento e altri dati."
       },
       "finance_delete": {
         "label": "Elimina i tuoi dati finanziari",
-        "desc": "Rimuovi definitivamente transazioni, conti, budget e altri dati."
+        "desc": "Rimuovi definitivamente transazioni, conti e altri dati."
       },
       "profile_read": {
         "label": "Visualizza il tuo profilo",

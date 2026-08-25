@@ -101,17 +101,6 @@ export interface VehicleRow {
   depreciationModel: string;
 }
 
-export interface BudgetRow {
-  name: string;
-  status: string;
-  periodStart: string;
-  periodEnd: string;
-  limitAmount: number | null;
-  currency: string;
-  categories: string[];
-  spentAmount: number;
-}
-
 export interface SubscriptionRow {
   name: string;
   /**
@@ -208,7 +197,6 @@ export type ExportTable =
   | { name: 'categories'; rows: CategoryRow[] }
   | { name: 'tags'; rows: TagRow[] }
   | { name: 'vehicles'; rows: VehicleRow[] }
-  | { name: 'budgets'; rows: BudgetRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }
   | { name: 'transaction_templates'; rows: TransactionTemplateRow[] }
   | { name: 'portfolios'; rows: PortfolioRow[] }

@@ -42,8 +42,6 @@ const ROUTE_NAMES_BY_TAB: Readonly<Record<MobilePrimaryTab, ReadonlySet<string>>
     ROUTES_NAMES.planned,
     ROUTES_NAMES.plannedSubscriptions,
     ROUTES_NAMES.plannedSubscriptionDetails,
-    ROUTES_NAMES.plannedBudgets,
-    ROUTES_NAMES.plannedBudgetDetails,
     ROUTES_NAMES.analytics,
     ROUTES_NAMES.analyticsCashFlow,
     ROUTES_NAMES.analyticsNetWorthHistory,

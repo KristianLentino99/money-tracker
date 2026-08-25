@@ -9,7 +9,7 @@ MoneyMatter ("we", "our", or "us") is committed to protecting your privacy. This
 ## 2. Information We Collect
 
 - **Account Information:** Email address and password for authentication.
-- **Financial Data:** Transaction records, account balances, categories, and budgets that you enter or sync from connected banks.
+- **Financial Data:** Transaction records, account balances, categories, and spending plans that you create or use with connected bank data.
 - **Bank Connection Credentials:** If you use bank integrations, we store encrypted API credentials to maintain your connections.
 - **Usage Data:** Basic analytics to improve the application experience.
 

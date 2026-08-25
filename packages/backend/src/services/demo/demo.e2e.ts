@@ -2,7 +2,6 @@ import {
   ACCOUNT_CATEGORIES,
   API_ERROR_CODES,
   API_RESPONSE_STATUS,
-  BUDGET_TYPES,
   LOAN_TYPE,
   PAYMENT_TYPES,
   SUBSCRIPTION_PERIOD_STATUSES,
@@ -353,17 +352,6 @@ describe('Demo Mode', () => {
       expect(yearsDiff).toBeGreaterThanOrEqual(2);
     });
 
-    it('seeds budgets', async () => {
-      const budgetsRes = await makeRequest({
-        method: 'get',
-        url: '/budgets',
-        raw: true,
-      });
-
-      // Should have at least 3 budgets per spec
-      expect(budgetsRes.length).toBeGreaterThanOrEqual(3);
-    });
-
     it('seeds categories', async () => {
       const categoriesRes = await makeRequest({
         method: 'get',
@@ -703,44 +691,6 @@ describe('Demo Mode', () => {
 
       for (const period of paidPeriods) {
         expect(period.transactionId).not.toBeNull();
-      }
-    });
-
-    it('seeds category budgets over a window with plausible utilization', async () => {
-      const budgets = await makeRequest({
-        method: 'get',
-        url: '/budgets',
-        raw: true,
-      });
-
-      expect(budgets.length).toBeGreaterThanOrEqual(3);
-
-      for (const budget of budgets as {
-        id: string;
-        type: string;
-        startDate: string | null;
-        endDate: string | null;
-        categories: unknown[];
-      }[]) {
-        // `category` is what writes the BudgetCategories rows the stats read; a
-        // `manual` budget with no linked transactions would report zero spend.
-        expect(budget.type).toBe(BUDGET_TYPES.category);
-        expect(budget.startDate).not.toBeNull();
-        expect(budget.endDate).not.toBeNull();
-        expect(budget.categories.length).toBeGreaterThan(0);
-
-        const stats = await makeRequest({
-          method: 'get',
-          url: `/budgets/${budget.id}/stats`,
-          raw: true,
-        });
-
-        expect(stats.summary.actualExpense).toBeGreaterThan(0);
-        expect(Number.isFinite(stats.summary.utilizationRate)).toBe(true);
-        expect(stats.summary.utilizationRate).toBeGreaterThan(0);
-        // Sanity band on the date window: a budget without one totals all three
-        // years of history against a one-month limit and blows far past this.
-        expect(stats.summary.utilizationRate).toBeLessThan(400);
       }
     });
 

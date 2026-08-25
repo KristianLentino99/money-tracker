@@ -1,6 +1,5 @@
 import type { RecordId } from '@bt/shared/types';
 import Accounts from '@models/accounts.model';
-import Budgets from '@models/budget.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Payees from '@models/payees.model';
 import Plans from '@models/plan.model';
@@ -44,7 +43,6 @@ export function createScopeResolver({ userId }: { userId: number }) {
     transactions: () => idsWhere({ model: Transactions, where: { userId } }),
     transactionGroups: () => idsWhere({ model: TransactionGroups, where: { userId } }),
     transactionTemplates: () => idsWhere({ model: TransactionTemplates, where: { userId } }),
-    budgets: () => idsWhere({ model: Budgets, where: { userId } }),
     plans: () => idsWhere({ model: Plans, where: { ownerUserId: userId } }),
     subscriptions: () => idsWhere({ model: Subscriptions, where: { userId } }),
     ventureEvents: () => idsWhere({ model: VentureEvents, where: { userId } }),

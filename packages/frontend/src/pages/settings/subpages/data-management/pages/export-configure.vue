@@ -171,15 +171,7 @@ import {
   type ExportFormat,
   type ExportGroup,
 } from '@bt/shared/types';
-import {
-  ArrowRightLeftIcon,
-  CalendarIcon,
-  ChevronLeftIcon,
-  RepeatIcon,
-  TrendingUpIcon,
-  WalletIcon,
-  XIcon,
-} from '@lucide/vue';
+import { ArrowRightLeftIcon, CalendarIcon, ChevronLeftIcon, RepeatIcon, TrendingUpIcon, XIcon } from '@lucide/vue';
 import { endOfMonth, format as formatDate, startOfMonth } from 'date-fns';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -199,7 +191,6 @@ const selectedPeriod = ref<Period | null>(null);
 
 const GROUP_ICONS: Record<ExportGroup, typeof ArrowRightLeftIcon> = {
   transactions: ArrowRightLeftIcon,
-  budgets: WalletIcon,
   subscriptions: RepeatIcon,
   investments: TrendingUpIcon,
 };

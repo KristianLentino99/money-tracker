@@ -94,14 +94,6 @@
       "duplicateCategory": "Cada división debe usar una categoría diferente"
     }
   },
-  "budgets": {
-    "budgetNotFound": "Presupuesto no encontrado",
-    "someTransactionIdsInvalid": "Algunos IDs de transacciones no son válidos",
-    "transactionsAddedSuccessfully": "Transacciones añadidas correctamente",
-    "cannotManuallyLinkToCategoryBudget": "No se pueden vincular transacciones manualmente a presupuestos basados en categorías. Las transacciones se registran automáticamente por categoría.",
-    "someCategoryIdsInvalid": "Algunos IDs de categorías no son válidos o no existen",
-    "notCategoryBudget": "Este endpoint solo está disponible para presupuestos basados en categorías"
-  },
   "tags": {
     "tagNotFound": "Etiqueta no encontrada",
     "tagNameAlreadyExists": "Ya existe una etiqueta con este nombre",

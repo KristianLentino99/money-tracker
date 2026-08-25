@@ -8,7 +8,7 @@ By accessing or using MoneyMatter ("the Service"), you agree to be bound by thes
 
 ## 2. Description of Service
 
-MoneyMatter is a personal finance management application that allows you to track expenses, manage budgets, connect bank accounts, and analyze your financial data. The Service is provided "as is" and "as available."
+MoneyMatter is a personal finance management application that allows you to track expenses, plan spending, connect bank accounts, and analyze your financial data. The Service is provided "as is" and "as available."
 
 ## 3. Acceptable Use
 

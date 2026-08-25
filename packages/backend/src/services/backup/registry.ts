@@ -5,9 +5,6 @@ import Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
 import BrandLogos from '@models/brand-logos.model';
-import BudgetCategories from '@models/budget-categories.model';
-import BudgetTransactions from '@models/budget-transactions.model';
-import Budgets from '@models/budget.model';
 import Categories from '@models/categories.model';
 import Currencies from '@models/currencies.model';
 import ExchangeRates from '@models/exchange-rates.model';
@@ -80,7 +77,6 @@ export type BackupParentScope =
   | 'transactions'
   | 'transactionGroups'
   | 'transactionTemplates'
-  | 'budgets'
   | 'plans'
   | 'subscriptions'
   | 'ventureEvents'
@@ -335,13 +331,6 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     restoreMode: 'insert',
   },
   {
-    fileName: 'budgets',
-    model: Budgets,
-    tier: 3,
-    scope: { strategy: 'userColumn', column: 'userId' },
-    restoreMode: 'insert',
-  },
-  {
     fileName: 'plans',
     model: Plans,
     tier: 3,
@@ -470,20 +459,6 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     model: TransactionGroupItems,
     tier: 5,
     scope: { strategy: 'viaParent', fk: 'groupId', parent: 'transactionGroups' },
-    restoreMode: 'insert',
-  },
-  {
-    fileName: 'budget-transactions',
-    model: BudgetTransactions,
-    tier: 5,
-    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
-    restoreMode: 'insert',
-  },
-  {
-    fileName: 'budget-categories',
-    model: BudgetCategories,
-    tier: 5,
-    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
     restoreMode: 'insert',
   },
   {

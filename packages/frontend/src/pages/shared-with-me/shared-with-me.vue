@@ -22,7 +22,6 @@ const router = useRouter();
 const ICON_BY_RESOURCE_TYPE: Record<ResourceType, typeof LandmarkIcon> = {
   [RESOURCE_TYPES.account]: LandmarkIcon,
   [RESOURCE_TYPES.household]: HomeIcon,
-  [RESOURCE_TYPES.budget]: WalletIcon,
   [RESOURCE_TYPES.plan]: WalletIcon,
 };
 
@@ -62,7 +61,6 @@ const groupedShares = computed(() => {
   const groups: Record<ResourceType, DisplayableRow[]> = {
     [RESOURCE_TYPES.account]: [],
     [RESOURCE_TYPES.household]: [],
-    [RESOURCE_TYPES.budget]: [],
     [RESOURCE_TYPES.plan]: [],
   };
   for (const row of sharesQuery.data.value ?? []) {
@@ -83,10 +81,8 @@ const leaveMutation = useMutation({
   onSuccess: () => {
     addSuccessNotification(t('pages.sharedWithMe.leaveSuccess'));
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.sharedWithMe });
-    // The recipient's resource lists also drop this row. Invalidating both is a no-op for
-    // the bucket the row didn't live in, so we don't need to branch on `resourceType`.
+    // The recipient's account list may have changed after leaving a share.
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
-    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetsList });
     leaveOpen.value = false;
     leaveTarget.value = null;
   },
@@ -113,9 +109,6 @@ const routeForRow = (row: SharedWithMeRow) => {
     // membership and leave from a single place. The shared-with-me page itself still
     // offers a Leave action inline, so the link is purely an entry to the manage UI.
     return { name: ROUTES_NAMES.settingsHousehold };
-  }
-  if (row.resourceType === RESOURCE_TYPES.budget) {
-    return { name: ROUTES_NAMES.plannedBudgetDetails, params: { id: row.resourceId } };
   }
   if (row.resourceType === RESOURCE_TYPES.plan) {
     return { name: ROUTES_NAMES.plan, query: { planId: row.resourceId } };

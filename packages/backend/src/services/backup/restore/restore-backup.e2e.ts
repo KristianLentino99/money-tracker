@@ -158,15 +158,6 @@ async function seedRichData() {
   });
   await helpers.createSingleRefund({ originalTxId: expense!.id, refundTxId: refundTx!.id }, true);
 
-  // Budget over a category, with a linked transaction.
-  const budget = await helpers.createCustomBudget({
-    name: 'Monthly',
-    limitAmount: 50000,
-    categoryIds: [parentCategory.id],
-    raw: true,
-  });
-  await helpers.addTransactionToCustomBudget({ id: budget.id, payload: { transactionIds: [expense!.id] }, raw: true });
-
   // Subscription (generates periods).
   await helpers.createSubscription({
     name: 'Streaming',

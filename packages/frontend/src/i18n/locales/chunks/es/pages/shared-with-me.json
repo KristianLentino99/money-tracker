@@ -9,8 +9,7 @@
       },
       "sections": {
         "account": "Cuentas",
-        "household": "Hogares",
-        "budget": "Presupuestos compartidos con usted"
+        "household": "Hogares"
       },
       "sharedBy": "Compartido por {handle}",
       "viaHousehold": "A través del hogar de {handle}",

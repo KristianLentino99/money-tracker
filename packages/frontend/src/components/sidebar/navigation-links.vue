@@ -80,9 +80,7 @@ const isForecastOnlyRoute = computed(
   () =>
     route.name === ROUTES_NAMES.planned ||
     route.name === ROUTES_NAMES.plannedSubscriptions ||
-    route.name === ROUTES_NAMES.plannedSubscriptionDetails ||
-    route.name === ROUTES_NAMES.plannedBudgets ||
-    route.name === ROUTES_NAMES.plannedBudgetDetails,
+    route.name === ROUTES_NAMES.plannedSubscriptionDetails,
 );
 
 watch(
@@ -299,17 +297,6 @@ watch(
           >
             <RepeatIcon :class="[navIconBase, isActive && navIconActive]" />
             <span>{{ $t('navigation.planned.subscriptions') }}</span>
-          </ui-button>
-        </router-link>
-        <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.plannedBudgets }">
-          <ui-button
-            variant="ghost"
-            as="span"
-            :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
-            size="sm"
-          >
-            <WalletIcon :class="[navIconBase, isActive && navIconActive]" />
-            <span>{{ $t('navigation.planned.budgets') }}</span>
           </ui-button>
         </router-link>
       </div>

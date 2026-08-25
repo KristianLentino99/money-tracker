@@ -13,10 +13,10 @@
     "accountDetails": "Detail akun",
     "logout": "Keluar",
     "settings": "Pengaturan",
+    "plan": "Anggaran",
     "planned": {
-      "planned": "Terencana",
-      "subscriptions": "Biaya Berulang",
-      "budgets": "Anggaran"
+      "planned": "Prakiraan",
+      "subscriptions": "Biaya Berulang"
     },
     "venture": "Venture",
     "automations": "Otomatisasi"
@@ -225,10 +225,6 @@
           "create-tag": {
             "title": "Buat tag",
             "description": "Tambahkan tag untuk mengelompokkan transaksi terkait"
-          },
-          "create-budget": {
-            "title": "Siapkan anggaran",
-            "description": "Buat batas pengeluaran untuk kategori"
           },
           "create-subscription": {
             "title": "Buat langganan",

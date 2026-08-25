@@ -94,20 +94,6 @@ export const buildNotificationRoute = (notification: NotificationStruct): Notifi
         to: { name: ROUTES_NAMES.settingsSharedWithMe },
       };
 
-    case NOTIFICATION_TYPES.budgetAlert: {
-      const payload = notification.payload as { budgetId?: string } | undefined;
-      if (payload?.budgetId) {
-        return {
-          kind: 'spa',
-          to: { name: ROUTES_NAMES.plannedBudgetDetails, params: { id: payload.budgetId } },
-        };
-      }
-      return {
-        kind: 'spa',
-        to: { name: ROUTES_NAMES.plannedBudgets },
-      };
-    }
-
     case NOTIFICATION_TYPES.subscriptionReminder: {
       const payload = notification.payload as { subscriptionId?: string } | undefined;
       if (!payload?.subscriptionId) return null;

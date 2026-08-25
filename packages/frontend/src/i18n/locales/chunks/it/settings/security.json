@@ -129,7 +129,6 @@
           "list": {
             "accounts": "Conti e saldi",
             "transactions": "Transazioni, rimborsi e trasferimenti",
-            "budgets": "Budget, tag e categorie",
             "portfolios": "Investimenti, portafogli e posizioni",
             "settings": "Impostazioni utente, chiavi IA e stato dell'onboarding",
             "baseCurrency": "Valuta di base e tassi di cambio"
@@ -161,7 +160,7 @@
           "description": "Questa azione non può essere annullata. Questo eliminerà definitivamente il tuo account e rimuoverà tutti i tuoi dati, inclusi:",
           "dataList": {
             "accounts": "Tutti i conti e le transazioni",
-            "categories": "Tutte le categorie e i budget",
+            "categories": "Tutte le categorie",
             "portfolios": "Tutti i portafogli di investimento",
             "settings": "Tutte le impostazioni e preferenze"
           },
@@ -194,7 +193,7 @@
               "aiKeysTerm": "Chiavi API IA",
               "aiKeys": "{term} — memorizzate cifrate, quindi dovrai reinserirle dopo il ripristino."
             },
-            "included": "Tutto il resto — conti, transazioni, categorie, budget, investimenti, prestiti, tag, beneficiari e abbonamenti — è incluso."
+            "included": "Tutto il resto — conti, transazioni, categorie, investimenti, prestiti, tag, beneficiari e abbonamenti — è incluso."
           }
         },
         "restore": {

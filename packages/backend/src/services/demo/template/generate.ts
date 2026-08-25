@@ -41,8 +41,7 @@ const cents = ({ min, max }: { min: number; max: number }) => faker.number.int({
 /**
  * Builds the template for one demo dataset.
  *
- * Seeded faker keeps every demo user's history identical, so budget limits can
- * be derived from the data and screenshots stay stable.
+ * Seeded faker keeps every demo user's history identical, so screenshots stay stable.
  */
 export function generateDemoTemplate({ generatedAt = new Date() }: { generatedAt?: Date } = {}): DemoTemplate {
   faker.seed(12345);
@@ -457,9 +456,7 @@ export function generateDemoTemplate({ generatedAt = new Date() }: { generatedAt
     // A big-box run rarely means food alone, so this shows a split transaction
     // instead of one flat category.
     //
-    // Splits must cover the full amount: budget stats skip a parent that has
-    // splits and count the split rows instead, so a leftover remainder would
-    // land in no budget.
+    // Splits must cover the full amount so no remainder disappears from the ledger.
     if (ref && emitted) {
       const household = Math.round(amount * 0.3);
       const pharmacy = Math.round(amount * 0.12);

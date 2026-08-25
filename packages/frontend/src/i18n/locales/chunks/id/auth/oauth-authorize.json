@@ -16,15 +16,15 @@
     "scopes": {
       "finance_read": {
         "label": "Lihat data keuangan Anda",
-        "desc": "Baca akun, transaksi, anggaran, kategori, tag, portofolio, dan statistik pengeluaran."
+        "desc": "Baca akun, transaksi, kategori, tag, portofolio, dan statistik pengeluaran."
       },
       "finance_write": {
         "label": "Buat dan sunting data keuangan Anda",
-        "desc": "Tambah dan perbarui transaksi, anggaran, langganan, posisi investasi, dan lainnya."
+        "desc": "Tambah dan perbarui transaksi, langganan, posisi investasi, dan lainnya."
       },
       "finance_delete": {
         "label": "Hapus data keuangan Anda",
-        "desc": "Hapus secara permanen transaksi, akun, anggaran, dan catatan lainnya."
+        "desc": "Hapus secara permanen transaksi, akun, dan catatan lainnya."
       },
       "profile_read": {
         "label": "Lihat profil Anda",

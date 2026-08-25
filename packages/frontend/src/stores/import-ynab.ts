@@ -61,7 +61,7 @@ export const useImportYnabStore = defineStore('importYnab', () => {
     onComplete: async () => {
       // Already on the `results` step; DoneStep renders once the progress status
       // flips to completed. Completion only needs to refresh caches.
-      // Invalidate every cached TanStack query so transactions/payees/budgets etc.
+      // Invalidate every cached TanStack query so imported data is reflected everywhere.
       // pick up the just-imported rows.
       queryClient.invalidateQueries();
       // Pinia-backed lists (accounts, categories, tags, currencies) are not

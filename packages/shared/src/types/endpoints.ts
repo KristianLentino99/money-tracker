@@ -871,30 +871,6 @@ export interface DismissTransferSuggestionBody {
   incomeTransactionId: RecordId;
 }
 
-// Budget Spending Stats
-export interface BudgetSpendingByCategoryItem {
-  categoryId: RecordId;
-  name: string;
-  color: string;
-  amount: number; // decimal, positive (expenses only)
-  children?: BudgetSpendingByCategoryItem[];
-}
-
-export interface BudgetSpendingPeriod {
-  periodStart: string; // yyyy-MM-dd
-  periodEnd: string;
-  expense: number; // decimal, positive
-  income: number; // decimal, positive
-}
-
-export interface BudgetSpendingStatsResponse {
-  spendingsByCategory: BudgetSpendingByCategoryItem[];
-  spendingOverTime: {
-    granularity: 'monthly' | 'weekly';
-    periods: BudgetSpendingPeriod[];
-  };
-}
-
 // Exchange Rates
 export interface ExchangeRatePairQuery extends QueryPayload {
   from: string;

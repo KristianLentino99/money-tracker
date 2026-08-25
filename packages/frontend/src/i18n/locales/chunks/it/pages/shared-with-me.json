@@ -9,8 +9,7 @@
       },
       "sections": {
         "account": "Conti",
-        "household": "Famiglie",
-        "budget": "Budget condivisi con te"
+        "household": "Famiglie"
       },
       "sharedBy": "Condiviso da {handle}",
       "viaHousehold": "Tramite la famiglia di {handle}",

@@ -94,55 +94,20 @@ describe('buildNotificationRoute', () => {
       expect(route).toBeNull();
     });
 
-    it('returns null when resourceType is not account (no router target yet)', () => {
-      // Phase 1 only ships RESOURCE_TYPES.account; later phases add budget/portfolio/etc.
-      // Use a string cast so this test stays meaningful as soon as a second resource type
-      // is added — at that point flip this to the new value.
+    it('returns null when resourceType has no direct router target', () => {
       const route = buildNotificationRoute(
         baseNotification({
           type: NOTIFICATION_TYPES.shareAccepted,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           payload: {
-            resourceType: 'budget' as any,
-            resourceId: '5',
-            resourceName: 'Groceries',
+            resourceType: RESOURCE_TYPES.plan,
+            resourceId: NONEXISTENT_ID,
+            resourceName: 'Monthly plan',
             counterpartUser: { id: 2, username: 'bob', avatar: null },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
+          },
         }),
       );
 
       expect(route).toBeNull();
-    });
-  });
-
-  describe('budget_alert', () => {
-    it('returns SPA route to planned budget details when budgetId present', () => {
-      const route = buildNotificationRoute(
-        baseNotification({
-          type: NOTIFICATION_TYPES.budgetAlert,
-          payload: { budgetId: 7 },
-        }),
-      );
-
-      expect(route).toEqual({
-        kind: 'spa',
-        to: { name: ROUTES_NAMES.plannedBudgetDetails, params: { id: 7 } },
-      });
-    });
-
-    it('falls back to planned budgets list when budgetId is missing', () => {
-      const route = buildNotificationRoute(
-        baseNotification({
-          type: NOTIFICATION_TYPES.budgetAlert,
-          payload: {},
-        }),
-      );
-
-      expect(route).toEqual({
-        kind: 'spa',
-        to: { name: ROUTES_NAMES.plannedBudgets },
-      });
     });
   });
 

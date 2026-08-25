@@ -117,7 +117,6 @@ const handlePrimaryOpenChange = (open: boolean) => {
           <ul class="mt-2 list-inside list-disc text-sm">
             <li>{{ $t('settings.security.wipeData.dialog.list.accounts') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.transactions') }}</li>
-            <li>{{ $t('settings.security.wipeData.dialog.list.budgets') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.portfolios') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.settings') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.baseCurrency') }}</li>

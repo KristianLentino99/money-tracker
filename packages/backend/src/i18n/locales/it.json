@@ -94,14 +94,6 @@
       "cannotReduceBelowRefunded": "Questa suddivisione ha rimborsi per un totale di {{refundsText}}. Non puoi ridurla al di sotto dell'importo rimborsato. Per ridurla ulteriormente, scollega prima i rimborsi."
     }
   },
-  "budgets": {
-    "budgetNotFound": "Budget non trovato.",
-    "someTransactionIdsInvalid": "Gli ID di alcune transazioni non sono validi.",
-    "transactionsAddedSuccessfully": "Transazioni aggiunte correttamente.",
-    "cannotManuallyLinkToCategoryBudget": "Non puoi collegare manualmente transazioni a budget basati su categorie. Le transazioni vengono contabilizzate automaticamente per categoria.",
-    "someCategoryIdsInvalid": "Gli ID di alcune categorie non sono validi o non esistono.",
-    "notCategoryBudget": "Questo endpoint è disponibile solo per i budget basati su categorie."
-  },
   "tags": {
     "tagNotFound": "Etichetta non trovata.",
     "tagNameAlreadyExists": "Esiste già un'etichetta con questo nome.",

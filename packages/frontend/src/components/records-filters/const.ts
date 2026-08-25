@@ -25,8 +25,6 @@ export interface FiltersStruct {
   /** Which transfer kinds to include. All selected = no narrowing. */
   transferNatures: TRANSACTION_TRANSFER_NATURE[];
   accountIds: string[];
-  budgetIds?: string[] | null;
-  excludedBudgetIds?: string[] | null;
   noteIncludes: string;
   categoryIds: string[];
   uncategorizedOnly: boolean;
@@ -48,7 +46,6 @@ export const DEFAULT_FILTERS: FiltersStruct = {
   plannedFilter: FILTER_OPERATION.all,
   transferNatures: [...SELECTABLE_TRANSFER_NATURES],
   accountIds: [],
-  excludedBudgetIds: null,
   noteIncludes: '',
   categoryIds: [],
   uncategorizedOnly: false,

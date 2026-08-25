@@ -129,7 +129,6 @@
           "list": {
             "accounts": "Akun dan saldo",
             "transactions": "Transaksi, pengembalian dana, dan transfer",
-            "budgets": "Anggaran, tag, dan kategori",
             "portfolios": "Investasi, portofolio, dan kepemilikan",
             "settings": "Pengaturan pengguna, kunci AI, dan status orientasi",
             "baseCurrency": "Mata uang dasar dan nilai tukar"
@@ -161,7 +160,7 @@
           "description": "Tindakan ini tidak dapat dibatalkan. Ini akan menghapus akun Anda secara permanen dan menghapus semua data Anda termasuk:",
           "dataList": {
             "accounts": "Semua akun dan transaksi",
-            "categories": "Semua kategori dan anggaran",
+            "categories": "Semua kategori",
             "portfolios": "Semua portofolio investasi",
             "settings": "Semua pengaturan dan preferensi"
           },
@@ -194,7 +193,7 @@
               "aiKeysTerm": "Kunci API AI",
               "aiKeys": "{term} — disimpan terenkripsi, sehingga Anda perlu memasukkannya kembali setelah memulihkan."
             },
-            "included": "Semua yang lain — akun, transaksi, kategori, anggaran, investasi, pinjaman, tag, penerima, dan biaya berulang — turut disertakan."
+            "included": "Semua yang lain — akun, transaksi, kategori, investasi, pinjaman, tag, penerima, dan biaya berulang — turut disertakan."
           }
         },
         "restore": {

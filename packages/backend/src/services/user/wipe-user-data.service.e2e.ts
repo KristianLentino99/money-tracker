@@ -4,7 +4,6 @@ import { VENTURE_CASH_FLOW_MODE, VENTURE_EVENT_TYPE } from '@bt/shared/types/ven
 import { authPool } from '@config/auth';
 import { describe, expect, it } from '@jest/globals';
 import Accounts from '@models/accounts.model';
-import Budgets from '@models/budget.model';
 import Categories from '@models/categories.model';
 import { connection } from '@models/index';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
@@ -45,7 +44,6 @@ describe('User data wipe (POST /user/wipe-data)', () => {
       }),
       raw: true,
     });
-    const budget = await helpers.createCustomBudget({ name: 'Wipe budget', limitAmount: 500, raw: true });
     const portfolio = await helpers.createPortfolio({ payload: { name: 'Wipe portfolio' }, raw: true });
     const tag = await helpers.createTag({ payload: { name: 'wipe-tag', color: '#123456' }, raw: true });
     const template = await helpers.createTransactionTemplate({
@@ -89,7 +87,6 @@ describe('User data wipe (POST /user/wipe-data)', () => {
     expect(await TransactionTemplates.findAll({ where: { userId } })).toHaveLength(0);
     expect(await TransactionTemplateTags.findAll({ where: { templateId: template.id } })).toHaveLength(0);
     expect(await Transactions.findAll({ where: { userId } })).toHaveLength(0);
-    expect(await Budgets.findAll({ where: { id: budget.id } })).toHaveLength(0);
     expect(await UsersCurrencies.findAll({ where: { userId } })).toHaveLength(0);
     expect(await UserSettings.findAll({ where: { userId } })).toHaveLength(0);
 

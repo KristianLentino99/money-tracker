@@ -1,7 +1,7 @@
 # Budget Tracker (MoneyMatter)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-A personal budget tracking application. Track your balances and transactions with bank connections or manual entry, categorize and analyze expenses and income, and many more.
+A personal finance application. Track balances and transactions with bank connections or manual entry, organize and analyze expenses and income, and plan spending in one place.
 
 ## Local Application setup
 

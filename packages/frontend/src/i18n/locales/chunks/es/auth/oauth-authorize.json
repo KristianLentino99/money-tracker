@@ -16,15 +16,15 @@
     "scopes": {
       "finance_read": {
         "label": "Ver sus datos financieros",
-        "desc": "Leer cuentas, transacciones, presupuestos, categorías, etiquetas, carteras y estadísticas de gasto."
+        "desc": "Leer cuentas, transacciones, categorías, etiquetas, carteras y estadísticas de gasto."
       },
       "finance_write": {
         "label": "Crear y editar sus datos financieros",
-        "desc": "Agregar y actualizar transacciones, presupuestos, suscripciones, posiciones de inversión y más."
+        "desc": "Agregar y actualizar transacciones, suscripciones, posiciones de inversión y más."
       },
       "finance_delete": {
         "label": "Eliminar sus datos financieros",
-        "desc": "Eliminar permanentemente transacciones, cuentas, presupuestos y otros registros."
+        "desc": "Eliminar permanentemente transacciones, cuentas y otros registros."
       },
       "profile_read": {
         "label": "Ver su perfil",

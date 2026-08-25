@@ -9,8 +9,7 @@
       },
       "sections": {
         "account": "Akun",
-        "household": "Rumah Tangga",
-        "budget": "Anggaran yang dibagikan dengan Anda"
+        "household": "Rumah Tangga"
       },
       "sharedBy": "Dibagikan oleh {handle}",
       "viaHousehold": "Melalui rumah tangga {handle}",

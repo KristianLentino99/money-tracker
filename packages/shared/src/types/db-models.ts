@@ -4,7 +4,6 @@ import {
   ACCOUNT_TYPES,
   AccessSource,
   BANK_PROVIDER_TYPE,
-  BUDGET_TYPES,
   CATEGORIZATION_MODE,
   LogoResolutionState,
   CATEGORIZATION_SKIP_REASON,
@@ -103,15 +102,13 @@ export interface AccountExternalData {
 
 /**
  * Resource share block emitted on user-facing list/detail responses for any shareable
- * resource (accounts, budgets, …). Describes whether the requester owns the resource
+ * resource (accounts, plans, …). Describes whether the requester owns the resource
  * or accesses it via an accepted share, plus the owner's display info.
  *
  * `accessSource` tells the frontend which kind of grant is in effect so it can pick
  * the right label and management entry point: per-resource shares keep the "Shared
  * by X" affordances, while household membership routes users into Settings → Household
- * for management. (Budgets never carry `'household'` – they're explicit-share only –
- * but the union stays open so a future selective-share extension doesn't force a type
- * widening.)
+ * for management.
  */
 export interface ResourceShareInfo {
   isOwner: boolean;
@@ -334,13 +331,9 @@ export interface TransactionModel {
    *  transactionCount is the group's full membership size, independent of how many of the
    *  group's members are in the current fetch window. */
   transactionGroups?: Array<{ id: RecordId; name: string; transactionCount: number }>;
-  /** Recipient who attached this tx to a shared budget. Present (possibly `null`) on
-   *  budget-scoped tx fetches; absent elsewhere. `null` ⇒ owner-attached, no chip in
-   *  the UI. Non-null ⇒ the budget recipient who clicked Attach for this row. */
-  addedBy?: { id: number; username: string; avatar: string | null } | null;
   /** Whether the caller has write access to this row. Set by list endpoints so the UI
    *  can render an inert details dialog (vs an edit form) when the row is visible –
-   *  typically via a budget share – but not editable. Absent on write-result payloads
+   *  through a read-only share – but not editable. Absent on write-result payloads
    *  and internal fetches; absent ⇒ "unknown / fall back to opportunistic UI". */
   canEdit?: boolean;
   /** Timestamp when the record was created (defaults to transaction time for existing records) */
@@ -448,32 +441,6 @@ export interface PlanAllocationEventModel {
   createdAt: Date;
 }
 
-export interface BudgetModel {
-  id: RecordId;
-  userId: number;
-  status: string;
-  name: string;
-  type: BUDGET_TYPES;
-  startDate?: Date;
-  endDate?: Date;
-  limitAmount?: number;
-  autoInclude?: boolean;
-  /**
-   * Category IDs for category-based budgets.
-   * Use for CREATE/UPDATE requests - the backend will expand parent IDs to include children.
-   * Not populated in GET responses (use `categories` array instead).
-   */
-  categoryIds?: string[];
-  /**
-   * Full category objects for category-based budgets.
-   * Populated in GET responses when budget has associated categories.
-   * Read-only - for mutations, use `categoryIds`.
-   */
-  categories?: CategoryModel[];
-  /** Present on user-facing list/detail responses; absent on internal serializations. */
-  share?: ResourceShareInfo;
-}
-
 export interface TagModel {
   id: RecordId;
   userId: number;
@@ -518,15 +485,6 @@ export interface TagReminderModel {
  * Type-specific payload structures for notifications.
  * Using discriminated union pattern for type safety.
  */
-export interface BudgetAlertPayload {
-  budgetId: RecordId;
-  budgetName: string;
-  thresholdPercent: number;
-  currentSpent: number;
-  limitAmount: number;
-  currencyCode: string;
-}
-
 export interface SystemNotificationPayload {
   code?: string;
   details?: Record<string, unknown>;
@@ -569,7 +527,7 @@ export interface ShareInvitationNotificationPayload {
   /** Single-use token used to deep-link to the accept/decline page (`/shared-with-me/invitations/:token`).
    * Required so the frontend notification handler can navigate without an extra lookup. */
   token: string;
-  /** Reusable across notification types: 'account', 'budget', etc. */
+  /** Reusable across notification types: 'account', 'plan', etc. */
   resourceType: ResourceType;
   /** String-encoded resource id, matches `ResourceShares.resourceId` shape. */
   resourceId: string;
@@ -624,7 +582,6 @@ export interface ShareInvitationSendFailedPayload {
 }
 
 export type NotificationPayload =
-  | BudgetAlertPayload
   | SystemNotificationPayload
   | ChangelogNotificationPayload
   | TagReminderNotificationPayload

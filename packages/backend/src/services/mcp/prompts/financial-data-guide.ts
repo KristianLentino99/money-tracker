@@ -19,11 +19,11 @@ export const FINANCIAL_DATA_GUIDE_CONTENT = `You are connected to MoneyMatter, a
 **Data Relationships:**
 - Transactions belong to one Account and one Category
 - Transactions can have multiple Tags
-- Budgets track spending across one or more Categories
+- Plans allocate money across one or more Categories
 - Categories can have parent-child hierarchy
 
 **Best Practices:**
 - Always check the user's base currency first via get_user_profile
 - Use search_transactions with date filters rather than requesting all data
 - For spending analysis, prefer get_spending_by_categories or get_cash_flow over manually summing transactions
-- Budget amounts and spending are always in the user's base currency`;
+- Plan amounts and spending are always in the user's base currency`;

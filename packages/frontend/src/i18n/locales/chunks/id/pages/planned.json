@@ -1,8 +1,5 @@
 {
   "planned": {
-    "budgets": {
-      "backToList": "Kembali ke Anggaran"
-    },
     "subscriptions": {
       "notFound": "Langganan tidak ditemukan",
       "notFoundDescription": "Kami tidak dapat menemukan langganan ini. Mungkin telah dihapus atau Anda mungkin tidak memiliki akses ke sana.",

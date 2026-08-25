@@ -2,13 +2,13 @@
 
 MoneyMatter exposes a remote Model Context Protocol (MCP) server. Connecting an
 agent to this server gives the agent OAuth-secured access to the user's
-financial data (accounts, transactions, budgets, subscriptions, transaction
+financial data (accounts, transactions, plans, subscriptions, transaction
 automations, categories, tags, cash flow, balance history, investment
 portfolios, holdings, and investment transactions). The agent can read these
 records and — when the user grants the corresponding scopes — create, edit,
 and delete them.
 
-Use this skill when the user asks to "connect Claude to my budget", "hook up
+Use this skill when the user asks to "connect Claude to my finances", "hook up
 ChatGPT to MoneyMatter", "let my AI see my finances", or similar.
 
 ## Endpoints
@@ -20,13 +20,13 @@ ChatGPT to MoneyMatter", "let my AI see my finances", or similar.
 
 ## OAuth scopes
 
-| Scope            | Purpose                                                         |
-| ---------------- | --------------------------------------------------------------- |
-| `finance:read`   | Read accounts, transactions, budgets, subscriptions, analytics  |
-| `finance:write`  | Create and edit transactions, budgets, subscriptions, and more  |
-| `finance:delete` | Permanently delete records (transactions, budgets, portfolios…) |
-| `profile:read`   | Read the user's profile (name, email, base currency)            |
-| `offline_access` | Receive a refresh token so sessions survive expiration          |
+| Scope            | Purpose                                                       |
+| ---------------- | ------------------------------------------------------------- |
+| `finance:read`   | Read accounts, transactions, plans, subscriptions, analytics  |
+| `finance:write`  | Create and edit transactions, plans, subscriptions, and more  |
+| `finance:delete` | Permanently delete records (transactions, plans, portfolios…) |
+| `profile:read`   | Read the user's profile (name, email, base currency)          |
+| `offline_access` | Receive a refresh token so sessions survive expiration        |
 
 The MoneyMatter consent screen lets the user grant or deny `finance:write` and
 `finance:delete` independently. Always request the narrowest set of scopes
@@ -56,14 +56,6 @@ page.
 | `search_transactions`                   | Filter transactions by date, category, tag, amount, etc.                                                         |
 | `get_categories`                        | List spending/income categories                                                                                  |
 | `get_tags`                              | List transaction tags                                                                                            |
-| `get_budgets`                           | Budgets with progress and overspend state                                                                        |
-| `create_budget`                         | Create a new budget with limit, date range, categories (`finance:write`)                                         |
-| `update_budget`                         | Update name, date range, limit, or categories of a budget (`finance:write`)                                      |
-| `delete_budget`                         | Permanently delete a budget and its transaction links (`finance:delete`)                                         |
-| `archive_budget`                        | Archive or restore a budget — active ↔ archived (`finance:write`)                                                |
-| `add_transactions_to_budget`            | Link transactions to a manual budget (`finance:write`)                                                           |
-| `remove_transactions_from_budget`       | Unlink transactions from a budget (`finance:write`)                                                              |
-| `get_budget_spending_stats`             | Category breakdown and time-series spending for a budget                                                         |
 | `get_spending_by_categories`            | Aggregate spending by category over a range                                                                      |
 | `get_cash_flow`                         | Income vs expenses over a range                                                                                  |
 | `get_balance_history`                   | Time-series of account balances                                                                                  |

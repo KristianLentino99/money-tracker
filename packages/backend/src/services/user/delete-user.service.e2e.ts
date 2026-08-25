@@ -9,7 +9,6 @@ import { API_RESPONSE_STATUS } from '@bt/shared/types/api';
 import { authPool } from '@config/auth';
 import { describe, expect, it } from '@jest/globals';
 import Accounts from '@models/accounts.model';
-import Budgets from '@models/budget.model';
 import Categories from '@models/categories.model';
 import { connection } from '@models/index';
 import Portfolios from '@models/investments/portfolios.model';
@@ -48,14 +47,7 @@ describe('User deletion (DELETE /user/delete)', () => {
     const group = await helpers.createAccountGroup({ name: 'Test Group', raw: true });
     await helpers.addAccountToGroup({ accountId: account.id, groupId: group.id, raw: true });
 
-    // 5. Create budget
-    const budget = await helpers.createCustomBudget({
-      name: 'Test Budget',
-      limitAmount: 5000,
-      raw: true,
-    });
-
-    // 6. Create portfolio
+    // 5. Create portfolio
     const portfolio = await helpers.createPortfolio({
       payload: { name: 'Test Portfolio' },
       raw: true,
@@ -69,7 +61,6 @@ describe('User deletion (DELETE /user/delete)', () => {
     const categoriesBefore = await helpers.getCategoriesList();
     const transactionsBefore = await helpers.getTransactions({ raw: true });
     const groupsBefore = await helpers.getAccountGroups({ raw: true });
-    const budgetsBefore = await helpers.getCustomBudgets({ raw: true });
     const portfoliosBefore = await helpers.listPortfolios({ raw: true });
     const currenciesBefore = await helpers.getUserCurrencies();
 
@@ -77,7 +68,6 @@ describe('User deletion (DELETE /user/delete)', () => {
     expect(categoriesBefore.length).toBeGreaterThanOrEqual(1);
     expect(transactionsBefore.length).toBeGreaterThanOrEqual(1);
     expect(groupsBefore.length).toBeGreaterThanOrEqual(1);
-    expect(budgetsBefore.length).toBeGreaterThanOrEqual(1);
     expect(portfoliosBefore.data.length).toBeGreaterThanOrEqual(1);
     expect(currenciesBefore.length).toBeGreaterThanOrEqual(2);
 
@@ -91,7 +81,6 @@ describe('User deletion (DELETE /user/delete)', () => {
     const accountsAfter = await Accounts.findAll({ where: { id: account.id } });
     const categoriesAfter = await Categories.findAll({ where: { id: category.id } });
     const transactionsAfter = await Transactions.findAll({ where: { accountId: account.id } });
-    const budgetsAfter = await Budgets.findAll({ where: { id: budget.id } });
     const portfoliosAfter = await Portfolios.findAll({ where: { id: portfolio.id } });
     const currenciesAfter = await UsersCurrencies.findAll({ where: { currencyCode: 'USD' } });
     const settingsAfter = await UserSettings.findAll({ where: {} });
@@ -99,7 +88,6 @@ describe('User deletion (DELETE /user/delete)', () => {
     expect(accountsAfter).toHaveLength(0);
     expect(categoriesAfter).toHaveLength(0);
     expect(transactionsAfter).toHaveLength(0);
-    expect(budgetsAfter).toHaveLength(0);
     expect(portfoliosAfter).toHaveLength(0);
     expect(currenciesAfter).toHaveLength(0);
     expect(settingsAfter).toHaveLength(0);
@@ -236,53 +224,6 @@ describe('User deletion (DELETE /user/delete)', () => {
     // Verify portfolio is deleted
     const portfoliosAfter = await Portfolios.findAll({ where: { id: portfolio.id } });
     expect(portfoliosAfter).toHaveLength(0);
-  });
-
-  it('should delete user with budget and linked transactions', async () => {
-    // Create account and category
-    const account = await helpers.createAccount({ raw: true });
-    const category = await helpers.addCustomCategory({
-      name: 'Budget Category',
-      color: '#FF0000',
-      raw: true,
-    });
-
-    // Create budget
-    const budget = await helpers.createCustomBudget({
-      name: 'Monthly Budget',
-      limitAmount: 1000,
-      raw: true,
-    });
-
-    // Create transaction
-    const [tx] = await helpers.createTransaction({
-      payload: helpers.buildTransactionPayload({
-        accountId: account.id,
-        amount: 500,
-        categoryId: category.id,
-        transactionType: TRANSACTION_TYPES.expense,
-      }),
-      raw: true,
-    });
-
-    // Add transaction to budget
-    await helpers.addTransactionToCustomBudget({
-      id: budget.id,
-      payload: { transactionIds: [tx!.id] },
-      raw: true,
-    });
-
-    // Verify budget exists
-    const budgetBefore = await helpers.getCustomBudgetById({ id: budget.id, raw: true });
-    expect(budgetBefore).toBeDefined();
-
-    // Delete user
-    const deleteRes = await helpers.deleteUserAccount();
-    expect(deleteRes.statusCode).toBe(200);
-
-    // Verify budget is deleted
-    const budgetsAfter = await Budgets.findAll({ where: { id: budget.id } });
-    expect(budgetsAfter).toHaveLength(0);
   });
 
   it('should delete user with refund transactions', async () => {

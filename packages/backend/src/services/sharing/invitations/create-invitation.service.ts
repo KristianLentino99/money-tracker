@@ -13,7 +13,6 @@ import {
 import { ConflictError, NotFoundError, ValidationError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
-import Budgets from '@models/budget.model';
 import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
 import ShareInvitations from '@models/share-invitations.model';
@@ -90,28 +89,6 @@ const resolveOwnedResource = async ({
       resourceName: plan.name,
     };
   }
-  if (resourceType === RESOURCE_TYPES.budget) {
-    const budget = await Budgets.findOne({ where: { id: resourceId } });
-    if (!budget) {
-      throw new NotFoundError({ message: 'Budget not found' });
-    }
-    if (budget.userId !== ownerUserId) {
-      // Don't leak existence — anyone other than the owner sees a 404.
-      throw new NotFoundError({ message: 'Budget not found' });
-    }
-    // Budgets are denominated in the owner's base currency (limitAmount + spending
-    // stats), not a per-budget currency. Recipient base currency is locked against
-    // this at accept-time.
-    const ownerBaseCurrency = await getBaseCurrency({ userId: ownerUserId });
-    if (!ownerBaseCurrency) {
-      throw new ValidationError({ message: 'Set your base currency before sharing a budget.' });
-    }
-    return {
-      ownerUserId: budget.userId,
-      ownerCurrencyCode: ownerBaseCurrency.currencyCode,
-      resourceName: budget.name,
-    };
-  }
   if (resourceType === RESOURCE_TYPES.household) {
     // A household is identified by its owner — the inviter can only invite people to
     // their own household, so `resourceId` must match `ownerUserId` exactly. Anything
@@ -159,10 +136,7 @@ const buildCleanPolicy = ({
   if (permission === SHARE_PERMISSIONS.read) {
     return null;
   }
-  // Budgets have no per-tx policy in MVP — `write` here means "attach own transactions",
-  // nothing else. Storing a `transactionsWriteScope` here would leak meaningless data into
-  // the row that a future reader could mistake for a real policy. Return null.
-  if (resourceType === RESOURCE_TYPES.budget || resourceType === RESOURCE_TYPES.plan) {
+  if (resourceType === RESOURCE_TYPES.plan) {
     return null;
   }
   const scope = policy?.transactionsWriteScope ?? TRANSACTIONS_WRITE_SCOPES.all;

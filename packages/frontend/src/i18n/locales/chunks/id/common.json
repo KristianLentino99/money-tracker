@@ -144,7 +144,6 @@
         "error": "Gagal melepas tautan transaksi!"
       },
       "record": {
-        "addedByTooltip": "Transaksi ini dilampirkan ke anggaran oleh {handle}",
         "hiddenAccount": "Akun tersembunyi"
       }
     },

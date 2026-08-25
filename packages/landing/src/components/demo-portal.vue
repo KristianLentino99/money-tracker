@@ -68,7 +68,7 @@
         >
           <template v-if="status === 'loading'">
             <p class="text-foreground text-base font-semibold">Setting up your demo account…</p>
-            <p class="text-muted-foreground mt-2 text-sm">Loading sample transactions &amp; budgets</p>
+            <p class="text-muted-foreground mt-2 text-sm">Loading sample transactions &amp; spending plans</p>
             <div class="mt-6 flex gap-2">
               <div
                 v-for="i in 3"

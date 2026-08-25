@@ -504,23 +504,6 @@
       "error": "No se pudo enviar la invitación. Inténtelo de nuevo.",
       "emailSendFailedWarning": "Invitación guardada, pero no se pudo enviar el correo electrónico. Es posible que el destinatario no haya recibido la notificación — inténtelo de nuevo más tarde."
     },
-    "shareBudgetDialog": {
-      "title": "Compartir presupuesto",
-      "description": "Invite a alguien a ver este presupuesto y contribuir con sus propias transacciones. {name}.",
-      "emailLabel": "Correo electrónico",
-      "emailPlaceholder": "Correo del destinatario",
-      "permissionLabel": "Permiso",
-      "permissions": {
-        "read": "Solo visualización",
-        "write": "Adjuntar transacciones propias",
-        "manage": "Gestionar"
-      },
-      "cancel": "Cancelar",
-      "send": "Enviar invitación",
-      "success": "Invitación enviada.",
-      "error": "No se pudo enviar la invitación.",
-      "emailSendFailedWarning": "Invitación creada, pero no se pudo entregar el correo electrónico."
-    },
     "shareInvitationDialog": {
       "titlePending": "{owner} quiere compartir con usted",
       "titleAccepted": "Invitación aceptada",
@@ -554,7 +537,6 @@
       "decline": "Rechazar",
       "close": "Cerrar",
       "goToAccount": "Ir a la cuenta",
-      "goToBudget": "Ir al presupuesto",
       "updateBaseCurrency": "Actualizar moneda base",
       "acceptSuccess": "Ahora forma parte de este recurso compartido.",
       "acceptError": "No se pudo aceptar la invitación. Inténtelo de nuevo.",

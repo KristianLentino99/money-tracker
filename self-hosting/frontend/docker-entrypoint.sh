@@ -131,7 +131,7 @@ cat > /app/site.webmanifest <<EOF
   "id": "/",
   "name": "$(js_escape "$PWA_APP_NAME")",
   "short_name": "$(js_escape "$PWA_SHORT_NAME")",
-  "description": "Track spending, plan budgets, and understand your financial future while keeping control of your data.",
+  "description": "Track spending, plan ahead, and understand your financial future while keeping control of your data.",
   "lang": "en",
   "dir": "ltr",
   "start_url": "/dashboard",

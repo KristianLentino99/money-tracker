@@ -8,9 +8,6 @@ import AccountsModel from './accounts.model';
 import BalancesModel from './balances.model';
 import BankDataProviderConnectionsModel from './bank-data-provider-connections.model';
 import BrandLogosModel from './brand-logos.model';
-import BudgetCategoriesModel from './budget-categories.model';
-import BudgetTransactionsModel from './budget-transactions.model';
-import BudgetModel from './budget.model';
 import CategoriesModel from './categories.model';
 import { connection } from './connection';
 import CurrenciesModel from './currencies.model';
@@ -105,9 +102,6 @@ const models = [
   UsersCurrenciesModel,
   AccountGroupingModel,
   AccountGroupsModel,
-  BudgetModel,
-  BudgetCategoriesModel,
-  BudgetTransactionsModel,
   PlanModel,
   PlanCategoryMembershipsModel,
   PlanAccountMembershipsModel,

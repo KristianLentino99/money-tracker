@@ -460,15 +460,8 @@ describe('Data export (POST /user/data-export)', () => {
   });
 
   describe('Multiple domain coverage', () => {
-    it('exports budgets, subscriptions, portfolios, and vehicles when their groups are enabled', async () => {
+    it('exports subscriptions, portfolios, and vehicles when their groups are enabled', async () => {
       const account = await helpers.createAccount({ raw: true });
-      const category = await helpers.addCustomCategory({ name: 'MultiCat', color: '#AABBCC', raw: true });
-      await helpers.createCustomBudget({
-        name: 'Export budget',
-        limitAmount: 100000,
-        categoryIds: [category.id],
-        raw: true,
-      });
       await helpers.createPortfolio({ payload: { name: 'Multi portfolio' }, raw: true });
 
       // Seed a subscription and vehicle so their transformers see real data –
@@ -497,9 +490,6 @@ describe('Data export (POST /user/data-export)', () => {
       const response = await helpers.exportData({ format: 'json' });
       const archive = helpers.parseExportArchive({ buffer: response.body });
       const json = archive.json as Record<string, unknown[]>;
-
-      expect(Array.isArray(json.budgets)).toBe(true);
-      expect((json.budgets as Array<Record<string, unknown>>).some((b) => b.name === 'Export budget')).toBe(true);
 
       expect(Array.isArray(json.subscriptions)).toBe(true);
       expect((json.subscriptions as Array<Record<string, unknown>>).some((s) => s.name === 'Multi subscription')).toBe(
@@ -571,29 +561,6 @@ describe('Data export (POST /user/data-export)', () => {
       expect(unpinned!.Category).toBe('');
       expect(unpinned!.Payee).toBe('');
       expect(unpinned!.Tags).toBe('');
-    });
-
-    it('handles budgets with NULL limitAmount without crashing', async () => {
-      // Budget.limitAmount is nullable; the transformer must guard the
-      // `.toNumber()` call so a budget without a cap exports as an empty cell
-      // rather than 500'ing the whole request.
-      const category = await helpers.addCustomCategory({ name: 'NoLimitCat', color: '#AABBCC', raw: true });
-      await helpers.createCustomBudget({
-        name: 'Open-ended budget',
-        categoryIds: [category.id],
-        // limitAmount intentionally omitted – should be allowed by the budgets API.
-        raw: true,
-      });
-
-      const response = await helpers.exportData({ format: 'csv' });
-      expect(response.statusCode).toBe(200);
-      const archive = helpers.parseExportArchive({ buffer: response.body });
-      const budgetsCsv = archive.files.get('budgets.csv');
-      expect(budgetsCsv).toBeDefined();
-      const rows = helpers.parseExportCsv({ buffer: budgetsCsv! });
-      const seeded = rows.find((r) => r.Name === 'Open-ended budget');
-      expect(seeded).toBeDefined();
-      expect(seeded?.LimitAmount).toBe('');
     });
   });
 

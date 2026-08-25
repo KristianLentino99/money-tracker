@@ -10,7 +10,7 @@ export const EXPORT_SCHEMA_VERSION = 1;
 export const EXPORT_FORMATS = ['json', 'csv', 'xlsx'] as const;
 export type ExportFormat = (typeof EXPORT_FORMATS)[number];
 
-export const ALL_EXPORT_GROUPS = ['transactions', 'budgets', 'subscriptions', 'investments'] as const;
+export const ALL_EXPORT_GROUPS = ['transactions', 'subscriptions', 'investments'] as const;
 export type ExportGroup = (typeof ALL_EXPORT_GROUPS)[number];
 
 /**
@@ -26,7 +26,6 @@ export const EXPORT_FILE_NAMES = [
   'categories',
   'tags',
   'vehicles',
-  'budgets',
   'subscriptions',
   'transaction_templates',
   'portfolios',
@@ -49,7 +48,7 @@ export const MAX_EXPORT_ROWS = 250_000;
  *
  * Only event tables filter on this range – transactions, balance history,
  * investment transactions, portfolio transfers. Reference tables (accounts,
- * categories, tags, vehicles, portfolios, holdings, budgets, subscriptions)
+ * categories, tags, vehicles, portfolios, holdings, subscriptions)
  * always emit all rows so the filtered CSV columns resolve to readable names
  * regardless of which window the user picked.
  *

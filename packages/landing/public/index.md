@@ -1,6 +1,6 @@
-# MoneyMatter — Free Open-Source Budget Tracker & Personal Finance App
+# MoneyMatter — Free Open-Source Personal Finance & Spending Plan App
 
-> Free, open-source personal finance app with budget tracking. Connect your banks, track expenses, set budgets, and monitor investments. Self-host for full control or use our cloud, and your data stays yours.
+> Free, open-source personal finance app with spending plans. Connect your banks, track expenses, plan spending, and monitor investments. Self-host for full control or use our cloud, and your data stays yours.
 
 MoneyMatter is a privacy-first alternative to apps like Mint and YNAB. It is free, open-source (AGPL-3.0), and designed for people who want control over their financial data.
 
@@ -15,7 +15,7 @@ MoneyMatter is a privacy-first alternative to apps like Mint and YNAB. It is fre
 
 - Bank account synchronization (Monobank, EnableBanking, LunchFlow, more coming)
 - AI-powered transaction categorization that learns your spending patterns
-- Budget tracking with visual progress indicators
+- Spending plans with visual progress indicators
 - Investment portfolio tracking with real-time market data
 - Multi-currency support with automatic exchange rates
 - CSV and bank statement import (with AI-assisted parsing)

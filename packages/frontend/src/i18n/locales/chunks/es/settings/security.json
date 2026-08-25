@@ -129,7 +129,6 @@
           "list": {
             "accounts": "Cuentas y saldos",
             "transactions": "Transacciones, reembolsos y transferencias",
-            "budgets": "Presupuestos, etiquetas y categorías",
             "portfolios": "Inversiones, carteras y posiciones",
             "settings": "Ajustes de usuario, claves de IA y estado de incorporación",
             "baseCurrency": "Moneda base y tipos de cambio"
@@ -161,7 +160,7 @@
           "description": "Esta acción no se puede deshacer. Eliminará permanentemente su cuenta y borrará todos sus datos, incluyendo:",
           "dataList": {
             "accounts": "Todas las cuentas y transacciones",
-            "categories": "Todas las categorías y presupuestos",
+            "categories": "Todas las categorías",
             "portfolios": "Todas las carteras de inversión",
             "settings": "Todos los ajustes y preferencias"
           },
@@ -194,7 +193,7 @@
               "aiKeysTerm": "Claves de API de IA",
               "aiKeys": "{term} — se almacenan cifradas, así que deberá volver a introducirlas después de restaurar."
             },
-            "included": "Todo lo demás — cuentas, transacciones, categorías, presupuestos, inversiones, préstamos, etiquetas, beneficiarios y suscripciones — está incluido."
+            "included": "Todo lo demás — cuentas, transacciones, categorías, inversiones, préstamos, etiquetas, beneficiarios y suscripciones — está incluido."
           }
         },
         "restore": {

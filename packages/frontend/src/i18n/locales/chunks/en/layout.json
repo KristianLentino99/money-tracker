@@ -16,10 +16,10 @@
     "accountDetails": "Account details",
     "logout": "Logout",
     "settings": "Settings",
+    "plan": "Budget",
     "planned": {
-      "planned": "Planned",
-      "subscriptions": "Recurring Payments",
-      "budgets": "Budgets"
+      "planned": "Forecast",
+      "subscriptions": "Recurring Payments"
     },
     "venture": "Venture"
   },
@@ -238,10 +238,6 @@
           "create-tag": {
             "title": "Create a tag",
             "description": "Add tags to group related transactions"
-          },
-          "create-budget": {
-            "title": "Set up a budget",
-            "description": "Create spending limits for categories"
           },
           "create-subscription": {
             "title": "Create a subscription",

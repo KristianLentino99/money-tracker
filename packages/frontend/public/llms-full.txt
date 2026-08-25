@@ -1,6 +1,6 @@
 # MoneyMatter
 
-> Free, open-source budget tracking and personal finance app. Self-host for full data ownership or use the cloud version. Supports AI integration via MCP (Model Context Protocol) for querying your finances with Claude, ChatGPT, or any MCP-compatible client.
+> Free, open-source personal finance and planning app. Self-host for full data ownership or use the cloud version. Supports AI integration via MCP (Model Context Protocol) for querying your finances with Claude, ChatGPT, or any MCP-compatible client.
 
 ## About
 
@@ -27,13 +27,13 @@ Connect bank accounts to automatically sync transactions. Currently supports Mon
 
 MoneyMatter uses AI to learn your spending patterns. Categorize a transaction once, and the AI will automatically categorize similar future transactions. No more manual sorting of every purchase.
 
-### Budget Tracking
+### Spending Plans
 
-Set budgets by category and track your progress with visual indicators. See at a glance whether you're on track, approaching your limit, or over budget. Budgets support custom time periods and flexible category groupings.
+Allocate income across categories in the Plan workspace and compare planned amounts with actual spending using visual progress indicators.
 
 ### Investment Portfolio Tracking (Beta)
 
-Track investment portfolios alongside your regular budget. Monitor performance, gains/losses, and asset allocation in one place. Supports real-time market data for securities pricing.
+Track investment portfolios alongside your spending plans. Monitor performance, gains/losses, and asset allocation in one place. Supports real-time market data for securities pricing.
 
 ### Multi-Currency Support
 
@@ -83,7 +83,7 @@ Use AI agent frameworks (OpenClaw, Claude, ChatGPT) to automate financial analys
 
 - **Weekly spending digest** — get a breakdown of your week's spending every Monday
 - **Anomaly detection** — automatically flag unusual transactions or spending spikes
-- **Monthly budget health check** — automated review with saving recommendations and goal tracking
+- **Monthly spending-plan health check** — automated review with saving recommendations and goal tracking
 
 ### Security and privacy
 

@@ -33,8 +33,6 @@ export const loadTransactions = async ({
   /** Pagination row offset. */
   offset?: number;
   limit?: number;
-  budgetIds?: string[];
-  excludedBudgetIds?: string[];
   accountType?: ACCOUNT_TYPES;
   transactionType?: TRANSACTION_TYPES;
   accountIds?: string[];
@@ -97,7 +95,7 @@ export const loadTransactionsByTransferId = async (transferId: string): Promise<
 };
 
 /** Single-tx fetch used by the edit dialog when the parent account isn't in the
- *  caller's local `accountsRecord` (typically the budget-share-only case). The list
+ *  caller's local `accountsRecord` (typically a shared-account case). The list
  *  endpoints skip `canEdit` to keep the common path cheap; this lookup exposes it
  *  for free from the already-resolved access result on the server. */
 export const loadTransactionById = async ({ id }: { id: string }): Promise<TransactionModel | null> => {

@@ -2,7 +2,6 @@ import { HouseholdSharePermission, RecordId, RESOURCE_TYPES } from '@bt/shared/t
 import AccountGroups from '@models/accounts-groups/account-groups.model';
 import * as Accounts from '@models/accounts.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
-import Budget from '@models/budget.model';
 import Categories from '@models/categories.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -117,7 +116,6 @@ export const destroyUserOwnedData = async ({ user }: { user: Users.default }) =>
   // Domain-top tables. DB-level FK CASCADE handles most children:
   //   Accounts → Balances, Transactions, BankDataProviderConnections,
   //              TransactionTags, TransactionSplits, RefundTransactions
-  //   Budget → BudgetCategories, BudgetTransactions
   //   Subscriptions → SubscriptionPeriods → SubscriptionPeriodNotifications,
   //                   SubscriptionTransactions
   //   Portfolios → Holdings, PortfolioBalances, PortfolioTransfers, InvestmentTransaction
@@ -140,7 +138,6 @@ export const destroyUserOwnedData = async ({ user }: { user: Users.default }) =>
   await SubscriptionCandidates.destroy({ where: { userId: user.id } });
   await TransferSuggestionDismissals.destroy({ where: { userId: user.id } });
   await TransactionAutomations.destroy({ where: { userId: user.id } });
-  await Budget.destroy({ where: { userId: user.id } });
   await Subscriptions.destroy({ where: { userId: user.id } });
   await TransactionTemplates.destroy({ where: { userId: user.id } });
   // PortfolioTransfers FKs Transactions / Accounts / Portfolios all via SET NULL.

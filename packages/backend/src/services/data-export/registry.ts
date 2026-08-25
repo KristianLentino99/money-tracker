@@ -2,7 +2,6 @@ import { EXPORT_FILE_NAMES } from '@bt/shared/types';
 
 import { transformAccounts } from './transformers/accounts-transformer';
 import { transformBalancesHistory } from './transformers/balances-history-transformer';
-import { transformBudgets } from './transformers/budgets-transformer';
 import { transformCategories } from './transformers/categories-transformer';
 import { transformHoldings } from './transformers/holdings-transformer';
 import { transformInvestmentTransactions } from './transformers/investment-transactions-transformer';
@@ -187,21 +186,6 @@ export const EXPORT_DOMAINS: ReadonlyArray<ExportDomainBase> = [
       { header: 'Currency', field: 'currency', kind: 'text' },
       { header: 'CurrentMileage', field: 'currentMileage', kind: 'number' },
       { header: 'DepreciationModel', field: 'depreciationModel', kind: 'text' },
-    ],
-  }),
-  defineDomain({
-    name: 'budgets',
-    group: 'budgets',
-    build: ({ userId }) => transformBudgets({ userId }),
-    columns: [
-      { header: 'Name', field: 'name', kind: 'text' },
-      { header: 'Status', field: 'status', kind: 'text' },
-      { header: 'PeriodStart', field: 'periodStart', kind: 'date' },
-      { header: 'PeriodEnd', field: 'periodEnd', kind: 'date' },
-      { header: 'LimitAmount', field: 'limitAmount', kind: 'money' },
-      { header: 'Currency', field: 'currency', kind: 'text' },
-      { header: 'Categories', field: 'categories', kind: 'array' },
-      { header: 'SpentAmount', field: 'spentAmount', kind: 'money' },
     ],
   }),
   defineDomain({

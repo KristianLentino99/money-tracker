@@ -22,8 +22,6 @@ import { removeUndefinedKeys } from '@js/helpers';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
-import BudgetTransactions from '@models/budget-transactions.model';
-import Budgets from '@models/budget.model';
 import Categories from '@models/categories.model';
 import Currencies from '@models/currencies.model';
 import LoanDetails from '@models/loan-details.model';
@@ -165,13 +163,6 @@ export default class Transactions extends Model {
   @Column({ type: DataType.JSONB, allowNull: true, defaultValue: null })
   creatorSnapshot!: TransactionCreatorSnapshot | null;
 
-  @BelongsToMany(() => Budgets, {
-    through: { model: () => BudgetTransactions, unique: false },
-    foreignKey: 'transactionId',
-    otherKey: 'budgetId',
-  })
-  budgets!: Budgets[];
-
   @BelongsToMany(() => Tags, {
     through: { model: () => TransactionTags, unique: false },
     foreignKey: 'transactionId',
@@ -267,7 +258,7 @@ export default class Transactions extends Model {
   @MoneyField({ storage: 'cents' })
   declare cashbackAmount: Money;
 
-  // Metadata only: no balance, statistics or budget path reads these. What the user spent in a
+  // Metadata only: no balance or statistics path reads these. What the user spent in a
   // foreign currency, with its ISO 4217 code. Both hold a value or both stay null.
   @MoneyField({ storage: 'cents', allowNull: true })
   declare originalAmount: Money | null;
@@ -792,8 +783,6 @@ export const findWithFilters = async ({
   accountType,
   accountIds,
   excludeAccountIds,
-  budgetIds,
-  excludedBudgetIds,
   tagIds,
   excludedTagIds,
   order = SORT_DIRECTIONS.desc,
@@ -840,8 +829,6 @@ export const findWithFilters = async ({
   accountIds?: string[];
   /** Filter: exclude transactions from these account IDs */
   excludeAccountIds?: string[];
-  budgetIds?: string[];
-  excludedBudgetIds?: string[];
   tagIds?: string[];
   excludedTagIds?: string[];
   order?: SORT_DIRECTIONS;
@@ -943,7 +930,7 @@ export const findWithFilters = async ({
   if (categoryIds && categoryIds.length > 0) {
     // Find transactions that have splits with any of the requested category IDs.
     // Under `access: 'pre-scoped'` we widen the lookup to any user's splits — the caller's
-    // upstream scoping (accessible accountIds / budget ids) constrains the final rows, so
+    // upstream scoping (accessible accountIds) constrains the final rows, so
     // this stays safe.
     const splitsWhere: Record<string, unknown> = { categoryId: { [Op.in]: categoryIds } };
     if (access !== 'pre-scoped') splitsWhere.userId = access.creator;
@@ -1031,40 +1018,6 @@ export const findWithFilters = async ({
       whereClause.refAmount[Op.gte] = refAmountGte.toCents();
     } else if (refAmountLte) {
       whereClause.refAmount[Op.lte] = refAmountLte.toCents();
-    }
-  }
-
-  if (budgetIds?.length) {
-    const budgetTransactionIds = await BudgetTransactions.findAll({
-      attributes: ['transactionId'],
-      where: {
-        budgetId: { [Op.in]: budgetIds },
-      },
-      raw: true,
-    }).then((results) => results.map((r) => r.transactionId));
-
-    whereClause.id = {
-      ...(whereClause.id as object),
-      [Op.in]: budgetTransactionIds,
-    };
-  }
-
-  if (excludedBudgetIds?.length) {
-    const excludedTransactionIds = await BudgetTransactions.findAll({
-      attributes: ['transactionId'],
-      where: {
-        budgetId: {
-          [Op.in]: excludedBudgetIds,
-        },
-      },
-      raw: true,
-    }).then((results) => results.map((r) => r.transactionId));
-
-    if (excludedTransactionIds.length > 0) {
-      whereClause.id = {
-        ...(whereClause.id as object),
-        [Op.notIn]: excludedTransactionIds,
-      };
     }
   }
 

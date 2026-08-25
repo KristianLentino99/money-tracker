@@ -1,13 +1,5 @@
 import type { RecordId } from '@bt/shared/types';
-import {
-  ACCOUNT_TYPES,
-  BUDGET_STATUSES,
-  BUDGET_TYPES,
-  DEPRECIATION_PRESET,
-  LOAN_TYPE,
-  SUPPORTED_LOAN_TYPES,
-  VEHICLE_CLASS,
-} from '@bt/shared/types';
+import { ACCOUNT_TYPES, DEPRECIATION_PRESET, LOAN_TYPE, SUPPORTED_LOAN_TYPES, VEHICLE_CLASS } from '@bt/shared/types';
 import { VENTURE_CASH_FLOW_MODE, VENTURE_EVENT_TYPE, VENTURE_SPV_SUBTYPE } from '@bt/shared/types/venture';
 import { getTranslatedCategories } from '@common/const/default-categories';
 import { getTranslatedDefaultTags } from '@common/const/default-tags';
@@ -17,7 +9,6 @@ import Accounts from '@models/accounts.model';
 import UserSettings, { DEFAULT_SETTINGS, type SettingsSchema } from '@models/user-settings.model';
 import * as UsersCurrencies from '@models/users-currencies.model';
 import * as accountsService from '@services/accounts.service';
-import { createBudget } from '@services/budgets/create-budget';
 import * as categoriesService from '@services/categories.service';
 import { createLoan } from '@services/loans/create-loan.service';
 import * as tagsService from '@services/tags';
@@ -217,76 +208,6 @@ export async function createAccounts({ userId }: { userId: number }): Promise<Ac
   }
 
   return accounts;
-}
-
-/** Rounds a cents amount to the nearest $10 so a derived limit reads as a number a person chose. */
-function roundToNearestTenDollars({ cents }: { cents: number }): number {
-  const step = 1000;
-  return Math.max(step, Math.round(cents / step) * step);
-}
-
-/**
- * Seeds category budgets over a trailing window. Skipping `type: category` or
- * `startDate`/`endDate` breaks the read path: `createBudget` then writes no
- * `BudgetCategories` rows (every card reads zero), or `buildDateFilter` drops
- * the filter and totals all history against a one-month limit. Limits derive
- * from actual spend in the window so the cards keep their under/near/over states.
- */
-export async function createBudgets({
-  userId,
-  categoryMap,
-  spendByCategoryKey,
-  windowStart,
-  windowEnd,
-}: {
-  userId: number;
-  categoryMap: Map<string, string>;
-  spendByCategoryKey: Map<string, number>;
-  windowStart: Date;
-  windowEnd: Date;
-}): Promise<void> {
-  let created = 0;
-  let skippedUnknownCategories = 0;
-  let skippedNoSpend = 0;
-
-  for (const budgetConfig of DEMO_CONFIG.budgets) {
-    const categoryIds = budgetConfig.categoryKeys
-      .map((key) => categoryMap.get(key))
-      .filter((id): id is string => id !== undefined);
-
-    if (!categoryIds.length) {
-      skippedUnknownCategories += 1;
-      continue;
-    }
-
-    const spent = budgetConfig.categoryKeys.reduce((total, key) => total + (spendByCategoryKey.get(key) ?? 0), 0);
-    if (spent <= 0) {
-      skippedNoSpend += 1;
-      continue;
-    }
-
-    await createBudget({
-      userId,
-      name: budgetConfig.name,
-      status: BUDGET_STATUSES.active,
-      type: BUDGET_TYPES.category,
-      categoryIds,
-      limitAmount: Money.fromCents(roundToNearestTenDollars({ cents: spent / budgetConfig.targetUtilization })),
-      startDate: windowStart,
-      endDate: windowEnd,
-    });
-    created += 1;
-  }
-
-  const summary = `Created ${created} of ${DEMO_CONFIG.budgets.length} demo budgets (skipped: ${skippedUnknownCategories} with no matching category, ${skippedNoSpend} with no spend in the window)`;
-
-  // Zero budgets leaves the Budgets page empty for every demo user; the skip
-  // counters above narrow it to a category-key or generator drift.
-  if (created === 0 && DEMO_CONFIG.budgets.length > 0) {
-    logger.error(summary);
-  } else {
-    logger.info(summary);
-  }
 }
 
 const DEMO_WATCHLIST_CATEGORY_KEYS = ['food', 'housing', 'transportation', 'life', 'income'];

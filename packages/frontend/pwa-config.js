@@ -5,7 +5,7 @@ export const pwaManifest = {
   id: '/',
   name: APP_NAME,
   short_name: APP_NAME,
-  description: 'Track spending, plan budgets, and understand your financial future while keeping control of your data.',
+  description: 'Track spending, plan ahead, and understand your financial future while keeping control of your data.',
   lang: 'en',
   dir: 'ltr',
   start_url: '/dashboard',

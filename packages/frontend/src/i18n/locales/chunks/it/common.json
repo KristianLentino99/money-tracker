@@ -139,7 +139,6 @@
         "error": "Impossibile scollegare le transazioni!"
       },
       "record": {
-        "addedByTooltip": "Questa transazione è stata aggiunta al budget da {handle}",
         "hiddenAccount": "Conto nascosto"
       }
     },

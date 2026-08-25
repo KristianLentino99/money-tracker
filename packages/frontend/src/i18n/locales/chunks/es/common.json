@@ -141,7 +141,6 @@
         "error": "Error al desvincular las transacciones"
       },
       "record": {
-        "addedByTooltip": "{handle} adjuntó esta transacción al presupuesto",
         "hiddenAccount": "Cuenta oculta"
       }
     },

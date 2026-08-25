@@ -458,23 +458,6 @@
       "error": "Impossibile inviare l'invito. Riprova.",
       "emailSendFailedWarning": "Invito salvato, ma non è stato possibile inviare l'email. Il destinatario potrebbe non aver ricevuto una notifica — riprova più tardi."
     },
-    "shareBudgetDialog": {
-      "title": "Condividi budget",
-      "description": "Invita qualcuno a visualizzare questo budget e a contribuire con le proprie transazioni. {name}.",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Email del destinatario",
-      "permissionLabel": "Autorizzazione",
-      "permissions": {
-        "read": "Solo visualizzazione",
-        "write": "Allega proprie transazioni",
-        "manage": "Gestisci"
-      },
-      "cancel": "Annulla",
-      "send": "Invia invito",
-      "success": "Invito inviato.",
-      "error": "Impossibile inviare l'invito.",
-      "emailSendFailedWarning": "Invito creato, ma non è stato possibile consegnare l'email."
-    },
     "shareInvitationDialog": {
       "titlePending": "{owner} vuole condividere con te",
       "titleAccepted": "Invito accettato",
@@ -508,7 +491,6 @@
       "decline": "Rifiuta",
       "close": "Chiudi",
       "goToAccount": "Vai al conto",
-      "goToBudget": "Vai al budget",
       "updateBaseCurrency": "Aggiorna valuta principale",
       "acceptSuccess": "Ora fai parte di questa risorsa condivisa.",
       "acceptError": "Impossibile accettare l'invito. Riprova.",

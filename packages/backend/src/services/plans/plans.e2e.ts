@@ -1,4 +1,4 @@
-import { RESOURCE_TYPES, SHARE_PERMISSIONS } from '@bt/shared/types';
+import { RESOURCE_TYPES, SHARE_PERMISSIONS, TRANSACTION_TYPES } from '@bt/shared/types';
 import { generateRandomRecordId } from '@common/lib/record-id-helpers';
 import { describe, expect, it } from '@jest/globals';
 import * as helpers from '@tests/helpers';
@@ -150,6 +150,132 @@ describe('Plan endpoints', () => {
     expect(row?.assigned).toBe(40);
     expect(result.view.readyToAssign).toBe(60);
     expect(result.mutation.revision).toBe(1);
+  });
+
+  it('calculates decimal assignments, signed activity, and forecast funding through HTTP endpoints', async () => {
+    const category = await helpers.addCustomCategory({ name: 'Plan Math Category', color: '#6789AB', raw: true });
+    const account = await helpers.createAccount({
+      payload: helpers.buildAccountPayload({ name: 'Plan Math Cash', initialBalance: 200 }),
+      raw: true,
+    });
+    const plan = await helpers.createPlan({
+      payload: {
+        name: 'Plan Math',
+        baseCurrencyCode: global.BASE_CURRENCY.code,
+        includeHistoricalTransactions: true,
+        categoryIds: [category.id],
+        accountIds: [account.id],
+      },
+      raw: true,
+    });
+    const periodStart = currentPeriodStart();
+    const transactionTime = new Date(`${periodStart}T12:00:00.000Z`).toISOString();
+
+    await helpers.createTransaction({
+      payload: helpers.buildTransactionPayload({
+        accountId: account.id,
+        categoryId: category.id,
+        amount: 20.1,
+        time: transactionTime,
+        transactionType: TRANSACTION_TYPES.expense,
+      }),
+      raw: true,
+    });
+    await helpers.createTransaction({
+      payload: helpers.buildTransactionPayload({
+        accountId: account.id,
+        categoryId: category.id,
+        amount: 5.05,
+        time: transactionTime,
+        transactionType: TRANSACTION_TYPES.income,
+      }),
+      raw: true,
+    });
+    await helpers.createPlannedTransaction({
+      payload: {
+        accountId: account.id,
+        categoryId: category.id,
+        amount: 65,
+        time: transactionTime,
+        transactionType: TRANSACTION_TYPES.expense,
+      },
+      raw: true,
+    });
+    await helpers.assignPlanCategory({
+      planId: plan.id,
+      periodStart,
+      categoryId: category.id,
+      payload: { assigned: 75.25, expectedRevision: 0, requestId: randomUUID() },
+      raw: true,
+    });
+
+    const view = await helpers.getPlanView({ planId: plan.id, periodStart, raw: true });
+    const row = view.groups.flatMap((group) => group.categories).find((item) => item.id === category.id);
+
+    expect(row).toMatchObject({
+      assigned: 75.25,
+      activity: -15.05,
+      available: 60.2,
+      upcomingObligation: 65,
+      underfundedBy: 4.8,
+      status: 'underfunded',
+    });
+    expect(view.readyToAssign).toBe(109.7);
+    expect(view.readyToAssignState).toBe('positive');
+    expect(view.upcomingObligations).toEqual([
+      expect.objectContaining({ categoryId: category.id, amount: 65, count: 1 }),
+    ]);
+  });
+
+  it('carries prior-period cash overspending into current ready-to-assign math', async () => {
+    const category = await helpers.addCustomCategory({
+      name: 'Plan Overspending Category',
+      color: '#789ABC',
+      raw: true,
+    });
+    const account = await helpers.createAccount({
+      payload: helpers.buildAccountPayload({ name: 'Plan Overspending Cash', initialBalance: 100 }),
+      raw: true,
+    });
+    const plan = await helpers.createPlan({
+      payload: {
+        name: 'Plan Overspending',
+        baseCurrencyCode: global.BASE_CURRENCY.code,
+        includeHistoricalTransactions: true,
+        categoryIds: [category.id],
+        accountIds: [account.id],
+      },
+      raw: true,
+    });
+    const periodStart = currentPeriodStart();
+    const previousPeriod = new Date(`${periodStart}T00:00:00.000Z`);
+    previousPeriod.setUTCMonth(previousPeriod.getUTCMonth() - 1);
+    const previousPeriodStart = `${previousPeriod.getUTCFullYear()}-${String(previousPeriod.getUTCMonth() + 1).padStart(2, '0')}-01`;
+
+    await helpers.createTransaction({
+      payload: helpers.buildTransactionPayload({
+        accountId: account.id,
+        categoryId: category.id,
+        amount: 30,
+        time: new Date(`${previousPeriodStart}T12:00:00.000Z`).toISOString(),
+        transactionType: TRANSACTION_TYPES.expense,
+      }),
+      raw: true,
+    });
+    await helpers.assignPlanCategory({
+      planId: plan.id,
+      periodStart: previousPeriodStart,
+      categoryId: category.id,
+      payload: { assigned: 10, expectedRevision: 0, requestId: randomUUID() },
+      raw: true,
+    });
+
+    const view = await helpers.getPlanView({ planId: plan.id, periodStart, raw: true });
+    const row = view.groups.flatMap((group) => group.categories).find((item) => item.id === category.id);
+
+    expect(row).toMatchObject({ assigned: 0, activity: 0, available: 0, status: 'none' });
+    expect(view.readyToAssign).toBe(40);
+    expect(view.readyToAssignState).toBe('positive');
   });
 
   it('lists, reads, updates, archives, restores, and deletes non-default Plans', async () => {

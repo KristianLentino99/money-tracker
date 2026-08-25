@@ -94,14 +94,6 @@
       "duplicateCategory": "Setiap split harus menggunakan kategori yang berbeda"
     }
   },
-  "budgets": {
-    "budgetNotFound": "Anggaran tidak ditemukan",
-    "someTransactionIdsInvalid": "Beberapa ID transaksi tidak valid",
-    "transactionsAddedSuccessfully": "Transaksi berhasil ditambahkan",
-    "cannotManuallyLinkToCategoryBudget": "Tidak dapat menautkan transaksi secara manual ke anggaran berbasis kategori. Transaksi dilacak secara otomatis berdasarkan kategori.",
-    "someCategoryIdsInvalid": "Beberapa ID kategori tidak valid atau tidak ada",
-    "notCategoryBudget": "Endpoint ini hanya tersedia untuk anggaran berbasis kategori"
-  },
   "tags": {
     "tagNotFound": "Tag tidak ditemukan",
     "tagNameAlreadyExists": "Tag dengan nama ini sudah ada",

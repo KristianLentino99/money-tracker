@@ -7,9 +7,8 @@ import { accountShareable } from './shareables/account.shareable';
 
 /**
  * Per-account share context attached to model instances by the accounts service so the
- * serializer can emit the public-facing `share` block. Identical shape to
- * `BudgetShareContext` — frontend share UI is share-shape-agnostic, so a single shape
- * lets the same components consume both.
+ * serializer can emit the public-facing `share` block. The frontend share UI is
+ * share-shape-agnostic, so a single shape serves every account share surface.
  */
 export type AccountShareContext = ShareContext;
 

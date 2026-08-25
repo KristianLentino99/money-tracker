@@ -1,8 +1,5 @@
 {
   "planned": {
-    "budgets": {
-      "backToList": "Back to Budgets"
-    },
     "subscriptions": {
       "notFound": "Recurring payment not found",
       "notFoundDescription": "We couldn't find this recurring payment. It may have been deleted or you might not have access to it.",

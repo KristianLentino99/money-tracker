@@ -52,7 +52,6 @@ export const BACKUP_FILE_NAMES = [
   'vehicles',
   'loan-details',
   'transaction-groups',
-  'budgets',
   'plans',
   // tier 4
   'transactions',
@@ -72,8 +71,6 @@ export const BACKUP_FILE_NAMES = [
   'transaction-splits',
   'transaction-tags',
   'transaction-group-items',
-  'budget-transactions',
-  'budget-categories',
   'refund-transactions',
   'subscription-transactions',
   'subscription-tags',

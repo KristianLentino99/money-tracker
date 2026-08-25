@@ -13,7 +13,6 @@ import { setupAccountGroups } from './seed-account-groups.service';
 import { setupAutomations } from './seed-automations.service';
 import {
   createAccounts,
-  createBudgets,
   createCategories,
   createTags,
   setupCurrencies,
@@ -26,12 +25,8 @@ import { setupInvestments } from './seed-investments.service';
 import { seedPayees } from './seed-payees.service';
 import { setupSubscriptions } from './seed-subscriptions.service';
 import { seedTransactionExtras } from './seed-transaction-extras.service';
-import { sumSpendByCategoryKey } from './template/budget-spend';
 import { toBaseCurrencyCents } from './template/fx';
 import type { DemoTemplateTransaction } from './template/types';
-
-/** How far back demo budgets look: a fixed window, always complete unlike a part-elapsed calendar month. */
-const BUDGET_WINDOW_DAYS = 30;
 
 interface TransferReconcilableRow {
   transferId: string | null;
@@ -269,18 +264,6 @@ export async function applyDemoTemplate({
 
   await updateAccountBalances({ userId });
   await rebuildBalancesHistory({ userId });
-
-  await createBudgets({
-    userId,
-    categoryMap,
-    spendByCategoryKey: sumSpendByCategoryKey({
-      template,
-      windowDays: BUDGET_WINDOW_DAYS,
-      currencyByAccountKey: accountKeyToCurrency,
-    }),
-    windowStart: subDays(referenceDate, BUDGET_WINDOW_DAYS),
-    windowEnd: referenceDate,
-  });
 
   const mainCheckingAccountId = accountKeyToId['main_checking'];
   if (mainCheckingAccountId) {

@@ -504,23 +504,6 @@
       "error": "Tidak dapat mengirim undangan. Silakan coba lagi.",
       "emailSendFailedWarning": "Undangan disimpan, tetapi email tidak dapat dikirim. Penerima mungkin tidak menerima notifikasi – coba lagi nanti."
     },
-    "shareBudgetDialog": {
-      "title": "Bagikan anggaran",
-      "description": "Undang seseorang untuk melihat anggaran ini dan menyumbangkan transaksi mereka sendiri ke dalamnya. {name}.",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Email penerima",
-      "permissionLabel": "Izin",
-      "permissions": {
-        "read": "Hanya lihat",
-        "write": "Lampirkan transaksi sendiri",
-        "manage": "Kelola"
-      },
-      "cancel": "Batal",
-      "send": "Kirim undangan",
-      "success": "Undangan terkirim.",
-      "error": "Tidak dapat mengirim undangan.",
-      "emailSendFailedWarning": "Undangan dibuat, tetapi email tidak dapat dikirim."
-    },
     "shareInvitationDialog": {
       "titlePending": "{owner} ingin berbagi dengan Anda",
       "titleAccepted": "Undangan diterima",
@@ -554,7 +537,6 @@
       "decline": "Tolak",
       "close": "Tutup",
       "goToAccount": "Buka akun",
-      "goToBudget": "Buka anggaran",
       "updateBaseCurrency": "Perbarui mata uang dasar",
       "acceptSuccess": "Anda sekarang bagian dari sumber daya bersama ini.",
       "acceptError": "Tidak dapat menerima undangan. Coba lagi.",

@@ -30,7 +30,7 @@ export const getTransactionById = createController(
 
     // Compute write-access from the already-resolved access result — no extra DB work.
     // The FE uses this on dialog open when the parent account isn't in its local
-    // `accountsRecord` (typically the budget-share-only case) to choose between the
+    // `accountsRecord` (typically a shared-account case) to choose between the
     // editable form and the read-only details view.
     const { tx, access } = fetched;
     let canEdit = false;

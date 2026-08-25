@@ -28,7 +28,6 @@ import {
   TagIcon,
   Trash2Icon,
   UserXIcon,
-  WalletIcon,
   XIcon,
 } from '@lucide/vue';
 import { useI18n } from 'vue-i18n';
@@ -73,8 +72,6 @@ const { formatDistanceToNow } = useDateLocale();
 
 const getIcon = (type: NotificationType) => {
   switch (type) {
-    case NOTIFICATION_TYPES.budgetAlert:
-      return WalletIcon;
     case NOTIFICATION_TYPES.system:
       return AlertTriangleIcon;
     case NOTIFICATION_TYPES.changelog:
@@ -120,8 +117,6 @@ const getIcon = (type: NotificationType) => {
 
 const getIconBg = (type: NotificationType) => {
   switch (type) {
-    case NOTIFICATION_TYPES.budgetAlert:
-      return 'bg-orange-500';
     case NOTIFICATION_TYPES.system:
       return 'bg-blue-500';
     case NOTIFICATION_TYPES.changelog:

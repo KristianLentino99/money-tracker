@@ -1,8 +1,5 @@
 {
   "planned": {
-    "budgets": {
-      "backToList": "Torna ai budget"
-    },
     "subscriptions": {
       "notFound": "Pagamento ricorrente non trovato",
       "notFoundDescription": "Non siamo riusciti a trovare questo pagamento ricorrente. Potrebbe essere stato eliminato o potresti non avervi accesso.",
