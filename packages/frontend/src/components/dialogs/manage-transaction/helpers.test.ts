@@ -91,8 +91,8 @@ describe('components/modals/modify-record/helpers', () => {
 
   describe('resolveInitialTransactionAccount', () => {
     it('prefers the account shown on the current account page over the saved default', () => {
-      const currentAccount = getUahAccount();
-      const defaultAccount = getUah2Account();
+      const currentAccount = getUahAccount() as AccountModel;
+      const defaultAccount = getUah2Account() as AccountModel;
 
       expect(
         resolveInitialTransactionAccount({
@@ -103,7 +103,7 @@ describe('components/modals/modify-record/helpers', () => {
     });
 
     it('uses the saved default when no account page is active', () => {
-      const defaultAccount = getUah2Account();
+      const defaultAccount = getUah2Account() as AccountModel;
 
       expect(
         resolveInitialTransactionAccount({
