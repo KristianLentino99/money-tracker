@@ -3,7 +3,8 @@ description: Build and optionally push the frontend Docker image
 
 # Deployment configuration (API origin, analytics keys, CSP hosts) is NOT a
 # build input: the image reads it from runtime env at container start. Inputs
-# here cover only build identity and the Sentry source-map upload.
+# here cover only build identity, build resource tuning, and the Sentry
+# source-map upload.
 inputs:
   sentry-auth-token:
     description: 'SENTRY_AUTH_TOKEN - Sentry auth token for source map upload'
@@ -25,6 +26,10 @@ inputs:
     description: 'VITE_APP_COMMIT_HASH - Git SHA baked into the bundle for stale-version detection (polled against /version.json)'
     required: false
     default: ''
+  frontend-build-node-options:
+    description: 'FRONTEND_BUILD_NODE_OPTIONS - Node.js options for the frontend production build'
+    required: false
+    default: '--max-old-space-size=4096'
   docker-hub-username:
     description: 'DOCKER_HUB_USERNAME'
     required: false
@@ -102,3 +107,4 @@ runs:
           SENTRY_AUTH_TOKEN=${{ inputs.sentry-auth-token }}
           SENTRY_ORG=${{ inputs.sentry-org }}
           SENTRY_PROJECT=${{ inputs.sentry-project }}
+          FRONTEND_BUILD_NODE_OPTIONS=${{ inputs.frontend-build-node-options }}
