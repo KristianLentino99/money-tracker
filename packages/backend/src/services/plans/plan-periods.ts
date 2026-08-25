@@ -9,7 +9,10 @@ const clampStartDay = ({ date, day }: { date: Date; day: number }): Date => {
 export const periodStartForDate = ({ date, day }: { date: Date | string; day: number }): string => {
   const parsed = typeof date === 'string' ? parseISO(date) : date;
   const current = clampStartDay({ date: parsed, day });
-  const start = parsed < current ? clampStartDay({ date: subMonths(parsed, 1), day }) : current;
+  const currentMonthEnd = endOfMonth(parsed);
+  const startsAtEndOfShortMonth = day > currentMonthEnd.getDate() && parsed.getTime() === current.getTime();
+  const start =
+    parsed < current || startsAtEndOfShortMonth ? clampStartDay({ date: subMonths(parsed, 1), day }) : current;
   return format(start, 'yyyy-MM-dd');
 };
 
@@ -23,4 +26,4 @@ export const periodEnd = ({ periodStart, day }: { periodStart: string; day: numb
   format(addDays(parseISO(nextPeriodStart({ periodStart, day })), -1), 'yyyy-MM-dd');
 
 export const isPeriodStart = ({ periodStart, day }: { periodStart: string; day: number }): boolean =>
-  periodStartForDate({ date: periodStart, day }) === periodStart;
+  format(clampStartDay({ date: parseISO(periodStart), day }), 'yyyy-MM-dd') === periodStart;
