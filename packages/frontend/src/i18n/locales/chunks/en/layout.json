@@ -1,6 +1,8 @@
 {
   "navigation": {
     "dashboard": "Dashboard",
+    "home": "Home",
+    "more": "More",
     "accounts": "Accounts",
     "accountsList": "All Accounts",
     "investments": "Investments",
@@ -20,6 +22,17 @@
       "budgets": "Budgets"
     },
     "venture": "Venture"
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Manage accounts, loans, investments, and venture assets."
+    },
+    "more": {
+      "title": "More",
+      "description": "Explore insights, planning tools, imports, and settings."
+    },
+    "addTransaction": "Add transaction"
   },
   "sidebar": {
     "settings": {

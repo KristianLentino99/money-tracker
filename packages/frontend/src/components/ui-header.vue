@@ -3,32 +3,10 @@
     <DemoBanner />
     <div class="shadow-header border-border flex items-center justify-between border-b px-4 py-2 sm:px-6">
       <div class="flex items-center gap-4">
-        <template v-if="isMobileView">
-          <Sheet.Sheet :open="isMobileSheetOpen" @update:open="isMobileSheetOpen = $event">
-            <Sheet.SheetTrigger as-child>
-              <Button size="icon-sm" variant="secondary" class="shrink-0">
-                <MenuIcon class="size-4" />
-              </Button>
-            </Sheet.SheetTrigger>
-            <Sheet.SheetContent
-              side="left"
-              :class="[
-                'xs:w-3/4 w-full overflow-y-auto px-0',
-                'data-[state=closed]:duration-200 data-[state=open]:duration-300',
-              ]"
-            >
-              <Sheet.SheetTitle></Sheet.SheetTitle>
-              <Sheet.SheetDescription></Sheet.SheetDescription>
-
-              <Sidebar mobile-view />
-            </Sheet.SheetContent>
-          </Sheet.Sheet>
-        </template>
-
-        <ManageTransactionDialog>
+        <ManageTransactionDialog v-if="!isMobileView">
           <Button variant="default" size="sm">
             <PlusIcon class="size-4" />
-            {{ isMobileView ? $t('header.add') : $t('header.newTransaction') }}
+            {{ $t('header.newTransaction') }}
           </Button>
         </ManageTransactionDialog>
 
@@ -47,7 +25,12 @@
         <template v-else>
           <Popover.Popover v-model:open="isPopoverOpen">
             <Popover.PopoverTrigger as-child>
-              <Button variant="secondary" size="icon" :aria-label="syncButtonLabel">
+              <Button
+                variant="secondary"
+                size="icon"
+                class="max-md:min-h-11 max-md:min-w-11"
+                :aria-label="syncButtonLabel"
+              >
                 <RefreshCcw v-if="syncStatus.isSyncing.value" class="animate-spin" :size="16" />
                 <AlertTriangleIcon v-else-if="syncStatus.syncStuck.value" class="text-destructive-text" :size="16" />
                 <SparklesIcon
@@ -87,7 +70,7 @@
 
         <NotificationsPopover />
 
-        <RouterLink :to="{ name: ROUTES_NAMES.settings }">
+        <RouterLink class="max-md:hidden" :to="{ name: ROUTES_NAMES.settings }">
           <DesktopOnlyTooltip :content="$t('header.settings')">
             <Button variant="secondary" size="icon" :aria-label="$t('header.settings')">
               <SettingsIcon class="size-4" />
@@ -105,13 +88,10 @@ import DemoBanner from '@/components/demo/demo-banner.vue';
 import ManageTransactionDialog from '@/components/dialogs/manage-transaction/index.vue';
 import Button from '@/components/lib/ui/button/Button.vue';
 import * as Popover from '@/components/lib/ui/popover';
-import * as Sheet from '@/components/lib/ui/sheet';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import NotificationsPopover from '@/components/notifications-popover/index.vue';
-import Sidebar from '@/components/sidebar/index.vue';
 import SyncConfirmationDialog from '@/components/sync-confirmation-dialog.vue';
 import SyncStatusTooltip from '@/components/sync-status-tooltip.vue';
-import { isMobileSheetOpen } from '@/composable/global-state/mobile-sheet';
 import { useCategorizationStatus } from '@/composable/use-categorization-status';
 import { useCssVarFromElementSize } from '@/composable/use-css-var-from-element-size';
 import { useDateLocale } from '@/composable/use-date-locale';
@@ -124,7 +104,6 @@ import {
   AlertTriangleIcon,
   CloudCheckIcon,
   ImportIcon,
-  MenuIcon,
   PlusIcon,
   RefreshCcw,
   SettingsIcon,
@@ -133,7 +112,7 @@ import {
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router';
 
 const accountsStore = useAccountsStore();
 const { accountsNeedingRelink, isAccountsFetched } = storeToRefs(accountsStore);
@@ -143,8 +122,7 @@ const { elementRef: headerRef } = useCssVarFromElementSize({
 });
 
 const { t } = useI18n();
-const route = useRoute();
-const isMobileView = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile);
+const isMobileView = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile, { wait: 50 });
 const showConfirmDialog = ref(false);
 const isPopoverOpen = ref(false);
 
@@ -216,8 +194,4 @@ const confirmSync = async () => {
   // Reopen popover to show sync progress
   isPopoverOpen.value = true;
 };
-
-watch(route, () => {
-  isMobileSheetOpen.value = false;
-});
 </script>

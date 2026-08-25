@@ -29,5 +29,16 @@ export default defineConfig({
   },
   timeout: 60_000,
   expect: { timeout: 10_000 },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    ...(process.env.PLAYWRIGHT_WEBKIT === 'true'
+      ? [
+          {
+            name: 'webkit-mobile',
+            grep: /@mobile-shell/,
+            use: { ...devices['iPhone 13'] },
+          },
+        ]
+      : []),
+  ],
 });

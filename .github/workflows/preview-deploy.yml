@@ -320,12 +320,14 @@ jobs:
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
         working-directory: packages/frontend
 
       - name: Install Playwright OS deps (cache hit)
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+        run: |
+          npx playwright install chromium webkit
+          npx playwright install-deps chromium webkit
         working-directory: packages/frontend
 
       - name: Run Playwright tests
@@ -334,6 +336,7 @@ jobs:
         run: npm run test:e2e -w packages/frontend -- --shard=${{ matrix.shardIndex }}/${{ env.SHARD_TOTAL }}
         env:
           CI: true
+          PLAYWRIGHT_WEBKIT: true
           PLAYWRIGHT_BASE_URL: https://pr-${{ env.PR_NUMBER }}.preview.moneymatter.app
           PLAYWRIGHT_API_BASE_URL: https://api-pr-${{ env.PR_NUMBER }}.preview.moneymatter.app
 

@@ -38,7 +38,7 @@ const strokeDasharray = (progress: number) => {
               // Desktop: right side, vertically centered
               'top-1/2 right-4 -translate-y-1/2',
               // Mobile: bottom right, above bottom navbar
-              'max-md:top-auto max-md:bottom-20 max-md:translate-y-0',
+              'max-md:top-auto max-md:bottom-[calc(var(--bottom-navbar-height)+0.75rem)] max-md:translate-y-0',
             )
           "
           @click="handleClick"

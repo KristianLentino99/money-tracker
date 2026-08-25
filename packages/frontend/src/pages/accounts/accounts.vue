@@ -45,6 +45,21 @@
         </div>
       </div>
 
+      <MobileHubSection
+        class="mb-6 md:hidden"
+        :title="$t('mobileHubs.accounts.title')"
+        :description="$t('mobileHubs.accounts.description')"
+      >
+        <MobileNavCard :to="{ name: ROUTES_NAMES.accounts }" :title="$t('accounts.title')" :icon="WalletIcon" />
+        <MobileNavCard :to="{ name: ROUTES_NAMES.loans }" :title="$t('navigation.loans')" :icon="HandCoinsIcon" />
+        <MobileNavCard
+          :to="{ name: ROUTES_NAMES.investments }"
+          :title="$t('navigation.investments')"
+          :icon="TrendingUpIcon"
+        />
+        <MobileNavCard :to="{ name: ROUTES_NAMES.venture }" :title="$t('navigation.venture')" :icon="RocketIcon" />
+      </MobileHubSection>
+
       <template v-if="isInitialLoading">
         <div class="grid grid-cols-1 gap-8">
           <Card>
@@ -188,6 +203,8 @@ import type { AccountGroups } from '@/common/types/models';
 import PageWrapper from '@/components/common/page-wrapper.vue';
 import CreateAccountDialog from '@/components/dialogs/create-account-dialog.vue';
 import CreateVehicleDialog from '@/components/dialogs/create-vehicle-dialog.vue';
+import MobileHubSection from '@/components/common/mobile-hub-section.vue';
+import MobileNavCard from '@/components/common/mobile-nav-card.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Card } from '@/components/lib/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/lib/ui/collapsible';
@@ -199,9 +216,19 @@ import { useProjectedBalance } from '@/composable/use-projected-balance';
 import { useAccountsStore } from '@/stores';
 import { ACCOUNT_CATEGORIES, ACCOUNT_STATUSES, AccountModel } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
-import { CarIcon, ChevronDownIcon, EllipsisVerticalIcon, PlusIcon, WalletIcon } from '@lucide/vue';
+import {
+  CarIcon,
+  ChevronDownIcon,
+  EllipsisVerticalIcon,
+  HandCoinsIcon,
+  PlusIcon,
+  RocketIcon,
+  TrendingUpIcon,
+  WalletIcon,
+} from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
+import { ROUTES_NAMES } from '@/routes';
 
 import { computeAccountsOverview } from './accounts-overview-totals';
 import AccountGroupRow from './components/account-group-row.vue';

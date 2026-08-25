@@ -77,6 +77,7 @@ export const ROUTES_NAMES = Object.freeze({
   settingsSharedWithMe: `${ROUTER_LAYOUTS.dashboard}.settings.shared-with-me`,
   settingsHousehold: `${ROUTER_LAYOUTS.dashboard}.settings.household`,
   settingsSubscriptions: `${ROUTER_LAYOUTS.dashboard}.settings.subscriptions`,
+  more: `${ROUTER_LAYOUTS.dashboard}.more`,
   importCsv: `${ROUTER_LAYOUTS.dashboard}.import-csv`,
   importStatement: `${ROUTER_LAYOUTS.dashboard}.import-statement`,
   importYnab: `${ROUTER_LAYOUTS.dashboard}.import-ynab`,
