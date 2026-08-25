@@ -13,8 +13,8 @@ describe('computeLoanScheduleSnapshot', () => {
       asOfDate: parseISO('2024-04-15'),
     });
 
-    expect(result.outstandingBalance).toBe(887.67);
-    expect(result.endDate).toEqual(addMonths(parseISO('2024-01-15'), 24));
+    expect(result?.outstandingBalance).toBe(887.67);
+    expect(result?.endDate).toEqual(addMonths(parseISO('2024-01-15'), 24));
   });
 
   it('returns no snapshot when the term cannot define an amortization schedule', () => {
