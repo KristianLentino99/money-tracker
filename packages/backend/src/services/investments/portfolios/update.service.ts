@@ -41,10 +41,15 @@ const updatePortfolioImpl = async ({
     message: t({ key: 'investments.portfolioNotFound' }),
   });
 
-  // The tracking mode and its locked currency only change before *any* portfolio history exists.
-  const trackingConfigurationChanged =
-    (isManualTracking !== undefined && isManualTracking !== portfolio.isManualTracking) ||
-    (displayCurrencyCode !== undefined && displayCurrencyCode !== portfolio.displayCurrencyCode);
+  // Manual tracking mode and a manual portfolio's valuation currency are locked
+  // once history exists. A regular portfolio's display currency is presentation
+  // state and can still change after holdings or transactions are recorded.
+  const trackingModeChanged = isManualTracking !== undefined && isManualTracking !== portfolio.isManualTracking;
+  const manualCurrencyChanged =
+    portfolio.isManualTracking &&
+    displayCurrencyCode !== undefined &&
+    displayCurrencyCode !== portfolio.displayCurrencyCode;
+  const trackingConfigurationChanged = trackingModeChanged || manualCurrencyChanged;
   if (trackingConfigurationChanged) {
     const [holdings, transactions, manualTransactions, valuations, transfers] = await Promise.all([
       Holdings.count({ where: { portfolioId } }),
@@ -57,7 +62,7 @@ const updatePortfolioImpl = async ({
     ]);
     if (holdings + transactions + manualTransactions + valuations + transfers > 0)
       throw new ValidationError({
-        message: 'Manual tracking mode and currency are locked once portfolio history exists.',
+        message: 'Manual tracking mode and valuation currency are locked once portfolio history exists.',
       });
     const nextManual = isManualTracking ?? portfolio.isManualTracking;
     const nextCurrency = displayCurrencyCode !== undefined ? displayCurrencyCode : portfolio.displayCurrencyCode;

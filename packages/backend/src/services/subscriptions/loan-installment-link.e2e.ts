@@ -16,6 +16,10 @@ async function createLoan() {
     payload: helpers.buildCreateLoanPayload({
       initialBalance: 1_000,
       originalPrincipal: 1_000,
+      // Keep this behavior test same-currency: the installment is booked in
+      // the user's base currency and the assertion is about loan linking,
+      // not foreign-exchange conversion.
+      currencyCode: global.BASE_CURRENCY_CODE,
       plannedPayment: 300,
       minPayment: 300,
     }),

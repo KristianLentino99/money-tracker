@@ -92,6 +92,7 @@ router.post(
 router.post(
   '/:id/periods/:periodStart/auto-assign/preview',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(previewAutoAssign.schema),
   previewAutoAssign.handler,
 );
