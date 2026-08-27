@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import { connection } from '@models/index';
 import Securities from '@models/investments/securities.model';
 import SecurityPricing from '@models/investments/security-pricing.model';
-import { makeAuthRequest, makeRequest } from '@tests/helpers';
+import { makeAuthRequest } from '@tests/helpers';
 import { subDays, subHours } from 'date-fns';
 
 /**

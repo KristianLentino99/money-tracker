@@ -29,6 +29,7 @@ const EXPECTED_GUARDED_COLUMNS: Record<string, string[]> = {
   'plan-allocation-events': ['planId'],
   'plan-assignments': ['categoryId', 'planId'],
   'plan-category-memberships': ['categoryId', 'planId'],
+  'plan-category-targets': ['categoryId', 'planId'],
   'plan-periods': ['planId'],
   'portfolio-balances': ['portfolioId'],
   'portfolio-transfers': ['fromAccountId', 'toAccountId', 'fromPortfolioId', 'toPortfolioId', 'transactionId'],

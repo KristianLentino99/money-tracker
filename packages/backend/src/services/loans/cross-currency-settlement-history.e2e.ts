@@ -27,7 +27,6 @@ const ANCHOR_DATE = dayObj(40);
 const PAY_1_DATE = dayObj(25);
 const PAY_2_DATE = dayObj(15);
 const ANCHOR_KEY = format(ANCHOR_DATE, 'yyyy-MM-dd');
-const PAY_1_KEY = format(PAY_1_DATE, 'yyyy-MM-dd');
 const PAY_2_KEY = format(PAY_2_DATE, 'yyyy-MM-dd');
 
 // Rate on each payment day. Payment 1 lands high, payment 2 lands low; averaged

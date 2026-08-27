@@ -1,5 +1,5 @@
 import { api } from '@/api/_api';
-import { type RecordId, type TRANSACTION_TYPES, endpointsTypes } from '@bt/shared/types';
+import { type TRANSACTION_TYPES, endpointsTypes } from '@bt/shared/types';
 import { format } from 'date-fns';
 
 const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');

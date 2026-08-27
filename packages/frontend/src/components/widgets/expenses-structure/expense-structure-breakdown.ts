@@ -38,7 +38,7 @@ export const getExpenseStructureBreakdownCategoryIds = ({
   return childCategoryIds.length > 0 ? [categoryId, ...childCategoryIds] : [];
 };
 
-export type ExpenseStructureClickAction =
+type ExpenseStructureClickAction =
   | { type: 'drilldown'; categoryId: string }
   | { type: 'transactions'; categoryId: string };
 

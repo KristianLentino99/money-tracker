@@ -53,33 +53,33 @@ Ignored unless you use the [Traefik overlay](traefik-overlay.md)
 | `CRYPTO_PRICES_SYNC_INTERVAL_MINUTES`                                                                                  | Crypto price sync cadence (1–59, default 15)                                                                                                                                |
 | `API_LAYER_API_KEYS`                                                                                                   | APILayer paid currency-rate fallback                                                                                                                                        |
 | `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` / `GEMINI_API_KEY` / `GROQ_API_KEY` / `OPENROUTER_API_KEY` / `DEEPSEEK_API_KEY` | AI transaction categorisation                                                                                                                                               |
-| `LOGO_DEV_SECRET_KEY`                                                                                                  | Server-side payee brand-logo search                                                                                                                                         |
+| `LOGO_DEV_SECRET_KEY`                                                                                                  | Server-side payee brand-logo search. Search results only – rendering the logo images also needs `VITE_LOGO_DEV_TOKEN` (below)                                               |
 | `ADMIN_USERS`                                                                                                          | Comma-separated admin usernames                                                                                                                                             |
 | `AUTH_RP_ID`, `AUTH_RP_NAME`                                                                                           | WebAuthn / passkey support. `AUTH_RP_NAME` doubles as the brand and sender name on outbound emails                                                                          |
 | `ALLOWED_ORIGINS`                                                                                                      | Extra CORS origins beyond `AUTH_ORIGIN`                                                                                                                                     |
 | `SENTRY_DSN`                                                                                                           | Backend error tracking                                                                                                                                                      |
-| `SYSTEM_MAX_SIGNUPS_ALLOWED`                                                                                           | Cap on user accounts: signups are rejected once the instance has this many users (`0` disables signups, `1` = "just me"). Deleting a user frees a slot. Unset = unlimited   |
-| `SYSTEM_DEMO_DISABLED`                                                                                                 | Blocks demo-account creation (`POST /demo`). Defaults to `true` in the self-host compose stack; set to `false` to allow demo accounts                                       |
+| `SYSTEM_MAX_SIGNUPS_ALLOWED`                                                                                           | Cap on user accounts: signups are rejected once the instance has this many users (0 disables signups, 1 = "just me"). Deleting a user frees a slot. Unset = unlimited       |
+| `SYSTEM_DEMO_DISABLED`                                                                                                 | Blocks demo-account creation (POST /demo). Defaults to true in the self-host compose stack; set to false to allow demo accounts                                             |
 
 ## Frontend runtime (optional)
 
 Interpolated into the frontend container's `environment:` block. Change and
 `up -d` – **no image rebuild** needed.
 
-| Variable                                     | Purpose                                                                |
-| -------------------------------------------- | ---------------------------------------------------------------------- |
-| `VITE_POSTHOG_KEY`, `VITE_POSTHOG_HOST`      | Product analytics (PostHog)                                            |
-| `VITE_SENTRY_DSN`                            | Frontend error tracking (Sentry)                                       |
-| `VITE_SENTRY_RELEASE`                        | Release tag Sentry events report — also a build arg, see below         |
-| `VITE_LOGO_DEV_TOKEN`                        | Brand logos for subs, banks, tickers (logo.dev)                        |
-| `PWA_ENABLED`                                | Enable install/offline shell support; `false` unregisters the worker   |
-| `PWA_APP_NAME`, `PWA_SHORT_NAME`             | Install name and compact Home Screen label                             |
-| `PWA_THEME_COLOR`, `PWA_BACKGROUND_COLOR`    | Six-digit hex colors used by the manifest and browser UI               |
-| `PWA_ICON_192`, `PWA_ICON_512`               | Same-origin absolute paths for install icons                           |
-| `MCP_BASE_URL`                               | Backend origin advertised to MCP clients — required for MCP, see below |
-| `API_HTTP`, `API_VER`                        | Point the SPA at a separate API origin (leave unset for same-origin)   |
-| `CSP_EXTRA_CONNECT`, `CSP_EXTRA_FORM_ACTION` | Extra CSP allow-list hosts (default to `API_HTTP`)                     |
-| `CSP_EXTRA_ANALYTICS`                        | CSP allow-list for analytics — **set this if you use Sentry**          |
+| Variable                                     | Purpose                                                                 |
+| -------------------------------------------- | ----------------------------------------------------------------------- |
+| `VITE_POSTHOG_KEY`, `VITE_POSTHOG_HOST`      | Product analytics (PostHog)                                             |
+| `VITE_SENTRY_DSN`                            | Frontend error tracking (Sentry)                                        |
+| `VITE_SENTRY_RELEASE`                        | Release tag Sentry events report — also a build arg, see below          |
+| `VITE_LOGO_DEV_TOKEN`                        | Brand logos for payees, subs, banks, tickers (logo.dev publishable key) |
+| `PWA_ENABLED`                                | Enable install/offline shell support; `false` unregisters the worker    |
+| `PWA_APP_NAME`, `PWA_SHORT_NAME`             | Install name and compact Home Screen label                              |
+| `PWA_THEME_COLOR`, `PWA_BACKGROUND_COLOR`    | Six-digit hex colors used by the manifest and browser UI                |
+| `PWA_ICON_192`, `PWA_ICON_512`               | Same-origin absolute paths for install icons                            |
+| `MCP_BASE_URL`                               | Backend origin advertised to MCP clients — required for MCP, see below  |
+| `API_HTTP`, `API_VER`                        | Point the SPA at a separate API origin (leave unset for same-origin)    |
+| `CSP_EXTRA_CONNECT`, `CSP_EXTRA_FORM_ACTION` | Extra CSP allow-list hosts (default to `API_HTTP`)                      |
+| `CSP_EXTRA_ANALYTICS`                        | CSP allow-list for analytics — **set this if you use Sentry**           |
 
 `CSP_EXTRA_ANALYTICS` defaults to `VITE_POSTHOG_HOST` only. Sentry's ingest host
 is not derivable from the DSN by the entrypoint, so a Sentry deployment that

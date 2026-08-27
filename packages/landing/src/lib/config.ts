@@ -18,7 +18,7 @@
  * of the SPA's `AppRuntimeConfig` — the landing only needs the API origin and
  * analytics.
  */
-export interface LandingRuntimeConfig {
+interface LandingRuntimeConfig {
   API_HTTP?: string;
   API_VER?: string;
   POSTHOG_KEY?: string;

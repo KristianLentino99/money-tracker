@@ -338,7 +338,7 @@ export interface ManualPortfolioImportRecord {
   possibleDuplicate: boolean;
 }
 
-export interface ManualPortfolioImportResult {
+interface ManualPortfolioImportResult {
   records: ManualPortfolioImportRecord[];
   warnings: string[];
   tokenCount?: { input: number; output: number };

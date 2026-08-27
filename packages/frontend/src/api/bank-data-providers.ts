@@ -3,26 +3,6 @@ import { BANK_PROVIDER_TYPE, type ConnectionNeedingReauth, type ConnectionStatus
 
 export type { ConnectionNeedingReauth, ConnectionStatusSummary };
 
-export interface BankProvider {
-  type: BANK_PROVIDER_TYPE;
-  name: string;
-  description: string;
-  logoUrl?: string;
-  documentationUrl?: string;
-  features: {
-    supportsAccountSync: boolean;
-    supportsTransactionSync: boolean;
-    supportsBalanceUpdates: boolean;
-    supportsWebhooks: boolean;
-    supportsManualSync: boolean;
-    supportsAutoSync: boolean;
-    supportsRealtime: boolean;
-    requiresReauth: boolean;
-    defaultSyncInterval: number;
-    minSyncInterval: number;
-  };
-}
-
 export interface BankConnection {
   id: string;
   providerType: BANK_PROVIDER_TYPE;
@@ -100,11 +80,6 @@ interface SyncedAccount {
   currency: string;
 }
 
-export const listProviders = async (): Promise<BankProvider[]> => {
-  const response = await api.get<{ providers: BankProvider[] }>('/bank-data-providers');
-  return response.providers;
-};
-
 export const listConnections = async (): Promise<BankConnection[]> => {
   const response = await api.get<{ connections: BankConnection[] }>('/bank-data-providers/connections');
   return response.connections;
@@ -115,18 +90,6 @@ export const getConnectionDetails = async (connectionId: string): Promise<BankCo
     `/bank-data-providers/connections/${connectionId}`,
   );
   return response.connection;
-};
-
-export const connectProvider = async (
-  providerType: BANK_PROVIDER_TYPE,
-  credentials: Record<string, unknown>,
-  providerName?: string,
-): Promise<{ connectionId: string; authUrl?: string; message: string }> => {
-  const response = await api.post(`/bank-data-providers/${providerType}/connect`, {
-    credentials,
-    providerName,
-  });
-  return response;
 };
 
 export const disconnectProvider = async ({
@@ -209,64 +172,6 @@ export const loadTransactionsForPeriod = async (
     to,
   });
   return response;
-};
-
-// Enable Banking specific APIs
-export interface ASPSP {
-  /** Available authentication methods */
-  auth_methods: Array<{
-    approach: string;
-    credentials: Array<{
-      description?: string;
-      name: string;
-      required: boolean;
-      template?: string;
-      title?: string;
-    }>;
-    hidden_method: boolean;
-    name: string;
-    psu_type: 'personal' | 'business';
-  }>;
-  /** Whether bank is in beta */
-  beta: boolean;
-  /** BIC code */
-  bic: string;
-  /** Country code */
-  country: string;
-  /** Logo URL */
-  logo: string;
-  /** Maximum consent validity in seconds */
-  maximum_consent_validity?: number;
-  /** Bank name */
-  name: string;
-  /** Payment capabilities */
-  payments?: Array<{
-    allowed_auth_methods: string[];
-    currencies: string[];
-    payment_type: string;
-    psu_type: 'personal' | 'business';
-    [key: string]: unknown;
-  }>;
-  /** Supported PSU types */
-  psu_types: Array<'personal' | 'business'>;
-  /** Required PSU headers */
-  required_psu_headers: string[];
-}
-
-export const getEnableBankingCountries = async (appId: string, privateKey: string): Promise<string[]> => {
-  const response: { countries: string[] } = await api.post('/bank-data-providers/enablebanking/countries', {
-    appId,
-    privateKey,
-  });
-  return response.countries;
-};
-
-export const getEnableBankingBanks = async (appId: string, privateKey: string, country: string): Promise<ASPSP[]> => {
-  const response: { banks: ASPSP[] } = await api.post(`/bank-data-providers/enablebanking/banks?country=${country}`, {
-    appId,
-    privateKey,
-  });
-  return response.banks;
 };
 
 export const completeEnableBankingOAuth = async (

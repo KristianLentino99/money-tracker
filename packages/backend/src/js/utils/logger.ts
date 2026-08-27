@@ -49,7 +49,7 @@ const createWinstonLogger = () => {
     format.timestamp(),
     isGrafanaConfigured
       ? format.json() // Loki requires JSON format
-      : format.printf(({ timestamp, level, message, requestId, sessionId, ...meta }) => {
+      : format.printf(({ timestamp, level, message, requestId: _requestId, sessionId: _sessionId, ...meta }) => {
           // requestId and sessionId are stamped on every log call, so they stay
           // out of the console line; the rest of the metadata is appended as JSON.
           const base = `[${timestamp}] ${level}: ${message}`;

@@ -1,6 +1,6 @@
 import { differenceInCalendarMonths, parseISO, startOfMonth } from 'date-fns';
 
-export interface PlanTargetMathInput {
+interface PlanTargetMathInput {
   targetAmountCents: number;
   dueDate: string;
   periodStart: string;
@@ -8,7 +8,7 @@ export interface PlanTargetMathInput {
   assignedCents: number;
 }
 
-export interface PlanTargetMathResult {
+interface PlanTargetMathResult {
   savedAmountCents: number;
   remainingCents: number;
   monthlyAmountCents: number;

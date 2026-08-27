@@ -9,7 +9,7 @@ const PROVIDER_ORDER: SECURITY_PROVIDER[] = [
   SECURITY_PROVIDER.coingecko,
 ];
 
-export interface SecuritySearchResultGroup {
+interface SecuritySearchResultGroup {
   provider: SECURITY_PROVIDER;
   results: SecuritySearchResultFormatted[];
 }

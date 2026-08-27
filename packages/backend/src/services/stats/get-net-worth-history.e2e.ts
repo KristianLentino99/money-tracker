@@ -435,7 +435,7 @@ describe('[Stats] Net worth history', () => {
       const to = formatDay(new Date());
 
       // A plain deposit account holding the user's own funds.
-      const positiveAccount = await helpers.createAccount({
+      const _positiveAccount = await helpers.createAccount({
         payload: helpers.buildAccountPayload({ initialBalance: 1000 }),
         raw: true,
       });

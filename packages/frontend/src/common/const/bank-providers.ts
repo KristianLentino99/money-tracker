@@ -1,7 +1,7 @@
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 
-export type PricingType = 'free' | 'paid';
-export type DifficultyType = 'easy' | 'medium' | 'very-difficult';
+type PricingType = 'free' | 'paid';
+type DifficultyType = 'easy' | 'medium' | 'very-difficult';
 
 export interface ProviderRegion {
   code: 'ua' | 'eu' | 'gb' | 'us' | 'pl' | 'ca' | 'au' | 'nz';
@@ -85,14 +85,12 @@ export const METAINFO_FROM_TYPE: Record<string, ProviderMetainfo> = {
   },
 };
 
-export interface RegionFilterGroup {
+interface RegionFilterGroup {
   key: string;
   labelKey: string;
   flagCode: string;
   codes: readonly ProviderRegion['code'][];
 }
-
-export const REGION_FILTER_ALL = 'all';
 
 export const REGION_FILTER_GROUPS: readonly RegionFilterGroup[] = [
   { key: 'usCanada', labelKey: 'pages.integrations.filters.usCanada', flagCode: 'us', codes: ['us', 'ca'] },
@@ -109,11 +107,3 @@ export const providerMatchesRegionFilter = ({
   regions: readonly ProviderRegion[];
   codes: readonly ProviderRegion['code'][];
 }): boolean => regions.some((region) => codes.includes(region.code));
-
-export const PROVIDER_DISPLAY_ORDER: readonly string[] = [
-  BANK_PROVIDER_TYPE.LUNCHFLOW,
-  BANK_PROVIDER_TYPE.SIMPLEFIN,
-  BANK_PROVIDER_TYPE.MONOBANK,
-  BANK_PROVIDER_TYPE.ENABLE_BANKING,
-  BANK_PROVIDER_TYPE.WALUTOMAT,
-];

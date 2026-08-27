@@ -146,10 +146,6 @@ export const linkInstallmentToLoan = async ({
   return api.post(`/subscriptions/${id}/loan`, { loanAccountId });
 };
 
-export const unlinkInstallmentFromLoan = async ({ id }: { id: string }): Promise<{ unlinked: boolean }> => {
-  return api.delete(`/subscriptions/${id}/loan`);
-};
-
 export const loadSuggestedMatches = async ({ id }: { id: string }): Promise<TransactionModel[]> => {
   return api.get(`/subscriptions/${id}/suggest-matches`);
 };

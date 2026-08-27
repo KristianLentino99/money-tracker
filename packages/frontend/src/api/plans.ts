@@ -4,9 +4,6 @@ import { endpointsTypes } from '@bt/shared/types';
 export const loadPlans = async ({ status }: { status?: string } = {}): Promise<endpointsTypes.PlanSummaryResponse[]> =>
   api.get('/plans', status ? { status } : undefined);
 
-export const loadPlan = async (planId: string): Promise<endpointsTypes.PlanSummaryResponse> =>
-  api.get(`/plans/${planId}`);
-
 export const loadPlanView = async ({
   planId,
   periodStart,
