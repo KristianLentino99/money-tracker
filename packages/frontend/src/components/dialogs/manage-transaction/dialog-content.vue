@@ -464,11 +464,20 @@ const isAmountFieldDisabled = computed(() => {
   return false;
 });
 
-// Planned mode is chosen once, at creation: un-planning a row means deleting the plan.
+// A saved plan can be confirmed directly only on a manual account. Connected-account
+// plans are confirmed by bank sync, and plans shared with the caller remain owner-managed.
+const isSavedManualPlanTogglable = computed(
+  () =>
+    !isFormCreation.value &&
+    Boolean(transaction.value?.isForecastOnly) &&
+    transaction.value?.accountType === ACCOUNT_TYPES.system &&
+    !isAccountSharedWithCaller.value,
+);
+
 // Loan and vehicle balances are recomputed by replaying transactions, and plans on
 // accounts shared *with* the caller belong to the owner only.
 const isForecastOnlyToggleVisible = computed(() => {
-  if (!isFormCreation.value) return false;
+  if (!isFormCreation.value) return isSavedManualPlanTogglable.value;
   if (isTransferTx.value) return false;
   if (isAccountSharedWithCaller.value) return false;
   // The toggle is what unlocks bank-connected accounts in the picker, so an empty picker
@@ -479,7 +488,9 @@ const isForecastOnlyToggleVisible = computed(() => {
   return !isDedicatedFlowAccountCategory(account.accountCategory);
 });
 
-const isForecastOnlyBadgeVisible = computed(() => !isFormCreation.value && Boolean(form.value.isForecastOnly));
+const isForecastOnlyBadgeVisible = computed(
+  () => !isFormCreation.value && Boolean(form.value.isForecastOnly) && !isSavedManualPlanTogglable.value,
+);
 
 // Real transactions on a bank-connected account come from the sync, so the account picker
 // only offers those once the row is a plan.
@@ -504,14 +515,16 @@ const plannedTooltipOverride = computed(() =>
 );
 
 watch(isForecastOnlyToggleVisible, (isVisible) => {
+  // Edit-mode visibility can change while shared-account access resolves. Preserve the
+  // saved plan flag there; creation-mode account switches may reset an invalid choice.
+  if (!isFormCreation.value) return;
   if (isVisible || !form.value.isForecastOnly) return;
   form.value.isForecastOnly = false;
   addInfoNotification(t('dialogs.manageTransaction.form.plannedUnavailableNotification'));
 });
 
-// In edit mode `isForecastOnly` mirrors the saved row, so nothing here may touch it. The accounts
-// store resolves the account after mount, and stamping the flag on an already-saved
-// bank-synced row makes the update fail.
+// The accounts store can resolve after mount. Only a newly-created bank-account row
+// should inherit the planned flag automatically.
 watch(isSelectedAccountConnected, (isConnected) => {
   if (!isFormCreation.value) return;
   if (!isConnected || !isForecastOnlyToggleVisible.value) return;

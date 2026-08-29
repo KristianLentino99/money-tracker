@@ -7,6 +7,7 @@ import { addDays, subDays } from 'date-fns';
 import {
   BaseSecurityDataProvider,
   BulkPriceData,
+  BulkPriceFetchOptions,
   HistoricalPriceOptions,
   PriceData,
   ProviderSymbol,
@@ -243,19 +244,24 @@ export class KrakenDataProvider extends BaseSecurityDataProvider {
   public async fetchPricesForSecurities(
     securities: SecurityPriceFetchInput[],
     forDate: Date,
-  ): Promise<Map<string, BulkPriceData>> {
-    const result = new Map<string, BulkPriceData>();
+    options?: BulkPriceFetchOptions,
+  ): Promise<Map<string, BulkPriceData[]>> {
+    const result = new Map<string, BulkPriceData[]>();
     const endDate = addDays(forDate, 1);
 
     for (const security of securities) {
       try {
         if (result.size > 0) await sleep({ ms: KRAKEN_REQUEST_DELAY_MS });
         const prices = await this.getHistoricalPrices(security.providerSymbol, {
-          startDate: forDate,
+          startDate: options?.startDate ?? forDate,
           endDate,
         });
-        const price = prices.at(-1);
-        if (price) result.set(security.securityId, { ...price, securityId: security.securityId });
+        if (prices.length > 0) {
+          result.set(
+            security.securityId,
+            prices.map((price) => ({ ...price, securityId: security.securityId })),
+          );
+        }
       } catch (error) {
         logger.info(
           `Failed to fetch Kraken price for ${security.symbol}: ${error instanceof Error ? error.message : String(error)}`,

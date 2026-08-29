@@ -244,7 +244,11 @@
       "morePlansAtLeast": "+oltre {count} pianificate",
       "deletePlanTitle": "Eliminare la transazione pianificata?",
       "deletePlanDescription": "Questa azione non può essere annullata.",
-      "plansLoadFailed": "Impossibile caricare le transazioni pianificate"
+      "plansLoadFailed": "Impossibile caricare le transazioni pianificate",
+      "confirmAction": "Conferma",
+      "confirmTooltip": "Il movimento è avvenuto: registralo e aggiorna il saldo",
+      "confirmPlanSuccess": "Transazione pianificata registrata — saldo aggiornato",
+      "confirmPlanError": "Impossibile registrare la transazione pianificata"
     }
   }
 }

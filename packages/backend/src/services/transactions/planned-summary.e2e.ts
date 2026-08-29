@@ -166,7 +166,7 @@ describe('GET /transactions/planned-summary', () => {
 });
 
 describe('GET /transactions isForecastOnly filter', () => {
-  const seedMixedRows = async () => {
+  it('splits planned from real rows and returns both when the filter is absent', async () => {
     const account = await createOwnedAccount();
     const [real] = await helpers.createTransaction({
       payload: helpers.buildTransactionPayload({ accountId: account.id, amount: 100 }),
@@ -177,30 +177,13 @@ describe('GET /transactions isForecastOnly filter', () => {
       raw: true,
     });
 
-    return { realId: real.id, plannedId: planned.id };
-  };
+    const plannedOnly = await helpers.getTransactions({ isForecastOnly: true, raw: true });
+    expect(plannedOnly.map((tx) => tx.id)).toEqual([planned.id]);
 
-  it('returns only planned rows when isForecastOnly=true', async () => {
-    const { plannedId } = await seedMixedRows();
+    const realOnly = await helpers.getTransactions({ isForecastOnly: false, raw: true });
+    expect(realOnly.map((tx) => tx.id)).toEqual([real.id]);
 
-    const transactions = await helpers.getTransactions({ isForecastOnly: true, raw: true });
-
-    expect(transactions.map((tx) => tx.id)).toEqual([plannedId]);
-  });
-
-  it('excludes planned rows when isForecastOnly=false', async () => {
-    const { realId } = await seedMixedRows();
-
-    const transactions = await helpers.getTransactions({ isForecastOnly: false, raw: true });
-
-    expect(transactions.map((tx) => tx.id)).toEqual([realId]);
-  });
-
-  it('returns both when the filter is absent', async () => {
-    const { realId, plannedId } = await seedMixedRows();
-
-    const transactions = await helpers.getTransactions({ raw: true });
-
-    expect(transactions.map((tx) => tx.id).toSorted()).toEqual([realId, plannedId].toSorted());
+    const unfiltered = await helpers.getTransactions({ raw: true });
+    expect(unfiltered.map((tx) => tx.id).toSorted()).toEqual([real.id, planned.id].toSorted());
   });
 });
