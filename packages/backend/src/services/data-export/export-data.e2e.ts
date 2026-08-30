@@ -466,6 +466,35 @@ describe('Data export (POST /user/data-export)', () => {
   });
 
   describe('Multiple domain coverage', () => {
+    it('exports vehicle mileage with its distance unit', async () => {
+      const account = await helpers.createAccount({ raw: true });
+      await helpers.patchUserSettings({ patch: { distanceUnit: 'mi' }, raw: true });
+      await helpers.createVehicle({
+        name: 'Mileage vehicle',
+        currencyCode: account.currencyCode,
+        make: 'Toyota',
+        model: 'Prius',
+        year: 2022,
+        vehicleClass: VEHICLE_CLASS.sedan,
+        purchasePrice: 25000,
+        purchaseDate: '2026-01-01',
+        currentMileage: 100,
+        raw: true,
+      });
+
+      const response = await helpers.exportData({ format: 'json' });
+      const archive = helpers.parseExportArchive({ buffer: response.body });
+      const data = archive.json as { vehicles: Array<Record<string, unknown>> };
+      const vehicle = data.vehicles.find((row) => row.makeModel === 'Toyota Prius');
+
+      expect(vehicle).toEqual(
+        expect.objectContaining({
+          currentMileage: 100,
+          distanceUnit: 'mi',
+        }),
+      );
+    });
+
     it('exports subscriptions, portfolios, and vehicles when their groups are enabled', async () => {
       const account = await helpers.createAccount({ raw: true });
       await helpers.createPortfolio({ payload: { name: 'Multi portfolio' }, raw: true });

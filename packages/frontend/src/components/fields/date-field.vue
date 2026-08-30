@@ -73,12 +73,13 @@ defineOptions({ inheritAttrs: false });
 const props = withDefaults(
   defineProps<{
     label?: string;
-    modelValue?: Date;
+    modelValue?: Date | null;
     type?: string;
     tabindex?: string;
     errorMessage?: string;
     inputFieldStyles?: Record<string, string>;
     disabled?: boolean;
+    allowEmpty?: boolean;
     calendarOptions?: {
       minDate?: Date;
       maxDate?: Date;
@@ -92,6 +93,7 @@ const props = withDefaults(
     errorMessage: undefined,
     inputFieldStyles: undefined,
     disabled: false,
+    allowEmpty: false,
     calendarOptions: undefined,
   },
 );
@@ -110,9 +112,9 @@ const formatToInput = (value: Date) => format(value, 'yyyy-MM-dd HH:mm');
 const inputValue = ref(props.modelValue ? formatToInput(props.modelValue) : '');
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', payload: Date): void;
+  (e: 'update:modelValue', payload: Date | null): void;
 }>();
-const localValue = ref<Date>(props.modelValue ?? new Date());
+const localValue = ref<Date | undefined>(props.modelValue ?? undefined);
 const isPopoverOpen = ref(false);
 
 const handleLocalInputUpdate = (event: Event) => {
@@ -124,6 +126,9 @@ const handleLocalInputUpdate = (event: Event) => {
   // Only emit the date if it's a valid date string
   if (inputVal && isValidDate(new Date(inputVal))) {
     emit('update:modelValue', new Date(inputVal));
+  } else if (!inputVal && props.allowEmpty) {
+    localValue.value = undefined;
+    emit('update:modelValue', null);
   }
   // For invalid intermediate states, don't emit anything
   // This prevents validation errors during typing
@@ -139,6 +144,9 @@ const handleBlur = (event: FocusEvent) => {
   } else if (inputVal) {
     // Invalid date - revert to last valid value
     inputValue.value = props.modelValue ? formatToInput(props.modelValue) : '';
+  } else if (props.allowEmpty) {
+    localValue.value = undefined;
+    emit('update:modelValue', null);
   }
   // If empty, keep it empty
 };
@@ -147,14 +155,19 @@ watch(
   () => props.modelValue,
   (value) => {
     inputValue.value = value ? formatToInput(value) : '';
-    if (isValidDate(value)) localValue.value = value;
+    localValue.value = isValidDate(value) ? value : undefined;
   },
 );
 
 watch(localValue, (value, previousValue) => {
-  // v-calendar clears its model when the already-selected day is tapped. The emit
-  // contract is a Date, so put the selection back instead of passing null on.
+  // v-calendar clears its model when the already-selected day is tapped. Empty
+  // fields keep that state; non-clearable fields restore the previous selection.
   if (!isValidDate(value)) {
+    if (props.allowEmpty) {
+      emit('update:modelValue', null);
+      isPopoverOpen.value = false;
+      return;
+    }
     localValue.value = isValidDate(previousValue) ? previousValue : (props.modelValue ?? new Date());
     return;
   }

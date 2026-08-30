@@ -10,6 +10,7 @@ import { DEPRECIATION_PRESET, type RecordId, VEHICLE_CLASS } from '@bt/shared/ty
 import { centsToApiDecimal, centsToApiDecimalOrNull } from '@common/types/money';
 import type Vehicles from '@models/vehicles.model';
 import { serializeAccount, type AccountApiResponse } from '@root/serializers/accounts.serializer';
+import { metersToDistance, type DistanceUnit } from '@services/vehicle-maintenance/distance';
 
 export interface VehicleApiResponse {
   id: string;
@@ -28,13 +29,17 @@ export interface VehicleApiResponse {
   customAnnualRatePct: number | null;
   salvageFloorPct: number;
   currentMileage: number | null;
+  distanceUnit: DistanceUnit;
   valueLastComputedAt: string | null;
   createdAt: string;
   updatedAt: string;
   account: AccountApiResponse | null;
 }
 
-export function serializeVehicle(vehicle: Vehicles): VehicleApiResponse {
+export function serializeVehicle(
+  vehicle: Vehicles,
+  { distanceUnit = 'km' }: { distanceUnit?: DistanceUnit } = {},
+): VehicleApiResponse {
   return {
     id: vehicle.id,
     accountId: vehicle.accountId,
@@ -51,7 +56,11 @@ export function serializeVehicle(vehicle: Vehicles): VehicleApiResponse {
     depreciationPreset: vehicle.depreciationPreset,
     customAnnualRatePct: vehicle.customAnnualRatePct ? Number(vehicle.customAnnualRatePct) : null,
     salvageFloorPct: Number(vehicle.salvageFloorPct),
-    currentMileage: vehicle.currentMileage,
+    currentMileage:
+      vehicle.currentMileageMeters == null
+        ? null
+        : metersToDistance({ meters: vehicle.currentMileageMeters, unit: distanceUnit }),
+    distanceUnit,
     valueLastComputedAt: vehicle.valueLastComputedAt ? vehicle.valueLastComputedAt.toISOString() : null,
     createdAt: vehicle.createdAt.toISOString(),
     updatedAt: vehicle.updatedAt.toISOString(),
@@ -59,6 +68,9 @@ export function serializeVehicle(vehicle: Vehicles): VehicleApiResponse {
   };
 }
 
-export function serializeVehicles(vehicles: Vehicles[]): VehicleApiResponse[] {
-  return vehicles.map(serializeVehicle);
+export function serializeVehicles(
+  vehicles: Vehicles[],
+  { distanceUnit = 'km' }: { distanceUnit?: DistanceUnit } = {},
+): VehicleApiResponse[] {
+  return vehicles.map((vehicle) => serializeVehicle(vehicle, { distanceUnit }));
 }

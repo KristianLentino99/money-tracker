@@ -882,7 +882,8 @@ const applySuggestedOriginalAmount = () => {
 
 // The field echoes every programmatic write back as an update, so an unchanged
 // value must not count as user input.
-const onDateUpdate = (value: Date) => {
+const onDateUpdate = (value: Date | null) => {
+  if (!value) return;
   if (value.getTime() === form.value.time?.getTime()) return;
   form.value.time = value;
   isDateUserTouched.value = true;

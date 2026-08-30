@@ -61,6 +61,11 @@ import UserMerchantCategoryCodesModel from './user-merchant-category-codes.model
 import UserSettingsModel from './user-settings.model';
 import UsersCurrenciesModel from './users-currencies.model';
 import UsersModel from './users.model';
+import VehicleMaintenanceActivitiesModel from './vehicle-maintenance-activities.model';
+import VehicleMaintenancePlansModel from './vehicle-maintenance-plans.model';
+import VehicleMaintenanceTransactionLinksModel from './vehicle-maintenance-transaction-links.model';
+import VehicleMaintenanceVisitActivitiesModel from './vehicle-maintenance-visit-activities.model';
+import VehicleMaintenanceVisitsModel from './vehicle-maintenance-visits.model';
 import VehiclesModel from './vehicles.model';
 import VentureDealsModel from './venture/venture-deals.model';
 import VentureEventLinksModel from './venture/venture-event-links.model';
@@ -145,6 +150,11 @@ const models = [
   VentureEventsModel,
   VentureEventLinksModel,
   VehiclesModel,
+  VehicleMaintenanceActivitiesModel,
+  VehicleMaintenancePlansModel,
+  VehicleMaintenanceTransactionLinksModel,
+  VehicleMaintenanceVisitsModel,
+  VehicleMaintenanceVisitActivitiesModel,
   LoanDetailsModel,
   TransactionAutomationsModel,
 ];

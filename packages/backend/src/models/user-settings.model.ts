@@ -253,6 +253,8 @@ const ZodSavedPivotViewSchema = z.object({
   config: ZodSavedPivotViewConfigSchema,
 });
 
+const ZodDistanceUnitSchema = z.enum(['km', 'mi']);
+
 export const ZodSettingsSchema = z.object({
   locale: z
     .enum([
@@ -262,6 +264,7 @@ export const ZodSettingsSchema = z.object({
       SUPPORTED_LOCALES.ITALIAN,
     ])
     .default(SUPPORTED_LOCALES.ENGLISH),
+  distanceUnit: ZodDistanceUnitSchema.default('km'),
   ai: ZodAiSettingsSchema.optional(),
   notifications: ZodNotificationPreferencesSchema.optional(),
   onboarding: ZodOnboardingStateSchema.optional(),
@@ -290,7 +293,11 @@ export const ZodSettingsSchema = z.object({
   savingsCategoryIds: z.array(z.uuid()).optional(),
 });
 
-export type SettingsSchema = z.infer<typeof ZodSettingsSchema>;
+// Stored settings predate the distance preference. Keep the persisted TypeScript contract
+// backward-compatible while the Zod schema supplies the km default whenever data is parsed.
+export type SettingsSchema = Omit<z.infer<typeof ZodSettingsSchema>, 'distanceUnit'> & {
+  distanceUnit?: z.infer<typeof ZodDistanceUnitSchema>;
+};
 
 export type StoredAiSettings = NonNullable<SettingsSchema['ai']>;
 
@@ -308,6 +315,7 @@ export const ZodSettingsPatchSchema = z.object({
       SUPPORTED_LOCALES.ITALIAN,
     ])
     .optional(),
+  distanceUnit: ZodDistanceUnitSchema.optional(),
   ai: z
     .object({
       apiKeys: z.array(ZodAiApiKeySchema).optional(),
@@ -451,6 +459,7 @@ export type AiCustomEndpointSchemaIsInSync = Expect<
 
 export const DEFAULT_SETTINGS: SettingsSchema = {
   locale: SUPPORTED_LOCALES.ENGLISH,
+  distanceUnit: 'km',
   includeCreditLimitInStats: false,
 };
 

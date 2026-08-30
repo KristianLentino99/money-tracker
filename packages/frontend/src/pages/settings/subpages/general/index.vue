@@ -101,6 +101,29 @@
             @update:model-value="handleShowArchivedToggle"
           />
         </div>
+
+        <Separator />
+
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="min-w-48 flex-1">
+            <div class="text-sm font-medium">
+              {{ $t('settings.general.distanceUnit.label') }}
+            </div>
+            <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              {{ $t('settings.general.distanceUnit.description') }}
+            </p>
+          </div>
+          <SelectField
+            class="w-64 shrink-0"
+            :model-value="selectedDistanceUnit"
+            :values="distanceUnitOptions"
+            value-key="value"
+            label-key="label"
+            :placeholder="$t('settings.general.distanceUnit.placeholder')"
+            :disabled="isUpdating || isPatching"
+            @update:model-value="handleDistanceUnitChange"
+          />
+        </div>
       </CardContent>
     </Card>
   </div>
@@ -110,6 +133,7 @@
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import AccountSelectField from '@/components/fields/account-select-field.vue';
 import CategoryMultiSelectField from '@/components/fields/category-multi-select-field.vue';
+import SelectField from '@/components/fields/select-field.vue';
 import { Card, CardContent, CardHeader } from '@/components/lib/ui/card';
 import { Separator } from '@/components/lib/ui/separator';
 import { Switch } from '@/components/lib/ui/switch';
@@ -123,10 +147,12 @@ import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { invalidateDistanceUnitQueries } from './distance-unit-queries';
+
 const { t } = useI18n();
 const queryClient = useQueryClient();
 const { addSuccessNotification, addErrorNotification } = useNotificationCenter();
-const { data: userSettings, mutateAsync, isUpdating } = useUserSettings();
+const { data: userSettings, mutateAsync, patchAsync, isUpdating, isPatching } = useUserSettings();
 const { accountsRecord, txTargetableSourceAccountsActiveFirst } = storeToRefs(useAccountsStore());
 const {
   defaultAccountId,
@@ -139,6 +165,15 @@ const {
 const includeCreditLimitInStats = computed(() => userSettings.value?.includeCreditLimitInStats ?? false);
 const matchTransfersWithManualAccounts = computed(() => userSettings.value?.matchTransfersWithManualAccounts ?? false);
 const savingsCategoryIds = computed(() => userSettings.value?.savingsCategoryIds ?? []);
+const distanceUnit = computed(() => userSettings.value?.distanceUnit ?? 'km');
+const distanceUnitOptions = computed(() => [
+  { value: 'km' as const, label: t('settings.general.distanceUnit.kilometers') },
+  { value: 'mi' as const, label: t('settings.general.distanceUnit.miles') },
+]);
+const selectedDistanceUnit = computed(
+  () =>
+    distanceUnitOptions.value.find((option) => option.value === distanceUnit.value) ?? distanceUnitOptions.value[0]!,
+);
 
 const defaultAccount = computed<AccountModel | null>(() =>
   defaultAccountId.value ? (accountsRecord.value[defaultAccountId.value] ?? null) : null,
@@ -215,4 +250,15 @@ const handleDefaultAccountChange = (account: AccountModel | null) =>
 
 const handleShowArchivedToggle = (value: boolean) =>
   applyDropdownPref({ update: () => setShowArchivedInDropdowns({ value }) });
+
+const handleDistanceUnitChange = async (value: { value: 'km' | 'mi' } | null) => {
+  if (!value || value.value === distanceUnit.value) return;
+  try {
+    await patchAsync({ distanceUnit: value.value });
+    await invalidateDistanceUnitQueries({ queryClient });
+    addSuccessNotification(t('settings.general.distanceUnit.successNotification'));
+  } catch {
+    addErrorNotification(t('settings.general.distanceUnit.errorNotification'));
+  }
+};
 </script>

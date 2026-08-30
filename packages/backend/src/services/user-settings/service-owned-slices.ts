@@ -10,7 +10,7 @@ import omit from 'lodash/omit';
 const SERVICE_OWNED_SETTING_PATHS = ['onboarding', 'ai.customEndpoints'] as const;
 
 export const stripServiceOwnedSlices = <T extends object>({ settings }: { settings: T }): T =>
-  omit(settings, [...SERVICE_OWNED_SETTING_PATHS]) as unknown as T;
+  omit(settings, SERVICE_OWNED_SETTING_PATHS) as unknown as T;
 
 /**
  * Deep-merges into the stored settings: an absent key never erases one, and the customizer

@@ -3,7 +3,7 @@ import { DEACTIVATION_REASON } from '@bt/shared/types';
 import Currencies from '@models/currencies.model';
 import MerchantCategoryCodes from '@models/merchant-category-codes.model';
 import { encryptCredentials } from '@services/bank-data-providers/utils/credential-encryption';
-import type { Transaction } from 'sequelize';
+import { Op, type Transaction } from 'sequelize';
 import { v7 as uuidv7 } from 'uuid';
 
 import { BACKUP_TABLES, type BackupTableDef } from '../registry';
@@ -18,6 +18,7 @@ import {
   guardRowReferences,
 } from './owned-reference-guard';
 import { remapEmbeddedReferences } from './remap-embedded-references';
+import { legacyMileageToMeters } from './vehicle-mileage';
 
 type Row = Record<string, unknown>;
 
@@ -43,6 +44,60 @@ interface InsertContext {
 
 const hasColumn = ({ plan, field }: { plan: TableColumnPlan; field: string }): boolean =>
   plan.columns.some((c) => c.field === field);
+
+/**
+ * Resolve instance-wide preset rows before inserting user-owned rows. Preset
+ * UUIDs are generated per instance, so their natural key must seed the FK map
+ * used by later tables. Existing target presets are reused; absent presets are
+ * left in the insert batch so a restore can still carry a complete catalog.
+ */
+async function resolveGlobalRows({
+  def,
+  rows,
+  ownMap,
+  transaction,
+}: {
+  def: BackupTableDef;
+  rows: Row[];
+  ownMap: Map<string, string>;
+  transaction: Transaction;
+}): Promise<Set<string>> {
+  const config = def.globalRows;
+  if (!config) return new Set<string>();
+
+  const globalRows = rows.filter((row) => row[config.ownerColumn] == null);
+  const keys = [
+    ...new Set(
+      globalRows
+        .map((row) => row[config.naturalKey])
+        .filter((key): key is string | number => typeof key === 'string' || typeof key === 'number')
+        .map(String),
+    ),
+  ];
+  if (keys.length === 0) return new Set<string>();
+
+  const existing = (await def.model.findAll({
+    attributes: ['id', config.naturalKey],
+    where: { [config.ownerColumn]: null, [config.naturalKey]: { [Op.in]: keys } },
+    transaction,
+    paranoid: false,
+    raw: true,
+  })) as unknown as Array<{ id: string; [key: string]: unknown }>;
+  const targetIdByKey = new Map(existing.map((row) => [String(row[config.naturalKey]), String(row.id)]));
+  const reusedIds = new Set<string>();
+
+  for (const row of globalRows) {
+    if (row.id == null) continue;
+    const key = row[config.naturalKey];
+    if (typeof key !== 'string' && typeof key !== 'number') continue;
+    const targetId = targetIdByKey.get(String(key));
+    if (targetId === undefined) continue;
+    ownMap.set(String(row.id), targetId);
+    reusedIds.add(String(row.id));
+  }
+
+  return reusedIds;
+}
 
 /**
  * Delete any restore-target rows that outlived the shared wipe, so this user's
@@ -127,6 +182,13 @@ function buildRowOverrides({
     overrides.metadata = { ...metadata, deactivationReason: DEACTIVATION_REASON.RESTORED };
   }
 
+  // A kilometre-based fallback is converted only when the canonical metre
+  // field is absent; when both shapes are present, the canonical value wins.
+  if (def.fileName === 'vehicles' && row.currentMileageMeters === undefined) {
+    const currentMileageMeters = legacyMileageToMeters({ value: row.currentMileage });
+    if (currentMileageMeters !== undefined) overrides.currentMileageMeters = currentMileageMeters;
+  }
+
   return overrides;
 }
 
@@ -164,6 +226,13 @@ async function insertTable({
     ownMap = new Map<string, string>();
     ctx.insertedIds.set(targetTable, ownMap);
   }
+
+  const reusedGlobalIds = await resolveGlobalRows({
+    def,
+    rows,
+    ownMap,
+    transaction: ctx.transaction,
+  });
 
   // A standalone UUID `id` (IdColumn) can be reminted when another user's row
   // already holds it; composite-PK tables (Holdings, join tables) have no such
@@ -210,6 +279,8 @@ async function insertTable({
   const fkNulledByColumn = new Map<string, number>();
 
   for (const row of rows) {
+    if (row.id != null && reusedGlobalIds.has(String(row.id))) continue;
+
     const overrides = buildRowOverrides({ def, plan, row, ctx });
     if (overrides === null) {
       droppedMccCount += 1;
@@ -220,6 +291,12 @@ async function insertTable({
     if (def.requireSeededCurrency && !ctx.currencyCodes.has(String(row.currencyCode))) {
       droppedCurrencyCount += 1;
       continue;
+    }
+
+    if (def.globalRows && row[def.globalRows.ownerColumn] == null) {
+      // Keep a missing preset global; existing presets were handled above and
+      // are represented only by their source-id → target-id map entry.
+      overrides[def.globalRows.ownerColumn] = null;
     }
 
     const guard = guardRowReferences({ guardedFks, row, insertedIds: ctx.insertedIds });

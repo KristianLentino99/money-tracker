@@ -1,5 +1,5 @@
 import { getDefaultValue } from '@common/helpers/get-default-value-from-zod-schema';
-import UserSettings, { ZodSettingsSchema } from '@models/user-settings.model';
+import UserSettings, { DEFAULT_SETTINGS, ZodSettingsSchema } from '@models/user-settings.model';
 
 import { withTransaction } from '../common/with-transaction';
 import { type RedactedSettingsSchema, redactKeyMaterial } from './redact-key-material';
@@ -11,7 +11,10 @@ export const getUserSettings = withTransaction(
       attributes: ['settings'],
     });
 
-    const defaults = getDefaultValue(ZodSettingsSchema);
+    const defaults = {
+      ...getDefaultValue(ZodSettingsSchema),
+      ...DEFAULT_SETTINGS,
+    };
 
     if (!userSettings) {
       return defaults;

@@ -46,6 +46,8 @@
         @enter="gridRef?.enterEditMode()"
       />
 
+      <VehicleMaintenanceReminders class="mb-4" />
+
       <DashboardGrid ref="gridRef" :current-period="currentPeriod" />
 
       <!-- Mobile: sticky "Done/Cancel" bar at bottom during edit mode -->
@@ -75,6 +77,7 @@ import { useRoute } from 'vue-router';
 import DashboardEditToolbar from './components/dashboard-edit-toolbar.vue';
 import DashboardGrid from './components/dashboard-grid.vue';
 import PeriodSelector from './components/period-selector.vue';
+import VehicleMaintenanceReminders from './components/vehicle-maintenance-reminders/vehicle-maintenance-reminders.vue';
 import { type Period } from './types';
 
 const { isSafariMobile, isPWA } = useSafariDetection();

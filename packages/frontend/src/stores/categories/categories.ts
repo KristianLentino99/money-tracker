@@ -27,6 +27,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     try {
       if (force) {
         await invalidatePersistedQuery({ queryKey: VUE_QUERY_CACHE_KEYS.categoriesList });
+        queryClient.removeQueries({ queryKey: VUE_QUERY_CACHE_KEYS.categoriesList, exact: true });
       }
 
       const result = await queryClient.fetchQuery({

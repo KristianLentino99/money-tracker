@@ -20,6 +20,7 @@ export interface VehicleModel {
   customAnnualRatePct: number | null;
   salvageFloorPct: number;
   currentMileage: number | null;
+  distanceUnit: 'km' | 'mi';
   valueLastComputedAt: string | null;
   createdAt: string;
   updatedAt: string;

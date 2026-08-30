@@ -6,9 +6,11 @@ import Vehicles from '@models/vehicles.model';
 import { calculateRefAmount } from '@services/calculate-ref-amount.service';
 import { withTransaction } from '@services/common/with-transaction';
 import { ensureUserCurrencyConnected } from '@services/sharing/auth/ensure-currency-connected.service';
+import { distanceToMetersForApi as distanceToMeters } from '@services/vehicle-maintenance/distance';
 import { parseISO } from 'date-fns';
 
 import { computeVehicleValue } from './compute-vehicle-value';
+import { getVehicleDistanceUnit } from './helpers';
 
 interface CreateVehicleParams {
   userId: number;
@@ -106,7 +108,10 @@ const createVehicleImpl = async (params: CreateVehicleParams) => {
     depreciationPreset,
     customAnnualRatePct,
     salvageFloorPct,
-    currentMileage,
+    currentMileageMeters:
+      currentMileage === null
+        ? null
+        : distanceToMeters({ value: currentMileage, unit: await getVehicleDistanceUnit({ userId }) }),
     valueLastComputedAt: now,
   });
 

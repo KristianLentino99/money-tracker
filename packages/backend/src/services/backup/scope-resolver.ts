@@ -8,6 +8,8 @@ import Subscriptions from '@models/subscriptions.model';
 import TransactionGroups from '@models/transaction-groups.model';
 import TransactionTemplates from '@models/transaction-templates.model';
 import Transactions from '@models/transactions.model';
+import VehicleMaintenanceVisits from '@models/vehicle-maintenance-visits.model';
+import Vehicles from '@models/vehicles.model';
 import VentureEvents from '@models/venture/venture-events.model';
 import { Model, Op, type ModelStatic } from 'sequelize';
 
@@ -46,6 +48,12 @@ export function createScopeResolver({ userId }: { userId: number }) {
     plans: () => idsWhere({ model: Plans, where: { ownerUserId: userId } }),
     subscriptions: () => idsWhere({ model: Subscriptions, where: { userId } }),
     ventureEvents: () => idsWhere({ model: VentureEvents, where: { userId } }),
+    vehicles: () => idsWhere({ model: Vehicles, where: { userId } }),
+    vehicleMaintenanceVisits: async () => {
+      const vehicleIds = await getScope({ scope: 'vehicles' });
+      if (vehicleIds.length === 0) return [];
+      return idsWhere({ model: VehicleMaintenanceVisits, where: { vehicleId: { [Op.in]: vehicleIds } } });
+    },
     subscriptionPeriods: async () => {
       const subscriptionIds = await getScope({ scope: 'subscriptions' });
       if (subscriptionIds.length === 0) return [];

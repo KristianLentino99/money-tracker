@@ -1,3 +1,9 @@
+import createMaintenancePlan from '@controllers/vehicle-maintenance/create-plan';
+import createMaintenanceVisit from '@controllers/vehicle-maintenance/create-visit';
+import deleteMaintenanceVisit from '@controllers/vehicle-maintenance/delete-visit';
+import getVehicleMaintenance from '@controllers/vehicle-maintenance/get-vehicle-maintenance';
+import updateMaintenancePlan from '@controllers/vehicle-maintenance/update-plan';
+import updateMaintenanceVisit from '@controllers/vehicle-maintenance/update-visit';
 import createVehicle from '@controllers/vehicles/create-vehicle';
 import deleteVehicle from '@controllers/vehicles/delete-vehicle';
 import getVehicle from '@controllers/vehicles/get-vehicle';
@@ -13,6 +19,12 @@ const router = Router({});
 
 router.get('/', authenticateSession, validateEndpoint(getVehicles.schema), getVehicles.handler);
 router.get('/:id', authenticateSession, validateEndpoint(getVehicle.schema), getVehicle.handler);
+router.get(
+  '/:id/maintenance',
+  authenticateSession,
+  validateEndpoint(getVehicleMaintenance.schema),
+  getVehicleMaintenance.handler,
+);
 router.post(
   '/',
   authenticateSession,
@@ -33,6 +45,36 @@ router.post(
   checkBaseCurrencyLock,
   validateEndpoint(overrideVehicleValue.schema),
   overrideVehicleValue.handler,
+);
+router.post(
+  '/:id/maintenance/visits',
+  authenticateSession,
+  validateEndpoint(createMaintenanceVisit.schema),
+  createMaintenanceVisit.handler,
+);
+router.delete(
+  '/:id/maintenance/visits/:visitId',
+  authenticateSession,
+  validateEndpoint(deleteMaintenanceVisit.schema),
+  deleteMaintenanceVisit.handler,
+);
+router.patch(
+  '/:id/maintenance/visits/:visitId',
+  authenticateSession,
+  validateEndpoint(updateMaintenanceVisit.schema),
+  updateMaintenanceVisit.handler,
+);
+router.post(
+  '/:id/maintenance/plans',
+  authenticateSession,
+  validateEndpoint(createMaintenancePlan.schema),
+  createMaintenancePlan.handler,
+);
+router.patch(
+  '/:id/maintenance/plans/:planId',
+  authenticateSession,
+  validateEndpoint(updateMaintenancePlan.schema),
+  updateMaintenancePlan.handler,
 );
 router.delete(
   '/:id',

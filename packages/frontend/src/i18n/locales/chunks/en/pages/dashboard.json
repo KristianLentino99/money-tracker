@@ -256,5 +256,39 @@
       "scheduledBadge": "Scheduled",
       "payAction": "Mark paid"
     }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Vehicle maintenance",
+        "description": "Keep track of upcoming maintenance for your vehicles.",
+        "count": "{count} reminders",
+        "unknownVehicle": "Unknown vehicle",
+        "status": {
+          "upcoming": "Upcoming",
+          "overdue": "Overdue"
+        },
+        "activity": {
+          "inspection": "Vehicle inspection",
+          "scheduled-service": "Scheduled service",
+          "oil-change": "Oil change",
+          "tires": "Tire rotation",
+          "brakes": "Brake service",
+          "battery": "Battery",
+          "other": "Other"
+        },
+        "dueDate": "Due {date}",
+        "dueDistance": "Due at {distance}",
+        "odometerLabel": "Current mileage ({unit})",
+        "odometerPlaceholder": "Enter current mileage",
+        "updateOdometer": "Update odometer",
+        "showLess": "Show less",
+        "showMore": "Show {count} more",
+        "notifications": {
+          "odometerUpdated": "Odometer updated",
+          "odometerUpdateError": "Could not update the odometer."
+        }
+      }
+    }
   }
 }

@@ -7,7 +7,7 @@ export const loadSystemCategories = async (): Promise<CategoryModel[]> => {
   // (transaction lists, widgets) use this to resolve names and icons for txs on
   // shared accounts without an N+1 lookup. The picker still narrows to the caller's
   // own set on its render path.
-  const result = await api.get('/categories', { includeAccessible: true });
+  const result = await api.get('/categories', { includeAccessible: true }, { cache: 'no-store' });
 
   return result;
 };

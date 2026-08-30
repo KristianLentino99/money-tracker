@@ -4,6 +4,7 @@ import { Money } from '@common/types/money';
 import { MoneyField } from '@common/types/money-column';
 import Accounts from '@models/accounts.model';
 import Users from '@models/users.model';
+import { metersToDistance } from '@services/vehicle-maintenance/distance';
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
 
 @Table({
@@ -100,10 +101,26 @@ export default class Vehicles extends Model {
   salvageFloorPct!: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     allowNull: true,
   })
-  currentMileage!: number | null;
+  get currentMileageMeters(): number | null {
+    const raw = this.getDataValue('currentMileageMeters');
+    return raw == null ? null : Number(raw);
+  }
+  set currentMileageMeters(value: number | string | null) {
+    this.setDataValue('currentMileageMeters', value);
+  }
+
+  /**
+   * Compatibility view for consumers that export the kilometre-based field.
+   * API serializers use `currentMileageMeters` and the caller's preferred unit.
+   */
+  get currentMileage(): number | null {
+    return this.currentMileageMeters == null
+      ? null
+      : metersToDistance({ meters: this.currentMileageMeters, unit: 'km' });
+  }
 
   @Column({
     type: DataType.DATE,

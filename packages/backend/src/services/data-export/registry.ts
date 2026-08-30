@@ -11,6 +11,8 @@ import { transformSubscriptions } from './transformers/subscriptions-transformer
 import { transformTags } from './transformers/tags-transformer';
 import { transformTransactionTemplates } from './transformers/transaction-templates-transformer';
 import { transformTransactions } from './transformers/transactions-transformer';
+import { transformVehicleMaintenancePlans } from './transformers/vehicle-maintenance-plans-transformer';
+import { transformVehicleMaintenanceVisits } from './transformers/vehicle-maintenance-visits-transformer';
 import { transformVehicles } from './transformers/vehicles-transformer';
 import type { ExportDateRange, ExportFileName, ExportGroup, ExportTable } from './types';
 
@@ -185,7 +187,38 @@ export const EXPORT_DOMAINS: ReadonlyArray<ExportDomainBase> = [
       { header: 'InitialCost', field: 'initialCost', kind: 'money' },
       { header: 'Currency', field: 'currency', kind: 'text' },
       { header: 'CurrentMileage', field: 'currentMileage', kind: 'number' },
+      { header: 'DistanceUnit', field: 'distanceUnit', kind: 'text' },
       { header: 'DepreciationModel', field: 'depreciationModel', kind: 'text' },
+    ],
+  }),
+  defineDomain({
+    name: 'vehicle_maintenance_plans',
+    group: 'transactions',
+    build: ({ userId }) => transformVehicleMaintenancePlans({ userId }),
+    columns: [
+      { header: 'Vehicle', field: 'vehicle', kind: 'text' },
+      { header: 'Activity', field: 'activity', kind: 'text' },
+      { header: 'NextDueDate', field: 'nextDueDate', kind: 'date' },
+      { header: 'NextDueDistance', field: 'nextDueDistance', kind: 'number' },
+      { header: 'LeadDays', field: 'leadDays', kind: 'number' },
+      { header: 'LeadDistance', field: 'leadDistance', kind: 'number' },
+      { header: 'DistanceUnit', field: 'distanceUnit', kind: 'text' },
+      { header: 'ArchivedAt', field: 'archivedAt', kind: 'date' },
+    ],
+  }),
+  defineDomain({
+    name: 'vehicle_maintenance_visits',
+    group: 'transactions',
+    build: ({ userId }) => transformVehicleMaintenanceVisits({ userId }),
+    columns: [
+      { header: 'Vehicle', field: 'vehicle', kind: 'text' },
+      { header: 'ServiceDate', field: 'serviceDate', kind: 'date' },
+      { header: 'Odometer', field: 'odometer', kind: 'number' },
+      { header: 'DistanceUnit', field: 'distanceUnit', kind: 'text' },
+      { header: 'Notes', field: 'notes', kind: 'text' },
+      { header: 'TotalCost', field: 'totalCost', kind: 'money' },
+      { header: 'BaseCurrency', field: 'baseCurrency', kind: 'text' },
+      { header: 'Activities', field: 'activitiesDetails', kind: 'text' },
     ],
   }),
   defineDomain({

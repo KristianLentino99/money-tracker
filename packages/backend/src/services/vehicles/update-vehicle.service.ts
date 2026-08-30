@@ -1,10 +1,12 @@
 import { DEPRECIATION_PRESET, VEHICLE_CLASS } from '@bt/shared/types';
 import { ValidationError } from '@js/errors';
 import Accounts from '@models/accounts.model';
+import { namespace } from '@models/connection';
 import Vehicles from '@models/vehicles.model';
 import { withTransaction } from '@services/common/with-transaction';
+import { distanceToMetersForApi as distanceToMeters } from '@services/vehicle-maintenance/distance';
 
-import { findVehicleOrThrow } from './helpers';
+import { assertVehicleMileageIsMonotonic, findVehicleOrThrow, getVehicleDistanceUnit } from './helpers';
 import { refreshVehicleValueIfStale } from './refresh-vehicle-value.service';
 
 interface UpdateVehicleParams {
@@ -23,9 +25,15 @@ interface UpdateVehicleParams {
 }
 
 const updateVehicleImpl = async (params: UpdateVehicleParams) => {
-  const { userId, vehicleId, name, ...rest } = params;
+  const { userId, vehicleId, name, currentMileage, ...rest } = params;
 
-  const vehicle = await findVehicleOrThrow({ vehicleId, userId });
+  const sequelizeTx = namespace.get('transaction');
+  const vehicle = await findVehicleOrThrow({
+    vehicleId,
+    userId,
+    transaction: sequelizeTx,
+    lock: sequelizeTx?.LOCK.UPDATE,
+  });
 
   const currentCustomRate = vehicle.customAnnualRatePct ? Number(vehicle.customAnnualRatePct) : null;
   const currentSalvageFloor = Number(vehicle.salvageFloorPct);
@@ -51,10 +59,24 @@ const updateVehicleImpl = async (params: UpdateVehicleParams) => {
     });
   }
 
-  await vehicle.update(rest);
+  let mileageUpdate: { currentMileageMeters?: number | null } = {};
+
+  if (currentMileage !== undefined) {
+    const currentMileageMeters =
+      currentMileage === null
+        ? null
+        : distanceToMeters({ value: currentMileage, unit: await getVehicleDistanceUnit({ userId }) });
+    mileageUpdate = { currentMileageMeters };
+    assertVehicleMileageIsMonotonic({
+      currentMileageMeters: vehicle.currentMileageMeters,
+      nextMileageMeters: currentMileageMeters,
+    });
+  }
+
+  await vehicle.update({ ...rest, ...mileageUpdate }, { transaction: sequelizeTx });
 
   if (name !== undefined) {
-    await Accounts.update({ name }, { where: { id: vehicle.accountId, userId } });
+    await Accounts.update({ name }, { where: { id: vehicle.accountId, userId }, transaction: sequelizeTx });
   }
 
   if (curveAffectingChange) {

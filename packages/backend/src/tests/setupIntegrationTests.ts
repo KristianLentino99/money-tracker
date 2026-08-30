@@ -196,6 +196,16 @@ const SEED_DATA_TABLES = [
   'exchangerates', // Exchange rates - seeded with historical rates (10 days ago)
 ];
 
+const GLOBAL_VEHICLE_MAINTENANCE_PRESETS = [
+  { id: '00000000-0000-4000-8000-000000000001', systemKey: 'inspection', sortOrder: 1 },
+  { id: '00000000-0000-4000-8000-000000000002', systemKey: 'scheduled-service', sortOrder: 2 },
+  { id: '00000000-0000-4000-8000-000000000003', systemKey: 'oil-change', sortOrder: 3 },
+  { id: '00000000-0000-4000-8000-000000000004', systemKey: 'tires', sortOrder: 4 },
+  { id: '00000000-0000-4000-8000-000000000005', systemKey: 'brakes', sortOrder: 5 },
+  { id: '00000000-0000-4000-8000-000000000006', systemKey: 'battery', sortOrder: 6 },
+  { id: '00000000-0000-4000-8000-000000000007', systemKey: 'other', sortOrder: 7 },
+] as const;
+
 /**
  * Fast table truncation - much faster than DROP + migrations
  * Uses TRUNCATE with CASCADE to clear all data while keeping schema intact
@@ -225,6 +235,26 @@ async function truncateAllTables() {
     15,
     200,
   );
+}
+
+async function reseedVehicleMaintenanceActivities() {
+  const now = new Date();
+
+  for (const preset of GLOBAL_VEHICLE_MAINTENANCE_PRESETS) {
+    await connection.sequelize.query(
+      `INSERT INTO "VehicleMaintenanceActivities"
+        ("id", "userId", "systemKey", "name", "sortOrder", "archivedAt", "createdAt", "updatedAt")
+       SELECT :id, NULL, :systemKey, NULL, :sortOrder, NULL, :now, :now
+       WHERE NOT EXISTS (
+         SELECT 1
+         FROM "VehicleMaintenanceActivities"
+         WHERE "userId" IS NULL AND "systemKey" = :systemKey
+       )`,
+      {
+        replacements: { ...preset, now },
+      },
+    );
+  }
 }
 
 async function waitForDatabaseConnection() {
@@ -354,6 +384,7 @@ beforeEach(async () => {
     // Schema comes from template database (created in setup-e2e-tests.sh).
     // We just need to truncate data between tests.
     await truncateAllTables();
+    await reseedVehicleMaintenanceActivities();
 
     // ExchangeRates is preserved across tests (it's in SEED_DATA_TABLES) so the
     // historical seed survives, but that also means today-dated rows written by

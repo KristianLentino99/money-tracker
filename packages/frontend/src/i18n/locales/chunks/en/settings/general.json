@@ -33,6 +33,15 @@
         },
         "successNotification": "Account dropdown settings updated",
         "errorNotification": "Failed to update account dropdown settings"
+      },
+      "distanceUnit": {
+        "label": "Distance unit",
+        "description": "Choose the unit used for vehicle mileage and maintenance distances.",
+        "placeholder": "Select a distance unit",
+        "kilometers": "Kilometers",
+        "miles": "Miles",
+        "successNotification": "Distance unit updated",
+        "errorNotification": "Failed to update distance unit"
       }
     }
   }

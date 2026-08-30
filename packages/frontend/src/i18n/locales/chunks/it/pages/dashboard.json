@@ -254,5 +254,39 @@
       "scheduledBadge": "Programmato",
       "payAction": "Contrassegna come pagato"
     }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Manutenzione veicoli",
+        "description": "Monitora i prossimi interventi di manutenzione dei tuoi veicoli.",
+        "count": "{count} promemoria",
+        "unknownVehicle": "Veicolo sconosciuto",
+        "status": {
+          "upcoming": "In arrivo",
+          "overdue": "In ritardo"
+        },
+        "activity": {
+          "inspection": "Revisione del veicolo",
+          "scheduled-service": "Tagliando programmato",
+          "oil-change": "Cambio dell'olio",
+          "tires": "Rotazione degli pneumatici",
+          "brakes": "Intervento sui freni",
+          "battery": "Batteria",
+          "other": "Altro"
+        },
+        "dueDate": "Scadenza {date}",
+        "dueDistance": "Scadenza a {distance}",
+        "odometerLabel": "Chilometraggio attuale ({unit})",
+        "odometerPlaceholder": "Inserisci il chilometraggio attuale",
+        "updateOdometer": "Aggiorna chilometraggio",
+        "showLess": "Mostra meno",
+        "showMore": "Mostra altri {count}",
+        "notifications": {
+          "odometerUpdated": "Chilometraggio aggiornato",
+          "odometerUpdateError": "Impossibile aggiornare il chilometraggio."
+        }
+      }
+    }
   }
 }

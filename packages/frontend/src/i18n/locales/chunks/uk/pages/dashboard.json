@@ -254,5 +254,39 @@
       "scheduledBadge": "Заплановано",
       "payAction": "Позначити як оплачено"
     }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Технічне обслуговування",
+        "description": "Відстежуйте майбутнє обслуговування ваших транспортних засобів.",
+        "count": "{count} нагадувань",
+        "unknownVehicle": "Невідомий транспортний засіб",
+        "status": {
+          "upcoming": "Незабаром",
+          "overdue": "Прострочено"
+        },
+        "activity": {
+          "inspection": "Техогляд",
+          "scheduled-service": "Планове ТО",
+          "oil-change": "Заміна оливи",
+          "tires": "Ротація шин",
+          "brakes": "Обслуговування гальм",
+          "battery": "Акумулятор",
+          "other": "Інше"
+        },
+        "dueDate": "Заплановано на {date}",
+        "dueDistance": "Заплановано на {distance}",
+        "odometerLabel": "Поточний пробіг ({unit})",
+        "odometerPlaceholder": "Введіть поточний пробіг",
+        "updateOdometer": "Оновити пробіг",
+        "showLess": "Показати менше",
+        "showMore": "Показати ще {count}",
+        "notifications": {
+          "odometerUpdated": "Пробіг оновлено",
+          "odometerUpdateError": "Не вдалося оновити пробіг."
+        }
+      }
+    }
   }
 }

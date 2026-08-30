@@ -254,5 +254,39 @@
       "scheduledBadge": "Programado",
       "payAction": "Marcar como pagado"
     }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Mantenimiento del vehículo",
+        "description": "Lleva un registro del próximo mantenimiento de tus vehículos.",
+        "count": "{count} recordatorios",
+        "unknownVehicle": "Vehículo desconocido",
+        "status": {
+          "upcoming": "Próximo",
+          "overdue": "Atrasado"
+        },
+        "activity": {
+          "inspection": "Inspección del vehículo",
+          "scheduled-service": "Servicio programado",
+          "oil-change": "Cambio de aceite",
+          "tires": "Rotación de neumáticos",
+          "brakes": "Servicio de frenos",
+          "battery": "Batería",
+          "other": "Otro"
+        },
+        "dueDate": "Vence el {date}",
+        "dueDistance": "Vence a los {distance}",
+        "odometerLabel": "Kilometraje actual ({unit})",
+        "odometerPlaceholder": "Introduce el kilometraje actual",
+        "updateOdometer": "Actualizar kilometraje",
+        "showLess": "Mostrar menos",
+        "showMore": "Mostrar {count} más",
+        "notifications": {
+          "odometerUpdated": "Kilometraje actualizado",
+          "odometerUpdateError": "No se pudo actualizar el kilometraje."
+        }
+      }
+    }
   }
 }

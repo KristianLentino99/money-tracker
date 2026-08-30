@@ -92,6 +92,24 @@ describe('Vehicles', () => {
       });
       expect(customWithoutRate.statusCode).toBe(422);
     });
+
+    it('rejects an odometer value outside the supported database range', async () => {
+      const response = await helpers.createVehicle({
+        ...basePayload({ currentMileage: Number.MAX_SAFE_INTEGER }),
+        raw: false,
+      });
+
+      expect(response.statusCode).toBe(422);
+    });
+
+    it('accepts a decimal odometer value and returns it in the preferred distance unit', async () => {
+      const vehicle = await helpers.createVehicle({
+        ...basePayload({ currentMileage: 12_345.678 }),
+        raw: true,
+      });
+
+      expect(vehicle.currentMileage).toBe(12_345.678);
+    });
   });
 
   describe('GET /vehicles', () => {
@@ -182,6 +200,35 @@ describe('Vehicles', () => {
       // cache stamp unchanged
       const after = await Vehicles.findByPk(vehicle.id).then((v) => v?.valueLastComputedAt);
       expect(after?.getTime()).toBe(initialComputedAt?.getTime());
+    });
+
+    it('accepts a decimal odometer update and returns it in the preferred distance unit', async () => {
+      const vehicle = await helpers.createVehicle({ ...basePayload({ currentMileage: 65_000 }), raw: true });
+
+      const updated = await helpers.updateVehicle({
+        id: vehicle.id,
+        currentMileage: 65_000.125,
+        raw: true,
+      });
+
+      expect(updated.currentMileage).toBe(65_000.125);
+    });
+
+    it('rejects lowering the canonical odometer and leaves the stored mileage unchanged', async () => {
+      const vehicle = await helpers.createVehicle({ ...basePayload({ currentMileage: 65_000 }), raw: true });
+
+      const response = await helpers.updateVehicle({ id: vehicle.id, currentMileage: 64_999 });
+
+      expect(response.statusCode).toBe(422);
+      expect((await helpers.getVehicleById({ id: vehicle.id, raw: true })).currentMileage).toBe(65_000);
+    });
+
+    it('rejects an odometer update outside the supported database range', async () => {
+      const vehicle = await helpers.createVehicle({ ...basePayload({ currentMileage: 65_000 }), raw: true });
+
+      const response = await helpers.updateVehicle({ id: vehicle.id, currentMileage: Number.MAX_SAFE_INTEGER });
+
+      expect(response.statusCode).toBe(422);
     });
 
     it('force-refreshes value when curve params change', async () => {

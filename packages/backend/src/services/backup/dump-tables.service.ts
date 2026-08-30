@@ -37,7 +37,9 @@ async function whereForScope({
     case 'root':
       return { id: userId };
     case 'userColumn':
-      return { [scope.column]: userId };
+      return scope.includeGlobal
+        ? { [Op.or]: [{ [scope.column]: userId }, { [scope.column]: null }] }
+        : { [scope.column]: userId };
     case 'viaParent': {
       // Empty id set → `IN (NULL)`, which matches no rows (correct: the user
       // owns no parents, so the child table is empty).

@@ -27,6 +27,7 @@ interface ApiRequestConfig {
   body?: BodyInit;
   credentials: RequestCredentials;
   signal?: AbortSignal;
+  cache?: RequestCache;
 }
 
 interface ApiCall {
@@ -50,6 +51,8 @@ interface ApiCall {
     silent?: boolean;
     /** AbortSignal forwarded to fetch – lets callers cancel in-flight requests. */
     signal?: AbortSignal;
+    /** Cache mode forwarded to fetch for mutable reference collections. */
+    cache?: RequestCache;
   };
 }
 
@@ -214,6 +217,10 @@ class ApiCaller {
 
     if (opts.options?.signal) {
       config.signal = opts.options.signal;
+    }
+
+    if (opts.options?.cache) {
+      config.cache = opts.options.cache;
     }
 
     let result: Response;

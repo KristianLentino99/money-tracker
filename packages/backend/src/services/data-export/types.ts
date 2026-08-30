@@ -98,7 +98,31 @@ export interface VehicleRow {
    */
   currency: string | null;
   currentMileage: number | null;
+  distanceUnit: 'km' | 'mi';
   depreciationModel: string;
+}
+
+export interface VehicleMaintenancePlanRow {
+  vehicle: string;
+  activity: string;
+  nextDueDate: string | null;
+  nextDueDistance: number | null;
+  leadDays: number;
+  leadDistance: number;
+  distanceUnit: 'km' | 'mi';
+  archivedAt: string | null;
+}
+
+export interface VehicleMaintenanceVisitRow {
+  vehicle: string;
+  serviceDate: string;
+  odometer: number | null;
+  distanceUnit: 'km' | 'mi';
+  notes: string;
+  totalCost: number;
+  baseCurrency: string;
+  activities: string[];
+  activitiesDetails: string;
 }
 
 export interface SubscriptionRow {
@@ -197,6 +221,8 @@ export type ExportTable =
   | { name: 'categories'; rows: CategoryRow[] }
   | { name: 'tags'; rows: TagRow[] }
   | { name: 'vehicles'; rows: VehicleRow[] }
+  | { name: 'vehicle_maintenance_plans'; rows: VehicleMaintenancePlanRow[] }
+  | { name: 'vehicle_maintenance_visits'; rows: VehicleMaintenanceVisitRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }
   | { name: 'transaction_templates'; rows: TransactionTemplateRow[] }
   | { name: 'portfolios'; rows: PortfolioRow[] }

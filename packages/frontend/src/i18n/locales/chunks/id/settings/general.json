@@ -33,6 +33,15 @@
         },
         "successNotification": "Pengaturan dropdown akun diperbarui",
         "errorNotification": "Gagal memperbarui pengaturan dropdown akun"
+      },
+      "distanceUnit": {
+        "label": "Satuan jarak",
+        "description": "Pilih satuan yang digunakan untuk jarak tempuh kendaraan dan jarak perawatan.",
+        "placeholder": "Pilih satuan jarak",
+        "kilometers": "Kilometer",
+        "miles": "Mil",
+        "successNotification": "Satuan jarak diperbarui",
+        "errorNotification": "Gagal memperbarui satuan jarak"
       }
     }
   }

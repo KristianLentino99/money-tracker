@@ -71,6 +71,7 @@ export type SavedPivotView = endpointsTypes.SavedPivotView;
 
 export interface UserSettingsSchema {
   locale?: SupportedLocale;
+  distanceUnit?: 'km' | 'mi';
   dashboard?: {
     widgets: DashboardWidgetConfig[];
   };

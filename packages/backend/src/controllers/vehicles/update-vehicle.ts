@@ -2,6 +2,7 @@ import { DEPRECIATION_PRESET, VEHICLE_CLASS } from '@bt/shared/types';
 import { recordId } from '@common/lib/zod/custom-types';
 import { createController } from '@controllers/helpers/controller-factory';
 import { serializeVehicle } from '@root/serializers/vehicles.serializer';
+import { getVehicleDistanceUnit } from '@services/vehicles/helpers';
 import { updateVehicle } from '@services/vehicles/update-vehicle.service';
 import { z } from 'zod';
 
@@ -22,15 +23,16 @@ const schema = z.object({
     depreciationPreset: z.nativeEnum(DEPRECIATION_PRESET).optional(),
     customAnnualRatePct: z.number().min(0).max(100).nullable().optional(),
     salvageFloorPct: z.number().min(0).max(100).optional(),
-    currentMileage: z.number().int().min(0).nullable().optional(),
+    currentMileage: z.number().finite().min(0).nullable().optional(),
   }),
 });
 
 export default createController(schema, async ({ user, params, body }) => {
+  const distanceUnit = await getVehicleDistanceUnit({ userId: user.id });
   const vehicle = await updateVehicle({
     userId: user.id,
     vehicleId: params.id,
     ...body,
   });
-  return { data: vehicle ? serializeVehicle(vehicle) : null };
+  return { data: vehicle ? serializeVehicle(vehicle, { distanceUnit }) : null };
 });

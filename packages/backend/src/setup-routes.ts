@@ -45,6 +45,7 @@ import transactionGroupsRoutes from './routes/transaction-groups.route';
 import transactionTemplatesRoutes from './routes/transaction-templates.route';
 import transactionsRoutes from './routes/transactions.route';
 import userRoutes from './routes/user.route';
+import vehicleMaintenanceRoutes from './routes/vehicle-maintenance.route';
 import vehiclesRoutes from './routes/vehicles.route';
 import ventureRoutes from './routes/venture.route';
 import webhooksRoutes from './routes/webhooks.route';
@@ -188,6 +189,7 @@ export function setupRoutes(app: Express) {
   app.use(`${API_PREFIX}/plans`, plansRoutes);
   app.use(`${API_PREFIX}/brand-logos`, brandLogosRoutes);
   app.use(`${API_PREFIX}/vehicles`, vehiclesRoutes);
+  app.use(`${API_PREFIX}/vehicle-maintenance`, vehicleMaintenanceRoutes);
   app.use(`${API_PREFIX}/loans`, loansRoutes);
   app.use(`${API_PREFIX}/share`, shareRoutes);
   app.use(`${API_PREFIX}/investments`, investmentsRoutes);

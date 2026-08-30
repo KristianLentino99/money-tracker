@@ -62,4 +62,20 @@ describe('DateField component', () => {
     // The native datetime-local getter canonicalizes to the T separator.
     expect((input.element as HTMLInputElement).value).toBe('2026-08-22T10:00');
   });
+
+  it('clears the calendar value when an allow-empty field is cleared', async () => {
+    const modelValue = new Date('2026-08-22T10:00:00');
+    const wrapper = mount(DateField, {
+      props: { modelValue, allowEmpty: true },
+      global: {
+        stubs: { Popover: SlotStub, PopoverTrigger: SlotStub, PopoverContent: SlotStub, Calendar: CalendarStub },
+      },
+    });
+
+    const input = wrapper.find('input[type="datetime-local"]');
+    await input.setValue('');
+    await wrapper.setProps({ modelValue: null });
+
+    expect(wrapper.findComponent({ name: 'CalendarStub' }).props('modelValue')).toBeUndefined();
+  });
 });

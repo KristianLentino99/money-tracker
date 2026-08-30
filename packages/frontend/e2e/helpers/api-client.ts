@@ -135,6 +135,15 @@ export async function setBaseCurrency({ request, currencyCode }: { request: APIR
   return apiPost({ request, path: '/api/v1/user/currencies/base', data: { currencyCode } });
 }
 
+async function getBaseCurrency({ request }: { request: APIRequestContext }): Promise<{ currencyCode?: string } | null> {
+  const result = await apiGet({ request, path: '/api/v1/user/currencies/base' });
+  if (!result || typeof result !== 'object') return null;
+
+  const response = (result as { response?: unknown }).response;
+  if (response && typeof response === 'object') return response as { currencyCode?: string };
+  return result as { currencyCode?: string };
+}
+
 export async function addUserCurrencies({
   request,
   currencyCode,
@@ -159,7 +168,10 @@ export async function completeOnboarding({
   request: APIRequestContext;
   currencyCode: string;
 }): Promise<void> {
-  await setBaseCurrency({ request, currencyCode });
+  const currentBaseCurrency = await getBaseCurrency({ request });
+  if (currentBaseCurrency?.currencyCode !== currencyCode) {
+    await setBaseCurrency({ request, currencyCode });
+  }
   await addUserCurrencies({ request, currencyCode });
   await dismissOnboarding({ request });
 }

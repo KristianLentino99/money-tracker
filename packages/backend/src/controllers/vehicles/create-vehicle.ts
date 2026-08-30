@@ -3,6 +3,7 @@ import { currencyCode, decimalMoney } from '@common/lib/zod/custom-types';
 import { createController } from '@controllers/helpers/controller-factory';
 import { serializeVehicle } from '@root/serializers/vehicles.serializer';
 import { createVehicle } from '@services/vehicles/create-vehicle.service';
+import { getVehicleDistanceUnit } from '@services/vehicles/helpers';
 import { z } from 'zod';
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -25,18 +26,19 @@ const schema = z.object({
     depreciationPreset: z.nativeEnum(DEPRECIATION_PRESET).optional(),
     customAnnualRatePct: z.number().min(0).max(100).nullable().optional(),
     salvageFloorPct: z.number().min(0).max(100).optional(),
-    currentMileage: z.number().int().min(0).nullable().optional(),
+    currentMileage: z.number().finite().min(0).nullable().optional(),
   }),
 });
 
 export default createController(schema, async ({ user, body }) => {
+  const distanceUnit = await getVehicleDistanceUnit({ userId: user.id });
   const vehicle = await createVehicle({
     userId: user.id,
     ...body,
   });
 
   return {
-    data: vehicle ? serializeVehicle(vehicle) : null,
+    data: vehicle ? serializeVehicle(vehicle, { distanceUnit }) : null,
     statusCode: 201,
   };
 });

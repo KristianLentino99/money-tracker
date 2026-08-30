@@ -50,11 +50,14 @@ export const BACKUP_FILE_NAMES = [
   'portfolios',
   'venture-deals',
   'vehicles',
+  'vehicle-maintenance-activities',
   'loan-details',
   'transaction-groups',
   'plans',
   // tier 4
   'transactions',
+  'vehicle-maintenance-plans',
+  'vehicle-maintenance-visits',
   'balances',
   'holdings',
   'investment-transactions',
@@ -79,6 +82,8 @@ export const BACKUP_FILE_NAMES = [
   'subscription-periods',
   'transfer-suggestion-dismissals',
   'venture-event-links',
+  'vehicle-maintenance-visit-activities',
+  'vehicle-maintenance-transaction-links',
   // tier 6
   'plan-assignments',
   'plan-allocation-events',

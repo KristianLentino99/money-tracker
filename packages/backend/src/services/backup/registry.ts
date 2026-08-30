@@ -57,6 +57,11 @@ import UserMerchantCategoryCodes from '@models/user-merchant-category-codes.mode
 import UserSettings from '@models/user-settings.model';
 import UsersCurrencies from '@models/users-currencies.model';
 import Users from '@models/users.model';
+import VehicleMaintenanceActivities from '@models/vehicle-maintenance-activities.model';
+import VehicleMaintenancePlans from '@models/vehicle-maintenance-plans.model';
+import VehicleMaintenanceTransactionLinks from '@models/vehicle-maintenance-transaction-links.model';
+import VehicleMaintenanceVisitActivities from '@models/vehicle-maintenance-visit-activities.model';
+import VehicleMaintenanceVisits from '@models/vehicle-maintenance-visits.model';
 import Vehicles from '@models/vehicles.model';
 import VentureDeals from '@models/venture/venture-deals.model';
 import VentureEventLinks from '@models/venture/venture-event-links.model';
@@ -81,18 +86,28 @@ export type BackupParentScope =
   | 'plans'
   | 'subscriptions'
   | 'ventureEvents'
-  | 'subscriptionPeriods';
+  | 'subscriptionPeriods'
+  | 'vehicles'
+  | 'vehicleMaintenanceVisits';
 
 /**
  * How a table's rows are selected for the current user.
  * - `root`: the Users row itself (`where id = userId`).
  * - `userColumn`: a direct owner column (`userId` or `ownerUserId`).
+ *   `includeGlobal` also includes rows whose owner column is null.
  * - `viaParent`: no owner column — filter its `fk` against a parent's ids.
  */
 export type BackupDumpScope =
   | { strategy: 'root' }
-  | { strategy: 'userColumn'; column: 'userId' | 'ownerUserId' }
+  | { strategy: 'userColumn'; column: 'userId' | 'ownerUserId'; includeGlobal?: boolean }
   | { strategy: 'viaParent'; fk: string; parent: BackupParentScope };
+
+export interface BackupGlobalRowDef {
+  /** Owner column whose null value identifies an instance-wide preset. */
+  ownerColumn: 'userId';
+  /** Natural key used to resolve the preset on the restore target. */
+  naturalKey: string;
+}
 
 /**
  * How a table's rows are handled on restore. The export path ignores all of
@@ -125,6 +140,8 @@ export interface BackupTableDef {
   enrichMccCode?: boolean;
   /** Drop a row on restore whose `currencyCode` isn't seeded on the target instance. */
   requireSeededCurrency?: boolean;
+  /** Global preset rows are resolved by natural key and are never duplicated. */
+  globalRows?: BackupGlobalRowDef;
 }
 
 /**
@@ -318,6 +335,14 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     restoreMode: 'insert',
   },
   {
+    fileName: 'vehicle-maintenance-activities',
+    model: VehicleMaintenanceActivities,
+    tier: 3,
+    scope: { strategy: 'userColumn', column: 'userId', includeGlobal: true },
+    restoreMode: 'insert',
+    globalRows: { ownerColumn: 'userId', naturalKey: 'systemKey' },
+  },
+  {
     fileName: 'loan-details',
     model: LoanDetails,
     tier: 3,
@@ -346,6 +371,20 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     model: Transactions,
     tier: 4,
     scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'vehicle-maintenance-plans',
+    model: VehicleMaintenancePlans,
+    tier: 4,
+    scope: { strategy: 'viaParent', fk: 'vehicleId', parent: 'vehicles' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'vehicle-maintenance-visits',
+    model: VehicleMaintenanceVisits,
+    tier: 4,
+    scope: { strategy: 'viaParent', fk: 'vehicleId', parent: 'vehicles' },
     restoreMode: 'insert',
   },
   {
@@ -516,6 +555,20 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     model: VentureEventLinks,
     tier: 5,
     scope: { strategy: 'viaParent', fk: 'ventureEventId', parent: 'ventureEvents' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'vehicle-maintenance-visit-activities',
+    model: VehicleMaintenanceVisitActivities,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'visitId', parent: 'vehicleMaintenanceVisits' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'vehicle-maintenance-transaction-links',
+    model: VehicleMaintenanceTransactionLinks,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'visitId', parent: 'vehicleMaintenanceVisits' },
     restoreMode: 'insert',
   },
 

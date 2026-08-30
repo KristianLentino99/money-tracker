@@ -1,5 +1,7 @@
 import Accounts from '@models/accounts.model';
 import Vehicles from '@models/vehicles.model';
+import { metersToDistance } from '@services/vehicle-maintenance/distance';
+import { getVehicleDistanceUnit } from '@services/vehicles/helpers';
 import { Op } from 'sequelize';
 
 import type { VehicleRow } from '../types';
@@ -8,6 +10,7 @@ import { resolveRelationName } from './utils';
 export async function transformVehicles({ userId }: { userId: number }): Promise<VehicleRow[]> {
   const vehicles = await Vehicles.findAll({ where: { userId }, order: [['createdAt', 'ASC']] });
   if (vehicles.length === 0) return [];
+  const distanceUnit = await getVehicleDistanceUnit({ userId });
 
   // Cross-user guard: a stray accountId in a vehicle row must not leak
   // another user's account name into the export.
@@ -38,7 +41,11 @@ export async function transformVehicles({ userId }: { userId: number }): Promise
       }),
       initialCost: vehicle.purchasePrice.toNumber(),
       currency: accountResolved ? (accountCurrencyById.get(accountIdStr) ?? null) : null,
-      currentMileage: vehicle.currentMileage ?? null,
+      currentMileage:
+        vehicle.currentMileageMeters == null
+          ? null
+          : metersToDistance({ meters: vehicle.currentMileageMeters, unit: distanceUnit }),
+      distanceUnit,
       depreciationModel: vehicle.depreciationPreset,
     };
   });

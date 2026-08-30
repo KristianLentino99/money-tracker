@@ -187,7 +187,7 @@
           <DetailRow :label="$t('pages.vehicleDetails.year')">{{ vehicle.year }}</DetailRow>
           <DetailRow v-if="vehicle.trim" :label="$t('pages.vehicleDetails.trim')">{{ vehicle.trim }}</DetailRow>
           <DetailRow v-if="vehicle.currentMileage !== null" :label="$t('pages.vehicleDetails.currentMileage')">
-            {{ vehicle.currentMileage.toLocaleString() }}
+            {{ vehicle.currentMileage.toLocaleString() }} {{ vehicle.distanceUnit }}
           </DetailRow>
         </DetailsCard>
 
@@ -218,6 +218,10 @@
           </DetailRow>
         </DetailsCard>
       </section>
+
+      <div id="vehicle-maintenance" class="scroll-mt-24">
+        <VehicleMaintenanceSection :vehicle="vehicle" />
+      </div>
 
       <OverrideHistoryCard v-if="vehicle.account" :account-id="vehicle.account.id" :currency-code="currencyCode" />
 
@@ -262,6 +266,7 @@ import DepreciationChart from '@/pages/accounts/components/vehicle-details/depre
 import DetailRow from '@/pages/accounts/components/vehicle-details/detail-row.vue';
 import DetailsCard from '@/pages/accounts/components/vehicle-details/details-card.vue';
 import OverrideHistoryCard from '@/pages/accounts/components/vehicle-details/override-history-card.vue';
+import VehicleMaintenanceSection from '@/pages/accounts/components/vehicle-maintenance/vehicle-maintenance-section.vue';
 import { buildDepreciationTimeline, getSalvageFloorValue } from '@/pages/accounts/utils/depreciation-math';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useCurrenciesStore } from '@/stores';
@@ -269,7 +274,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ArrowDownRightIcon, ArrowUpRightIcon, CarIcon, Trash2Icon, TrendingDownIcon } from '@lucide/vue';
 import { addMonths, differenceInCalendarDays, format, parseISO } from 'date-fns';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -408,6 +413,14 @@ const formatDisplayDate = (iso: string) => format(parseISO(iso), 'MMM d, yyyy');
 const isOverrideOpen = ref(false);
 const isEditOpen = ref(false);
 const isDeleteOpen = ref(false);
+
+const scrollToMaintenanceAnchor = async () => {
+  if (route.hash !== '#vehicle-maintenance') return;
+  await nextTick();
+  document.getElementById('vehicle-maintenance')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+watch([() => route.hash, () => vehicle.value?.id], scrollToMaintenanceAnchor, { immediate: true });
 
 const onOverrideClosed = () => {
   isOverrideOpen.value = false;
