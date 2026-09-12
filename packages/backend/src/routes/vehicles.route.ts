@@ -41,30 +41,35 @@ router.patch(
 router.post(
   '/:id/maintenance/visits',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(createMaintenanceVisit.schema),
   createMaintenanceVisit.handler,
 );
 router.delete(
   '/:id/maintenance/visits/:visitId',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(deleteMaintenanceVisit.schema),
   deleteMaintenanceVisit.handler,
 );
 router.patch(
   '/:id/maintenance/visits/:visitId',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(updateMaintenanceVisit.schema),
   updateMaintenanceVisit.handler,
 );
 router.post(
   '/:id/maintenance/plans',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(createMaintenancePlan.schema),
   createMaintenancePlan.handler,
 );
 router.patch(
   '/:id/maintenance/plans/:planId',
   authenticateSession,
+  checkBaseCurrencyLock,
   validateEndpoint(updateMaintenancePlan.schema),
   updateMaintenancePlan.handler,
 );

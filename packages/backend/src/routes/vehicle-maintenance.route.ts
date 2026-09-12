@@ -4,6 +4,7 @@ import getEligibleTransactions from '@controllers/vehicle-maintenance/get-eligib
 import getReminders from '@controllers/vehicle-maintenance/get-reminders';
 import updateActivity from '@controllers/vehicle-maintenance/update-activity';
 import { authenticateSession } from '@middlewares/better-auth';
+import { checkBaseCurrencyLock } from '@middlewares/check-base-currency-lock';
 import { validateEndpoint } from '@middlewares/validations';
 import { Router } from 'express';
 
@@ -17,7 +18,19 @@ router.get(
 );
 router.get('/activities', authenticateSession, validateEndpoint(getActivities.schema), getActivities.handler);
 router.get('/reminders', authenticateSession, validateEndpoint(getReminders.schema), getReminders.handler);
-router.post('/activities', authenticateSession, validateEndpoint(createActivity.schema), createActivity.handler);
-router.patch('/activities/:id', authenticateSession, validateEndpoint(updateActivity.schema), updateActivity.handler);
+router.post(
+  '/activities',
+  authenticateSession,
+  checkBaseCurrencyLock,
+  validateEndpoint(createActivity.schema),
+  createActivity.handler,
+);
+router.patch(
+  '/activities/:id',
+  authenticateSession,
+  checkBaseCurrencyLock,
+  validateEndpoint(updateActivity.schema),
+  updateActivity.handler,
+);
 
 export default router;
