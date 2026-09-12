@@ -1,7 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import { connection } from '@models/index';
 
-import { REAL_TRANSACTIONS_VIEW } from '../../migrations/utils/real-transactions-view';
+import {
+  createLegacyRealTransactionsViewSql,
+  createRealTransactionsViewSql,
+  dropRealTransactionsViewSql,
+  REAL_TRANSACTIONS_VIEW,
+} from '../../migrations/utils/real-transactions-view';
 
 /**
  * Postgres pins a view's column list at creation, so a migration that adds a column to
@@ -30,5 +35,28 @@ describe('real_transactions view', () => {
 
     expect(tableColumns.length).toBeGreaterThan(0);
     expect(viewColumns).toEqual(tableColumns);
+  });
+
+  it('repairs stale output columns after a source column rename', async () => {
+    try {
+      await connection.sequelize.query(dropRealTransactionsViewSql);
+      await connection.sequelize.query('ALTER TABLE "Transactions" RENAME COLUMN "isForecastOnly" TO "isPlanned"');
+      await connection.sequelize.query(createLegacyRealTransactionsViewSql);
+      await connection.sequelize.query('ALTER TABLE "Transactions" RENAME COLUMN "isPlanned" TO "isForecastOnly"');
+
+      expect(await columnsOf(REAL_TRANSACTIONS_VIEW)).toContain('isPlanned');
+
+      await connection.sequelize.query(createRealTransactionsViewSql);
+
+      expect(await columnsOf(REAL_TRANSACTIONS_VIEW)).toContain('isForecastOnly');
+      expect(await columnsOf(REAL_TRANSACTIONS_VIEW)).not.toContain('isPlanned');
+    } finally {
+      const tableColumns = await columnsOf('Transactions');
+      if (tableColumns.includes('isPlanned') && !tableColumns.includes('isForecastOnly')) {
+        await connection.sequelize.query('ALTER TABLE "Transactions" RENAME COLUMN "isPlanned" TO "isForecastOnly"');
+      }
+      await connection.sequelize.query(dropRealTransactionsViewSql);
+      await connection.sequelize.query(createRealTransactionsViewSql);
+    }
   });
 });
