@@ -19,14 +19,14 @@ const props = withDefaults(
   defineProps<{
     open: boolean;
     transactionType?: TRANSACTION_TYPES;
-    /** Restrict the picker to transactions recorded on this calendar date. */
-    transactionDate?: string;
+    /** When true, hide forecast-only rows that cannot settle a real payment. */
+    excludePlanned?: boolean;
     /** IDs to hide from the list (e.g. already-selected txs in a multi-pick flow). */
     excludeIds?: TransactionModel['id'][];
   }>(),
   {
     transactionType: undefined,
-    transactionDate: undefined,
+    excludePlanned: false,
     excludeIds: () => [],
   },
 );
@@ -60,7 +60,7 @@ const {
   queryEnabled: isOpen,
   staticFilters: computed(() =>
     buildPickTransactionStaticFilters({
-      transactionDate: props.transactionDate,
+      excludePlanned: props.excludePlanned,
       transactionType: props.transactionType,
     }),
   ),
@@ -88,15 +88,6 @@ const flatTransactions = computed(() => {
   return all.filter((tx) => !skip.has(tx.id));
 });
 const isListEmpty = computed(() => isFetched.value && flatTransactions.value.length === 0);
-
-const applyPickerFilters = () => {
-  const dateFilters = buildPickTransactionStaticFilters({ transactionDate: props.transactionDate });
-  if (props.transactionDate && 'start' in dateFilters && 'end' in dateFilters) {
-    filters.value.start = dateFilters.start;
-    filters.value.end = dateFilters.end;
-  }
-  applyFilters();
-};
 
 const { virtualRows, totalSize } = useVirtualizedInfiniteScroll({
   items: flatTransactions,
@@ -139,7 +130,7 @@ const isMobileView = computed(() => contentWrapperWidth.value <= CUSTOM_BREAKPOI
                 :is-reset-button-disabled="isResetButtonDisabled"
                 :is-filters-out-of-sync="isFiltersOutOfSync"
                 @reset-filters="resetFilters"
-                @apply-filters="applyPickerFilters"
+                @apply-filters="applyFilters"
               />
             </ScrollArea>
           </RecordsFiltersDialog>
@@ -150,7 +141,7 @@ const isMobileView = computed(() => contentWrapperWidth.value <= CUSTOM_BREAKPOI
             :is-reset-button-disabled="isResetButtonDisabled"
             :is-filters-out-of-sync="isFiltersOutOfSync"
             @reset-filters="resetFilters"
-            @apply-filters="applyPickerFilters"
+            @apply-filters="applyFilters"
           />
         </template>
       </ScrollArea>

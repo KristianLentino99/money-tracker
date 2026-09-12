@@ -19,7 +19,6 @@ import { useNotificationCenter } from '@/components/notification-center';
 import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
 import { useFormatCurrency } from '@/composable/formatters';
 import { useAccountDropdownPrefs } from '@/composable/use-account-dropdown-prefs';
-import { isTransactionOnDate } from '@/components/dialogs/pick-transaction-dialog.helpers';
 import { ApiErrorResponseError, isApiErrorWithCode } from '@/js/errors';
 import { cn } from '@/lib/utils';
 import { useAccountsStore } from '@/stores';
@@ -233,14 +232,6 @@ watch(isDialogOpen, (open) => {
 function handleLinkedTransaction(transaction: TransactionModel) {
   if (!activeSubscription.value || !activePeriodId.value) return;
 
-  if (
-    !activePeriodDueDate.value ||
-    !isTransactionOnDate({ transactionTime: transaction.time, transactionDate: activePeriodDueDate.value })
-  ) {
-    addErrorNotification(t('dialogs.subscriptionMarkPaid.notifications.linkTransactionDateMismatch'));
-    return;
-  }
-
   isLinkTransactionDialogOpen.value = false;
   submitPay({
     id: activeSubscription.value.id,
@@ -438,7 +429,7 @@ defineExpose({ triggerPay, isPending });
   <PickTransactionDialog
     v-model:open="isLinkTransactionDialogOpen"
     :transaction-type="activeSubscription?.transactionType"
-    :transaction-date="activePeriodDueDate ?? undefined"
+    :exclude-planned="true"
     @select="handleLinkedTransaction"
   />
 

@@ -229,14 +229,7 @@ import {
   TransactionModel,
 } from '@bt/shared/types';
 import { format } from 'date-fns';
-import {
-  ArrowRight,
-  BriefcaseIcon,
-  ExternalLinkIcon,
-  InfoIcon,
-  HandCoinsIcon,
-  MapPinIcon,
-} from '@lucide/vue';
+import { ArrowRight, BriefcaseIcon, ExternalLinkIcon, InfoIcon, HandCoinsIcon, MapPinIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
