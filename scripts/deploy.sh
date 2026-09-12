@@ -162,9 +162,15 @@ if [[ -n "$remote_dirty" && "$ALLOW_REMOTE_DIRTY" != '1' ]]; then
   exit 1
 fi
 
+# A complete commit graph keeps deployed revisions connected to their branch
+# history, including when the production checkout was bootstrapped as shallow.
+if [[ "$(sudo git -C "$APP_DIR" rev-parse --is-shallow-repository)" == 'true' ]]; then
+  sudo git -C "$APP_DIR" fetch --unshallow origin
+fi
+
 # Fetch the branch once and assert it is still the revision used for the local
 # image build. A concurrent push cannot cause a mixed code/config deployment.
-sudo git -C "$APP_DIR" fetch --depth=1 origin dev
+sudo git -C "$APP_DIR" fetch origin dev
 if [[ "$(sudo git -C "$APP_DIR" rev-parse FETCH_HEAD)" != "$TARGET_SHA" ]]; then
   echo "origin/dev changed while the images were being built; rerun deployment." >&2
   exit 1
@@ -198,12 +204,41 @@ COMPOSE=(
   -f docker-compose.build.yml
   -f docker-compose.traefik.yml
 )
-"${COMPOSE[@]}" \
-  up -d --no-build --remove-orphans
+
+show_backend_diagnostics() {
+  echo "Backend did not become healthy; showing service status and logs." >&2
+  "${COMPOSE[@]}" ps >&2
+  "${COMPOSE[@]}" logs --tail=100 backend >&2
+}
+
+# Keep the serving frontend in place until the candidate backend is healthy.
+if ! "${COMPOSE[@]}" up -d --no-build --no-deps --remove-orphans backend; then
+  show_backend_diagnostics
+  exit 1
+fi
 
 backend_id="$("${COMPOSE[@]}" ps -q backend)"
+backend_healthy=0
 for _ in {1..30}; do
-  if [[ "$(sudo docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$backend_id")" == "healthy" ]]; then
+  if [[ -n "$backend_id" ]] &&
+    [[ "$(sudo docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$backend_id" 2>/dev/null)" == 'healthy' ]]; then
+    backend_healthy=1
+    break
+  fi
+  sleep 2
+done
+
+if [[ "$backend_healthy" != '1' ]]; then
+  show_backend_diagnostics
+  exit 1
+fi
+
+"${COMPOSE[@]}" up -d --no-build --no-deps --remove-orphans frontend
+
+frontend_id="$("${COMPOSE[@]}" ps -q frontend)"
+for _ in {1..30}; do
+  if [[ -n "$frontend_id" ]] &&
+    [[ "$(sudo docker inspect --format '{{.State.Status}}' "$frontend_id" 2>/dev/null)" == 'running' ]]; then
     sudo docker image prune --force >/dev/null
     echo "Deployment complete: $TARGET_SHA"
     exit 0
@@ -211,8 +246,8 @@ for _ in {1..30}; do
   sleep 2
 done
 
-echo "Backend did not become healthy; showing service status and logs." >&2
+echo "Frontend did not reach running state; showing service status and logs." >&2
 "${COMPOSE[@]}" ps >&2
-"${COMPOSE[@]}" logs --tail=100 backend >&2
+"${COMPOSE[@]}" logs --tail=100 frontend >&2
 exit 1
 REMOTE_SCRIPT
