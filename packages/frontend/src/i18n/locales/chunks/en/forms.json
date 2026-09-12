@@ -355,7 +355,16 @@
       "selectedMany": "{n} payees selected",
       "noResults": "No payees found",
       "unknownPayee": "Unknown payee",
-      "loadError": "Couldn't load payees. Please try again."
+      "loadError": "Couldn't load payees. Please try again.",
+      "blankOption": "No payee"
+    },
+    "budgetMultiSelect": {
+      "label": "All budgets",
+      "selectedMany": "{n} budgets selected",
+      "searchPlaceholder": "Search budgets",
+      "noResults": "No budgets found",
+      "unknownBudget": "Unknown budget",
+      "loadError": "Couldn't load budgets. Please try again."
     },
     "payeeSelect": {
       "placeholder": "Select a payee",

@@ -11,6 +11,16 @@
         "title": "Secciones de la barra lateral",
         "description": "Elija qué secciones aparecen en la barra lateral.",
         "alwaysVisibleTooltip": "Esta sección siempre es visible."
+      },
+      "header": {
+        "title": "Encabezado",
+        "description": "Elija qué acciones del encabezado son visibles.",
+        "supportButton": "Botón de soporte"
+      },
+      "currency": {
+        "title": "Símbolos de moneda",
+        "description": "Cómo se muestra la moneda en los importes. Los símbolos cortos se ven como Rp, ₴ o zł en lugar de IDR, UAH o PLN, pero las monedas que comparten símbolo (USD, CAD, AUD, SGD) se muestran todas como $.",
+        "narrowSymbol": "Usar símbolos de moneda cortos"
       }
     }
   }

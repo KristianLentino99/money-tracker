@@ -308,6 +308,9 @@ export const createOppositeTransaction = async (params: CreateOppositeTransactio
     amount: destinationAmount,
     refAmount: oppositeRefAmount,
     note: baseTransaction.note,
+    externalUrl: baseTransaction.externalUrl,
+    externalReference: baseTransaction.externalReference,
+    location: baseTransaction.location,
     time: new Date(baseTransaction.time),
     transactionType:
       transactionType === TRANSACTION_TYPES.income ? TRANSACTION_TYPES.expense : TRANSACTION_TYPES.income,
@@ -354,6 +357,7 @@ export const createTransaction = withTransaction(
     payeeLocked: callerPayeeLocked,
     categoryIdIsExplicit = false,
     matchPlanned = false,
+    applyAutomations = false,
     ...payload
   }: CreateTransactionParams): Promise<CreateTxResult> => {
     try {
@@ -457,6 +461,9 @@ export const createTransaction = withTransaction(
             cashbackAmount: payload.cashbackAmount,
             accountType,
             rawMerchantName,
+            externalUrl: payload.externalUrl,
+            externalReference: payload.externalReference,
+            location: payload.location,
           },
         });
 
@@ -657,6 +664,7 @@ export const createTransaction = withTransaction(
           externalData: payload.externalData,
           transferNature,
           isPlanned: Boolean(payload.isForecastOnly),
+          applyAutomations,
         })
       ) {
         try {

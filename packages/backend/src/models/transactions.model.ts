@@ -1,6 +1,7 @@
 import {
   ACCOUNT_CATEGORIES,
   ACCOUNT_TYPES,
+  BLANK_FILTER_VALUE,
   CategorizationMeta,
   CATEGORIZATION_SOURCE,
   FILTER_OPERATION,
@@ -11,6 +12,7 @@ import {
   TRANSACTION_TRANSFER_NATURE,
   TRANSACTION_TYPES,
   TransactionCreatorSnapshot,
+  TransactionLocation,
   TransactionModel,
 } from '@bt/shared/types';
 import { IdColumn } from '@common/types/id-column';
@@ -90,6 +92,9 @@ export interface TransactionsAttributes {
   /** Amount in user's base currency */
   refAmount: Money;
   note: string;
+  externalUrl: string | null;
+  externalReference: string | null;
+  location: TransactionLocation | null;
   time: Date;
   userId: number;
   transactionType: TRANSACTION_TYPES;
@@ -148,6 +153,15 @@ export default class Transactions extends Model {
   @Length({ max: 2000 })
   @Column({ allowNull: true, type: DataType.STRING })
   note!: string;
+
+  @Column({ allowNull: true, type: DataType.STRING(2048) })
+  externalUrl!: string | null;
+
+  @Column({ allowNull: true, type: DataType.STRING(255) })
+  externalReference!: string | null;
+
+  @Column({ allowNull: true, type: DataType.JSONB })
+  location!: TransactionLocation | null;
 
   @Column({
     defaultValue: Date.now(),
@@ -783,7 +797,7 @@ export const findWithFilters = async ({
   accountType,
   accountIds,
   excludeAccountIds,
-  tagIds,
+  tagIds: requestedTagIds,
   excludedTagIds,
   order = SORT_DIRECTIONS.desc,
   sortBy,
@@ -906,6 +920,12 @@ export const findWithFilters = async ({
     }),
   };
 
+  const pushAndCondition = (condition: WhereOptions<Transactions>) => {
+    const andConditions = (whereClause[Op.and as unknown as string] as unknown[] | undefined) ?? [];
+    andConditions.push(condition);
+    whereClause[Op.and as unknown as string] = andConditions;
+  };
+
   // When both filters are "only", use OR logic so the user can see
   // "refunds OR transfers" instead of the impossible "refunds AND transfers"
   if (
@@ -915,16 +935,14 @@ export const findWithFilters = async ({
     resolvedRefundFilter === FILTER_OPERATION.only
   ) {
     // Wrap in Op.and to avoid conflicting with category filter's Op.or
-    whereClause[Op.and as unknown as string] = [{ [Op.or]: [transferCondition, refundCondition] }];
+    pushAndCondition({ [Op.or]: [transferCondition, refundCondition] });
   } else {
     if (transferCondition) Object.assign(whereClause, transferCondition);
     if (refundCondition) Object.assign(whereClause, refundCondition);
   }
 
   if (excludeRefundTxs) {
-    const andConditions = (whereClause[Op.and as unknown as string] as unknown[] | undefined) ?? [];
-    andConditions.push(buildExcludeRefundTxsCondition({ keepRefundsForTxId }));
-    whereClause[Op.and as unknown as string] = andConditions;
+    pushAndCondition(buildExcludeRefundTxsCondition({ keepRefundsForTxId }));
   }
 
   if (categoryIds && categoryIds.length > 0) {
@@ -964,9 +982,14 @@ export const findWithFilters = async ({
   }
 
   if (payeeIds && payeeIds.length > 0) {
-    whereClause.payeeId = {
-      [Op.in]: payeeIds,
-    };
+    const realPayeeIds = payeeIds.filter((id) => id !== BLANK_FILTER_VALUE);
+    if (realPayeeIds.length === payeeIds.length) {
+      whereClause.payeeId = { [Op.in]: realPayeeIds };
+    } else {
+      pushAndCondition({
+        [Op.or]: [{ payeeId: null }, ...(realPayeeIds.length ? [{ payeeId: { [Op.in]: realPayeeIds } }] : [])],
+      });
+    }
   }
 
   if (accountIds && accountIds.length > 0) {
@@ -1021,8 +1044,21 @@ export const findWithFilters = async ({
     }
   }
 
+  const hasBlankTag = !!requestedTagIds?.includes(BLANK_FILTER_VALUE);
+  const tagIds = hasBlankTag ? requestedTagIds!.filter((id) => id !== BLANK_FILTER_VALUE) : requestedTagIds;
+  // A required include can't express "no tags", so the blank case is a correlated subquery.
+  if (hasBlankTag) {
+    if (tagIds!.some((id) => !UUID_PATTERN.test(id))) {
+      throw new ValidationError({ message: '"tagIds" must contain valid record ids' });
+    }
+    const junction = `SELECT 1 FROM "TransactionTags" tt WHERE tt."transactionId" = "Transactions"."id"`;
+    const untagged = `NOT EXISTS (${junction})`;
+    const taggedWithAny = `EXISTS (${junction} AND tt."tagId" IN (${tagIds!.map((id) => `'${id}'`).join(', ')}))`;
+    pushAndCondition(literal(tagIds!.length ? `(${untagged} OR ${taggedWithAny})` : untagged));
+  }
+
   // Filter by tagIds - include only transactions with these tags
-  if (tagIds?.length) {
+  if (tagIds?.length && !hasBlankTag) {
     queryInclude.push({
       model: Tags,
       through: { attributes: [], where: { tagId: { [Op.in]: tagIds } } },
@@ -1077,7 +1113,7 @@ export const findWithFilters = async ({
         ...(tagIds?.length ? { where: { tagId: { [Op.in]: tagIds } } } : {}),
       },
       attributes: ['id', 'name', 'color', 'icon'],
-      required: !!tagIds?.length,
+      required: !!tagIds?.length && !hasBlankTag,
     });
   }
 
@@ -1233,6 +1269,9 @@ type CreateTxOptionalParams = Partial<
   Pick<
     TransactionsAttributes,
     | 'note'
+    | 'externalUrl'
+    | 'externalReference'
+    | 'location'
     | 'time'
     | 'categoryId'
     | 'refCurrencyCode'
@@ -1268,6 +1307,9 @@ export interface UpdateTransactionByIdParams {
   amount?: Money;
   refAmount?: Money;
   note?: string | null;
+  externalUrl?: string | null;
+  externalReference?: string | null;
+  location?: TransactionLocation | null;
   time?: Date;
   transactionType?: TRANSACTION_TYPES;
   paymentType?: PAYMENT_TYPES;

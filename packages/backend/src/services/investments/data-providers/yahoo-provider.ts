@@ -17,7 +17,7 @@ import {
   toProviderSymbol,
 } from './base-provider';
 import { resolveByIsinFallback } from './yahoo/isin-resolver';
-import { ISIN_PATTERN, mapYahooTypeToAssetClass, remapUcitsType } from './yahoo/utils';
+import { ISIN_PATTERN, mapYahooTypeToAssetClass, remapUcitsType, toIsoCurrency, toMajorUnit } from './yahoo/utils';
 
 const DEFAULT_HISTORY_YEARS = 5;
 const CURRENCY_RESOLVE_CONCURRENCY = 5;
@@ -155,7 +155,7 @@ export class YahooDataProvider extends BaseSecurityDataProvider {
         throw new Error(`No quote data found for symbol: ${providerSymbol}`);
       }
 
-      const priceClose = quote.regularMarketPreviousClose;
+      const priceClose = toMajorUnit({ price: quote.regularMarketPreviousClose, currency: quote.currency });
       if (!quote.regularMarketTime) {
         logger.info(`Missing regularMarketTime for ${providerSymbol}, using current time as fallback`);
       }
@@ -201,13 +201,14 @@ export class YahooDataProvider extends BaseSecurityDataProvider {
       }
 
       const results: PriceData[] = [];
+      const currency = chartResult.meta?.currency;
       for (const q of chartResult.quotes) {
         if (q.close == null) continue;
 
         results.push({
           providerSymbol,
           date: new Date(q.date),
-          priceClose: q.adjclose ?? q.close,
+          priceClose: toMajorUnit({ price: q.adjclose ?? q.close, currency }),
           priceAsOf: new Date(q.date),
           providerName: SECURITY_PROVIDER.yahoo,
         });
@@ -287,7 +288,7 @@ export class YahooDataProvider extends BaseSecurityDataProvider {
       });
 
       for (const entry of cached) {
-        currencyMap.set(entry.symbol, entry.currencyCode);
+        currencyMap.set(entry.symbol, toIsoCurrency(entry.currencyCode));
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
@@ -313,10 +314,11 @@ export class YahooDataProvider extends BaseSecurityDataProvider {
           const symbol = batch[j]!;
 
           if (result.status === 'fulfilled' && result.value?.currency) {
-            currencyMap.set(symbol, result.value.currency);
+            const currencyCode = toIsoCurrency(result.value.currency);
+            currencyMap.set(symbol, currencyCode);
             toCache.push({
               symbol,
-              currencyCode: result.value.currency,
+              currencyCode,
               providerName: SECURITY_PROVIDER.yahoo,
             });
           }

@@ -3,21 +3,20 @@
     "title": "Akun",
     "createAccount": "Buat akun",
     "createVehicle": "Tambah kendaraan",
+    "actionsMenu": "Tindakan akun",
     "sections": {
       "archived": "Diarsipkan",
       "manual": "Akun manual",
       "sharedWithMe": "Dibagikan dengan saya",
-      "vehicles": "Kendaraan"
+      "vehicles": "Kendaraan",
+      "bankConnections": "Koneksi Bank"
     },
     "empty": {
       "title": "Belum Ada Akun",
       "description": "Buat akun manual untuk mulai melacak keuangan, saldo, dan transaksi Anda.",
+      "connectBank": "Hubungkan Akun Bank",
       "createManual": "Buat Akun Manual"
     },
-    "sharedBy": "Dibagikan oleh {handle}",
-    "viaHousehold": "Dibagikan melalui rumah tangga {handle}",
-    "inGroupSubtitle": "di {name}",
-    "actionsMenu": "Tindakan akun",
     "overview": {
       "totalBalance": "Total saldo",
       "assets": "Aset",
@@ -25,9 +24,15 @@
       "vehicles": "Kendaraan",
       "projected": "Proyeksi {amount} · {count} entri terencana hingga {date} | Proyeksi {amount} · {count} entri terencana hingga {date}"
     },
+    "sharedBy": "Dibagikan oleh {handle}",
+    "viaHousehold": "Dibagikan melalui rumah tangga {handle}",
+    "connect": "Hubungkan",
+    "connectBank": "Hubungkan bank",
+    "noBanksConnected": "Belum ada bank yang terhubung — hubungkan satu untuk menyinkronkan saldo secara otomatis.",
     "reconnect": "Hubungkan Kembali",
     "manageConnection": "Kelola koneksi",
     "accountsCount": "{count} akun | {count} akun",
+    "inGroupSubtitle": "di {name}",
     "sort": {
       "auto": "Otomatis",
       "name": "Nama",

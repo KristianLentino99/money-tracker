@@ -65,6 +65,18 @@ describe('Patch user settings', () => {
     });
   });
 
+  it('persists currencyDisplay in both directions and keeps it through a rejected patch', async () => {
+    const patched = await helpers.patchUserSettings({ raw: true, patch: { currencyDisplay: 'narrowSymbol' } });
+    expect(patched.currencyDisplay).toBe('narrowSymbol');
+
+    const invalid = await helpers.patchUserSettings({ patch: { currencyDisplay: 'code' } });
+    expect(invalid.statusCode).toBe(ERROR_CODES.ValidationError);
+    expect((await helpers.getUserSettings({ raw: true })).currencyDisplay).toBe('narrowSymbol');
+
+    await helpers.patchUserSettings({ raw: true, patch: { currencyDisplay: 'symbol' } });
+    expect((await helpers.getUserSettings({ raw: true })).currencyDisplay).toBe('symbol');
+  });
+
   it('replaces arrays wholesale instead of appending', async () => {
     await helpers.patchUserSettings({
       raw: true,
@@ -77,6 +89,40 @@ describe('Patch user settings', () => {
 
     const fetched = await helpers.getUserSettings({ raw: true });
     expect(fetched.ui?.transactionsTable?.extraFilters).toStrictEqual(['note']);
+  });
+
+  it('persists ui.transactionForm.optionalFields, keeps an explicit empty list, rejects unknown fields', async () => {
+    const patched = await helpers.patchUserSettings({
+      raw: true,
+      patch: { ui: { transactionForm: { optionalFields: ['externalUrl', 'location'] } } },
+    });
+    expect(patched.ui?.transactionForm?.optionalFields).toStrictEqual(['externalUrl', 'location']);
+
+    const emptied = await helpers.patchUserSettings({
+      raw: true,
+      patch: { ui: { transactionForm: { optionalFields: [] } } },
+    });
+    expect(emptied.ui?.transactionForm?.optionalFields).toStrictEqual([]);
+
+    const rejected = await helpers.patchUserSettings({
+      patch: { ui: { transactionForm: { optionalFields: ['nope'] } } },
+    });
+    expect(rejected.statusCode).toBe(ERROR_CODES.ValidationError);
+    expect((await helpers.getUserSettings({ raw: true })).ui?.transactionForm?.optionalFields).toStrictEqual([]);
+  });
+
+  it('persists ui.transactionForm.mapPicker and rejects a non-boolean', async () => {
+    const patched = await helpers.patchUserSettings({
+      raw: true,
+      patch: { ui: { transactionForm: { mapPicker: true } } },
+    });
+    expect(patched.ui?.transactionForm?.mapPicker).toBe(true);
+
+    const rejected = await helpers.patchUserSettings({
+      patch: { ui: { transactionForm: { mapPicker: 'yes' } } },
+    });
+    expect(rejected.statusCode).toBe(ERROR_CODES.ValidationError);
+    expect((await helpers.getUserSettings({ raw: true })).ui?.transactionForm?.mapPicker).toBe(true);
   });
 
   it('rejects a patch that would make settings invalid and keeps stored value intact', async () => {
@@ -155,6 +201,7 @@ describe('Patch user settings', () => {
       { import: { recalculateAccountBalance: 'yes' } },
       { accounts: { defaultAccountId: 'not-a-uuid' } },
       { accounts: { showArchivedInDropdowns: 'yes' } },
+      { currencyDisplay: 'code' },
     ];
 
     for (const patch of invalidPatches) {

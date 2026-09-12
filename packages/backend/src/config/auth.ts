@@ -12,7 +12,7 @@ import { sendEmail } from '@services/email/send-email';
 import { createAppUserWithUniqueUsername, seedUserDefaults } from '@services/user/create-user-with-defaults.service';
 import { areSignupsOpen } from '@services/user/signups-open.service';
 import bcrypt from 'bcryptjs';
-import { APIError, betterAuth } from 'better-auth';
+import { APIError, betterAuth, isAPIError } from 'better-auth';
 import { jwt } from 'better-auth/plugins';
 import { Pool } from 'pg';
 
@@ -259,6 +259,15 @@ export const auth = betterAuth({
 
   // Error handling - redirect OAuth errors to frontend callback page
   onAPIError: {
+    // Defining onError replaces better-auth's own error logging, so 4xx are
+    // logged too (info: Loki only, no Sentry noise from failed logins).
+    onError: (error) => {
+      if (isAPIError(error) && error.status !== 'INTERNAL_SERVER_ERROR') {
+        logger.info(`better-auth ${error.status}: ${error.message}`, { code: error.body?.code });
+        return;
+      }
+      logger.error({ message: 'better-auth API error', error: error as Error });
+    },
     errorURL: process.env.AUTH_ORIGIN
       ? `${process.env.AUTH_ORIGIN}/auth/callback`
       : 'https://localhost:8100/auth/callback',

@@ -29,6 +29,8 @@ type AnalyticsEvent =
     }
   // Language selector
   | { event: 'language_changed'; properties: { from_locale: string; to_locale: string } }
+  | { event: 'crowdin_contribute_clicked'; properties: { current_locale: string } }
+  | { event: 'language_request_board_clicked'; properties: { current_locale: string } }
   // Onboarding funnel
   | { event: 'onboarding_visited' }
   | { event: 'onboarding_completed'; properties: { base_currency: string } }
@@ -45,7 +47,7 @@ type AnalyticsEvent =
   // Import funnel (import_completed tracked on backend)
   | {
       event: 'import_opened';
-      properties: { import_type: 'csv' | 'statement_parser' | 'ynab' | 'budget-bakers-wallet' | 'ms-money' };
+      properties: { import_type: 'csv' | 'statement_parser' | 'ynab' | 'budget-bakers-wallet' | 'ms-money' | 'ofx' };
     }
   // AI features (ai_categorization_completed tracked on backend)
   | { event: 'ai_feature_used'; properties: { feature: 'statement_parser' | 'categorization' } }

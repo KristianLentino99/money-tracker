@@ -6,7 +6,7 @@
  * Deserializers convert API decimal inputs to Money.
  */
 import { PAYMENT_TYPES, TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES } from '@bt/shared/types';
-import type { CategorizationMeta, RecordId } from '@bt/shared/types';
+import type { CategorizationMeta, RecordId, TransactionLocation } from '@bt/shared/types';
 import { Money, centsToApiDecimal, centsToApiDecimalOrNull } from '@common/types/money';
 import type Tags from '@models/tags.model';
 import type TransactionGroups from '@models/transaction-groups.model';
@@ -41,6 +41,9 @@ export interface TransactionApiResponse {
   originalAmount: number | null;
   originalCurrencyCode: string | null;
   note: string | null;
+  externalUrl: string | null;
+  externalReference: string | null;
+  location: TransactionLocation | null;
   time: Date;
   userId: number;
   transactionType: string;
@@ -96,6 +99,9 @@ interface CreateTransactionRequest {
   commissionRate?: number;
   destinationAmount?: number;
   note?: string | null;
+  externalUrl?: string | null;
+  externalReference?: string | null;
+  location?: TransactionLocation | null;
   time?: string;
   transactionType: TRANSACTION_TYPES;
   paymentType: PAYMENT_TYPES;
@@ -115,6 +121,7 @@ interface CreateTransactionRequest {
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  applyAutomations?: boolean;
   originalAmount?: number; // decimal from API
   originalCurrencyCode?: string;
 }
@@ -128,6 +135,9 @@ interface CreateTransactionInternal {
   commissionRate?: Money;
   destinationAmount?: Money;
   note?: string;
+  externalUrl?: string;
+  externalReference?: string;
+  location?: TransactionLocation;
   time?: Date;
   transactionType: TRANSACTION_TYPES;
   paymentType: PAYMENT_TYPES;
@@ -148,6 +158,7 @@ interface CreateTransactionInternal {
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  applyAutomations?: boolean;
   originalAmount?: Money;
   originalCurrencyCode?: string;
 }
@@ -205,6 +216,9 @@ export function serializeTransaction(
     originalAmount: centsToApiDecimalOrNull(tx.originalAmount),
     originalCurrencyCode: tx.originalCurrencyCode ?? null,
     note: tx.note,
+    externalUrl: tx.externalUrl ?? null,
+    externalReference: tx.externalReference ?? null,
+    location: tx.location ?? null,
     time: tx.time,
     userId: tx.userId,
     transactionType: tx.transactionType,
@@ -299,6 +313,9 @@ export function deserializeCreateTransaction(req: CreateTransactionRequest, user
     commissionRate: req.commissionRate !== undefined ? Money.fromDecimal(req.commissionRate) : undefined,
     destinationAmount: req.destinationAmount !== undefined ? Money.fromDecimal(req.destinationAmount) : undefined,
     note: req.note || undefined,
+    externalUrl: req.externalUrl || undefined,
+    externalReference: req.externalReference || undefined,
+    location: req.location ?? undefined,
     time: req.time ? new Date(req.time) : undefined,
     transactionType: req.transactionType,
     paymentType: req.paymentType,
@@ -319,6 +336,7 @@ export function deserializeCreateTransaction(req: CreateTransactionRequest, user
     payeeId: req.payeeId,
     payeeLocked: req.payeeLocked,
     isForecastOnly: req.isForecastOnly,
+    applyAutomations: req.applyAutomations,
     originalAmount: req.originalAmount !== undefined ? Money.fromDecimal(req.originalAmount) : undefined,
     originalCurrencyCode: req.originalCurrencyCode,
   };

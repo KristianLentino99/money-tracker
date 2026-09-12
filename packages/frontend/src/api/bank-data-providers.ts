@@ -3,6 +3,26 @@ import { BANK_PROVIDER_TYPE, type ConnectionNeedingReauth, type ConnectionStatus
 
 export type { ConnectionNeedingReauth, ConnectionStatusSummary };
 
+export interface BankProvider {
+  type: BANK_PROVIDER_TYPE;
+  name: string;
+  description: string;
+  logoUrl?: string;
+  documentationUrl?: string;
+  redirectUrl?: string;
+  features: {
+    supportsAccountSync: boolean;
+    supportsTransactionSync: boolean;
+    supportsBalanceUpdates: boolean;
+    supportsWebhooks: boolean;
+    supportsManualSync: boolean;
+    supportsAutoSync: boolean;
+    supportsRealtime: boolean;
+    requiresReauth: boolean;
+    defaultSyncInterval: number;
+    minSyncInterval: number;
+  };
+}
 export interface BankConnection {
   id: string;
   providerType: BANK_PROVIDER_TYPE;
@@ -79,6 +99,11 @@ interface SyncedAccount {
   balance: number;
   currency: string;
 }
+
+export const listProviders = async (): Promise<BankProvider[]> => {
+  const response = await api.get<{ providers: BankProvider[] }>('/bank-data-providers');
+  return response.providers;
+};
 
 export const listConnections = async (): Promise<BankConnection[]> => {
   const response = await api.get<{ connections: BankConnection[] }>('/bank-data-providers/connections');

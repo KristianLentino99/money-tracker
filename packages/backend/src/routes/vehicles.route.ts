@@ -8,7 +8,6 @@ import createVehicle from '@controllers/vehicles/create-vehicle';
 import deleteVehicle from '@controllers/vehicles/delete-vehicle';
 import getVehicle from '@controllers/vehicles/get-vehicle';
 import getVehicles from '@controllers/vehicles/get-vehicles';
-import overrideVehicleValue from '@controllers/vehicles/override-vehicle-value';
 import updateVehicle from '@controllers/vehicles/update-vehicle';
 import { authenticateSession } from '@middlewares/better-auth';
 import { checkBaseCurrencyLock } from '@middlewares/check-base-currency-lock';
@@ -38,13 +37,6 @@ router.patch(
   checkBaseCurrencyLock,
   validateEndpoint(updateVehicle.schema),
   updateVehicle.handler,
-);
-router.post(
-  '/:id/value',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(overrideVehicleValue.schema),
-  overrideVehicleValue.handler,
 );
 router.post(
   '/:id/maintenance/visits',

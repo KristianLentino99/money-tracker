@@ -2,7 +2,13 @@ import { SECURITY_PROVIDER, SecuritySearchResult } from '@bt/shared/types/invest
 import { logger } from '@js/utils';
 import type YahooFinance from 'yahoo-finance2';
 
-import { ISIN_EXCHANGE_SUFFIXES, isExpectedNotFoundError, mapYahooTypeToAssetClass, remapUcitsType } from './utils';
+import {
+  ISIN_EXCHANGE_SUFFIXES,
+  isExpectedNotFoundError,
+  mapYahooTypeToAssetClass,
+  remapUcitsType,
+  toIsoCurrency,
+} from './utils';
 
 // Yahoo's search endpoint returns only six quote rows by default. That is too
 // small for multi-listed UCITS ETFs: the USD London listing can occupy the
@@ -173,7 +179,7 @@ function buildIsinFallbackResult({ quote, isin }: { quote: YahooQuoteResult; isi
     exchangeName: fullExchangeName,
     exchangeAcronym: quote.exchange,
     exchangeMic: undefined,
-    currencyCode: quote.currency,
+    currencyCode: toIsoCurrency(quote.currency),
     cusip: undefined,
     isin,
   };
