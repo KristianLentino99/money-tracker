@@ -107,6 +107,8 @@ export interface UserSettingsSchema {
   payeeExtractionUsesDescription?: boolean;
   /** Transactions sharing a raw merchant name before a Payee is auto-created. Defaults to 2. */
   payeePromotionThreshold?: 1 | 2 | 3;
+  /** Show the header Support button. Defaults to visible when unset. */
+  showSupportButton?: boolean;
   ui?: UiSettings;
   subscriptions?: SubscriptionsSettings;
   savedPivotViews?: SavedPivotView[];

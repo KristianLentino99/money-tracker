@@ -253,8 +253,10 @@
       </div>
     </div>
 
-    <template #footer="{ close }">
-      <UiButton @click="close">{{ t('pages.integrations.instructionsDialog.gotItButton') }}</UiButton>
+    <template #footer>
+      <UiButton @click="emit('update:open', false)">
+        {{ t('pages.integrations.instructionsDialog.gotItButton') }}
+      </UiButton>
     </template>
   </SharedInstructionsDialog>
 </template>
@@ -280,7 +282,7 @@ defineProps<{
   open: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   'update:open': [value: boolean];
 }>();
 
