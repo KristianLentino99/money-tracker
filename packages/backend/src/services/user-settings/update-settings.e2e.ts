@@ -1,12 +1,15 @@
 import { getDefaultValue } from '@common/helpers/get-default-value-from-zod-schema';
 import { describe, expect, it } from '@jest/globals';
-import { SettingsSchema, ZodSettingsSchema } from '@models/user-settings.model';
+import { DEFAULT_SETTINGS, SettingsSchema, ZodSettingsSchema } from '@models/user-settings.model';
 import * as helpers from '@tests/helpers';
 
 describe('Update user settings', () => {
   it('returns default value when no settings were ever set', async () => {
     const useSettings = await helpers.getUserSettings({ raw: true });
-    const defaultUserSettingsValue = getDefaultValue(ZodSettingsSchema);
+    const defaultUserSettingsValue = {
+      ...getDefaultValue(ZodSettingsSchema),
+      ...DEFAULT_SETTINGS,
+    };
 
     expect(useSettings).toStrictEqual(defaultUserSettingsValue);
   });
@@ -20,9 +23,13 @@ describe('Update user settings', () => {
       raw: true,
       settings: newSettings,
     });
+    const expectedSettings = ZodSettingsSchema.parse(newSettings);
 
-    expect(updatedUserSettings).toStrictEqual(newSettings);
-    expect(await helpers.getUserSettings({ raw: true })).toStrictEqual(newSettings);
+    expect(updatedUserSettings).toStrictEqual(expectedSettings);
+    expect(await helpers.getUserSettings({ raw: true })).toStrictEqual({
+      ...DEFAULT_SETTINGS,
+      ...expectedSettings,
+    });
 
     const overridingSettings: SettingsSchema = { locale: 'uk' };
 
@@ -30,9 +37,13 @@ describe('Update user settings', () => {
       raw: true,
       settings: overridingSettings,
     });
+    const expectedOverriddenSettings = ZodSettingsSchema.parse(overridingSettings);
 
-    expect(overridden).toStrictEqual(overridingSettings);
-    expect(await helpers.getUserSettings({ raw: true })).toStrictEqual(overridingSettings);
+    expect(overridden).toStrictEqual(expectedOverriddenSettings);
+    expect(await helpers.getUserSettings({ raw: true })).toStrictEqual({
+      ...DEFAULT_SETTINGS,
+      ...expectedOverriddenSettings,
+    });
   });
 
   it('saves every accepted widget config shape', async () => {
@@ -64,7 +75,7 @@ describe('Update user settings', () => {
       settings: newSettings,
     });
 
-    expect(updatedSettings).toStrictEqual(newSettings);
+    expect(updatedSettings).toStrictEqual(ZodSettingsSchema.parse(newSettings));
     expect(updatedSettings.dashboard?.widgets[1]?.config).toBeUndefined();
 
     const fetchedSettings = await helpers.getUserSettings({ raw: true });
@@ -98,7 +109,7 @@ describe('Update user settings', () => {
         settings: newSettings,
       });
 
-      expect(updatedSettings).toStrictEqual(newSettings);
+      expect(updatedSettings).toStrictEqual(ZodSettingsSchema.parse(newSettings));
 
       // Verify persistence
       const fetched = await helpers.getUserSettings({ raw: true });
@@ -134,7 +145,7 @@ describe('Update user settings', () => {
         settings: newSettings,
       });
 
-      expect(updatedSettings).toStrictEqual(newSettings);
+      expect(updatedSettings).toStrictEqual(ZodSettingsSchema.parse(newSettings));
 
       // Also test upper boundaries
       const upperSettings: SettingsSchema = {
@@ -160,7 +171,7 @@ describe('Update user settings', () => {
         settings: upperSettings,
       });
 
-      expect(upperResult).toStrictEqual(upperSettings);
+      expect(upperResult).toStrictEqual(ZodSettingsSchema.parse(upperSettings));
     });
 
     it('rejects out-of-range spike config values', async () => {

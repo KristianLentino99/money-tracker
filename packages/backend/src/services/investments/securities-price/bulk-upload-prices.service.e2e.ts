@@ -11,12 +11,11 @@ describe('POST /investments/securities/prices/bulk-upload', () => {
   let originalAdminUsers: string | undefined;
 
   beforeEach(async () => {
-    // Save original ADMIN_USERS env var
     originalAdminUsers = process.env.ADMIN_USERS;
+    process.env.ADMIN_USERS = 'test1';
   });
 
   afterEach(() => {
-    // Restore original ADMIN_USERS env var
     if (originalAdminUsers !== undefined) {
       process.env.ADMIN_USERS = originalAdminUsers;
     } else {
@@ -39,11 +38,7 @@ describe('POST /investments/securities/prices/bulk-upload', () => {
       const nonAdmin = await helpers.bulkUploadSecurityPrices({ payload });
       expect(nonAdmin.statusCode).toBe(ERROR_CODES.Unauthorized);
 
-      if (originalAdminUsers === undefined) {
-        delete process.env.ADMIN_USERS;
-      } else {
-        process.env.ADMIN_USERS = originalAdminUsers;
-      }
+      process.env.ADMIN_USERS = 'test1';
       const admin = await helpers.bulkUploadSecurityPrices({ payload });
       // Fails deeper on validation (no exchange rates), but passes authorization
       expect(admin.statusCode).not.toBe(ERROR_CODES.Unauthorized);

@@ -1,6 +1,6 @@
 import { ASSET_CLASS, SECURITY_PROVIDER } from '@bt/shared/types/investments';
 import Coingecko from '@coingecko/coingecko-typescript';
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import Holdings from '@models/investments/holdings.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Securities from '@models/investments/securities.model';
@@ -95,6 +95,7 @@ const createCryptoSecurity = async ({
   });
 
 describe('Securities Daily Sync Service (via API Endpoint)', () => {
+  let originalAdminUsers: string | undefined;
   let investmentPortfolio: Portfolios;
   let usSecurity: Securities;
   let nonUsSecurity: Securities;
@@ -102,6 +103,9 @@ describe('Securities Daily Sync Service (via API Endpoint)', () => {
   let securityWithExcludedHolding: Securities;
 
   beforeEach(async () => {
+    originalAdminUsers = process.env.ADMIN_USERS;
+    process.env.ADMIN_USERS = 'test1';
+
     jest.clearAllMocks();
 
     // Yahoo mocks default to rejecting so seedSecurities falls back to FMP
@@ -187,6 +191,14 @@ describe('Securities Daily Sync Service (via API Endpoint)', () => {
     // Clear factory cache after seeding so the sync endpoint creates a fresh
     // composite provider that uses the shared Yahoo mocks configured per-test.
     dataProviderFactory.clearCache();
+  });
+
+  afterEach(() => {
+    if (originalAdminUsers === undefined) {
+      delete process.env.ADMIN_USERS;
+    } else {
+      process.env.ADMIN_USERS = originalAdminUsers;
+    }
   });
 
   describe('Basic Sync Functionality', () => {

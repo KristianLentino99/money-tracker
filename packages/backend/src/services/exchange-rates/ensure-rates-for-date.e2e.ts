@@ -400,14 +400,25 @@ describe('Exchange Rates Functionality', () => {
   });
 
   it('should handle ApiLayer 429 by trying next available key', async () => {
-    // Make both free providers fail so the chain reaches ApiLayer.
-    currencyRatesApiOverride.setOverride({ status: 500 });
-    fawazOverride.setOverride({ status: 500 });
+    const originalApiLayerKeys = process.env.API_LAYER_API_KEYS;
+    process.env.API_LAYER_API_KEYS = 'rate-limited-key-1,available-key-2';
 
-    // ApiLayer returns 429 for first key, should try next key
-    apiLayerOverride.setOneTimeOverride({ status: 429 });
-    // Since we have multiple API keys in tests, it should retry with next key
-    await expect(helpers.syncExchangeRates().then((m) => m.statusCode)).resolves.toBe(200);
+    try {
+      // Make both free providers fail so the chain reaches ApiLayer.
+      currencyRatesApiOverride.setOverride({ status: 500 });
+      fawazOverride.setOverride({ status: 500 });
+
+      // ApiLayer returns 429 for the first key, then the default mock succeeds for the second.
+      apiLayerOverride.setOneTimeOverride({ status: 429 });
+
+      await expect(helpers.syncExchangeRates().then((m) => m.statusCode)).resolves.toBe(200);
+    } finally {
+      if (originalApiLayerKeys === undefined) {
+        delete process.env.API_LAYER_API_KEYS;
+      } else {
+        process.env.API_LAYER_API_KEYS = originalApiLayerKeys;
+      }
+    }
   });
 
   describe('Live exchange rates flows', () => {
