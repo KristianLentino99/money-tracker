@@ -7,7 +7,7 @@ the inexpensive 2 GB plan; database backups are **not** scheduled.
 Deploy a revision already pushed to `origin/dev` with:
 
 ```bash
-./scripts/deploy-finance.sh
+./scripts/deploy.sh
 ```
 
 The script checks out the exact current `origin/dev` revision in an isolated
@@ -23,7 +23,7 @@ For this already-provisioned host only, its initial bootstrap edits are now
 tracked by the first Finance release. Use this one-time migration command:
 
 ```bash
-FINANCE_ALLOW_REMOTE_DIRTY=1 ./scripts/deploy-finance.sh
+FINANCE_ALLOW_REMOTE_DIRTY=1 ./scripts/deploy.sh
 ```
 
 Do not use that override for unknown server-side edits: the normal command
@@ -38,6 +38,14 @@ the command needs an authenticated AWS CLI profile allowed to call
 `lightsail:DownloadDefaultKeyPair` and `secretsmanager:GetSecretValue`, Docker,
 and access to the repository's `origin`. Runtime application secrets remain
 only in `/opt/money-tracker/self-hosting/.env` on the server.
+
+The scripts use the `default` AWS CLI profile explicitly, so an ambient
+`AWS_PROFILE` cannot silently select another account. To use a different
+authenticated profile, set `FINANCE_AWS_PROFILE` explicitly:
+
+```bash
+FINANCE_AWS_PROFILE=personale ./scripts/deploy.sh
+```
 
 ## Google OAuth credentials
 
@@ -97,14 +105,14 @@ permission, scoped to the one secret (replace `<ACCOUNT_ID>`):
 After creating the secret, deploy normally:
 
 ```bash
-./scripts/deploy-finance.sh
+./scripts/deploy.sh
 ```
 
 To use a different secret name:
 
 ```bash
 FINANCE_GOOGLE_OAUTH_SECRET_ID=money-tracker/finance/google-oauth \
-./scripts/deploy-finance.sh
+./scripts/deploy.sh
 ```
 
 For a deployment that intentionally does not synchronize Google OAuth, use
@@ -114,7 +122,8 @@ secret stops the deployment before the new release is activated.
 Optional overrides:
 
 ```bash
+FINANCE_AWS_PROFILE=default \
 FINANCE_AWS_REGION=eu-central-1 \
 FINANCE_HOST=18.153.188.35 \
-./scripts/deploy-finance.sh
+./scripts/deploy.sh
 ```

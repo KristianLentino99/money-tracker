@@ -10,6 +10,8 @@ set -Eeuo pipefail
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 readonly AWS_REGION="${FINANCE_AWS_REGION:-eu-central-1}"
+readonly AWS_PROFILE_NAME="${FINANCE_AWS_PROFILE:-default}"
+readonly AWS_CLI=(aws --profile "$AWS_PROFILE_NAME" --region "$AWS_REGION")
 readonly FINANCE_HOST="${FINANCE_HOST:-18.153.188.35}"
 readonly FINANCE_USER="${FINANCE_USER:-ubuntu}"
 readonly APP_DIR="${FINANCE_APP_DIR:-/opt/money-tracker}"
@@ -42,6 +44,8 @@ if [[ "$SYNC_GOOGLE_OAUTH" != '0' && "$SYNC_GOOGLE_OAUTH" != '1' ]]; then
 fi
 
 cd "$REPO_DIR"
+
+echo "Using AWS profile ${AWS_PROFILE_NAME} in ${AWS_REGION}."
 
 # Build a committed, remote-tracked revision in an isolated worktree. This
 # means an unrelated local edit (for example package-lock.json) can never leak
@@ -76,8 +80,7 @@ git -C "$REPO_DIR" worktree add --detach --quiet "$BUILD_DIR" "$TARGET_SHA"
 
 # AWS returns the account's Lightsail default SSH key. It is kept in a private
 # temporary file for this deployment only and removed by the EXIT trap.
-aws lightsail download-default-key-pair \
-  --region "$AWS_REGION" \
+"${AWS_CLI[@]}" lightsail download-default-key-pair \
   --query privateKeyBase64 \
   --output text >"$SSH_KEY"
 chmod 600 "$SSH_KEY"
@@ -128,8 +131,7 @@ if [[ "$SYNC_GOOGLE_OAUTH" == '1' ]]; then
   echo "Synchronizing Google OAuth credentials from AWS Secrets Manager..."
   # SecretString is streamed through SSH stdin. It is never put in this
   # script's command arguments, repository, or deployment logs.
-  aws secretsmanager get-secret-value \
-    --region "$AWS_REGION" \
+  "${AWS_CLI[@]}" secretsmanager get-secret-value \
     --secret-id "$GOOGLE_OAUTH_SECRET_ID" \
     --query SecretString \
     --output text |

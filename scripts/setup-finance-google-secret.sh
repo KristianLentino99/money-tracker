@@ -6,6 +6,8 @@
 set -Eeuo pipefail
 
 readonly AWS_REGION="${FINANCE_AWS_REGION:-eu-central-1}"
+readonly AWS_PROFILE_NAME="${FINANCE_AWS_PROFILE:-default}"
+readonly AWS_CLI=(aws --profile "$AWS_PROFILE_NAME" --region "$AWS_REGION")
 readonly SECRET_ID="${FINANCE_GOOGLE_OAUTH_SECRET_ID:-money-tracker/finance/google-oauth}"
 
 require_command() {
@@ -18,7 +20,8 @@ require_command() {
 require_command aws
 require_command python3
 
-readonly AWS_ARN="$(aws sts get-caller-identity --query Arn --output text)"
+echo "Using AWS profile ${AWS_PROFILE_NAME} in ${AWS_REGION}."
+readonly AWS_ARN="$("${AWS_CLI[@]}" sts get-caller-identity --query Arn --output text)"
 if [[ "$AWS_ARN" == arn:aws:iam::*:root ]]; then
   echo "Warning: AWS CLI is authenticated as the account root user: $AWS_ARN" >&2
   echo "Use an IAM Identity Center/role or least-privilege IAM user for routine deploys." >&2
@@ -62,20 +65,17 @@ Path(sys.argv[1]).write_text(
 PY
 chmod 600 "$SECRET_FILE"
 
-if aws secretsmanager describe-secret \
-  --region "$AWS_REGION" \
+if "${AWS_CLI[@]}" secretsmanager describe-secret \
   --secret-id "$SECRET_ID" \
   >/dev/null 2>&1; then
-  VERSION_ID="$(aws secretsmanager put-secret-value \
-    --region "$AWS_REGION" \
+  VERSION_ID="$("${AWS_CLI[@]}" secretsmanager put-secret-value \
     --secret-id "$SECRET_ID" \
     --secret-string "file://$SECRET_FILE" \
     --query VersionId \
     --output text)"
   echo "Updated $SECRET_ID in $AWS_REGION (version $VERSION_ID)."
 else
-  ARN="$(aws secretsmanager create-secret \
-    --region "$AWS_REGION" \
+  ARN="$("${AWS_CLI[@]}" secretsmanager create-secret \
     --name "$SECRET_ID" \
     --description 'Google OAuth credentials for MoneyMatter Finance' \
     --secret-string "file://$SECRET_FILE" \
