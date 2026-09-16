@@ -78,6 +78,7 @@ import VentureLinkedView from './components/venture-linked-view.vue';
 import MarkAsRefundField from './components/mark-as-refund/mark-as-refund-field.vue';
 import AmountWithCurrencyField from './components/amount-with-currency-field.vue';
 import LabelPill from './components/label-pill.vue';
+import InvestmentContributionFields from './components/investment-contribution-fields.vue';
 import LocationPickerDialog from './components/location-picker-dialog.vue';
 import SplitDialog from './components/split-dialog.vue';
 import TypeSelector from './components/type-selector.vue';
@@ -94,6 +95,7 @@ import {
   getRefundInfo,
   useDeleteTransaction,
   useSubmitTransaction,
+  isInvestmentContributionFormValid,
   useTransferFormLogic,
   useUnlinkTransactions,
 } from './composables';
@@ -112,7 +114,7 @@ import {
   prepopulateForm,
   resolveInitialTransactionAccount,
 } from './helpers';
-import { FORM_TYPES, UI_FORM_STRUCT } from './types';
+import { FORM_TYPES, UI_FORM_STRUCT, type InvestmentContributionForm } from './types';
 import { canSuggestOriginalAmount, resolveSuggestedOriginalAmount } from './utils/suggest-original-amount';
 
 defineOptions({
@@ -215,6 +217,7 @@ const form = ref<UI_FORM_STRUCT>({
   isForecastOnly: false,
   originalAmount: null,
   originalCurrency: null,
+  investmentContribution: null,
 });
 
 // PayeeField → category auto-fill (one-shot) + tag auto-apply.
@@ -432,12 +435,16 @@ const isFormFieldsDisabled = computed(() => isLoading.value || !isInitialRefunds
 
 const currentTxType = computed(() => form.value.type);
 const isTransferTx = computed(() => currentTxType.value === FORM_TYPES.transfer);
+const isInvestmentContributionVisible = computed(
+  () => !isTransferTx.value && currentTxType.value === FORM_TYPES.expense && !form.value.isForecastOnly,
+);
 const recurringPaymentTransactionType = computed(() =>
   isTransferTx.value ? undefined : getTxTypeFromFormType(currentTxType.value),
 );
 
-watch(currentTxType, () => {
+watch(currentTxType, (type) => {
   form.value.recurringPaymentId = null;
+  if (type !== FORM_TYPES.expense) form.value.investmentContribution = null;
 });
 
 // The Loan pill only narrows the picker to loan accounts; the backend stamps transfer_to_loan from the destination's accountCategory.
@@ -571,7 +578,10 @@ const wasPlannedUnchecked = ref(false);
 watch(
   () => form.value.isForecastOnly,
   (isForecastOnly, wasPlanned) => {
-    if (isForecastOnly) return;
+    if (isForecastOnly) {
+      form.value.investmentContribution = null;
+      return;
+    }
     if (wasPlanned) wasPlannedUnchecked.value = true;
 
     if (isSelectedAccountConnected.value) {
@@ -587,6 +597,38 @@ watch(
 const isPastDateRequired = computed(
   () => wasPlannedUnchecked.value && isDateUserTouched.value && !form.value.isForecastOnly,
 );
+
+const createInvestmentContributionForm = (): InvestmentContributionForm => ({
+  portfolio: null,
+  purchases: [
+    {
+      searchResult: null,
+      quantity: '',
+      price: '',
+      fees: '0',
+      date: new Date(form.value.time),
+      settlementCurrency: null,
+      settlementAmount: '',
+      settlementFees: '0',
+    },
+  ],
+});
+
+const investmentContributionForm = computed<InvestmentContributionForm>({
+  get: () => form.value.investmentContribution ?? createInvestmentContributionForm(),
+  set: (value) => {
+    form.value.investmentContribution = value;
+  },
+});
+
+const setInvestmentContributionEnabled = (enabled: boolean) => {
+  if (!enabled) {
+    form.value.investmentContribution = null;
+    return;
+  }
+  if (!form.value.categoryUserTouched) form.value.category = null;
+  form.value.investmentContribution ??= createInvestmentContributionForm();
+};
 
 const isCurrenciesDifferent = computed(() => {
   if (!form.value.account || !form.value.toAccount) return false;
@@ -981,6 +1023,10 @@ const submit = () => {
   touchField('form.externalReference');
 
   if (!isFormValid('form')) return;
+  if (form.value.investmentContribution && !isInvestmentContributionFormValid({ form: form.value })) {
+    addErrorNotification(t('dialogs.manageTransaction.investmentContribution.validationError'));
+    return;
+  }
 
   submitMutation.mutate({
     form: form.value,
@@ -1668,6 +1714,33 @@ onUnmounted(() => {
                   </span>
                 </Button>
               </form-row>
+
+              <FormRow v-if="isInvestmentContributionVisible">
+                <label class="border-border bg-muted/20 flex cursor-pointer items-start gap-3 rounded-lg border p-3">
+                  <Checkbox
+                    :model-value="Boolean(form.investmentContribution)"
+                    :disabled="isFormFieldsDisabled"
+                    @update:model-value="(checked) => setInvestmentContributionEnabled(Boolean(checked))"
+                  />
+                  <span class="grid gap-0.5">
+                    <span class="text-sm font-medium">
+                      {{ $t('dialogs.manageTransaction.investmentContribution.toggleLabel') }}
+                    </span>
+                    <span class="text-muted-foreground text-xs">
+                      {{ $t('dialogs.manageTransaction.investmentContribution.toggleHint') }}
+                    </span>
+                  </span>
+                </label>
+              </FormRow>
+
+              <InvestmentContributionFields
+                v-if="isInvestmentContributionVisible && form.investmentContribution"
+                v-model="investmentContributionForm"
+                :disabled="isFormFieldsDisabled"
+                :currency-code="currencyCode"
+                :transfer-amount="form.amount"
+                :portfolios="portfolios ?? []"
+              />
 
               <!-- Split Dialog -->
               <SplitDialog

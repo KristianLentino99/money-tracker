@@ -2,6 +2,7 @@ import { PAYMENT_TYPES, TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES, type end
 import type { RecordId, TransactionLocation } from '@bt/shared/types';
 import Transactions from '@models/transactions.model';
 import type { TransactionApiResponse } from '@root/serializers/transactions.serializer';
+import { createInvestmentContributionFromTransaction as _createInvestmentContributionFromTransaction } from '@services/investments/portfolios/transfers';
 import * as transactionsService from '@services/transactions';
 import type { getTransactionsByTransferId as apiGetTransactionsByTransferId } from '@services/transactions/get-by-transfer-id';
 import type { getTransactions as apiGetTransactions } from '@services/transactions/get-transactions';
@@ -52,6 +53,23 @@ export async function createTransaction({
     method: 'post',
     url: '/transactions',
     payload: txPayload,
+    raw,
+  });
+}
+
+export async function createInvestmentContributionFromTransaction<R extends boolean | undefined = false>({
+  transactionId,
+  payload,
+  raw,
+}: {
+  transactionId: string;
+  payload: Omit<Parameters<typeof _createInvestmentContributionFromTransaction>[0], 'userId' | 'transactionId'>;
+  raw?: R;
+}) {
+  return makeRequest<Awaited<ReturnType<typeof _createInvestmentContributionFromTransaction>>, R>({
+    method: 'post',
+    url: `/transactions/${transactionId}/investment-contribution`,
+    payload,
     raw,
   });
 }

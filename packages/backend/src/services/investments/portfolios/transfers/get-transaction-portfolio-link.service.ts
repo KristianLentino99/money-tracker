@@ -1,8 +1,10 @@
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { t } from '@i18n/index';
 import Currencies from '@models/currencies.model';
+import InvestmentTransaction from '@models/investments/investment-transaction.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
+import Securities from '@models/investments/securities.model';
 
 interface GetTransactionPortfolioLinkParams {
   userId: number;
@@ -20,6 +22,11 @@ export const getTransactionPortfolioLink = async ({ userId, transactionId }: Get
         { model: Portfolios, as: 'fromPortfolio', paranoid: false },
         { model: Portfolios, as: 'toPortfolio', paranoid: false },
         { model: Currencies, as: 'currency' },
+        {
+          model: InvestmentTransaction,
+          as: 'investmentTransactions',
+          include: [{ model: Securities, as: 'security' }],
+        },
       ],
     }),
     message: t({ key: 'investments.portfolioTransferNotFound' }),
@@ -46,5 +53,36 @@ export const getTransactionPortfolioLink = async ({ userId, transactionId }: Get
     currencyCode: transfer.currencyCode,
     date: transfer.date,
     affectsCash: transfer.affectsCash,
+    investmentTransactions: (transfer.investmentTransactions ?? []).map((investmentTransaction) => ({
+      id: investmentTransaction.id,
+      securityId: investmentTransaction.securityId,
+      date: investmentTransaction.date.toISOString(),
+      name: investmentTransaction.name,
+      quantity: investmentTransaction.quantity.toJSON(),
+      price: investmentTransaction.price.toJSON(),
+      fees: investmentTransaction.fees.toJSON(),
+      amount: investmentTransaction.amount.toJSON(),
+      settlementCurrencyCode: investmentTransaction.settlementCurrencyCode,
+      settlementAmount: investmentTransaction.settlementAmount.toJSON(),
+      settlementFees: investmentTransaction.settlementFees.toJSON(),
+      security: investmentTransaction.security
+        ? {
+            symbol: investmentTransaction.security.symbol,
+            name: investmentTransaction.security.name,
+            providerSymbol: investmentTransaction.security.providerSymbol,
+            priceSourceSymbol: investmentTransaction.security.priceSourceSymbol,
+            providerName: investmentTransaction.security.providerName,
+            assetClass: investmentTransaction.security.assetClass,
+            currencyCode: investmentTransaction.security.currencyCode,
+            exchangeAcronym: investmentTransaction.security.exchangeAcronym,
+            exchangeMic: investmentTransaction.security.exchangeMic,
+            exchangeName: investmentTransaction.security.exchangeName,
+            cryptoCurrencyCode: investmentTransaction.security.cryptoCurrencyCode,
+            cusip: investmentTransaction.security.cusip,
+            isin: investmentTransaction.security.isin,
+            logoUrl: investmentTransaction.security.logoUrl,
+          }
+        : null,
+    })),
   };
 };

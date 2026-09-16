@@ -30,6 +30,7 @@ export const useDeleteInvestmentTransaction = () => {
     mutationFn: deleteInvestmentTransaction,
     onSuccess: () => {
       invalidatePortfolioState({ queryClient });
+      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.transactionPortfolioLink });
     },
   });
 };

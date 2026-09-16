@@ -1,7 +1,10 @@
 import {
   accountToPortfolioTransfer,
   createDirectCashTransaction,
+  createInvestmentContribution,
+  createInvestmentContributionFromTransaction,
   createPortfolioTransfer,
+  updateInvestmentContribution,
   deletePortfolioTransfer,
   exchangeCurrency,
   getPortfolioTransfers,
@@ -51,6 +54,34 @@ export const useAccountToPortfolioTransfer = () => {
   });
 };
 
+export const useCreateInvestmentContribution = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: Parameters<typeof createInvestmentContribution>[0]) => createInvestmentContribution(params),
+    onSuccess: () => invalidateTransferRelatedQueries(queryClient),
+  });
+};
+
+export const useCreateInvestmentContributionFromTransaction = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: Parameters<typeof createInvestmentContributionFromTransaction>[0]) =>
+      createInvestmentContributionFromTransaction(params),
+    onSuccess: () => invalidateTransferRelatedQueries(queryClient),
+  });
+};
+
+export const useUpdateInvestmentContribution = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: Parameters<typeof updateInvestmentContribution>[0]) => updateInvestmentContribution(params),
+    onSuccess: () => invalidateTransferRelatedQueries(queryClient),
+  });
+};
+
 export const usePortfolioToAccountTransfer = () => {
   const queryClient = useQueryClient();
 
@@ -82,8 +113,12 @@ export const useDeletePortfolioTransfer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: { portfolioId: string; transferId: string; deleteLinkedTransaction?: boolean }) =>
-      deletePortfolioTransfer(params),
+    mutationFn: (params: {
+      portfolioId: string;
+      transferId: string;
+      deleteLinkedTransaction?: boolean;
+      deleteLinkedInvestmentTransactions?: boolean;
+    }) => deletePortfolioTransfer(params),
     onSuccess: () => invalidateTransferRelatedQueries(queryClient),
   });
 };

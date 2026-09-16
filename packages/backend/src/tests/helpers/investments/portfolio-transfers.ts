@@ -1,5 +1,7 @@
 import {
   accountToPortfolioTransfer as _accountToPortfolioTransfer,
+  createInvestmentContribution as _createInvestmentContribution,
+  updateInvestmentContribution as _updateInvestmentContribution,
   createPortfolioTransfer as _createPortfolioTransfer,
   deletePortfolioTransfer as _deletePortfolioTransfer,
   directCashTransaction as _directCashTransaction,
@@ -106,6 +108,42 @@ export async function accountToPortfolioTransfer<R extends boolean | undefined =
   });
 }
 
+export async function updateInvestmentContribution<R extends boolean | undefined = false>({
+  portfolioId,
+  transferId,
+  payload,
+  raw,
+}: {
+  portfolioId: string;
+  transferId: string;
+  payload: Omit<Parameters<typeof _updateInvestmentContribution>[0], 'userId' | 'portfolioId' | 'transferId'>;
+  raw?: R;
+}) {
+  return makeRequest<Awaited<ReturnType<typeof _updateInvestmentContribution>>, R>({
+    method: 'put',
+    url: `/investments/portfolios/${portfolioId}/contributions/${transferId}`,
+    payload,
+    raw,
+  });
+}
+
+export async function createInvestmentContribution<R extends boolean | undefined = false>({
+  portfolioId,
+  payload,
+  raw,
+}: {
+  portfolioId: string;
+  payload: Omit<Parameters<typeof _createInvestmentContribution>[0], 'userId' | 'portfolioId'>;
+  raw?: R;
+}) {
+  return makeRequest<Awaited<ReturnType<typeof _createInvestmentContribution>>, R>({
+    method: 'post',
+    url: `/investments/portfolios/${portfolioId}/contributions`,
+    payload,
+    raw,
+  });
+}
+
 export async function portfolioToAccountTransfer<R extends boolean | undefined = false>({
   portfolioId,
   payload,
@@ -134,14 +172,23 @@ export async function deletePortfolioTransfer<R extends boolean | undefined = fa
   portfolioId,
   transferId,
   deleteLinkedTransaction,
+  deleteLinkedInvestmentTransactions,
   raw,
 }: {
   portfolioId: string;
   transferId: string;
   deleteLinkedTransaction?: boolean;
+  deleteLinkedInvestmentTransactions?: boolean;
   raw?: R;
 }) {
-  const query = deleteLinkedTransaction !== undefined ? `?deleteLinkedTransaction=${deleteLinkedTransaction}` : '';
+  const queryParams = new URLSearchParams();
+  if (deleteLinkedTransaction !== undefined) {
+    queryParams.set('deleteLinkedTransaction', String(deleteLinkedTransaction));
+  }
+  if (deleteLinkedInvestmentTransactions !== undefined) {
+    queryParams.set('deleteLinkedInvestmentTransactions', String(deleteLinkedInvestmentTransactions));
+  }
+  const query = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
   return makeRequest<Awaited<ReturnType<typeof _deletePortfolioTransfer>>, R>({
     method: 'delete',

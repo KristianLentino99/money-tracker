@@ -9,6 +9,7 @@ import {
   getHoldingsController,
 } from '@controllers/investments/holdings';
 import accountToPortfolioTransferController from '@controllers/investments/portfolios/account-to-portfolio-transfer';
+import createInvestmentContributionController from '@controllers/investments/portfolios/create-investment-contribution';
 import createPortfolioController from '@controllers/investments/portfolios/create-portfolio';
 import createPortfolioTransferController from '@controllers/investments/portfolios/create-portfolio-transfer';
 import deletePortfolioController from '@controllers/investments/portfolios/delete-portfolio';
@@ -38,6 +39,7 @@ import {
 import portfolioToAccountTransferController from '@controllers/investments/portfolios/portfolio-to-account-transfer';
 import restorePortfolioController from '@controllers/investments/portfolios/restore-portfolio';
 import setTransferAdjustmentController from '@controllers/investments/portfolios/set-transfer-adjustment';
+import updateInvestmentContributionController from '@controllers/investments/portfolios/update-investment-contribution';
 import updatePortfolioController from '@controllers/investments/portfolios/update-portfolio';
 import updatePortfolioBalanceController from '@controllers/investments/portfolios/update-portfolio-balance';
 import getPricesController from '@controllers/investments/prices/get-prices.controller';
@@ -197,6 +199,19 @@ router.post(
   checkBaseCurrencyLock,
   validateEndpoint(accountToPortfolioTransferController.schema),
   accountToPortfolioTransferController.handler,
+);
+
+router.post(
+  '/portfolios/:id/contributions',
+  checkBaseCurrencyLock,
+  validateEndpoint(createInvestmentContributionController.schema),
+  createInvestmentContributionController.handler,
+);
+router.put(
+  '/portfolios/:id/contributions/:transferId',
+  checkBaseCurrencyLock,
+  validateEndpoint(updateInvestmentContributionController.schema),
+  updateInvestmentContributionController.handler,
 );
 
 router.post(

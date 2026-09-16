@@ -164,7 +164,12 @@
     "transactionAlreadyLinkedToPortfolio": "Transaction is already linked to a portfolio transfer.",
     "transactionAlreadyLinkedToVenture": "Transaction is already linked to a venture deal",
     "portfolioTransferNotFound": "Portfolio transfer not found",
-    "exchangeCurrenciesMustDiffer": "Exchange currencies must be different"
+    "exchangeCurrenciesMustDiffer": "Exchange currencies must be different",
+    "contributionPurchaseRequired": "At least one investment purchase is required.",
+    "contributionSecurityRequired": "Each investment purchase must include a security.",
+    "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
+    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
+    "contributionDeletePurchasesConfirmationRequired": "Deleting this contribution requires explicit confirmation to delete its linked investment purchases."
   },
   "loans": {
     "loanNotFound": "Loan not found.",

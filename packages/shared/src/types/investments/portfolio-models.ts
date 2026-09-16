@@ -167,4 +167,5 @@ export interface PortfolioTransferModel {
   toPortfolio?: PortfolioModel;
   currency?: CurrencyModel;
   toCurrency?: CurrencyModel;
+  investmentTransactions?: InvestmentTransactionModel[];
 }

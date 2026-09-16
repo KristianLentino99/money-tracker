@@ -1,5 +1,10 @@
 import { createTransaction, editTransaction, linkTransactions } from '@/api';
-import { accountToPortfolioTransfer, linkTransactionToPortfolio } from '@/api/portfolios';
+import {
+  accountToPortfolioTransfer,
+  createInvestmentContribution,
+  createInvestmentContributionFromTransaction,
+  linkTransactionToPortfolio,
+} from '@/api/portfolios';
 import { linkTransactionsToSubscription } from '@/api/subscriptions';
 import { OUT_OF_WALLET_ACCOUNT_MOCK, VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
 import { useNotificationCenter } from '@/components/notification-center';
@@ -38,6 +43,70 @@ interface OptimisticUpdateContext {
   previousQueries: Map<string, unknown>;
 }
 
+export const buildInvestmentContributionPayload = ({ form }: { form: UI_FORM_STRUCT }) => {
+  if (!form.investmentContribution) return null;
+
+  return {
+    purchases: form.investmentContribution.purchases.map((purchase) => ({
+      ...(purchase.securityId ? { securityId: purchase.securityId } : { searchResult: purchase.searchResult! }),
+      quantity: purchase.quantity,
+      price: purchase.price,
+      fees: purchase.fees || '0',
+      date: purchase.date.toISOString(),
+      ...(purchase.name?.trim() ? { name: purchase.name.trim() } : {}),
+      ...(purchase.settlementCurrency
+        ? {
+            settlementCurrencyCode: purchase.settlementCurrency.code,
+            settlementAmount: purchase.settlementAmount,
+            ...(purchase.settlementCurrency.code !==
+            (purchase.searchResult?.currencyCode ?? purchase.securityLabel?.currencyCode)
+              ? { settlementFees: purchase.settlementFees || '0' }
+              : {}),
+          }
+        : {}),
+    })),
+  };
+};
+
+export const isInvestmentContributionFormValid = ({ form }: { form: UI_FORM_STRUCT }) => {
+  const contribution = form.investmentContribution;
+  if (
+    !contribution ||
+    !contribution.portfolio ||
+    !form.account ||
+    form.amount == null ||
+    !form.category ||
+    contribution.purchases.length === 0
+  ) {
+    return false;
+  }
+  if (form.splits?.length) return false;
+
+  return contribution.purchases.every((purchase) => {
+    const quantity = Number(purchase.quantity);
+    const price = Number(purchase.price);
+    const fees = Number(purchase.fees || 0);
+    const settlementAmount = Number(purchase.settlementAmount);
+    const settlementFees = Number(purchase.settlementFees || 0);
+
+    return (
+      (!!purchase.searchResult || !!purchase.securityId) &&
+      Number.isFinite(quantity) &&
+      quantity > 0 &&
+      Number.isFinite(price) &&
+      price >= 0 &&
+      Number.isFinite(fees) &&
+      fees >= 0 &&
+      Number.isFinite(purchase.date.getTime()) &&
+      (!purchase.settlementCurrency ||
+        (Number.isFinite(settlementAmount) &&
+          settlementAmount >= 0 &&
+          Number.isFinite(settlementFees) &&
+          settlementFees >= 0))
+    );
+  });
+};
+
 export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
   const queryClient = useQueryClient();
   const { addErrorNotification } = useNotificationCenter();
@@ -55,6 +124,32 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         transaction,
         linkedTransaction,
       } = params;
+
+      if (form.investmentContribution) {
+        const payload = buildInvestmentContributionPayload({ form });
+        if (!payload || !form.investmentContribution.portfolio || !form.category) {
+          throw new Error(i18n.global.t('dialogs.manageTransaction.investmentContribution.validationError'));
+        }
+
+        if (isFormCreation) {
+          return createInvestmentContribution({
+            portfolioId: form.investmentContribution.portfolio.id,
+            accountId: form.account!.id,
+            amount: String(form.amount!),
+            date: form.time.toISOString().split('T')[0]!,
+            categoryId: form.category.id,
+            description: form.note,
+            ...payload,
+          });
+        }
+
+        return createInvestmentContributionFromTransaction({
+          transactionId: transaction!.id,
+          portfolioId: form.investmentContribution.portfolio.id,
+          categoryId: form.category.id,
+          ...payload,
+        });
+      }
 
       if (isFormCreation) {
         if (isTransferTx && form.toPortfolio) {
@@ -102,7 +197,13 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
       const { form, isFormCreation, transaction, isRecordExternal, linkedTransaction, isTransferTx } = params;
 
       // Only apply optimistic updates for edits (not creation, linking, or portfolio conversion)
-      if (isFormCreation || linkedTransaction || !transaction || (isTransferTx && form.toPortfolio)) {
+      if (
+        isFormCreation ||
+        linkedTransaction ||
+        !transaction ||
+        form.investmentContribution ||
+        (isTransferTx && form.toPortfolio)
+      ) {
         return undefined;
       }
 
@@ -132,7 +233,9 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         const transactionId = params.isFormCreation
           ? Array.isArray(data)
             ? data[0]?.id
-            : undefined
+            : data && 'transactionId' in data
+              ? data.transactionId
+              : undefined
           : params.transaction?.id;
 
         if (transactionId) {
@@ -153,7 +256,7 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         }
       }
 
-      if (params.isTransferTx && params.form.toPortfolio) {
+      if ((params.isTransferTx && params.form.toPortfolio) || params.form.investmentContribution) {
         invalidateTransferRelatedQueries(queryClient);
       }
 

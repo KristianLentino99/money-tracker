@@ -8,6 +8,7 @@ import {
   ManualPortfolioJsonExport,
   ManualPortfolioOverviewModel,
 } from '@bt/shared/types/investments';
+import type { SecuritySearchResult } from '@bt/shared/types/investments';
 import type { PortfolioAnnualizedReturnModel } from '@bt/shared/types/investments/portfolio-annualized-return.model';
 import type { PortfolioSummaryModel } from '@bt/shared/types/investments/portfolio-summary.model';
 
@@ -96,6 +97,62 @@ export const accountToPortfolioTransfer = async ({
   ...params
 }: AccountToPortfolioTransferParams): Promise<PortfolioTransferModel> => {
   const result = await api.post(`/investments/portfolios/${portfolioId}/transfer/from-account`, params);
+  return result;
+};
+
+export interface InvestmentContributionPurchaseRequest {
+  securityId?: string;
+  searchResult?: SecuritySearchResult;
+  quantity: string;
+  price: string;
+  fees: string;
+  date: string;
+  name?: string;
+  settlementCurrencyCode?: string;
+  settlementAmount?: string;
+  settlementFees?: string;
+}
+
+export interface CreateInvestmentContributionRequest {
+  accountId: string;
+  amount: string;
+  date: string;
+  categoryId: string;
+  description?: string | null;
+  purchases: InvestmentContributionPurchaseRequest[];
+}
+
+export const createInvestmentContribution = async ({
+  portfolioId,
+  ...params
+}: { portfolioId: string } & CreateInvestmentContributionRequest): Promise<PortfolioTransferModel> => {
+  const result = await api.post(`/investments/portfolios/${portfolioId}/contributions`, params);
+  return result;
+};
+
+export const createInvestmentContributionFromTransaction = async ({
+  transactionId,
+  ...params
+}: {
+  transactionId: string;
+  portfolioId: string;
+  categoryId: string;
+  purchases: InvestmentContributionPurchaseRequest[];
+}): Promise<PortfolioTransferModel> => {
+  const result = await api.post(`/transactions/${transactionId}/investment-contribution`, params);
+  return result;
+};
+
+export const updateInvestmentContribution = async ({
+  portfolioId,
+  transferId,
+  purchases,
+}: {
+  portfolioId: string;
+  transferId: string;
+  purchases: InvestmentContributionPurchaseRequest[];
+}): Promise<PortfolioTransferModel> => {
+  const result = await api.put(`/investments/portfolios/${portfolioId}/contributions/${transferId}`, { purchases });
   return result;
 };
 
@@ -196,14 +253,19 @@ export const deletePortfolioTransfer = async ({
   portfolioId,
   transferId,
   deleteLinkedTransaction,
+  deleteLinkedInvestmentTransactions,
 }: {
   portfolioId: string;
   transferId: string;
   deleteLinkedTransaction?: boolean;
+  deleteLinkedInvestmentTransactions?: boolean;
 }): Promise<void> => {
   const query: Record<string, string> = {};
   if (deleteLinkedTransaction !== undefined) {
     query.deleteLinkedTransaction = String(deleteLinkedTransaction);
+  }
+  if (deleteLinkedInvestmentTransactions !== undefined) {
+    query.deleteLinkedInvestmentTransactions = String(deleteLinkedInvestmentTransactions);
   }
   return api.delete(`/investments/portfolios/${portfolioId}/transfers/${transferId}`, { query });
 };
@@ -225,7 +287,37 @@ export const unlinkTransactionFromPortfolio = async ({ transactionId }: { transa
   return api.post(`/transactions/${transactionId}/unlink-from-portfolio`);
 };
 
-interface TransactionPortfolioLinkResponse {
+interface TransactionPortfolioInvestment {
+  id: string;
+  securityId: string;
+  date: string;
+  name: string | null;
+  quantity: string;
+  price: string;
+  fees: string;
+  amount: string;
+  settlementCurrencyCode: string;
+  settlementAmount: string;
+  settlementFees: string;
+  security: {
+    symbol: string | null;
+    name: string | null;
+    providerSymbol: string;
+    priceSourceSymbol: string | null;
+    providerName: string;
+    assetClass: string;
+    currencyCode: string;
+    exchangeAcronym: string | null;
+    exchangeMic: string | null;
+    exchangeName: string | null;
+    cryptoCurrencyCode: string | null;
+    cusip: string | null;
+    isin: string | null;
+    logoUrl: string | null;
+  } | null;
+}
+
+export interface TransactionPortfolioLinkResponse {
   transferId: string;
   portfolioId: string;
   portfolioName: string;
@@ -236,6 +328,7 @@ interface TransactionPortfolioLinkResponse {
   currencyCode: string;
   date: string;
   affectsCash: boolean;
+  investmentTransactions: TransactionPortfolioInvestment[];
 }
 
 export const getTransactionPortfolioLink = async ({

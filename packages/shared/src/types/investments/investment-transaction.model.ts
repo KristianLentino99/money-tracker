@@ -67,6 +67,8 @@ export interface InvestmentTransactionModel {
    * accounts and don't affect income/expense stats.
    */
   transferNature: TRANSACTION_TRANSFER_NATURE;
+  // The portfolio funding transfer that grouped this investment transaction, when present.
+  portfolioTransferId: string | null;
   // (hash, used to connect two transactions)
   transferId: string | null;
   updatedAt: Date;

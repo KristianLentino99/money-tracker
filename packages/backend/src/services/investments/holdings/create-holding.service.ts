@@ -14,6 +14,7 @@ interface CreateHoldingParams {
   userId: number;
   portfolioId: string;
   securityId: string;
+  skipPriceSync?: boolean;
 }
 
 const createHoldingImpl = async ({ userId, portfolioId, securityId }: CreateHoldingParams) => {
@@ -56,17 +57,19 @@ const createHoldingImpl = async ({ userId, portfolioId, securityId }: CreateHold
 export const createHolding = async (params: CreateHoldingParams) => {
   const { newHolding, securityId } = await withTransaction(createHoldingImpl)(params);
 
-  // TODO: check if securityId already assiciated with some other holdings, and if so
-  // then there's no need to sync historical prices, because they must already be synced
-  // by sync-latest-prices service/cron. We can also add extra verification check like
-  // if_already_associated + if_last_synced_price_no_older_than_week
-  // Trigger background price sync after transaction is committed
-  syncHistoricalPrices(securityId).catch((error) => {
-    logger.error({
-      message: `Background historical price sync failed for securityId: ${securityId}`,
-      error: error as Error,
+  if (!params.skipPriceSync) {
+    // TODO: check if securityId already assiciated with some other holdings, and if so
+    // then there's no need to sync historical prices, because they must already be synced
+    // by sync-latest-prices service/cron. We can also add extra verification check like
+    // if_already_associated + if_last_synced_price_no_older_than_week
+    // Trigger background price sync after transaction is committed
+    syncHistoricalPrices(securityId).catch((error) => {
+      logger.error({
+        message: `Background historical price sync failed for securityId: ${securityId}`,
+        error: error as Error,
+      });
     });
-  });
+  }
 
   return newHolding;
 };

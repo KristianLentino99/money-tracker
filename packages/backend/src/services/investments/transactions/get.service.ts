@@ -90,6 +90,7 @@ const serviceImpl = async ({
         'id',
         'securityId',
         'portfolioId',
+        'portfolioTransferId',
         'category',
         'date',
         'name',

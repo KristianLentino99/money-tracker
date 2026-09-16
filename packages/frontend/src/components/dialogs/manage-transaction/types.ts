@@ -1,6 +1,7 @@
 import type { VerbosePaymentType } from '@/common/const';
 import type { FormattedCategory } from '@/common/types';
 import { AccountModel, CurrencyModel, PortfolioModel, TransactionModel } from '@bt/shared/types';
+import type { SecuritySearchResult } from '@bt/shared/types/investments';
 
 export enum FORM_TYPES {
   income = 'income',
@@ -31,6 +32,29 @@ export interface FormSplit {
   category: FormattedCategory | null;
   amount: number | null;
   note?: string | null;
+}
+
+export interface InvestmentContributionPurchaseForm {
+  securityId?: string;
+  searchResult: SecuritySearchResult | null;
+  securityLabel?: {
+    symbol: string | null;
+    name: string | null;
+    currencyCode: string;
+  };
+  quantity: string;
+  price: string;
+  fees: string;
+  date: Date;
+  name?: string;
+  settlementCurrency: CurrencyModel | null;
+  settlementAmount: string;
+  settlementFees: string;
+}
+
+export interface InvestmentContributionForm {
+  portfolio: Pick<PortfolioModel, 'id' | 'name'> | null;
+  purchases: InvestmentContributionPurchaseForm[];
 }
 
 export interface UI_FORM_STRUCT {
@@ -69,4 +93,5 @@ export interface UI_FORM_STRUCT {
   originalAmount?: number | null;
   /** Any ISO currency, not only the user's linked ones. Sent to the API as its `code`. */
   originalCurrency?: CurrencyModel | null;
+  investmentContribution?: InvestmentContributionForm | null;
 }

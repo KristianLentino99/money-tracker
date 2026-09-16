@@ -45,6 +45,8 @@ interface CreateTxParams {
    * used instead. Mutually exclusive with settlementFees.
    */
   settlementRate?: string;
+  /** The funding transfer that groups this investment transaction, when present. */
+  portfolioTransferId?: string;
   /**
    * Optional pre-loaded holding (with `security` and `portfolio` includes) +
    * a flag indicating the caller has already verified portfolio ownership.

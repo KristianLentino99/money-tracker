@@ -24,6 +24,7 @@ interface AccountToPortfolioTransferParams {
   amount: string;
   date: string;
   description?: string | null;
+  categoryId?: string;
 }
 
 const accountToPortfolioTransferImpl = async ({
@@ -33,6 +34,7 @@ const accountToPortfolioTransferImpl = async ({
   amount,
   date,
   description,
+  categoryId,
 }: AccountToPortfolioTransferParams) => {
   validatePositiveAmount({ amount });
 
@@ -63,6 +65,7 @@ const accountToPortfolioTransferImpl = async ({
     transferNature: TRANSACTION_TRANSFER_NATURE.transfer_to_portfolio,
     time: new Date(date),
     note: description || undefined,
+    categoryId,
   });
 
   // Create PortfolioTransfer record linked to the transaction

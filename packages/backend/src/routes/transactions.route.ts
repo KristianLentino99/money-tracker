@@ -1,3 +1,4 @@
+import createInvestmentContributionFromTransaction from '@controllers/investments/portfolios/create-investment-contribution-from-transaction';
 import {
   getTransactionById,
   getTransactionsByTransferId,
@@ -92,6 +93,13 @@ router.delete(
 );
 
 // Portfolio linking routes
+router.post(
+  '/:id/investment-contribution',
+  authenticateSession,
+  checkBaseCurrencyLock,
+  validateEndpoint(createInvestmentContributionFromTransaction.schema),
+  createInvestmentContributionFromTransaction.handler,
+);
 router.post(
   '/:transactionId/link-to-portfolio',
   authenticateSession,

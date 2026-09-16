@@ -10,6 +10,7 @@ const schema = z.object({
   }),
   query: z.object({
     deleteLinkedTransaction: booleanQuery().optional().default(false),
+    deleteLinkedInvestmentTransactions: booleanQuery().optional().default(false),
   }),
 });
 
@@ -18,6 +19,7 @@ export default createController(schema, async ({ user, params, query }) => {
     userId: user.id,
     transferId: params.transferId,
     deleteLinkedTransaction: query.deleteLinkedTransaction,
+    deleteLinkedInvestmentTransactions: query.deleteLinkedInvestmentTransactions,
   });
 
   return { statusCode: 204 };

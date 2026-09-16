@@ -1,5 +1,6 @@
 export * from './account-to-portfolio-transfer.service';
 export * from './create-portfolio-transfer.service';
+export * from './create-investment-contribution.service';
 export * from './delete-portfolio-transfer.service';
 export * from './direct-cash-transaction.service';
 export * from './exchange-currency.service';

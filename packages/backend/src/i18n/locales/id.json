@@ -164,7 +164,12 @@
     "transactionAlreadyLinkedToPortfolio": "Transaksi sudah ditautkan ke transfer portofolio.",
     "transactionAlreadyLinkedToVenture": "Transaksi sudah ditautkan ke deal venture",
     "portfolioTransferNotFound": "Transfer portofolio tidak ditemukan",
-    "exchangeCurrenciesMustDiffer": "Mata uang pertukaran harus berbeda"
+    "exchangeCurrenciesMustDiffer": "Mata uang pertukaran harus berbeda",
+    "contributionPurchaseRequired": "Setidaknya diperlukan satu pembelian investasi.",
+    "contributionSecurityRequired": "Setiap pembelian investasi harus menyertakan sekuritas.",
+    "contributionExceedsCash": "Pembelian investasi melebihi kas portofolio {{currencyCode}} yang tersedia.",
+    "contributionSourceMustBeExpense": "Hanya transaksi pengeluaran yang dapat dicatat sebagai kontribusi investasi.",
+    "contributionDeletePurchasesConfirmationRequired": "Menghapus kontribusi ini memerlukan konfirmasi eksplisit untuk menghapus pembelian investasi yang tertaut dengannya."
   },
   "loans": {
     "loanNotFound": "Pinjaman tidak ditemukan.",

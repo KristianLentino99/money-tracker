@@ -5,6 +5,7 @@ import { Money } from '@common/types/money';
 import { MoneyField } from '@common/types/money-column';
 import { Table, Column, Model, ForeignKey, DataType, BelongsTo, Index } from 'sequelize-typescript';
 
+import PortfolioTransfers from './portfolio-transfers.model';
 import Portfolios from './portfolios.model';
 import Securities from './securities.model';
 
@@ -48,6 +49,11 @@ export default class InvestmentTransaction extends Model {
   @Index
   @Column({ type: DataType.UUID, allowNull: false })
   portfolioId!: RecordId;
+
+  @ForeignKey(() => PortfolioTransfers)
+  @Index
+  @Column({ type: DataType.UUID, allowNull: true, defaultValue: null, onDelete: 'SET NULL' })
+  portfolioTransferId!: RecordId | null;
 
   /**
    * The transaction type representing cash flow direction:
@@ -192,4 +198,7 @@ export default class InvestmentTransaction extends Model {
 
   @BelongsTo(() => Portfolios)
   portfolio?: Portfolios;
+
+  @BelongsTo(() => PortfolioTransfers, 'portfolioTransferId')
+  portfolioTransfer?: PortfolioTransfers;
 }

@@ -2,12 +2,13 @@ import { RecordId } from '@bt/shared/types';
 import { IdColumn } from '@common/types/id-column';
 import { Money } from '@common/types/money';
 import { MoneyField } from '@common/types/money-column';
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, Index } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany, Index } from 'sequelize-typescript';
 
 import Accounts from '../accounts.model';
 import Currencies from '../currencies.model';
 import Transactions from '../transactions.model';
 import Users from '../users.model';
+import InvestmentTransaction from './investment-transaction.model';
 import Portfolios from './portfolios.model';
 
 @Table({
@@ -126,4 +127,10 @@ export default class PortfolioTransfers extends Model {
 
   @BelongsTo(() => Transactions)
   transaction?: Transactions;
+
+  @HasMany(() => InvestmentTransaction, {
+    foreignKey: 'portfolioTransferId',
+    as: 'investmentTransactions',
+  })
+  investmentTransactions?: InvestmentTransaction[];
 }

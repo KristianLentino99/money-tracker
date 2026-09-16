@@ -1,9 +1,13 @@
 import { TRANSACTION_TRANSFER_NATURE } from '@bt/shared/types';
+import { t } from '@i18n/index';
+import { ValidationError } from '@js/errors';
 import Currencies from '@models/currencies.model';
+import InvestmentTransaction from '@models/investments/investment-transaction.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
 import * as Transactions from '@models/transactions.model';
 import { withTransaction } from '@services/common/with-transaction';
+import { deleteInvestmentTransaction } from '@services/investments/transactions/delete.service';
 
 import { reverseTransferBalanceChanges } from './transfer-validations';
 
@@ -11,12 +15,14 @@ interface DeletePortfolioTransferParams {
   userId: number;
   transferId: string;
   deleteLinkedTransaction?: boolean;
+  deleteLinkedInvestmentTransactions?: boolean;
 }
 
 const deletePortfolioTransferImpl = async ({
   userId,
   transferId,
   deleteLinkedTransaction = false,
+  deleteLinkedInvestmentTransactions = false,
 }: DeletePortfolioTransferParams) => {
   const transfer = await PortfolioTransfers.findOne({
     where: { id: transferId, userId },
@@ -24,11 +30,23 @@ const deletePortfolioTransferImpl = async ({
       { model: Portfolios, as: 'fromPortfolio' },
       { model: Portfolios, as: 'toPortfolio' },
       { model: Currencies, as: 'currency' },
+      { model: InvestmentTransaction, as: 'investmentTransactions' },
     ],
   });
 
   if (!transfer) {
     return { success: true };
+  }
+
+  const linkedInvestmentTransactions = transfer.investmentTransactions ?? [];
+  if (linkedInvestmentTransactions.length > 0 && !deleteLinkedInvestmentTransactions) {
+    throw new ValidationError({
+      message: t({ key: 'investments.contributionDeletePurchasesConfirmationRequired' }),
+    });
+  }
+
+  for (const investmentTransaction of linkedInvestmentTransactions) {
+    await deleteInvestmentTransaction({ userId, transactionId: investmentTransaction.id });
   }
 
   await reverseTransferBalanceChanges({ transfer, userId });

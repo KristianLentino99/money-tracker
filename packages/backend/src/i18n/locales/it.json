@@ -155,7 +155,12 @@
     "transactionAlreadyLinkedToPortfolio": "La transazione è già collegata a un trasferimento di portafoglio.",
     "transactionAlreadyLinkedToVenture": "La transazione è già collegata a un'operazione di venture capital.",
     "portfolioTransferNotFound": "Trasferimento di portafoglio non trovato.",
-    "exchangeCurrenciesMustDiffer": "Le valute di cambio devono essere diverse."
+    "exchangeCurrenciesMustDiffer": "Le valute di cambio devono essere diverse.",
+    "contributionPurchaseRequired": "È necessario almeno un acquisto di investimento.",
+    "contributionSecurityRequired": "Ogni acquisto di investimento deve includere un titolo.",
+    "contributionExceedsCash": "Gli acquisti di investimento superano la liquidità disponibile del portafoglio in {{currencyCode}}.",
+    "contributionSourceMustBeExpense": "Solo le transazioni di spesa possono essere registrate come contributi di investimento.",
+    "contributionDeletePurchasesConfirmationRequired": "L'eliminazione di questo contributo richiede una conferma esplicita per eliminare i relativi acquisti di investimento."
   },
   "loans": {
     "loanNotFound": "Prestito non trovato.",

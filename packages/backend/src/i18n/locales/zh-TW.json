@@ -164,7 +164,12 @@
     "transactionAlreadyLinkedToPortfolio": "Transaction is already linked to a portfolio transfer.",
     "transactionAlreadyLinkedToVenture": "Transaction is already linked to a venture deal",
     "portfolioTransferNotFound": "Portfolio transfer not found",
-    "exchangeCurrenciesMustDiffer": "Exchange currencies must be different"
+    "exchangeCurrenciesMustDiffer": "Exchange currencies must be different",
+    "contributionPurchaseRequired": "至少需要一筆投資買入。",
+    "contributionSecurityRequired": "每筆投資買入都必須包含一項證券。",
+    "contributionExceedsCash": "投資買入金額超過投資組合中可用的 {{currencyCode}} 現金。",
+    "contributionSourceMustBeExpense": "只有支出交易可以記錄為投資投入。",
+    "contributionDeletePurchasesConfirmationRequired": "刪除此項投入需要明確確認才能刪除其關聯的投資買入。"
   },
   "loans": {
     "loanNotFound": "Loan not found.",

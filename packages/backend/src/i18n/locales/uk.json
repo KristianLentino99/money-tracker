@@ -164,7 +164,12 @@
     "transactionAlreadyLinkedToPortfolio": "Транзакція вже прив'язана до переказу в портфель.",
     "transactionAlreadyLinkedToVenture": "Транзакція вже прив'язана до венчурної угоди",
     "portfolioTransferNotFound": "Переказ портфеля не знайдено",
-    "exchangeCurrenciesMustDiffer": "Валюти обміну мають бути різними"
+    "exchangeCurrenciesMustDiffer": "Валюти обміну мають бути різними",
+    "contributionPurchaseRequired": "Потрібна принаймні одна інвестиційна покупка.",
+    "contributionSecurityRequired": "Кожна інвестиційна покупка повинна містити цінний папір.",
+    "contributionExceedsCash": "Інвестиційні покупки перевищують доступні грошові кошти портфеля у валюті {{currencyCode}}.",
+    "contributionSourceMustBeExpense": "Лише транзакції витрат можна записувати як інвестиційні внески.",
+    "contributionDeletePurchasesConfirmationRequired": "Видалення цього внеску потребує явного підтвердження для видалення пов'язаних з ним інвестиційних покупок."
   },
   "loans": {
     "loanNotFound": "Кредит не знайдено.",
