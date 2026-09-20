@@ -105,7 +105,12 @@
           "noInvalidRows": "Nessuna riga non valida",
           "noDuplicates": "Nessun duplicato",
           "expand": "Mostra dati completi",
-          "collapse": "Nascondi dati completi"
+          "collapse": "Nascondi dati completi",
+          "columnHeaders": {
+            "row": "Riga",
+            "problem": "Problema",
+            "data": "Dati"
+          }
         },
         "results": {
           "completeTitle": "Importazione completata!",

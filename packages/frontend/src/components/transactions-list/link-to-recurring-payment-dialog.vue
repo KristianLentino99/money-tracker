@@ -64,7 +64,7 @@ const submit = () => {
 
     <template #footer>
       <Button variant="outline" :disabled="isLoading" @click="isOpen = false">
-        {{ t('common.ui.cancel') }}
+        {{ t('common.actions.cancel') }}
       </Button>
       <Button :disabled="isLinkDisabled" :loading="isLoading" @click="submit">
         {{ t('transactions.bulkLinkSubscription.confirmButton') }}

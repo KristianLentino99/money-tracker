@@ -106,7 +106,12 @@
           "noInvalidRows": "Немає недійсних рядків",
           "noDuplicates": "Немає дублікатів",
           "expand": "Показати повні дані",
-          "collapse": "Сховати повні дані"
+          "collapse": "Сховати повні дані",
+          "columnHeaders": {
+            "row": "Рядок",
+            "problem": "Проблема",
+            "data": "Дані"
+          }
         },
         "results": {
           "completeTitle": "Імпорт завершено!",

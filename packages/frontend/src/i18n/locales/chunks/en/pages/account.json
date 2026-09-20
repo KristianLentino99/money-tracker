@@ -495,7 +495,8 @@
             "quickExpenseRequired": "Select an account and category and enter an amount.",
             "quickExpensePositive": "Expense amount must be greater than zero.",
             "freeActivityLabelTooLong": "Activity names must be 100 characters or fewer."
-          }
+          },
+          "record": "Record visit"
         }
       }
     }

@@ -490,7 +490,8 @@
             "quickExpenseRequired": "Seleziona un conto e una categoria e inserisci un importo.",
             "quickExpensePositive": "L'importo dell'uscita deve essere maggiore di zero.",
             "freeActivityLabelTooLong": "I nomi delle attività possono contenere al massimo 100 caratteri."
-          }
+          },
+          "record": "Registra intervento"
         }
       }
     }

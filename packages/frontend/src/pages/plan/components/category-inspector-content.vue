@@ -110,13 +110,8 @@ const statusClass = computed(() => {
           }}</span>
         </div>
       </div>
-      <DesktopOnlyTooltip :content="String($t('common.actions.close'))">
-        <UiButton
-          variant="ghost"
-          size="icon-sm"
-          :aria-label="String($t('common.actions.close'))"
-          @click="emit('close')"
-        >
+      <DesktopOnlyTooltip :content="String($t('common.ui.close'))">
+        <UiButton variant="ghost" size="icon-sm" :aria-label="String($t('common.ui.close'))" @click="emit('close')">
           <XIcon class="size-4" aria-hidden="true" />
         </UiButton>
       </DesktopOnlyTooltip>
@@ -231,7 +226,7 @@ const statusClass = computed(() => {
           <UiButton
             variant="ghost"
             size="icon-sm"
-            :aria-label="String($t('common.actions.close'))"
+            :aria-label="String($t('common.ui.close'))"
             @click="isTargetEditorOpen = false"
           >
             <XIcon class="size-4" aria-hidden="true" />

@@ -12,7 +12,7 @@ set -Eeuo pipefail
 
 APP_DOMAIN='finance.kristianlentino.it'
 LETSENCRYPT_EMAIL='kristianlentino@gmail.com'
-APP_REF='7d2f57936d73288cfe19e837cb0c5cf2617844fb'
+APP_REF='fd6246aefebe6d13eead8dbf86708af7133a12a5'
 APP_DIR='/opt/money-tracker'
 LOG_FILE='/var/log/money-tracker-bootstrap.log'
 
