@@ -161,6 +161,17 @@ function disconnect(): void {
 }
 
 /**
+ * Disconnect only when no handler is registered for any event, so a feature that is done with the
+ * stream never cuts it off for the others (categorization, imports) sharing the one connection.
+ */
+function disconnectIfIdle(): void {
+  const hasListeners = [...eventHandlers.values()].some((handlers) => handlers.size > 0);
+  if (!hasListeners) {
+    disconnect();
+  }
+}
+
+/**
  * Register an event handler. The payload type is inferred from the event name
  * via `SSEEventPayloadMap`, so each handler receives exactly the payload its
  * event carries.
@@ -191,6 +202,7 @@ export function useSSE() {
   return {
     connect,
     disconnect,
+    disconnectIfIdle,
     on,
     isConnected,
     isConnecting,

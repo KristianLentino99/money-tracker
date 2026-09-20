@@ -1,15 +1,21 @@
+import { parseDecimalAmount } from './parse-decimal-amount';
+
 /**
  * Parse amount string and return numeric value in cents (integer)
- * Supports various formats: 1234.56, 1,234.56, -1234.56, (1234.56)
+ * Supports various formats: 1234.56, 1,234.56, -1234.56, (1234.56), 1234.56-
  *
- * New code should use `parseDecimalAmount`, which rejects ambiguous tokens. This one always
- * guesses: a lone comma is read as the decimal point, so `1,234` returns 123 cents.
+ * Digits and separators are read by `parseDecimalAmount`, so a lone separator before exactly
+ * three digits (`1,234`, `1.500`) is ambiguous and returns null rather than a guessed value.
  */
 export function parseAmount(amountStr: string): number | null {
   if (!amountStr) return null;
 
   // Banks export U+2212 minus, en/em dashes, and other hyphen look-alikes as the sign
-  let cleanStr = amountStr.trim().replace(/^[\u2010-\u2015\u2212\uFE63\uFF0D]/, '-');
+  const dashes = '\\u2010-\\u2015\\u2212\\uFE63\\uFF0D';
+  let cleanStr = amountStr
+    .trim()
+    .replace(new RegExp(`^[${dashes}]`), '-')
+    .replace(new RegExp(`[${dashes}]$`), '-');
 
   // Handle parentheses as negative (accounting format)
   const isNegativeParens = cleanStr.startsWith('(') && cleanStr.endsWith(')');
@@ -17,10 +23,10 @@ export function parseAmount(amountStr: string): number | null {
     cleanStr = cleanStr.slice(1, -1);
   }
 
-  // Handle explicit negative sign
-  const isNegativeSign = cleanStr.startsWith('-');
+  // Handle explicit negative sign, leading or trailing (`100-`)
+  const isNegativeSign = cleanStr.startsWith('-') || cleanStr.endsWith('-');
   if (isNegativeSign) {
-    cleanStr = cleanStr.slice(1);
+    cleanStr = cleanStr.replace(/^-|-$/g, '');
   }
 
   // Handle explicit positive sign
@@ -31,23 +37,9 @@ export function parseAmount(amountStr: string): number | null {
   // Remove currency symbols and spaces
   cleanStr = cleanStr.replace(/[$€£¥₴₽\s]/g, '');
 
-  // Determine decimal separator
-  // If string has both comma and period, the last one is the decimal separator
-  const lastComma = cleanStr.lastIndexOf(',');
-  const lastPeriod = cleanStr.lastIndexOf('.');
+  const parsed = parseDecimalAmount({ raw: cleanStr });
 
-  if (lastComma > lastPeriod) {
-    // European format: 1.234,56 -> 1234.56
-    cleanStr = cleanStr.replace(/\./g, '').replace(',', '.');
-  } else {
-    // US/UK format: 1,234.56 -> 1234.56
-    cleanStr = cleanStr.replace(/,/g, '');
-  }
-
-  // Parse as float
-  const parsed = parseFloat(cleanStr);
-
-  if (isNaN(parsed)) {
+  if (parsed === null) {
     return null;
   }
 

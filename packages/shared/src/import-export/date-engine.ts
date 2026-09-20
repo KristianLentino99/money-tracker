@@ -107,7 +107,8 @@ export function isIntrinsicallyOrdered({ value }: { value: string }): boolean {
 
 export function parseImportDate({ value, format }: ParseImportDateParams): ParsedImportDate | null {
   if (ISO_ZONED_DATETIME.test(value)) {
-    return { kind: 'instant', instant: new Date(value) };
+    const instant = new Date(value);
+    return Number.isNaN(instant.getTime()) ? null : { kind: 'instant', instant };
   }
 
   const localMatch = value.match(ISO_LOCAL_DATETIME);

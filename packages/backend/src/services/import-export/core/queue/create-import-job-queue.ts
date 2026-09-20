@@ -277,6 +277,9 @@ export function createImportJobQueue<
     {
       connection,
       concurrency: 2,
+      // A stalled job (deploy/SIGTERM mid-import) must not restart from row 0: rows already
+      // committed have no originalId to dedupe against, so a re-run would duplicate them.
+      maxStalledCount: 0,
     },
   );
 

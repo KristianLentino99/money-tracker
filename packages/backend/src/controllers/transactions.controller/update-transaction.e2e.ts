@@ -1153,4 +1153,45 @@ describe('Update transaction controller', () => {
       expect(result.statusCode).toBe(ERROR_CODES.NotFoundError);
     });
   });
+
+  describe('editing the income leg of a transfer', () => {
+    it('keeps the expense leg an expense and leaves both account balances unchanged', async () => {
+      const [accountA, accountB] = await Promise.all([
+        helpers.createAccount({ raw: true }),
+        helpers.createAccount({ raw: true }),
+      ]);
+
+      const [expenseLeg, incomeLeg] = await helpers.createTransaction({
+        payload: {
+          ...helpers.buildTransactionPayload({ accountId: accountA.id, amount: 100 }),
+          transferNature: TRANSACTION_TRANSFER_NATURE.common_transfer,
+          destinationAmount: 100,
+          destinationAccountId: accountB.id,
+        },
+        raw: true,
+      });
+      expect(incomeLeg!.transactionType).toBe(TRANSACTION_TYPES.income);
+
+      const balanceA = (await helpers.getAccount({ id: accountA.id, raw: true })).currentBalance;
+      const balanceB = (await helpers.getAccount({ id: accountB.id, raw: true })).currentBalance;
+
+      // Editing from the receiving side, only the note changes
+      const res = await helpers.updateTransaction({
+        id: incomeLeg!.id,
+        payload: { note: 'edited from B' },
+        raw: false,
+      });
+      expect(res.statusCode).toBe(200);
+
+      const transactions = (await helpers.getTransactions({ raw: true }))!;
+      const expenseAfter = transactions.find((tx) => tx.id === expenseLeg.id)!;
+      const incomeAfter = transactions.find((tx) => tx.id === incomeLeg!.id)!;
+      expect(expenseAfter.transactionType).toBe(TRANSACTION_TYPES.expense);
+      expect(incomeAfter.transactionType).toBe(TRANSACTION_TYPES.income);
+      expect(incomeAfter.note).toBe('edited from B');
+
+      expect((await helpers.getAccount({ id: accountA.id, raw: true })).currentBalance).toBe(balanceA);
+      expect((await helpers.getAccount({ id: accountB.id, raw: true })).currentBalance).toBe(balanceB);
+    });
+  });
 });

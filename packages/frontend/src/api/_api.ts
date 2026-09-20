@@ -82,7 +82,7 @@ class ApiCaller {
     const validQuery: ApiCall['query'] = {};
 
     for (const key in query) {
-      if (query[key]) {
+      if (query[key] !== undefined && query[key] !== null && query[key] !== '') {
         validQuery[key] = query[key]?.toString() ?? '';
       }
     }
@@ -159,7 +159,7 @@ class ApiCaller {
 
     if (params?.query) {
       for (const key in params.query) {
-        if (params.query[key]) {
+        if (params.query[key] !== undefined && params.query[key] !== null && params.query[key] !== '') {
           validQuery[key] = params.query[key]?.toString() ?? '';
         }
       }

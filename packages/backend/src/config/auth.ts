@@ -45,6 +45,8 @@ const pool = new Pool({
 // Longest better-auth rate-limit window (core + plugins) is 60s; the limiter
 // resets from `lastRequest` itself, so a longer TTL only affects storage.
 const AUTH_RATE_LIMIT_TTL_SECONDS = 120;
+// Cost 12 follows OWASP 2026 guidance.
+const BCRYPT_COST = 12;
 
 const DEV_TRUSTED_ORIGINS =
   process.env.NODE_ENV === 'development'
@@ -99,14 +101,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: isEnvConfigured(EnvVar.RESEND_API_KEY, process.env.RESEND_API_KEY),
-    // Cost 12 follows OWASP 2026 guidance.
     password: {
       hash: async (password: string) => {
-        const salt = bcrypt.genSaltSync(12);
-        return bcrypt.hashSync(password, salt);
+        return bcrypt.hash(password, BCRYPT_COST);
       },
       verify: async ({ password, hash }: { password: string; hash: string }) => {
-        return bcrypt.compareSync(password, hash);
+        return bcrypt.compare(password, hash);
       },
     },
   },

@@ -150,4 +150,16 @@ describe('calculateNextDueDate', () => {
       expect(result).toBe('2027-01-15');
     });
   });
+
+  describe('first-of-month and month-end anchors', () => {
+    it.each([
+      ['2026-03-01', SUBSCRIPTION_FREQUENCIES.monthly, 1, '2026-04-01'],
+      ['2026-03-01', SUBSCRIPTION_FREQUENCIES.quarterly, 1, '2026-06-01'],
+      ['2026-03-01', SUBSCRIPTION_FREQUENCIES.semiAnnual, 1, '2026-09-01'],
+      ['2026-03-01', SUBSCRIPTION_FREQUENCIES.annual, 1, '2027-03-01'],
+      ['2026-10-31', SUBSCRIPTION_FREQUENCIES.monthly, 31, '2026-11-30'],
+    ])('%s %s (anchor %i) -> %s', (currentDueDate, frequency, anchorDay, expected) => {
+      expect(calculateNextDueDate({ currentDueDate, frequency, anchorDay })).toBe(expected);
+    });
+  });
 });

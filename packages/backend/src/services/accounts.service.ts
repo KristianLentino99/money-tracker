@@ -41,6 +41,7 @@ import { pauseAutomationsReferencing } from '@services/transaction-automations/r
 import { Op } from 'sequelize';
 
 import { archiveAccount as performArchiveSideEffects } from './accounts/archive-account';
+import { lockAccountRow } from './accounts/lock-account-row';
 import { restampRefInitialBalance } from './accounts/restamp-ref-initial-balance';
 import { unlinkSubscriptionsFromAccount } from './accounts/unlink-subscriptions-from-account';
 import { unlinkTemplatesFromAccount } from './accounts/unlink-templates-from-account';
@@ -268,6 +269,12 @@ export const updateAccount = withTransaction(
        */
       loanBalanceCorrection?: boolean;
     }) => {
+    // Serialize against concurrent writers: the balance edit below is a read-modify-write, and a
+    // transaction booked in between would otherwise be overwritten by this stale read.
+    if (id !== undefined) {
+      await lockAccountRow({ accountId: id, userId: payload.userId });
+    }
+
     const accountData = await findOrThrowNotFound({
       query: Accounts.getAccountById({ id, userId: payload.userId }),
       message: t({ key: 'accounts.accountNotFound' }),

@@ -289,7 +289,10 @@ export const useDeletePayee = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id }: { id: string }) => deletePayee({ id }),
-    onSuccess: () => invalidatePayeesScope(queryClient),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
+      invalidatePayeesScope(queryClient);
+    },
   });
 };
 
@@ -311,7 +314,10 @@ export const useMergePayees = () => {
   return useMutation({
     mutationFn: ({ sourceId, targetPayeeId }: { sourceId: string; targetPayeeId: string }) =>
       mergePayees({ sourceId, targetPayeeId }),
-    onSuccess: () => invalidatePayeesScope(queryClient),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
+      invalidatePayeesScope(queryClient);
+    },
   });
 };
 
@@ -369,6 +375,7 @@ export const useDeletePayeeAndIgnore = () => {
   return useMutation({
     mutationFn: ({ id }: { id: string }) => deletePayeeAndIgnore({ id }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
       invalidatePayeesScope(queryClient);
       invalidateIgnoredNames(queryClient);
     },

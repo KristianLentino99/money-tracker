@@ -436,3 +436,62 @@ describe('Delete Portfolio Transfer (DELETE /investments/portfolios/:id/transfer
     });
   });
 });
+
+describe('Delete Portfolio Transfer into a manual-tracking portfolio', () => {
+  const setup = async () => {
+    const account = await helpers.createAccount({
+      payload: helpers.buildAccountPayload({ name: 'Main Account' }),
+      raw: true,
+    });
+    const portfolio = await helpers.createPortfolio({
+      payload: helpers.buildPortfolioPayload({
+        name: 'Manual Portfolio',
+        displayCurrencyCode: account.currencyCode,
+        isManualTracking: true,
+      }),
+      raw: true,
+    });
+
+    return { account, portfolio };
+  };
+
+  // A manual portfolio never books transfers into its cash balance, so undoing one has
+  // nothing to reverse. Reversing anyway leaves a negative "cash" balance that never existed.
+  const expectNoCashBalance = async ({ portfolioId, currencyCode }: { portfolioId: string; currencyCode: string }) => {
+    const balances = await helpers.getPortfolioBalance({ portfolioId, currencyCode, raw: true });
+
+    balances.forEach((balance) => {
+      expect(balance.availableCash).toBeNumericEqual(0);
+      expect(balance.totalCash).toBeNumericEqual(0);
+    });
+  };
+
+  it('does not create a negative cash balance when an account-to-portfolio transfer is deleted', async () => {
+    const { account, portfolio } = await setup();
+    const transfer = await helpers.accountToPortfolioTransfer({
+      portfolioId: portfolio.id,
+      payload: { accountId: account.id, amount: '500', date: '2025-06-15' },
+      raw: true,
+    });
+
+    await expectNoCashBalance({ portfolioId: portfolio.id, currencyCode: account.currencyCode });
+
+    await helpers.deletePortfolioTransfer({ portfolioId: portfolio.id, transferId: transfer.id, raw: true });
+
+    await expectNoCashBalance({ portfolioId: portfolio.id, currencyCode: account.currencyCode });
+  });
+
+  it('does not create a positive cash balance when a portfolio-to-account transfer is deleted', async () => {
+    const { account, portfolio } = await setup();
+    const transfer = await helpers.portfolioToAccountTransfer({
+      portfolioId: portfolio.id,
+      payload: { accountId: account.id, amount: '200', currencyCode: account.currencyCode, date: '2025-06-15' },
+      raw: true,
+    });
+    expect(transfer.id).toBeDefined();
+
+    await helpers.deletePortfolioTransfer({ portfolioId: portfolio.id, transferId: transfer.id, raw: true });
+
+    await expectNoCashBalance({ portfolioId: portfolio.id, currencyCode: account.currencyCode });
+  });
+});

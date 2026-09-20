@@ -35,7 +35,7 @@ export function formatFractionAsPercent(
   const num = parseFinite(fraction);
   if (num === null) return fallback;
   const formatted = (num * 100).toFixed(maximumFractionDigits);
-  const trimmed = stripTrailingZeros ? formatted.replace(/\.?0+$/, '') : formatted;
+  const trimmed = stripTrailingZeros && formatted.includes('.') ? formatted.replace(/\.?0+$/, '') : formatted;
   return `${trimmed}%`;
 }
 

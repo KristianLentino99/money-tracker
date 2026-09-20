@@ -17,6 +17,8 @@ import { createTransaction } from '@services/transactions/create-transaction';
 import { refreshVehicleValueIfStale } from '@services/vehicles/refresh-vehicle-value.service';
 import { format } from 'date-fns';
 
+import { lockAccountRow } from './lock-account-row';
+
 interface AdjustAccountBalanceParams {
   userId: number;
   accountId: string;
@@ -40,6 +42,9 @@ export const adjustAccountBalance = withTransaction(
     note,
     time,
   }: AdjustAccountBalanceParams): Promise<AdjustAccountBalanceResult> => {
+    // The diff below is derived from the balance read here, so lock the row first or a concurrent
+    // write makes the adjustment land on the wrong target.
+    await lockAccountRow({ accountId, userId });
     const account = await getAccountById({ id: accountId, userId });
 
     if (!account) {

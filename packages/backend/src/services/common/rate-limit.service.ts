@@ -35,7 +35,9 @@ export class RateLimitService {
       if (count >= maxAttempts) {
         // Rate limit exceeded, get TTL to determine remaining seconds
         const ttl = await redisClient.ttl(redisKey);
-        const remainingSeconds = ttl > 0 ? ttl : 0;
+        // A key without TTL (crash between INCR and EXPIRE) would block forever: heal it.
+        if (ttl === -1) await redisClient.expire(redisKey, windowSeconds);
+        const remainingSeconds = ttl > 0 ? ttl : ttl === -1 ? windowSeconds : 0;
         const resetTime = new Date(Date.now() + remainingSeconds * 1000);
 
         return {

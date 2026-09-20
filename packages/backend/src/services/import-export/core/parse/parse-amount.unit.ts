@@ -29,11 +29,26 @@ describe('parseAmount (core tabular-import amount parser)', () => {
     expect(parseAmount('1.000.000,00')).toBe(100000000);
   });
 
-  it('treats a lone comma as the decimal separator', () => {
-    // With no period present, the comma is read as the decimal point (European
-    // convention), not a thousands separator: '1,5' -> 1.5, '1,234' -> 1.234.
+  it('reads a lone separator before one or two digits as the decimal point', () => {
     expect(parseAmount('1,5')).toBe(150);
-    expect(parseAmount('1,234')).toBe(123);
+    expect(parseAmount('1,50')).toBe(150);
+    expect(parseAmount('1.5')).toBe(150);
+  });
+
+  it('rejects a lone separator before exactly three digits as ambiguous', () => {
+    // '1.500' is 1500 to a US bank and 1.50 to a European one; guessing is a silent 1000x error.
+    expect(parseAmount('1,234')).toBeNull();
+    expect(parseAmount('1.500')).toBeNull();
+  });
+
+  it('rejects malformed digit groups instead of truncating them', () => {
+    expect(parseAmount('12.345.67')).toBeNull();
+    expect(parseAmount('1,23,456.78')).toBeNull();
+  });
+
+  it('treats a trailing minus as a negative sign', () => {
+    expect(parseAmount('100-')).toBe(-10000);
+    expect(parseAmount('1,234.50-')).toBe(-123450);
   });
 
   it('treats parentheses as a negative (accounting format)', () => {
@@ -65,7 +80,7 @@ describe('parseAmount (core tabular-import amount parser)', () => {
   });
 
   it('rounds sub-cent precision to the nearest cent', () => {
-    expect(parseAmount('10.994')).toBe(1099);
-    expect(parseAmount('10.996')).toBe(1100);
+    expect(parseAmount('10.9949')).toBe(1099);
+    expect(parseAmount('10.9951')).toBe(1100);
   });
 });

@@ -204,7 +204,9 @@ export function setupMiddleware(app: Express) {
     if (req.path.startsWith(`${API_PREFIX}/auth/`)) return next();
     express.urlencoded({ extended: false })(req, res, next);
   });
-  if (process.env.NODE_ENV !== 'test') {
+  // Dev only: morgan logs the full URL, and in production that leaks query-string tokens
+  // (email-verification links, OAuth code/state) into the logs.
+  if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   }
   app.use(sessionMiddleware);

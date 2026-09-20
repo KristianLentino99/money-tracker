@@ -24,7 +24,7 @@ vi.mock('./use-sse', () => ({
   SSE_EVENT_TYPES: { SYNC_STATUS_CHANGED: 'sync_status_changed' },
   useSSE: () => ({
     connect: vi.fn(),
-    disconnect: vi.fn(),
+    disconnectIfIdle: vi.fn(),
     on: vi.fn((_event: string, handler: (data: unknown) => void) => {
       sse.handler = handler;
       return () => {};

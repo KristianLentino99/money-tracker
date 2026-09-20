@@ -1,6 +1,4 @@
 import { SUBSCRIPTION_FREQUENCIES } from '@bt/shared/types';
-import { addDays, addMonths, getDaysInMonth } from 'date-fns';
-
 interface CalculateNextDueDateParams {
   currentDueDate: string;
   frequency: SUBSCRIPTION_FREQUENCIES;
@@ -17,33 +15,40 @@ export function calculateNextDueDate({ currentDueDate, frequency, anchorDay }: C
 
   switch (frequency) {
     case SUBSCRIPTION_FREQUENCIES.weekly:
-      return formatDate(addDays(current, 7));
+      return formatDate(addUtcDays({ date: current, days: 7 }));
 
     case SUBSCRIPTION_FREQUENCIES.biweekly:
-      return formatDate(addDays(current, 14));
+      return formatDate(addUtcDays({ date: current, days: 14 }));
 
     case SUBSCRIPTION_FREQUENCIES.monthly:
-      return clampToAnchor({ date: addMonths(current, 1), anchorDay });
+      return addMonthsClamped({ date: current, months: 1, anchorDay });
 
     case SUBSCRIPTION_FREQUENCIES.quarterly:
-      return clampToAnchor({ date: addMonths(current, 3), anchorDay });
+      return addMonthsClamped({ date: current, months: 3, anchorDay });
 
     case SUBSCRIPTION_FREQUENCIES.semiAnnual:
-      return clampToAnchor({ date: addMonths(current, 6), anchorDay });
+      return addMonthsClamped({ date: current, months: 6, anchorDay });
 
     case SUBSCRIPTION_FREQUENCIES.annual:
-      return clampToAnchor({ date: addMonths(current, 12), anchorDay });
+      return addMonthsClamped({ date: current, months: 12, anchorDay });
 
     default:
       throw new Error(`Unknown frequency: ${frequency}`);
   }
 }
 
-function clampToAnchor({ date, anchorDay }: { date: Date; anchorDay: number }): string {
-  const daysInMonth = getDaysInMonth(date);
-  const day = Math.min(anchorDay, daysInMonth);
-  const clamped = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), day));
-  return formatDate(clamped);
+// Due dates are UTC-midnight calendar days, so all arithmetic stays in UTC. date-fns helpers
+// work in host local time and shift the day on non-UTC servers.
+function addUtcDays({ date, days }: { date: Date; days: number }): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + days));
+}
+
+function addMonthsClamped({ date, months, anchorDay }: { date: Date; months: number; anchorDay: number }): string {
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + months;
+  // Day 0 of the following month is the last day of the target month
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  return formatDate(new Date(Date.UTC(year, month, Math.min(anchorDay, daysInMonth))));
 }
 
 function formatDate(date: Date): string {

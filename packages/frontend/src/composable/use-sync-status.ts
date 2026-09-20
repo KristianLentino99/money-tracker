@@ -59,7 +59,7 @@ let isSSESubscribed = false;
 export function useSyncStatus() {
   const { t } = useI18n();
   const queryClient = useQueryClient();
-  const { connect, disconnect, on, isConnected } = useSSE();
+  const { connect, disconnectIfIdle, on, isConnected } = useSSE();
   const { isLoggedIn } = storeToRefs(useAuthStore());
   const { isDemo } = storeToRefs(useUserStore());
 
@@ -246,12 +246,14 @@ export function useSyncStatus() {
           justCompleted.value = false;
         }, SUCCESS_MESSAGE_TTL_MS);
 
-        // Disconnect SSE when sync is complete (per user requirement).
+        // Disconnect SSE when sync is complete (per user requirement), but only if no other
+        // feature (AI categorization, imports) is still listening on the shared connection.
         // TODO: Handle SSE reconnection for cron-triggered syncs. Currently SSE
         // disconnects when idle and only reconnects on manual trigger. Cron syncs
         // won't push updates until user manually triggers or refreshes the page.
         // Options: (1) Keep SSE always connected, (2) Use WebSocket, (3) Polling fallback
-        disconnect();
+        unsubscribeFromSSE();
+        disconnectIfIdle();
       }
     });
 

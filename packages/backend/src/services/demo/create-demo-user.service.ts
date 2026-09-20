@@ -32,8 +32,7 @@ export async function createDemoUserFast(): Promise<DemoUserResult> {
     [authUserId, demoEmail, demoUsername, now, now],
   );
 
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(demoPassword, salt);
+  const hashedPassword = await bcrypt.hash(demoPassword, 10);
 
   await authPool.query(
     `INSERT INTO ba_account (id, "userId", "providerId", "accountId", password, "createdAt", "updatedAt")

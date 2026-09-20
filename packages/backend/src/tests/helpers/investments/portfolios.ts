@@ -19,6 +19,7 @@ export function buildPortfolioPayload({
   description = 'Test portfolio description',
   displayCurrencyCode,
   isEnabled = true,
+  isManualTracking,
 }: Partial<Omit<Parameters<typeof _createPortfolio>[0], 'userId'>> = {}): Omit<
   Parameters<typeof _createPortfolio>[0],
   'userId'
@@ -29,6 +30,7 @@ export function buildPortfolioPayload({
     description,
     ...(displayCurrencyCode !== undefined ? { displayCurrencyCode } : {}),
     isEnabled,
+    ...(isManualTracking !== undefined ? { isManualTracking } : {}),
   };
 }
 

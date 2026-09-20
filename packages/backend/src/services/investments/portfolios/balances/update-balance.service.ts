@@ -1,6 +1,7 @@
 import { INVESTMENT_DECIMAL_SCALE, Money } from '@common/types/money';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { t } from '@i18n/index';
+import { namespace } from '@models/connection';
 import Currencies from '@models/currencies.model';
 import PortfolioBalances from '@models/investments/portfolio-balances.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -42,8 +43,13 @@ const updatePortfolioBalanceImpl = async ({
   });
 
   // Find or create portfolio balance record
+  // Row-locked so concurrent read-modify-write updates of the same balance serialize
+  // instead of overwriting each other's delta.
+  const sequelizeTx = namespace.get('transaction');
   let balance = await PortfolioBalances.findOne({
     where: { portfolioId, currencyCode },
+    transaction: sequelizeTx,
+    lock: sequelizeTx?.LOCK.UPDATE,
   });
 
   if (!balance) {

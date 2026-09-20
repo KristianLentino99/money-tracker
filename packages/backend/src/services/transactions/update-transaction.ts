@@ -425,7 +425,9 @@ const updateTransferTransaction = async (params: HelperFunctionsArgs) => {
     userId: oppositeTx.userId,
     amount: destinationAmount !== undefined ? destinationAmount : undefined,
     refAmount: baseTransaction.refAmount,
-    transactionType: TRANSACTION_TYPES.income,
+    // The pair keeps its shape whichever leg is edited: forcing `income` here flipped the
+    // expense leg when the edit came from the receiving side.
+    transactionType: oppositeTx.transactionType,
     accountId: destinationAccountId,
     note,
     externalUrl,

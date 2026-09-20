@@ -77,11 +77,19 @@ export async function reverseTransferBalanceChanges({
 }): Promise<void> {
   if (!transfer.affectsCash) return;
 
+  // Manual-tracking portfolios never had this transfer booked into their cash balance,
+  // so there is nothing to reverse on their side.
+  const manualPortfolioIds = await findManualTrackingPortfolioIds({
+    portfolioIds: [transfer.fromPortfolioId, transfer.toPortfolioId],
+  });
+  const reverseOnPortfolio = (portfolioId: string | null): portfolioId is string =>
+    portfolioId !== null && !manualPortfolioIds.has(portfolioId);
+
   const amount = transfer.amount.toDecimalString(10);
   const { currencyCode } = transfer;
 
   // Currency exchange: reverse both currency balance changes
-  if (transfer.toCurrencyCode && transfer.toAmount && transfer.fromPortfolioId) {
+  if (transfer.toCurrencyCode && transfer.toAmount && reverseOnPortfolio(transfer.fromPortfolioId)) {
     const toAmount = transfer.toAmount.toDecimalString(10);
 
     // Add back the from-amount to the source currency
@@ -107,7 +115,7 @@ export async function reverseTransferBalanceChanges({
   }
 
   // Regular transfer reversal
-  if (transfer.fromPortfolioId) {
+  if (reverseOnPortfolio(transfer.fromPortfolioId)) {
     await updatePortfolioBalance({
       userId,
       portfolioId: transfer.fromPortfolioId,
@@ -117,7 +125,7 @@ export async function reverseTransferBalanceChanges({
     });
   }
 
-  if (transfer.toPortfolioId) {
+  if (reverseOnPortfolio(transfer.toPortfolioId)) {
     const negated = negateAmount({ amount });
     await updatePortfolioBalance({
       userId,
@@ -127,6 +135,22 @@ export async function reverseTransferBalanceChanges({
       totalCashDelta: negated,
     });
   }
+}
+
+async function findManualTrackingPortfolioIds({
+  portfolioIds,
+}: {
+  portfolioIds: Array<string | null>;
+}): Promise<Set<string>> {
+  const ids = portfolioIds.filter((id): id is string => id !== null);
+  if (ids.length === 0) return new Set();
+
+  const manualPortfolios = await Portfolios.findAll({
+    where: { id: ids, isManualTracking: true },
+    attributes: ['id'],
+  });
+
+  return new Set(manualPortfolios.map((portfolio) => portfolio.id));
 }
 
 export async function getUserBaseCurrencyCode({ userId }: { userId: number }): Promise<string> {

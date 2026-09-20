@@ -2,6 +2,7 @@ import { SUBSCRIPTION_PERIOD_STATUSES } from '@bt/shared/types';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { t } from '@i18n/index';
 import { ConflictError, ValidationError } from '@js/errors';
+import { namespace } from '@models/connection';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import { findOneTransaction } from '@models/transactions-query';
 import { withTransaction } from '@services/common/with-transaction';
@@ -55,6 +56,9 @@ export const markPeriodPaid = withTransaction(
     const period = await findOrThrowNotFound({
       query: SubscriptionPeriods.findOne({
         where: { id: periodId, subscriptionId },
+        // Lock so two concurrent "mark paid" requests can't both pass the status check.
+        transaction: namespace.get('transaction'),
+        lock: namespace.get('transaction')?.LOCK.UPDATE,
       }),
       message: 'Subscription period not found.',
     });
