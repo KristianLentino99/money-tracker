@@ -3,7 +3,10 @@
     <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-sm">
       <div class="font-semibold">{{ $t('analytics.fire.progress.progressTo', { type: targetName }) }}</div>
       <div class="text-muted-foreground tabular-nums">
-        <span :class="cn('font-bold', isReached ? 'text-success-text' : 'text-foreground')">{{ pctLabel }}</span>
+        <span
+          :class="cn('text-2xl font-extrabold tracking-tight', isReached ? 'text-success-text' : 'text-foreground')"
+          >{{ pctLabel }}</span
+        >
         <template v-if="plan.target !== null">
           ·
           {{
