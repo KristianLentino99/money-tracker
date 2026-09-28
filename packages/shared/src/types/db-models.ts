@@ -75,6 +75,9 @@ export interface CategoryModel {
   userId: number;
 }
 
+/** Where linking puts the balance residual the post-link sync leaves unexplained. */
+export type LinkResidualTarget = 'opening-balance' | 'adjustment';
+
 /**
  * Known structure for account externalData field.
  * This is a JSONB field that can contain additional custom data.
@@ -89,6 +92,8 @@ export interface AccountExternalData {
       externalBalance: number;
       difference: number;
       adjustmentTransactionId: RecordId | null;
+      /** Where the post-link residual goes. Absent means the opening-balance path. */
+      residualTarget?: LinkResidualTarget;
       /** Residual the post-link sync left unexplained, in cents, folded into the opening balance. */
       absorbedResidual?: number;
       /**
