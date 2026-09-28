@@ -240,8 +240,9 @@ Set status = SYNCING
        ↓
 Fetch all transactions (paginated on continuation_key until the ASPSP
 stops returning one; an incremental sync starts at the latest stored
-transaction or the oldest payment still pending on the previous sync,
-whichever is earlier; an initial sync also negotiates the lookback window
+transaction, the oldest payment still pending on the previous sync, or
+the oldest stored pending row from the last 14 days, whichever is
+earliest; an initial sync also negotiates the lookback window
 by retrying 1095 → 730 → 365 → 90 days on date-range rejections)
        ↓
 Drop PDNG/HOLD payloads unless the user setting

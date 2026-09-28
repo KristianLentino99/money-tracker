@@ -808,6 +808,22 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           // future-dated entry – a value_date past today – would ask for a date_from
           // the bank rejects on every sync.
           const storedOldestPendingDate = account.externalData?.oldestPendingDate;
+          // A bank may stop listing a payment as pending before it lists the booked copy,
+          // so the stored pending row keeps the range open too. Older rows are skipped:
+          // their booked copy could no longer upgrade them.
+          const oldestStoredPendingRow = latestTransaction
+            ? await findOneTransaction({
+                planned: 'exclude',
+                access: 'unscoped-internal',
+                balanceAdjustments: 'include',
+                where: {
+                  accountId: account.id,
+                  time: { [Op.gte]: new Date(to.getTime() - PENDING_UPGRADE_WINDOW_DAYS * MS_PER_DAY) },
+                  [Op.and]: [wherePreBookingStatus()],
+                },
+                order: [['time', 'ASC']],
+              })
+            : null;
           const fetchedTransactions = latestTransaction
             ? await this.fetchTransactions(
                 connectionId,
@@ -818,6 +834,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
                       latestTransaction.time.getTime(),
                       to.getTime(),
                       (typeof storedOldestPendingDate === 'string' && Date.parse(storedOldestPendingDate)) || Infinity,
+                      oldestStoredPendingRow?.time.getTime() ?? Infinity,
                     ),
                   ),
                   to,
