@@ -45,6 +45,8 @@ const props = withDefaults(
     /** For scoped lists (e.g. a single payee) where a group row would misrepresent the set and hide per-row actions */
     disableGrouping?: boolean;
     selectionScopeKey?: string;
+    compact?: boolean;
+    hidePlannedMarker?: boolean;
   }>(),
   {
     isTransactionRecord: false,
@@ -213,7 +215,8 @@ watchEffect(() => {
           <TransactionRecord
             :tx="item as TransactionModel"
             :show-checkbox="enableBulkEdit"
-            :hide-planned-marker="!rawList"
+            :compact="compact"
+            :hide-planned-marker="hidePlannedMarker || !rawList"
             :is-selected="isTransactionSelected((item as TransactionModel).id)"
             :is-selectable="isTransactionSelectable(item as TransactionModel)"
             :unselectable-reason="getUnselectableReason(item as TransactionModel)"

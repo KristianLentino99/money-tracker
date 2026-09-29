@@ -8,6 +8,7 @@ import { useFormatCurrency } from '@/composable/formatters';
 import { buttonVariants } from '@/components/lib/ui/button';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import BrandLogo from '@/components/common/brand-logo.vue';
+import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import TransactionsList from '@/components/transactions-list/transactions-list.vue';
 import SubscriptionMarkPaidDialog from '@/pages/planned/subscriptions/components/subscription-mark-paid-dialog.vue';
@@ -30,6 +31,7 @@ import { useIncludePlannedConfig } from './use-include-planned-config';
 
 // Days ahead threshold for "upcoming" payments shown in the widget.
 const UPCOMING_DAYS_WINDOW = 3;
+const MAX_DISPLAY = 20;
 
 const { isAppInitialized } = storeToRefs(useRootStore());
 const { formatAmountByCurrencyCode, formatBaseCurrency } = useFormatCurrency();
@@ -41,12 +43,6 @@ const includeScheduled = computed(() => {
   const raw = widgetConfigRef?.value?.config?.includeScheduled;
   // Explicit opt-out only; undefined (first use) defaults to enabled.
   return raw !== 'false';
-});
-
-const maxDisplay = computed(() => {
-  const config = widgetConfigRef?.value;
-  if (!config) return 10;
-  return (config.rowSpan ?? 1) >= 2 ? 12 : 5;
 });
 
 const exclusions = computed(() => readLatestRecordsExclusions({ widgetConfig: widgetConfigRef?.value }));
@@ -116,9 +112,9 @@ const pastTransactions = computed(() => {
   return (transactions.value ?? []).filter((tx) => !isAfter(new Date(tx.time), now));
 });
 
-// Scheduled rows consume slots first; transactions fill whatever remains up to maxDisplay.
-const scheduledRows = computed(() => sortedScheduledItems.value.slice(0, maxDisplay.value));
-const txMaxDisplay = computed(() => Math.max(0, maxDisplay.value - scheduledRows.value.length));
+// Scheduled rows consume slots first; transactions fill whatever remains up to MAX_DISPLAY.
+const scheduledRows = computed(() => sortedScheduledItems.value.slice(0, MAX_DISPLAY));
+const txMaxDisplay = computed(() => Math.max(0, MAX_DISPLAY - scheduledRows.value.length));
 
 const markPaidDialogRef = ref<InstanceType<typeof SubscriptionMarkPaidDialog> | null>(null);
 
@@ -148,7 +144,9 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
 
 <template>
   <WidgetWrapper :is-fetching="isFetching">
-    <template #title> {{ $t('dashboard.widgets.latestTransactions.title') }} </template>
+    <template #title>
+      {{ $t('dashboard.widgets.latestTransactions.title') }}
+    </template>
     <template #action>
       <DesktopOnlyTooltip
         v-if="!isDataEmpty && !isInitialLoading"
@@ -156,7 +154,13 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
       >
         <span class="inline-flex">
           <router-link
-            :class="buttonVariants({ variant: 'ghost', size: 'icon-sm', class: 'text-muted-foreground' })"
+            :class="
+              buttonVariants({
+                variant: 'ghost',
+                size: 'icon-sm',
+                class: 'text-muted-foreground',
+              })
+            "
             :to="{ name: ROUTES_NAMES.transactions }"
             :aria-label="$t('dashboard.widgets.latestTransactions.showAll')"
           >
@@ -176,7 +180,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
         <ListIcon class="size-32" />
       </EmptyState>
     </template>
-    <template v-else>
+    <ScrollArea v-else class="-mx-2 min-h-0 flex-1" viewport-class="overscroll-contain px-2">
       <!-- Scheduled payment rows: one row per item, overdue first, sorted by dueDate -->
       <template v-if="includeScheduled && scheduledRows.length > 0">
         <div
@@ -192,7 +196,9 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
             class="size-5 shrink-0"
           />
           <div class="min-w-0 flex-1">
-            <p class="truncate text-sm leading-tight font-medium">{{ sub.name }}</p>
+            <p class="truncate text-sm leading-tight font-medium">
+              {{ sub.name }}
+            </p>
             <p class="text-muted-foreground overflow-hidden text-xs text-ellipsis whitespace-nowrap">
               <span v-if="sub.currentPeriod?.status === 'overdue'" class="text-app-expense-color font-medium">
                 {{ $t('widgets.latestRecords.overdueBadge') }}
@@ -229,11 +235,12 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
       <TransactionsList
         v-if="txMaxDisplay > 0"
         raw-list
+        :paginate="false"
         class="gap-0.5!"
         :transactions="pastTransactions"
         :max-display="txMaxDisplay"
       />
-    </template>
+    </ScrollArea>
 
     <!-- Mark-paid dialog: rendered once, opened imperatively via triggerPay() -->
     <SubscriptionMarkPaidDialog ref="markPaidDialogRef" />
