@@ -7,11 +7,10 @@
     @click="onRowClick"
   >
     <!-- Selection checkbox (sticky so it survives horizontal scroll) -->
-    <!-- Arbitrary property, not border-dashed: the cell's border-b must stay solid. -->
     <td
       :class="[
         'sticky left-0 z-1 w-8 border-b px-1',
-        isPlannedRow ? 'bg-muted border-l-primary/60 border-l-2 [border-left-style:dashed]' : 'bg-card',
+        isPlannedRow ? ['bg-muted border-l-[3px]', isPlanExpired ? 'border-l-warning' : 'border-l-primary'] : 'bg-card',
       ]"
       @click.stop
     >
@@ -29,7 +28,7 @@
           <div v-else class="size-4" />
         </label>
 
-        <PlannedIndicator compact hide-confirmed :transaction="tx" />
+        <PlannedIndicator v-if="!isPlannedRow" compact hide-confirmed :transaction="tx" />
       </div>
     </td>
 
@@ -244,6 +243,7 @@ import { useTransactionPortfolioLink } from '@/composable/data-queries/portfolio
 import { useFormatCurrency } from '@/composable/formatters';
 import { useAccountAccess } from '@/composable/use-account-access';
 import { formatUIAmount } from '@/js/helpers';
+import { isPlanMatchWindowExpired } from '@/common/utils/planned-transactions';
 import { cn } from '@/lib/utils';
 import { useAccountsStore, useCategoriesStore, useUserStore } from '@/stores';
 import {
@@ -351,6 +351,7 @@ const isTransferRow = computed(
   () => isTwoLegTransferRow.value || isOutOfWalletTransfer.value || isPortfolioLinked.value,
 );
 const isPlannedRow = computed(() => props.tx.isPlanned);
+const isPlanExpired = computed(() => isPlannedRow.value && isPlanMatchWindowExpired({ time: props.tx.time }));
 
 const { data: oppositeTx } = useOppositeTxRecord(() => props.tx);
 

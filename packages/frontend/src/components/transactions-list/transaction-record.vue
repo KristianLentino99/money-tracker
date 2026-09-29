@@ -128,7 +128,7 @@
             >
               <UsersIcon class="text-muted-foreground size-3.5 shrink-0 cursor-help" :aria-label="addedByTooltip" />
             </ResponsiveTooltip>
-            <PlannedIndicator :transaction="transaction" />
+            <PlannedIndicator v-if="!(hidePlannedMarker && transaction.isPlanned)" :transaction="transaction" />
             <SplitIndicator :transaction="transaction" />
             <RefundIndicator :transaction="transaction" />
             <TagsIndicator :tags="transaction.tags ?? []" />
@@ -271,6 +271,8 @@ const props = withDefaults(
     index?: number;
     /** Single-line row: the note renders inline, amount and date share one line. */
     compact?: boolean;
+    /** Set where planned rows already sit under their own collapsible header. */
+    hidePlannedMarker?: boolean;
   }>(),
   {
     asButton: true,
