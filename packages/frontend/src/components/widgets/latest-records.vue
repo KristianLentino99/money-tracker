@@ -26,7 +26,11 @@ import EmptyState from './components/empty-state.vue';
 import LatestRecordsSettingsPopover from './components/latest-records-settings-popover.vue';
 import LoadingState from './components/loading-state.vue';
 import WidgetWrapper from './components/widget-wrapper.vue';
-import { buildLatestRecordsTransferNatures, readLatestRecordsExclusions } from './latest-records-config';
+import {
+  buildLatestRecordsTransferNatures,
+  readLatestRecordsExclusions,
+  readLatestRecordsTagsVariant,
+} from './latest-records-config';
 import { useIncludePlannedConfig } from './use-include-planned-config';
 
 // Days ahead threshold for "upcoming" payments shown in the widget.
@@ -49,6 +53,7 @@ const exclusions = computed(() => readLatestRecordsExclusions({ widgetConfig: wi
 const transferNatures = computed(() => buildLatestRecordsTransferNatures(exclusions.value));
 const excludeBalanceAdjustments = computed(() => exclusions.value.excludeBalanceAdjustments);
 const { includePlanned } = useIncludePlannedConfig();
+const tagsVariant = computed(() => readLatestRecordsTagsVariant({ widgetConfig: widgetConfigRef?.value }));
 
 const { data: transactions, isFetching: isTxFetching } = useQuery({
   queryKey: [...VUE_QUERY_CACHE_KEYS.widgetLatestRecords, transferNatures, excludeBalanceAdjustments, includePlanned],
@@ -239,6 +244,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
         class="gap-0.5!"
         :transactions="pastTransactions"
         :max-display="txMaxDisplay"
+        :tags-variant="tagsVariant"
       />
     </ScrollArea>
 

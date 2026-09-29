@@ -131,7 +131,7 @@
             <PlannedIndicator v-if="!(hidePlannedMarker && transaction.isPlanned)" :transaction="transaction" />
             <SplitIndicator :transaction="transaction" />
             <RefundIndicator :transaction="transaction" />
-            <TagsIndicator :tags="transaction.tags ?? []" />
+            <TagsIndicator :tags="transaction.tags ?? []" :variant="tagsVariant" />
             <AttachmentIndicator :transaction="transaction" />
             <ResponsiveTooltip
               v-if="externalLinkHref && !compact"
@@ -255,7 +255,7 @@ import PlannedIndicator from './indicators/planned-indicator.vue';
 import AttachmentIndicator from './indicators/attachment-indicator.vue';
 import RefundIndicator from './indicators/refund-indicator.vue';
 import SplitIndicator from './indicators/split-indicator.vue';
-import TagsIndicator from '@/components/common/tags-indicator.vue';
+import TagsIndicator, { type TagsIndicatorVariant } from '@/components/common/tags-indicator.vue';
 
 const { t } = useI18n();
 
@@ -273,6 +273,7 @@ const props = withDefaults(
     compact?: boolean;
     /** Set where planned rows already sit under their own collapsible header. */
     hidePlannedMarker?: boolean;
+    tagsVariant?: TagsIndicatorVariant;
   }>(),
   {
     asButton: true,

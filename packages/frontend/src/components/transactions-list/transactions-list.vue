@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { TagsIndicatorVariant } from '@/components/common/tags-indicator.vue';
 import { useScrollAreaContainer } from '@/composable/scroll-area-container';
 import { useBulkTransactionActions } from '@/composable/use-bulk-transaction-actions';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
@@ -47,6 +48,7 @@ const props = withDefaults(
     selectionScopeKey?: string;
     compact?: boolean;
     hidePlannedMarker?: boolean;
+    tagsVariant?: TagsIndicatorVariant;
   }>(),
   {
     isTransactionRecord: false,
@@ -216,6 +218,7 @@ watchEffect(() => {
             :tx="item as TransactionModel"
             :show-checkbox="enableBulkEdit"
             :compact="compact"
+            :tags-variant="tagsVariant"
             :hide-planned-marker="hidePlannedMarker || !rawList"
             :is-selected="isTransactionSelected((item as TransactionModel).id)"
             :is-selectable="isTransactionSelectable(item as TransactionModel)"

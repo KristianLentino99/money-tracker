@@ -258,7 +258,11 @@
         "excludeBalanceAdjustmentsDescription": "Hide balance adjustment transactions",
         "plannedTitle": "Planned transactions",
         "excludePlannedDescription": "Hide pending planned transactions from the list",
-        "nothingExcluded": "Nothing excluded"
+        "nothingExcluded": "Nothing excluded",
+        "tagsStyleTitle": "Tags",
+        "tagsStyleNames": "Names",
+        "tagsStyleBars": "Bars",
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
       },
       "overdueBadge": "Overdue",
       "scheduledBadge": "Scheduled",
