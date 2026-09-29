@@ -87,19 +87,13 @@ import { cn } from '@/lib/utils';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import {
-  displayProgressPct,
-  formatProgressPct,
-  milestoneLabel,
-  useFormatFireCompact,
-} from '@/composable/fire/fire-display';
+import { displayProgressPct, formatProgressPct, milestoneLabel } from '@/composable/fire/fire-display';
 
 const props = defineProps<{ plan: FirePlan; targetName: string }>();
 
 const { t } = useI18n();
 const { format } = useDateLocale();
-const { formatWholeBaseCurrency } = useFormatCurrency();
-const formatCompact = useFormatFireCompact();
+const { formatWholeBaseCurrency, formatCompactBaseCurrency: formatCompact } = useFormatCurrency();
 
 const isReached = computed(() => props.plan.status === 'reached');
 const pct = computed(() => displayProgressPct({ ratio: props.plan.progress ?? 0, reached: isReached.value }));

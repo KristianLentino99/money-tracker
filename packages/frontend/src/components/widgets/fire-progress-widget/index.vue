@@ -4,7 +4,7 @@ import { Button } from '@/components/lib/ui/button';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useUserSettings } from '@/composable/data-queries/user-settings';
 import { type FireMilestone, type FireWarning, UNREACHABLE_PMT_MONTHS } from '@/composable/fire/build-fire-plan';
-import { displayProgressPct, useFormatFireCompact } from '@/composable/fire/fire-display';
+import { displayProgressPct } from '@/composable/fire/fire-display';
 import { monthsToLabel } from '@/composable/fire/fire-math';
 import { useFirePlan, useResolvedFireSettings } from '@/composable/fire/use-fire-plan';
 import { useFormatCurrency } from '@/composable/formatters';
@@ -30,8 +30,7 @@ const LEDGER_ROW_CLASS = 'border-border flex items-baseline justify-between gap-
 
 const { t } = useI18n();
 const { format } = useDateLocale();
-const { formatWholeBaseCurrency } = useFormatCurrency();
-const compact = useFormatFireCompact();
+const { formatWholeBaseCurrency, formatCompactBaseCurrency: compact } = useFormatCurrency();
 
 const widgetConfigRef = inject<Ref<DashboardWidgetConfig> | null>('dashboard-widget-config', null);
 const isNumbers = computed(() => widgetConfigRef?.value?.config?.style === 'numbers');
