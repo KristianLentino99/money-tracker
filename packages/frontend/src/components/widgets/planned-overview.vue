@@ -89,7 +89,7 @@ const retry = () => {
 </script>
 
 <template>
-  <WidgetWrapper :is-fetching="isFetching || isPlansFetching">
+  <WidgetWrapper class="max-md:max-h-96" :is-fetching="isFetching || isPlansFetching">
     <template #title>{{ $t('dashboard.widgets.plannedOverview.title') }}</template>
     <template #action>
       <span
@@ -128,7 +128,7 @@ const retry = () => {
             !arrivedState.bottom && '[mask-image:linear-gradient(to_bottom,black_calc(100%-1.75rem),transparent)]',
           )
         "
-        viewport-class="overscroll-contain px-2"
+        viewport-class="px-2 md:overscroll-contain"
       >
         <div class="pb-2.5">
           <p ref="balanceRef" class="text-2xl font-bold tracking-tight tabular-nums">

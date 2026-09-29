@@ -148,7 +148,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
 </script>
 
 <template>
-  <WidgetWrapper :is-fetching="isFetching">
+  <WidgetWrapper class="max-md:max-h-96" :is-fetching="isFetching">
     <template #title>
       {{ $t('dashboard.widgets.latestTransactions.title') }}
     </template>
@@ -185,7 +185,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
         <ListIcon class="size-32" />
       </EmptyState>
     </template>
-    <ScrollArea v-else class="-mx-2 min-h-0 flex-1" viewport-class="overscroll-contain px-2">
+    <ScrollArea v-else class="-mx-2 min-h-0 flex-1" viewport-class="px-2 md:overscroll-contain">
       <!-- Scheduled payment rows: one row per item, overdue first, sorted by dueDate -->
       <template v-if="includeScheduled && scheduledRows.length > 0">
         <div

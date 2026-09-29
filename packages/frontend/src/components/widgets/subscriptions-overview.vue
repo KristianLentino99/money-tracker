@@ -227,7 +227,7 @@ function payPeriod({ subscription }: { subscription: SubscriptionListItem }) {
 </script>
 
 <template>
-  <WidgetWrapper :is-fetching="isFetching">
+  <WidgetWrapper class="max-md:max-h-96" :is-fetching="isFetching">
     <template #title> {{ widgetTitle }} </template>
     <template v-if="isOnDashboard" #action>
       <span
@@ -286,7 +286,7 @@ function payPeriod({ subscription }: { subscription: SubscriptionListItem }) {
           !arrivedState.bottom && '[mask-image:linear-gradient(to_bottom,black_calc(100%-1.75rem),transparent)]',
         )
       "
-      viewport-class="overscroll-contain px-2"
+      viewport-class="px-2 md:overscroll-contain"
     >
       <div v-if="summary && totalActiveCount > 0" class="pb-2.5">
         <template v-if="summary.activeCount.expense > 0">
