@@ -28,10 +28,10 @@ jobs:
           download_translations: true
           # Ukrainian is maintained in the repo; see crowdin-upload.yml
           download_translations_args: '--exclude-language uk'
-          # No `skip_untranslated_strings` key, so untranslated strings arrive filled
-          # with English source text (Crowdin's default). Either way the reader sees
-          # English: the frontend pairs every locale chunk with its English copy, so
-          # vue-i18n's `fallbackLocale` also resolves keys the export omits.
+          # Untranslated strings arrive filled with English source text (Crowdin's
+          # default). Abolished alternative: `skip_untranslated_strings` exports them
+          # as "" rather than omitting them, and vue-i18n renders "" as blank text
+          # instead of falling back to English.
           localization_branch_name: l10n_crowdin
           create_pull_request: true
           pull_request_title: 'chore(i18n): new Crowdin translations'
