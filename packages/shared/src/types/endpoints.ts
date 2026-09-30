@@ -35,6 +35,7 @@ export interface UpdateAccountBody extends NullableBodyPayload, EntityLogoPayloa
   accountCategory?: AccountModel['accountCategory'];
   name?: AccountModel['name'];
   currentBalance?: AccountModel['currentBalance'];
+  initialBalance?: AccountModel['initialBalance'];
   creditLimit?: AccountModel['creditLimit'];
   status?: ACCOUNT_STATUSES;
   excludeFromStats?: boolean;
