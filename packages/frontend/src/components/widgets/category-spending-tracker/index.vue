@@ -43,14 +43,9 @@ const selectedCategoryIds = computed<string[]>(() => {
   return Array.isArray(ids) ? (ids as string[]) : [];
 });
 
-const MAX_SLOTS_LARGE = 16;
-const MAX_SLOTS_SMALL = 7;
+const MAX_CATEGORIES = 30;
 
-const maxSlots = computed(() => {
-  const config = widgetConfigRef?.value;
-  if (!config) return MAX_SLOTS_SMALL;
-  return (config.rowSpan ?? 1) >= 2 ? MAX_SLOTS_LARGE : MAX_SLOTS_SMALL;
-});
+const visibleSlots = computed(() => ((widgetConfigRef?.value?.rowSpan ?? 1) >= 2 ? 16 : 7));
 
 const { includePlanned } = useIncludePlannedConfig();
 
@@ -101,7 +96,13 @@ watch(categoryRows, (rows) => {
   draggableRows.value = draggableRows.value.filter((r) => newIds.has(r.id));
 });
 
-const ghostSlotCount = computed(() => Math.max(0, maxSlots.value - categoryRows.value.length));
+const canAddCategory = computed(() => categoryRows.value.length < MAX_CATEGORIES);
+// Past the visible slots a trailing "Add" row keeps adding discoverable; an exactly full widget stays clean.
+const ghostSlotCount = computed(() => {
+  const count = categoryRows.value.length;
+  if (count < visibleSlots.value) return visibleSlots.value - count;
+  return count > visibleSlots.value && canAddCategory.value ? 1 : 0;
+});
 const isInitialLoading = computed(() => isFetching.value && !hasData.value && selectedCategoryIds.value.length > 0);
 
 const pickerOpen = ref(false);
@@ -229,7 +230,7 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
 </script>
 
 <template>
-  <WidgetWrapper :is-fetching="isFetching" data-testid="widget-category-spending-tracker">
+  <WidgetWrapper class="max-md:max-h-96" :is-fetching="isFetching" data-testid="widget-category-spending-tracker">
     <template #title>{{ t('dashboard.widgets.categoryTracker.title') }}</template>
     <template #action>
       <button
@@ -259,6 +260,15 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
           </Button>
         </PopoverTrigger>
         <PopoverContent class="w-60 p-1" align="end">
+          <button
+            v-if="canAddCategory"
+            data-testid="cst-settings-add-category"
+            class="hover:bg-muted/50 flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm"
+            @click="openPickerForAdd"
+          >
+            <PlusIcon class="size-3.5" />
+            {{ t('dashboard.widgets.categoryTracker.addCategory') }}
+          </button>
           <IncludePlannedMenuItem test-id-prefix="cst" />
         </PopoverContent>
       </Popover>
@@ -266,7 +276,7 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
 
     <template v-if="isInitialLoading">
       <div class="-mx-2 flex flex-col gap-2">
-        <div v-for="n in maxSlots" :key="n" class="flex h-9 items-center gap-2 rounded-md px-3">
+        <div v-for="n in visibleSlots" :key="n" class="flex h-9 items-center gap-2 rounded-md px-3">
           <div class="bg-muted size-5 animate-pulse rounded-full" />
           <div class="bg-muted h-4 flex-1 animate-pulse rounded" :style="{ maxWidth: `${40 + ((n * 4) % 10)}%` }" />
           <div class="bg-muted ml-auto h-4 w-14 animate-pulse rounded" />
