@@ -588,6 +588,7 @@
     "unsupportedFileType": "Unsupported file type. Upload a JPEG, PNG, WebP or PDF invoice.",
     "notAnInvoice": "This document does not look like an invoice or a receipt.",
     "incompleteInvoice": "Could not read a vendor, total amount and date from this invoice.",
+    "pdfWithoutText": "Custom AI connections can't receive PDF files directly, and this one couldn't be opened to convert it (for example, it's password-protected). Convert it to an image (PNG or JPEG), such as a screenshot of the invoice, and upload that instead.",
     "noFileUploaded": "No file was uploaded."
   }
 }
