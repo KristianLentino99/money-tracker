@@ -29,7 +29,7 @@ import { accountHasPlannedRows } from '@services/transactions/planned-matching';
 import { subDays } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 
-import { SyncStatus, setAccountSyncStatus } from '../sync/sync-status-tracker';
+import { SyncStatus, setAccountSyncStatus, setAccountsSyncStatus } from '../sync/sync-status-tracker';
 import { clampSyncStartToLink } from '../utils/clamp-sync-start-to-link';
 import { encryptCredentials } from '../utils/credential-encryption';
 import { linkAndEmitSyncedTransactions } from '../utils/link-and-emit-synced-transactions';
@@ -366,9 +366,8 @@ export class SimplefinProvider extends BaseBankDataProvider {
     });
     if (accounts.length === 0) return;
 
-    await Promise.all(
-      accounts.map((account) => setAccountSyncStatus({ accountId: account.id, status: SyncStatus.SYNCING, userId })),
-    );
+    const accountIds = accounts.map((account) => account.id);
+    await setAccountsSyncStatus({ accountIds, status: SyncStatus.SYNCING, userId });
 
     const { accessUrl } = await this.getValidatedCredentials(connectionId);
     const apiClient = new SimplefinApiClient(accessUrl);
@@ -399,11 +398,7 @@ export class SimplefinProvider extends BaseBankDataProvider {
       // Fetch-level failure (auth/rate-limit/outage): no account got data, so
       // fail them all with the same message and rethrow for the caller's logger.
       const message = error instanceof Error ? error.message : 'Unknown error';
-      await Promise.all(
-        accounts.map((account) =>
-          setAccountSyncStatus({ accountId: account.id, status: SyncStatus.FAILED, error: message, userId }),
-        ),
-      );
+      await setAccountsSyncStatus({ accountIds, status: SyncStatus.FAILED, error: message, userId });
       throw error;
     }
 
