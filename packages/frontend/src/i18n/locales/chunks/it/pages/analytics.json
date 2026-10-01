@@ -13,7 +13,8 @@
       "collapse": "Comprimi",
       "sections": {
         "investments": "Investimenti"
-      }
+      },
+      "fire": "FIRE"
     },
     "cashFlow": {
       "income": "Entrate",
@@ -45,6 +46,36 @@
         "thisYear": "Quest'anno",
         "previousYear": "Anno precedente",
         "allTime": "Sempre"
+      },
+      "subtitle": "Income against expenses over time, and where the money went.",
+      "composition": {
+        "detail": "Detail",
+        "levelsSummary": "Sources L{sources} · Expenses L{expenses}",
+        "levelsHint": "Category nesting level per side: higher levels break flows into subcategories.",
+        "sources": "Sources",
+        "level": "Level {level}",
+        "topN": "Top {count}",
+        "totalIncome": "Total income",
+        "incomePlusDeficit": "Income + deficit",
+        "savings": "Savings",
+        "deficit": "Deficit",
+        "other": "Other",
+        "noData": "No transactions in this period",
+        "noDataHint": "Pick another period or click a bar in the chart above",
+        "loadError": "Failed to load composition",
+        "amount": "Amount",
+        "shareOfIncome": "Share of income",
+        "shareOfExpenses": "Share of expenses",
+        "saved": "Saved",
+        "pctOfIncome": "{pct} of income",
+        "pctSavingsRate": "{pct} savings rate",
+        "keptAsCash": "Kept as cash",
+        "shareOfSavings": "Share of savings",
+        "deficitOverspend": "Expenses exceeded income by {amount}. The gap was covered from existing account balances.",
+        "deficitInvested": "Portfolio contributions ({invested}) exceeded this period's net savings ({saved}). The difference came from existing account balances.",
+        "deficitBoth": "Expenses exceeded income by {overspend}, and {invested} was still moved into portfolios. Both were covered from existing account balances.",
+        "andMore": "+{count} more",
+        "settings": "Chart settings"
       }
     },
     "trends": {
@@ -78,7 +109,23 @@
       "vsPreviousPeriod": "rispetto al periodo precedente",
       "loadError": "Impossibile caricare i dati",
       "noData": "Nessun dato disponibile",
-      "noDataHint": "Nessuna transazione registrata per questo periodo"
+      "noDataHint": "Nessuna transazione registrata per questo periodo",
+      "subtitle": "Compare spending, income and savings with the previous period.",
+      "filters": {
+        "button": "Filters",
+        "title": "Filters",
+        "categories": "Categorie",
+        "include": "Include",
+        "exclude": "Exclude",
+        "accounts": "Conti",
+        "payees": "Beneficiari",
+        "tags": "Etichette",
+        "reset": "Reset"
+      },
+      "legend": {
+        "hide": "Hide from chart",
+        "show": "Show in chart"
+      }
     },
     "investmentCalculator": {
       "initialBalance": "Saldo iniziale",
@@ -108,7 +155,16 @@
       "configure": "Configura",
       "hideInputs": "Nascondi",
       "portfolioReturnOption": "{name} (il tuo ~{rate}%/anno)",
-      "portfolioNoHistoryOption": "{name} — cronologia insufficiente"
+      "portfolioNoHistoryOption": "{name} — cronologia insufficiente",
+      "subtitle": "Project how your portfolio could grow with regular contributions.",
+      "presetReturnOption": "{label} (~{rate}%/yr)",
+      "rangeMin": "Min",
+      "rangeMax": "Max",
+      "indicators": {
+        "worldStock": "Total World Stock",
+        "usTreasury": "US Treasury Bonds",
+        "corporateBonds": "Corporate Bonds"
+      }
     },
     "portfolioFilter": {
       "all": "Tutti i portafogli",
@@ -116,6 +172,204 @@
       "selectedMany": "{n} portafogli",
       "searchPlaceholder": "Cerca portafogli",
       "noResults": "Nessun portafoglio corrisponde alla ricerca"
+    },
+    "controls": {
+      "options": "Options"
+    },
+    "fire": {
+      "subtitle": "Quando i tuoi risparmi potrebbero coprire le tue spese per sempre",
+      "planLink": "Pianifica il tuo FIRE",
+      "addToDashboard": "Aggiungi alla dashboard",
+      "addedToDashboard": "Progressi FIRE aggiunti alla dashboard",
+      "addToDashboardFailed": "Impossibile aggiungere il widget. Riprova.",
+      "saveFailed": "Impossibile salvare le ipotesi FIRE. Riprova per mantenere le modifiche.",
+      "loading": "Caricamento del piano FIRE",
+      "loadFailed": "Impossibile caricare i dati del piano FIRE.",
+      "adjustAssumptions": "Modifica le ipotesi",
+      "disclaimer": "Le proiezioni usano le medie storiche dei mercati e le tue spese recenti. Sono stime, non consigli finanziari. I rendimenti possono variare.",
+      "callouts": {
+        "contributionClamped": "Negli ultimi 12 mesi hai speso più di quanto hai guadagnato, quindi la proiezione non prevede nuovi risparmi.",
+        "enterContribution": "Inserisci un contributo",
+        "returnBelowInflation": "Il rendimento ipotizzato non supera l'inflazione ({real} reale), quindi il saldo diminuisce in termini di potere d'acquisto.",
+        "portfolioShortHistory": "Il rendimento del portafoglio si basa su soli {years} anni. Una storia breve o limitata a mercati in crescita raramente si ripete. Valuta uno scenario di mercato predefinito.",
+        "portfolioUnavailable": "Il portafoglio usato da questo piano non esiste più o ha una storia troppo breve. Il rendimento ora usa le azioni globali.",
+        "customMissing": "Inserisci un rendimento personalizzato. Fino ad allora, il piano usa le azioni globali.",
+        "historyDegraded": "Alcune posizioni sono valutate al costo d'acquisto oppure manca un tasso di cambio. Il saldo potrebbe essere sottostimato fino alla sincronizzazione dei prezzi.",
+        "hide": "Nascondi avviso",
+        "hideTitle": "Nascondere questo avviso?",
+        "hideDescription": "Ricomparirà la prossima volta che aprirai il pianificatore.",
+        "dontShowAgain": "Non mostrare più",
+        "hideConfirm": "Nascondi"
+      },
+      "assumptions": {
+        "title": "Ipotesi",
+        "spendingLabel": "Spesa annua dopo il pensionamento",
+        "spendingPlaceholder": "es. 40000",
+        "requiredBadge": "Obbligatorio",
+        "autoSpendingHint": "Media dell'ultimo {n} mese completo × 12, solo per i tuoi conti, esclusi trasferimenti e categorie di risparmio. Mese tipico: {typical}. Include rate di prestiti e mutui. | Media degli ultimi {n} mesi completi × 12, solo per i tuoi conti, esclusi trasferimenti e categorie di risparmio. Mese tipico: {typical}. Include rate di prestiti e mutui.",
+        "backToAuto": "Torna al calcolo automatico ({amount})",
+        "excludedLabel": "Non conteggiato come spesa",
+        "excludedPlaceholder": "Escludi categorie",
+        "savingsNote": "Anche le categorie di risparmio sono escluse. {link}",
+        "savingsNoteLink": "Modifica",
+        "contributionLabel": "Contributo mensile",
+        "contributionPlaceholder": "es. 1500",
+        "autoContributionHint": "Flusso netto medio nello stesso {n} mese. I versamenti diretti in un portafoglio non rientrano nei flussi di cassa: aggiungili qui. I dividendi versati su un conto bancario vengono conteggiati due volte, come entrata e rendimento. | Flusso netto medio negli stessi {n} mesi. I versamenti diretti in un portafoglio non rientrano nei flussi di cassa: aggiungili qui. I dividendi versati su un conto bancario vengono conteggiati due volte, come entrata e rendimento.",
+        "savingsRate": "Risparmi il {pct} del tuo reddito",
+        "countsTitle": "Cosa contribuisce al FIRE",
+        "countsCash": "Contanti e conti bancari",
+        "countsPortfolios": "Portafogli di investimento",
+        "countsVentures": "Investimenti",
+        "countsVehicles": "Veicoli",
+        "countsLoans": "Prestiti & Finanziamenti",
+        "countsHint": "Contanti e portafogli sono sempre inclusi. Le rate dei prestiti sono già conteggiate come spese, quindi i prestiti sono esclusi per impostazione predefinita.",
+        "archivedNote": "{count} conto archiviato escluso dalle statistiche contiene ancora {amount}. {link} | {count} conti archiviati esclusi dalle statistiche contengono ancora {amount}. {link}",
+        "archivedNoteLink": "Revisiona",
+        "presetLabel": "{label} · ≈{real} reale ({nominal} nominale, {inflation} inflazione USA)",
+        "inflationLabel": "Inflazione",
+        "inflationBuiltIn": "{pct}% · inclusa in questo scenario",
+        "inflationBuiltInHint": "Gli scenari predefiniti usano rendimenti nominali USA e globali, quindi includono l'inflazione USA. Abbinarli all'inflazione locale darebbe risultati fuorvianti. Scegli un rendimento personalizzato o il tuo portafoglio per impostare l'inflazione.",
+        "withdrawalLabel": "Tasso di prelievo",
+        "withdrawalCustom": "Personalizzato",
+        "withdrawalPlaceholder": "es. 3,8",
+        "withdrawalHint": "La quota dei risparmi che prelevi ogni anno. Un tasso più alto riduce il capitale FIRE necessario, ma aumenta il rischio di esaurirlo. La regola del 4% deriva da dati USA su pensionamenti di 30 anni.",
+        "more": "Altro",
+        "moreSummary": "Lean {lean}× · Fat {fat}× · coast a {age} anni",
+        "leanLabel": "Moltiplicatore Lean FIRE",
+        "leanPlaceholder": "es. 0,7",
+        "fatLabel": "Moltiplicatore Fat FIRE",
+        "fatPlaceholder": "es. 1,5",
+        "baristaLabel": "Reddito mensile da lavoro part-time",
+        "baristaPlaceholder": "es. 1000",
+        "birthYearLabel": "Anno di nascita",
+        "birthYearPlaceholder": "es. 1990",
+        "coastAgeLabel": "Età obiettivo Coast FIRE",
+        "coastAgePlaceholder": "es. 65"
+      },
+      "auto": "Automatico",
+      "perYear": "{amount}/anno",
+      "perMonth": "{amount}/mese",
+      "notWithinHorizon": "oltre 50 anni",
+      "hero": {
+        "timeTo": "Tempo per {type}",
+        "unitYears": "{n} anni | {n} anno | {n} anni",
+        "unitMonths": "{n} mesi | {n} mese | {n} mesi",
+        "atAge": "a {age} anni",
+        "alwaysCounted": "Sempre incluso",
+        "range": "Da {earliest} a {latest} con rendimenti superiori o inferiori di 2 punti",
+        "rangeOpen": "Da {earliest} a dopo il {year} con rendimenti superiori o inferiori di 2 punti",
+        "basedOn": {
+          "spending": "Spese: {amount}",
+          "saving": "Risparmio: {amount}",
+          "counting": "Inclusi: {buckets}"
+        },
+        "reached": {
+          "eyebrowFor": "{type} raggiunto",
+          "title": "Hai raggiunto l'indipendenza finanziaria",
+          "supports": "Il tuo capitale copre {amount}/mese",
+          "pctOfSpending": "{pct}% delle tue spese · con prelievo del {rate}%",
+          "yearsCovered": "Coperto meno di un anno di spese | Coperto 1 anno di spese | Coperti {n} anni di spese",
+          "drawdown": "Stai prelevando circa {amount}/mese.",
+          "noNewSavings": "Le proiezioni non prevedono nuovi risparmi."
+        },
+        "unreachable": {
+          "title": "Non raggiungibile con il risparmio attuale",
+          "noSavingsTitle": "Nessun nuovo risparmio.",
+          "noSavingsClamped": "Negli ultimi 12 mesi hai speso più di quanto hai guadagnato, quindi il contributo è impostato a 0.",
+          "noSavings": "Il contributo mensile è pari o inferiore a 0.",
+          "enterContribution": "Inserisci un contributo",
+          "lowReturnTitle": "Il rendimento non supera l'inflazione.",
+          "lowReturn": "Il saldo diminuisce in termini di potere d'acquisto.",
+          "tooSlow": "A questo ritmo servono più di 50 anni.",
+          "whatItTakes": "Cosa servirebbe",
+          "whatItTakesDetail": "per raggiungere {target} in {duration} con il rendimento attuale."
+        }
+      },
+      "progress": {
+        "progressTo": "Progressi verso {type}",
+        "amountOfTarget": "{balance} su {target}",
+        "next": "Prossimo: {goal} · {date}",
+        "nextGoal": "{goal} in {duration}",
+        "nextUnreachable": "Prossimo: {goal} · non raggiungibile con questi valori",
+        "targetReached": "Obiettivo FIRE raggiunto",
+        "supportsToday": "Copre {amount}/mese oggi",
+        "negativeNetWorth": "Il patrimonio netto è negativo. I contributi prima colmano il disavanzo, poi iniziano a crescere."
+      },
+      "chips": {
+        "lean": {
+          "name": "Lean FIRE",
+          "description": "{pct}% delle tue spese"
+        },
+        "regular": {
+          "name": "FIRE standard",
+          "description": "stile di vita attuale"
+        },
+        "fat": {
+          "name": "Fat FIRE",
+          "description": "{pct}% delle tue spese"
+        },
+        "barista": {
+          "name": "Barista FIRE",
+          "description": "il reddito part-time copre una parte",
+          "withIncome": "con {amount}/mese da lavoro part-time"
+        },
+        "coast": {
+          "name": "Coast FIRE",
+          "description": "necessario oggi per ritirarti a {age} anni",
+          "needsBirthYear": "serve il tuo anno di nascita",
+          "pastAge": "hai superato l'età coast di {age} anni",
+          "notMeaningful": "la sola crescita non basta con un rendimento reale pari o inferiore a 0%"
+        },
+        "others": "Altri",
+        "nextGoal": "{name} · prossimo",
+        "eta": "tra {duration}",
+        "growthOnly": "solo crescita",
+        "reached": "Raggiunto",
+        "reachedCoast": "Raggiunto · ora risparmiare è facoltativo",
+        "reachedBaristaCovers": "Il reddito part-time copre le tue spese",
+        "actions": {
+          "enterSpending": "inserisci prima le spese",
+          "changeCoastAge": "Modifica l'età coast",
+          "changeReturn": "Modifica il rendimento",
+          "addPartTimeIncome": "Aggiungi reddito part-time",
+          "addBirthYear": "Aggiungi anno di nascita"
+        }
+      },
+      "chart": {
+        "ariaLabel": "Andamento del patrimonio netto e proiezione verso il capitale FIRE necessario",
+        "actual": "Effettivo",
+        "projected": "Previsto",
+        "range": "Rendimento ±2 punti",
+        "today": "Oggi",
+        "typeTarget": "{type} · {amount}",
+        "typeLabel": "{type} · {date}"
+      },
+      "milestones": {
+        "reached": "Raggiunto",
+        "reachedOn": "Raggiunto il {date}",
+        "eta": "tra {duration} · {date}"
+      },
+      "empty": {
+        "noData": {
+          "title": "Pianifica il percorso verso l'indipendenza finanziaria",
+          "description": "Questa pagina usa i tuoi conti e le tue transazioni. Non ci sono ancora dati, quindi inizia dalle spese annue. Quando aggiungi dei conti, il piano usa i dati reali."
+        },
+        "shortHistory": {
+          "title": "Ancora nessun mese completo di transazioni | Solo 1 mese completo di transazioni | Solo {n} mesi completi di transazioni",
+          "description": "Non è ancora possibile calcolare le spese. Il calcolo diventa automatico dopo 3 mesi completi. Fino ad allora, inseriscile manualmente."
+        },
+        "noSpending": {
+          "title": "Nessuna spesa registrata",
+          "description": "Nei mesi recenti non risultano spese utilizzabili. Inserisci le spese annue per visualizzare il piano."
+        },
+        "enterSpending": "Inserisci le spese",
+        "addAccount": "Aggiungi un conto"
+      },
+      "trial": {
+        "daysLeft": "Prova del pianificatore FIRE · resta {n} giorno | Prova del pianificatore FIRE · restano {n} giorni",
+        "ended": "La prova di 14 giorni del pianificatore FIRE è terminata. Passa a Plus per continuare a pianificare il tuo percorso FIRE.",
+        "startFailed": "Impossibile avviare la prova del pianificatore FIRE. Ricarica la pagina per riprovare."
+      }
     }
   },
   "pivotReport": {
@@ -155,7 +409,10 @@
       "allCategories": "Tutte",
       "accounts": "Conti",
       "reset": "Reimposta",
-      "resetTooltip": "Ripristina i valori predefiniti"
+      "resetTooltip": "Ripristina i valori predefiniti",
+      "button": "Filters",
+      "categories": "Categorie",
+      "payees": "Beneficiari"
     },
     "periods": {
       "last6Months": "Ultimi 6 mesi",

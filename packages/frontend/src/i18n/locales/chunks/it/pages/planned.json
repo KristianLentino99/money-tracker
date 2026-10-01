@@ -349,7 +349,15 @@
           "notesEmpty": "Nessuna",
           "tagsMore": "+altri {count}"
         }
+      },
+      "markPaid": {
+        "overpayTitle": "Il pagamento supera il saldo",
+        "overpayDescription": "Questo pagamento supera il saldo residuo di {amount}. Segnarlo comunque come pagato?",
+        "overpayConfirmButton": "Segna comunque come pagato"
       }
+    },
+    "budgets": {
+      "backToList": "Back to Budgets"
     }
   }
 }

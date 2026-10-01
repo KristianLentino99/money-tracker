@@ -134,7 +134,8 @@
           "title": "Modifica transazione in contanti",
           "description": "Cambia come questa transazione viene trattata nei report.",
           "save": "Salva modifiche"
-        }
+        },
+        "noCashBadge": "No cash impact"
       },
       "buysSells": {
         "emptyState": "Nessuna transazione di acquisto/vendita",
@@ -187,7 +188,8 @@
       "tryAgainLater": "Riprova più tardi",
       "emptyDescription": "Aggiungi la tua prima transazione per iniziare a monitorare i tuoi investimenti",
       "addFirstHolding": "Aggiungi prima posizione",
-      "importTransactions": "Oppure importa da un file"
+      "importTransactions": "Oppure importa da un file",
+      "stalePrice": "Last available price. Market value and gains may be outdated."
     },
     "transactionsList": {
       "title": "Transazioni",

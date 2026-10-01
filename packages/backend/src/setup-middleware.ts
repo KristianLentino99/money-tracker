@@ -15,6 +15,11 @@ export function setupMiddleware(app: Express) {
   // Drop the default `X-Powered-By: Express` info-disclosure header.
   app.disable('x-powered-by');
 
+  // `req.ip` keys the per-IP rate limits. Behind nginx or Traefik the socket peer is the proxy, so
+  // Express has to read X-Forwarded-For. Trusting private ranges only means the first public
+  // address from the right wins, which a client cannot forge.
+  app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+
   app.use(requestIdMiddleware);
 
   // Opt-in (PERF_DEBUG=true): tag responses with per-request query count + timing.
@@ -112,7 +117,7 @@ export function setupMiddleware(app: Express) {
   // Paths that need raw body preserved (for signature verification)
   // Note: These paths should include the full path WITH API_PREFIX because
   // this middleware runs before route mounting, so req.path contains full path
-  const rawBodyPaths = [`${API_PREFIX}/webhooks/github`];
+  const rawBodyPaths = [`${API_PREFIX}/webhooks/github`, `${API_PREFIX}/webhooks/billing`];
 
   // Binary uploads: the body is a file, not JSON, and the route mounts its own
   // `express.raw` parser. Running the JSON parser here first would buffer a
@@ -184,6 +189,7 @@ export function setupMiddleware(app: Express) {
     // Use req.originalUrl to ensure we match the full path regardless of mounting
     if (rawBodyPaths.some((p) => req.originalUrl.startsWith(p))) {
       return express.json({
+        limit: '1mb',
         verify: (rawReq, _res, buf) => {
           (rawReq as Request & { rawBody?: Buffer }).rawBody = buf;
         },

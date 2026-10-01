@@ -13,11 +13,11 @@
   >
     <!-- Selection checkbox -->
     <label v-if="showCheckbox" class="-my-1 -ml-2 flex items-center justify-center self-stretch px-3" @click.stop>
-      <Checkbox v-if="isSelectable" v-model="checkedModel" />
+      <Checkbox v-if="isSelectable" v-model="checkedModel" :aria-label="$t('common.transactions.record.selectRow')" />
       <ResponsiveTooltip
         v-else-if="unselectableReason"
         :delay-duration="100"
-        :content="$t(`transactions.bulkEdit.unselectableReasons.${unselectableReason}`)"
+        :content="$t(`common.transactions.record.unselectableReasons.${unselectableReason}`)"
         content-class-name="max-w-56"
       >
         <InfoIcon class="text-muted-foreground size-3.5 cursor-help" />
@@ -120,12 +120,13 @@
             <span class="text-sm tracking-wider whitespace-nowrap">
               {{ category ? category.name : t('common.ui.other') }}
             </span>
-            <PlannedIndicator :transaction="transaction" />
+            <PlannedIndicator v-if="!(hidePlannedMarker && transaction.isForecastOnly)" :transaction="transaction" />
             <SplitIndicator :transaction="transaction" />
             <RefundIndicator :transaction="transaction" />
-            <TagsIndicator :transaction="transaction" />
+            <TagsIndicator :tags="transaction.tags ?? []" :variant="tagsVariant" />
+            <AttachmentIndicator :transaction="transaction" />
             <ResponsiveTooltip
-              v-if="externalLinkHref"
+              v-if="externalLinkHref && !compact"
               :content="$t('common.transactions.record.externalLinkTooltip')"
               content-class-name="max-w-56"
               :delay-duration="100"
@@ -142,7 +143,7 @@
               </a>
             </ResponsiveTooltip>
             <ResponsiveTooltip
-              v-if="locationMapUrl"
+              v-if="locationMapUrl && !compact"
               :content="$t('common.transactions.record.locationTooltip')"
               content-class-name="max-w-56"
               :delay-duration="100"
@@ -235,9 +236,10 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import PlannedIndicator from './indicators/planned-indicator.vue';
+import AttachmentIndicator from './indicators/attachment-indicator.vue';
 import RefundIndicator from './indicators/refund-indicator.vue';
 import SplitIndicator from './indicators/split-indicator.vue';
-import TagsIndicator from './indicators/tags-indicator.vue';
+import TagsIndicator, { type TagsIndicatorVariant } from '@/components/common/tags-indicator.vue';
 
 const { t } = useI18n();
 
@@ -253,6 +255,9 @@ const props = withDefaults(
     index?: number;
     /** Single-line row: the note renders inline, amount and date share one line. */
     compact?: boolean;
+    /** Set where planned rows already sit under their own collapsible header. */
+    hidePlannedMarker?: boolean;
+    tagsVariant?: TagsIndicatorVariant;
   }>(),
   {
     asButton: true,

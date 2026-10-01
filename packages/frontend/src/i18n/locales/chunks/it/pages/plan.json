@@ -27,7 +27,114 @@
       "targetSaved": "Obiettivo salvato",
       "targetSaveFailed": "Non è stato possibile salvare l'obiettivo.",
       "targetDeleted": "Obiettivo eliminato",
-      "targetDeleteFailed": "Non è stato possibile eliminare l'obiettivo."
+      "targetDeleteFailed": "Non è stato possibile eliminare l'obiettivo.",
+      "moved": "Denaro spostato",
+      "autoAssigned": "Piano aggiornato",
+      "undone": "Allocazione annullata",
+      "categoryAdded": "Categoria aggiunta al Piano",
+      "categoryAddFailed": "La categoria è stata creata, ma non è stato possibile aggiungerla al Piano.",
+      "categoryUpdated": "Categoria aggiornata",
+      "deleted": "Piano eliminato",
+      "deleteFailed": "Impossibile eliminare il Piano."
+    },
+    "header": {
+      "subtitle": "Assegna un compito a ogni euro prima che il mese entri nel vivo."
+    },
+    "error": {
+      "title": "Impossibile caricare il Piano",
+      "description": "Al momento non è possibile caricare il Piano. Riprova."
+    },
+    "empty": {
+      "title": "Nessun Piano",
+      "description": "Crea un Piano per decidere dove destinare il denaro prima di spenderlo."
+    },
+    "actions": {
+      "create": "Crea Piano",
+      "template": "Usa modello iniziale",
+      "newCategory": "Nuova categoria",
+      "toggleCategory": "Attiva o disattiva categoria",
+      "previousPeriod": "Periodo precedente",
+      "nextPeriod": "Periodo successivo",
+      "delete": "Elimina Piano",
+      "autoAssign": "Assegna automaticamente",
+      "moveMoney": "Sposta denaro",
+      "undo": "Annulla"
+    },
+    "readyToAssign": {
+      "label": "Da assegnare",
+      "positive": "Disponibile da assegnare",
+      "zero": "Interamente assegnato",
+      "negative": "Assegnazione eccessiva",
+      "overAssigned": "Assegnati {amount} in eccesso"
+    },
+    "columns": {
+      "category": "Categoria",
+      "assigned": "Assegnato",
+      "activity": "Movimenti",
+      "available": "Disponibile"
+    },
+    "status": {
+      "funded": "Finanziata",
+      "underfunded": "Fondi insufficienti",
+      "overspent": "Spesa eccessiva"
+    },
+    "assignment": {
+      "ariaLabel": "Importo assegnato a {category}",
+      "placeholder": "Inserisci importo"
+    },
+    "filters": {
+      "label": "Filtra categorie",
+      "searchLabel": "Cerca categorie",
+      "searchPlaceholder": "Cerca categorie…",
+      "all": "Tutte",
+      "attention": "Richiedono attenzione",
+      "funded": "Finanziate",
+      "unassigned": "Senza assegnazione",
+      "activity": "Con movimenti",
+      "clear": "Cancella",
+      "noResults": "Nessuna categoria corrispondente",
+      "noResultsDescription": "Prova un'altra ricerca o rimuovi i filtri."
+    },
+    "categoryInspector": {
+      "description": "Controlla questa categoria e apporta modifiche senza uscire dal Piano.",
+      "noStatus": "Ancora nessun movimento",
+      "upcoming": "Impegno in scadenza",
+      "edit": "Modifica categoria",
+      "addSubcategory": "Aggiungi sottocategoria",
+      "hint": "Fai clic sulla riga di una categoria per tenere i dettagli a portata di mano mentre gestisci il mese."
+    },
+    "delete": {
+      "title": "Eliminare questo Piano?",
+      "description": "Questa operazione elimina definitivamente {name}, le sue assegnazioni e la cronologia delle allocazioni. L'operazione è irreversibile.",
+      "defaultDescription": "Il Piano predefinito non può essere eliminato. Imposta prima un altro Piano come predefinito.",
+      "confirm": "Elimina Piano"
+    },
+    "move": {
+      "title": "Sposta denaro",
+      "description": "Sposta il denaro disponibile da una categoria a un'altra.",
+      "source": "Da",
+      "sourcePlaceholder": "Seleziona la categoria di origine",
+      "destination": "A",
+      "destinationPlaceholder": "Seleziona la categoria di destinazione",
+      "amount": "Importo",
+      "amountPlaceholder": "Inserisci un importo"
+    },
+    "autoAssign": {
+      "title": "Assegna automaticamente",
+      "description": "Visualizza un'anteprima delle assegnazioni basate sul periodo precedente prima di applicarle.",
+      "remaining": "Da assegnare dopo le modifiche: {amount}",
+      "noChanges": "Nessuna modifica da applicare.",
+      "confirm": "Applica modifiche"
+    },
+    "create": {
+      "title": "Crea un Piano",
+      "description": "Assegna un nome al Piano. Potrai aggiungere categorie e conti dopo averlo creato.",
+      "freshStartDescription": "Le transazioni precedenti alla creazione del Piano non saranno incluse nei movimenti o nel riporto.",
+      "includeHistoricalLabel": "Includi transazioni passate",
+      "includeHistoricalDescription": "Includi nei movimenti e nel riporto le transazioni precedenti alla creazione del Piano. L'importo da assegnare potrebbe diventare negativo se le spese passate non avevano fondi assegnati.",
+      "nameLabel": "Nome del Piano",
+      "namePlaceholder": "es. Piano mensile",
+      "currency": "Questo Piano usa la tua valuta di base: {currency}"
     }
   }
 }

@@ -38,6 +38,9 @@
       "plannedFilter": {
         "label": "Planned"
       },
+      "attachments": {
+        "label": "Attachments"
+      },
       "filterOperation": {
         "all": "All",
         "exclude": "Exclude",
@@ -116,9 +119,11 @@
       "tagModeAdd": "Add to existing tags",
       "tagModeReplace": "Replace all tags",
       "tagModeRemove": "Remove these tags",
-      "unselectableReasons": {
-        "split": "Can't be selected: split transactions don't support bulk editing. Edit it individually instead.",
-        "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
+      "totals": {
+        "income": "Income",
+        "expense": "Expense",
+        "net": "Net",
+        "transfers": "Transfers"
       }
     },
     "bulkLinkSubscription": {
@@ -182,6 +187,10 @@
       "expiredTooltip": "Expected {days} days ago, no matching bank transaction",
       "mergedTooltip": "Confirmed from planned entry on {date}"
     },
+    "pending": {
+      "label": "Pending",
+      "tooltip": "The bank hasn't booked this transaction yet. It doesn't affect the account balance."
+    },
     "table": {
       "columns": {
         "date": "Date",
@@ -199,14 +208,19 @@
         "split": "Split"
       },
       "outOfWallet": "Out of wallet",
-      "hint": "Click a row to view details. Select rows to bulk edit.",
+      "hint": "Click a cell to edit it, or ↗ to open the full transaction. Select rows to bulk edit.",
+      "plannedRows": "{count} planned transactions",
       "emptyTitle": "No transactions match these filters",
       "emptyDescription": "Try adjusting or resetting the filters.",
       "columnConfig": {
         "title": "Table settings",
         "columns": "Columns",
         "visibleCount": "{count} visible",
-        "resetDefaults": "Reset to defaults"
+        "resetDefaults": "Reset to defaults",
+        "alwaysShowLockedCells": {
+          "label": "Always show locked cells",
+          "description": "Shade cells you can't edit here on every row, not only on hover."
+        }
       },
       "categorizationSourceValues": {
         "manual": "Manual",
@@ -233,6 +247,16 @@
       "confirmDescription": "This action cannot be undone. Transfers will have both sides removed.",
       "successMessage": "{count} transactions deleted",
       "unexpectedError": "Failed to delete transactions. Please try again."
+    },
+    "inlineEdit": {
+      "saveFailed": "Couldn't save {field}. Try again.",
+      "bankTitle": "Set by your bank",
+      "bankDescription": "Date, account and amount sync from your bank connection. Everything else on this transaction is yours to change.",
+      "managedTitle": "Managed elsewhere",
+      "managedDescription": "This transaction belongs to a portfolio, investment, vehicle or loan. Change it from its own page so balances stay correct.",
+      "gotIt": "Got it",
+      "openDetails": "Open details",
+      "tooManyTags": "Up to {max} tags per transaction"
     }
   },
   "records": {

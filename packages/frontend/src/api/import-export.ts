@@ -3,17 +3,20 @@ import type {
   AiMapImportCategoriesResponse,
   ColumnMappingConfig,
   CsvImportProgress,
-  DeleteImportBatchResponse,
+  DeleteImportBatchResult,
   DetectDuplicatesRequest,
   DetectDuplicatesResponse,
   ExecuteImportRequest,
   ExecuteImportResponse,
   ExtractUniqueValuesResponse,
+  ImportBatchDeleteActiveStatus,
   ImportBatchesHistoryResponse,
   StatementCostEstimate,
   StatementCostEstimateFailure,
-  StatementExtractRequest,
+  StatementExecuteImportQueuedResponse,
   StatementExtractionResult,
+  StatementExtractRequest,
+  StatementImportProgress,
 } from '@bt/shared/types';
 
 interface ParseCsvRequest {
@@ -82,8 +85,16 @@ export const deleteImportBatch = async ({
 }: {
   batchId: string;
   deleteLinkedTransfers?: boolean;
-}): Promise<DeleteImportBatchResponse> => {
+}): Promise<DeleteImportBatchResult> => {
   return api.delete(`/import/batch/${batchId}`, { data: { deleteLinkedTransfers } });
+};
+
+/**
+ * User-scoped status of the background batch delete (no job id). Polled to drive
+ * the blocking overlay. Never 404s — returns `idle` when nothing runs.
+ */
+export const getActiveImportBatchDeleteStatus = async (): Promise<ImportBatchDeleteActiveStatus> => {
+  return api.get('/import/batch-delete/status');
 };
 
 // Statement Parser API (supports PDF, CSV, TXT)
@@ -136,21 +147,12 @@ interface StatementExecuteImportRequest {
   skipIndices: number[];
 }
 
-export interface StatementExecuteImportResponse {
-  summary: {
-    imported: number;
-    skipped: number;
-    errors: Array<{
-      transactionIndex: number;
-      error: string;
-    }>;
-  };
-  newTransactionIds: string[];
-  batchId: string;
-}
-
 export const executeStatementImport = async (
   payload: StatementExecuteImportRequest,
-): Promise<StatementExecuteImportResponse> => {
+): Promise<StatementExecuteImportQueuedResponse> => {
   return api.post('/import/text-source/execute', payload);
+};
+
+export const getStatementImportStatus = async ({ jobId }: { jobId: string }): Promise<StatementImportProgress> => {
+  return api.get(`/import/text-source/execute/status/${jobId}`);
 };

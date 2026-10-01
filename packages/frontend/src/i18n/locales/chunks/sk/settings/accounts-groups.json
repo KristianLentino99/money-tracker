@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "accountGroups": {
+      "page": {
+        "title": "Skupiny účtov",
+        "description": "Usporiadajte účty do skupín. Bankové pripojenia si svoje skupiny vytvárajú a spravujú automaticky.",
+        "addButton": "Pridať skupinu"
+      },
+      "empty": {
+        "title": "Zatiaľ žiadne skupiny účtov",
+        "description": "Zoskupte účty podľa banky, meny alebo účelu a udržte si prehľadný zoznam účtov."
+      },
+      "loadError": {
+        "title": "Vaše skupiny sa nepodarilo načítať",
+        "description": "Pri načítavaní vašich skupín účtov sa niečo pokazilo. Skontrolujte pripojenie a skúste to znova.",
+        "retry": "Skúsiť znova"
+      },
+      "row": {
+        "bankBadge": "Vytvorené bankovým pripojením",
+        "bankBadgeShort": "Pripojenie",
+        "bankBadgeTooltip": "Táto skupina vznikla pri pripojení banky, no nepredstavuje samotné pripojenie — môžete ju voľne premenovať, presúvať z nej účty alebo ju zmazať. Účty zostanú synchronizované bez ohľadu na to.",
+        "accountsCount": "{count} účet | {count} účtov",
+        "noAccounts": "Žiadne účty",
+        "accountsElsewhere": "{count} synchronizovaný účet v iných skupinách | {count} synchronizovaných účtov v iných skupinách",
+        "inParent": "v {name}",
+        "manageConnection": "Spravovať pripojenie"
+      },
+      "update": {
+        "label": "Názov skupiny",
+        "placeholder": "Zadajte názov skupiny",
+        "saveButton": "Uložiť",
+        "emptyNameError": "Názov skupiny nemôže byť prázdny"
+      },
+      "accounts": {
+        "heading": "Účty v tejto skupine",
+        "empty": "Zatiaľ žiadne účty v tejto skupine. Účty do skupiny pridáte na stránke účtu.",
+        "emptyBankLinked": "Účty tohto pripojenia sú usporiadané v iných skupinách — ich presunutie neovplyvní synchronizáciu.",
+        "unlinkTooltip": "Odstrániť zo skupiny",
+        "removeConfirmTitle": "Odstrániť „{name}“ z tejto skupiny?",
+        "removeConfirmDescription": "Účet sa nezmaže — len opustí túto skupinu.",
+        "removeConfirmAction": "Odstrániť"
+      },
+      "delete": {
+        "button": "Zmazať skupinu",
+        "confirmTitle": "Zmazať „{name}“?",
+        "accountsKept": "Účty zostanú zachované — len prestanú byť v skupine.",
+        "syncContinues": "Banková synchronizácia pokračuje — pripojenie je nezávislé od tejto skupiny.",
+        "ungroupedHeading": "Ostávajú bez skupiny"
+      }
+    }
+  }
+}

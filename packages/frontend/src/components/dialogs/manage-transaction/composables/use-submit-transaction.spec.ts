@@ -1,9 +1,16 @@
+import { uploadTransactionAttachment } from '@/api/attachments';
 import type { CurrencyModel } from '@bt/shared/types';
 import { ASSET_CLASS, SECURITY_PROVIDER } from '@bt/shared/types/investments';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { UI_FORM_STRUCT } from '../types';
-import { buildInvestmentContributionPayload, isInvestmentContributionFormValid } from './use-submit-transaction';
+import {
+  buildInvestmentContributionPayload,
+  isInvestmentContributionFormValid,
+  uploadPendingTransactionAttachments,
+} from './use-submit-transaction';
+
+vi.mock('@/api/attachments', () => ({ uploadTransactionAttachment: vi.fn() }));
 
 const searchResult = {
   symbol: 'AAA',
@@ -94,5 +101,40 @@ describe('investment contribution submission helpers', () => {
     });
 
     expect(isInvestmentContributionFormValid({ form })).toBe(false);
+  });
+});
+
+describe('pending creation attachment uploads', () => {
+  beforeEach(() => vi.mocked(uploadTransactionAttachment).mockReset());
+
+  it('uploads to the contribution transaction returned by creation', async () => {
+    const file = { name: 'receipt.pdf' } as File;
+    vi.mocked(uploadTransactionAttachment).mockResolvedValue({} as never);
+    const onError = vi.fn();
+
+    expect(
+      await uploadPendingTransactionAttachments({ transactionIds: ['contribution-tx'], files: [file], onError }),
+    ).toBe(false);
+    expect(uploadTransactionAttachment).toHaveBeenCalledWith({ transactionId: 'contribution-tx', file });
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('continues uploading the other transfer leg after a failure and reports partial failure', async () => {
+    const file = { name: 'receipt.pdf' } as File;
+    const error = new Error('upload failed');
+    vi.mocked(uploadTransactionAttachment)
+      .mockRejectedValueOnce(error)
+      .mockResolvedValueOnce({} as never);
+    const onError = vi.fn();
+
+    expect(
+      await uploadPendingTransactionAttachments({
+        transactionIds: ['source-tx', 'destination-tx'],
+        files: [file],
+        onError,
+      }),
+    ).toBe(true);
+    expect(uploadTransactionAttachment).toHaveBeenCalledTimes(2);
+    expect(onError).toHaveBeenCalledWith(error);
   });
 });

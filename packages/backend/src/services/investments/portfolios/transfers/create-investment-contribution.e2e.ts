@@ -22,16 +22,25 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
         payload: helpers.buildAccountPayload({ name: 'Main Account' }),
         raw: true,
       }),
-      helpers.addCustomCategory({ name: 'Investments', raw: true }),
+      helpers.makeRequest<{ id: RecordId }>({
+        method: 'post',
+        url: '/categories',
+        payload: { name: 'Investments', color: '#123456' },
+      }),
       helpers.seedSecurities([
-        { symbol: 'AAA', name: 'Alpha ETF' },
-        { symbol: 'BBB', name: 'Beta ETF' },
+        { symbol: 'AAA', name: 'Alpha ETF', currencyCode: global.BASE_CURRENCY.code },
+        { symbol: 'BBB', name: 'Beta ETF', currencyCode: global.BASE_CURRENCY.code },
       ]),
     ]);
 
+    expect(category.body.response).toHaveProperty('id');
+    expect(category.statusCode).toBe(200);
+    expect(portfolio).toHaveProperty('id');
+    expect(account).toHaveProperty('id');
+    expect(securities).toHaveLength(2);
     portfolioId = portfolio.id;
     accountId = account.id;
-    categoryId = category.id;
+    categoryId = helpers.extractResponse(category).id;
     securityIds = securities.map((security) => security.id);
 
     await Promise.all(
@@ -97,7 +106,7 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
 
     const [balance] = await helpers.getPortfolioBalance({
       portfolioId,
-      currencyCode: 'USD',
+      currencyCode: global.BASE_CURRENCY.code,
       raw: true,
     });
     expect(balance!.availableCash).toBeNumericEqual('499');
@@ -105,10 +114,15 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
   });
 
   it('resolves and creates a holding for a newly searched security', async () => {
+    const usdAccount = await helpers.createAccount({
+      payload: helpers.buildAccountPayload({ name: 'USD brokerage funding', currencyCode: 'USD' }),
+      raw: true,
+    });
+    expect(usdAccount).toHaveProperty('id');
     const contribution = await helpers.createInvestmentContribution({
       portfolioId,
       payload: {
-        accountId,
+        accountId: usdAccount.id,
         amount: '1000',
         date: CONTRIBUTION_DATE,
         categoryId,
@@ -137,9 +151,14 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
 
     const searchedSecurityId = contribution.investmentTransactions![0]!.securityId;
     expect(searchedSecurityId).not.toBe(securityIds[0]);
-    expect((await helpers.getAllSecurities({ raw: true })).some((security) => security.id === searchedSecurityId)).toBe(
-      true,
+    const searchedSecurity = (await helpers.getAllSecurities({ raw: true })).find(
+      (security) => security.id === searchedSecurityId,
     );
+    expect(searchedSecurity).toMatchObject({ symbol: 'CCC', providerName: SECURITY_PROVIDER.fmp, currencyCode: 'USD' });
+    expect(contribution.investmentTransactions![0]).toMatchObject({
+      currencyCode: 'USD',
+      settlementCurrencyCode: 'USD',
+    });
   });
 
   it('replaces grouped purchases while preserving the parent transfer', async () => {

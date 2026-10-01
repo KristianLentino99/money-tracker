@@ -7,7 +7,6 @@
       "accountsGroups": "Accounts groups",
       "importData": "Import/Export",
       "ai": "AI",
-      "aiIntegrations": "AI Integrations",
       "security": "Security",
       "admin": "Admin",
       "sharedWithMe": "Shared with me",
@@ -18,7 +17,9 @@
       "language": "Language",
       "general": "General",
       "payees": "Payees",
-      "subscriptions": "Scheduled payments"
+      "subscriptions": "Scheduled payments",
+      "planBilling": "Plan & billing",
+      "collapse": "Collapse"
     },
     "backToSettings": "Back to Settings"
   }

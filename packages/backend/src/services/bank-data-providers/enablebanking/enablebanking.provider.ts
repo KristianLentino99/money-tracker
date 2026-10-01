@@ -17,7 +17,12 @@ import { logger } from '@js/utils';
 import Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
-import { countTransactions, findOneTransaction, findTransactions } from '@models/transactions-query';
+import {
+  countTransactions,
+  findOneTransaction,
+  findTransactions,
+  updateTransactions,
+} from '@models/transactions-query';
 import Transactions from '@models/transactions.model';
 import { getUserDefaultCategory } from '@models/users.model';
 import {
@@ -31,6 +36,7 @@ import {
 import { createTransaction } from '@services/transactions';
 import { accountHasPlannedRows } from '@services/transactions/planned-matching';
 import { getExchangeRate } from '@services/user-exchange-rate/get-exchange-rate.service';
+import { getUserSettings } from '@services/user-settings/get-user-settings';
 import { addDays, subDays } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 
@@ -50,8 +56,8 @@ import {
   StartAuthorizationResponse,
   TransactionStatus,
 } from './types';
-import { balancesForLog } from './utils/balances';
-import { filterIbanCompatible, pickNearestByDate } from './utils/candidate-selection';
+import { balancesForLog, pickAccountBalance } from './utils/balances';
+import { filterIbanCompatible, haveSameParties, pickNearestByDate } from './utils/candidate-selection';
 import { calculateConsentValidUntil } from './utils/consent';
 import {
   FINGERPRINT_WINDOW_DAYS,
@@ -75,7 +81,7 @@ import {
   hasSettledStatus,
   isBookedCanonical,
   isNonLedgerStatus,
-  isPendingOrphan,
+  isPreBookingRow,
   isPreBookingStatus,
   isRevokedStatus,
   parseBookingDay,
@@ -564,13 +570,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
             apiClient.getAccountBalances(accountId),
           ]);
 
-          // Get primary balance (prefer ITAV = Interim Available, then ITBD = Interim Booked)
-          const primaryBalance =
-            balances.find((b) => b.balance_type === 'ITAV') || // Interim Available
-            balances.find((b) => b.balance_type === 'ITBD') || // Interim Booked
-            balances.find((b) => b.balance_type === 'CLAV') || // Closing Available
-            balances.find((b) => b.balance_type === 'OPAV') || // Opening Available
-            balances[0];
+          const primaryBalance = pickAccountBalance({ balances });
 
           logger.info('[balance-diag] Enable Banking fetchAccounts balances', {
             connectionId,
@@ -805,16 +805,45 @@ export class EnableBankingProvider extends BaseBankDataProvider {
 
           const to = new Date();
 
-          // Incremental: `from` anchored to last tx – bank lookback can't be exceeded.
+          // Incremental: `from` anchored to last tx, pulled back to the oldest payment the
+          // previous sync saw pending. That payment books under its original date, so a
+          // newer stored row must not push it out of range.
           // Initial: no anchor, must negotiate window with bank.
           // Anchor capped at `to`: it is a MAX over every row on the account, so one
           // future-dated entry – a value_date past today – would ask for a date_from
           // the bank rejects on every sync.
-          const providerTransactions = latestTransaction
+          const storedOldestPendingDate = account.externalData?.oldestPendingDate;
+          // A bank may stop listing a payment as pending before it lists the booked copy,
+          // so the stored pending row keeps the range open too. Older rows are skipped:
+          // their booked copy could no longer upgrade them.
+          const oldestStoredPendingRow = latestTransaction
+            ? await findOneTransaction({
+                planned: 'exclude',
+                access: 'unscoped-internal',
+                balanceAdjustments: 'include',
+                where: {
+                  accountId: account.id,
+                  time: { [Op.gte]: new Date(to.getTime() - PENDING_UPGRADE_WINDOW_DAYS * MS_PER_DAY) },
+                  [Op.and]: [wherePreBookingStatus()],
+                },
+                order: [['time', 'ASC']],
+              })
+            : null;
+          const fetchedTransactions = latestTransaction
             ? await this.fetchTransactions(
                 connectionId,
                 apiUid,
-                { from: new Date(Math.min(latestTransaction.time.getTime(), to.getTime())), to },
+                {
+                  from: new Date(
+                    Math.min(
+                      latestTransaction.time.getTime(),
+                      to.getTime(),
+                      (typeof storedOldestPendingDate === 'string' && Date.parse(storedOldestPendingDate)) || Infinity,
+                      oldestStoredPendingRow?.time.getTime() ?? Infinity,
+                    ),
+                  ),
+                  to,
+                },
                 account.externalId,
               )
             : await this.fetchInitialTransactionsWithShrinkingWindow({
@@ -825,6 +854,20 @@ export class EnableBankingProvider extends BaseBankDataProvider {
                 to,
               });
 
+          // oxlint-disable-next-line unicorn/consistent-function-scoping
+          const isPendingPayload = (tx: ProviderTransaction) =>
+            isPreBookingStatus({ status: getRawTransactionStatus({ externalData: tx.metadata }) });
+          const pendingTimes = fetchedTransactions.filter(isPendingPayload).map((tx) => tx.date.getTime());
+          const oldestPendingDate =
+            pendingTimes.length > 0 ? new Date(Math.min(...pendingTimes)).toISOString() : undefined;
+
+          // A skipped pending payload returns as BOOK on a later sync. Rows stored while
+          // the setting was on still get booked or revoked through the matcher below.
+          const { importPendingBankTransactions } = await getUserSettings({ userId: connection.userId });
+          const providerTransactions = importPendingBankTransactions
+            ? fetchedTransactions
+            : fetchedTransactions.filter((tx) => !isPendingPayload(tx));
+
           // Sort transactions by date (ascending) so the last transaction for each day
           // will have the correct end-of-day balance in balance_after_transaction.
           // This is important for Balances.handleTransactionChange() which uses the
@@ -833,8 +876,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           // copies of the same purchase, the pending row must already exist for the
           // booked copy to upgrade it, otherwise both land as separate rows. It also
           // puts a cancellation after the payload that stored the row it removes.
-          const pendingFirstRank = (tx: ProviderTransaction) =>
-            isPreBookingStatus({ status: getRawTransactionStatus({ externalData: tx.metadata }) }) ? 0 : 1;
+          const pendingFirstRank = (tx: ProviderTransaction) => (isPendingPayload(tx) ? 0 : 1);
           providerTransactions.sort(
             (a, b) => a.date.getTime() - b.date.getTime() || pendingFirstRank(a) - pendingFirstRank(b),
           );
@@ -852,18 +894,25 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           // sync every row is unmatched. Flips to true as soon as this run stores a
           // pending row so a same-batch booked copy can still upgrade it.
           let accountHasPendingRows = await this.accountHasPendingRows({ accountId: account.id });
+          const ownAccountIds = [
+            metadata?.iban,
+            rawAccountData?.account_id?.iban,
+            rawAccountData?.account_id?.other?.identification,
+          ].filter((id): id is string => typeof id === 'string' && id !== '');
           let stalePendingIgnoredCount = 0;
           let revokedRemovedCount = 0;
           let revokedKeptCount = 0;
+          let softDeletedSkippedCount = 0;
           const checkpoint = this.createBaseCurrencyLockCheckpoint({ userId });
 
           for (const tx of providerTransactions) {
             await checkpoint();
 
-            const existingTx = await this.findExistingTransactionForSync({
+            let existingTx = await this.findExistingTransactionForSync({
               accountId: account.id,
               tx,
               accountHasPendingRows,
+              ownAccountIds,
             });
 
             const incomingStatus = getRawTransactionStatus({ externalData: tx.metadata });
@@ -872,9 +921,10 @@ export class EnableBankingProvider extends BaseBankDataProvider {
             // while it was still pending has to go, and nothing about the payload may
             // be written back. A row the user made load-bearing is kept instead —
             // losing their splits, tags or transfer is worse than an extra row.
+            // A soft-deleted row stays too: hard-deleting it would drop it from reconciliation history.
             if (isRevokedStatus({ status: incomingStatus })) {
               const storedStatus = getRawTransactionStatus({ externalData: existingTx?.externalData });
-              if (existingTx && isPreBookingStatus({ status: storedStatus })) {
+              if (existingTx && !existingTx.deletedAt && isPreBookingStatus({ status: storedStatus })) {
                 if (await this.hasDependentRows({ tx: existingTx })) {
                   revokedKeptCount++;
                   logger.info(
@@ -885,11 +935,45 @@ export class EnableBankingProvider extends BaseBankDataProvider {
                   if (createdIndex !== -1) createdTransactionIds.splice(createdIndex, 1);
                   const mergedIndex = mergedPlannedIds.indexOf(existingTx.id);
                   if (mergedIndex !== -1) mergedPlannedIds.splice(mergedIndex, 1);
-                  await existingTx.destroy();
+                  await existingTx.destroy({ force: true });
                   revokedRemovedCount++;
                 }
               }
               continue;
+            }
+
+            // A removed pending row the bank now books is a real charge: it comes back and is upgraded below.
+            if (
+              existingTx?.deletedAt &&
+              !existingTx.mergedIntoId &&
+              incomingStatus === TransactionStatus.BOOK &&
+              isPreBookingRow({ tx: existingTx })
+            ) {
+              await existingTx.restore();
+            }
+
+            // Soft-deleted: the user removed it via reconciliation, so the bank copy must not come back.
+            // Only a booking is handed to a still-pending merge survivor: any other payload would
+            // re-anchor the survivor onto the removed row's identity and break its own matching.
+            if (existingTx?.deletedAt) {
+              // A survivor can itself be merged away later, so follow the chain to the live row.
+              let survivor: Transactions | null = null;
+              let nextId = incomingStatus === TransactionStatus.BOOK ? existingTx.mergedIntoId : null;
+              while (nextId) {
+                survivor = await findOneTransaction({
+                  planned: 'exclude',
+                  access: 'unscoped-internal',
+                  balanceAdjustments: 'include',
+                  paranoid: false,
+                  where: { id: nextId, accountId: account.id },
+                });
+                nextId = survivor?.deletedAt ? survivor.mergedIntoId : null;
+              }
+              if (!survivor || survivor.deletedAt || !isPreBookingRow({ tx: survivor })) {
+                softDeletedSkippedCount++;
+                continue;
+              }
+              existingTx = survivor;
             }
 
             if (existingTx) {
@@ -920,6 +1004,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
                 note: string;
                 externalReference: string;
                 externalData: typeof tx.metadata;
+                transactionType: TRANSACTION_TYPES;
               }> = {};
               if (existingTx.originalId !== tx.externalId) {
                 updates.originalId = tx.externalId;
@@ -937,6 +1022,13 @@ export class EnableBankingProvider extends BaseBankDataProvider {
               // same-amount purchase into it.
               const pendingBecameBooked =
                 incomingStatus === TransactionStatus.BOOK && isPreBookingStatus({ status: storedStatus });
+              if (pendingBecameBooked) {
+                // Some ASPSPs flag a pending payment with the wrong direction;
+                // the booked copy is authoritative.
+                const incomingType =
+                  tx.metadata?.isExpense === true ? TRANSACTION_TYPES.expense : TRANSACTION_TYPES.income;
+                if (incomingType !== existingTx.transactionType) updates.transactionType = incomingType;
+              }
               // Read before the merge below overwrites the stored payload.
               const storedSyncNote = syncGeneratedNote({ tx: existingTx });
               if ((bookingDateAppeared || pendingBecameBooked) && existingTx.time.getTime() !== tx.date.getTime()) {
@@ -1042,11 +1134,16 @@ export class EnableBankingProvider extends BaseBankDataProvider {
             mergedPlannedIds.length > 0 ||
             stalePendingIgnoredCount > 0 ||
             revokedRemovedCount > 0 ||
-            revokedKeptCount > 0
+            revokedKeptCount > 0 ||
+            softDeletedSkippedCount > 0
           ) {
             logger.info(
-              `Enable Banking sync: ${createdTransactionIds.length} created, ${updatedCount} updated, ${mergedPlannedIds.length} planned confirmed, ${stalePendingIgnoredCount} stale pending ignored, ${revokedRemovedCount} revoked removed, ${revokedKeptCount} revoked kept for account ${account.id}`,
+              `Enable Banking sync: ${createdTransactionIds.length} created, ${updatedCount} updated, ${mergedPlannedIds.length} planned confirmed, ${stalePendingIgnoredCount} stale pending ignored, ${revokedRemovedCount} revoked removed, ${revokedKeptCount} revoked kept, ${softDeletedSkippedCount} soft-deleted skipped for account ${account.id}`,
             );
+          }
+
+          if (oldestPendingDate !== storedOldestPendingDate) {
+            await account.update({ externalData: { ...account.externalData, oldestPendingDate } });
           }
 
           await notifyPlannedConfirmations({
@@ -1274,12 +1371,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
     const apiClient = new EnableBankingApiClient(credentials);
     const balances = await apiClient.getAccountBalances(accountExternalId);
 
-    // Prefer ITAV (Interim Available), then ITBD (Interim Booked)
-    const balance =
-      balances.find((b) => b.balance_type === 'ITAV') ||
-      balances.find((b) => b.balance_type === 'ITBD') ||
-      balances.find((b) => b.balance_type === 'CLAV') ||
-      balances[0];
+    const balance = pickAccountBalance({ balances });
 
     logger.info('[balance-diag] Enable Banking fetchBalance balances', {
       connectionId,
@@ -1548,6 +1640,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
       balanceAdjustments: 'include',
       completeness: 'all',
       where: { accountId: account.id },
+      paranoid: false,
     });
 
     let migratedCount = 0;
@@ -1602,10 +1695,12 @@ export class EnableBankingProvider extends BaseBankDataProvider {
     accountId,
     tx,
     accountHasPendingRows,
+    ownAccountIds,
   }: {
     accountId: string;
     tx: ProviderTransaction;
     accountHasPendingRows: boolean;
+    ownAccountIds: string[];
   }): Promise<Transactions | null> {
     const entryReference = tx.metadata?.entryReference as string | undefined;
 
@@ -1620,6 +1715,8 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           accountId,
           [Op.and]: [Sequelize.where(Sequelize.literal(`"externalData"->>'entryReference'`), entryReference)],
         },
+        paranoid: false,
+        order: [['deletedAt', 'ASC NULLS FIRST']],
       });
       if (byEntryRef) return byEntryRef;
     }
@@ -1643,6 +1740,8 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           Sequelize.where(Sequelize.literal(`"externalData"#>>'{originalSource,originalId}'`), tx.externalId),
         ],
       },
+      paranoid: false,
+      order: [['deletedAt', 'ASC NULLS FIRST']],
     });
     if (byOriginalId) return byOriginalId;
 
@@ -1684,15 +1783,18 @@ export class EnableBankingProvider extends BaseBankDataProvider {
             whereNoEntryReference(),
           ],
         },
+        paranoid: false,
+        order: [['deletedAt', 'ASC NULLS FIRST']],
       });
       if (byFingerprint) return byFingerprint;
     }
 
-    // (4) Pending upgrade. A card purchase first arrives as PDNG or HOLD and is
-    // re-issued as BOOK with different remittance text and, on some ASPSPs, a
-    // different entry_reference, so no earlier tier sees it. Safety comes from
-    // the pre-booking-only candidate pool, exact amount/currency/type equality, the
-    // conditional IBAN gate below, and the caller flipping the matched row to BOOK.
+    // (4) Pending upgrade. A card purchase or transfer first arrives as PDNG or
+    // HOLD and is re-issued as BOOK with different remittance text and, on some
+    // ASPSPs, a different entry_reference, so no earlier tier sees it. Safety comes
+    // from the pre-booking-only candidate pool, exact amount/currency/type equality,
+    // the IBAN gate below (a different counterparty IBAN never matches), and the
+    // caller flipping the matched row to BOOK.
     // A stored entryReference is only tolerated when the incoming payload carries
     // one too: then tier 1 has already ruled out an equal-reference row, so the
     // mismatch is the fresh-reference re-issue. A reference-less payload never
@@ -1700,43 +1802,80 @@ export class EnableBankingProvider extends BaseBankDataProvider {
     if (!accountHasPendingRows) return null;
     if (getRawTransactionStatus({ externalData: tx.metadata }) !== TransactionStatus.BOOK) return null;
 
+    const pendingPoolWhere = {
+      ...fingerprintBase,
+      // A row the user made load-bearing must not have its time and identity
+      // re-stamped by a heuristic; the booked copy lands as its own row instead.
+      transferId: { [Op.is]: null },
+      refundLinked: false,
+      // A pending copy can trail its booking by a day or two of date drift, never
+      // by weeks, so the forward side stays narrow.
+      time: {
+        [Op.between]: [subDays(tx.date, PENDING_UPGRADE_WINDOW_DAYS), addDays(tx.date, FINGERPRINT_WINDOW_DAYS)],
+      },
+      [Op.and]: entryReference ? [wherePreBookingStatus()] : [wherePreBookingStatus(), whereNoEntryReference()],
+    };
     const pendingCandidates = await findTransactions({
       planned: 'exclude',
       access: 'unscoped-internal',
       balanceAdjustments: 'include',
       completeness: 'all',
-      where: {
-        ...fingerprintBase,
-        // A row the user made load-bearing must not have its time and identity
-        // re-stamped by a heuristic; the booked copy lands as its own row instead.
-        transferId: { [Op.is]: null },
-        refundLinked: false,
-        time: {
-          [Op.between]: [subDays(tx.date, PENDING_UPGRADE_WINDOW_DAYS), addDays(tx.date, PENDING_UPGRADE_WINDOW_DAYS)],
-        },
-        [Op.and]: entryReference ? [wherePreBookingStatus()] : [wherePreBookingStatus(), whereNoEntryReference()],
-      },
+      where: pendingPoolWhere,
     });
 
     const ibanCompatible = filterIbanCompatible({
       candidates: pendingCandidates,
       counterpartyIban: counterpartyIban ?? null,
+      date: tx.date,
     });
     if (pendingCandidates.length > 0 && ibanCompatible.length === 0) {
       logger.info(
-        `Enable Banking pending upgrade: account ${accountId} dropped ${pendingCandidates.length} candidate(s) – iban_mismatch`,
+        `Enable Banking pending upgrade: account ${accountId} dropped ${pendingCandidates.length} candidate(s) – iban_mismatch_or_fallback_window`,
       );
-      return null;
     }
 
     const pendingMatch = pickNearestByDate({ candidates: ibanCompatible, date: tx.date });
-    if (!pendingMatch) return null;
+    if (pendingMatch) {
+      const dayDistance = Math.abs(pendingMatch.time.getTime() - tx.date.getTime()) / MS_PER_DAY;
+      logger.info(
+        `Enable Banking pending upgrade: account ${accountId} matched tx ${pendingMatch.id} at ${dayDistance.toFixed(1)}d, IBAN gate ${counterpartyIban ? 'enforced' : 'not applicable'}`,
+      );
+      return pendingMatch;
+    }
 
-    const dayDistance = Math.abs(pendingMatch.time.getTime() - tx.date.getTime()) / MS_PER_DAY;
+    // Some ASPSPs flag a pending payment with the opposite direction of its booked
+    // copy. Only a pending row naming the same parties on the same sides qualifies.
+    const incomingRaw = getRawTransaction({ externalData: tx.metadata });
+    if (!incomingRaw) return null;
+
+    const mirroredCandidates = await findTransactions({
+      planned: 'exclude',
+      access: 'unscoped-internal',
+      balanceAdjustments: 'include',
+      completeness: 'all',
+      where: {
+        ...pendingPoolWhere,
+        transactionType: isExpense ? TRANSACTION_TYPES.income : TRANSACTION_TYPES.expense,
+        // Narrower than the same-direction pool: an opposite payment to the same
+        // account within two weeks is plausible, within two days much less so.
+        time: {
+          [Op.between]: [subDays(tx.date, FINGERPRINT_WINDOW_DAYS), addDays(tx.date, FINGERPRINT_WINDOW_DAYS)],
+        },
+      },
+    });
+    const sameParties = mirroredCandidates.filter((candidate) => {
+      const storedRaw = getRawTransaction({ externalData: candidate.externalData });
+      return storedRaw !== null && haveSameParties({ incoming: incomingRaw, stored: storedRaw, ownAccountIds });
+    });
+
+    const mirroredMatch = pickNearestByDate({ candidates: sameParties, date: tx.date });
+    if (!mirroredMatch) return null;
+
+    const mirroredDayDistance = Math.abs(mirroredMatch.time.getTime() - tx.date.getTime()) / MS_PER_DAY;
     logger.info(
-      `Enable Banking pending upgrade: account ${accountId} matched tx ${pendingMatch.id} at ${dayDistance.toFixed(1)}d, IBAN gate ${counterpartyIban ? 'enforced' : 'not applicable'}`,
+      `Enable Banking pending upgrade: account ${accountId} matched tx ${mirroredMatch.id} at ${mirroredDayDistance.toFixed(1)}d, mirrored direction, same parties`,
     );
-    return pendingMatch;
+    return mirroredMatch;
   }
 
   /** Whether tier 4 has anything to look at. Cheap enough to run once per sync. */
@@ -1757,10 +1896,14 @@ export class EnableBankingProvider extends BaseBankDataProvider {
    * One-time reconciliation of duplicate pairs that predate the live-sync
    * matcher. Two passes per (amount, currency, type) bucket:
    *
-   *   a) booked row + leftover pre-booking row within ±5 days, booked at or after
-   *      pending. When the booked row has a counterparty IBAN the pending row
-   *      must carry the same one; when it has none (card purchases) no IBAN
-   *      filtering happens. User edits on the pending copy move to the survivor.
+   *   a) booked row + leftover pre-booking row, booked at or after pending and
+   *      within PENDING_UPGRADE_WINDOW_DAYS. When the booked row has a
+   *      counterparty IBAN, a pending row carrying the same one wins, an
+   *      IBAN-less one within IBAN_LESS_FALLBACK_WINDOW_DAYS is the fallback, and
+   *      a different IBAN never pairs; when it has none (card purchases) no IBAN
+   *      filtering happens. A pending row with an entryReference only pairs with
+   *      a booked row that has one too. User edits on the pending copy move to
+   *      the survivor.
    *   b) row with entryReference + row without, within ±2 days and sharing a
    *      counterparty IBAN.
    *
@@ -1815,6 +1958,16 @@ export class EnableBankingProvider extends BaseBankDataProvider {
     const logSkip = ({ orphanId, reason }: { orphanId: RecordId; reason: ReconcileSkipReason }) => {
       logger.info(`Reconcile: skipping orphan tx ${orphanId} (account ${account.id}) – ${reason}`);
     };
+    // The FK's ON DELETE SET NULL would otherwise turn a reconciliation merge into the deleted row into a "remove".
+    const repointMergedRows = ({ fromId, toId }: { fromId: RecordId; toId: RecordId }) =>
+      updateTransactions({
+        values: { mergedIntoId: toId },
+        where: { accountId: account.id, mergedIntoId: fromId },
+        paranoid: false,
+        planned: 'include',
+        access: 'unscoped-internal',
+        balanceAdjustments: 'include',
+      });
     // Each check is seven COUNT queries and the same pending row is offered to every
     // booked row in its bucket; nothing inside this run can change the answer.
     const dependentRowsByTxId = new Map<RecordId, boolean>();
@@ -1829,7 +1982,7 @@ export class EnableBankingProvider extends BaseBankDataProvider {
     for (const candidates of buckets.values()) {
       if (candidates.length < 2) continue;
 
-      const pendingRows = candidates.filter((c) => isPendingOrphan({ tx: c }));
+      const pendingRows = candidates.filter((c) => isPreBookingRow({ tx: c }));
       const bookedRows = candidates.filter((c) => isBookedCanonical({ tx: c }));
 
       // Nearest-first over every plausible pair, so the closest booked/pending
@@ -1839,18 +1992,24 @@ export class EnableBankingProvider extends BaseBankDataProvider {
       // value_date estimate postdated the booking, which is the cheaper mistake.
       const pairs: { booked: Transactions; pending: Transactions; distance: number }[] = [];
       for (const booked of bookedRows) {
+        const bookedHasEntryReference = getEntryReference({ tx: booked }) !== null;
+        // Window first: the IBAN gate's IBAN-less fallback depends on which
+        // candidates are in play, so an out-of-window match must not suppress it.
+        const eligible = pendingRows.filter((pending) => {
+          const distance = booked.time.getTime() - pending.time.getTime();
+          if (distance < 0 || distance > PENDING_UPGRADE_WINDOW_DAYS * MS_PER_DAY) return false;
+          // A referenced pending row can only be re-issued under a fresh
+          // reference, so a reference-less booked row is not its copy.
+          return bookedHasEntryReference || getEntryReference({ tx: pending }) === null;
+        });
         const ibanCompatible = filterIbanCompatible({
-          candidates: pendingRows,
+          candidates: eligible,
           counterpartyIban: getCounterpartyIban({ tx: booked }),
+          date: booked.time,
         });
         unresolvedCount += pendingRows.length - ibanCompatible.length;
         for (const pending of ibanCompatible) {
-          const distance = booked.time.getTime() - pending.time.getTime();
-          if (distance < 0 || distance > PENDING_UPGRADE_WINDOW_DAYS * MS_PER_DAY) {
-            unresolvedCount++;
-            continue;
-          }
-          pairs.push({ booked, pending, distance });
+          pairs.push({ booked, pending, distance: booked.time.getTime() - pending.time.getTime() });
         }
       }
       pairs.sort(
@@ -1902,7 +2061,8 @@ export class EnableBankingProvider extends BaseBankDataProvider {
         if (Object.keys(survivorUpdates).length > 0) {
           await booked.update(survivorUpdates);
         }
-        await pending.destroy();
+        await repointMergedRows({ fromId: pending.id, toId: booked.id });
+        await pending.destroy({ force: true });
         pairedBooked.add(booked.id);
         mergedPending.add(pending.id);
         mergedCount++;
@@ -1956,7 +2116,8 @@ export class EnableBankingProvider extends BaseBankDataProvider {
           continue;
         }
 
-        await orphan.destroy();
+        await repointMergedRows({ fromId: orphan.id, toId: canonical.id });
+        await orphan.destroy({ force: true });
         mergedCount++;
       }
     }

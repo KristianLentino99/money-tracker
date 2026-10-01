@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "currencies": {
+      "page": {
+        "title": "Meny",
+        "description": "Spravujte meny, ktoré sledujete, a výmenné kurzy používané na vašich účtoch."
+      },
+      "addNew": {
+        "loading": "Načítavanie...",
+        "selectCurrency": "Vyberte menu",
+        "addButton": "Pridať",
+        "sectionLabel": "Pridať menu",
+        "successfullyAdded": "Mena pridaná",
+        "errors": {
+          "addFailed": "Neočakávaná chyba. Mena nebola pridaná."
+        }
+      },
+      "howItWorks": {
+        "trigger": "Ako to funguje?",
+        "body": "Základná mena je tá, na ktorú sa prepočítava každý zostatok pre súčty a prehľady. Každá pridaná mena sa automaticky aktualizuje podľa aktuálnych trhových kurzov, alebo môžete nastaviť vlastný kurz, ktorý ich prepíše."
+      },
+      "row": {
+        "baseBadge": "Základná",
+        "custom": "Vlastné",
+        "live": "Živý kurz",
+        "unused": "Nepoužívaná",
+        "accountsCount": "{count} účet | {count} účtov"
+      },
+      "empty": {
+        "title": "Zatiaľ žiadne ďalšie meny",
+        "description": "Vyššie pridajte menu a sledujte jej zostatky a výmenné kurzy popri základnej mene."
+      },
+      "exchangeRate": {
+        "disableLiveUpdate": "Ak chcete nastaviť vlastný výmenný kurz, vypnite živú aktualizáciu.",
+        "liveUpdateInfo": "Keď je zapnutá, vlastný kurz sa ignoruje.",
+        "liveUpdateLabel": "Živá aktualizácia",
+        "ratePlaceholder": "0,00",
+        "saveButton": "Uložiť",
+        "successfullyUpdated": "Úspešne aktualizované.",
+        "balancesNotRefreshed": "Zostatky účtov, ktoré sa zatiaľ nepodarilo obnoviť novým kurzom (počet: {count}), sa automaticky aktualizujú, keď bude kurz dostupný.",
+        "errors": {
+          "unexpectedError": "Neočakávaná chyba",
+          "updateFailed": "Neočakávaná chyba. Mena nebola aktualizovaná."
+        }
+      },
+      "delete": {
+        "confirmTitle": "Vymazať menu?",
+        "description": "Mena sa dá vymazať alebo odpojiť, len ak k nej nie sú priradené žiadne účty ani transakcie.",
+        "button": "Vymazať menu",
+        "buttonShort": "Zmazať",
+        "disabledTooltip": "Túto menu nemožno zmazať, pretože je stále prepojená s jedným alebo viacerými účtami.",
+        "successfullyDeleted": "Úspešne vymazané.",
+        "errors": {
+          "deleteFailed": "Neočakávaná chyba. Menu sa nepodarilo zmazať."
+        }
+      },
+      "setBase": {
+        "button": "Nastaviť ako základnú menu",
+        "buttonShort": "Nastaviť ako základnú",
+        "processing": "Prebieha spracovanie...",
+        "tooltip": "Označiť ako základnú menu. Všetky štatistiky a údaje na nástenke sa budú zobrazovať v tejto mene. Transakcie sa prepočítajú výmenným kurzom platným v deň ich zaznamenania.",
+        "dialog": {
+          "title": "Zmeniť základnú menu?",
+          "warningTitle": "Upozornenie:",
+          "warningText": "Zmena základnej meny by mala byť dôkladne zvážené rozhodnutie. V ideálnom prípade by sa mala vykonať len raz, hoci neexistujú žiadne skutočné obmedzenia.",
+          "descriptionText": "Pri každej zmene základnej meny sa všetky transakcie prepočítajú podľa historických výmenných kurzov. Kvôli aritmetike s pohyblivou desatinnou čiarkou a bežným odchýlkam medzi kurzami základnej a kotovanej meny môžu opakované prepočty postupne spôsobiť drobné rozdiely vo vašich referenčných sumách. Referenčné sumy sa používajú na zobrazenie štatistík a nastavenie limitov rozpočtov.",
+          "roundingTitle": "Ako presne sa počíta zaokrúhľovanie?",
+          "roundingIntro": "Prepočty mien používajú bankové zaokrúhľovanie (štandard IEEE 754), známe aj ako „zaokrúhľovanie polovice na párne“. Tým sa minimalizujú kumulatívne chyby zaokrúhľovania pri veľkom počte výpočtov.",
+          "roundingHow": "Ako to funguje:",
+          "roundingRule1": "Ak je hodnota presne v polovici (napr. 0,5), zaokrúhli sa na najbližšie párne číslo",
+          "roundingRule2": "Príklad: 0,5 → 0, 1,5 → 2, 2,5 → 2, 3,5 → 4",
+          "roundingStandard": "Túto metódu odporúčajú účtovné štandardy IFRS/GAAP a používajú ju významné finančné systémy, aby sa predišlo systematickému skresleniu pri prepočtoch mien.",
+          "untouchedWarning": "Pôvodné sumy transakcií zostanú vždy nedotknuté!",
+          "processingTimeInfo": "Môže to chvíľu trvať, ak ide o menej bežnú menu.",
+          "restrictionWarning": "Kým proces prebieha, nebudete môcť vytvárať nové účty, transakcie ani nič, čo súvisí so „sumami“.",
+          "confirmation": "Naozaj chcete pokračovať?",
+          "changeButton": "Zmeniť základnú menu",
+          "cancelButton": "Zrušiť"
+        },
+        "successMessage": "Základná mena bola úspešne zmenená.",
+        "errors": {
+          "changeFailed": "Neočakávaná chyba. Základnú menu sa nepodarilo zmeniť.",
+          "lockedHousehold": "Máte {count} aktívne členstvo v domácnosti. Najprv ho opustite v Nastavenia → Domácnosť. | Máte {count} aktívnych členstiev v domácnosti. Najprv ich opustite v Nastavenia → Domácnosť.",
+          "lockedShares": "Máte {count} aktívne zdieľanie účtu. Najprv ho odoberte v nastaveniach účtu. | Máte {count} aktívnych zdieľaní účtov. Najprv ich odoberte pri každom účte."
+        }
+      }
+    }
+  }
+}

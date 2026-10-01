@@ -1,0 +1,184 @@
+{
+  "pages": {
+    "statementParser": {
+      "pageTitle": "Analyzátor výpisov",
+      "pageDescription": "Nahrajte bankový výpis (PDF, CSV alebo TXT) a vyťažte transakcie pomocou AI. Ak chcete neobmedzený prístup, pridajte si v nastaveniach vlastný model AI.",
+      "stepper": {
+        "steps": {
+          "upload": "Nahratie",
+          "account": "Účet",
+          "review": "Kontrola",
+          "results": "Import"
+        }
+      },
+      "steps": {
+        "accountTitle": "Vyberte účet",
+        "accountDescription": "Vyberte alebo vytvorte účet pre transakcie"
+      },
+      "selectCurrency": "Vyberte menu",
+      "selectExistingAccount": "Vyberte existujúci účet",
+      "accountNamePlaceholder": "napr. Hlavný bankový účet",
+      "selectAccount": "Vyberte účet",
+      "searchAccounts": "Hľadať účty...",
+      "uploadExtract": {
+        "supportedFormats": "Podporované formáty: PDF, CSV, TXT (max. 10 MB)",
+        "clickOrDragStatements": "Kliknite sem alebo sem presuňte súbory výpisov",
+        "filesLabel": "Súbory",
+        "analyzingFiles": "Analyzovanie súborov...",
+        "totalForFiles": "spolu za {count} súborov",
+        "estimateFailedSome": "Nepodarilo sa analyzovať súborov: {count} z {total}:",
+        "extractionFailedSome": "Nepodarilo sa spracovať súbory: {count} z {total}. Zvyšok je pripravený na import.",
+        "retryFailed": "Skúsiť neúspešné súbory znova",
+        "progressFile": "Spracúvanie {name} ({current} z {total})",
+        "acrossFiles": "naprieč {count} súbormi",
+        "currencyConflict": "Vybrané výpisy uvádzajú rôzne meny ({currencies}). Všetky sa importujú do jedného účtu, v mene tohto účtu.",
+        "unsupportedFileNamed": "{name} nie je súbor PDF, CSV ani TXT",
+        "unreadableFiles": "Nepodarilo sa prečítať: {files}",
+        "fileStatus": {
+          "pending": "Neanalyzované",
+          "estimating": "Analyzovanie...",
+          "estimated": "Pripravené",
+          "estimateFailed": "Nepodarilo sa analyzovať",
+          "extracting": "Spracúvanie...",
+          "extracted": "{count} transakcia | {count} transakcií",
+          "failed": "Zlyhalo"
+        },
+        "analyzeButton": "Analyzovať súbor | Analyzovať súbory ({count})",
+        "tryAgain": "Skúsiť znova",
+        "modelLabel": "Model",
+        "estimatedCostLabel": "Odhadovaná cena",
+        "estimatedTokensLabel": "Odhadovaný počet tokenov",
+        "extractButton": "Vyťažiť transakcie",
+        "progressMessage": "Podľa veľkosti dokumentu to môže trvať 30 až 60 sekúnd",
+        "foundLabel": "Nájdené:",
+        "transactions": "transakcií",
+        "fromLabel": "z",
+        "inLabel": "v",
+        "continueMessage": "Pokračujte výberom účtu pre tieto transakcie.",
+        "continueButton": "Pokračovať na účet",
+        "tokenWarning": {
+          "medium": {
+            "title": "Rozpoznaný veľký súbor",
+            "description": "Spracovanie môže trvať 1 až 2 minúty. Buďte, prosím, trpezliví."
+          },
+          "high": {
+            "title": "Rozpoznaný veľmi veľký súbor",
+            "description": "Vzhľadom na veľkosť súboru môže spracovanie trvať niekoľko minút."
+          },
+          "extreme": {
+            "title": "Mimoriadne veľký súbor",
+            "description": "Spracovanie môže trvať viac než 5 minút. Ak chcete rýchlejšie spracovanie, zvážte rozdelenie súboru na menšie časti."
+          }
+        },
+        "freeApiWarning": "Používate zahrnuté MoneyMatter AI, ktoré má limity používania.",
+        "addApiKeyLink": "Pridať vlastný model AI",
+        "status": {
+          "sendingFile": "Odosielanie súboru do AI...",
+          "readingDocument": "AI číta dokument...",
+          "analyzingStructure": "Analyzovanie štruktúry výpisu...",
+          "extractingData": "Vyťažovanie údajov o transakciách...",
+          "processingTransactions": "Spracúvanie transakcií...",
+          "finalizing": "Dokončovanie vyťažovania...",
+          "almostDone": "Takmer hotovo..."
+        },
+        "tokenFormat": "{inputTokens} tis. vstupných, ~{outputTokens} tis. výstupných",
+        "pdfPasswordLabel": "Heslo k PDF",
+        "pdfPasswordPlaceholder": "Zadajte heslo dokumentu",
+        "pdfPasswordSubmit": "Odomknúť a analyzovať"
+      },
+      "accountSelect": {
+        "newlyCreated": "(novo vytvorený)",
+        "differentCurrency": "Iná mena",
+        "linkedToBanks": "Prepojené s bankami",
+        "linkedToBanksTooltip": "Import výpisov je zatiaľ obmedzený len na systémové účty.",
+        "noAccountsFound": "Nenašli sa žiadne účty",
+        "currencyAccounts": "Účty v mene {currency}"
+      },
+      "accountSelection": {
+        "transactions": "Transakcie:",
+        "files": "Výpisy:",
+        "filesList": "Z: {files}",
+        "currencyConflict": "Výpisy uvádzajú rôzne meny ({currencies}). Vyberte menu, ktorú má účet používať:",
+        "bank": "Banka:",
+        "currency": "Mena:",
+        "currencyNotDetected": "Menu výpisu sa nepodarilo rozpoznať. Vyberte menu ručne, prosím:",
+        "currencyMismatch": "Mena výpisu ({statementCurrency}) sa líši od meny účtu ({accountCurrency}). Transakcie sa importujú v mene účtu.",
+        "yourCurrenciesGroup": "Vaše meny",
+        "allCurrenciesGroup": "Všetky meny",
+        "createNew": "Vytvoriť nový",
+        "back": "Späť",
+        "importTransactions": "Importovať transakcie",
+        "checkForDuplicates": "Skontrolovať duplicity"
+      },
+      "createAccountDialog": {
+        "title": "Vytvoriť účet na import",
+        "description": "Vytvorte nový účet a importujte transakcie z výpisu.",
+        "accountNameLabel": "Názov účtu",
+        "currencyLabel": "Mena",
+        "fromStatement": "(z výpisu)",
+        "currencyLocked": "Mena je uzamknutá tak, aby zodpovedala výpisu ({currency}).",
+        "currencyWillBeAdded": "Poznámka: {currency} sa pridá k vašim menám.",
+        "cancel": "Zrušiť",
+        "creating": "Vytváranie...",
+        "createAccount": "Vytvoriť účet",
+        "validation": {
+          "nameRequired": "Názov účtu je povinný",
+          "currencyRequired": "Vyberte menu, prosím"
+        },
+        "success": "Účet bol úspešne vytvorený",
+        "error": "Účet sa nepodarilo vytvoriť"
+      },
+      "transactionReview": {
+        "checkingDuplicates": "Kontrola duplicít...",
+        "extractedLabel": "Vyťažené:",
+        "fromFiles": "z {count} výpisov",
+        "duplicatesLabel": "Možné duplicity:",
+        "willImportLabel": "Importuje sa:",
+        "alreadyInAccountLabel": "Už v účte:",
+        "timelineTitle": "Časová os transakcií",
+        "legendNew": "Nové",
+        "legendDuplicate": "Duplicita",
+        "legendExisting": "Už v účte",
+        "statusDup": "Duplicita",
+        "statusImport": "Import",
+        "statusExists": "V účte",
+        "duplicateInfoSkipped": "Ako duplicity sa preskočí {count} transakcií.",
+        "duplicateInfoOverridden": "Prepísaných duplicít, ktoré sa importujú: {count}.",
+        "toggleInfo": "Označené riadky sa importujú. Duplicity sú spočiatku neoznačené – ak chcete duplicitu napriek tomu importovať, označte ju.",
+        "backButton": "Späť",
+        "continueButton": "Pokračovať na import",
+        "transactionCount": "(Transakcie: {count})",
+        "duplicateCheckFailed": "Tento výpis sa nepodarilo porovnať s vašimi existujúcimi transakciami, preto počet duplicít nižšie nie je dostupný. Pred importom si zoznam skontrolujte."
+      },
+      "droppedRowsWarning": "{count} riadok z odpovede AI sa nepodarilo prečítať a bol preskočený. Počet importovaných nižšie môže byť nižší než v súbore. | {count} riadkov z odpovede AI sa nepodarilo prečítať a boli preskočené. Počet importovaných nižšie môže byť nižší než v súbore.",
+      "importResults": {
+        "readyTitle": "Pripravené na import",
+        "readyDescription": "Skontrolujte súhrn nižšie a pokračujte kliknutím na „Importovať transakcie\".",
+        "accountLabel": "Účet:",
+        "statementsLabel": "Výpisy:",
+        "toImportLabel": "Transakcie na import:",
+        "toSkipLabel": "Transakcie na preskočenie:",
+        "backButton": "Späť",
+        "importButton": "Importovať {count} transakcií",
+        "importingTitle": "Importovanie transakcií",
+        "importingDescription": "Počkajte, prosím, kým importujeme vaše transakcie...",
+        "failedTitle": "Import zlyhal",
+        "failedDescription": "Nič sa neimportovalo. Podrobnosti nižšie pochádzajú zo servera.",
+        "jobFailedDescription": "Import sa zastavil pred dokončením. Niektoré transakcie mohli byť už vytvorené. Pred opätovným importom tohto výpisu skontrolujte svoje transakcie.",
+        "tryAgainButton": "Skúsiť znova",
+        "completeTitle": "Import dokončený!",
+        "completeWithIssuesTitle": "Import dokončený s problémami",
+        "successDescription": "Vaše transakcie boli úspešne importované.",
+        "partialDescription": "Niektoré transakcie sa nepodarilo importovať.",
+        "importedLabel": "Importované:",
+        "skippedLabel": "Preskočené:",
+        "errorsTitle": "Chyby importu",
+        "transactionNumberHeader": "Transakcia č.",
+        "errorHeader": "Chyba",
+        "batchIdNote": "ID dávky importu: {batchId}. Pomocou tohto ID nájdete všetky importované transakcie a môžete ich spravovať.",
+        "viewTransactionsButton": "Zobraziť transakcie",
+        "startNewImportButton": "Spustiť nový import"
+      }
+    }
+  }
+}

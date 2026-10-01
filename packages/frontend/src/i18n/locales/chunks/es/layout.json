@@ -19,9 +19,15 @@
       "planned": "Previsión",
       "subscriptions": "Cargos recurrentes"
     },
-    "venture": "Venture"
+    "venture": "Venture",
+    "helpAndDocs": "Ayuda & Documentación",
+    "appVersion": "App version {version}",
+    "home": "Home",
+    "more": "More"
   },
   "sidebar": {
+    "collapse": "Contraer barra lateral",
+    "expand": "Expandir barra lateral",
     "settings": {
       "title": "Ajustes",
       "sections": {
@@ -62,7 +68,8 @@
       "synchronizing": "Sincronizando...",
       "syncedTime": "Sincronizado {time}",
       "syncingAccounts": "Sincronizando {count} cuentas",
-      "stuck": "Sincronización bloqueada"
+      "stuck": "Sincronización bloqueada",
+      "failed": "Sincronización fallida, algunas cuentas necesitan atención"
     },
     "categorization": {
       "title": "Categorización IA",
@@ -75,7 +82,11 @@
       "allSkipped": "La IA no pudo categorizar la transacción con confianza | La IA no pudo categorizar ninguna de las {count} transacciones con confianza",
       "queued": "Esperando para comenzar...",
       "transactions": "transacciones"
-    }
+    },
+    "moreActions": "Más formas de añadir datos",
+    "importDataHint": "Archivo CSV o extracto bancario",
+    "attachInvoice": "Adjuntar factura",
+    "attachInvoiceHint": "Encontramos la transacción a la que pertenece"
   },
   "themeSelector": {
     "light": "Claro",
@@ -281,5 +292,16 @@
         }
       }
     }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Manage accounts, loans, investments, and venture assets."
+    },
+    "more": {
+      "title": "More",
+      "description": "Explore insights, planning tools, imports, and settings."
+    },
+    "addTransaction": "Add transaction"
   }
 }

@@ -1,7 +1,10 @@
 <template>
   <div ref="headerRef">
     <DemoBanner />
-    <div class="shadow-header border-border flex items-center justify-between border-b px-4 py-2 sm:px-6">
+    <TrialBanner />
+    <div
+      class="shadow-header border-border @container/header-bar flex items-center justify-between border-b px-4 py-2 sm:px-6"
+    >
       <div class="flex items-center gap-4">
         <ManageTransactionDialog v-if="isMobileView">
           <Button
@@ -15,19 +18,61 @@
           </Button>
         </ManageTransactionDialog>
 
-        <ManageTransactionDialog v-else>
-          <Button variant="default" size="sm">
-            <PlusIcon class="size-4" />
-            {{ $t('header.newTransaction') }}
-          </Button>
-        </ManageTransactionDialog>
+        <div class="flex items-center gap-px">
+          <ManageTransactionDialog v-if="!isMobileView">
+            <Button variant="default" size="sm" class="rounded-r-none">
+              <PlusIcon class="size-4" />
+              {{ isMobileView ? $t('header.add') : $t('header.newTransaction') }}
+            </Button>
+          </ManageTransactionDialog>
 
-        <RouterLink :to="{ name: ROUTES_NAMES.settingsDataManagement }" class="max-md:hidden">
-          <Button variant="secondary" size="sm">
-            <ImportIcon class="size-4" />
-            {{ $t('header.importData') }}
-          </Button>
-        </RouterLink>
+          <Popover.Popover v-model:open="isAddMenuOpen">
+            <Popover.PopoverTrigger as-child>
+              <Button
+                variant="default"
+                size="icon"
+                :class="isMobileView ? 'min-h-11 min-w-11' : 'h-8 rounded-l-none px-2'"
+                :aria-label="$t('header.moreActions')"
+              >
+                <ChevronDownIcon class="size-4" />
+              </Button>
+            </Popover.PopoverTrigger>
+            <Popover.PopoverContent class="grid w-72 gap-0.5 p-1.5" align="start">
+              <RouterLink :to="{ name: ROUTES_NAMES.settingsDataManagement }" @click="isAddMenuOpen = false">
+                <Button variant="ghost" class="h-auto w-full justify-start gap-3 p-2 text-left">
+                  <span
+                    class="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-md"
+                  >
+                    <ImportIcon class="size-4" />
+                  </span>
+                  <span class="grid">
+                    <span class="text-sm font-semibold">{{ $t('header.importData') }}</span>
+                    <span class="text-muted-foreground text-xs font-normal">{{ $t('header.importDataHint') }}</span>
+                  </span>
+                </Button>
+              </RouterLink>
+
+              <Button
+                v-if="!userStore.isDemo"
+                variant="ghost"
+                class="h-auto w-full justify-start gap-3 p-2 text-left"
+                @click="openAttachInvoice"
+              >
+                <span
+                  class="bg-primary/10 text-primary-text flex size-9 shrink-0 items-center justify-center rounded-md"
+                >
+                  <ReceiptTextIcon class="size-4" />
+                </span>
+                <span class="grid">
+                  <span class="text-sm font-semibold">{{ $t('header.attachInvoice') }}</span>
+                  <span class="text-muted-foreground text-xs font-normal">{{ $t('header.attachInvoiceHint') }}</span>
+                </span>
+              </Button>
+            </Popover.PopoverContent>
+          </Popover.Popover>
+        </div>
+
+        <AttachInvoiceDialog v-if="isAttachInvoiceMounted" v-model:open="isAttachInvoiceOpen" />
       </div>
 
       <div class="ml-auto flex items-center gap-2">
@@ -45,6 +90,7 @@
               >
                 <RefreshCcw v-if="syncStatus.isSyncing.value" class="animate-spin" :size="16" />
                 <AlertTriangleIcon v-else-if="syncStatus.syncStuck.value" class="text-destructive-text" :size="16" />
+                <CloudAlertIcon v-else-if="syncStatus.hasSyncIssue.value" class="text-destructive-text size-4" />
                 <SparklesIcon
                   v-else-if="categorizationStatus.isCategorizing.value"
                   class="text-primary-text animate-pulse"
@@ -96,6 +142,7 @@
 
 <script setup lang="ts">
 import AccountsRelinkWarning from '@/components/accounts-relink-warning.vue';
+import TrialBanner from '@/components/billing/trial-banner.vue';
 import DemoBanner from '@/components/demo/demo-banner.vue';
 import ManageTransactionDialog from '@/components/dialogs/manage-transaction/index.vue';
 import Button from '@/components/lib/ui/button/Button.vue';
@@ -111,20 +158,36 @@ import { useIdleEnabled } from '@/composable/use-idle-enabled';
 import { useSyncStatus } from '@/composable/use-sync-status';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
 import { ROUTES_NAMES } from '@/routes/constants';
-import { useAccountsStore } from '@/stores';
+import { useAccountsStore, useUserStore } from '@/stores';
 import {
   AlertTriangleIcon,
+  ChevronDownIcon,
+  CloudAlertIcon,
   CloudCheckIcon,
   ImportIcon,
   PlusIcon,
+  ReceiptTextIcon,
   RefreshCcw,
   SettingsIcon,
   SparklesIcon,
 } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
+
+const AttachInvoiceDialog = defineAsyncComponent(() => import('@/components/dialogs/attach-invoice/index.vue'));
+
+const userStore = useUserStore();
+const isAddMenuOpen = ref(false);
+const isAttachInvoiceMounted = ref(false);
+const isAttachInvoiceOpen = ref(false);
+
+const openAttachInvoice = () => {
+  isAddMenuOpen.value = false;
+  isAttachInvoiceMounted.value = true;
+  isAttachInvoiceOpen.value = true;
+};
 
 const accountsStore = useAccountsStore();
 const { accountsNeedingRelink, isAccountsFetched } = storeToRefs(accountsStore);
@@ -157,6 +220,7 @@ const hasConnections = computed(() => syncStatus.accountStatuses.value.length > 
 const syncButtonLabel = computed(() => {
   if (syncStatus.isSyncing.value) return t('header.sync.syncing');
   if (syncStatus.syncStuck.value) return t('header.sync.stuck');
+  if (syncStatus.hasSyncIssue.value) return t('header.sync.failed');
   if (categorizationStatus.isCategorizing.value) return t('header.categorization.categorizing');
   if (hasConnections.value) {
     return lastSyncRelativeTime.value

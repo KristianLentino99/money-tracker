@@ -153,7 +153,6 @@ const handleDelete = async () => {
     await deleteSubscription({ id: subscriptionId.value });
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.subscriptionsList });
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.subscriptionsSummary });
-    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.widgetSubscriptionsUpcoming });
     addSuccessNotification(t('planned.subscriptions.deleteSuccess'));
     router.push({ name: ROUTES_NAMES.plannedSubscriptions });
   } catch {

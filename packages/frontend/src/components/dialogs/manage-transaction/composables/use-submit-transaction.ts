@@ -1,4 +1,5 @@
 import { createTransaction, editTransaction, linkTransactions } from '@/api';
+import { uploadTransactionAttachment } from '@/api/attachments';
 import {
   accountToPortfolioTransfer,
   createInvestmentContribution,
@@ -12,10 +13,10 @@ import { getInvalidationQueryKey } from '@/composable/data-queries/opposite-tx-r
 import { invalidateTransferRelatedQueries } from '@/composable/data-queries/portfolio-transfers';
 import { useInvalidateSubscriptionQueries } from '@/composable/data-queries/subscriptions';
 import { i18n } from '@/i18n';
-import { ApiErrorResponseError } from '@/js/errors';
+import { ApiErrorResponseError, extractApiErrorMessage, isApiErrorWithCode } from '@/js/errors';
 import { trackAnalyticsEvent } from '@/lib/posthog';
 import { useOnboardingStore } from '@/stores/onboarding';
-import { type TransactionModel } from '@bt/shared/types';
+import { API_ERROR_CODES, type TransactionModel } from '@bt/shared/types';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 
 import type { UI_FORM_STRUCT } from '../types';
@@ -37,6 +38,8 @@ interface SubmitTransactionParams {
   transaction?: TransactionModel;
   linkedTransaction?: TransactionModel | null;
   oppositeTransaction?: TransactionModel;
+  /** Files picked before the row existed; uploaded right after creation. */
+  pendingAttachments?: File[];
 }
 
 interface OptimisticUpdateContext {
@@ -107,10 +110,49 @@ export const isInvestmentContributionFormValid = ({ form }: { form: UI_FORM_STRU
   });
 };
 
-export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
+export const uploadPendingTransactionAttachments = async ({
+  transactionIds,
+  files,
+  onError,
+}: {
+  transactionIds: string[];
+  files: File[];
+  onError: (error: unknown) => void;
+}): Promise<boolean> => {
+  let attachmentsFailed = false;
+  for (const file of files) {
+    for (const transactionId of transactionIds) {
+      try {
+        await uploadTransactionAttachment({ transactionId, file });
+      } catch (error) {
+        attachmentsFailed = true;
+        // The API client announces expired sessions and plan-required responses.
+        if (
+          !isApiErrorWithCode(error, API_ERROR_CODES.unauthorized) &&
+          !isApiErrorWithCode(error, API_ERROR_CODES.planRequired)
+        ) {
+          onError(error);
+        }
+      }
+    }
+  }
+  return attachmentsFailed;
+};
+
+export function useSubmitTransaction({
+  onSuccess,
+}: {
+  onSuccess: (result: { created?: TransactionModel; attachmentsFailed?: boolean }) => void;
+}) {
   const queryClient = useQueryClient();
   const { addErrorNotification } = useNotificationCenter();
   const invalidateSubscriptionQueries = useInvalidateSubscriptionQueries();
+
+  const announceAttachmentError = (error: unknown) => {
+    addErrorNotification(
+      extractApiErrorMessage(error) || i18n.global.t('dialogs.manageTransaction.form.attachments.errors.upload'),
+    );
+  };
 
   return useMutation({
     mutationFn: async (params: SubmitTransactionParams) => {
@@ -123,6 +165,7 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         isRecordExternal,
         transaction,
         linkedTransaction,
+        pendingAttachments = [],
       } = params;
 
       if (form.investmentContribution) {
@@ -132,7 +175,7 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         }
 
         if (isFormCreation) {
-          return createInvestmentContribution({
+          const contribution = await createInvestmentContribution({
             portfolioId: form.investmentContribution.portfolio.id,
             accountId: form.account!.id,
             amount: String(form.amount!),
@@ -141,6 +184,12 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
             description: form.note,
             ...payload,
           });
+          const attachmentsFailed = await uploadPendingTransactionAttachments({
+            transactionIds: contribution.transactionId ? [contribution.transactionId] : [],
+            files: pendingAttachments,
+            onError: announceAttachmentError,
+          });
+          return { transactionId: contribution.transactionId, attachmentsFailed };
         }
 
         return createInvestmentContributionFromTransaction({
@@ -153,34 +202,47 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
 
       if (isFormCreation) {
         if (isTransferTx && form.toPortfolio) {
-          return accountToPortfolioTransfer({
+          await accountToPortfolioTransfer({
             portfolioId: form.toPortfolio.id,
             accountId: form.account!.id,
             amount: String(form.amount!),
             date: form.time.toISOString().split('T')[0]!,
             description: form.note,
           });
+          return {};
         }
 
-        return createTransaction(
+        const createdResult = await createTransaction(
           prepareTxCreationParams({
             form,
             isTransferTx,
             isCurrenciesDifferent,
           }),
         );
+        const created = createdResult.filter((tx): tx is TransactionModel => tx !== undefined);
+        // The row is already saved, so a failed upload is reported without failing the submit.
+        // Each transfer leg gets its own copy, so deleting it from one leg keeps the other.
+        const attachmentsFailed = await uploadPendingTransactionAttachments({
+          transactionIds: created.map((tx) => tx.id),
+          files: pendingAttachments,
+          onError: announceAttachmentError,
+        });
+        // A transfer's two legs give no single row a caller could act on.
+        return { created: isTransferTx ? undefined : created[0], attachmentsFailed };
       } else if (linkedTransaction) {
-        return linkTransactions({
+        await linkTransactions({
           ids: [[transaction!.id, linkedTransaction.id]],
         });
+        return {};
       } else if (isTransferTx && form.toPortfolio && transaction) {
-        return linkTransactionToPortfolio({
+        await linkTransactionToPortfolio({
           transactionId: transaction.id,
           portfolioId: form.toPortfolio.id,
           affectsCash: !form.portfolioCashAlreadyReflected,
         });
+        return {};
       } else {
-        return editTransaction(
+        await editTransaction(
           prepareTxUpdationParams({
             form,
             transaction: transaction!,
@@ -191,6 +253,7 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
             isOriginalRefundsOverriden,
           }),
         );
+        return {};
       }
     },
     onMutate: async (params): Promise<OptimisticUpdateContext | undefined> => {
@@ -233,9 +296,11 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         const transactionId = params.isFormCreation
           ? Array.isArray(data)
             ? data[0]?.id
-            : data && 'transactionId' in data
-              ? data.transactionId
-              : undefined
+            : data && 'created' in data
+              ? data.created?.id
+              : data && 'transactionId' in data
+                ? data.transactionId
+                : undefined
           : params.transaction?.id;
 
         if (transactionId) {
@@ -325,7 +390,10 @@ export function useSubmitTransaction({ onSuccess }: { onSuccess: () => void }) {
         onboardingStore.completeTask('mark-transfer-out');
       }
 
-      onSuccess();
+      onSuccess({
+        ...(data && 'created' in data ? { created: data.created } : {}),
+        ...(data && 'attachmentsFailed' in data ? { attachmentsFailed: data.attachmentsFailed } : {}),
+      });
     },
     onError: (error, _, context) => {
       // Rollback optimistic update on error

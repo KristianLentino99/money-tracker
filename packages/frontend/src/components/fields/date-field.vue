@@ -117,6 +117,13 @@ const emit = defineEmits<{
 const localValue = ref<Date | undefined>(props.modelValue ?? undefined);
 const isPopoverOpen = ref(false);
 
+// Safari mobile uses the native picker; the calendar trigger is disabled there too.
+defineExpose({
+  open: () => {
+    if (!isSafariMobile) isPopoverOpen.value = true;
+  },
+});
+
 const handleLocalInputUpdate = (event: Event) => {
   const inputVal = (event.target as HTMLInputElement).value;
 

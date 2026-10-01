@@ -1,0 +1,130 @@
+{
+  "investmentsImport": {
+    "title": "Import transakcií",
+    "description": "Nahrajte súbor CSV z burzy, PDF od brokera, alebo vložte históriu transakcií. AI vyťaží nákupy a predaje. Pred importom si všetko skontrolujete.",
+    "backToPortfolio": "Späť na portfólio",
+    "upload": {
+      "fileTab": "Súbor",
+      "pasteTab": "Vložiť text",
+      "fileHintFormats": "CSV, TXT alebo PDF",
+      "pastePlaceholder": "Sem vložte zoznam svojich transakcií...",
+      "estimatedCost": "Odhadované náklady",
+      "model": "Model",
+      "estimateButton": "Odhadnúť cenu",
+      "extractButton": "Vyťažiť",
+      "extracting": "Vyťažovanie…",
+      "modeAi": "Import pomocou AI",
+      "modeCsv": "Import CSV",
+      "modeAiHint": "Nahrajte ľubovoľný súbor — AI automaticky vyťaží vaše transakcie. Spotrebúva tokeny.",
+      "modeCsvHint": "Nahrajte súbor CSV od svojho brokera a priraďte stĺpce ručne. AI sa nepoužíva.",
+      "csvHintFormats": "Len súbory CSV.",
+      "parsingCsv": "Spracúvanie…",
+      "continueToMapping": "Pokračovať na priradenie"
+    },
+    "review": {
+      "warningsTitle": "Upozornenia",
+      "empty": "AI v tomto súbore nenašla žiadne transakcie.",
+      "pickSecurity": "Vyberte cenný papier...",
+      "pickCurrency": "Mena...",
+      "searchPlaceholder": "Hľadať podľa symbolu...",
+      "searching": "Vyhľadávanie...",
+      "parsedSymbolHint": "{symbol} sa nepodarilo automaticky priradiť — vyberte správny cenný papier nižšie.",
+      "startTyping": "Pre vyhľadávanie začnite písať",
+      "noResults": "Žiadne zhody",
+      "alreadyPicked": "už vybraný",
+      "duplicateSecurity": "Rovnaký cenný papier je vybraný na inom riadku",
+      "willMerge": "Zlúči sa s existujúcou pozíciou",
+      "txns": "{count} transakcia | {count} transakcií",
+      "expand": "Rozbaliť",
+      "collapse": "Zbaliť",
+      "deleteHolding": "Zmazať pozíciu",
+      "deleteTransaction": "Zmazať transakciu",
+      "buy": "Nákup",
+      "sell": "Predaj",
+      "possibleDup": "Možný duplikát",
+      "skipping": "Preskakuje sa",
+      "duplicateBadgeTooltip": "Toto vyzerá ako možný duplikát existujúcej transakcie. Kliknutím ho preskočíte — inak sa vedľa existujúcej vytvorí nová transakcia (bez zlúčenia či prepísania).",
+      "back": "Späť",
+      "commit": "Importovať",
+      "cols": {
+        "date": "Dátum",
+        "side": "Typ",
+        "qty": "Množstvo",
+        "price": "Cena",
+        "fees": "Poplatky",
+        "amount": "Suma",
+        "security": "Cenný papier",
+        "currency": "Mena",
+        "txCount": "Transakcie"
+      },
+      "tooltips": {
+        "security": "Cenný papier sme vybrali automaticky na základe tikeru vyťaženého AI. Ak zhoda nie je správna, kliknutím na pole ju zmeňte.",
+        "currency": "Mena, v ktorej sa vyrovnala hotovostná strana obchodu (napr. USD, EUR). Nemení spôsob, akým sa pozícia ukladá — sumy sa prepočítavajú na vašu základnú menu pomocou historických výmenných kurzov k dátumu obchodu.",
+        "parentRowDuplicates": "{count} možný duplikát v tejto pozícii sa importuje ako nová transakcia, pokiaľ ho nepreskočíte. | {count} možných duplicít v tejto pozícii sa importuje ako nové transakcie, pokiaľ ich nepreskočíte."
+      }
+    },
+    "done": {
+      "transactions": "Pridané transakcie"
+    },
+    "notifications": {
+      "imported": "Importovaných {count} transakcií",
+      "extractFailed": "Transakcie zo súboru sa nepodarilo vyťažiť.",
+      "importFailed": "Transakcie sa nepodarilo importovať.",
+      "skippedHoldings": "Preskočené pozície: {count}",
+      "failedTransactions": "Neúspešné transakcie: {count}",
+      "estimateFailed": "Cenu importu sa nepodarilo odhadnúť",
+      "csvParseFailed": "Súbor CSV sa nepodarilo spracovať. Skontrolujte formát súboru a skúste to znova."
+    },
+    "columnMapping": {
+      "rowsAndDelimiter": "{rows} riadkov · oddeľovač „{delimiter}\"",
+      "backToUpload": "Späť",
+      "previewTitle": "Náhľad",
+      "requiredTitle": "Povinné stĺpce",
+      "optionalTitle": "Voliteľné stĺpce",
+      "defaultsTitle": "Predvoľby",
+      "sideValueMappingTitle": "Priradenie hodnôt strany",
+      "sideValueMappingHint": "Povedzte nám, čo znamená každá hodnota v stĺpci strany.",
+      "sideValueMappingEmpty": "V tomto stĺpci sa zatiaľ nenašli žiadne hodnoty.",
+      "selectColumn": "Vyberte stĺpec…",
+      "notMapped": "Nepriradené",
+      "pickCategory": "Vyberte kategóriu…",
+      "cashMovementsNote": "Hotovostné vklady a výbery zatiaľ nie sú podporované. Pri týchto hodnotách strany vyberte „Preskočiť tieto riadky\", aby sa vynechali z importu.",
+      "extractButton": "Pokračovať na kontrolu",
+      "extracting": "Vyťažovanie…",
+      "fields": {
+        "symbol": "Symbol",
+        "date": "Dátum",
+        "side": "Strana / Akcia",
+        "quantity": "Množstvo",
+        "price": "Cena",
+        "fees": "Poplatky",
+        "currency": "Mena",
+        "name": "Názov",
+        "defaultCurrency": "Predvolená mena",
+        "defaultAssetClass": "Predvolená trieda aktíva"
+      },
+      "tooltips": {
+        "fees": "Stĺpec s províziou/poplatkami za transakciu. Ak nie je priradený, poplatky sa predvolene rovnajú 0.",
+        "currency": "Stĺpec kótovacej meny (napr. USD, EUR, USDT). Určuje hotovostnú stranu každého obchodu. Ak je prázdny alebo nepriradený, použije sa Predvolená mena nižšie.",
+        "name": "Voliteľný zobrazovaný názov cenného papiera (napr. „Apple Inc.\"). Používa sa len na zobrazenie v kroku kontroly — rozhodujúcim identifikátorom zostáva tiker.",
+        "defaultCurrency": "Použije sa, keď je stĺpec Mena vyššie prázdny alebo nepriradený.",
+        "defaultAssetClass": "Pomôcka na priradenie vašich symbolov k cenným papierom. Vyberte triedu, ktorá zodpovedá väčšine riadkov vo vašom súbore — pre jednotlivé cenné papiere ju môžete zmeniť v kroku kontroly."
+      }
+    },
+    "categories": {
+      "buy": "Nákup",
+      "sell": "Predaj",
+      "dividend": "Dividenda",
+      "transfer": "Prevod",
+      "tax": "Daň",
+      "fee": "Poplatok",
+      "cancel": "Zrušiť",
+      "other": "Ostatné",
+      "skip": "Preskočiť tieto riadky"
+    },
+    "assetClasses": {
+      "stocks": "Akcie",
+      "crypto": "Kryptomeny"
+    }
+  }
+}

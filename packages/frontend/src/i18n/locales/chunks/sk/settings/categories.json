@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "categories": {
+      "title": "Kategórie",
+      "description": "Rozdeľte transakcie do kategórií a podkategórií. Presunutím kategórie ju môžete zaradiť pod inú nadradenú kategóriu alebo na najvyššiu úroveň.",
+      "addButton": "Pridať kategóriu",
+      "organizeButton": "Usporiadať",
+      "empty": "Zatiaľ žiadne kategórie. Vytvorte prvú kategóriu a začnite.",
+      "categoriesCount": "{n} kategória | {n} kategórií",
+      "organizeHint": "Presuňte na novú nadradenú kategóriu, alebo pustite sem pre najvyššiu úroveň.",
+      "dropToTopLevel": "Pustite sem a „{name}\" sa stane kategóriou najvyššej úrovne",
+      "movesQueued": "{n} presun čaká | {n} presunov čaká",
+      "unqueueMove": "Odstrániť tento presun",
+      "topLevel": "Najvyššia úroveň",
+      "saveChanges": "Ulož zmeny",
+      "parentField": {
+        "label": "Nadradená kategória",
+        "placeholder": "Vyberte nadradenú kategóriu",
+        "hiddenHint": "Kategórie, ktoré nemožno použiť ako nadradené, sú v zozname skryté."
+      },
+      "moveDialog": {
+        "title": "Presunúť „{name}\"",
+        "description": "Vyberte novú nadradenú kategóriu.",
+        "moveButton": "Presunúť"
+      },
+      "delete": {
+        "title": "Vymazať kategóriu?",
+        "description": "Týmto sa „{name}“ natrvalo vymaže. Túto akciu nie je možné vrátiť späť.",
+        "deleteButton": "Zmazať",
+        "cancelButton": "Zrušiť"
+      },
+      "errors": {
+        "cannotLoad": "Kategórie sa nepodarilo načítať"
+      },
+      "notifications": {
+        "deleteSuccess": "Kategória zmazaná",
+        "deleteFailed": "Vymazanie kategórie zlyhalo",
+        "checkFailed": "Kategóriu sa nepodarilo skontrolovať",
+        "moveFailed": "Kategóriu sa nepodarilo presunúť.",
+        "saveSuccess": "Zmeny uložené.",
+        "staleMovesRemoved": "Odstránený {n} čakajúci presun, ktorý už neplatí | Odstránených {n} čakajúcich presunov, ktoré už neplatia"
+      },
+      "dropErrors": {
+        "currentParent": "Už je v tejto kategórii",
+        "insideItself": "Kategóriu nemožno presunúť do jej vlastnej podkategórie",
+        "internalTarget": "Systémové kategórie nemôžu obsahovať iné kategórie",
+        "tooDeep": "Kategórie možno vnárať najviac do {max} úrovní",
+        "childrenTooDeep": "Jej podkategórie by sa dostali hlbšie než na {max} úrovní",
+        "alreadyTopLevel": "Už je kategóriou najvyššej úrovne"
+      }
+    }
+  }
+}

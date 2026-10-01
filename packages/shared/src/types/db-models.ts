@@ -1,3 +1,4 @@
+import type { Entitlements } from './billing';
 import {
   ACCOUNT_CATEGORIES,
   ACCOUNT_STATUSES,
@@ -41,7 +42,6 @@ import { RecordId } from './record-id';
 export interface UserModel {
   id: number;
   username: string;
-  email: string;
   firstName: string;
   lastName: string;
   middleName: string;
@@ -55,7 +55,12 @@ export interface UserModel {
   isAdmin?: boolean;
   /** Feeds the demo-account expiry countdown. */
   createdAt: Date;
+  /** Present on `GET /user` only. */
+  entitlements?: Entitlements;
 }
+
+/** `GET /user` payload. Email comes from better-auth's ba_user, not the Users table. */
+export type UserInfoResponse = UserModel & { email: string | null };
 
 export interface CategoryModel {
   color: string;
@@ -72,6 +77,9 @@ export interface CategoryModel {
   userId: number;
 }
 
+/** Where linking puts the balance residual the post-link sync leaves unexplained. */
+export type LinkResidualTarget = 'opening-balance' | 'adjustment';
+
 /**
  * Known structure for account externalData field.
  * This is a JSONB field that can contain additional custom data.
@@ -86,6 +94,8 @@ export interface AccountExternalData {
       externalBalance: number;
       difference: number;
       adjustmentTransactionId: RecordId | null;
+      /** Where the post-link residual goes. Absent means the opening-balance path. */
+      residualTarget?: LinkResidualTarget;
       /** Residual the post-link sync left unexplained, in cents, folded into the opening balance. */
       absorbedResidual?: number;
       /**
@@ -311,9 +321,13 @@ export interface TransactionModel {
   originalAmount: number | null;
   originalCurrencyCode: string | null;
   refundLinked: boolean;
+  /** Serializer-derived, list reads only. */
+  hasAttachments?: boolean;
   isForecastOnly: boolean;
   /** Serializer-derived: set when a bank transaction merged into this row while it was planned. */
   plannedMerge?: { mergedAt: string } | null;
+  /** Serializer-derived: the bank has not booked this row yet. */
+  isPending?: boolean;
   /** Metadata about how this transaction was categorized */
   categorizationMeta?: CategorizationMeta | null;
   /** Linked Payee. Null when no Payee resolved (raw merchant missing/unmatched). */
@@ -545,6 +559,10 @@ export interface TagReminderNotificationPayload {
   transactionIds?: string[];
 }
 
+export interface StuckPendingNotificationPayload {
+  transactionIds: RecordId[];
+}
+
 /**
  * Common metadata about a share-related notification's owner / recipient pair.
  * The recipient's perspective uses `owner` fields; the owner's perspective uses `recipient` fields.
@@ -612,6 +630,7 @@ export type NotificationPayload =
   | SystemNotificationPayload
   | ChangelogNotificationPayload
   | TagReminderNotificationPayload
+  | StuckPendingNotificationPayload
   | ShareInvitationNotificationPayload
   | ShareLifecycleNotificationPayload
   | ShareInvitationSendFailedPayload
@@ -906,6 +925,8 @@ export interface PayeeModel extends EntityLogoFields {
    * means no tag rule.
    */
   defaultTagIds: RecordId[];
+  /** Stamped onto transactions linked to this Payee that carry no location of their own. */
+  defaultLocation: TransactionLocation | null;
   /** How logoDomain was resolved – see LogoResolutionState. 'manual' can pair
    *  with a null logoDomain (user explicitly cleared the logo); null only before
    *  the Payee has been through a resolution pass. */
@@ -1003,6 +1024,8 @@ export interface TransactionTemplateModel {
   payeeId: RecordId | null;
   paymentType: PAYMENT_TYPES | null;
   note: string | null;
+  /** ISO 4217 code preselected in the form's "original amount" field; the amount itself is typed each time. */
+  originalCurrencyCode: string | null;
   tagIds: RecordId[];
   createdAt: Date;
   updatedAt: Date;

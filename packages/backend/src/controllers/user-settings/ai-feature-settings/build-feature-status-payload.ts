@@ -1,29 +1,37 @@
-import { AIFeatureConfig, AIFeatureStatus, AI_FEATURE } from '@bt/shared/types';
+import { AIFeatureStatus, AI_FEATURE, FEATURES } from '@bt/shared/types';
+import { getRequestFeatureAccess } from '@middlewares/entitlements';
 import type { StoredAiSettings } from '@models/user-settings.model';
-import { resolveFeatureModelDisplay } from '@services/user-settings/resolve-feature-model-display';
+import { resolveFeatureStatus } from '@services/user-settings/resolve-feature-model-display';
+import type { Request } from 'express';
 
-export function buildFeatureStatusPayload({
+/** Receipt parsing also gets the server model on a free try of invoice matching, as `matchInvoice` grants it. */
+export const resolveServerKeysAllowed = async ({
+  req,
   feature,
-  config,
+}: {
+  req: Request;
+  feature: AI_FEATURE;
+}): Promise<boolean> => {
+  if ((await getRequestFeatureAccess({ req, feature: FEATURES.operator_ai })) === 'plan') return true;
+
+  return (
+    feature === AI_FEATURE.receiptParsing &&
+    (await getRequestFeatureAccess({ req, feature: FEATURES.invoice_matching })) === 'trial'
+  );
+};
+
+export async function buildFeatureStatusPayload({
+  req,
+  feature,
   aiSettings,
 }: {
+  req: Request;
   feature: AI_FEATURE;
-  config: AIFeatureConfig | null;
   aiSettings: StoredAiSettings | null;
-}): AIFeatureStatus {
-  const { modelId, modelName, usingUserKey, customEndpointId, endpointName } = resolveFeatureModelDisplay({
+}): Promise<AIFeatureStatus> {
+  return resolveFeatureStatus({
     feature,
-    config,
     aiSettings,
+    serverKeysAllowed: await resolveServerKeysAllowed({ req, feature }),
   });
-
-  return {
-    feature,
-    isConfigured: !!config,
-    modelId,
-    modelName,
-    usingUserKey,
-    customEndpointId,
-    endpointName,
-  };
 }

@@ -194,6 +194,7 @@ export interface UpdateAccountBody extends NullableBodyPayload, EntityLogoPayloa
   accountCategory?: AccountModel['accountCategory'];
   name?: AccountModel['name'];
   currentBalance?: AccountModel['currentBalance'];
+  initialBalance?: AccountModel['initialBalance'];
   creditLimit?: AccountModel['creditLimit'];
   status?: ACCOUNT_STATUSES;
   excludeFromStats?: boolean;
@@ -257,7 +258,7 @@ export interface CreateTransactionBody {
   note?: TransactionModel['note'];
   externalUrl?: string;
   externalReference?: string;
-  location?: TransactionLocation;
+  location?: TransactionLocation | null;
   time: string;
   transactionType: TransactionModel['transactionType'];
   paymentType: TransactionModel['paymentType'];
@@ -363,6 +364,56 @@ export interface BulkDeleteTransactionsResponse {
   deletedIds: string[];
 }
 
+export interface ReconciliationRemoveBody {
+  transactionIds: RecordId[];
+}
+
+export interface ReconciliationMergeBody {
+  transactionIds: RecordId[];
+  survivorId: RecordId;
+}
+
+export interface ReconciliationActionResponse {
+  removedIds: RecordId[];
+}
+
+export interface ReconciliationRestoreBody {
+  transactionIds: RecordId[];
+}
+
+export interface ReconciliationRestoreResponse {
+  restoredIds: RecordId[];
+}
+
+export type ReconciliationHistoryEvent = {
+  removedAt: string;
+  transactions: TransactionModel[];
+} & ({ type: 'merge'; survivor: TransactionModel } | { type: 'remove'; survivor: null });
+
+export interface StuckPendingItem {
+  transaction: TransactionModel;
+  candidate: TransactionModel | null;
+  canCheckWithBank: boolean;
+  pendingDays: number;
+}
+
+export interface CheckStuckPendingBody {
+  accountId: RecordId;
+}
+
+export interface CheckStuckPendingResponse {
+  bookedCount: number;
+  pendingCount: number;
+}
+
+export interface KeepAsBookedBody {
+  transactionIds: RecordId[];
+}
+
+export interface KeepAsBookedResponse {
+  updatedIds: RecordId[];
+}
+
 export type CreateCategoryBody = {
   name: CategoryModel['name'];
   color?: CategoryModel['color'];
@@ -418,7 +469,8 @@ export interface CashFlowPeriodData {
   income: number;
   expenses: number;
   netFlow: number;
-  // Per-category breakdown (only present when categoryIds filter is used)
+  // Per-category breakdown, always sent: the categoryIds selection when given, otherwise root categories.
+  // Lists only categories with data in some period of the range.
   categories?: CashFlowCategoryData[];
 }
 
@@ -647,8 +699,9 @@ export interface NetWorthDriversDegraded {
   // `composition.holdingsValue` may not reflect current value. Name them so the user
   // can fill in the prices that matter. Omitted when every holding priced.
   unpricedSecurities?: NetWorthDriversUnpricedSecurity[];
-  // ISO codes that converted at a 1:1 placeholder. Warn that every amount touching
-  // them is wrong by the true rate rather than presenting the totals as final.
+  // ISO codes converted without a real rate for the day: at the currency's earliest
+  // stored rate for dates before it, or 1:1 when none is stored. Warn that amounts
+  // touching them are approximate rather than presenting the totals as final.
   // Omitted when every currency resolved.
   fxFallbackCurrencies?: string[];
 }
@@ -834,8 +887,9 @@ export interface NetWorthHistoryDegraded {
   // Holdings with no price data in the range, carried at cost — their contribution
   // to `assets.investments` understates market value. Omitted when every holding priced.
   unpricedSecurities?: NetWorthHistoryUnpricedSecurity[];
-  // ISO codes that converted at a 1:1 placeholder — every amount touching them is
-  // off by the true rate. Omitted when every currency resolved.
+  // ISO codes converted without a real rate for the day: at the currency's earliest
+  // stored rate for dates before it, or 1:1 when none is stored. Amounts touching
+  // them are approximate. Omitted when every currency resolved.
   fxFallbackCurrencies?: string[];
 }
 
@@ -954,6 +1008,7 @@ export interface CreateTransactionTemplateBody {
   payeeId?: TransactionTemplateModel['payeeId'];
   paymentType?: TransactionTemplateModel['paymentType'];
   note?: TransactionTemplateModel['note'];
+  originalCurrencyCode?: TransactionTemplateModel['originalCurrencyCode'];
   /** Full replacement of the template's tag set. */
   tagIds?: TransactionTemplateModel['tagIds'];
 }

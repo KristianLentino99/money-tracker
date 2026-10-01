@@ -6,6 +6,7 @@ import ExcludeCategoriesMenu from '@/components/common/category-exclusions/exclu
 import ExcludedCountBadge from '@/components/common/category-exclusions/excluded-count-badge.vue';
 import { useCategoryExclusionsConfig } from '@/components/common/category-exclusions/use-category-exclusions-config';
 import { ChartTooltipHeader } from '@/components/common/charts/chart-tooltip';
+import FitAmount from '@/components/common/fit-amount.vue';
 import ResponsiveTooltip from '@/components/common/responsive-tooltip.vue';
 import { buttonVariants } from '@/components/lib/ui/button';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
@@ -41,6 +42,7 @@ const {
   hasPrevData,
   isFetching,
   isInitialLoading,
+  isCurrentEmpty,
   isEmpty,
 } = useCashFlowData({ selectedPeriod: () => props.selectedPeriod, excludedCategoryIds, includePlanned });
 
@@ -199,6 +201,13 @@ const trendBars = computed(() => {
             <!-- Comparison badge -->
             <div v-if="hasPrevData" class="flex flex-col items-end gap-0.5">
               <span
+                v-if="isCurrentEmpty"
+                class="bg-muted text-muted-foreground inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold"
+              >
+                {{ $t('dashboard.widgets.cashFlow.notAvailable') }}
+              </span>
+              <span
+                v-else
                 class="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold"
                 :class="{
                   'bg-success-text/15 text-success-text': netFlowDiff > 0,
@@ -219,16 +228,18 @@ const trendBars = computed(() => {
 
         <!-- Flow bar visualization -->
         <div>
-          <div class="flex h-3 w-full overflow-hidden rounded-full">
-            <div
-              class="bg-app-income-color transition-all duration-500 ease-out"
-              :style="{ width: `${incomePercent}%` }"
-            />
-            <div class="bg-muted w-px shrink-0" />
-            <div
-              class="bg-app-expense-color transition-all duration-500 ease-out"
-              :style="{ width: `${expensePercent}%` }"
-            />
+          <div class="bg-muted flex h-3 w-full overflow-hidden rounded-full">
+            <template v-if="flowBarTotal > 0">
+              <div
+                class="bg-app-income-color transition-all duration-500 ease-out"
+                :style="{ width: `${incomePercent}%` }"
+              />
+              <div class="bg-muted w-px shrink-0" />
+              <div
+                class="bg-app-expense-color transition-all duration-500 ease-out"
+                :style="{ width: `${expensePercent}%` }"
+              />
+            </template>
           </div>
         </div>
 
@@ -239,9 +250,7 @@ const trendBars = computed(() => {
             <div class="text-muted-foreground mb-1 text-[11px] font-medium tracking-wider uppercase">
               {{ $t('dashboard.widgets.cashFlow.income') }}
             </div>
-            <div class="text-app-income-color text-amount text-sm">
-              {{ formatBaseCurrency(animatedIncome) }}
-            </div>
+            <FitAmount :value="animatedIncome" :target="income" class="text-app-income-color text-amount text-sm" />
           </div>
 
           <!-- Expenses -->
@@ -249,9 +258,11 @@ const trendBars = computed(() => {
             <div class="text-muted-foreground mb-1 text-[11px] font-medium tracking-wider uppercase">
               {{ $t('dashboard.widgets.cashFlow.expenses') }}
             </div>
-            <div class="text-app-expense-color text-amount text-sm">
-              {{ formatBaseCurrency(animatedExpenses) }}
-            </div>
+            <FitAmount
+              :value="animatedExpenses"
+              :target="expenses"
+              class="text-app-expense-color text-amount text-sm"
+            />
           </div>
 
           <!-- Savings rate -->
@@ -285,7 +296,11 @@ const trendBars = computed(() => {
                 <div class="flex h-22 w-full max-w-10 items-end justify-center">
                   <div
                     class="min-h-1 w-full rounded-xs transition-all duration-500"
-                    :class="bar.isPositive ? 'bg-app-income-color/90' : 'bg-app-expense-color/90'"
+                    :class="{
+                      'bg-muted': bar.value === 0,
+                      'bg-app-income-color/90': bar.value > 0,
+                      'bg-app-expense-color/90': bar.value < 0,
+                    }"
                     :style="{ height: `${Math.max(bar.heightPercent, 4)}%` }"
                   />
                 </div>

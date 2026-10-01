@@ -1,6 +1,8 @@
 import { logger } from '@js/utils/logger';
 import { shutdownPostHog } from '@js/utils/posthog';
+import { accountSyncWorker } from '@services/bank-data-providers/sync/account-sync-queue';
 
+import { attachmentsOrphanSweepCron } from './crons/attachments-orphan-sweep';
 import { balanceRevalueSweepCron } from './crons/balance-revalue-sweep';
 import { cryptoPricesSyncCron } from './crons/crypto-prices-sync';
 import { demoCleanupCron } from './crons/demo-cleanup';
@@ -10,6 +12,7 @@ import { purgeDeletedPortfoliosCron } from './crons/purge-deleted-portfolios';
 import { securitiesDailySyncCron } from './crons/securities-daily-sync';
 import { shareInvitationsExpireCron } from './crons/share-invitations-expire';
 import { shareResourceOrphanCleanupCron } from './crons/share-resource-orphan-cleanup';
+import { stuckPendingCheckCron } from './crons/stuck-pending-check';
 import { subscriptionAutoRecordCron } from './crons/subscription-auto-record';
 import { subscriptionCandidateDetectionCron } from './crons/subscription-candidate-detection';
 import { subscriptionRemindersCron } from './crons/subscription-reminders-check';
@@ -36,6 +39,7 @@ export function initializeBackgroundJobs() {
       securitiesDailySyncCron.startCron();
       cryptoPricesSyncCron.startCron();
       tagRemindersCron.startCron();
+      stuckPendingCheckCron.startCron();
       subscriptionRemindersCron.startCron();
       subscriptionAutoRecordCron.startCron();
       subscriptionCandidateDetectionCron.startCron();
@@ -43,6 +47,7 @@ export function initializeBackgroundJobs() {
       shareResourceOrphanCleanupCron.startCron();
       purgeDeletedPortfoliosCron.startCron();
       balanceRevalueSweepCron.startCron();
+      attachmentsOrphanSweepCron.startCron();
     }
   }
 }
@@ -53,6 +58,7 @@ export async function shutdownBackgroundJobs() {
   securitiesDailySyncCron.stopCron();
   cryptoPricesSyncCron.stopCron();
   tagRemindersCron.stopCron();
+  stuckPendingCheckCron.stopCron();
   subscriptionRemindersCron.stopCron();
   subscriptionAutoRecordCron.stopCron();
   subscriptionCandidateDetectionCron.stopCron();
@@ -60,7 +66,9 @@ export async function shutdownBackgroundJobs() {
   shareResourceOrphanCleanupCron.stopCron();
   purgeDeletedPortfoliosCron.stopCron();
   balanceRevalueSweepCron.stopCron();
+  attachmentsOrphanSweepCron.stopCron();
   loadCurrencyRatesJob.stop();
+  await accountSyncWorker.close();
   // Flush remaining PostHog events before exit
   await shutdownPostHog();
 }

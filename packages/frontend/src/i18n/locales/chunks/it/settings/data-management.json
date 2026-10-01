@@ -44,7 +44,8 @@
         },
         "requestMore": {
           "title": "Vuoi altre opzioni? Richiedile qui"
-        }
+        },
+        "whichImporterHint": "Not sure which one to use?"
       },
       "export": {
         "cardTitle": "Esporta i tuoi dati",
@@ -70,7 +71,9 @@
           "subscriptions": "Abbonamenti e promemoria",
           "subscriptionsDescription": "Abbonamenti ricorrenti e promemoria delle fatture",
           "investments": "Investimenti",
-          "investmentsDescription": "Portafogli, posizioni, transazioni di investimento e trasferimenti"
+          "investmentsDescription": "Portafogli, posizioni, transazioni di investimento e trasferimenti",
+          "budgets": "Budgets",
+          "budgetsDescription": "Custom budgets with linked categories and spending totals"
         },
         "notifications": {
           "success": "Esportazione pronta: il download dovrebbe iniziare a breve.",
@@ -85,7 +88,17 @@
           "placeholder": "Sempre",
           "clear": "Cancella intervallo di date"
         },
-        "listDescription": "Scarica un file ZIP per fogli di calcolo, imposte o migrazioni"
+        "listDescription": "Scarica un file ZIP per fogli di calcolo, imposte o migrazioni",
+        "backupOrExportHint": "Not sure whether you need Export or Backup?",
+        "accounts": {
+          "label": "Conti",
+          "helper": "Export only the selected accounts with their transactions and balance history. Leave empty to export all accounts.",
+          "placeholder": "All accounts"
+        }
+      },
+      "ofx": {
+        "title": "OFX or QFX statement",
+        "listDescription": "Import bank and credit card transactions"
       }
     }
   }

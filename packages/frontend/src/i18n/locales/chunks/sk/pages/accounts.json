@@ -1,0 +1,48 @@
+{
+  "accounts": {
+    "title": "Účty",
+    "createAccount": "Vytvoriť účet",
+    "createVehicle": "Pridať vozidlo",
+    "actionsMenu": "Operácie s účtom",
+    "sections": {
+      "archived": "Archivované",
+      "manual": "Manuálne účty",
+      "sharedWithMe": "Zdieľané so mnou",
+      "vehicles": "Vozidlá",
+      "bankConnections": "Bankové pripojenia"
+    },
+    "empty": {
+      "title": "Zatiaľ žiadne účty",
+      "description": "Pripojte banku alebo vytvorte manuálny účet a začnite sledovať financie, zostatky a transakcie.",
+      "connectBank": "Pripojiť bankový účet",
+      "createManual": "Vytvoriť manuálny účet"
+    },
+    "overview": {
+      "totalBalance": "Celkový zostatok",
+      "assets": "Aktíva",
+      "liabilities": "Záväzky",
+      "vehicles": "Vozidlá",
+      "projected": "Výhľad: {amount} · {count} plánovaný záznam do {date} | Výhľad: {amount} · {count} plánovaných záznamov do {date}"
+    },
+    "sharedBy": "Zdieľané {handle}",
+    "viaHousehold": "Zdieľané cez domácnosť používateľa {handle}",
+    "connect": "Pripojiť",
+    "connectBank": "Pripojiť banku",
+    "noBanksConnected": "Zatiaľ nie je pripojená žiadna banka — pripojte ju a zostatky sa budú synchronizovať automaticky.",
+    "reconnect": "Obnoviť pripojenie",
+    "manageConnection": "Spravovať pripojenie",
+    "accountsCount": "{count} účet | {count} účtov",
+    "inGroupSubtitle": "v {name}",
+    "sort": {
+      "auto": "Automaticky",
+      "name": "Názov",
+      "balance": "Zostatok",
+      "ariaLabel": "Zoradiť účty"
+    },
+    "status": {
+      "active": "Aktívne",
+      "expiringSoon": "Čoskoro vyprší",
+      "expired": "Vypršané"
+    }
+  }
+}

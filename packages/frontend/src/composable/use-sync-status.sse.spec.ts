@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
 const auth = vi.hoisted(() => ({ isLoggedIn: { value: true } }));
-const user = vi.hoisted(() => ({ isDemo: { value: false } }));
+const user = vi.hoisted(() => ({ isDemo: { value: false }, hasFeature: vi.fn(() => true) }));
 
 // The fake transport: records the options `fetchEventSource` was opened with and lets a
 // test push server events through the registered `onmessage`.
@@ -79,10 +79,12 @@ describe('useSyncStatus completion vs. the shared SSE connection', () => {
 
   afterEach(() => {
     unsubscribers.splice(0).forEach((unsubscribe) => unsubscribe());
+    useSSE().disconnect();
   });
 
   beforeEach(() => {
     vi.clearAllMocks();
+    user.hasFeature.mockReturnValue(true);
     useSSE().disconnect();
     transport.options = null;
   });
@@ -106,9 +108,18 @@ describe('useSyncStatus completion vs. the shared SSE connection', () => {
     expect(categorizationEvents).toEqual([{ status: 'completed' }]);
   });
 
-  it('closes the connection after a sync completes when nothing else is listening', async () => {
+  it('keeps observing later bank syncs after completion and closes on explicit teardown', async () => {
     await startSyncAndFinishIt();
 
-    expect(transport.options!.signal.aborted).toBe(true);
+    const signal = transport.options!.signal;
+    expect(signal.aborted).toBe(false);
+    queryClient.getQueryData.mockReturnValue(snapshot({ syncing: 0 }));
+    const subsequentSync = snapshot({ syncing: 1 });
+    pushServerEvent({ event: SSE_EVENT_TYPES.SYNC_STATUS_CHANGED, payload: subsequentSync });
+    expect(queryClient.setQueryData).toHaveBeenLastCalledWith(['bankSyncStatus'], subsequentSync);
+
+    useSSE().disconnect();
+    expect(signal.aborted).toBe(true);
+    expect(useSSE().isConnected.value).toBe(false);
   });
 });

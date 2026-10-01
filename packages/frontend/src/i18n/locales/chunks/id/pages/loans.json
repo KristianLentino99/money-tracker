@@ -223,6 +223,24 @@
           "actual": "Saldo aktual",
           "schedule": "Jadwal asli"
         }
+      },
+      "installments": {
+        "title": "Loan installments",
+        "description": "Future payments from these installments will settle this loan.",
+        "linkAction": "Link installment",
+        "emptyTitle": "No installments linked",
+        "emptyDescription": "Link an installment so each future payment can reduce this loan.",
+        "progress": "{progress} payments",
+        "paused": "Paused",
+        "linkSuccess": "Installment linked to the loan.",
+        "linkError": "The installment could not be linked.",
+        "dialogTitle": "Link installments",
+        "dialogDescription": "Choose one or more expense installments. The link affects future payments only.",
+        "searchLabel": "Search installments",
+        "searchPlaceholder": "Search by name",
+        "loading": "Loading installments...",
+        "noResults": "No eligible installments found.",
+        "confirmLink": "Link {count} installments"
       }
     }
   }

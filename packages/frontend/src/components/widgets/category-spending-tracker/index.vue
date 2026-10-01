@@ -3,6 +3,8 @@ import type { DashboardWidgetConfig } from '@/api/user-settings';
 import CategoryCircle from '@/components/common/category-circle.vue';
 import { buttonVariants, Button } from '@/components/lib/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/lib/ui/popover';
+import { ScrollArea } from '@/components/lib/ui/scroll-area';
+import { Separator } from '@/components/lib/ui/separator';
 import IncludePlannedMenuItem from '@/components/widgets/components/include-planned-menu-item.vue';
 import { useIncludePlannedConfig } from '@/components/widgets/use-include-planned-config';
 import { useFormatCurrency } from '@/composable/formatters';
@@ -42,14 +44,9 @@ const selectedCategoryIds = computed<string[]>(() => {
   return Array.isArray(ids) ? (ids as string[]) : [];
 });
 
-const MAX_SLOTS_LARGE = 16;
-const MAX_SLOTS_SMALL = 7;
+const MAX_CATEGORIES = 30;
 
-const maxSlots = computed(() => {
-  const config = widgetConfigRef?.value;
-  if (!config) return MAX_SLOTS_SMALL;
-  return (config.rowSpan ?? 1) >= 2 ? MAX_SLOTS_LARGE : MAX_SLOTS_SMALL;
-});
+const visibleSlots = computed(() => ((widgetConfigRef?.value?.rowSpan ?? 1) >= 2 ? 16 : 7));
 
 const { includePlanned } = useIncludePlannedConfig();
 
@@ -100,7 +97,13 @@ watch(categoryRows, (rows) => {
   draggableRows.value = draggableRows.value.filter((r) => newIds.has(r.id));
 });
 
-const ghostSlotCount = computed(() => Math.max(0, maxSlots.value - categoryRows.value.length));
+const canAddCategory = computed(() => categoryRows.value.length < MAX_CATEGORIES);
+// Past the visible slots a trailing "Add" row keeps adding discoverable; an exactly full widget stays clean.
+const ghostSlotCount = computed(() => {
+  const count = categoryRows.value.length;
+  if (count < visibleSlots.value) return visibleSlots.value - count;
+  return count > visibleSlots.value && canAddCategory.value ? 1 : 0;
+});
 const isInitialLoading = computed(() => isFetching.value && !hasData.value && selectedCategoryIds.value.length > 0);
 
 const pickerOpen = ref(false);
@@ -118,6 +121,13 @@ const disabledCategoryIds = computed(() => {
 const openPickerForAdd = () => {
   replacingCategoryId.value = null;
   pickerOpen.value = true;
+};
+
+const isSettingsOpen = ref(false);
+
+const addCategoryFromSettings = () => {
+  isSettingsOpen.value = false;
+  openPickerForAdd();
 };
 
 const openPickerForReplace = ({ categoryId }: { categoryId: string }) => {
@@ -228,7 +238,7 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
 </script>
 
 <template>
-  <WidgetWrapper :is-fetching="isFetching" data-testid="widget-category-spending-tracker">
+  <WidgetWrapper class="max-md:max-h-96" :is-fetching="isFetching" data-testid="widget-category-spending-tracker">
     <template #title>{{ t('dashboard.widgets.categoryTracker.title') }}</template>
     <template #action>
       <button
@@ -251,21 +261,38 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
         </template>
       </button>
 
-      <Popover v-if="widgetConfigRef">
+      <Popover v-if="widgetConfigRef" v-model:open="isSettingsOpen">
         <PopoverTrigger as-child>
           <Button size="icon-sm" variant="ghost" data-testid="cst-settings-btn">
             <SettingsIcon class="text-muted-foreground size-4" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent class="w-60 p-1" align="end">
-          <IncludePlannedMenuItem test-id-prefix="cst" />
+        <PopoverContent class="w-72 overflow-hidden p-0" align="end">
+          <header class="border-b px-3 py-2 text-sm font-medium">{{ t('common.actions.settings') }}</header>
+          <template v-if="canAddCategory">
+            <div class="flex flex-col p-2">
+              <button
+                type="button"
+                data-testid="cst-settings-add-category"
+                class="hover:bg-accent flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm font-medium transition-colors"
+                @click="addCategoryFromSettings"
+              >
+                <PlusIcon class="text-muted-foreground size-4" />
+                {{ t('dashboard.widgets.categoryTracker.addCategory') }}
+              </button>
+            </div>
+            <Separator />
+          </template>
+          <div class="flex flex-col p-2">
+            <IncludePlannedMenuItem test-id-prefix="cst" />
+          </div>
         </PopoverContent>
       </Popover>
     </template>
 
     <template v-if="isInitialLoading">
       <div class="-mx-2 flex flex-col gap-2">
-        <div v-for="n in maxSlots" :key="n" class="flex h-9 items-center gap-2 rounded-md px-3">
+        <div v-for="n in visibleSlots" :key="n" class="flex h-9 items-center gap-2 rounded-md px-3">
           <div class="bg-muted size-5 animate-pulse rounded-full" />
           <div class="bg-muted h-4 flex-1 animate-pulse rounded" :style="{ maxWidth: `${40 + ((n * 4) % 10)}%` }" />
           <div class="bg-muted ml-auto h-4 w-14 animate-pulse rounded" />
@@ -274,79 +301,81 @@ const navigateToTransactions = ({ categoryId }: { categoryId: string }) => {
     </template>
 
     <template v-else>
-      <div class="-mx-2 flex flex-col gap-2 overflow-y-auto">
-        <!-- Customize mode: draggable rows -->
-        <VueDraggable
-          v-if="isCustomizing"
-          v-model="draggableRows"
-          handle=".drag-handle"
-          :animation="200"
-          class="flex flex-col gap-2"
-        >
-          <div
-            v-for="(item, index) in draggableRows"
-            :key="item.id"
-            class="hover:bg-muted/50 flex h-9 cursor-pointer items-center gap-1 rounded-md py-0.5 pr-3 pl-1 transition-colors"
-            @click="openPickerForReplace({ categoryId: item.id })"
+      <ScrollArea class="-mx-2 min-h-0 flex-1">
+        <div class="flex flex-col gap-2">
+          <!-- Customize mode: draggable rows -->
+          <VueDraggable
+            v-if="isCustomizing"
+            v-model="draggableRows"
+            handle=".drag-handle"
+            :animation="200"
+            class="flex flex-col gap-2"
           >
             <div
-              :class="
-                buttonVariants({
-                  size: 'icon-sm',
-                  variant: 'ghost',
-                  class: 'drag-handle cursor-grab active:cursor-grabbing',
-                })
-              "
-              @click.stop
+              v-for="(item, index) in draggableRows"
+              :key="item.id"
+              class="hover:bg-muted/50 flex h-9 cursor-pointer items-center gap-1 rounded-md py-0.5 pr-3 pl-1 transition-colors"
+              @click="openPickerForReplace({ categoryId: item.id })"
             >
-              <GripVerticalIcon class="text-muted-foreground size-4" />
+              <div
+                :class="
+                  buttonVariants({
+                    size: 'icon-sm',
+                    variant: 'ghost',
+                    class: 'drag-handle cursor-grab active:cursor-grabbing',
+                  })
+                "
+                @click.stop
+              >
+                <GripVerticalIcon class="text-muted-foreground size-4" />
+              </div>
+
+              <CategoryCircle :category-id="item.id" />
+
+              <span class="min-w-0 flex-1 truncate text-sm">{{ item.name }}</span>
+
+              <Button
+                data-testid="cst-remove-category"
+                size="icon-sm"
+                variant="ghost-destructive"
+                @click.stop="removeCategory({ categoryId: item.id })"
+              >
+                <Trash2Icon class="size-3.5" />
+              </Button>
             </div>
+          </VueDraggable>
 
-            <CategoryCircle :category-id="item.id" />
-
-            <span class="min-w-0 flex-1 truncate text-sm">{{ item.name }}</span>
-
-            <Button
-              data-testid="cst-remove-category"
-              size="icon-sm"
-              variant="ghost-destructive"
-              @click.stop="removeCategory({ categoryId: item.id })"
+          <!-- Normal mode: static rows -->
+          <template v-else>
+            <button
+              v-for="item in categoryRows"
+              :key="item.id"
+              class="hover:bg-muted/50 flex h-9 w-full items-center gap-2 rounded-md px-3 py-0.5 text-left transition-colors"
+              @click="navigateToTransactions({ categoryId: item.id })"
             >
-              <Trash2Icon class="size-3.5" />
-            </Button>
-          </div>
-        </VueDraggable>
+              <CategoryCircle :category-id="item.id" />
 
-        <!-- Normal mode: static rows -->
-        <template v-else>
+              <span class="min-w-0 flex-1 truncate text-sm">{{ item.name }}</span>
+
+              <span class="text-amount shrink-0 text-sm" :class="getAmountClass({ netAmount: item.netAmount })">
+                {{ formatAmount({ netAmount: item.netAmount }) }}
+              </span>
+            </button>
+          </template>
+
+          <!-- Ghost rows -->
           <button
-            v-for="item in categoryRows"
-            :key="item.id"
-            class="hover:bg-muted/50 flex h-9 w-full items-center gap-2 rounded-md px-3 py-0.5 text-left transition-colors"
-            @click="navigateToTransactions({ categoryId: item.id })"
+            v-for="n in ghostSlotCount"
+            :key="`ghost-${n}`"
+            data-testid="cst-add-slot"
+            class="border-muted-foreground/30 hover:bg-muted/50 text-muted-foreground mx-1 flex h-9 items-center gap-2 rounded-md border border-dashed px-2 py-0.5 transition-colors"
+            @click="openPickerForAdd"
           >
-            <CategoryCircle :category-id="item.id" />
-
-            <span class="min-w-0 flex-1 truncate text-sm">{{ item.name }}</span>
-
-            <span class="text-amount shrink-0 text-sm" :class="getAmountClass({ netAmount: item.netAmount })">
-              {{ formatAmount({ netAmount: item.netAmount }) }}
-            </span>
+            <PlusIcon class="size-3.5" />
+            <span class="text-sm">{{ t('dashboard.widgets.categoryTracker.addCategory') }}</span>
           </button>
-        </template>
-
-        <!-- Ghost rows -->
-        <button
-          v-for="n in ghostSlotCount"
-          :key="`ghost-${n}`"
-          data-testid="cst-add-slot"
-          class="border-muted-foreground/30 hover:bg-muted/50 text-muted-foreground mx-1 flex h-9 items-center gap-2 rounded-md border border-dashed px-2 py-0.5 transition-colors"
-          @click="openPickerForAdd"
-        >
-          <PlusIcon class="size-3.5" />
-          <span class="text-sm">{{ t('dashboard.widgets.categoryTracker.addCategory') }}</span>
-        </button>
-      </div>
+        </div>
+      </ScrollArea>
     </template>
 
     <CategoryPickerDialog

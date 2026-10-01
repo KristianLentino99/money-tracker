@@ -30,7 +30,12 @@
           "warningsTitle": "Avvisi",
           "rowPrefix": "Riga {rowIndex}:",
           "startOver": "Ricomincia",
-          "continueToImport": "Avvia importazione"
+          "continueToImport": "Avvia importazione",
+          "categories": "Categorie",
+          "payees": "Beneficiari",
+          "tags": "Etichette",
+          "transfers": "Transfers",
+          "skippedNote": "{count} account(s) will be skipped. Their transactions — and any transfers to or from them — will not be imported."
         },
         "accountRow": {
           "transactionsCount": "{count} transazioni",
@@ -38,7 +43,8 @@
           "currencyPlaceholder": "USD",
           "currencyLabel": "Valuta",
           "currencyInvalid": "Inserisci un codice valuta di 3 lettere (ad es. USD)",
-          "autoDetected": "rilevata automaticamente: {code}"
+          "autoDetected": "rilevata automaticamente: {code}",
+          "undoSkip": "Include in import"
         },
         "execute": {
           "starting": "Avvio dell'importazione…",
@@ -61,7 +67,8 @@
           "splitsDetected": "Gruppi di suddivisioni rilevati",
           "errorsTitle": "Importazione non riuscita per {count} righe",
           "viewTransactions": "Visualizza transazioni",
-          "importAnother": "Importa un altro file"
+          "importAnother": "Importa un altro file",
+          "accountsSkipped": "Conti omessi"
         }
       }
     }

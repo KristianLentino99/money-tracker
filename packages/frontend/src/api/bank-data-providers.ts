@@ -88,6 +88,7 @@ export interface AvailableAccount {
   name: string;
   type: string;
   balance: number;
+  creditLimit: number;
   currency: string;
   metadata?: Record<string, unknown>;
 }
@@ -185,6 +186,31 @@ export const syncTransactions = async (
   return response;
 };
 
+export const syncConnection = async ({ connectionId }: { connectionId: string }): Promise<SyncResult> => {
+  const response = await api.post(`/bank-data-providers/connections/${connectionId}/sync`);
+  return response;
+};
+
+export interface ReconcileDuplicatesResult {
+  mergedCount: number;
+  skippedCount: number;
+  consideredPairs: number;
+  unresolvedCount: number;
+}
+
+export const reconcileDuplicates = async ({
+  connectionId,
+  accountId,
+}: {
+  connectionId: string;
+  accountId: string;
+}): Promise<ReconcileDuplicatesResult> => {
+  const response = await api.post(`/bank-data-providers/connections/${connectionId}/reconcile-duplicates`, {
+    accountId,
+  });
+  return response;
+};
+
 export const loadTransactionsForPeriod = async (
   connectionId: string,
   accountId: string,
@@ -250,30 +276,14 @@ export interface SyncStatusResponse {
 
 interface SyncResult {
   totalAccounts: number;
-  syncedAccounts: number;
-  failedAccounts: number;
-  skippedAccounts: number;
-  accountResults: Array<{
-    accountId: string;
-    accountName: string;
-    status: 'success' | 'failed' | 'skipped';
-    error?: string;
-  }>;
+  queuedAccounts: number;
 }
 
 interface CheckSyncResponse {
   syncTriggered: boolean;
   message?: string;
   totalAccounts?: number;
-  syncedAccounts?: number;
-  failedAccounts?: number;
-  skippedAccounts?: number;
-  accountResults?: Array<{
-    accountId: string;
-    accountName: string;
-    status: 'success' | 'failed' | 'skipped';
-    error?: string;
-  }>;
+  queuedAccounts?: number;
 }
 
 /**

@@ -46,6 +46,7 @@ interface SubscriptionBase extends Pick<
   | 'expectedCurrencyCode'
   | 'frequency'
   | 'startDate'
+  | 'dueDate'
   | 'endDate'
   | 'accountId'
   | 'loanAccountId'

@@ -1,0 +1,247 @@
+{
+  "loans": {
+    "title": "Pôžičky",
+    "loadError": "Pôžičky sa nepodarilo načítať.",
+    "tryAgain": "Skúsiť znova",
+    "addButton": {
+      "label": "Pridať pôžičku"
+    },
+    "actions": {
+      "more": "Viac",
+      "moreAriaLabel": "Ďalšie akcie",
+      "excludeFromStats": "Vylúčiť zo štatistík",
+      "linkPayments": "Prepojiť predchádzajúce platby"
+    },
+    "linkPayments": {
+      "title": "Prepojiť predchádzajúce platby",
+      "description": "Vyberte transakcie, ktoré ste už na túto pôžičku zaplatili, a zaznamenajte ich ako splátky.",
+      "emptyTitle": "Žiadne zodpovedajúce transakcie",
+      "emptyDescription": "Týmto filtrom nezodpovedajú žiadne transakcie. Skúste rozšíriť rozsah dátumov alebo zrušiť filtre.",
+      "selectedCount": "Vybraných: {count}",
+      "clearSelection": "Vymazať",
+      "linkSelected": "Prepojiť {count}",
+      "success": "K pôžičke prepojená {count} platba. | K pôžičke prepojených {count} platieb.",
+      "preAnchorWarning": "{count} vybraná platba je datovaná pred referenčným dátumom zostatku pôžičky ({date}) — prepojí sa len ako história a nezníži nesplatený zostatok. | {count} vybraných platieb je datovaných pred referenčným dátumom zostatku pôžičky ({date}) — prepoja sa len ako história a nezníži sa nesplatený zostatok.",
+      "error": "Vybrané platby sa nepodarilo prepojiť. Skúste to znova, prosím.",
+      "overpayTitle": "Platby prevyšujú zostatok",
+      "overpayDescription": "Vybrané platby v súčte prevyšujú zostávajúci zostatok pôžičky o {amount}. Napriek tomu ich prepojiť?",
+      "overpayConfirmButton": "Aj tak prepojiť"
+    },
+    "dialog": {
+      "createTitle": "Pridať pôžičku",
+      "createDescription": "Sledujte hypotéku, úver na auto, študentskú pôžičku alebo akýkoľvek iný záväzok. Čokoľvek môžete neskôr upraviť.",
+      "editTitle": "Upraviť pôžičku",
+      "editDescription": "Aktualizujte podmienky pôžičky. Zmeny sadzby, doby splácania alebo plánovanej splátky sa zaznamenajú na časovej osi udalostí.",
+      "termRecalcConfirm": {
+        "title": "Recalculate outstanding balance?",
+        "description": "Using the new {term} month term, the estimated outstanding balance is {balance} and the loan end date is {endDate}. Apply this recalculation?",
+        "applyButton": "Use estimated balance",
+        "keepButton": "Keep current balance"
+      }
+    },
+    "settings": {
+      "title": "Nastavenia",
+      "editTitle": "Upraviť podrobnosti pôžičky",
+      "editDescription": "Aktualizujte názov, zostatok, sadzbu, dobu splácania, polia splátky alebo údaje o veriteľovi.",
+      "editButton": "Upraviť",
+      "excludeFromStatsTitle": "Vylúčiť zo štatistík",
+      "excludeFromStatsDescription": "Skryte túto pôžičku z čistej hodnoty majetku, grafov a prehľadov bez toho, aby ste ju archivovali.",
+      "archiveTitle": "Archivovať pôžičku",
+      "archiveDescription": "Skryje pôžičku z bočného panela a zoznamov účtov. Kedykoľvek ju môžete obnoviť.",
+      "archiveButton": "Archivovať",
+      "archivedTitle": "Táto pôžička je archivovaná",
+      "archivedDescription": "Je skrytá z bočného panela a výberov účtov a uvedená v sekcii Archivované na stránke pôžičiek. Ak chcete v sledovaní pokračovať, obnovte ju.",
+      "unarchiveButton": "Obnoviť",
+      "archiveConfirmTitle": "Archivovať túto pôžičku?",
+      "archiveConfirmDescription": "{name} sa presunie do sekcie Archivované na tejto stránke a skryje sa z bočného panela a výberov účtov.",
+      "archiveAlsoExclude": "Vylúčiť aj zo štatistík",
+      "deleteTitle": "Zmazať pôžičku",
+      "deleteDescription": "Natrvalo odstráni pôžičku aj jej históriu. Túto akciu nie je možné vrátiť späť.",
+      "deleteButton": "Zmazať",
+      "deleteConfirmTitle": "Zmazať túto pôžičku natrvalo?",
+      "deleteConfirmDescription": "{name} a všetky jej udalosti sa natrvalo odstránia. Túto akciu nie je možné vrátiť späť.",
+      "toggleSuccess": "Nastavenie aktualizované",
+      "toggleError": "Nastavenie sa nepodarilo aktualizovať",
+      "archiveSuccess": "Pôžička archivovaná",
+      "archiveError": "Pôžičku sa nepodarilo archivovať",
+      "unarchiveSuccess": "Pôžička obnovená",
+      "deleteSuccess": "Pôžička zmazaná",
+      "deleteError": "Pôžičku sa nepodarilo zmazať",
+      "deleteBlockedByPayments": "Táto pôžička má zaznamenané platby. Najprv ich zmažte, potom môžete zmazať aj pôžičku."
+    },
+    "empty": {
+      "title": "Zatiaľ žiadne pôžičky",
+      "description": "Sledujte na tomto mieste hypotéky, úvery na auto, študentské pôžičky a ostatné záväzky.",
+      "createFirstButton": "Pridajte prvú pôžičku"
+    },
+    "paidOff": {
+      "sectionTitle": "Splatené",
+      "repaid": "Splatené",
+      "opened": "Vznik",
+      "closed": "Splatená",
+      "interestPaid": "Zaplatený úrok (odhad)"
+    },
+    "archivedList": {
+      "sectionTitle": "Archivované",
+      "badge": "Archivované",
+      "outstanding": "Nesplatené"
+    },
+    "aggregate": {
+      "avgApr": "Priem. RPMN",
+      "monthlyObligation": "Mesačný záväzok",
+      "interestProjected": "Predpokladaný úrok",
+      "totalOutstanding": "Celkovo nesplatené",
+      "principalRepaid": "Splatených {percent} % z istiny {amount}",
+      "debtFree": "Bez dlhov"
+    },
+    "list": {
+      "columns": {
+        "loan": "Pôžička",
+        "progress": "Priebeh",
+        "balance": "Zostatok",
+        "apr": "RPMN",
+        "monthly": "Mesačne",
+        "payoff": "Splatenie",
+        "interestLeft": "Zostávajúci úrok"
+      },
+      "paidPercent": "Splatené {value} %",
+      "monthsLeft": "Zostáva {count} mes.",
+      "ofPrincipal": "z {amount}"
+    },
+    "types": {
+      "mortgage": "Hypotéka",
+      "auto": "Vozidlo",
+      "student": "Študentská",
+      "personal": "Osobná",
+      "heloc": "HELOC",
+      "business": "Podnikateľská",
+      "medical": "Zdravotná",
+      "other": "Ostatné"
+    },
+    "warnings": {
+      "no_planned_payment": "Nie je nastavená plánovaná splátka – predpokladané splatenie nie je dostupné.",
+      "payment_below_interest": "Plánovaná splátka nepokrýva mesačný úrok – pôžička by rástla."
+    },
+    "detail": {
+      "backToList": "Späť na Pôžičky",
+      "loadError": "Túto pôžičku sa nepodarilo načítať.",
+      "paidOffBadge": "Splatené",
+      "summary": {
+        "outstanding": "Aktuálny zostatok",
+        "principalOnlyTooltip": "Zostatok odráža len splátky istiny. Úrok sa automaticky nepripočítava – rozhodujúci je výpis od vášho veriteľa.",
+        "apr": "RPMN",
+        "originalPrincipal": "Pôvodná istina",
+        "term": "Doba splácania",
+        "termMonths": "{count} mesiac | {count} mesiacov",
+        "startDate": "Dátum začiatku",
+        "paymentDay": "Deň splátky",
+        "dayOfMonth": "{day}. deň každého mesiaca",
+        "accountNumber": "Číslo účtu",
+        "balanceAnchor": "Zostatok k",
+        "balanceAnchorTooltip": "Nesplatený zostatok je fixovaný k tomuto dátumu. Platby datované pred ním sa zachovávajú v histórii, no nemenia priebeh splácania.",
+        "actualDuration": "Skutočné trvanie",
+        "endDate": "End date"
+      },
+      "paidOff": {
+        "bannerTitle": "{name} — úplne splatená",
+        "bannerSubline": "{type} · Vznik {opened} · Splatená {closed}",
+        "took": "Trvalo",
+        "monthsEarly": "o {count} mes. skôr",
+        "duration": {
+          "full": "{years} r. {months} mes.",
+          "years": "{years} r.",
+          "months": "{months} mes."
+        },
+        "cost": {
+          "title": "Koľko táto pôžička stála",
+          "totalLabel": "Celková cena",
+          "principal": "Istina",
+          "interest": "Úrok (odhad)",
+          "estimateFootnote": "Úrok je odhad podľa amortizačného plánu — platby sa zaznamenávajú ako istina, presné rozdelenie úroku sa neukladá.",
+          "effectiveCost": "Efektívna cena: {cents} centov úroku na každé požičané euro"
+        },
+        "chart": {
+          "title": "Vývoj zostatku",
+          "titleHint": "Skutočný zaznamenaný zostatok vašej pôžičky v čase v porovnaní s pôvodným amortizačným plánom.",
+          "noData": "Nedostatok histórie na zobrazenie vývoja zostatku tejto pôžičky."
+        }
+      },
+      "projection": {
+        "title": "Projekcia",
+        "paidLabel": "Splatené",
+        "paidOfOriginal": "Splatené {paid} z {original}",
+        "payoffDate": "Dátum splatenia",
+        "monthsRemaining": "Zostávajúce mesiace",
+        "totalInterestRemaining": "Zostávajúci celkový úrok",
+        "nextMonthInterest": "Úrok na nasledujúci mesiac",
+        "nextMonthPrincipal": "Istina na nasledujúci mesiac",
+        "plannedPayment": "Plánovaná splátka"
+      },
+      "events": {
+        "title": "Časová os",
+        "empty": "Zatiaľ žiadna história – tu sa zobrazia zmeny sadzby, úpravy zostatku a poznámky.",
+        "rateChange": "Sadzba sa zmenila z {from} % na {to} %",
+        "termChange": "Doba splácania sa zmenila z {from} na {to} mesiacov",
+        "plannedPaymentChange": "Plánovaná splátka sa zmenila z {from} na {to}",
+        "paidOff": "Pôžička splatená",
+        "balanceCorrection": "Nesplatený zostatok upravený z {from} na {to}"
+      },
+      "payments": {
+        "title": "Nedávne platby",
+        "empty": "Zatiaľ nie sú k tejto pôžičke zaznamenané žiadne platby.",
+        "loadError": "Nedávne platby sa nepodarilo načítať.",
+        "seeAll": "Zobraziť všetky",
+        "allTitle": "Všetky platby"
+      },
+      "recordPayment": "Zaznamenať platbu",
+      "payoffChart": {
+        "title": "Projekcia splatenia",
+        "titleHint": "Zobrazuje, kedy bude vaša pôžička úplne splatená pri minimálnej, plánovanej a vlastnej mesačnej splátke, spolu s dátumom splatenia a celkovým úrokom pre každý scenár. Zadajte ľubovoľnú sumu do poľa vlastnej splátky a okamžite uvidíte, ako sa zmení dátum splatenia a celkový úrok.",
+        "customPaymentLabel": "Vlastná splátka",
+        "applyAsPlanned": "Použiť ako plánovanú splátku",
+        "applyConfirmTitle": "Použiť ako plánovanú splátku?",
+        "applyConfirmDescription": "Týmto sa plánovaná mesačná splátka pôžičky nastaví na {amount}.",
+        "applySuccess": "Plánovaná splátka aktualizovaná.",
+        "applyError": "Plánovanú splátku sa nepodarilo aktualizovať. Skúste to znova, prosím.",
+        "belowInterest": "Táto splátka nepokrýva mesačný úrok, preto zostatok nikdy neklesne.",
+        "paidOff": "Táto pôžička je splatená — nie je čo projektovať.",
+        "enterPaymentPrompt": "Ak chcete zistiť projekciu splatenia, zadajte vyššie sumu splátky.",
+        "paidOffShort": "Splatené",
+        "neverPaysOff": "Nikdy",
+        "interestVsPlanned": "Úrok oproti plánu",
+        "payoffVsPlanned": "Splatenie oproti plánu",
+        "sameAsPlanned": "Rovnaké ako plán",
+        "earlierBy": "o {time} skôr",
+        "laterBy": "o {time} neskôr",
+        "monthsLabel": "{n} mes.",
+        "yearsLabel": "{n} r.",
+        "yearsMonthsLabel": "{y} r. {m} mes.",
+        "legend": {
+          "minimum": "Minimálna splátka",
+          "planned": "Plánovaná splátka",
+          "custom": "Vlastná splátka",
+          "actual": "Skutočný zostatok",
+          "schedule": "Pôvodný plán"
+        }
+      },
+      "installments": {
+        "title": "Loan installments",
+        "description": "Future payments from these installments will settle this loan.",
+        "linkAction": "Link installment",
+        "emptyTitle": "No installments linked",
+        "emptyDescription": "Link an installment so each future payment can reduce this loan.",
+        "progress": "{progress} payments",
+        "paused": "Paused",
+        "linkSuccess": "Installment linked to the loan.",
+        "linkError": "The installment could not be linked.",
+        "dialogTitle": "Link installments",
+        "dialogDescription": "Choose one or more expense installments. The link affects future payments only.",
+        "searchLabel": "Search installments",
+        "searchPlaceholder": "Search by name",
+        "loading": "Loading installments...",
+        "noResults": "No eligible installments found.",
+        "confirmLink": "Link {count} installments"
+      }
+    }
+  }
+}

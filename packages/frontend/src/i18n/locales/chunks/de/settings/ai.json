@@ -1,0 +1,278 @@
+{
+  "settings": {
+    "ai": {
+      "title": "KI-Einstellungen",
+      "description": "Wähle, welches KI-Modell für die einzelnen Funktionen verwendet wird, füge deine eigenen Modelle hinzu und verbinde KI-Apps wie Claude oder ChatGPT mit deinen Daten.",
+      "tabs": {
+        "features": "KI-Funktionen",
+        "models": "KI-Modelle",
+        "connectedApps": "Konnektoren (MCP)",
+        "invalidConnectionsTooltip": "Eines deiner KI-Modelle erfordert Aufmerksamkeit"
+      },
+      "credentialStatus": {
+        "validated": "Überprüft {timeAgo}",
+        "failed": "Fehlgeschlagen {timeAgo}",
+        "invalidBadge": "Ungültig"
+      },
+      "features": {
+        "title": "KI-Funktionen",
+        "description": "Konfiguriere, welches Modell für die jeweiligen KI-gestützten Funktionen verwendet werden soll",
+        "howItWorks": "So funktioniert's",
+        "loadError": "Deine KI-Funktionen konnten nicht geladen werden."
+      },
+      "categorization": {
+        "howItWorks": {
+          "points": {
+            "autoSync": "Wenn du Transaktionen von deiner Bank synchronisierst, werden unkategorisierte Transaktionen automatisch zur Kategorisierung an die KI gesendet.",
+            "analysis": "Die KI analysiert Transaktionsbeschreibungen und Händlernamen, um passende Kategorien aus deiner bestehenden Kategorienliste vorzuschlagen.",
+            "override": "Du kannst von der KI vorgeschlagene Kategorien jederzeit manuell überschreiben."
+          }
+        }
+      },
+      "statementParsing": {
+        "howItWorks": {
+          "points": {
+            "upload": "Lade einen Kontoauszug (PDF, CSV oder TXT) hoch und die KI extrahiert automatisch alle Transaktionen.",
+            "analysis": "Die KI analysiert die Dokumentenstruktur, um Daten, Beschreibungen, Beträge und Transaktionstypen zu erkennen.",
+            "review": "Du kannst alle extrahierten Daten überprüfen und korrigieren, bevor du sie in dein Konto importierst.",
+            "cost": "Die Kosten werden vor der Verarbeitung geschätzt, stellen jedoch nur Näherungswerte dar."
+          }
+        }
+      },
+      "modelSelector": {
+        "placeholder": "Modell auswählen",
+        "automaticOption": "Automatisch",
+        "automaticOptionWithTarget": "Automatisch · {target}",
+        "serverOption": "MoneyMatter KI · enthalten",
+        "connectionOption": "{name} · {model}",
+        "connectionOptionNeedsAttention": "{name} · {model} (erfordert Aufmerksamkeit)",
+        "badges": {
+          "yourKey": "Eigener Schlüssel",
+          "yourKeyTooltip": "Läuft auf einem deiner eigenen KI-Modelle. Dein Anbieter rechnet direkt mit dir ab und MoneyMatter beschränkt die Nutzung nicht.",
+          "server": "Server",
+          "serverTooltip": "Läuft auf MoneyMatter KI, in deinem Paket enthalten. Es gelten Nutzungslimits."
+        },
+        "sharedPoolNote": "In deinem aktuellen Paket läuft das enthaltene Modell in einem gemeinsamen Pool, sodass bei hoher Gesamtnachfrage Limits gelten können. {link}, um diese zu vermeiden.",
+        "sharedPoolNoteLink": "Auf Plus upgraden",
+        "modelLabel": "Modell",
+        "modelInfo": {
+          "estimatedCost": "Geschätzte Kosten:",
+          "per100Transactions": "pro 100 Transaktionen",
+          "unknown": "Unknown"
+        },
+        "notifications": {
+          "updateSuccess": "Modell erfolgreich aktualisiert",
+          "updateFailed": "Modell konnte nicht aktualisiert werden",
+          "resetSuccess": "Auf Standardmodell zurückgesetzt",
+          "resetFailed": "Standardmodell konnte nicht zurückgesetzt werden"
+        },
+        "empty": {
+          "title": "Noch kein KI-Modell",
+          "description": "Füge dein eigenes KI-Modell hinzu, um diese Funktion zu nutzen."
+        },
+        "allConnectionsDown": "Alle deine KI-Modelle erfordern deine Aufmerksamkeit, daher ist diese Funktion pausiert. Behebe das Problem unter {link}.",
+        "allConnectionsDownLink": "KI-Modelle"
+      },
+      "modelGuide": {
+        "trigger": "Welches Modell passt?",
+        "tierHeading": "{tier}-Modell reicht aus",
+        "tiers": {
+          "light": "Einfach",
+          "balanced": "Ausgewogen",
+          "smart": "Intelligent"
+        },
+        "needsLabel": "Erfordert",
+        "picksLabel": "Gute Wahl",
+        "yourModel": "Dein Modell",
+        "source": "Modelldetails von models.dev",
+        "needs": {
+          "textOnly": "Nur Text",
+          "runsOften": "Läuft bei jeder Synchronisation",
+          "longAnswers": "Lange Antworten",
+          "readsFiles": "Liest Bilder & PDFs",
+          "structuredAnswers": "Strukturierte Antworten"
+        },
+        "why": {
+          "categorization": "Eine kurze, wiederkehrende Aufgabe. Ein kleines Modell meistert das gut und hält die Kosten niedrig.",
+          "statementParsing": "Liest den gesamten Kontoauszug und gibt jede Zeile zurück – erfordert daher ein Modell, das auch bei langen Texten präzise bleibt.",
+          "investmentTransactionsParsing": "Wandelt Broker-Exporte in Kauf- und Verkaufenzeilen um. Lange Exporte benötigen ein Modell, das lange Antworten schreiben kann.",
+          "receiptParsing": "Das Modell analysiert die Belegdatei selbst, muss also Bilder und PDFs lesen können."
+        },
+        "picks": {
+          "categorization": "Gemini Flash Lite · Claude Haiku",
+          "statementParsing": "Gemini Flash · Claude Sonnet · GPT Terra",
+          "investmentTransactionsParsing": "Gemini Flash · Claude Sonnet",
+          "receiptParsing": "Gemini Flash · Claude Sonnet"
+        },
+        "verdict": {
+          "fit": "Gut geeignet",
+          "gaps": "{count} fehlt | {count} fehlen",
+          "unknown": "Nicht geprüft"
+        },
+        "warning": {
+          "readsFiles": "Kann keine Dateien lesen",
+          "readsText": "Kann keinen Text lesen",
+          "readsImages": "Kann keine Bilder lesen",
+          "readsPdfs": "Kann keine PDFs lesen",
+          "longAnswers": "Nur kurze Antworten",
+          "structuredAnswers": "Keine strukturierten Antworten"
+        },
+        "checks": {
+          "readsText": {
+            "label": "Liest Text",
+            "fail": "Dieses Modell verarbeitet keinen Text."
+          },
+          "readsImages": {
+            "label": "Liest Bilder",
+            "fail": "Bilddateien funktionieren nicht."
+          },
+          "readsPdfs": {
+            "label": "Liest PDFs",
+            "fail": "PDF-Dateien funktionieren nicht."
+          },
+          "longAnswers": {
+            "label": "Lange Antworten",
+            "ok": "Schreibt bis zu {tokens} Token.",
+            "fail": "Schreibt bis zu {tokens} Token, sodass lange Dateien abgeschnitten werden."
+          },
+          "structuredAnswers": {
+            "label": "Strukturierte Antworten",
+            "fail": "Die Antworten sind möglicherweise in einem Format, das die App nicht lesen kann."
+          }
+        },
+        "unknown": {
+          "title": "Modell kann nicht geprüft werden",
+          "detail": "models.dev hat derzeit keine Details zu diesem Modell, daher können wir es nicht überprüfen. Stelle sicher, dass es die oben genannten Anforderungen erfüllt."
+        }
+      },
+      "connections": {
+        "title": "KI-Modelle",
+        "description": "Verbinde OpenAI, Claude, Gemini, OpenRouter oder ein lokales Modell. Jeder Eintrag ist ein Modell, das du für jede beliebige Funktion auswählen kannst.",
+        "tip": {
+          "ariaLabel": "Über KI-Modelle",
+          "text": "Du kannst denselben Anbieter mehrfach mit unterschiedlichen Modellen hinzufügen. Benenne sie nach ihrer Leistungsfähigkeit, z.B. „Claude smart“ und „Claude fast“, und wähle dann das passende Modell für jede Funktion."
+        },
+        "addButton": "Modell hinzufügen",
+        "capReached": "Du hast das Limit von {max} KI-Modellen erreicht. Entferne ein Modell, um ein neues hinzuzufügen.",
+        "duplicateName": "{name} Kopie",
+        "empty": {
+          "title": "Noch keine KI-Modelle",
+          "description": "Füge ein Modell mit deinem eigenen API-Schlüssel hinzu oder verbinde ein lokales Modell wie Ollama oder LM Studio."
+        },
+        "loadError": {
+          "title": "Deine KI-Modelle konnten nicht geladen werden",
+          "description": "Deine gespeicherten Modelle sind weiterhin vorhanden. Überprüfe deine Verbindung und versuche es erneut."
+        },
+        "badges": {
+          "default": "Standard",
+          "defaultSkipped": "Standard · übersprungen, da Eingreifen erforderlich"
+        },
+        "status": {
+          "model": "{provider} · {model}"
+        },
+        "actions": {
+          "menuAriaLabel": "KI-Modell-Aktionen",
+          "duplicate": "Duplizieren",
+          "setDefault": "Als Standard festlegen",
+          "remove": "Entfernen",
+          "reconnect": "Erneut verbinden",
+          "enterKey": "API-Schlüssel eingeben"
+        },
+        "removeDialog": {
+          "title": "Dieses KI-Modell entfernen?",
+          "description": "\"{name}\" und sein gespeicherter API-Schlüssel werden entfernt.",
+          "pinnedFeatures": "Diese Funktionen wechseln zu Automatisch: {features}.",
+          "confirm": "Entfernen"
+        },
+        "removeKeyDialog": {
+          "title": "API-Schlüssel entfernen?",
+          "description": "Anfragen an dieses Modell werden ohne Schlüssel gesendet. Server, die einen Schlüssel benötigen, antworten dann nicht mehr.",
+          "confirm": "Schlüssel entfernen"
+        },
+        "test": {
+          "success": "Verbunden. Das Modell hat geantwortet.",
+          "failed": "Das Modell konnte nicht erreicht werden."
+        },
+        "notifications": {
+          "saveSuccess": "KI-Modell gespeichert",
+          "saveFailed": "KI-Modell konnte nicht gespeichert werden",
+          "removeSuccess": "KI-Modell entfernt",
+          "removeFailed": "KI-Modell konnte nicht entfernt werden",
+          "setDefaultSuccess": "\"{name}\" ist jetzt dein Standardmodell",
+          "setDefaultFailed": "Standardmodell konnte nicht geändert werden",
+          "removeKeySuccess": "API-Schlüssel entfernt",
+          "removeKeyFailed": "API-Schlüssel konnte nicht entfernt werden",
+          "removeKeyInvalid": "API-Schlüssel wurde entfernt, aber das Modell antwortet nicht mehr: {reason}",
+          "editedConnectionGone": "Dieses KI-Modell wurde an anderer Stelle entfernt, daher wurde das Formular geschlossen."
+        },
+        "form": {
+          "titleAdd": "KI-Modell hinzufügen",
+          "titleEdit": "KI-Modell bearbeiten",
+          "titleDuplicate": "KI-Modell duplizieren",
+          "providerLabel": "Anbieter",
+          "providerPlaceholder": "Anbieter auswählen",
+          "nameLabel": "Name",
+          "baseUrlLabel": "Basis-URL",
+          "baseUrlPlaceholder": "https://example.com/v1",
+          "apiKeyLabel": "API-Schlüssel",
+          "apiKeyPlaceholder": "Füge deinen API-Schlüssel ein",
+          "apiKeyGetHint": "Erhalte einen Schlüssel unter {link}.",
+          "apiKeyOptionalHint": "Optional. Leer lassen, wenn dein Server keinen Schlüssel benötigt.",
+          "apiKeySavedHint": "Leer lassen, um den gespeicherten Schlüssel beizubehalten.",
+          "apiKeyBorrowedHint": "Verwendet den Schlüssel von \"{name}\". Gib Sie einen neuen Schlüssel ein, um einen anderen zu verwenden.",
+          "removeApiKeyButton": "API-Schlüssel entfernen",
+          "modelLabel": "Modell",
+          "modelPlaceholder": "Modell eingeben oder auswählen",
+          "modelListEmpty": "Keine Modelle zur Auswahl. Gib den Modellnamen ein, den dein Server verwendet.",
+          "modelListNoMatch": "Kein aufgelistetes Modell passt. Du kannst den eingegebenen Namen trotzdem verwenden.",
+          "testButton": "Verbindung testen",
+          "saveButton": "Änderungen speichern",
+          "localNetworkOnly": "MoneyMatter kann keinen Server auf deinem eigenen Computer wie {hostname} oder {ip} erreichen. Gib ihn über einen Tunnel wie ngrok oder Cloudflare Tunnel frei und füge die URL des Tunnels hier ein.",
+          "dockerHost": "Wenn du diese App in Docker auf demselben Gerät wie den Modell-Server ausführst, verwende {dockerHost} anstelle von {ip}."
+        },
+        "presets": {
+          "openai": {
+            "label": "OpenAI",
+            "namePlaceholder": "z.B. GPT fast"
+          },
+          "anthropic": {
+            "label": "Anthropic (Claude)",
+            "namePlaceholder": "z.B. Claude smart"
+          },
+          "google": {
+            "label": "Google (Gemini)",
+            "namePlaceholder": "z.B. Gemini fast"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "namePlaceholder": "z.B. OpenRouter Llama"
+          },
+          "ollama": {
+            "label": "Ollama",
+            "namePlaceholder": "e.g. Lokales Llama"
+          },
+          "lmStudio": {
+            "label": "LM Studio",
+            "namePlaceholder": "z.B. LM Studio Qwen"
+          },
+          "custom": {
+            "label": "Benutzerdefiniert (OpenAI-kompatibel)",
+            "namePlaceholder": "z.B. Mein Server"
+          }
+        }
+      },
+      "customInstructions": {
+        "title": "Benutzerdefinierte Anweisungen",
+        "description": "Gib Kontext an, um der KI bei der Kategorisierung deiner Transaktionen zu helfen. Diese Anweisungen werden bei der Kategorisierung von Transaktionen während der Bank-Synchronisierung und des manuellen Imports berücksichtigt.",
+        "placeholder": "z.B. Transaktionen von \"Starbucks\" gehören zu \"Kaffee\". Meine freiberuflichen Einnahmen stammen von \"Acme Corp\".",
+        "serverModelHint": "Benutzerdefinierte Anweisungen gelten nur, wenn eines deiner eigenen KI-Modelle die Kategorisierung übernimmt. Wähle oben eines aus.",
+        "requiresOwnCredentials": "Füge dein eigenes KI-Modell hinzu, um benutzerdefinierte Anweisungen zu nutzen.",
+        "credentialsCheckFailed": "Deine KI-Modelle konnten nicht überprüft werden, daher sind benutzerdefinierte Anweisungen vorübergehend nicht verfügbar.",
+        "retryCredentialsCheck": "Erneut versuchen",
+        "save": "Speichern",
+        "saved": "Gespeichert!",
+        "saveFailed": "Benutzerdefinierte Anweisungen konnten nicht gespeichert werden. Bitte versuche es erneut."
+      }
+    }
+  }
+}

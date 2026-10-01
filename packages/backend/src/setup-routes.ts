@@ -10,8 +10,11 @@ import { auth, authPool } from './config/auth';
 import { SUPPORTED_LOCALES } from './i18n';
 import accountGroupsRoutes from './routes/account-groups';
 import accountsRoutes from './routes/accounts.route';
+import adminRoutes from './routes/admin.route';
+import attachmentsRoutes from './routes/attachments.route';
 import bankDataProvidersRoutes from './routes/bank-data-providers.route';
 import betterAuthExtensionsRoutes from './routes/better-auth-extensions.route';
+import billingRoutes from './routes/billing.route';
 import brandLogosRoutes from './routes/brand-logos.route';
 import categoriesRoutes from './routes/categories.route';
 import modelsCurrenciesRoutes from './routes/currencies.route';
@@ -27,6 +30,7 @@ import ofxImportRoutes from './routes/import-export/ofx.route';
 import statementParserRoutes from './routes/import-export/text-source.route';
 import ynabImportRoutes from './routes/import-export/ynab.route';
 import investmentsRoutes from './routes/investments.route';
+import landingRoutes from './routes/landing.route';
 import loansRoutes from './routes/loans.route';
 import mcpRoutes from './routes/mcp.route';
 import notificationsRoutes from './routes/notifications.route';
@@ -100,7 +104,7 @@ export function setupRoutes(app: Express) {
         body = Buffer.from(JSON.stringify(parsed));
       } catch {
         // Not valid JSON – proxy the original bytes and let better-auth error
-        logger.warn('[register-patch] Failed to parse request body as JSON');
+        logger.info('[register-patch] Failed to parse request body as JSON');
         body = Buffer.concat(chunks);
       }
 
@@ -173,6 +177,7 @@ export function setupRoutes(app: Express) {
   app.use(`${API_PREFIX}/user`, userRoutes);
   app.use(`${API_PREFIX}/accounts`, accountsRoutes);
   app.use(`${API_PREFIX}/transactions`, transactionsRoutes);
+  app.use(`${API_PREFIX}/attachments`, attachmentsRoutes);
   app.use(`${API_PREFIX}/categories`, categoriesRoutes);
   app.use(`${API_PREFIX}/models/currencies`, modelsCurrenciesRoutes);
   app.use(`${API_PREFIX}/bank-data-providers`, bankDataProvidersRoutes);
@@ -208,6 +213,9 @@ export function setupRoutes(app: Express) {
   app.use(`${API_PREFIX}/sse`, sseRoutes);
   app.use(`${API_PREFIX}/webhooks`, webhooksRoutes);
   app.use(`${API_PREFIX}/github`, githubRoutes);
+  app.use(`${API_PREFIX}/landing`, landingRoutes);
+  app.use(`${API_PREFIX}/billing`, billingRoutes);
+  app.use(`${API_PREFIX}/admin`, adminRoutes);
 
   // "development" is required here: Playwright frontend e2e tests run against
   // the dev backend on CI and rely on /tests/verify-email and other test-only endpoints.
@@ -226,7 +234,7 @@ export function setupRoutes(app: Express) {
   // mcp.moneymatter.app; the SPA host has a static mirror in nginx.
   // Refresh `Expires` before it lapses, otherwise scanners flag it as expired.
   const securityTxt = [
-    'Contact: https://github.com/letehaha/budget-tracker/security/advisories/new',
+    'Contact: https://github.com/letehaha/moneymatter/security/advisories/new',
     'Expires: 2027-04-25T00:00:00.000Z',
     'Preferred-Languages: en',
     'Canonical: https://api.moneymatter.app/.well-known/security.txt',

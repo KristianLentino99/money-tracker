@@ -1,15 +1,19 @@
 import type { BackupRestoreProgress, BackupRestoreSummary, BackupRestoreWarning } from '@bt/shared/types';
-import UserSettings, { ZodSettingsSchema } from '@models/user-settings.model';
+import { logger } from '@js/utils/logger';
+import { trackBackupRestored } from '@js/utils/posthog';
+import UserSettings, { type SettingsSchema, ZodSettingsSchema } from '@models/user-settings.model';
 import Users from '@models/users.model';
+import { unifyAiConnections } from '@root/migrations/utils/unify-ai-connections';
 import { runUserDestroyLifecycle } from '@services/user/user-destroy-lifecycle';
 import { destroyUserOwnedData } from '@services/user/wipe-user-data.service';
 
+import { stripConnectionKeys } from '../dump-tables.service';
 import { BACKUP_TABLES } from '../registry';
 import { type ParsedArchive } from './load-archive';
 import { loadValidatedArchive } from './load-validated-archive';
 import { USER_ROW_GUARDED_FK, foreignReferenceNulledMessage } from './owned-reference-guard';
 import { triggerPostRestorePriceSync } from './post-restore-price-sync';
-import { remapSavedPivotViewIds } from './remap-embedded-references';
+import { remapFireSettingsIds, remapSavedPivotViewIds } from './remap-embedded-references';
 import { resolveSecurities } from './resolve-securities';
 import { insertRestoreTables, purgeUserOwnedRestoreTables } from './restore-tables';
 
@@ -24,7 +28,7 @@ if (!USER_RESTORE_DEF?.fields) {
 const USER_RESTORE_FIELDS = USER_RESTORE_DEF.fields;
 
 /** UPDATE the target Users row with the tier-1 restorable fields only. Identity
- *  (id/username/email/authUserId/role) is never touched. Category UUIDs may be
+ *  (id/username/authUserId/role) is never touched. Category UUIDs may be
  *  reminted on restore, so `defaultCategoryId` is remapped to the category's
  *  final id; a value that isn't one of this restore's categories (forged or
  *  foreign) is nulled with a warning. */
@@ -97,8 +101,13 @@ async function upsertUserSettings({
     return;
   }
 
-  const parsed = ZodSettingsSchema.safeParse(src.settings);
-  if (!parsed.success) {
+  // Legacy archives (API keys, custom endpoints) convert exactly like the DB rows did. Keys
+  // are stripped here too, so a hand-edited archive can't bring ciphertext in.
+  const settings = stripConnectionKeys({ settings: unifyAiConnections({ settings: src.settings }) });
+  const parsed = ZodSettingsSchema.safeParse(settings);
+  const restored = parsed.success ? parsed : ZodSettingsSchema.omit({ fire: true }).safeParse(settings);
+  if (!restored.success) {
+    logger.warn('Backup restore: settings failed schema and were reset', { userId, issues: restored.error.issues });
     // A backup taken across a settings-schema change can carry a blob the current
     // schema rejects. Reset to defaults and warn rather than aborting an otherwise
     // valid restore over a non-critical field.
@@ -111,11 +120,22 @@ async function upsertUserSettings({
     return;
   }
 
-  // Category/account/payee UUIDs may be reminted on restore, so rewrite the ids
-  // saved inside each Pivot view before persisting the settings blob.
-  remapSavedPivotViewIds({ views: parsed.data.savedPivotViews, insertedIds });
+  if (!parsed.success) {
+    logger.warn('Backup restore: FIRE settings failed schema and were reset', { userId, issues: parsed.error.issues });
+    warnings.push({
+      code: 'fire_settings_reset',
+      table: 'user-settings',
+      message: 'Saved FIRE settings did not match the current schema and were reset to defaults.',
+    });
+  }
+  const restoredSettings: SettingsSchema = restored.data;
 
-  await UserSettings.create({ userId, settings: parsed.data });
+  // Category/account/payee/portfolio UUIDs may be reminted on restore, so rewrite the
+  // ids saved inside Pivot views and the FIRE slice before persisting the settings blob.
+  remapSavedPivotViewIds({ views: restoredSettings.savedPivotViews, insertedIds });
+  remapFireSettingsIds({ fire: restoredSettings.fire, insertedIds });
+
+  await UserSettings.create({ userId, settings: restoredSettings });
 }
 
 /**
@@ -192,6 +212,13 @@ export async function restoreUserBackup({
   // fire-and-forget `syncHistoricalPrices` opens its own fresh transaction rather
   // than joining a committed one.
   triggerPostRestorePriceSync({ securityIds: securities.resolvedSecurityIds });
+
+  trackBackupRestored({
+    userId,
+    sourceUsername: archive.manifest.user?.username,
+    sourceEmail: archive.manifest.user?.email,
+    backupExportedAt: archive.manifest.exportedAt,
+  });
 
   return { insertedByTable, warnings };
 }

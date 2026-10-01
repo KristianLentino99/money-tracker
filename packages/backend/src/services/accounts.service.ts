@@ -16,7 +16,6 @@ import { logger } from '@js/utils/logger';
 import * as Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
-import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import PlanAccountMemberships from '@models/plan-account-memberships.model';
 import { countTransactions } from '@models/transactions-query';
 import { getBaseCurrency } from '@models/users-currencies.model';
@@ -40,8 +39,10 @@ import { convertCrossUserTransfersForAccountIds } from '@services/sharing/househ
 import { pauseAutomationsReferencing } from '@services/transaction-automations/references';
 import { Op } from 'sequelize';
 
+import { absorbBalanceAdjustment } from './accounts/absorb-balance-adjustment';
 import { archiveAccount as performArchiveSideEffects } from './accounts/archive-account';
 import { lockAccountRow } from './accounts/lock-account-row';
+import { removePortfolioTransfersForAccounts } from './accounts/remove-portfolio-transfers-for-accounts';
 import { restampRefInitialBalance } from './accounts/restamp-ref-initial-balance';
 import { unlinkSubscriptionsFromAccount } from './accounts/unlink-subscriptions-from-account';
 import { unlinkTemplatesFromAccount } from './accounts/unlink-templates-from-account';
@@ -251,6 +252,26 @@ export const createAccount = withTransaction(
   },
 );
 
+const updateInitialBalance = withTransaction(
+  async ({ userId, accountId, initialBalance }: { userId: number; accountId: string; initialBalance: Money }) => {
+    const account = await findOrThrowNotFound({
+      query: lockAccountRow({ accountId, userId }),
+      message: t({ key: 'accounts.accountNotFound' }),
+    });
+    // absorbBalanceAdjustment keeps a non-system account's initialBalance and would only move currentBalance.
+    if (account.type !== ACCOUNT_TYPES.system) {
+      throw new ValidationError({
+        message: t({ key: 'accounts.initialBalanceOnlySystem' }),
+      });
+    }
+
+    const delta = initialBalance.subtract(account.initialBalance);
+    if (delta.isZero()) return;
+
+    await absorbBalanceAdjustment({ userId, accountId, amountDelta: delta });
+  },
+);
+
 export const updateAccount = withTransaction(
   async ({
     id,
@@ -259,6 +280,7 @@ export const updateAccount = withTransaction(
     logoDomain,
     logoInitials,
     logoColor,
+    initialBalance: nextInitialBalance,
     ...payload
   }: Accounts.UpdateAccountByIdPayload &
     (Pick<Accounts.UpdateAccountByIdPayload, 'id'> | Pick<Accounts.UpdateAccountByIdPayload, 'externalId'>) & {
@@ -274,11 +296,28 @@ export const updateAccount = withTransaction(
     if (id !== undefined) {
       await lockAccountRow({ accountId: id, userId: payload.userId });
     }
+    if (nextInitialBalance !== undefined && payload.currentBalance !== undefined) {
+      throw new ValidationError({ message: t({ key: 'accounts.initialAndCurrentBalanceTogether' }) });
+    }
+    if (nextInitialBalance !== undefined) {
+      await updateInitialBalance({ userId: payload.userId, accountId: id, initialBalance: nextInitialBalance });
+    }
 
     const accountData = await findOrThrowNotFound({
       query: Accounts.getAccountById({ id, userId: payload.userId }),
       message: t({ key: 'accounts.accountNotFound' }),
     });
+
+    // loan and vehicle require a sidecar row that only the /loans and /vehicles endpoints create.
+    if (
+      payload.accountCategory !== undefined &&
+      payload.accountCategory !== accountData.accountCategory &&
+      isDedicatedFlowAccountCategory(payload.accountCategory)
+    ) {
+      throw new ValidationError({
+        message: t({ key: 'accounts.dedicatedFlowCategoryNotAllowed' }),
+      });
+    }
 
     // Vehicle value changes only via balance adjustment, which re-anchors depreciation
     if (accountData.accountCategory === ACCOUNT_CATEGORIES.vehicle && payload.currentBalance !== undefined) {
@@ -496,14 +535,10 @@ const deleteAccountByIdInTx = withTransaction(
 
     await pauseAutomationsReferencing({ userId, refType: 'account', refId: account.id, label: account.name });
 
-    // Must run before the account destroy — the FK is ON DELETE SET NULL, so afterwards
-    // these rows would no longer reference the account and couldn't be targeted. Without
-    // this opt-in they survive as orphaned contributions and double-count if the user
-    // re-creates the account and re-links the same transfers.
+    // Without this opt-in the transfers survive as orphaned contributions and double-count
+    // if the user re-creates the account and re-links the same transfers.
     if (removePortfolioTransfers) {
-      await PortfolioTransfers.destroy({
-        where: { userId, [Op.or]: [{ fromAccountId: id }, { toAccountId: id }] },
-      });
+      await removePortfolioTransfersForAccounts({ userId, accountIds: [id] });
     }
 
     const affectedRows = await Accounts.deleteAccountById({ id, userId });

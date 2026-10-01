@@ -118,7 +118,7 @@ const isMobileView = computed(() => contentWrapperWidth.value <= CUSTOM_BREAKPOI
 
     <div
       ref="contentWrapperRef"
-      class="@container/pick-transaction grid min-h-0 flex-1 grid-cols-1 gap-4"
+      class="@container/pick-transaction grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] gap-4 @lg/pick-transaction:grid-rows-[minmax(0,1fr)]"
       :class="getPickTransactionGridClass({ isMobile: isMobileView })"
     >
       <ScrollArea class="relative min-h-0 px-1">

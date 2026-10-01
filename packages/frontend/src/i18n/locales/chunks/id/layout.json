@@ -19,9 +19,15 @@
       "planned": "Prakiraan",
       "subscriptions": "Biaya Berulang"
     },
-    "venture": "Venture"
+    "venture": "Venture",
+    "helpAndDocs": "Help & docs",
+    "appVersion": "App version {version}",
+    "home": "Home",
+    "more": "More"
   },
   "sidebar": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
     "settings": {
       "title": "Pengaturan",
       "sections": {
@@ -62,7 +68,8 @@
       "synchronizing": "Menyinkronkan...",
       "syncedTime": "Disinkronkan {time}",
       "syncingAccounts": "Menyinkronkan {count} akun",
-      "stuck": "Sinkronisasi macet"
+      "stuck": "Sinkronisasi macet",
+      "failed": "Sync failed, some accounts need attention"
     },
     "categorization": {
       "title": "Kategorisasi AI",
@@ -75,7 +82,11 @@
       "allSkipped": "AI tidak dapat mengategorikan {count} transaksi dengan yakin",
       "queued": "Menunggu untuk mulai...",
       "transactions": "transaksi"
-    }
+    },
+    "moreActions": "More ways to add data",
+    "importDataHint": "CSV file or bank statement",
+    "attachInvoice": "Attach invoice",
+    "attachInvoiceHint": "We find the transaction it belongs to"
   },
   "themeSelector": {
     "light": "Terang",
@@ -281,5 +292,16 @@
         }
       }
     }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Manage accounts, loans, investments, and venture assets."
+    },
+    "more": {
+      "title": "More",
+      "description": "Explore insights, planning tools, imports, and settings."
+    },
+    "addTransaction": "Add transaction"
   }
 }

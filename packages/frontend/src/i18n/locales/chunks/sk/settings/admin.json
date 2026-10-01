@@ -1,0 +1,118 @@
+{
+  "settings": {
+    "admin": {
+      "title": "Administrátorský panel",
+      "description": "Administratívne nástroje a správa systému",
+      "priceSync": {
+        "title": "Synchronizácia cien cenných papierov",
+        "description": "Ručne spustite synchronizáciu cien pre všetky cenné papiere s pozíciami",
+        "button": "Spustiť synchronizáciu cien",
+        "buttonLoading": "Synchronizácia...",
+        "notifications": {
+          "success": "Synchronizácia cien cenných papierov bola úspešne dokončená",
+          "failed": "Synchronizáciu cien sa nepodarilo spustiť",
+          "rateLimited": "Nie je povolené. Skúste to znova o {time}.",
+          "adminRequired": "Táto akcia vyžaduje administrátorské oprávnenia"
+        }
+      },
+      "priceUpload": {
+        "title": "Ručné nahratie cien cenných papierov",
+        "description": "Nahrajte historické cenové údaje cenných papierov cez súbory CSV alebo JSON",
+        "button": "Nahrať ceny cenných papierov",
+        "dialogTitle": "Nahrať ceny cenných papierov",
+        "selectSecurity": {
+          "searchLabel": "Hľadať symbol alebo názov",
+          "searchPlaceholder": "AAPL",
+          "searching": "Vyhľadávanie…",
+          "failed": "Vyhľadávanie cenných papierov zlyhalo.",
+          "noResults": "Žiadne výsledky.",
+          "changeButton": "Zmeniť"
+        },
+        "dateRangeInfo": {
+          "loading": "Načítavanie informácií o rozsahu dátumov...",
+          "title": "Dostupný rozsah dátumov výmenných kurzov ({currency}):",
+          "tooltipText": "Ceny cenných papierov môžete nahrať len pre dátumy, pre ktoré máme dostupné výmenné kurzy. Inak nebude možné prepočítať cenu cenného papiera na iné meny. Ak potrebujete staršie údaje, najprv nahrajte výmenné kurzy. Inak sa záznamy, v závislosti od voľby v ďalších krokoch, buď automaticky odfiltrujú (vynechajú), alebo požiadavka na nahratie zlyhá."
+        },
+        "fileUpload": {
+          "title": "Nahrať súbor",
+          "supportedFormats": "Podporované sú súbory CSV alebo JSON",
+          "errors": {
+            "unsupportedFormat": "Nepodporovaný formát súboru. Nahrajte súbor CSV alebo JSON, prosím.",
+            "parseFailed": "Súbor {fileType} sa nepodarilo spracovať: {error}"
+          }
+        },
+        "fieldMapper": {
+          "title": "Priradenie polí",
+          "description": "Priraďte polia vášho súboru k požadovaným poliam nižšie.",
+          "selectField": "Vyberte pole...",
+          "dateFormatLabel": "Formát dátumu",
+          "dateFormatDescription": "Vyberte formát dátumu použitý vo vašom súbore",
+          "dateFormats": {
+            "ddMMyyyySlash": "DD/MM/RRRR (napr. 31/12/2024)",
+            "MMddyyyySlash": "MM/DD/RRRR (napr. 12/31/2024)",
+            "yyyyMMddDash": "RRRR-MM-DD (napr. 2024-12-31)",
+            "ddMMyyyyDash": "DD-MM-RRRR (napr. 31-12-2024)",
+            "MMddyyyyDash": "MM-DD-RRRR (napr. 12-31-2024)"
+          },
+          "mappingComplete": "Všetky požadované polia sú priradené",
+          "mappingIncomplete": "Ak chcete pokračovať, priraďte všetky požadované polia",
+          "fileInfo": "Súbor:",
+          "records": "{count} záznamov",
+          "changeFileButton": "Zmeniť súbor",
+          "continueButton": "Pokračovať na náhľad"
+        },
+        "preview": {
+          "title": "Náhľad údajov",
+          "recordsCount": "Nahrá sa {count} záznam | Nahrá sa {count} záznamov",
+          "recordsPeriod": "za obdobie od {oldest} do {newest}",
+          "loadingExisting": "Načítavanie existujúcich cien na porovnanie...",
+          "warnings": {
+            "significantDifferences": "Zistené výrazné cenové rozdiely",
+            "differencesDetails": "{count} záznam má cenový rozdiel väčší než 4 % oproti existujúcim údajom. Dôkladne ho skontrolujte. | {count} záznamy majú cenový rozdiel väčší než 4 % oproti existujúcim údajom. Dôkladne ich skontrolujte."
+          },
+          "filterCheckbox": "Zobraziť len záznamy s výrazným rozdielom (>4 %)",
+          "tableHeaders": {
+            "date": "Dátum",
+            "newPrice": "Nová cena",
+            "existingPrice": "Existujúca cena",
+            "difference": "Rozdiel (%)"
+          },
+          "noExistingPrice": "Nedostupné",
+          "scrollForMore": "Posuňte pre viac...",
+          "noDifferences": "Nenašli sa žiadne záznamy s výrazným rozdielom.",
+          "backButton": "Späť na priradenie polí",
+          "continueButton": "Pokračovať na možnosti"
+        },
+        "options": {
+          "title": "Možnosti nahrávania",
+          "autoFilter": {
+            "title": "Automaticky odfiltrovať dátumy mimo dostupného rozsahu",
+            "description": "Automaticky odstrániť dátumy, ktoré sú mimo dostupného rozsahu výmenných kurzov"
+          },
+          "override": {
+            "title": "Prepísať existujúce záznamy",
+            "description": "Aktualizovať existujúce cenové záznamy namiesto preskočenia duplicít"
+          },
+          "backButton": "Späť",
+          "uploadButton": "Nahrať ceny",
+          "uploadingButton": "Nahrávanie..."
+        },
+        "result": {
+          "title": "Nahrávanie dokončené!",
+          "inserted": "✓ Vložený {count} nový záznam | ✓ Vložených {count} nových záznamov",
+          "duplicates": "• {count} duplicít {action}",
+          "duplicatesUpdated": "aktualizovaných",
+          "duplicatesSkipped": "preskočených",
+          "filtered": "• {count} dátum odfiltrovaný (mimo rozsahu) | • {count} dátumov odfiltrovaných (mimo rozsahu)",
+          "closeButton": "Zavrieť",
+          "uploadMoreButton": "Nahrať ďalšie"
+        },
+        "notifications": {
+          "dateInfoLoadFailed": "Informácie o dátume sa nepodarilo načítať: {error}",
+          "uploadSuccess": "Úspešne nahraný {count} cenový záznam | Úspešne nahraných {count} cenových záznamov",
+          "uploadFailed": "Nahrávanie zlyhalo: {error}"
+        }
+      }
+    }
+  }
+}

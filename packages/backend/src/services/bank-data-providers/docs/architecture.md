@@ -184,14 +184,16 @@ For each selected account:
     - Link to connection
     - Balance, currency, metadata
        ↓
-Trigger transaction sync for each account
+Enqueue the initial transaction sync on the `account-sync` queue
        ↓
-Return created accounts
+Return created accounts (sync still running in the background)
 ```
 
 **Key file:** `connection/connect-selected-accounts.ts`
 
 This is where accounts are actually created with proper `refInitialBalance` and `refCurrentBalance` calculations.
+
+The response returns as soon as account creation commits — a first backfill can run for minutes. Clients poll `GET /sync/status` for per-account progress.
 
 ---
 
@@ -237,8 +239,14 @@ EnableBankingProvider.syncTransactions()
 Set status = SYNCING
        ↓
 Fetch all transactions (paginated on continuation_key until the ASPSP
-stops returning one; an initial sync also negotiates the lookback window
+stops returning one; an incremental sync starts at the latest stored
+transaction, the oldest payment still pending on the previous sync, or
+the oldest stored pending row from the last 14 days, whichever is
+earliest; an initial sync also negotiates the lookback window
 by retrying 1095 → 730 → 365 → 90 days on date-range rejections)
+       ↓
+Drop PDNG/HOLD payloads unless the user setting
+`importPendingBankTransactions` is on (off by default)
        ↓
 Sort by date ascending, pre-booking (PDNG/HOLD) before BOOK within the
 same date so a same-batch booked copy finds its pending row already stored
@@ -251,7 +259,8 @@ For each transaction:
   • Matched, stored booked + incoming pre-booking → no writes (stale re-send)
   • Matched → re-anchor originalId, merge externalData (pendingHash +
     merchantName backfill), flip pre-booking → BOOK, re-stamp time when the
-    flip changed it, refresh the note while it is still sync-generated
+    flip changed it, refresh the note while it is still sync-generated;
+    on that flip the booked payload's direction overwrites the row's type
   • Unmatched → create Transaction record
        ↓
 Update account balance
@@ -264,9 +273,9 @@ Set status = COMPLETED
 1. **entry_reference** — the ASPSP promises it is unique and immutable per account
 2. **originalId** — the stored hash; the steady state when the bank returns stable fields. It also matches `externalData.pendingHash`, the hash a row carried during its pending life, so a `PDNG` payload the ASPSP re-sends after booking resolves back onto the booked row instead of creating a duplicate
 3. **IBAN fingerprint** — same amount/currency/type within ±2 days, same counterparty IBAN, and only against rows that carry no stored entry_reference
-4. **Pending upgrade** — a booked payload adopts a stored `PDNG`/`HOLD` row with the same amount/currency/type within ±5 days. The IBAN gate is conditional: when the incoming booked payload carries a counterparty IBAN the candidate must carry the same one (an IBAN-less candidate is rejected), and when it carries none — the card-purchase case — no IBAN filtering happens. The candidate pool also excludes rows with an entry_reference, a `transferId`, or `refundLinked`. The whole tier is skipped when a single pre-sync count says the account holds no pre-booking rows at all; that pre-check re-arms mid-run as soon as this run stores one
+4. **Pending upgrade** — a booked payload adopts a stored `PDNG`/`HOLD` row with the same amount/currency/type dated up to 14 days before the booked payload or 2 days after it (transfers can sit pending well over a week; a pending copy never trails its booking by more than date drift). The IBAN gate is conditional: when the incoming booked payload carries a counterparty IBAN, candidates carrying the same one win, IBAN-less candidates dated within 5 days are the fallback (ASPSPs often omit the counterparty on the pending payload and fill it at booking; the short window keeps an unrelated same-amount card reservation from being taken as the transfer's pending copy), and a candidate with a different IBAN is never matched; when the payload carries none — the card-purchase case — no IBAN filtering happens. The candidate pool excludes rows with a `transferId` or `refundLinked`, and rows with an entry_reference unless the incoming payload carries one too. The whole tier is skipped when a single pre-sync count says the account holds no pre-booking rows at all; that pre-check re-arms mid-run as soon as this run stores one. When no same-type row qualifies, the same pool is searched with the opposite type, since some ASPSPs flag a pending payment with the wrong direction; such a row is adopted only when it is dated within ±2 days of the booked payload and its raw payload names the same counterparty account on the same creditor/debtor side as the booked payload (own account ids ignored), which keeps a purchase and its refund apart
 
-Tier 3 runs before tier 4 because IBAN equality is the stronger signal — an incoming transfer must not consume an unrelated IBAN-less card pending.
+Tier 3 runs before tier 4 because IBAN equality is the stronger signal — an incoming transfer lands on a row sharing its IBAN before tier 4 falls back to an IBAN-less pending.
 
 **Why direct?**
 
@@ -316,16 +325,22 @@ POST /sync/trigger (or scheduled trigger)
        ↓
 syncAllUserAccounts()
        ↓
-Fetch all user's bank-connected accounts
+Fetch all user's bank-connected accounts, grouped by connection
        ↓
-Set all to QUEUED
+enqueueAccountSync() per connection: accounts set to QUEUED, jobs added
        ↓
-Schedule via Bottleneck (max 5 concurrent)
-       ↓
-Each account syncs independently
+`account-sync` BullMQ worker (concurrency 5) picks jobs up
        ↓
 Frontend polls GET /sync/status for progress
 ```
+
+One job per account, except batch-capable providers (SimpleFIN), which get one
+job per connection so a single windowed fetch covers every account. Monobank's
+job fans out into its own rate-limited queue. Job ids are deterministic
+(`account-sync-<accountId>` / `account-sync-<connectionId>`), so re-triggering a
+sync that is still queued or running is a no-op.
+
+**Key file:** `sync/account-sync-queue.ts`
 
 ---
 
@@ -498,7 +513,7 @@ If secondary dedup finds a match, it restores `originalId` so future syncs use t
 
 **Reconciliation of pre-existing duplicates:** `POST /connections/:id/reconcile-duplicates` runs `reconcileDuplicateTransactionsForAccount`, which buckets an account's transactions by (amount, currency, transactionType) and makes two passes:
 
-- **Pass (a)** pairs booked rows with leftover pre-booking rows, nearest-first. The directional window accepts a booked row dated at or after its pending copy, up to 5 days later. The same conditional IBAN gate as tier 4 applies: a booked row with a counterparty IBAN only pairs with a pending row carrying that exact IBAN; a booked row without one is not IBAN-filtered. One booked row adopts at most one pending row. User edits on the pending copy (note, category + its `categorizationMeta` stamp, paymentType, locked payee) migrate onto the survivor; divergent edits on both sides skip the pair, and a skipped pair leaves both rows free to pair with someone else. A moved category always arrives with a manual stamp — synthesized when the pending row only had the legacy null-stamp signal — so the next AI run leaves it alone, and an orphan-only manual stamp moves even when both sides already share the category. The survivor also inherits the pending row's hash as `externalData.pendingHash`, so a re-sent `PDNG` payload resolves through tier 2 instead of recreating the duplicate. Any pending row pass (a) touched — merged or skipped — is excluded from pass (b), as is any booked row that received a merge.
+- **Pass (a)** pairs booked rows with leftover pre-booking rows, nearest-first. The directional window accepts a booked row dated at or after its pending copy, up to 14 days later. The same conditional IBAN gate as tier 4 applies: a booked row with a counterparty IBAN pairs with pending rows carrying that exact IBAN, falls back to IBAN-less pending rows within 5 days when none does, and never pairs with a different IBAN; a booked row without one is not IBAN-filtered. A pending row that carries its own entry_reference is eligible only against a booked row that also carries one (the fresh-reference re-issue); a pending row without one pairs with any booked row. One booked row adopts at most one pending row. User edits on the pending copy (note, category + its `categorizationMeta` stamp, paymentType, locked payee) migrate onto the survivor; divergent edits on both sides skip the pair, and a skipped pair leaves both rows free to pair with someone else. A moved category always arrives with a manual stamp — synthesized when the pending row only had the legacy null-stamp signal — so the next AI run leaves it alone, and an orphan-only manual stamp moves even when both sides already share the category. The survivor also inherits the pending row's hash as `externalData.pendingHash`, so a re-sent `PDNG` payload resolves through tier 2 instead of recreating the duplicate. Any pending row pass (a) touched — merged or skipped — is excluded from pass (b), as is any booked row that received a merge.
 - **Pass (b)** pairs a row that has an `entry_reference` with one that has none, within ±2 days and sharing a counterparty IBAN. It is stricter than pass (a) — the pairing evidence is circumstantial, so any scalar divergence aborts the merge instead of migrating. It compares against canonicals as pass (a) left them, so an edit pass (a) just migrated can block a later strict merge.
 
 Both passes refuse to delete an orphan that has dependent rows (`transferId`, `refundLinked`, splits, tags, refunds in either direction, subscriptions, group membership), and both are idempotent. The endpoint returns `{ mergedCount, skippedCount, consideredPairs, unresolvedCount }` — `consideredPairs` counts pass-(a) pairs that survived the IBAN gate and the directional window, and `unresolvedCount` counts pairs and rows that produced neither a merge nor a skip (IBAN drops, direction rejects, already-taken members, orphans with no partner).
@@ -565,7 +580,8 @@ bank-data-providers/
 │   │   ├── candidate-selection.ts    # IBAN gate + nearest-date pick
 │   │   ├── candidate-selection.unit.ts # Unit tests for candidate selection
 │   │   ├── consent.ts                # Consent validity end date
-│   │   └── balances.ts               # Balance payload shaping for logs
+│   │   ├── balances.ts               # Balance type priority + payload shaping for logs
+│   │   └── balances.unit.ts          # Unit tests for balance type priority
 │   ├── enablebanking-dedup.e2e.ts # E2E: matcher tiers + reconciliation
 │   ├── enablebanking-flow.e2e.ts # E2E: connect → sync flow
 │   └── docs/details.md
@@ -594,6 +610,7 @@ bank-data-providers/
 | `/connections/:id/available-accounts`     | GET    | List accounts for selection                 |
 | `/connections/:id/sync-selected-accounts` | POST   | Create accounts + sync                      |
 | `/connections/:id/sync-transactions`      | POST   | Sync single account                         |
+| `/connections/:id/sync`                   | POST   | Queue sync for the connection's accounts    |
 | `/connections/:id/reconcile-duplicates`   | POST   | Collapse pre-existing duplicate pairs       |
 | `/sync/trigger`                           | POST   | Trigger full sync                           |
 | `/sync/status`                            | GET    | Get all sync statuses                       |

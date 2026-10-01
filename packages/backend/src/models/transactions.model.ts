@@ -30,7 +30,7 @@ import LoanDetails from '@models/loan-details.model';
 import Payees from '@models/payees.model';
 import Tags from '@models/tags.model';
 import TransactionGroupItems from '@models/transaction-group-items.model';
-import TransactionGroups from '@models/transaction-groups.model';
+import TransactionGroups, { dissolveUndersizedGroups } from '@models/transaction-groups.model';
 import TransactionSplits from '@models/transaction-splits.model';
 import TransactionTags from '@models/transaction-tags.model';
 import { hasBalanceRelevantChange } from '@models/transactions-balance-relevance';
@@ -53,7 +53,16 @@ import {
 } from '@models/transactions-query/where-builders';
 import Users from '@models/users.model';
 import { updateAccountBalanceForChangedTx } from '@services/accounts/update-balance-for-changed-tx';
-import { Op, Includeable, Order, WhereOptions, literal, where as sequelizeWhere } from 'sequelize';
+import {
+  Op,
+  FindAttributeOptions,
+  Includeable,
+  Order,
+  ProjectionAlias,
+  WhereOptions,
+  literal,
+  where as sequelizeWhere,
+} from 'sequelize';
 import {
   Table,
   BeforeCreate,
@@ -72,7 +81,7 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 
-const prepareTXInclude = ({ includeSplits }: { includeSplits?: boolean }) => {
+const prepareTXInclude = ({ includeSplits, includeTags }: { includeSplits?: boolean; includeTags?: boolean }) => {
   const include: Includeable[] = [];
 
   if (includeSplits) {
@@ -80,6 +89,14 @@ const prepareTXInclude = ({ includeSplits }: { includeSplits?: boolean }) => {
       model: TransactionSplits,
       as: 'splits',
       include: [{ model: Categories, as: 'category' }],
+    });
+  }
+
+  if (includeTags) {
+    include.push({
+      model: Tags,
+      through: { attributes: [] },
+      attributes: ['id', 'name', 'color', 'icon'],
     });
   }
 
@@ -119,6 +136,8 @@ export interface TransactionsAttributes {
     receiptId?: string;
     /** Set on transactions created by the balance-adjustment flow. */
     balanceAdjustment?: boolean;
+    /** Set when the row was created with `applyAutomations`; keeps it automation-eligible. */
+    applyAutomations?: boolean;
   } & Record<string, unknown>;
   commissionRate: Money;
   refCommissionRate: Money;
@@ -136,6 +155,9 @@ export interface TransactionsAttributes {
 
 @Table({
   timestamps: true,
+  // Hard deletes must pass `force: true` (or go through destroyTransactions / deleteTransactionById);
+  // without it Sequelize only sets `deletedAt`.
+  paranoid: true,
   tableName: 'Transactions',
   freezeTableName: true,
 })
@@ -324,9 +346,13 @@ export default class Transactions extends Model {
   })
   payeeLocked!: boolean;
 
+  @Column({ allowNull: true, type: DataType.UUID })
+  mergedIntoId!: RecordId | null;
+
   // Managed by Sequelize (timestamps: true)
   declare createdAt: Date;
   declare updatedAt: Date;
+  declare deletedAt: Date | null;
 
   @BeforeCreate
   @BeforeUpdate
@@ -701,23 +727,7 @@ export default class Transactions extends Model {
 
     if (!affectedGroupIds || affectedGroupIds.length === 0) return;
 
-    const underMinGroups = (await TransactionGroups.findAll({
-      where: {
-        id: { [Op.in]: affectedGroupIds },
-        [Op.and]: literal(`(
-          SELECT COUNT(*)
-          FROM "TransactionGroupItems"
-          WHERE "TransactionGroupItems"."groupId" = "TransactionGroups"."id"
-        ) < 2`),
-      },
-      attributes: ['id'],
-      raw: true,
-    })) as TransactionGroups[];
-
-    const idsToDelete = underMinGroups.map((g) => g.id);
-    if (idsToDelete.length > 0) {
-      await TransactionGroups.destroy({ where: { id: { [Op.in]: idsToDelete } } });
-    }
+    await dissolveUndersizedGroups({ groupIds: affectedGroupIds });
   }
 }
 
@@ -756,6 +766,8 @@ export function buildOrderClause({
     [TRANSACTION_SORT_FIELD.categoryName]:
       '(SELECT "name" FROM "Categories" WHERE "Categories"."id" = "Transactions"."categoryId")',
     [TRANSACTION_SORT_FIELD.payeeName]: '(SELECT "name" FROM "Payees" WHERE "Payees"."id" = "Transactions"."payeeId")',
+    // NULLIF: notes saved as an empty string must land with the NULL ones, not first.
+    [TRANSACTION_SORT_FIELD.note]: `NULLIF("Transactions"."note", '')`,
     [TRANSACTION_SORT_FIELD.categorizationSource]: `("Transactions"."categorizationMeta"->>'source')`,
   };
 
@@ -788,6 +800,8 @@ function buildExcludeRefundTxsCondition({ keepRefundsForTxId }: { keepRefundsFor
   );
 }
 
+const HAS_ATTACHMENTS_SQL = `EXISTS (SELECT 1 FROM "TransactionAttachments" ta WHERE ta."transactionId" = "Transactions"."id")`;
+
 export const findWithFilters = async ({
   planned,
   access,
@@ -811,6 +825,8 @@ export const findWithFilters = async ({
   excludeRefunds,
   excludeRefundTxs,
   keepRefundsForTxId,
+  hasAttachment,
+  includeHasAttachments,
   transferFilter,
   refundFilter,
   startDate,
@@ -866,6 +882,11 @@ export const findWithFilters = async ({
   /** With `excludeRefundTxs`: keep refunds linked to this original, so an edit dialog
    *  can still list and deselect its own links. */
   keepRefundsForTxId?: string;
+  /** Absent = both, `true` = only rows carrying attachments, `false` = only rows without. */
+  hasAttachment?: boolean;
+  /** Adds a `hasAttachments` boolean to every row. Costs an EXISTS subquery per row, so
+   *  only the user-facing list asks for it. */
+  includeHasAttachments?: boolean;
   transferFilter?: FILTER_OPERATION;
   refundFilter?: FILTER_OPERATION;
   startDate?: string;
@@ -943,6 +964,10 @@ export const findWithFilters = async ({
 
   if (excludeRefundTxs) {
     pushAndCondition(buildExcludeRefundTxsCondition({ keepRefundsForTxId }));
+  }
+
+  if (hasAttachment !== undefined) {
+    pushAndCondition(literal(`${hasAttachment ? '' : 'NOT '}${HAS_ATTACHMENTS_SQL}`));
   }
 
   if (categoryIds && categoryIds.length > 0) {
@@ -1180,6 +1205,13 @@ export const findWithFilters = async ({
   }
   const { limit, offset } = completenessToPagination({ completeness });
 
+  const hasAttachmentsAttribute: ProjectionAlias = [literal(HAS_ATTACHMENTS_SQL), 'hasAttachments'];
+  const resolvedAttributes: FindAttributeOptions | undefined = !includeHasAttachments
+    ? attributes
+    : attributes
+      ? [...attributes, hasAttachmentsAttribute]
+      : { include: [hasAttachmentsAttribute] };
+
   const transactions = await Transactions.findAll({
     include: queryInclude,
     where: whereClause,
@@ -1189,7 +1221,7 @@ export const findWithFilters = async ({
     raw: isRaw,
     // When raw is true and includeSplits/includeTags is requested, use nest to preserve nested structure
     nest: isRaw && (includeSplits || includeTags) ? true : undefined,
-    attributes,
+    attributes: resolvedAttributes,
   });
 
   // `info`, not `warn`: warn ships every occurrence to Sentry as its own event.
@@ -1208,12 +1240,14 @@ export const getTransactionById = ({
   id,
   userId,
   includeSplits,
+  includeTags,
 }: {
   id: string;
   userId: number;
   includeSplits?: boolean;
+  includeTags?: boolean;
 }): Promise<Transactions | null> => {
-  const include = prepareTXInclude({ includeSplits });
+  const include = prepareTXInclude({ includeSplits, includeTags });
 
   return Transactions.findOne({
     where: { id, userId },
@@ -1396,5 +1430,6 @@ export const deleteTransactionById = async ({ id, userId }: { id: string; userId
     where: { id, userId },
     // So that BeforeDestroy will be triggered
     individualHooks: true,
+    force: true,
   });
 };

@@ -1,0 +1,36 @@
+{
+  "auth": {
+    "login": {
+      "title": "Prihláste sa do účtu",
+      "divider": "alebo pokračujte pomocou emailu",
+      "submitButton": "Prihlásiť sa",
+      "noAccount": "Ešte nemáte účet?",
+      "signupsDisabledTooltip": "Správca tejto inštancie zakázal registráciu nových používateľov",
+      "errors": {
+        "incorrectEmailOrPassword": "Nesprávny email alebo heslo.",
+        "incorrectPassword": "Nesprávne heslo.",
+        "userNotFound": "Používateľ nebol nenájdený.",
+        "emailNotVerified": "Pred prihlásením si overte svoju emailovú adresu, prosím.",
+        "sessionExpired": "Vaša relácia vypršala. Prihláste sa znova, prosím.",
+        "noPasswordSet": "Pre tento účet nie je nastavené žiadne heslo. Skúste sa prihlásiť cez Google.",
+        "passwordInvalid": "Heslo je neplatné.",
+        "genericError": "Vyskytla sa chyba.",
+        "genericErrorRetry": "Vyskytla sa chyba. Skúste to znova, prosím.",
+        "oauthFailed": "Prihlásenie cez {provider} sa nepodarilo. Skúste to znovu, prosím.",
+        "oauthNotConfigured": "Na tomto serveri nie je nakonfigurované prihlasovanie cez {provider}.",
+        "passkeyFailed": "Prihlásenie pomocou prístupového kľúča sa nepodarilo. Skúste to znovu, prosím."
+      }
+    },
+    "shared": {
+      "divider": "alebo pokračujte pomocou",
+      "passkeyButton": {
+        "signIn": "Prihláste sa pomocou prístupového kľúča",
+        "register": "Pridať prístupový kľúč"
+      },
+      "oauthButton": {
+        "signIn": "Prihlásiť sa cez {provider}",
+        "signUp": "Zaregistrovať sa cez {provider}"
+      }
+    }
+  }
+}

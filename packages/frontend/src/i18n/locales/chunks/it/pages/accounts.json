@@ -8,12 +8,14 @@
       "archived": "Archiviati",
       "manual": "Conti manuali",
       "sharedWithMe": "Condiviso con me",
-      "vehicles": "Veicoli"
+      "vehicles": "Veicoli",
+      "bankConnections": "Connessioni bancarie"
     },
     "empty": {
       "title": "Nessun conto",
       "description": "Crea un conto manuale per iniziare a tenere sotto controllo finanze, saldi e transazioni.",
-      "createManual": "Crea un conto manuale"
+      "createManual": "Crea un conto manuale",
+      "connectBank": "Collega il conto bancario"
     },
     "overview": {
       "totalBalance": "Saldo totale",
@@ -38,6 +40,9 @@
       "active": "Attivo",
       "expiringSoon": "In scadenza",
       "expired": "Scaduto"
-    }
+    },
+    "connect": "Connetti",
+    "connectBank": "Collega banca",
+    "noBanksConnected": "Nessuna banca collegata - connettine una per sincronizzare i saldi automaticamente."
   }
 }

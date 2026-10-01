@@ -7,7 +7,6 @@
       "accountsGroups": "Grupos de cuentas",
       "importData": "Importar datos",
       "ai": "IA",
-      "aiIntegrations": "Integraciones de IA",
       "security": "Seguridad",
       "admin": "Administración",
       "sharedWithMe": "Compartido conmigo",
@@ -18,7 +17,9 @@
       "language": "Idioma",
       "general": "Estadísticas",
       "payees": "Beneficiarios",
-      "subscriptions": "Pagos programados"
+      "subscriptions": "Pagos programados",
+      "planBilling": "Planes y facturación",
+      "collapse": "Contraer"
     },
     "backToSettings": "Volver a ajustes"
   }

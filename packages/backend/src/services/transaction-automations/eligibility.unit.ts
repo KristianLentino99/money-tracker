@@ -9,7 +9,7 @@ const eligible = {
   accountType: ACCOUNT_TYPES.monobank,
   externalData: null,
   transferNature: TRANSACTION_TRANSFER_NATURE.not_transfer,
-  isPlanned: false,
+  isForecastOnly: false,
 };
 
 describe('isAutomationEligible', () => {
@@ -42,21 +42,20 @@ describe('isAutomationEligible', () => {
     ).toBe(true);
   });
 
-  it('accepts a manual system row when applyAutomations is set', () => {
+  it('accepts a manual system row stamped with applyAutomations', () => {
     expect(
       isAutomationEligible({
         ...eligible,
         accountType: ACCOUNT_TYPES.system,
-        externalData: null,
-        applyAutomations: true,
+        externalData: { applyAutomations: true },
       }),
     ).toBe(true);
   });
 
   it.each([
     ['a manual system row', { accountType: ACCOUNT_TYPES.system, externalData: null }],
-    ['a planned row', { isPlanned: true }],
-    ['a planned row even with applyAutomations', { isPlanned: true, applyAutomations: true }],
+    ['a planned row', { isForecastOnly: true }],
+    ['a planned row even with applyAutomations', { isForecastOnly: true, externalData: { applyAutomations: true } }],
     ['a transfer leg', { transferNature: TRANSACTION_TRANSFER_NATURE.common_transfer }],
     ['a wallet-out transfer', { transferNature: TRANSACTION_TRANSFER_NATURE.transfer_out_wallet }],
     [
@@ -69,11 +68,14 @@ describe('isAutomationEligible', () => {
 });
 
 describe('buildEligibilityWhere', () => {
-  it('carries the trigger axis of its predicate twin', () => {
+  it('carries the trigger axis of its predicate twin and drops split parents', () => {
     const bankAccountIds = [generateRandomRecordId(), generateRandomRecordId()];
-    const [accountClause, importClause] = buildEligibilityWhere({ bankAccountIds })[Op.or];
+    const [eligibility, noSplits] = buildEligibilityWhere({ bankAccountIds })[Op.and];
+    const [accountClause, importClause, apiClause] = eligibility?.[Op.or] ?? [];
 
     expect(accountClause).toEqual({ accountId: { [Op.in]: bankAccountIds } });
     expect((importClause as ReturnType<typeof literal>).val).toContain(`"externalData"->'importDetails' IS NOT NULL`);
+    expect((apiClause as ReturnType<typeof literal>).val).toContain(`"externalData"->'applyAutomations' IS NOT NULL`);
+    expect((noSplits as ReturnType<typeof literal>).val).toContain('NOT EXISTS (SELECT 1 FROM "TransactionSplits"');
   });
 });

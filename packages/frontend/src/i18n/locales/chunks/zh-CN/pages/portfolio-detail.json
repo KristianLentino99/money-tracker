@@ -1,6 +1,6 @@
 {
   "portfolioDetail": {
-    "loading": "Loading...",
+    "loading": "加载中……",
     "loadingDetails": "Loading portfolio details...",
     "loadError": "Failed to load portfolio details.",
     "tryAgain": "Try Again",
@@ -10,9 +10,10 @@
     "subtitle": "Portfolio Overview",
     "actions": {
       "transfer": "Transfer",
-      "edit": "Edit",
+      "edit": "编辑",
       "delete": "Delete",
-      "exchangeCurrency": "Exchange Currency"
+      "exchangeCurrency": "兑换货币",
+      "shareJson": "Share JSON"
     },
     "balance": {
       "totalValue": "Total Value",
@@ -52,7 +53,7 @@
         "adjustmentError": "Failed to update this transfer",
         "rowActions": "Transaction actions",
         "emptyStateDescription": "Deposits, withdrawals and transfers for this portfolio will appear here.",
-        "edit": "Edit",
+        "edit": "编辑",
         "editDialog": {
           "title": "Edit cash transaction",
           "description": "Change how this transaction is treated in reports.",
@@ -77,7 +78,7 @@
       "empty": "No holdings yet",
       "noFilterResults": "No matching holdings",
       "noFilterResultsDescription": "No holdings match your search. Try a different symbol or name.",
-      "clearFilterButton": "Clear search",
+      "clearFilterButton": "清除搜索条件",
       "headers": {
         "symbol": "Symbol",
         "name": "Name",
@@ -95,6 +96,7 @@
         "addFirstButton": "Add first Transaction"
       },
       "closedPositions": "Closed positions ({count})",
+      "stalePrice": "Last available price. Market value and gains may be outdated.",
       "deleteHolding": {
         "ariaLabel": "Delete holding",
         "title": "Delete holding",
@@ -104,7 +106,7 @@
         "error": "Failed to delete the holding."
       },
       "addTransactionDialog": {
-        "title": "Add Transaction",
+        "title": "新增交易",
         "description": "Add a new transaction to your portfolio."
       },
       "tryAgainLater": "Please try again later",
@@ -139,7 +141,7 @@
         "transfer": "Transfer",
         "tax": "Tax",
         "fee": "Fee",
-        "cancel": "Cancel",
+        "cancel": "取消",
         "other": "Other"
       },
       "headerTooltips": {
@@ -149,6 +151,83 @@
       },
       "deleteTransaction": {
         "tooltip": "Delete transaction"
+      }
+    },
+    "manual": {
+      "derivedValue": "Current value (derived)",
+      "noValuation": "Add an end-of-day valuation to calculate value and performance.",
+      "lastReported": "Last reported value",
+      "activitySince": "Net activity since report",
+      "gain": "Gain",
+      "contributions": "Contributions",
+      "reportedEstimated": "Reported / estimated",
+      "stale": "Reported value may be stale",
+      "addTransaction": "Add manual transaction",
+      "addValuation": "Add valuation",
+      "transactionDescription": "Record a contribution, fee, tax, or other movement from the fund.",
+      "valuationDescription": "Enter the value reported by the fund for the selected date.",
+      "editingTransaction": "Editing transaction",
+      "editingValuation": "Editing valuation",
+      "date": "Date",
+      "category": "Category",
+      "amount": "Amount",
+      "value": "Reported value",
+      "note": "Note (optional)",
+      "source": "Source (optional)",
+      "save": "Save",
+      "saveTransaction": "Save transaction",
+      "saveValuation": "Save valuation",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "transactionSaved": "Transaction saved.",
+      "valuationSaved": "Valuation saved.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "timeline": "Timeline",
+      "valuation": "Valuation",
+      "valueVsCapital": "Value vs invested capital",
+      "reportedLegend": "Reported value",
+      "capitalLegend": "Invested capital",
+      "jsonTitle": "Share portfolio as JSON",
+      "jsonDescription": "Copy this portfolio's manual transactions and valuations, then paste the JSON into the same panel in another account. Linked transfers are exported as standalone records.",
+      "copyJson": "Copy JSON",
+      "pasteJson": "Paste JSON",
+      "jsonFieldLabel": "Portfolio JSON",
+      "jsonPlaceholder": "Paste a portfolio JSON export here",
+      "importJson": "Import JSON",
+      "jsonMergeDescription": "Existing matching records are skipped; nothing is deleted or overwritten.",
+      "jsonCopied": "Portfolio JSON copied to the clipboard.",
+      "jsonCopyError": "Could not copy JSON. Select the text from the field and copy it manually.",
+      "jsonPasteError": "Could not read the clipboard. Paste the JSON into the field manually.",
+      "jsonInvalid": "The pasted content is not valid JSON.",
+      "jsonImportSuccess": "Imported {imported} record(s); skipped {skipped} existing record(s).",
+      "import": "Import manual records",
+      "importDescription": "Paste text or upload a PDF, CSV, or TXT statement. Review the extracted records before importing.",
+      "paste": "Paste text",
+      "file": "Upload file",
+      "aiExtraction": "Extract with AI",
+      "localCsv": "Parse CSV locally",
+      "review": "Review extracted records",
+      "kindTransaction": "Transaction",
+      "kindValuation": "Valuation",
+      "skip": "Skip",
+      "currency": "Currency",
+      "confidence": "Confidence",
+      "sourceContext": "Source context",
+      "possibleDuplicate": "Possible duplicate",
+      "currencyMismatch": "Currency does not match this portfolio. Edit it to {currency} or skip the record.",
+      "missingFields": "Complete the highlighted fields before importing.",
+      "executeImport": "Import reviewed records",
+      "discardImport": "Discard review",
+      "importContentDiscarded": "The original pasted/uploaded content is discarded after extraction.",
+      "importSuccess": "Imported {imported} record(s); skipped {skipped}.",
+      "categories": {
+        "contribution": "Contribution",
+        "withdrawal": "Withdrawal",
+        "fee": "Fee",
+        "tax": "Tax",
+        "other_income": "Other income",
+        "distribution": "Distribution"
       }
     }
   }

@@ -18,10 +18,10 @@ import {
   WrenchIcon,
   ZapIcon,
 } from '@lucide/vue';
-import { computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { watch } from 'vue';
 
 import { useSidebarNavCollapse } from './use-nav-collapse';
+import { useSidebarNavRoutes } from './use-nav-routes';
 
 withDefaults(defineProps<{ bottomNav?: boolean }>(), { bottomNav: false });
 
@@ -30,23 +30,8 @@ const navItemActive = 'bg-primary/10 text-foreground';
 const navIconBase = 'size-4 shrink-0';
 const navIconActive = 'text-primary-text';
 
-const route = useRoute();
 const { isAccountsOpen, isTransactionsOpen, isForecastOnlyOpen } = useSidebarNavCollapse();
-
-const isAccountsRoute = computed(
-  () =>
-    route.name === ROUTES_NAMES.accounts ||
-    route.name === ROUTES_NAMES.account ||
-    route.name === ROUTES_NAMES.accountIntegrationDetails ||
-    route.name === ROUTES_NAMES.loans ||
-    route.name === ROUTES_NAMES.loanDetail ||
-    route.name === ROUTES_NAMES.investments ||
-    route.name === ROUTES_NAMES.portfolioDetail ||
-    route.name === ROUTES_NAMES.portfolioTransactionsImport ||
-    route.name === ROUTES_NAMES.venture ||
-    route.name === ROUTES_NAMES.venturePlatformsList ||
-    route.name === ROUTES_NAMES.ventureDealDetail,
-);
+const { isAccountsRoute, isTransactionsRoute, isPlannedRoute: isForecastOnlyRoute } = useSidebarNavRoutes();
 
 watch(
   isAccountsRoute,
@@ -56,31 +41,12 @@ watch(
   { immediate: true },
 );
 
-const isTransactionsRoute = computed(
-  () =>
-    route.name === ROUTES_NAMES.transactions ||
-    route.name === ROUTES_NAMES.transactionGroups ||
-    route.name === ROUTES_NAMES.optimizations ||
-    route.name === ROUTES_NAMES.optimizationsTransfers ||
-    route.name === ROUTES_NAMES.optimizationsAiCategorization ||
-    route.name === ROUTES_NAMES.automations ||
-    route.name === ROUTES_NAMES.automationCreate ||
-    route.name === ROUTES_NAMES.automationDetails,
-);
-
 watch(
   isTransactionsRoute,
   (val) => {
     if (val) isTransactionsOpen.value = true;
   },
   { immediate: true },
-);
-
-const isForecastOnlyRoute = computed(
-  () =>
-    route.name === ROUTES_NAMES.planned ||
-    route.name === ROUTES_NAMES.plannedSubscriptions ||
-    route.name === ROUTES_NAMES.plannedSubscriptionDetails,
 );
 
 watch(

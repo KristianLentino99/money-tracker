@@ -1,17 +1,64 @@
-# Budget Tracker (MoneyMatter)
+<div align="center">
+
+<img src="packages/landing/public/img/logo.svg" width="72" alt="MoneyMatter logo">
+
+# MoneyMatter
+
+**Open-source personal finance. Your finances, your server, your rules.**
+
+Accounts, budgets, investments, loans and net worth in one place.<br>
+Self-host it for free, or use the cloud.
+
+[Website](https://moneymatter.app) · [Docs](https://docs.moneymatter.app) · [Self-host](self-hosting/README.md) · [Cloud](https://moneymatter.app/sign-up) · [Roadmap](https://moneymatter.featurebase.app/dashboard/roadmap) · [Changelog](https://github.com/letehaha/moneymatter/releases)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 A personal finance application. Track balances and transactions with bank connections or manual entry, organize and analyze expenses and income, and plan spending in one place.
 
-## Local Application setup
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="packages/docs/public/screenshots/getting-started/app-overview.dark.png">
+  <img src="packages/docs/public/screenshots/getting-started/app-overview.png" alt="The MoneyMatter dashboard: balance trend, cash flow, expenses structure, latest transactions and a categories watchlist, with accounts, portfolios, vehicles and loans grouped in the sidebar.">
+</picture>
 
-To set up the application locally, please refer to the [instructions here](./docs/application-setup.md).
+<details>
+<summary><b>More screenshots</b></summary>
+<br>
 
-## Self-hosting
+<table>
+  <tr>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/net-worth@2x.webp" alt="Net worth history chart stacked by cash, investments, vehicles and ventures">
+      <br><sub>Net worth history</sub>
+    </td>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/money-flow@2x.webp" alt="Money flow diagram from income through expenses and savings to categories">
+      <br><sub>Money flow</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/investments@2x.webp" alt="Investment portfolio with total value, total return and gains per holding">
+      <br><sub>Investments</sub>
+    </td>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/transactions@2x.webp" alt="Transactions list with categories, accounts and payee logos">
+      <br><sub>Transactions</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/bank-providers@2x.webp" alt="Bank provider picker listing LunchFlow, SimpleFIN, Monobank, Enable Banking and Walutomat">
+      <br><sub>Bank connections</sub>
+    </td>
+    <td width="50%">
+      <img src="packages/landing/public/img/landing/screenshots/import-sources@2x.webp" alt="Import options: any text source, CSV, OFX, YNAB, Wallet and Microsoft Money">
+      <br><sub>Import sources</sub>
+    </td>
+  </tr>
+</table>
 
-Run Budget Tracker (MoneyMatter) on your own server: the stack pulls published multi-arch Docker images and exposes the whole app on a single port, so you front it with whatever reverse proxy you already run (Nginx Proxy Manager, Caddy, Traefik, …) – or use the optional bundled Traefik + Let's Encrypt overlay. See the [self-hosting guide](./self-hosting/README.md).
+Every feature is explained, with screenshots, in the [help center](https://docs.moneymatter.app).
 
-## Translations
+</details>
 
 The app ships in English, Ukrainian, Spanish and Indonesian. Translation files are maintained directly in the repository under `packages/frontend/src/i18n/locales` and `packages/backend/src/i18n/locales`.
 

@@ -1,0 +1,350 @@
+{
+  "navigation": {
+    "dashboard": "Nástenka",
+    "accounts": "Účty",
+    "accountsList": "Všetky účty",
+    "investments": "Investície",
+    "loans": "Pôžičky",
+    "allTransactions": "Všetky transakcie",
+    "transactions": "Transakcie",
+    "transactionGroups": "Skupiny",
+    "analytics": "Analytika",
+    "optimizations": "Optimalizácie",
+    "automations": "Automatizácie",
+    "accountDetails": "Podrobnosti účtu",
+    "helpAndDocs": "Pomoc a dokumentácia",
+    "logout": "Odhlásiť sa",
+    "appVersion": "Verzia aplikácie {version}",
+    "settings": "Nastavenia",
+    "planned": {
+      "planned": "Plánované",
+      "subscriptions": "Opakujúce sa platby",
+      "budgets": "Rozpočty"
+    },
+    "venture": "Rizikový kapitál",
+    "home": "Home",
+    "more": "More",
+    "plan": "Budget"
+  },
+  "sidebar": {
+    "collapse": "Zbaliť bočný panel",
+    "expand": "Otvoriť bočný panel",
+    "settings": {
+      "title": "Nastavenia",
+      "sections": {
+        "label": "Sekcie bočného panela",
+        "description": "Vyberte, ktoré sekcie sa majú zobrazovať v bočnom paneli.",
+        "alwaysVisibleTooltip": "Táto sekcia je vždy viditeľná."
+      },
+      "hideZeroBalances": {
+        "label": "Skryť nulové zostatky",
+        "description": "Skryť účty a skupiny s nulovým zostatkom"
+      }
+    },
+    "accountsView": {
+      "title": "Účty",
+      "bankAccounts": "Bankové účty",
+      "newAccount": "Nový účet",
+      "newAccountsGroup": "Nová skupina účtov",
+      "portfolios": "Portfóliá",
+      "newPortfolio": "Nové portfólio",
+      "noPortfolios": "Zatiaľ žiadne portfóliá",
+      "ventures": "Rizikové kapitály",
+      "cars": "Vozidlá",
+      "loans": "Pôžičky",
+      "collapseNavigation": "Zbaliť navigáciu",
+      "viaHousehold": "Zdieľané cez domácnosť používateľa {handle}",
+      "sharedBy": "Zdieľané {handle}",
+      "needsReauthTooltip": "Platnosť pripojenia vypršala. Ak chcete obnoviť synchronizáciu, pripojte sa znova."
+    }
+  },
+  "header": {
+    "add": "Pridať",
+    "importData": "Importovať údaje",
+    "moreActions": "Ďalšie spôsoby pridania údajov",
+    "importDataHint": "Súbor CSV alebo bankový výpis",
+    "attachInvoice": "Priložiť faktúru",
+    "attachInvoiceHint": "Nájdeme transakciu, ku ktorej patrí",
+    "language": "Jazyk",
+    "newTransaction": "Pridať transakciu",
+    "settings": "Nastavenia",
+    "feedback": "Odoslať spätnú väzbu",
+    "support": "Podpora",
+    "sync": {
+      "syncing": "Synchronizácia",
+      "synchronizing": "Synchronizácia...",
+      "syncedTime": "Synchronizované {time}",
+      "connectBank": "Pripojiť banku",
+      "syncingAccounts": "Synchronizuje sa {count} účtov",
+      "stuck": "Synchronizácia sa zasekla",
+      "failed": "Synchronizácia zlyhala, niektoré účty vyžadujú pozornosť"
+    },
+    "categorization": {
+      "title": "Kategorizácia pomocou AI",
+      "categorizing": "Kategorizovanie...",
+      "completed": "AI zaradila {count} transakciu | AI zaradila {count} transakcií",
+      "completedShort": "Kategorizácia dokončená",
+      "completedWithSkipped": "Zaradená {count} transakcia (preskočených: {skipped}) | Zaradených {count} transakcií (preskočených: {skipped})",
+      "failed": "Kategorizácia zlyhala",
+      "failedShort": "Zlyhalo",
+      "allSkipped": "AI nedokázala transakciu spoľahlivo zaradiť | AI nedokázala spoľahlivo zaradiť žiadnu z {count} transakcií",
+      "queued": "Čaká sa na spustenie...",
+      "transactions": "transakcie"
+    }
+  },
+  "themeSelector": {
+    "light": "Svetlá",
+    "dark": "Tmavá",
+    "system": "Systémová"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Zanechajte spätnú väzbu",
+      "description": "Povedzte nám, čo funguje a čo nie.",
+      "typeLabel": "Typ",
+      "typePlaceholder": "Vyberte typ",
+      "types": {
+        "bug": "Niečo je pokazené",
+        "featureRequest": "Chcem novú funkciu",
+        "other": "Niečo iné"
+      },
+      "docsHint": "Neviete ako niečo funguje? Najprv sa pozrite do {link}.",
+      "docsHintLink": "dokumentácie",
+      "messageLabel": "Vaša spätná väzba",
+      "messagePlaceholder": "Čo sa stalo, alebo čo by ste chceli vidieť?",
+      "messageRequired": "Pred odoslaním napíšte správu, prosím.",
+      "submit": "Odoslať",
+      "thanks": "Ďakujeme, čítame každú správu.",
+      "unavailable": "Odosielanie je momentálne nedostupné. Použite namiesto toho nástenku nižšie.",
+      "or": "alebo",
+      "board": {
+        "title": "Uverejnite to na verejnej nástenke",
+        "description": "Hlasujte za nápady iných, pozrite si, čo je už naplánované, a dostanete odpoveď aj na svoj vlastný."
+      }
+    }
+  },
+  "syncStatusTooltip": {
+    "title": "Stav synchronizácie bankových pripojení",
+    "syncedSuccessfully": "Úspešne synchronizované",
+    "syncCompletedWithErrors": "Niektoré účty sa nepodarilo synchronizovať",
+    "syncStuckTitle": "Synchronizácia sa zdá byť zaseknutá",
+    "syncStuckDescription": "Niektoré bankové pripojenia neodpovedali včas. Skúste to znova, alebo ich znova pripojte na stránke integrácií.",
+    "progress": "Synchronizovaných {current} z {total}",
+    "progressPercentage": "{percentage} %",
+    "statuses": {
+      "syncing": "Synchronizácia",
+      "queued": "V poradí",
+      "synced": "Synchronizované",
+      "failed": "Zlyhalo",
+      "idle": "Nečinné"
+    },
+    "lastSynced": "Naposledy synchronizované:",
+    "neverSynced": "Nikdy nesynchronizované",
+    "syncNowButton": "Synchronizovať teraz",
+    "noBankAccounts": "Žiadne pripojené bankové účty",
+    "connectButton": "Pripojiť",
+    "retrySyncButton": "Skúsiť synchronizáciu znova",
+    "manageConnectionsButton": "Spravovať pripojenia",
+    "needsReauthTitle": "Pripojenia je potrebné obnoviť",
+    "needsReauthDescription": "Platnosť týchto bankových relácií vypršala. Ak chcete obnoviť synchronizáciu, pripojte sa znova.",
+    "reconnectButton": "Pripojiť znova",
+    "affectedAccounts": "1 účet | {count} účtov",
+    "timeAgo": {
+      "justNow": "Práve teraz",
+      "secondsAgo": "pred {count} sekundou | pred {count} sekundami",
+      "minutesAgo": "pred {count} minútou | pred {count} minútami",
+      "hoursAgo": "pred {count} hodinou | pred {count} hodinami",
+      "daysAgo": "pred {count} dňom | pred {count} dňami",
+      "weeksAgo": "pred {count} týždňom | pred {count} týždňami",
+      "monthsAgo": "pred {count} mesiacom | pred {count} mesiacmi",
+      "yearsAgo": "pred {count} rokom | pred {count} rokmi"
+    }
+  },
+  "banners": {
+    "recoveryMethod": {
+      "title": "Pridajte záložný spôsob prihlásenia",
+      "description": "Chráňte svoj účet pridaním prihlásenia cez Google alebo prístupového kľúča (passkey). Zaistíte si tak, že sa k účtu vždy dostanete.",
+      "actionButton": "Prejsť do Bezpečnostných nastavení"
+    }
+  },
+  "relinkWarning": {
+    "buttonLabel": "{count} účet vyžaduje pozornosť | {count} účtov vyžaduje pozornosť",
+    "title": "Enable Banking: Vyžaduje sa akcia",
+    "description": "Tieto účty Enable Banking je potrebné aktualizovať kvôli zmene dátovej schémy. Ide o jednorazovú akciu, ktorá zlepší spoľahlivosť synchronizácie.",
+    "step1Full": "Ak chcete ušetriť čas, skúste najprv obnoviť celé bankové pripojenie. Tlačidlo {reconnect} nájdete v sekcii {connectionValidity} na stránke každého pripojenia:",
+    "reconnectButton": "Obnoviť pripojenie",
+    "connectionValiditySection": "Platnosť pripojenia",
+    "connectionLabel": "Pripojenie č. #{id}",
+    "step2Full": "Ak po obnovení pripojenia zostanú niektoré účty uvedené nižšie, pri každom z nich ručne vykonajte {unlink} a následne ho znova {link}.",
+    "unlinkAction": "Odpojiť",
+    "linkAction": "Odkaz"
+  },
+  "pages": {
+    "integrations": {
+      "providers": {
+        "monobank": {
+          "name": "Monobank"
+        },
+        "enableBanking": {
+          "name": "Enable Banking"
+        },
+        "lunchflow": {
+          "name": "Lunch Flow"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "onboarding": {
+      "title": "Vitajte v MoneyMatter",
+      "subtitle": "Začnite nastavením svojho prvého účtu",
+      "createManualAccount": {
+        "title": "Vytvoriť manuálny účet",
+        "description": "Sledujte hotovosť, sporenie alebo akýkoľvek účet ručne"
+      },
+      "connectBank": {
+        "title": "Pripojte svoju banku",
+        "description": "Automaticky synchronizujte transakcie z banky"
+      },
+      "divider": "alebo importujte existujúce údaje",
+      "importFile": {
+        "title": "Importovať zo súboru",
+        "description": "Importujte transakcie z bankových výpisov (PDF) alebo CSV súborov"
+      },
+      "quickStart": {
+        "categories": {
+          "getting-started": {
+            "title": "Prvé kroky"
+          },
+          "advanced-transactions": {
+            "title": "Pokročilé transakcie"
+          },
+          "organization": {
+            "title": "Zorganizujte si financie"
+          },
+          "bank-import": {
+            "title": "Pripojenie a import"
+          },
+          "analytics": {
+            "title": "Preskúmajte analytiku"
+          },
+          "ai-settings": {
+            "title": "AI funkcie"
+          },
+          "sharing": {
+            "title": "Zdieľanie a domácnosť"
+          }
+        },
+        "tasks": {
+          "create-account": {
+            "title": "Vytvorte si prvý účet",
+            "description": "Pridajte bankový účet alebo peňaženku na sledovanie"
+          },
+          "add-transaction": {
+            "title": "Pridajte prvú transakciu",
+            "description": "Zaznamenajte príjem alebo výdavok"
+          },
+          "create-transfer": {
+            "title": "Vytvorte prevod",
+            "description": "Presuňte peniaze medzi svojimi účtami"
+          },
+          "link-refund": {
+            "title": "Prepojte vrátenie platby",
+            "description": "Prepojte vrátenia platby s pôvodnými nákupmi"
+          },
+          "link-transactions": {
+            "title": "Prepojte existujúce transakcie",
+            "description": "Prepojte súvisiace transakcie navzájom"
+          },
+          "split-transaction": {
+            "title": "Rozdeľte transakciu",
+            "description": "Rozdeľte výdavky medzi kategórie"
+          },
+          "mark-transfer-out": {
+            "title": "Označte prevody mimo peňaženky",
+            "description": "Sledujte peniaze odchádzajúce z účtov"
+          },
+          "create-category": {
+            "title": "Vytvorte vlastnú kategóriu",
+            "description": "Zorganizujte si transakcie podľa typu"
+          },
+          "create-tag": {
+            "title": "Vytvorte štítok",
+            "description": "Pridajte štítky a zoskupte súvisiace transakcie"
+          },
+          "create-budget": {
+            "title": "Nastavte si rozpočet",
+            "description": "Vytvorte limity výdavkov pre kategórie"
+          },
+          "create-subscription": {
+            "title": "Vytvorte predplatné",
+            "description": "Nastavte opakované platby a sledujte svoje predplatné"
+          },
+          "create-account-group": {
+            "title": "Vytvorte skupinu účtov",
+            "description": "Zorganizujte si účty podľa typu alebo účelu"
+          },
+          "setup-tag-reminder": {
+            "title": "Nastavte pripomienku štítku",
+            "description": "Nechajte sa upozorniť na opakujúce sa výdavky"
+          },
+          "connect-bank": {
+            "title": "Pripojte bankový účet",
+            "description": "Automaticky synchronizujte transakcie"
+          },
+          "import-csv": {
+            "title": "Importujte z ľubovoľného textového zdroja",
+            "description": "Importujte zo súborov CSV, PDF alebo bankových výpisov"
+          },
+          "view-annual-overview": {
+            "title": "Pozrite si ročný prehľad",
+            "description": "Sledujte ročné trendy a vzorce"
+          },
+          "view-cash-flow": {
+            "title": "Zobrazte si analytiku peňažného toku",
+            "description": "Porovnajte svoje príjmy a výdavky"
+          },
+          "review-ai-features": {
+            "title": "Prezrite si AI funkcie",
+            "description": "Preskúmajte dostupné AI možnosti"
+          },
+          "configure-ai": {
+            "title": "Pridajte si vlastný model AI",
+            "description": "Pripojte OpenAI, Claude, Gemini alebo lokálny model."
+          },
+          "invite-household-member": {
+            "title": "Pozvite člena domácnosti",
+            "description": "Zdieľajte s niekým celý svoj finančný život — získa prístup ku všetkým vašim súčasným aj neskôr pridaným účtom."
+          },
+          "share-account": {
+            "title": "Zdieľajte účet",
+            "description": "Otvorte ktorýkoľvek účet a pomocou akcie Zdieľať udeľte jednému používateľovi prístup na čítanie alebo zápis."
+          }
+        },
+        "ui": {
+          "title": "Rýchly štart",
+          "subtitle": "Použite nášho sprievodcu Rýchlym štartom a zistite všetko, čo pre vás MoneyMatter dokáže urobiť.",
+          "dismissButton": "Natrvalo zavrieť",
+          "dismissConfirmTitle": "Zavrieť Rýchly štart?",
+          "dismissConfirmDescription": "Ak si to rozmyslíte, sprievodcu Rýchlym štartom môžete kedykoľvek znova otvoriť v nastaveniach.",
+          "dismissConfirmButton": "Zavrieť",
+          "triggerTooltip": "Rýchly štart – zostávajúce úlohy: {count}",
+          "srDescription": "Splňte tieto úlohy a začnite aplikáciu naplno používať",
+          "progressText": "Dokončených {completed} z {total}",
+          "categoryProgress": "Dokončených {completed} z {total}"
+        }
+      }
+    }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Manage accounts, loans, investments, and venture assets."
+    },
+    "more": {
+      "title": "More",
+      "description": "Explore insights, planning tools, imports, and settings."
+    },
+    "addTransaction": "Add transaction"
+  }
+}

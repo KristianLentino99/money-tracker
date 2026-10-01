@@ -162,7 +162,85 @@
         "validation": {
           "required": "Questo campo è obbligatorio",
           "minValue": "L'importo deve essere maggiore o uguale a 0",
-          "futureDate": "La data deve essere odierna o precedente."
+          "futureDate": "La data deve essere odierna o precedente.",
+          "latitudeRange": "Latitude must be between -90 and 90",
+          "longitudeRange": "Longitude must be between -180 and 180",
+          "locationPair": "Enter both latitude and longitude",
+          "maxLength": "Must not exceed {max} characters",
+          "httpUrl": "Enter a valid http(s) URL"
+        },
+        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "externalUrlLabel": "External URL",
+        "externalUrlPlaceholder": "Link to the order, booking or receipt page",
+        "externalReferenceLabel": "External reference",
+        "externalReferencePlaceholder": "Order number, invoice number, booking reference",
+        "location": {
+          "label": "Location",
+          "useCurrent": "Use my location",
+          "clear": "Clear location",
+          "latitudePlaceholder": "Latitude, e.g. 50.4501",
+          "longitudePlaceholder": "Longitude, e.g. 30.5234",
+          "unsupported": "Your browser does not support geolocation",
+          "denied": "Location access was denied. Allow it in your browser settings or enter coordinates manually",
+          "unavailable": "Could not determine your location. Try again or enter coordinates manually",
+          "pickOnMap": "Pick on map",
+          "picker": {
+            "title": "Pick a location",
+            "searchPlaceholder": "Search address or place",
+            "noResults": "No places found",
+            "searchFailed": "Search is unavailable right now. Try again in a moment",
+            "confirm": "Use this location",
+            "loadFailed": "Could not load the map. Check your connection and try again",
+            "retry": "Try again",
+            "consent": {
+              "title": "Map tiles come from OpenStreetMap",
+              "description": "Opening the map and searching addresses sends requests to openstreetmap.org, which sees your IP address. You can turn this off later in Settings.",
+              "enable": "Enable map",
+              "failed": "Could not save the setting. Try again"
+            }
+          }
+        },
+        "selectCategoryPlaceholder": "Select a category",
+        "plannedConfirmTooltip": "Turn off once the money has moved — saving records it in your balance.",
+        "deleteConfirmTitle": "Delete this transaction?",
+        "deleteConfirmDescription": "This can't be undone. Any splits and refund links attached to it will be removed too.",
+        "portfolioCashAlreadyReflectedLabel": "Portfolio balance already includes this money",
+        "portfolioCashAlreadyReflectedHint": "Records the transfer for contribution history without adding cash to the portfolio. Use this for old transactions when the portfolio was set up with its current balance.",
+        "attachments": {
+          "label": "Allegati",
+          "loading": "Caricamento degli allegati…",
+          "listLoadFailed": "Impossibile caricare gli allegati. Chiudi e riapri questa finestra per riprovare.",
+          "hint": "Fino a {max} file, da {size} ciascuno. JPEG, PNG, WebP o PDF.",
+          "trigger": {
+            "empty": "Aggiungi allegati",
+            "count": "{count} allegato | {count} allegati",
+            "uploading": "Caricamento…"
+          },
+          "dropzone": {
+            "idle": "Trascina qui i file o fai clic per sceglierli",
+            "drag": "Rilascia per allegare"
+          },
+          "errors": {
+            "unsupportedType": "Alcuni file sono stati ignorati: si possono allegare solo file JPEG, PNG, WebP e PDF.",
+            "tooMany": "Una transazione può avere al massimo {max} allegati.",
+            "tooLarge": "\"{filename}\" supera {max} e non è stato caricato.",
+            "upload": "Impossibile caricare l'allegato.",
+            "delete": "Impossibile eliminare l'allegato."
+          },
+          "deleteConfirm": {
+            "title": "Eliminare l'allegato?",
+            "description": "\"{filename}\" verrà eliminato definitivamente. L'operazione è irreversibile."
+          },
+          "deleteAll": "Elimina tutti",
+          "deleteAllConfirm": {
+            "title": "Eliminare tutti gli allegati?",
+            "description": "Tutti i {count} file verranno eliminati definitivamente. L'operazione è irreversibile."
+          },
+          "viewer": {
+            "loadFailed": "Impossibile caricare questo file.",
+            "openInNewTab": "Apri in una nuova scheda",
+            "download": "Scarica"
+          }
         }
       },
       "investmentContribution": {
@@ -280,7 +358,8 @@
         "summarySelected": "{count} selezionate · {amount}",
         "summaryOfLimit": "{count} selezionate · {amount} di {limit}",
         "summaryExceedsBy": "{count} selezionate · {amount} — supera l'originale di {excess}",
-        "summaryExceeds": "{count} selezionate · {amount} — supera l'importo originale"
+        "summaryExceeds": "{count} selezionate · {amount} — supera l'importo originale",
+        "summaryBelowRefund": "{amount} — smaller than this refund of {limit}"
       },
       "refundInfo": {
         "trigger": "Come funziona?",
@@ -350,7 +429,8 @@
         "deletePurchaseButton": "Elimina acquisto",
         "deletePurchaseTitle": "Eliminare l'acquisto collegato?",
         "deletePurchaseDescription": "Questa operazione rimuove l'acquisto di investimento selezionato, ma mantiene l'uscita dal conto e il contributo al portafoglio.",
-        "confirmDeletePurchase": "Elimina acquisto"
+        "confirmDeletePurchase": "Elimina acquisto",
+        "unlinkWarningNoCash": "This transfer never changed {portfolio}'s cash balance, so unlinking leaves the balance untouched."
       },
       "ventureLinked": {
         "title": "Transazione collegata a una venture",
@@ -363,6 +443,62 @@
         "description": "Questa transazione è il registro di una modifica manuale del valore di {name}.",
         "editHint": "Per modificare il valore, la data o eliminare questa rettifica, gestiscila dalla pagina di dettaglio del veicolo.",
         "openVehicle": "Apri {name}"
+      },
+      "templates": {
+        "trigger": "Templates",
+        "filterPlaceholder": "Find a template…",
+        "emptyState": "Templates fill this form with details you enter often — amount, account, category, payee, tags, note. They never add anything on their own; for something that repeats on a schedule use Recurring Payments.",
+        "noMatches": "No templates match.",
+        "loadError": "Couldn't load your templates.",
+        "saveCurrent": "Save current as template",
+        "updateApplied": "Update ‘{name}’",
+        "saveAsNew": "Save as new",
+        "newTemplate": "New template",
+        "use": "Use template",
+        "edit": "Edit",
+        "tapHint": "Tap a template to fill the form",
+        "toggleDetails": "Show details",
+        "noAmount": "no amount saved",
+        "keepsAccount": "keeps the selected account",
+        "stale": {
+          "categoryDeleted": "category deleted",
+          "accountUnavailable": "account unavailable"
+        },
+        "removeAriaLabel": "Remove template, restore form",
+        "announceApplied": "Applied {name} — {count} field filled. Amount is empty. | Applied {name} — {count} fields filled. Amount is empty.",
+        "announceAppliedWithAmount": "Applied {name} — {count} field filled. Amount set to {amount}. | Applied {name} — {count} fields filled. Amount set to {amount}.",
+        "categoryDeletedHint": "This template’s category was deleted — pick one.",
+        "alsoSet": "Template also set: {fields}",
+        "tagsCount": "{count} tag | {count} tags",
+        "applyConfirmTitle": "Apply template?",
+        "applyConfirmDescription": "Applying replaces your splits and refund link.",
+        "toasts": {
+          "savedFromForm": "Saved ‘{name}’ — it’s now the active template.",
+          "saved": "Template saved.",
+          "deleted": "Template deleted."
+        },
+        "form": {
+          "titleNew": "New template",
+          "titleEdit": "Edit template",
+          "titleSaveCurrent": "Save as template",
+          "nameLabel": "Nome",
+          "namePlaceholder": "e.g. Morning coffee",
+          "typeLabel": "Type",
+          "keepAccount": "Keep whichever account is selected when I use it",
+          "noAmount": "Don’t save an amount — I’ll type it each time",
+          "delete": "Delete template",
+          "save": "Save template",
+          "deleteConfirmTitle": "Delete ‘{name}’?",
+          "deleteConfirmDescription": "This template will be removed. Transactions you already created from it are not affected.",
+          "duplicateName": "You already have a template called “{name}”.",
+          "originalCurrencyLabel": "Original amount currency",
+          "originalCurrencyPlaceholder": "Select a currency"
+        },
+        "errors": {
+          "create": "Couldn't save the template. Please try again.",
+          "update": "Couldn't update the template. Please try again.",
+          "delete": "Couldn't delete the template. Please try again."
+        }
       }
     },
     "portfolioTransfer": {
@@ -447,7 +583,8 @@
         "created": "Categoria creata",
         "saveFailed": "Impossibile salvare la categoria",
         "unexpectedError": "Errore imprevisto"
-      }
+      },
+      "inheritParentColor": "Use parent's color"
     },
     "addCurrency": {
       "title": "Aggiungi nuova valuta",
@@ -560,8 +697,10 @@
         "sentBody": "Abbiamo inviato un invito a {owner}. Otterrà l'accesso non appena accetterà.",
         "success": "Invito inviato.",
         "deliveryFailed": "Invito creato, ma non è stato possibile inviare l'email. Riprova più tardi.",
-        "error": "Impossibile inviare l'invito."
-      }
+        "error": "Impossibile inviare l'invito.",
+        "emailNotConfigured": "Invitation created, but this server has no email sending configured. Ask them to check their invitations in the app."
+      },
+      "goToBudget": "Go to budget"
     },
     "categoryExclusions": {
       "title": "Escludi categorie",
@@ -598,6 +737,140 @@
         "markedAsPaid": "Pagamento registrato",
         "markAsPaidFailed": "Impossibile registrare il pagamento",
         "linkTransactionDateMismatch": "Scegli una transazione registrata nella data di pagamento prevista."
+      }
+    },
+    "attachInvoice": {
+      "title": "Allega fattura",
+      "description": "Trascina una fattura o uno scontrino. Leggiamo il totale, la data e il venditore, poi troviamo la transazione corrispondente.",
+      "resultsTitle": "Scegli la transazione",
+      "resultsDescription": "Nessuna transazione corrisponde alla fattura. | {count} transazione potrebbe corrispondere alla fattura. | {count} transazioni potrebbero corrispondere alla fattura.",
+      "analyzing": "Lettura della fattura e ricerca tra le transazioni…",
+      "attaching": "Collegamento della fattura alla transazione…",
+      "privacyNote": "Il file viene inviato al provider IA solo per leggerlo. Non viene salvato nulla finché non lo colleghi a una transazione.",
+      "direction": {
+        "paid": "Ho pagato",
+        "gotPaid": "Ho ricevuto un pagamento",
+        "paidHint": "Cerchiamo il pagamento tra le tue spese.",
+        "gotPaidHint": "Cerchiamo il pagamento tra le tue entrate."
+      },
+      "invoice": {
+        "number": "Fattura n.",
+        "issued": "Emissione",
+        "total": "Totale"
+      },
+      "fixDetails": "Correggi i dettagli",
+      "form": {
+        "vendor": "Venditore",
+        "vendorPlaceholder": "Inserisci il nome del venditore",
+        "customer": "Cliente",
+        "customerPlaceholder": "A chi è intestata la fattura",
+        "total": "Totale",
+        "totalPlaceholder": "0.00",
+        "currency": "Valuta",
+        "currencyPlaceholder": "EUR",
+        "issued": "Data della fattura",
+        "submit": "Cerca di nuovo"
+      },
+      "signals": {
+        "amountExact": "Importo esatto",
+        "amountClose": "Differenza di {diff}",
+        "amountConverted": "Corrisponde dopo la conversione",
+        "amountUnknown": "Importo non confrontato",
+        "sameDay": "Stesso giorno della fattura",
+        "daysAfter": "{count} giorno dopo la fattura | {count} giorni dopo la fattura",
+        "daysBefore": "{count} giorno prima della fattura | {count} giorni prima della fattura",
+        "merchant": {
+          "match": "Il venditore corrisponde",
+          "partial": "Il venditore è simile",
+          "none": "Venditore diverso",
+          "unknown": "Nessun beneficiario impostato"
+        },
+        "customer": {
+          "match": "Il cliente corrisponde",
+          "partial": "Il cliente è simile",
+          "none": "Cliente diverso",
+          "unknown": "Nessun beneficiario impostato"
+        }
+      },
+      "alreadyHasFile": "Ha già un file",
+      "bestMatch": "Corrispondenza migliore · {score}%",
+      "empty": {
+        "title": "Nessuna transazione corrispondente",
+        "description": "Abbiamo cercato circa {total} in tutti i conti, da 14 giorni prima a 30 giorni dopo la data della fattura. Il pagamento potrebbe non essere ancora importato oppure la fattura potrebbe essere stata letta in modo errato."
+      },
+      "searchManually": "Cerca manualmente",
+      "createTransaction": "Crea transazione",
+      "link": "Collega fattura",
+      "linked": "Fattura collegata alla transazione",
+      "created": "Transazione creata e fattura allegata",
+      "openTransaction": "Apri transazione",
+      "confirm": {
+        "title": "Collegare la fattura a questa transazione?",
+        "description": "{filename} verrà allegato alla transazione da {amount} del {date}. Potrai rimuoverlo dalla transazione in seguito."
+      },
+      "errors": {
+        "match": "Impossibile leggere la fattura. Riprova o usa un file più leggibile.",
+        "link": "Impossibile collegare la fattura. Riprova.",
+        "detailsNotFilled": "Fattura allegata, ma non è stato possibile copiare i dettagli nella transazione. Aggiungili manualmente se ti servono.",
+        "createdNotAttached": "Transazione creata, ma la fattura non è stata allegata. Scegli la transazione dall'elenco per allegarla.",
+        "rematch": "Impossibile ripetere la ricerca. Controlla i dettagli e riprova.",
+        "openTransaction": "Impossibile aprire la transazione. Cercala nell'elenco delle transazioni."
+      },
+      "trial": {
+        "left": "Resta 1 tentativo gratuito su {limit} | Restano {count} tentativi gratuiti su {limit}",
+        "spent": "Hai usato tutti i tentativi gratuiti. Passa a Plus per continuare ad allegare fatture con l'IA."
+      }
+    },
+    "shareBudgetDialog": {
+      "title": "Share budget",
+      "description": "Invite someone to view this budget and contribute their own transactions to it. {name}.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Recipient email",
+      "permissionLabel": "Permission",
+      "permissions": {
+        "read": "View only",
+        "write": "Attach own transactions",
+        "manage": "Gestisci"
+      },
+      "cancel": "Cancella",
+      "send": "Send invitation",
+      "success": "Invitation sent.",
+      "error": "Couldn't send invitation.",
+      "emailSendFailedWarning": "Invitation created, but the email couldn't be delivered."
+    },
+    "loanPayment": {
+      "title": "Loan payment",
+      "description": "Record or edit a payment against this loan.",
+      "createTitle": "Record Payment",
+      "editTitle": "Edit Loan Payment",
+      "payingTo": "Paying to",
+      "fromAccountLabel": "From account",
+      "fromAccountPlaceholder": "Select account",
+      "amountLabel": "Amount",
+      "amountPlaceholder": "0.00",
+      "targetAmountLabel": "Amount applied to loan",
+      "targetAmountPlaceholder": "0.00",
+      "targetAmountTooltip": "Source account is in {source}, loan is in {loan}. We pre-fill the converted amount using the current exchange rate – adjust if your bank applied a different rate.",
+      "saveButton": "Save",
+      "recordButton": "Record",
+      "overdrawWarning": "This is more than {account}'s balance and will overdraw the account.",
+      "preAnchorWarning": "This payment is dated before the loan's balance anchor ({date}), so it will be saved as history and won't reduce the outstanding balance.",
+      "overpayError": "Payment exceeds the remaining loan balance ({max}).",
+      "deleteConfirmTitle": "Delete this payment?",
+      "deleteConfirmDescription": "Both sides of the transfer will be removed and the loan balance will be restored. This cannot be undone.",
+      "preAnchorHint": "This date is before the loan's balance snapshot, so this payment won't change the outstanding balance – it's already included in the opening balance.",
+      "unlinkButton": "Scollega",
+      "unlinkConfirmTitle": "Unlink this payment?",
+      "unlinkConfirmDescription": "The transaction will be kept as a regular expense but removed from this loan. The loan balance will be recalculated.",
+      "unlinkSuccess": "Payment unlinked",
+      "unlinkError": "Couldn't unlink the payment. Please try again.",
+      "syncedAccountHint": "Paying from a synced account? Use Link payments to attach the imported expense instead.",
+      "sourceInfo": {
+        "trigger": "More details",
+        "title": "Why only these accounts?",
+        "manualOnly": "This picker lists only your manually-managed accounts.",
+        "whySynced": "Transactions on bank-synced accounts are imported directly from your bank. Recording a loan payment from one here would create a duplicate of the transaction your bank will send.",
+        "howToLink": "Instead, once the bank transaction appears, open it and choose Link payments to attach it to this loan. That keeps a single source of truth and updates the loan balance correctly."
       }
     }
   }

@@ -1,0 +1,182 @@
+{
+  "payees": {
+    "title": "Príjemcovia",
+    "subtitle": "Hlavný zoznam obchodníkov, s ktorými máte transakcie",
+    "newPayeeButton": "Nová protistrana",
+    "searchPlaceholder": "Hľadať protistrany...",
+    "columns": {
+      "name": "Názov",
+      "transactionCount": "# tr.",
+      "netFlow": "Čistý tok",
+      "category": "Kategória",
+      "categoryHint": "Efektívna kategória tejto protistrany. Zobrazí predvolenú kategóriu, ak ste ju nastavili — inak kategóriu najčastejšie použitú v minulých transakciách. Automaticky sa vyplní pri vytváraní novej transakcie.",
+      "topCategory": "Najčastejšia kategória",
+      "defaultCategory": "Predvolená kategória",
+      "defaultTags": "Predvolené štítky"
+    },
+    "sort": {
+      "label": "Zoradiť podľa",
+      "transactionCount": "Suma transakcií",
+      "netFlow": "Čistý tok",
+      "name": "Názov",
+      "lastSeen": "Nedávna aktivita",
+      "defaultTags": "Predvolené štítky"
+    },
+    "actions": {
+      "menu": "Akcie",
+      "rename": "Premenovať",
+      "merge": "Zlúčiť do…",
+      "delete": "Zmazať",
+      "deleteAndIgnore": "Zmazať a ignorovať"
+    },
+    "bulk": {
+      "select": "Vybrať",
+      "selectedCount": "Vybraných: {count}",
+      "clearSelection": "Zrušiť výber",
+      "selectAll": "Vybrať všetky načítané protistrany",
+      "selectRow": "Vybrať {name}",
+      "deleteTitle": "Zmazať {count} protistranu? | Zmazať {count} protistrán?",
+      "deleteDescription": "Ich transakcie zostanú zachované, no stratia prepojenie na protistranu. Túto akciu nie je možné vrátiť späť.",
+      "deleteAndIgnoreTitle": "Zmazať a ignorovať {count} protistranu? | Zmazať a ignorovať {count} protistrán?",
+      "deleteAndIgnoreDescription": "Ich názvy sa pridajú na zoznam ignorovaných, takže ich importy a bankové synchronizácie znova nevytvoria. Ich transakcie zostanú zachované, no stratia prepojenie na protistranu."
+    },
+    "emptyState": {
+      "title": "Zatiaľ žiadne protistrany",
+      "description": "Pripojte banku a protistrany sa rozpoznajú automaticky, alebo si jednu vytvorte ručne."
+    },
+    "form": {
+      "namePlaceholder": "Zadajte názov protistrany",
+      "categoryPlaceholder": "Vyberte kategóriu",
+      "categorizationMode": {
+        "label": "Kategorizácia pomocou AI",
+        "enforce": {
+          "label": "Vždy použiť kategóriu protistrany",
+          "hint": "Vždy sa použije predvolená kategória protistrany. Kategorizácia pomocou AI sa pre túto protistranu preskočí."
+        },
+        "hint": {
+          "label": "Použiť ako podnet",
+          "hint": "Nastaví predvolenú kategóriu protistrany, AI ju však môže na základe podrobností transakcie zmeniť."
+        },
+        "off": {
+          "label": "Vyp.",
+          "hint": "Predvolená kategória protistrany sa ignoruje. Kategorizáciu vykoná AI alebo vaše ostatné pravidlá."
+        }
+      }
+    },
+    "detail": {
+      "categorizationSection": "Kategorizácia",
+      "aliasesHeading": "Aliasy",
+      "aliasesEmpty": "Zatiaľ žiadne aliasy. Nové varianty sa tu zobrazia, keď táto protistrana bude zodpovedať inému názvu obchodníka.",
+      "cannotDeleteCanonicalAlias": "Alias zhodujúci sa s názvom protistrany nemožno zmazať. Namiesto toho protistranu premenujte.",
+      "deleteAliasConfirm": "Odstrániť tento alias?",
+      "addAlias": "Pridať",
+      "addAliasTitle": "Pridať alias",
+      "addAliasDescription": "Budúce transakcie, ktorých text obchodníka sa po normalizácii zhoduje s týmto aliasom, sa automaticky prepoja s touto protistranou. Minulé transakcie zostanú nezmenené.",
+      "addAliasInputLabel": "Názov obchodníka",
+      "addAliasPlaceholder": "napr. ACME STORE #1234",
+      "aliasDuplicate": "Tento alias je už priradený k tejto protistrane.",
+      "aliasUsedByOtherPayee": "Tento alias už používa „{name}\".",
+      "deletePayeeTitle": "Zmazať protistranu?",
+      "deletePayeeDescription": "Prepojené transakcie si ponechajú svoju kategóriu, no stratia prepojenie na protistranu. Túto akciu nie je možné vrátiť späť.",
+      "deleteAndIgnoreTitle": "Zmazať túto protistranu a ignorovať budúce zhody?",
+      "deleteAndIgnoreDescription": "Zmaže túto protistranu A pridá jej názvy (hlavný aj všetky aliasy) na blokovací zoznam ignorovaných názvov. Budúce synchronizácie ju znova nevytvoria zo surového textu obchodníka. Prepojené transakcie zostanú zachované, no stratia prepojenie na protistranu.",
+      "mergeTitle": "Zlúčiť do inej protistrany",
+      "mergeDescription": "Vyberte cieľovú protistranu. Všetky transakcie a aliasy sa presunú do nej; táto protistrana sa zmaže.",
+      "confirmMerge": "Zlúčiť",
+      "topCategoryHint": "Kategória najčastejšie použitá v transakciách prepojených s touto protistranou. Použije sa ako náhradná, ak nie je nastavená predvolená kategória.",
+      "defaultCategoryPlaceholder": "Vyberte kategóriu",
+      "defaultTagsLabel": "Automaticky priraďovať štítky",
+      "defaultTagsPlaceholder": "Vyberte štítky na automatické priradenie",
+      "defaultTagsHint": "Tieto štítky sa automaticky priradia k novým transakciám prepojeným s touto protistranou (banková synchronizácia a importy).",
+      "defaultLocationLabel": "Predvolená poloha",
+      "defaultLocationEmpty": "Poloha nie je nastavená",
+      "defaultLocationHint": "Transakcie prepojené s touto protistranou, ktoré nemajú vlastnú polohu, dostanú túto — pri vytvorení aj počas bankovej synchronizácie.",
+      "clearDefaultLocationTitle": "Odstrániť predvolenú polohu?",
+      "clearDefaultLocationDescription": "Nové transakcie prepojené s touto protistranou už túto polohu nedostanú. Existujúce transakcie si svoju polohu ponechajú.",
+      "applyTagsToExisting": "Použiť na existujúce transakcie"
+    },
+    "logo": {
+      "change": "Zmeniť logo",
+      "dialogTitle": "Zmeniť logo",
+      "dialogDescription": "Vyhľadajte logo značky, ktoré bude túto protistranu reprezentovať.",
+      "resetToAuto": "Vrátiť na automatické",
+      "updatedToast": "Logo aktualizované.",
+      "resetToast": "Logo vrátené na automatické.",
+      "fieldLabel": "Logo",
+      "domainHint": "Ak chcete nájsť presnú značku, zadajte doménu webovej stránky spoločnosti (napr. amazon.com) — tá vždy priradí správne logo."
+    },
+    "transactionsDialog": {
+      "title": "{name} — transakcie",
+      "empty": "S touto protistranou nie sú prepojené žiadne transakcie.",
+      "unlink": "Odpojiť od protistrany",
+      "unlinked": "Transakcia odpojená od protistrany",
+      "unlinkConfirmTitle": "Odpojiť transakciu?",
+      "unlinkConfirmDescription": "Táto transakcia už nebude prepojená s {name}. Budúce bankové synchronizácie ju automaticky znova neprepoja.",
+      "unlinkConfirmLabel": "Odpojiť"
+    },
+    "toasts": {
+      "created": "Protistrana vytvorená",
+      "updated": "Protistrana aktualizovaná",
+      "deleted": "Protistrana zmazaná",
+      "merged": "Protistrany zlúčené",
+      "aliasDeleted": "Alias odstránený",
+      "aliasAdded": "Alias pridaný",
+      "deletedAndIgnored": "Protistrana zmazaná a pridaná na zoznam ignorovaných názvov",
+      "tagsAppliedToExisting": "Štítky priradené k {count} transakciám",
+      "bulkDeleted": "Zmazaná {count} protistrana | Zmazaných {count} protistrán",
+      "bulkDeletedAndIgnored": "Zmazaná a ignorovaná {count} protistrana | Zmazaných a ignorovaných {count} protistrán"
+    },
+    "errors": {
+      "collision": "Protistrana s týmto názvom už existuje. Namiesto toho ju zlúčte.",
+      "generic": "Niečo sa pokazilo, skúste to znova, prosím."
+    },
+    "tabs": {
+      "manage": "Spravovať",
+      "settings": "Nastavenia"
+    },
+    "settings": {
+      "title": "Nastavenia rozpoznávania protistrán",
+      "description": "Nastavte, ako aplikácia automaticky rozpoznáva protistrany z vašich synchronizovaných transakcií.",
+      "howDetectionWorks": "Ako funguje rozpoznávanie",
+      "payeeFromDescription": {
+        "label": "Rozpoznávať protistrany z popisov transakcií",
+        "description": "Keď banka neposkytuje samostatné pole pre obchodníka, na automatické rozpoznanie protistrán sa použije popis transakcie (poznámka). Hodí sa pri bankových pripojeniach, ktoré majú pole obchodníka prázdne alebo chýbajúce. Môže to viesť k menej presným názvom protistrán (napr. s predponami splátkových platieb), ktoré môžete neskôr premenovať alebo zlúčiť.",
+        "successNotification": "Nastavenie aktualizované",
+        "errorNotification": "Nastavenie sa nepodarilo aktualizovať"
+      },
+      "promotionThreshold": {
+        "label": "Vytvoriť protistranu po N výskytoch",
+        "description": "Koľko transakcií musí mať rovnaký názov obchodníka, kým sa automaticky vytvorí protistrana. Nastavením na 1 sa protistrany vytvoria už z prvej transakcie.",
+        "successNotification": "Hranica vytvorenia protistrany aktualizovaná",
+        "errorNotification": "Hranicu vytvorenia protistrany sa nepodarilo aktualizovať"
+      },
+      "bulkCategorizationMode": {
+        "label": "Použiť režim kategorizácie na všetky protistrany",
+        "description": "Vyberte, ako sa má kategorizácia správať pri každej existujúcej protistrane. Toto prepíše individuálne nastavenie každej protistrany.",
+        "applyButton": "Použiť na všetky",
+        "confirmTitle": "Použiť na všetky protistrany?",
+        "confirmDescription": "Všetky protistrany sa prepnú na {mode}. Každú protistranu môžete neskôr aj tak zmeniť individuálne.",
+        "successNotification": "Aktualizované protistrany: {count}.",
+        "errorNotification": "Protistrany sa nepodarilo aktualizovať. Skúste to znova, prosím."
+      }
+    },
+    "ignoredNames": {
+      "title": "Ignorované názvy obchodníkov",
+      "description": "Surové reťazce obchodníkov, ktoré by nikdy nemali automaticky vytvoriť protistranu. Hodí sa pri rušivých údajoch typu „Card transfer\", „From: <name>\" alebo predponách vrátenia platby. Tieto názvy môžete stále ručne prepojiť s protistranou — blokované je len automatické priraďovanie.",
+      "addPlaceholder": "napr. Spotify",
+      "addButton": "Pridať",
+      "addedToast": "Pridané do ignorovaných názvov",
+      "addError": "Nepodarilo sa pridať do ignorovaných názvov",
+      "removeTooltip": "Odstrániť zo zoznamu ignorovaných",
+      "removedToast": "Odstránené z ignorovaných názvov",
+      "removeError": "Odstránenie zlyhalo",
+      "empty": "Zatiaľ žiadne ignorované názvy.",
+      "normalizedLabel": "Normalizované",
+      "conflictTitle": "Existujúca zhoda s protistranou",
+      "conflictDescription": "Protistrana s rovnakým normalizovaným názvom ako „{name}\" už existuje. Pokračovaním túto protistranu zmažete (transakcie zostanú, stratia prepojenie).",
+      "forceConfirm": "Zmazať protistranu a ignorovať"
+    },
+    "loadingMore": "Načítavanie ďalších…",
+    "txCount": "{count} tr."
+  }
+}

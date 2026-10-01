@@ -1,7 +1,8 @@
 {
   "common": {
     "processAlreadyLocked": "El proceso de sincronización para \"{{lockKey}}\" ya está bloqueado.",
-    "serviceTemporarilyUnavailable": "Servicio no disponible temporalmente. Inténtelo de nuevo."
+    "serviceTemporarilyUnavailable": "Servicio no disponible temporalmente. Inténtelo de nuevo.",
+    "jobInterruptedByServerUpdate": "A server update interrupted this before it finished, so nothing was changed."
   },
   "accounts": {
     "groupNotFound": "Grupo o cuenta no encontrados",
@@ -14,7 +15,9 @@
     "deleteBlockedByLoanPayments": "Esta cuenta tiene pagos de préstamos. Elimínelos o reasígnalos antes de eliminar la cuenta.",
     "loanBalanceUseUpdateLoan": "Cambie el saldo pendiente de un préstamo desde su página de préstamo, no desde la configuración de la cuenta.",
     "loanCategoryImmutable": "La categoría de una cuenta de préstamo no se puede cambiar.",
-    "dedicatedFlowCategoryNotAllowed": "Las cuentas de préstamos y vehículos deben crearse a través de sus puntos finales dedicados, no a través del punto final genérico de cuentas."
+    "dedicatedFlowCategoryNotAllowed": "Las cuentas de préstamos y vehículos deben crearse a través de sus puntos finales dedicados, no a través del punto final genérico de cuentas.",
+    "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
   },
   "balanceAdjustment": {
     "defaultNote": "Ajuste de saldo",
@@ -101,6 +104,27 @@
       "splitNotFound": "División no encontrada",
       "cannotDeleteWithRefunds": "No se puede eliminar una división que tiene reembolsos asociados",
       "cannotReduceBelowRefunded": "Esta división tiene reembolsos por un total de {{refundsText}}. No puede reducirla por debajo del importe reembolsado. Para reducir más, primero desvincule los reembolsos."
+    },
+    "reconciliation": {
+      "systemNotAllowed": "Only bank-connected transactions can be merged or removed.",
+      "plannedNotAllowed": "Planned transactions can't be merged or removed.",
+      "transferNotAllowed": "Linked transfers can't be merged or removed. Unlink the transfer first.",
+      "refundNotAllowed": "Refund-linked transactions can't be merged or removed. Unlink the refund first.",
+      "survivorPending": "Pick the booked transaction as the one to keep. A pending survivor would stay stuck as pending.",
+      "survivorNotSelected": "The transaction to keep must be one of the selected transactions.",
+      "differentAccounts": "Only transactions from the same account can be merged.",
+      "budgetConflict": "The selected transactions belong to different budgets. Align their budgets before merging.",
+      "groupConflict": "The selected transactions belong to different transaction groups. Align their groups before merging.",
+      "subscriptionConflict": "The selected transactions are linked to different subscriptions. Align their subscriptions before merging.",
+      "accountDisconnected": "Can't restore: the account is no longer connected to the bank.",
+      "bankCheckUnsupported": "Checking with the bank is only available for Enable Banking accounts.",
+      "notPending": "Only pending transactions can be kept as booked.",
+      "stuckPendingNotification": {
+        "title": "Some card payments haven't cleared",
+        "message_one": "1 transaction has been pending for over a week. Check it with your bank so your balance stays accurate.",
+        "message_other": "{{count}} transactions have been pending for over a week. Check them with your bank so your balance stays accurate."
+      },
+      "maintenanceConflict": "Las transacciones seleccionadas pertenecen a distintas visitas de mantenimiento."
     }
   },
   "tags": {
@@ -171,6 +195,9 @@
     "contributionSourceMustBeExpense": "Solo las transacciones de gasto pueden registrarse como aportaciones de inversión.",
     "contributionDeletePurchasesConfirmationRequired": "Eliminar esta aportación requiere confirmación explícita para eliminar sus compras de inversión vinculadas."
   },
+  "landingFaq": {
+    "unavailable": "The assistant is unavailable right now. Please try again later or email support@moneymatter.app."
+  },
   "loans": {
     "loanNotFound": "Préstamo no encontrado.",
     "createAccountFailed": "Error al crear la cuenta del préstamo",
@@ -180,7 +207,12 @@
     "unlinkPaymentNotFound": "Pago del préstamo no encontrado.",
     "unlinkPaymentInvalidSelection": "Esta transacción no es un pago de este préstamo.",
     "correctionAsOfBeforeStartDate": "currentBalanceAsOf no puede ser anterior a la fecha de inicio del préstamo",
-    "correctionOverpay": "El saldo corregido pagaría de más el préstamo por {{overpayAmount}}: los pagos que suman {{paymentsTotal}} tienen fecha en o posterior a {{asOfDate}}"
+    "correctionOverpay": "El saldo corregido pagaría de más el préstamo por {{overpayAmount}}: los pagos que suman {{paymentsTotal}} tienen fecha en o posterior a {{asOfDate}}",
+    "loanNotActive": "This loan is no longer active or has already been paid off.",
+    "loanInstallmentOnly": "Only expense installments can be linked to a loan.",
+    "loanInstallmentAlreadyLinked": "This installment is already linked to a loan.",
+    "loanInstallmentSourceAccount": "The installment source account cannot be the loan account.",
+    "loanInstallmentRequiresTransaction": "A loan-linked installment must create or link a real transaction."
   },
   "errors": {
     "connectionNotFound": "Conexión no encontrada",
@@ -212,6 +244,7 @@
     "failedToFetchBanks": "No se pudieron obtener los bancos. Por favor, verifique sus credenciales y el código de país.",
     "failedToFetchCountries": "No se pudieron obtener los países. Por favor, verifique sus credenciales.",
     "accountNotLinkedToConnection": "Cuenta no encontrada o no vinculada a esta conexión",
+    "accountAlreadyConnectedToAnotherConnection": "La cuenta \"{{account}}\" ya está conectada a través de \"{{connection}}\". Desconecte esa primero.",
     "cannotLoadBeforeLinkDate": "No se pueden cargar transacciones anteriores a la fecha de vinculación de la cuenta ({{linkedAt}}). Esta cuenta fue vinculada con la estrategia \"solo hacia adelante\" para evitar la duplicación de datos.",
     "dateRangeExceedsLimit": "El rango de fechas no puede superar 1 año.",
     "fromAfterTo": "La fecha \"from\" debe ser anterior a la fecha \"to\"",
@@ -300,7 +333,9 @@
   "importExport": {
     "batchDeleteBankLinkedAccount": "Esta importación ya no se puede deshacer porque su cuenta ahora está conectada a un banco. Eliminar estas transacciones podría desajustar el saldo sincronizado.",
     "batchDeleteLinkedLoanTransfer": "Esta importación está vinculada a un pago de préstamo y no se puede deshacer por sí sola. Active \"también eliminar las transacciones de transferencia vinculadas\" para eliminarla.",
-    "batchDeleteTooLarge": "Esta importación tiene demasiadas transacciones para deshacerla en una sola solicitud en este momento. Póngase en contacto con soporte si necesita ayuda para eliminarla."
+    "batchDeleteInProgress": "Un lote de importación ya está siendo eliminado. Espere a que termine antes de iniciar otro.",
+    "statementImportInProgress": "Ya se está ejecutando una importación de sentencias. Espere a que termine antes de comenzar otra.",
+    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated."
   },
   "statementParser": {
     "invalidFile": "Archivo no válido",
@@ -343,8 +378,23 @@
     "defaultCurrencyNotPresent": "No se puede eliminar la moneda. La moneda predeterminada no está presente en el sistema"
   },
   "ai": {
-    "apiKeyValidationFailed": "La validación de la clave de API falló",
-    "noApiKeyForProvider": "No hay clave de API configurada para el proveedor: {{provider}}",
+    "connectionNotFound": "AI model not found.",
+    "connectionNameTaken": "You already have an AI model with this name.",
+    "connectionLimitReached": "You can add up to {{max}} AI models.",
+    "connectionNameInvalidLength": "Name must be between 1 and {{max}} characters.",
+    "connectionModelRequired": "Enter a model name.",
+    "connectionBaseUrlRequired": "Enter the base URL of your OpenAI-compatible server.",
+    "connectionBaseUrlNotAllowed": "This provider always uses its official API address, so it doesn't take a base URL.",
+    "connectionApiKeyRequired": "Enter the API key.",
+    "connectionProviderMismatch": "That AI model uses a different provider.",
+    "connectionKeySourceMissing": "The AI model you're copying from has no API key. Enter one.",
+    "connectionStoredKeyUnreadable": "The API key saved for this AI model can no longer be read. Enter it again.",
+    "connectionKeyRejected": "The provider rejected this API key. Check that it's correct, active, and has credits.",
+    "connectionModelNotAvailable": "This API key can't use the model \"{{model}}\". Check the model name.",
+    "connectionProviderUnreachable": "Couldn't reach the provider. Try again in a moment.",
+    "connectionValidationFailed": "The provider refused the test request: {{reason}}",
+    "serverModelUnavailable": "The included MoneyMatter AI model isn't available on your plan.",
+    "connectionKeyNotInBackup": "API key isn't included in backups. Edit this model and enter the key again.",
     "customEndpointUnreachable": "No se pudo conectar con el endpoint. Verifique la URL base y asegúrese de que el servidor esté en ejecución y sea accesible desde internet.",
     "customEndpointAuthFailed": "El endpoint rechazó la clave de API. Verifique que la clave sea correcta y tenga los permisos necesarios.",
     "customEndpointModelNotFound": "El endpoint no ofrece ningún modelo llamado \"{{model}}\".",
@@ -352,16 +402,9 @@
     "customEndpointMoreModels": "y {{count}} más",
     "customEndpointNotApiResponse": "El servidor en esta URL respondió con HTTP {{status}} en lugar de una respuesta compatible con OpenAI. Verifique que el servidor esté en ejecución y que la URL base sea correcta — normalmente termina en /v1.",
     "customEndpointValidationFailed": "El endpoint no devolvió una respuesta utilizable. Verifique la URL base, el nombre del modelo y la clave de API.",
-    "customEndpointMissingFields": "Se requieren una URL base y un nombre de modelo.",
-    "customEndpointNameTaken": "Ya tiene un endpoint con este nombre.",
-    "customEndpointNameInvalidLength": "El nombre del endpoint debe tener entre 1 y 50 caracteres.",
-    "customEndpointNotFound": "Endpoint personalizado no encontrado.",
-    "customEndpointIdRequired": "Seleccione qué endpoint personalizado ofrece este modelo.",
-    "customModelNameInvalidLength": "El nombre del modelo debe tener entre 1 y 200 caracteres.",
-    "customEndpointLimitReached": "Puede almacenar hasta {{max}} endpoints personalizados. Elimine uno antes de añadir otro.",
-    "customEndpointStoredKeyUnreadable": "La clave de API guardada para este endpoint ya no se puede leer. Por favor, introdúzcala de nuevo.",
     "categorizationAlreadyRunning": "La categorización con IA ya está en curso. Espere a que finalice antes de iniciar otra ejecución.",
-    "categorizationRateLimited": "Ha iniciado la categorización con IA demasiadas veces recientemente. Inténtelo de nuevo más tarde."
+    "categorizationRateLimited": "Ha iniciado la categorización con IA demasiadas veces recientemente. Inténtelo de nuevo más tarde.",
+    "customInstructionsNeedConnection": "Add an AI model in Settings → AI to use custom instructions."
   },
   "middleware": {
     "tooManyRequests": "Demasiadas solicitudes. Por favor, inténtelo de nuevo más tarde."
@@ -530,28 +573,33 @@
     "notFound": "Vehículo no encontrado"
   },
   "plans": {
-    "targetAmountMustBePositive": "El importe objetivo debe ser mayor que cero."
-  },
-  "urlGuard": {
-    "invalidUrl": "Esto no es una URL válida.",
-    "unsupportedProtocol": "Solo se permiten URLs http:// y https://.",
-    "credentialsInUrlNotAllowed": "La URL no debe contener un nombre de usuario ni una contraseña. Use el campo de clave de API en su lugar.",
-    "privateAddressBlocked": "{{host}} apunta a una dirección de red privada o reservada, lo cual no está permitido.",
-    "hostnameNotResolvable": "No se pudo resolver {{host}}. Verifique que la dirección no tenga errores tipográficos.",
-    "redirectNotAllowed": "El endpoint respondió con una redirección. Introduzca la URL final en su lugar.",
-    "hostnameLookupUnavailable": "No pudimos verificar {{host}} en este momento. Por favor, inténtelo de nuevo en unos instantes."
-  },
-  "brandLogos": {
-    "domainAndInitialsExclusive": "No se pueden establecer un logotipo de marca y letras personalizadas al mismo tiempo.",
-    "colorRequiresInitials": "Un color de monograma requiere letras de monograma."
+    "targetAmountMustBePositive": "El importe objetivo debe ser mayor que cero.",
+    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan."
   },
   "stats": {
     "netWorthHistoryTooManyPoints": "Este rango de fechas y esta granularidad producen demasiados puntos de datos. Elija una granularidad más amplia o un rango más corto."
   },
   "automations": {
     "automationNotFound": "Automatización no encontrada.",
+    "previewRequiresConditions": "Proporcione condiciones o una automatización guardada para previsualizar.",
     "reorderStale": "La lista de automatizaciones ha cambiado. Actualícela e inténtelo de nuevo.",
     "ruleLimitReached": "Ha alcanzado el número máximo de automatizaciones.",
     "staleReference": "Esta automatización hace referencia a un elemento que ya no existe."
+  },
+  "attachments": {
+    "transactionNotFound": "Transaction not found.",
+    "attachmentNotFound": "Attachment not found.",
+    "fileNotFound": "Attachment file not found.",
+    "unsupportedFileType": "Unsupported file type. Upload a JPEG, PNG, WebP or PDF file.",
+    "tooManyAttachments": "A transaction can hold at most {{max}} attachments.",
+    "quotaExceeded": "Attachment storage quota exceeded.",
+    "noFileUploaded": "No file was uploaded."
+  },
+  "invoiceMatching": {
+    "unsupportedFileType": "Unsupported file type. Upload a JPEG, PNG, WebP or PDF invoice.",
+    "notAnInvoice": "This document does not look like an invoice or a receipt.",
+    "incompleteInvoice": "Could not read a vendor, total amount and date from this invoice.",
+    "pdfWithoutText": "Custom AI connections can't receive PDF files directly, and this one couldn't be opened to convert it (for example, it's password-protected). Convert it to an image (PNG or JPEG), such as a screenshot of the invoice, and upload that instead.",
+    "noFileUploaded": "No file was uploaded."
   }
 }

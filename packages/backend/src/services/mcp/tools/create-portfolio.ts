@@ -1,17 +1,28 @@
 import { PORTFOLIO_TYPE } from '@bt/shared/types/investments';
+import { currencyCode } from '@common/lib/zod/custom-types';
 import { trackMcpToolUsed } from '@js/utils/posthog';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { createPortfolio } from '@services/investments/portfolios/create.service';
 import { z } from 'zod';
 
-import { getUserId, jsonContent, requireScope } from './helpers';
+import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
 
 const inputSchema = {
-  name: z.string().describe('Portfolio name (must be unique for this user)'),
+  name: z.string().describe('Portfolio name'),
   portfolioType: z
     .enum([PORTFOLIO_TYPE.investment, PORTFOLIO_TYPE.retirement, PORTFOLIO_TYPE.savings, PORTFOLIO_TYPE.other])
     .describe('Type of portfolio: investment, retirement, savings, or other'),
   description: z.string().optional().describe('Optional description of the portfolio'),
+  displayCurrencyCode: currencyCode()
+    .nullable()
+    .optional()
+    .describe('Connected display/valuation currency; null follows the user base currency for ordinary portfolios'),
+  isManualTracking: z
+    .boolean()
+    .optional()
+    .describe(
+      'Track manual cash flows and end-of-day valuations; requires displayCurrencyCode and cannot change after portfolio history exists',
+    ),
   isEnabled: z.boolean().optional().describe('Whether the portfolio is active (default: true)'),
 };
 
@@ -25,7 +36,7 @@ export function registerCreatePortfolio(server: McpServer) {
     },
     async (args, extra) => {
       const userId = getUserId({ extra });
-      requireScope({ extra, scope: 'finance:write' });
+      await assertMcpMutationAllowed({ extra, userId });
       trackMcpToolUsed({ userId, tool: 'create_portfolio', clientId: extra.authInfo?.clientId });
 
       const portfolio = await createPortfolio({
@@ -34,6 +45,8 @@ export function registerCreatePortfolio(server: McpServer) {
         portfolioType: args.portfolioType as PORTFOLIO_TYPE,
         description: args.description ?? null,
         isEnabled: args.isEnabled,
+        displayCurrencyCode: args.displayCurrencyCode,
+        isManualTracking: args.isManualTracking,
       });
 
       return jsonContent({ data: portfolio });

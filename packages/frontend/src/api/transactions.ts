@@ -75,12 +75,16 @@ export const loadTransactions = async ({
   includeGroups?: boolean;
   /** true = only planned rows, false = exclude them, absent = both. */
   isForecastOnly?: boolean;
+  /** true = only rows with attachments, false = only rows without, absent = both. */
+  hasAttachment?: boolean;
 }): Promise<endpointsTypes.GetTransactionsResponse> => {
   return api.get('/transactions', {
     ...params,
     // The client drops falsy query values, which would swallow `isForecastOnly: false`.
     // Stringifying keeps the "exclude planned" intent on the wire.
     isForecastOnly: params.isForecastOnly === undefined ? undefined : String(params.isForecastOnly),
+    hasAttachment: params.hasAttachment === undefined ? undefined : String(params.hasAttachment),
+    includeHasAttachments: true,
     from: from ? new Date(from).toISOString() : undefined,
     to: to ? new Date(to).toISOString() : undefined,
   });
@@ -149,6 +153,44 @@ export const bulkDeleteTransactions = async (
   payload: endpointsTypes.BulkDeleteTransactionsBody,
 ): Promise<endpointsTypes.BulkDeleteTransactionsResponse> => {
   return api.post('/transactions/bulk-delete', payload);
+};
+
+export const reconciliationRemove = async (
+  payload: endpointsTypes.ReconciliationRemoveBody,
+): Promise<endpointsTypes.ReconciliationActionResponse> => {
+  return api.post('/transactions/reconciliation/remove', payload);
+};
+
+export const reconciliationMerge = async (
+  payload: endpointsTypes.ReconciliationMergeBody,
+): Promise<endpointsTypes.ReconciliationActionResponse> => {
+  return api.post('/transactions/reconciliation/merge', payload);
+};
+
+export const reconciliationRestore = async (
+  payload: endpointsTypes.ReconciliationRestoreBody,
+): Promise<endpointsTypes.ReconciliationRestoreResponse> => {
+  return api.post('/transactions/reconciliation/restore', payload);
+};
+
+export const loadReconciliationHistory = async (): Promise<endpointsTypes.ReconciliationHistoryEvent[]> => {
+  return api.get('/transactions/reconciliation/history');
+};
+
+export const loadStuckPending = async (): Promise<endpointsTypes.StuckPendingItem[]> => {
+  return api.get('/transactions/reconciliation/stuck-pending');
+};
+
+export const checkStuckPending = async (
+  payload: endpointsTypes.CheckStuckPendingBody,
+): Promise<endpointsTypes.CheckStuckPendingResponse> => {
+  return api.post('/transactions/reconciliation/stuck-pending/check', payload);
+};
+
+export const keepAsBooked = async (
+  payload: endpointsTypes.KeepAsBookedBody,
+): Promise<endpointsTypes.KeepAsBookedResponse> => {
+  return api.post('/transactions/reconciliation/keep-as-booked', payload);
 };
 
 export const loadRefundRecommendations = async (

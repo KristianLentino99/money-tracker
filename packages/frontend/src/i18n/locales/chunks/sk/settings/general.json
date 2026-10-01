@@ -1,0 +1,99 @@
+{
+  "settings": {
+    "general": {
+      "title": "Všeobecné",
+      "description": "Nastavte, ako sa vaše finančné údaje počítajú a zobrazujú v celej aplikácii.",
+      "creditLimit": {
+        "label": "Zahrnúť úverové limity do zostatku",
+        "description": "Keď je zapnuté, úverové limity sa v štatistikách a v grafe vývoja zostatku odpočítajú od zostatkov na účtoch. Zobrazí sa tak vaša skutočná finančná pozícia namiesto dostupného úveru.",
+        "successNotification": "Nastavenie bolo úspešne aktualizované",
+        "errorNotification": "Nastavenie sa nepodarilo aktualizovať"
+      },
+      "manualTransferMatching": {
+        "label": "Priraďovať prevody k manuálnym účtom",
+        "description": "Umožnite automaticky rozpoznaným prevodom prepojiť synchronizovanú bankovú transakciu s transakciou, ktorú ste vytvorili ručne.",
+        "successNotification": "Nastavenie priraďovania prevodov aktualizované",
+        "errorNotification": "Nastavenie priraďovania prevodov sa nepodarilo aktualizovať"
+      },
+      "pendingBankTransactions": {
+        "label": "Importovať čakajúce bankové transakcie",
+        "description": "Ukladá transakcie z Enable Banking ešte pred ich zaúčtovaním bankou. Sú označené ako čakajúce, nikdy nezmenia zostatok účtu a do zaúčtovania im často chýbajú údaje o obchodníkovi. Ostatných poskytovateľov sa to netýka: SimpleFIN a LunchFlow vždy importujú len zaúčtované transakcie a Monobank importuje každú transakciu ako bežnú.",
+        "successNotification": "Nastavenie čakajúcich transakcií aktualizované",
+        "errorNotification": "Nastavenie čakajúcich transakcií sa nepodarilo aktualizovať"
+      },
+      "quickStart": {
+        "label": "Sprievodca Rýchlym štartom",
+        "description": "Zobraziť na nástenke úvodný zoznam úloh. Vypnutím sprievodcu skryjete, opätovným zapnutím ho kedykoľvek vrátite späť."
+      },
+      "savingsCategories": {
+        "label": "Počítať kategórie ako úspory",
+        "description": "Výdavky v týchto kategóriách (a ich podkategóriách) sa v analytike peňažného toku vylučujú z výdavkov, takže sa počítajú do mesačných úspor a miery úspor.",
+        "successNotification": "Kategórie úspor aktualizované",
+        "errorNotification": "Kategórie úspor sa nepodarilo aktualizovať"
+      },
+      "accountDropdowns": {
+        "defaultAccount": {
+          "label": "Predvolený účet",
+          "description": "Predvyplní sa pri vytváraní transakcie.",
+          "placeholder": "Bez predvoľby — prvý účet"
+        },
+        "showArchived": {
+          "label": "Zobraziť archivované účty",
+          "description": "Keď je vypnuté, archivované účty sú vo výberoch účtov skryté."
+        },
+        "successNotification": "Nastavenia výberu účtov aktualizované",
+        "errorNotification": "Nastavenia výberu účtov sa nepodarilo aktualizovať"
+      },
+      "showUpcomingTransactions": {
+        "label": "Zobraziť nadchádzajúce transakcie",
+        "description": "Pripnite na vrch zoznamu transakcií sekciu s omeškanými pravidelnými platbami a tými, ktoré sú splatné v nasledujúcich 3 dňoch.",
+        "successNotification": "Nastavenie nadchádzajúcich transakcií aktualizované",
+        "errorNotification": "Nastavenie nadchádzajúcich transakcií sa nepodarilo aktualizovať"
+      },
+      "transactionFields": {
+        "label": "Voliteľné polia transakcie",
+        "description": "Ďalšie polia zobrazené vo formulári transakcie. Pole, ktoré už má hodnotu, sa zobrazuje vždy.",
+        "successNotification": "Polia transakcie aktualizované",
+        "errorNotification": "Vyskytla sa neočakávaná chyba. Nastavenie sa neuložilo",
+        "fields": {
+          "externalUrl": {
+            "label": "Externá URL",
+            "description": "Prepojte transakciu so stránkou objednávky, potvrdením rezervácie alebo účtenkou."
+          },
+          "externalReference": {
+            "label": "Externý odkaz",
+            "description": "Uchovajte pri transakcii číslo objednávky, číslo faktúry alebo referenciu rezervácie."
+          },
+          "originalAmount": {
+            "label": "Pôvodná suma",
+            "description": "Skutočne zaplatená suma v inej mene, keď sa líši od meny účtu."
+          },
+          "location": {
+            "label": "Poloha",
+            "description": "Súradnice GPS miesta, kde sa nákup uskutočnil. Vyplňte podľa polohy vášho zariadenia, alebo ich zadajte ručne"
+          }
+        },
+        "mapPicker": {
+          "label": "Výber na mape",
+          "description": "Vyberajte polohy transakcií na mape a vyhľadávajte adresy. Mapové podklady a vyhľadávanie poskytuje OpenStreetMap, ktorý pri otvorení mapy dostane vašu IP adresu."
+        }
+      },
+      "defaultPaymentType": {
+        "label": "Predvolený spôsob platby",
+        "description": "Predvyplní sa pri pridávaní novej transakcie.",
+        "placeholder": "Vyberte spôsob platby",
+        "successNotification": "Predvolený spôsob platby aktualizovaný",
+        "errorNotification": "Predvolený spôsob platby sa nepodarilo aktualizovať"
+      },
+      "distanceUnit": {
+        "label": "Distance unit",
+        "description": "Choose the unit used for vehicle mileage and maintenance distances.",
+        "placeholder": "Select a distance unit",
+        "kilometers": "Kilometers",
+        "miles": "Miles",
+        "successNotification": "Distance unit updated",
+        "errorNotification": "Failed to update distance unit"
+      }
+    }
+  }
+}

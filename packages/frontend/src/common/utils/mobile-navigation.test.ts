@@ -25,4 +25,15 @@ describe('mobile navigation', () => {
     expect(isMobileTabActive({ tab: 'more', routeName: ROUTES_NAMES.settingsSecuritySessions })).toBe(true);
     expect(isMobileTabActive({ tab: 'accounts', routeName: ROUTES_NAMES.settingsSecuritySessions })).toBe(false);
   });
+  it('groups upstream AI models, connected apps, billing and FIRE under More while reconciliation stays in Transactions', () => {
+    for (const routeName of [
+      ROUTES_NAMES.settingsAiModels,
+      ROUTES_NAMES.settingsAiConnectedApps,
+      ROUTES_NAMES.settingsPlanBilling,
+      ROUTES_NAMES.analyticsFire,
+    ]) {
+      expect(isMobileTabActive({ tab: 'more', routeName })).toBe(true);
+    }
+    expect(isMobileTabActive({ tab: 'transactions', routeName: ROUTES_NAMES.optimizationsReconciliation })).toBe(true);
+  });
 });

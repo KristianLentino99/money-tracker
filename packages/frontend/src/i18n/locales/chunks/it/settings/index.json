@@ -18,7 +18,9 @@
       "language": "Lingua",
       "general": "Generale",
       "payees": "Beneficiari",
-      "subscriptions": "Pagamenti programmati"
+      "subscriptions": "Pagamenti programmati",
+      "planBilling": "Piani e fatturazione",
+      "collapse": "Collapse"
     },
     "backToSettings": "Torna alle impostazioni"
   }

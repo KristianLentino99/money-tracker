@@ -1,0 +1,471 @@
+{
+  "pages": {
+    "integrations": {
+      "addDialog": {
+        "titleSelect": "Pridať integráciu",
+        "titleConnect": "Pripojiť {provider}",
+        "selectProviderHint": "Kde bankujete? Vyberte región a zobrazia sa dostupné možnosti.",
+        "betaBadge": "Beta"
+      },
+      "providers": {
+        "monobank": {
+          "name": "Monobank",
+          "description": "Ukrajinská digitálna banka"
+        },
+        "enableBanking": {
+          "name": "Enable Banking",
+          "description": "Prístup k viac než 6000 európskym bankám cez otvorené bankovníctvo PSD2"
+        },
+        "lunchflow": {
+          "name": "Lunch Flow",
+          "description": "Synchronizácia transakcií z viac než 20 000 bánk po celom svete cez LunchFlow"
+        },
+        "simplefin": {
+          "name": "SimpleFIN",
+          "description": "Synchronizácia transakcií z bánk v USA a Kanade cez SimpleFIN Bridge"
+        },
+        "walutomat": {
+          "name": "Walutomat",
+          "description": "Poľská zmenárenská platforma s 23 menami"
+        }
+      },
+      "monobank": {
+        "apiTokenLabel": "API token",
+        "connectionNameLabel": "Názov pripojenia (voliteľné)",
+        "tokenPlaceholder": "Zadajte svoj API token pre Monobank",
+        "accountNamePlaceholder": "napr. Osobný účet",
+        "help": {
+          "trigger": "Kde získam API token?",
+          "title": "Získať API token pre Monobank",
+          "step1": "Navštívte {link} a podľa pokynov vygenerujte osobný token.",
+          "step2": "Token bezpečne uložte a vložte ho do poľa.",
+          "note": "Nemusíte sa obávať — API token slúži výhradne na čítanie."
+        },
+        "backButton": "Späť",
+        "connectingButton": "Pripájanie...",
+        "connectButton": "Pripojiť",
+        "loadingAccounts": "Načítavanie účtov...",
+        "selectAccountsHint": "Vyberte účty, ktoré chcete synchronizovať s MoneyMatter",
+        "syncingButton": "Synchronizácia...",
+        "syncButton": "Synchronizovať účty (počet: {count})",
+        "syncSuccess": "Pripojené účty (počet: {count}). Transakcie sa synchronizujú na pozadí.",
+        "errors": {
+          "connectFailed": "Poskytovateľa sa nepodarilo pripojiť",
+          "syncFailed": "Účty sa nepodarilo synchronizovať"
+        }
+      },
+      "enableBankingConnector": {
+        "beta": {
+          "title": "Funkcia v beta verzii – určená pre vývojárov",
+          "description": "Nastavenie tejto integrácie vyžaduje technické znalosti. Budete si musieť zaregistrovať vlastnú aplikáciu Enable Banking a poskytnúť prístupové API údaje. Postup nastavenia aj samotné API sa môžu v budúcich aktualizáciách zmeniť."
+        },
+        "credentials": {
+          "appIdLabel": "ID aplikácie",
+          "appIdHint": "Získate ho v portáli Enable Banking po nahratí certifikátu",
+          "privateKeyLabel": "Súkromný kľúč",
+          "privateKeyHint": "Váš súkromný kľúč RSA vo formáte PEM (uložený šifrovane)",
+          "bicLabel": "BIC:"
+        },
+        "steps": {
+          "loadingCountries": "Načítavanie krajín...",
+          "selectCountryHint": "Vyberte krajinu vašej banky",
+          "countryLabel": "Krajina",
+          "loadingBanks": "Načítavanie bánk...",
+          "selectBankHint": "Vyberte banku v krajine {country}",
+          "bankLabel": "Banka",
+          "connectingToBank": "Pripájanie k banke {bank}...",
+          "authDescription": "Kliknutím na tlačidlo nižšie povolíte prístup k vášmu účtu v banke {bank}.",
+          "authWarning": "Budete presmerovaní na webovú stránku banky {bank}, kde sa prihlásite a schválite pripojenie.",
+          "authorizeButton": "Povoliť prístup banke {bank}",
+          "loadingAccounts": "Načítavanie účtov...",
+          "selectAccountsHint": "Vyberte účty, ktoré chcete synchronizovať s MoneyMatter"
+        },
+        "buttons": {
+          "back": "Späť",
+          "loading": "Načítavanie...",
+          "next": "Ďalej",
+          "syncing": "Synchronizácia...",
+          "sync": "Synchronizovať {count} účet | Synchronizovať {count} účtov"
+        },
+        "errors": {
+          "loadCountriesFailed": "Krajiny sa nepodarilo načítať. Skontrolujte prístupové údaje, prosím.",
+          "loadAccountsFailed": "Účty sa nepodarilo načítať",
+          "syncFailed": "Účty sa nepodarilo synchronizovať"
+        },
+        "syncSuccess": "Pripojené účty (počet: {count}). Transakcie sa synchronizujú na pozadí."
+      },
+      "instructionsDialog": {
+        "title": "Ako získať prístupové údaje pre Enable Banking",
+        "overview": {
+          "title": "Prehľad",
+          "text": "Enable Banking vyžaduje zaregistrovanie aplikácie a vygenerovanie bezpečnostných údajov na prístup k bankovým dátam. Podľa nasledujúcich krokov získate ID aplikácie a súkromný kľúč."
+        },
+        "step1": {
+          "title": "Zaregistrovať sa a vytvoriť aplikáciu",
+          "intro": "Navštívte {link} a ak ešte nemáte účet, vytvorte si ho.",
+          "createApp": "Potom vytvorte aplikáciu:",
+          "steps": {
+            "login": "Prihláste sa do portálu Enable Banking",
+            "navigate": "Prejdite na {link}",
+            "lookForm": "Nájdite formulár „Create Application\"",
+            "selectEnv": "Vyberte prostredie {strong}",
+            "selectEnvStrong": "\"Production\"",
+            "generateKey": "Zaškrtnite políčko {strong}. Po vytvorení aplikácie sa súbor s kľúčom .pem automaticky uloží do vášho počítača. {warning} z akéhokoľvek dôvodu – v takom prípade budete musieť aplikáciu vytvoriť znova",
+            "generateKeyStrong": "\"Generate private RSA key in the browser\"",
+            "generateKeyWarning": "Ak sa súbor neuložil",
+            "fillForm": "Vyplňte formulár nasledujúcimi hodnotami:",
+            "appName": "Application name:",
+            "redirectUrls": "Allowed redirect URLs:",
+            "appDescription": "Application description:",
+            "emailProtection": "Email for data protection matters:",
+            "privacyUrl": "Privacy URL:",
+            "termsUrl": "Terms URL:",
+            "clickRegister": "Kliknite na „Register\"",
+            "downloadKey": "Ponúkne sa vám stiahnutie súboru. Je to váš RSA kľúč, ktorý si musíte niekam uložiť, keďže je súčasťou vašich prístupových údajov"
+          }
+        },
+        "step2": {
+          "title": "Pripojte svoje bankové účty",
+          "intro": "Pred použitím aplikácie s MoneyMatter musíte najprv prepojiť svoje bankové účty cez portál Enable Banking. Vyhľadajte tlačidlo „Link accounts\" v dlaždici vytvorenej aplikácie a postupujte podľa všetkých krokov, ktoré sa tam vyžadujú.",
+          "breakdown": "Tu je rozpis jednotlivých polí:",
+          "steps": {
+            "clickLink": "Kliknite na „Link accounts\" a počkajte, kým sa dokončí načítanie",
+            "newFields": "Na rovnakom mieste sa objavia nové polia: „Country\", „ASPSP\", „Usage type\"",
+            "country": "Country:",
+            "countryValue": "Krajina vašej banky",
+            "aspsp": "ASPSP:",
+            "aspspValue": "Your bank name",
+            "usageType": "Usage type:",
+            "usageTypeValue": "Private",
+            "clickSave": "Kliknite na „Save\"",
+            "redirect": "Dôjde k presmerovaniu na prihlasovaciu stránku vašej banky. Prihláste sa a vyberte všetky účty, ktoré chcete pripojiť.",
+            "finishAuth": "Po dokončení prihlasovacieho procesu vás stránka presmeruje späť do Enable Banking.",
+            "waitAccounts": "Počkajte, kým sa vybrané účty zobrazia v dlaždici aplikácie v poli „Linked accounts\""
+          },
+          "warningNotLinked": "Môže sa stať, že niektoré vybrané účty sa nepripoja. Ide o problém na strane vašej banky, ktorý vy nemôžete vyriešiť. Môžete len počkať niekoľko hodín či dní, kým sa problém vyrieši. Ak sa nevyrieši, jedinou možnosťou je nahlásiť to Enable Banking.",
+          "infoAddMore": "Ak by ste v budúcnosti chceli pripojiť ďalšie účty, budete musieť postup pripájania účtov zopakovať. {strong}, že pri pridávaní NOVÝCH účtov musíte znova vybrať aj STARÉ účty – v podstate musíte vybrať VŠETKY účty, ktoré majú byť pripojené.",
+          "infoAddMoreStrong": "Nezabudnite"
+        },
+        "step3": {
+          "title": "Získajte svoje prístupové údaje",
+          "intro": "Z portálu Enable Banking:",
+          "appId": "{strong} skopírujte {code} z podrobností vašej aplikácie",
+          "appIdStrong": "Application ID:",
+          "appIdCode": "app_id",
+          "appIdExample": "Príklad:",
+          "privateKey": "{strong} otvorte uložený súbor {code} v ľubovoľnom textovom editore (TextEdit na macOS alebo Poznámkový blok na Windows) a skopírujte celý jeho obsah (vrátane riadkov BEGIN a END)",
+          "privateKeyStrong": "Súkromný kľúč:",
+          "privateKeyCode": "private.pem"
+        },
+        "securityNote": {
+          "title": "Bezpečnostné upozornenie",
+          "text": "Váš súkromný kľúč sa v našej databáze uchováva šifrovane a používa sa len na overenie voči Enable Banking vo vašom mene. Token má prístup obmedzený len na čítanie údajov. Napriek tomu svoj súkromný kľúč nikdy s nikým nezdieľajte."
+        },
+        "gotItButton": "Rozumiem"
+      },
+      "enableBanking": {
+        "instructions": {},
+        "placeholders": {
+          "appId": "Zadajte svoje Enable Banking app_id",
+          "privateKey": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+          "searchCountries": "Hľadať krajiny...",
+          "searchBanks": "Hľadať banky..."
+        },
+        "errors": {
+          "noAuthUrl": "Server neposkytol autorizačnú URL adresu",
+          "failedToLoadBanks": "Banky sa nepodarilo načítať",
+          "failedToConnectProvider": "Poskytovateľa sa nepodarilo pripojiť"
+        },
+        "help": {
+          "trigger": "Kde získam prístupové údaje pre Enable Banking?"
+        }
+      },
+      "lunchflow": {
+        "apiKeyLabel": "API kľúč",
+        "apiKeyPlaceholder": "Zadajte svoj API kľúč pre LunchFlow",
+        "help": {
+          "trigger": "Kde nájdem svoj API kľúč?",
+          "title": "Získajte svoj API kľúč pre LunchFlow",
+          "step1": "Otvorte {link}.",
+          "step2": "Prejdite na Settings → API Destinations.",
+          "step3": "Skopírujte API kľúč a vložte ho do poľa."
+        },
+        "backButton": "Späť",
+        "connectingButton": "Pripájanie...",
+        "connectButton": "Pripojiť",
+        "loadingAccounts": "Načítavanie účtov...",
+        "accountsPreviewHint": "Nájdené účty (počet: {count}). Importujú sa všetky.",
+        "importingButton": "Importovanie...",
+        "importButton": "Importovať účty (počet: {count})",
+        "importSuccess": "Pripojené účty (počet: {count}). Transakcie sa synchronizujú na pozadí.",
+        "skipButton": "Preskočiť",
+        "skipTooltip": "Preskočte import, ak chcete neskôr pripojiť len konkrétne účty, alebo znova prepojiť existujúce účty v ich nastaveniach.",
+        "errors": {
+          "connectFailed": "Pripojenie k LunchFlow zlyhalo",
+          "importFailed": "Účty sa nepodarilo importovať"
+        }
+      },
+      "common": {
+        "selectAll": "Vybrať všetko",
+        "availableLabel": "Dostupné",
+        "clearAll": "Zrušiť výber",
+        "noCurrencyBadge": "Bez meny",
+        "currencyPicker": {
+          "placeholder": "Vyberte menu",
+          "missingCount": "{count} vybraný účet ešte potrebuje menu — po importe sa už nedá zmeniť. | {count} vybraných účtov ešte potrebuje menu — po importe sa už nedá zmeniť."
+        }
+      },
+      "help": {
+        "openSite": "Otvoriť {site}"
+      },
+      "simplefin": {
+        "setupTokenLabel": "Setup token",
+        "setupTokenPlaceholder": "Vložte svoj SimpleFIN setup token",
+        "help": {
+          "trigger": "Kde získam setup token?",
+          "title": "Získajte svoj SimpleFIN setup token",
+          "step1": "Vytvorte si účet SimpleFIN Bridge na {link} a pripojte svoju banku.",
+          "step2": "Vygenerujte nový setup token na paneli Bridge.",
+          "step3": "Vložte token do poľa."
+        },
+        "connectButton": "Pripojiť",
+        "connectingButton": "Pripájanie...",
+        "backButton": "Späť",
+        "loadingAccounts": "Načítavanie účtov...",
+        "backfillNote": "Teraz načítame transakcie za posledných 6 mesiacov. Staršiu históriu môžete kedykoľvek dodatočne načítať zo stránky účtu pomocou výberu dátumového rozsahu.",
+        "importButton": "Vybrať účty | Importovať 1 účet | Importovať {count} účtov",
+        "importingButton": "Importovanie...",
+        "errors": {
+          "connectFailed": "Pripojenie k SimpleFIN zlyhalo. Skontrolujte svoj setup token a skúste to znova.",
+          "importFailed": "Účty sa nepodarilo importovať. Skúste to znova, prosím."
+        }
+      },
+      "walutomat": {
+        "help": {
+          "trigger": "Ako nastavím prístup k API pre Walutomat?"
+        },
+        "apiKeyLabel": "API kľúč",
+        "apiKeyPlaceholder": "Zadajte svoj API kľúč pre Walutomat",
+        "apiKeyHint": "Nájdete ho na paneli Walutomat v sekcii Settings → API",
+        "privateKeyLabel": "Súkromný kľúč (PEM)",
+        "privateKeyPlaceholder": "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----",
+        "privateKeyHint": "Vložte obsah súboru private.key (formát RSA 4096-bit PEM)",
+        "backButton": "Späť",
+        "connectButton": "Pripojiť",
+        "connectingButton": "Pripájanie...",
+        "loadingWallets": "Načítavanie peňaženiek...",
+        "selectWalletsHint": "Vyberte menové peňaženky na synchronizáciu (dostupné: {count})",
+        "selectAll": "Vybrať všetko",
+        "importButton": "Importovať peňaženky (počet: {count})",
+        "importingButton": "Importovanie...",
+        "importSuccess": "Pripojené účty (počet: {count}). Transakcie sa synchronizujú na pozadí.",
+        "errors": {
+          "connectFailed": "Pripojenie k Walutomat zlyhalo. Skontrolujte svoje prístupové údaje.",
+          "importFailed": "Peňaženky sa nepodarilo importovať."
+        },
+        "instructions": {
+          "title": "Návod na nastavenie API pre Walutomat",
+          "overviewTitle": "Prehľad",
+          "overviewText": "Na pripojenie Walutomatu potrebujete API kľúč a súkromný kľúč RSA. API kľúč overuje váš účet, zatiaľ čo súkromný kľúč z bezpečnostných dôvodov podpisuje každú požiadavku.",
+          "step1Title": "Vygenerujte pár kľúčov RSA",
+          "step1Intro": "Otvorte terminál a spustite tieto príkazy:",
+          "step1FilesCreated": "Vytvoria sa dva súbory: {privateKey} (uchovajte v tajnosti!) a {publicKey} (nahrajte do Walutomat).",
+          "step2Title": "Nahrajte verejný kľúč do Walutomatu",
+          "step2Login": "1. Prihláste sa na",
+          "step2GoToSettings": "2. Prejdite na {settings} → {api}",
+          "step2Upload": "3. Nahrajte svoj súbor {publicKey}",
+          "step2ApiKeyGenerated": "4. Walutomat vám vygeneruje API kľúč",
+          "step3Title": "Zadajte prístupové údaje",
+          "step3Intro": "Budete potrebovať dve veci:",
+          "step3ApiKeyDesc": "{apiKey} — skopírujte ho zo stránky nastavení API vo Walutomate",
+          "step3PrivateKeyDesc": "{privateKey} — otvorte {filename} v textovom editore a skopírujte celý jeho obsah (vrátane riadkov BEGIN/END)",
+          "securityNoteTitle": "Bezpečnostné upozornenie",
+          "securityNoteText": "Váš súkromný kľúč sa pred uložením zašifruje a používa sa len na podpisovanie API požiadaviek. Nikdy sa nezverejňuje ani neposiela nikomu okrem Walutomatu.",
+          "closeButton": "Rozumiem"
+        }
+      },
+      "notifications": {
+        "disconnectSuccess": "Integrácia bola úspešne odpojená",
+        "disconnectFailed": "Integráciu sa nepodarilo odpojiť",
+        "connectAccountsSuccess": "Účty pripojené. Transakcie sa synchronizujú na pozadí.",
+        "connectAccountsFailed": "Účty sa nepodarilo pripojiť",
+        "updateNameSuccess": "Názov pripojenia bol úspešne zmenený",
+        "updateNameFailed": "Názov pripojenia sa nepodarilo zmeniť",
+        "connectionEstablished": "Bankové pripojenie bolo úspešne nadviazané!"
+      },
+      "details": {
+        "error": {
+          "notFoundTitle": "Integrácia sa nenašla",
+          "notFoundDescription": "Táto integrácia mohla byť odstránená, alebo je odkaz nesprávny. Skontrolujte zoznam integrácií, kde nájdete to, čo hľadáte.",
+          "unexpectedTitle": "Niečo sa pokazilo",
+          "unexpectedDescription": "Toto pripojenie sa nepodarilo načítať. Skúste to znova neskôr, prosím.",
+          "backButton": "Späť na Integrácie"
+        },
+        "connectionDetails": {
+          "statusActive": "Aktívne",
+          "statusInactive": "Neaktívne",
+          "autoSync": "Automatická synchronizácia"
+        },
+        "connectionValidity": {
+          "statusExpired": "Vypršané",
+          "statusActive": "Aktívne",
+          "daysCount": "{count} deň | {count} dní",
+          "notAvailable": "Nedostupné",
+          "reconnectButton": "Pripojiť znova"
+        },
+        "connectedAccounts": {
+          "title": "Pripojené účty",
+          "empty": "Zatiaľ nie sú pripojené žiadne účty.",
+          "connectButton": "Pripojiť účty",
+          "currencyFallback": "Banka pre tento účet neuviedla menu — pri pripojení bola priradená mena {currency}, ktorú už nemožno zmeniť.",
+          "columnAccount": "Účet",
+          "columnExternalId": "Externé ID",
+          "columnBalance": "Zostatok",
+          "currencyFallbackChip": "Mena: {currency}",
+          "syncNow": "Synchronizovať teraz",
+          "connectRemainingWithCount": "Pripojiť zostávajúce účty ({count})",
+          "needsAttention": "{count} vyžaduje pozornosť | {count} vyžadujú pozornosť",
+          "totalLabel": "Spolu: {amount}",
+          "syncStarted": "Synchronizácia začala",
+          "syncFailed": "Synchronizáciu sa nepodarilo spustiť"
+        },
+        "actions": {
+          "renameButton": "Premenovať pripojenie",
+          "disconnectButton": "Odpojiť integráciu",
+          "manage": "Spravovať"
+        },
+        "fetchAccountsDialog": {
+          "title": "Pripojiť zostávajúce účty",
+          "description": "Vyberte dostupné účty z {providerName}, ktoré ešte nie sú pripojené.",
+          "missingAccountsQuestion": "Nevidíte svoje účty?",
+          "missingAccountsHint": "Ak niektoré účty nevidíte, skúste obnoviť bankové pripojenie v sekcii {section} kliknutím na {button}.",
+          "missingAccountsSectionName": "Platnosť pripojenia",
+          "missingAccountsButtonName": "Pripojiť znova",
+          "missingAccountsPersist": "Ak problém pretrváva, nahláste ho, prosím, na ďalšie preskúmanie.",
+          "sessionExpired": "Vaša relácia vypršala. Ak chcete pokračovať, obnovte bankové pripojenie, prosím.",
+          "loadFailed": "Dostupné účty sa nepodarilo načítať. Skúste to znova, prosím.",
+          "noAdditionalAccounts": "Nie sú dostupné žiadne ďalšie účty na pripojenie.",
+          "connectSelectedButton": "Pripojiť vybrané účty ({count})",
+          "selectAccountsButton": "Vybrať účty",
+          "alreadyConnected": "Už pripojené",
+          "creditLimitMeta": "Limit {amount}"
+        },
+        "meta": {
+          "connectedSince": "Pripojené {date}"
+        },
+        "summary": {
+          "totalBalance": "Celkový zostatok",
+          "accounts": "Účty",
+          "accountsCount": "žiadne účty | {count} účet | {count} účtov",
+          "lastSync": "Posledná synchronizácia",
+          "consent": "Súhlas",
+          "every": "Každých {hours} h",
+          "autoSyncOff": "Vyp.",
+          "connectedOf": "{connected} z {total}",
+          "connectedSub": "pripojené",
+          "accountsFailed": "{count} účet zlyhal | {count} účtov zlyhalo"
+        },
+        "consentStrip": {
+          "expiring": "Súhlas vyprší o {days} deň · {date} | Súhlas vyprší o {days} dní · {date}",
+          "expired": "Súhlas vypršal. Pripojte sa znova a obnovte synchronizáciu."
+        },
+        "relativeTime": {
+          "never": "nikdy"
+        },
+        "errors": {
+          "reauthorizationFailed": "Opätovnú autorizáciu sa nepodarilo spustiť"
+        }
+      },
+      "dialogs": {
+        "disconnect": {
+          "title": "Odpojiť integráciu",
+          "description": "Naozaj chcete odpojiť túto integráciu? Túto akciu nie je možné vrátiť späť.",
+          "removeAccounts": "Odstrániť aj súvisiace účty",
+          "removeAccountsHint": "Týmto natrvalo zmažete všetky účty prepojené s touto integráciou",
+          "disconnecting": "Odpájanie...",
+          "disconnect": "Odpojiť"
+        },
+        "editName": {
+          "title": "Upraviť názov pripojenia",
+          "description": "Dajte pripojeniu vlastný názov, aby ste ho ľahko identifikovali.",
+          "label": "Názov pripojenia",
+          "saving": "Ukladanie...",
+          "save": "Uložiť"
+        },
+        "reconnect": {
+          "title": "Znova pripojiť integráciu",
+          "description": "Spustením procesu opätovného pripojenia {warning}. Aby bolo pripojenie znova aktívne, musíte tento proces dokončiť.",
+          "warning": "vaše aktuálne pripojenie okamžite stratí platnosť",
+          "preparing": "Príprava...",
+          "continue": "Pokračovať"
+        }
+      },
+      "authFailure": {
+        "description": "Toto pripojenie je potrebné znova pripojiť, aby mohlo opäť synchronizovať.",
+        "updateButton": "Aktualizovať prístupové údaje"
+      },
+      "updateCredentials": {
+        "title": "Aktualizovať prístupové údaje",
+        "apiKeyLabel": "API kľúč",
+        "apiKeyPlaceholder": "Zadajte svoj API kľúč",
+        "updatingButton": "Aktualizácia...",
+        "updateButton": "Aktualizovať",
+        "success": "Prístupové údaje boli úspešne aktualizované",
+        "failed": "Prístupové údaje sa nepodarilo aktualizovať"
+      },
+      "labels": {
+        "free": "Zadarmo",
+        "paid": "Zaplatené",
+        "easySetup": "Jednoduché nastavenie",
+        "mediumSetup": "Stredne náročné nastavenie",
+        "veryDifficultSetup": "Veľmi náročné nastavenie"
+      },
+      "regions": {
+        "ukraine": "Ukrajina",
+        "eu": "EÚ",
+        "uk": "Spojené kráľovstvo",
+        "usa": "USA",
+        "poland": "Poľsko",
+        "canada": "Kanada",
+        "australia": "Austrália",
+        "newZealand": "Nový Zéland"
+      },
+      "filters": {
+        "all": "Všetko",
+        "usCanada": "USA a Kanada",
+        "euUk": "EÚ a Spojené kráľovstvo"
+      },
+      "tooltips": {
+        "monobank": "Vyžaduje ručné skopírovanie API tokenu z mobilnej aplikácie Monobank",
+        "enableBanking": "Keďže plynulá integrácia by si vyžadovala platbu niekoľko tisíc dolárov mesačne, jediný spôsob pripojenia je vytvoriť si vlastný vývojársky účet Enable Banking, nastaviť „testovaciu\" aplikáciu s reálnym pripojením na vlastné banky, uložiť certifikáty a kľúče a nahrať ich sem. Vyžaduje sa stredne pokročilá technická znalosť",
+        "lunchflow": "Stačí pripojiť svoje banky na strane LunchFlow, potom vytvoriť a vložiť svoj API kľúč pre LunchFlow",
+        "simplefin": "SimpleFIN Bridge je platená služba. Vytvoríte si bridge účet, pripojíte banku a vložíte setup token — bez potreby vývojárskeho nastavenia.",
+        "walutomat": "Vyžaduje vygenerovanie páru kľúčov RSA a nahratie verejného kľúča na panel Walutomatu"
+      }
+    },
+    "connectionName": {
+      "placeholder": "napr. Osobný účet"
+    },
+    "bankCallback": {
+      "processing": {
+        "title": "Dokončovanie autorizácie...",
+        "description": "Počkajte, kým overíme vaše bankové pripojenie, prosím."
+      },
+      "error": {
+        "title": "Autorizácia zlyhala",
+        "backToIntegrations": "Späť na Integrácie"
+      },
+      "success": {
+        "title": "Pripojenie úspešné!",
+        "description": "Váš bankový účet bol úspešne pripojený.",
+        "viewAccounts": "Zobraziť účty"
+      },
+      "errors": {
+        "authorizationDenied": "Autorizácia bola zamietnutá alebo zlyhala",
+        "missingParameters": "Chýbajú povinné parametre (code alebo state)",
+        "connectionIdNotFound": "Connection ID sa nenašlo. Spustite proces pripojenia znova, prosím.",
+        "failedToComplete": "Autorizáciu sa nepodarilo dokončiť"
+      }
+    }
+  }
+}

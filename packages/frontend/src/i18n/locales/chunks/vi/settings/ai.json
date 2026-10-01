@@ -1,0 +1,278 @@
+{
+  "settings": {
+    "ai": {
+      "title": "Cài đặt AI",
+      "description": "Cấu hình các tính năng hỗ trợ AI, ví dụ như tự động phân loại giao dịch",
+      "tabs": {
+        "features": "Tính năng AI",
+        "models": "AI models",
+        "connectedApps": "Connectors (MCP)",
+        "invalidConnectionsTooltip": "One of your AI models needs attention"
+      },
+      "credentialStatus": {
+        "validated": "Đã xác thực {timeAgo}",
+        "failed": "Thất bại {timeAgo}",
+        "invalidBadge": "Không hợp lệ"
+      },
+      "features": {
+        "title": "Tính năng AI",
+        "description": "Cấu hình mô hình dùng cho từng tính năng AI",
+        "howItWorks": "How it works",
+        "loadError": "Couldn't load your AI features."
+      },
+      "categorization": {
+        "howItWorks": {
+          "points": {
+            "autoSync": "Khi bạn đồng bộ giao dịch từ ngân hàng, các giao dịch chưa gán danh mục sẽ tự động được gửi đến AI để phân loại.",
+            "analysis": "AI phân tích mô tả giao dịch và tên người bán để đề xuất danh mục phù hợp từ danh sách hiện có của bạn.",
+            "override": "Bạn luôn có thể tự chỉnh lại danh mục do AI đề xuất."
+          }
+        }
+      },
+      "statementParsing": {
+        "howItWorks": {
+          "points": {
+            "upload": "Tải lên sao kê ngân hàng (PDF, CSV hoặc TXT) và AI sẽ tự động trích xuất toàn bộ giao dịch.",
+            "analysis": "AI phân tích cấu trúc tài liệu để nhận diện ngày, mô tả, số tiền và loại giao dịch.",
+            "review": "Bạn có thể kiểm tra và chỉnh lại dữ liệu đã trích xuất trước khi nhập vào tài khoản.",
+            "cost": "Hệ thống ước tính chi phí trước khi xử lý, nhưng con số này chỉ mang tính tương đối."
+          }
+        }
+      },
+      "modelSelector": {
+        "placeholder": "Pick a model",
+        "automaticOption": "Automatic",
+        "automaticOptionWithTarget": "Automatic · {target}",
+        "serverOption": "MoneyMatter AI · included",
+        "connectionOption": "{name} · {model}",
+        "connectionOptionNeedsAttention": "{name} · {model} (needs attention)",
+        "badges": {
+          "yourKey": "Khóa của bạn",
+          "yourKeyTooltip": "Tính năng này dùng khóa API cá nhân của bạn. Bạn toàn quyền kiểm soát mức sử dụng và chi phí, không bị giới hạn tốc độ từ máy chủ của chúng tôi.",
+          "server": "Máy chủ",
+          "serverTooltip": "Tính năng này sử dụng khóa API dùng chung trên máy chủ của chúng tôi. Miễn phí nhưng có thể bị giới hạn tốc độ khi nhu cầu cao. Thêm khóa API của riêng bạn để sử dụng không giới hạn."
+        },
+        "sharedPoolNote": "On your current plan, the included model runs in a shared pool, so limits may apply when overall demand is high. {link} to avoid them.",
+        "sharedPoolNoteLink": "Upgrade to Plus",
+        "modelLabel": "Mô hình",
+        "modelInfo": {
+          "estimatedCost": "Chi phí ước tính:",
+          "per100Transactions": "mỗi 100 giao dịch",
+          "unknown": "Unknown"
+        },
+        "notifications": {
+          "updateSuccess": "Đã cập nhật mô hình thành công",
+          "updateFailed": "Không cập nhật được mô hình",
+          "resetSuccess": "Đã đặt lại về mô hình mặc định",
+          "resetFailed": "Không đặt lại được mô hình"
+        },
+        "empty": {
+          "title": "No AI model yet",
+          "description": "Add your own AI model to use this feature."
+        },
+        "allConnectionsDown": "All your AI models need attention, so this feature is paused. Fix one in {link}.",
+        "allConnectionsDownLink": "AI models"
+      },
+      "modelGuide": {
+        "trigger": "Which model fits?",
+        "tierHeading": "{tier} model is enough",
+        "tiers": {
+          "light": "Light",
+          "balanced": "Balanced",
+          "smart": "Smart"
+        },
+        "needsLabel": "Needs",
+        "picksLabel": "Good picks",
+        "yourModel": "Your model",
+        "source": "Model details from models.dev",
+        "needs": {
+          "textOnly": "Text only",
+          "runsOften": "Runs on every sync",
+          "longAnswers": "Long answers",
+          "readsFiles": "Reads images & PDFs",
+          "structuredAnswers": "Structured answers"
+        },
+        "why": {
+          "categorization": "A short, repetitive job. A small model handles it well and keeps the cost down.",
+          "statementParsing": "Reads the whole statement and writes back every row, so it needs a model that stays accurate over long text.",
+          "investmentTransactionsParsing": "Turns broker exports into buy and sell rows. Long exports need a model that can write long answers.",
+          "receiptParsing": "The model looks at the invoice file itself, so it has to read images and PDFs."
+        },
+        "picks": {
+          "categorization": "Gemini Flash Lite · Claude Haiku",
+          "statementParsing": "Gemini Flash · Claude Sonnet · GPT Terra",
+          "investmentTransactionsParsing": "Gemini Flash · Claude Sonnet",
+          "receiptParsing": "Gemini Flash · Claude Sonnet"
+        },
+        "verdict": {
+          "fit": "Good fit",
+          "gaps": "{count} gap | {count} gaps",
+          "unknown": "Not checked"
+        },
+        "warning": {
+          "readsFiles": "Can't read files",
+          "readsText": "Can't read text",
+          "readsImages": "Can't read images",
+          "readsPdfs": "Can't read PDFs",
+          "longAnswers": "Short answers only",
+          "structuredAnswers": "No structured answers"
+        },
+        "checks": {
+          "readsText": {
+            "label": "Reads text",
+            "fail": "This model doesn't take text."
+          },
+          "readsImages": {
+            "label": "Reads images",
+            "fail": "Image files won't work."
+          },
+          "readsPdfs": {
+            "label": "Reads PDFs",
+            "fail": "PDF files won't work."
+          },
+          "longAnswers": {
+            "label": "Long answers",
+            "ok": "Writes up to {tokens} tokens.",
+            "fail": "Writes up to {tokens} tokens, so long files get cut off."
+          },
+          "structuredAnswers": {
+            "label": "Structured answers",
+            "fail": "Its answers may come back in a shape the app can't read."
+          }
+        },
+        "unknown": {
+          "title": "Can't check this model",
+          "detail": "models.dev has no details for this model right now, so we can't check it. Make sure it covers the needs above."
+        }
+      },
+      "connections": {
+        "title": "AI models",
+        "description": "Connect OpenAI, Claude, Gemini, OpenRouter or a local model. Each entry is one model you can pick for any feature.",
+        "tip": {
+          "ariaLabel": "About AI models",
+          "text": "You can add the same provider more than once with different models. Name them by how smart they are, like 'Claude smart' and 'Claude fast', then pick the right one for each feature."
+        },
+        "addButton": "Add model",
+        "capReached": "You've reached the limit of {max} AI models. Remove one to add another.",
+        "duplicateName": "{name} copy",
+        "empty": {
+          "title": "No AI models yet",
+          "description": "Add a model with your own API key, or connect a local one like Ollama or LM Studio."
+        },
+        "loadError": {
+          "title": "Couldn't load your AI models",
+          "description": "Your saved models are still there. Check your connection and try again."
+        },
+        "badges": {
+          "default": "Default",
+          "defaultSkipped": "Default · skipped while it needs attention"
+        },
+        "status": {
+          "model": "{provider} · {model}"
+        },
+        "actions": {
+          "menuAriaLabel": "AI model actions",
+          "duplicate": "Duplicate",
+          "setDefault": "Set as default",
+          "remove": "Remove",
+          "reconnect": "Reconnect",
+          "enterKey": "Enter API key"
+        },
+        "removeDialog": {
+          "title": "Remove this AI model?",
+          "description": "\"{name}\" and its saved API key will be removed.",
+          "pinnedFeatures": "These features will switch to automatic: {features}.",
+          "confirm": "Remove"
+        },
+        "removeKeyDialog": {
+          "title": "Remove the API key?",
+          "description": "Requests to this model will be sent without a key. Servers that need one will stop answering.",
+          "confirm": "Remove key"
+        },
+        "test": {
+          "success": "Connected. The model answered.",
+          "failed": "Couldn't reach the model."
+        },
+        "notifications": {
+          "saveSuccess": "AI model saved",
+          "saveFailed": "Couldn't save the AI model",
+          "removeSuccess": "AI model removed",
+          "removeFailed": "Couldn't remove the AI model",
+          "setDefaultSuccess": "\"{name}\" is now your default model",
+          "setDefaultFailed": "Couldn't change the default model",
+          "removeKeySuccess": "API key removed",
+          "removeKeyFailed": "Couldn't remove the API key",
+          "removeKeyInvalid": "API key removed, but the model stopped answering: {reason}",
+          "editedConnectionGone": "This AI model was removed elsewhere, so the form was closed."
+        },
+        "form": {
+          "titleAdd": "Add AI model",
+          "titleEdit": "Edit AI model",
+          "titleDuplicate": "Duplicate AI model",
+          "providerLabel": "Provider",
+          "providerPlaceholder": "Select a provider",
+          "nameLabel": "Name",
+          "baseUrlLabel": "Base URL",
+          "baseUrlPlaceholder": "https://example.com/v1",
+          "apiKeyLabel": "API key",
+          "apiKeyPlaceholder": "Paste your API key",
+          "apiKeyGetHint": "Get a key at {link}.",
+          "apiKeyOptionalHint": "Optional. Leave blank if your server doesn't need a key.",
+          "apiKeySavedHint": "Leave blank to keep the saved key.",
+          "apiKeyBorrowedHint": "Uses the key from \"{name}\". Type a new key to use a different one.",
+          "removeApiKeyButton": "Remove API key",
+          "modelLabel": "Mô hình",
+          "modelPlaceholder": "Type or pick a model",
+          "modelListEmpty": "No models to pick from. Type the model name your server uses.",
+          "modelListNoMatch": "No listed model matches. You can still use the name you typed.",
+          "testButton": "Test connection",
+          "saveButton": "Save changes",
+          "localNetworkOnly": "MoneyMatter can't reach a server on your own computer, like {hostname} or {ip}. Expose it through a tunnel such as ngrok or Cloudflare Tunnel, then paste the tunnel's URL here.",
+          "dockerHost": "If you run this app in Docker on the same machine as the model server, use {dockerHost} instead of {ip}."
+        },
+        "presets": {
+          "openai": {
+            "label": "OpenAI",
+            "namePlaceholder": "e.g. GPT fast"
+          },
+          "anthropic": {
+            "label": "Anthropic (Claude)",
+            "namePlaceholder": "e.g. Claude smart"
+          },
+          "google": {
+            "label": "Google (Gemini)",
+            "namePlaceholder": "e.g. Gemini fast"
+          },
+          "openrouter": {
+            "label": "OpenRouter",
+            "namePlaceholder": "e.g. OpenRouter Llama"
+          },
+          "ollama": {
+            "label": "Ollama",
+            "namePlaceholder": "e.g. Local Llama"
+          },
+          "lmStudio": {
+            "label": "LM Studio",
+            "namePlaceholder": "e.g. LM Studio Qwen"
+          },
+          "custom": {
+            "label": "Custom (OpenAI-compatible)",
+            "namePlaceholder": "e.g. My server"
+          }
+        }
+      },
+      "customInstructions": {
+        "title": "Hướng dẫn tùy chỉnh",
+        "description": "Cung cấp ngữ cảnh để AI phân loại giao dịch của bạn chính xác hơn. Những hướng dẫn này được dùng khi phân loại giao dịch trong lúc đồng bộ ngân hàng và nhập thủ công.",
+        "placeholder": "Ví dụ: Giao dịch từ 'Starbucks' nên được xếp vào 'Coffee'. Thu nhập freelance của tôi đến từ 'Acme Corp'.",
+        "serverModelHint": "Custom instructions only apply when one of your own AI models handles categorization. Pick one above.",
+        "requiresOwnCredentials": "Thêm khóa API của riêng bạn hoặc một điểm truy cập tùy chỉnh để dùng hướng dẫn tùy chỉnh.",
+        "credentialsCheckFailed": "Chúng tôi không kiểm tra được bạn có thông tin xác thực AI riêng hay không. Hãy thử lại để mở khóa hướng dẫn tùy chỉnh.",
+        "retryCredentialsCheck": "Thử lại",
+        "save": "Lưu",
+        "saved": "Đã lưu!",
+        "saveFailed": "Không lưu được hướng dẫn tùy chỉnh. Vui lòng thử lại."
+      }
+    }
+  }
+}

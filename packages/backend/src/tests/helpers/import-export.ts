@@ -17,9 +17,10 @@ import type {
   ExecuteOfxRequest,
   ExecuteOfxResponse,
   ExecuteYnabResponse,
-  ExtractUniqueValuesResponse,
   ExtractedMetadata,
   ExtractedTransaction,
+  ExtractUniqueValuesResponse,
+  ImportBatchDeleteActiveStatus,
   ImportBatchesHistoryResponse,
   MsMoneyAccountMapping,
   MsMoneyImportProgress,
@@ -31,8 +32,10 @@ import type {
   ParseYnabResponse,
   StatementCostEstimate,
   StatementDetectDuplicatesResponse,
-  StatementExecuteImportResponse,
+  StatementExecuteImportQueuedResponse,
   StatementExtractionResult,
+  StatementImportProgress,
+  StatementImportSummary,
   TagMappingConfig,
   YnabAccountMapping,
   YnabImportProgress,
@@ -357,19 +360,87 @@ interface StatementExecuteImportParams {
   skipIndices: number[];
 }
 
+/**
+ * POST /import/text-source/execute. The execute step is asynchronous: this
+ * enqueues a background job and resolves to `{ jobId }`. Callers poll the result
+ * via {@link waitForStatementImportCompletion}, or use
+ * {@link statementExecuteImportAndWait} to do both in one call.
+ */
 export function statementExecuteImport<R extends boolean | undefined = false>({
   payload,
   raw,
 }: {
   payload: StatementExecuteImportParams;
   raw?: R;
-}): UtilizeReturnType<() => StatementExecuteImportResponse, R> {
-  return makeRequest<StatementExecuteImportResponse, R>({
+}): UtilizeReturnType<() => StatementExecuteImportQueuedResponse, R> {
+  return makeRequest<StatementExecuteImportQueuedResponse, R>({
     method: 'post',
     url: '/import/text-source/execute',
     payload,
     raw,
   });
+}
+
+export function getStatementImportStatus<R extends boolean | undefined = false>({
+  jobId,
+  raw,
+}: {
+  jobId: string;
+  raw?: R;
+}): UtilizeReturnType<() => StatementImportProgress, R> {
+  return makeRequest<StatementImportProgress, R>({
+    method: 'get',
+    url: `/import/text-source/execute/status/${jobId}`,
+    raw,
+  });
+}
+
+/**
+ * Poll GET /import/text-source/execute/status/:jobId every 100 ms until the job
+ * leaves the running/queued states or the timeout elapses.
+ */
+export async function waitForStatementImportCompletion({
+  jobId,
+  timeoutMs = 30_000,
+}: {
+  jobId: string;
+  timeoutMs?: number;
+}): Promise<StatementImportProgress> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const progress = await getStatementImportStatus({ jobId, raw: true });
+    if (progress.status === 'completed' || progress.status === 'failed') {
+      return progress;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error(`Statement import job ${jobId} did not finish within ${timeoutMs}ms`);
+}
+
+/**
+ * Narrow terminal statement-import progress to the `completed` branch so tests
+ * can read `summary` directly. Throws (failing the calling test) when the worker
+ * finished with `status:'failed'`.
+ */
+export function expectStatementImportCompleted(
+  progress: StatementImportProgress,
+): asserts progress is Extract<StatementImportProgress, { status: 'completed' }> {
+  if (progress.status !== 'completed') {
+    const detail = progress.status === 'failed' ? ` Error: ${progress.error}` : '';
+    throw new Error(`Expected completed statement import, got status="${progress.status}".${detail}`);
+  }
+}
+
+/** Enqueue a statement import, wait for the worker, and return its summary. */
+export async function statementExecuteImportAndWait({
+  payload,
+}: {
+  payload: StatementExecuteImportParams;
+}): Promise<StatementImportSummary> {
+  const { jobId } = await statementExecuteImport({ payload, raw: true });
+  const progress = await waitForStatementImportCompletion({ jobId });
+  expectStatementImportCompleted(progress);
+  return progress.summary;
 }
 
 // ============================================
@@ -946,6 +1017,29 @@ export function getBatchesHistory<R extends boolean | undefined = false>({
 // ============================================
 // Delete Import Batch Endpoint
 // ============================================
+
+export function getImportBatchDeleteStatus<R extends boolean | undefined = false>({
+  raw,
+}: { raw?: R } = {}): UtilizeReturnType<() => ImportBatchDeleteActiveStatus, R> {
+  return makeRequest<ImportBatchDeleteActiveStatus, R>({
+    method: 'get',
+    url: '/import/batch-delete/status',
+    raw,
+  });
+}
+
+/** Poll GET /import/batch-delete/status every 100 ms until the job settles. */
+export async function waitForImportBatchDelete({
+  timeoutMs = 60_000,
+}: { timeoutMs?: number } = {}): Promise<ImportBatchDeleteActiveStatus> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const status = await getImportBatchDeleteStatus({ raw: true });
+    if (status.state === 'completed' || status.state === 'failed') return status;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error(`Import batch delete did not finish within ${timeoutMs}ms`);
+}
 
 export function deleteImportBatch<R extends boolean | undefined = false>({
   batchId,

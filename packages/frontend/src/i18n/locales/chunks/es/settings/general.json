@@ -15,6 +15,16 @@
         "successNotification": "Ajuste de asociación de transferencias actualizado",
         "errorNotification": "Error al actualizar el ajuste de asociación de transferencias"
       },
+      "pendingBankTransactions": {
+        "label": "Importar transacciones bancarias pendientes",
+        "description": "Store Enable Banking transactions before the bank books them. They're marked as pending, never change the account balance, and often lack merchant details until booked. Other providers aren't affected: SimpleFIN and LunchFlow always import booked transactions only, and Monobank imports every transaction as a regular one.",
+        "successNotification": "Configuración de transacciones pendientes actualizada",
+        "errorNotification": "Error al actualizar la configuración de transacciones pendientes"
+      },
+      "quickStart": {
+        "label": "Guía de Inicio Rápido",
+        "description": "Mostrar la lista de verificación de incorporación en el tablero. Desactívala para ocultar la guía; vuelve a encenderla para traerla de vuelta en cualquier momento."
+      },
       "savingsCategories": {
         "label": "Contar categorías como ahorro",
         "description": "El gasto en estas categorías (y sus subcategorías) se excluye de los gastos en el análisis de flujo de caja, por lo que cuenta para el ahorro mensual y la tasa de ahorro.",
@@ -54,6 +64,41 @@
         "description": "Fija en la parte superior de la lista de transacciones una sección con los pagos programados vencidos y los que vencen en los próximos 3 días.",
         "successNotification": "Ajuste de transacciones próximas actualizado",
         "errorNotification": "Error al actualizar el ajuste de transacciones próximas"
+      },
+      "transactionFields": {
+        "label": "Campos de transacción opcionales",
+        "description": "Campos adicionales mostrados en el formulario de transacción. Un campo que ya tiene un valor siempre se muestra.",
+        "successNotification": "Campos de transacción actualizados",
+        "errorNotification": "Ocurrió un error inesperado. Configuración no guardada",
+        "fields": {
+          "externalUrl": {
+            "label": "URL externa",
+            "description": "Enlace la transacción a una página de pedido, reserva de confirmación o recibo."
+          },
+          "externalReference": {
+            "label": "Referencia externa",
+            "description": "Mantenga un número de pedido, número de factura o referencia de reserva con la transacción."
+          },
+          "originalAmount": {
+            "label": "Importe original",
+            "description": "La cantidad realmente cobrada en otra moneda, cuando difiere de la divisa de la cuenta."
+          },
+          "location": {
+            "label": "Ubicación",
+            "description": "Coordenadas GPS dónde ocurrió la compra. Rellena desde la ubicación de tu dispositivo o escríbelas"
+          }
+        },
+        "mapPicker": {
+          "label": "Selector de mapa",
+          "description": "Escoja las ubicaciones de las transacciones en un mapa y las direcciones de búsqueda. Los cuadros de mapa y la búsqueda provienen de OpenStreetMap, que recibe su dirección IP cuando el mapa se abre."
+        }
+      },
+      "defaultPaymentType": {
+        "label": "Default payment type",
+        "description": "Preselected when you add a new transaction.",
+        "placeholder": "Select a payment type",
+        "successNotification": "Default payment type updated",
+        "errorNotification": "Failed to update default payment type"
       }
     }
   }

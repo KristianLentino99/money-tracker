@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 
 import { ROUTES_NAMES } from './constants';
-import { authPageGuard, baseCurrencyExists, redirectRouteGuard } from './guards';
+import { authPageGuard, baseCurrencyExists, billingPageGuard, redirectRouteGuard } from './guards';
 
 export { ROUTES_NAMES } from './constants';
 
@@ -125,7 +125,7 @@ const routes: RouteRecordRaw[] = [
         path: '/analytics',
         name: ROUTES_NAMES.analytics,
         component: () => import('@/pages/analytics/index.vue'),
-        meta: { i18nChunks: ['pages/analytics'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/analytics', 'pages/transactions'] as I18nChunkName[] },
         children: [
           {
             path: 'trends-comparison',
@@ -141,6 +141,11 @@ const routes: RouteRecordRaw[] = [
             path: 'net-worth-history',
             name: ROUTES_NAMES.analyticsNetWorthHistory,
             component: () => import('@/pages/analytics/subpages/net-worth-history/index.vue'),
+          },
+          {
+            path: 'fire',
+            name: ROUTES_NAMES.analyticsFire,
+            component: () => import('@/pages/analytics/subpages/fire/index.vue'),
           },
           {
             path: 'net-worth-drivers',
@@ -215,7 +220,7 @@ const routes: RouteRecordRaw[] = [
         path: '/transactions/optimizations',
         name: ROUTES_NAMES.optimizations,
         component: () => import('@/pages/optimizations/index.vue'),
-        meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/optimizations', 'pages/automations', 'pages/transactions'] as I18nChunkName[] },
       },
       {
         path: '/transactions/optimizations/transfers',
@@ -227,6 +232,12 @@ const routes: RouteRecordRaw[] = [
         path: '/transactions/optimizations/ai-categorization',
         name: ROUTES_NAMES.optimizationsAiCategorization,
         component: () => import('@/pages/optimizations/ai-categorization/index.vue'),
+        meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
+      },
+      {
+        path: '/transactions/optimizations/reconciliation',
+        name: ROUTES_NAMES.optimizationsReconciliation,
+        component: () => import('@/pages/optimizations/reconciliation/index.vue'),
         meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
       },
       {
@@ -291,6 +302,13 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.settingsCategories,
             component: () => import('@/pages/settings/subpages/categories/index.vue'),
             meta: { i18nChunks: ['settings/categories'] as I18nChunkName[] },
+          },
+          {
+            path: 'plan-billing',
+            name: ROUTES_NAMES.settingsPlanBilling,
+            beforeEnter: billingPageGuard,
+            component: () => import('@/pages/settings/subpages/plan-billing/index.vue'),
+            meta: { i18nChunks: ['settings/plan-billing'] as I18nChunkName[] },
           },
           {
             path: 'tags',
@@ -449,7 +467,8 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.settingsAi,
             component: () => import('@/pages/settings/subpages/ai/index.vue'),
             redirect: { name: ROUTES_NAMES.settingsAiFeatures },
-            meta: { i18nChunks: ['settings/ai'] as I18nChunkName[] },
+            // Chunk names match the Crowdin files, so the merged page keeps both.
+            meta: { i18nChunks: ['settings/ai', 'settings/ai-integrations'] as I18nChunkName[] },
             children: [
               {
                 path: 'features',
@@ -457,15 +476,17 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('@/pages/settings/subpages/ai/pages/features.vue'),
               },
               {
-                path: 'keys',
-                name: ROUTES_NAMES.settingsAiKeys,
-                component: () => import('@/pages/settings/subpages/ai/pages/keys.vue'),
+                path: 'models',
+                name: ROUTES_NAMES.settingsAiModels,
+                component: () => import('@/pages/settings/subpages/ai/pages/models.vue'),
               },
               {
-                path: 'endpoints',
-                name: ROUTES_NAMES.settingsAiEndpoints,
-                component: () => import('@/pages/settings/subpages/ai/pages/endpoints.vue'),
+                path: 'connected-apps',
+                name: ROUTES_NAMES.settingsAiConnectedApps,
+                component: () => import('@/pages/settings/subpages/ai/pages/connected-apps.vue'),
               },
+              { path: 'keys', redirect: { name: ROUTES_NAMES.settingsAiModels } },
+              { path: 'endpoints', redirect: { name: ROUTES_NAMES.settingsAiModels } },
             ],
           },
           {
@@ -504,9 +525,7 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: 'ai-integrations',
-            name: ROUTES_NAMES.settingsAiIntegrations,
-            component: () => import('@/pages/settings/subpages/ai-integrations/index.vue'),
-            meta: { i18nChunks: ['settings/ai-integrations'] as I18nChunkName[] },
+            redirect: { name: ROUTES_NAMES.settingsAiConnectedApps },
           },
           {
             path: 'shared-with-me',
@@ -561,7 +580,7 @@ const routes: RouteRecordRaw[] = [
         name: ROUTES_NAMES.welcome,
         beforeEnter: redirectRouteGuard,
         component: () => import('@/pages/auth/welcome.vue'),
-        meta: { i18nChunks: ['auth/welcome'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/welcome', 'forms'] as I18nChunkName[] },
       },
       {
         path: '/auth/callback',

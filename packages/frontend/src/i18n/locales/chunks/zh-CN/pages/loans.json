@@ -1,6 +1,6 @@
 {
   "loans": {
-    "title": "Loans",
+    "title": "贷款",
     "loadError": "Failed to load loans.",
     "tryAgain": "Try again",
     "addButton": {
@@ -31,13 +31,19 @@
       "createTitle": "Add a loan",
       "createDescription": "Track a mortgage, auto loan, student loan, or any other liability. You can edit anything later.",
       "editTitle": "Edit loan",
-      "editDescription": "Update the loan's terms. Changes to the rate, term, or planned payment are recorded in the events timeline."
+      "editDescription": "Update the loan's terms. Changes to the rate, term, or planned payment are recorded in the events timeline.",
+      "termRecalcConfirm": {
+        "title": "Recalculate outstanding balance?",
+        "description": "Using the new {term} month term, the estimated outstanding balance is {balance} and the loan end date is {endDate}. Apply this recalculation?",
+        "applyButton": "Use estimated balance",
+        "keepButton": "Keep current balance"
+      }
     },
     "settings": {
-      "title": "Settings",
+      "title": "设置",
       "editTitle": "Edit loan details",
       "editDescription": "Update the name, balance, rate, term, payment fields, or lender info.",
-      "editButton": "Edit",
+      "editButton": "编辑",
       "excludeFromStatsTitle": "Exclude from statistics",
       "excludeFromStatsDescription": "Hide this loan from net worth, charts, and reports without archiving it.",
       "archiveTitle": "Archive loan",
@@ -90,7 +96,7 @@
     },
     "list": {
       "columns": {
-        "loan": "Loan",
+        "loan": "贷款",
         "progress": "Progress",
         "balance": "Balance",
         "apr": "APR",
@@ -133,7 +139,8 @@
         "accountNumber": "Account number",
         "balanceAnchor": "Balance as of",
         "balanceAnchorTooltip": "The outstanding balance is fixed as of this date. Payments dated before it are kept for history but don't change the Paid progress.",
-        "actualDuration": "Actual duration"
+        "actualDuration": "Actual duration",
+        "endDate": "End date"
       },
       "paidOff": {
         "bannerTitle": "{name} — paid off in full",
@@ -216,6 +223,24 @@
           "actual": "Actual balance",
           "schedule": "Original schedule"
         }
+      },
+      "installments": {
+        "title": "Loan installments",
+        "description": "Future payments from these installments will settle this loan.",
+        "linkAction": "Link installment",
+        "emptyTitle": "No installments linked",
+        "emptyDescription": "Link an installment so each future payment can reduce this loan.",
+        "progress": "{progress} payments",
+        "paused": "Paused",
+        "linkSuccess": "Installment linked to the loan.",
+        "linkError": "The installment could not be linked.",
+        "dialogTitle": "Link installments",
+        "dialogDescription": "Choose one or more expense installments. The link affects future payments only.",
+        "searchLabel": "Search installments",
+        "searchPlaceholder": "Search by name",
+        "loading": "Loading installments...",
+        "noResults": "No eligible installments found.",
+        "confirmLink": "Link {count} installments"
       }
     }
   }

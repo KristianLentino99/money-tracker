@@ -52,7 +52,8 @@
         "tagSingular": "Etichetta",
         "tagPlural": "Etichette",
         "selected": "selezionate",
-        "searchPlaceholder": "Cerca etichette..."
+        "searchPlaceholder": "Cerca etichette...",
+        "blankOption": "No tags"
       },
       "payees": {
         "label": "Beneficiari",
@@ -64,7 +65,8 @@
         "type": "Tipo",
         "tags": "Etichette",
         "amount": "Intervallo importo",
-        "note": "Note"
+        "note": "Note",
+        "budgets": "Budgets"
       },
       "transferNature": {
         "label": "Tipo di trasferimento",
@@ -74,7 +76,11 @@
         "toPortfolio": "Verso un portafoglio",
         "toVenture": "Verso una venture",
         "selectedCount": "{n} selezionati"
-      }
+      },
+      "attachments": {
+        "label": "Allegati"
+      },
+      "uncategorized": "Senza categoria"
     },
     "list": {
       "noMoreData": "Nessun'altra transazione",
@@ -116,6 +122,12 @@
       "unselectableReasons": {
         "split": "Non selezionabile: le transazioni suddivise non supportano la modifica in blocco. Modificala singolarmente.",
         "sharedAccount": "Non selezionabile: questa transazione è su un conto condiviso con te e solo il proprietario può modificarla."
+      },
+      "totals": {
+        "income": "Income",
+        "expense": "Expense",
+        "net": "Net",
+        "transfers": "Transfers"
       }
     },
     "bulkLinkSubscription": {
@@ -161,7 +173,8 @@
         "searchPlaceholder": "Cerca gruppi...",
         "noGroupsMessage": "Ancora nessun gruppo di transazioni.",
         "emptyStateHint": "Seleziona delle transazioni nella pagina Transazioni e fai clic su \"Crea gruppo\" per iniziare.",
-        "transactionCountLabel": "Transazioni"
+        "transactionCountLabel": "Transazioni",
+        "deleteError": "Failed to delete the group. Please try again."
       },
       "errors": {
         "nameRequired": "Il nome del gruppo è obbligatorio",
@@ -202,7 +215,11 @@
         "title": "Impostazioni tabella",
         "columns": "colonne",
         "visibleCount": "{count} visibili",
-        "resetDefaults": "Ripristina predefiniti"
+        "resetDefaults": "Ripristina predefiniti",
+        "alwaysShowLockedCells": {
+          "label": "Always show locked cells",
+          "description": "Shade cells you can't edit here on every row, not only on hover."
+        }
       },
       "categorizationSourceValues": {
         "manual": "Manuale",
@@ -219,7 +236,8 @@
       "fullscreen": {
         "enter": "Focus mode",
         "exit": "Exit focus mode"
-      }
+      },
+      "plannedRows": "{count} planned transactions"
     },
     "bulkDelete": {
       "button": "Elimina",
@@ -229,6 +247,20 @@
       "confirmDescription": "Questa azione non può essere annullata. Per i trasferimenti verranno rimossi entrambi i lati.",
       "successMessage": "{count} transazioni eliminate",
       "unexpectedError": "Impossibile eliminare le transazioni. Riprova."
+    },
+    "pending": {
+      "label": "In attesa",
+      "tooltip": "The bank hasn't booked this transaction yet. It doesn't affect the account balance."
+    },
+    "inlineEdit": {
+      "saveFailed": "Couldn't save {field}. Try again.",
+      "bankTitle": "Set by your bank",
+      "bankDescription": "Date, account and amount sync from your bank connection. Everything else on this transaction is yours to change.",
+      "managedTitle": "Managed elsewhere",
+      "managedDescription": "This transaction belongs to a portfolio, investment, vehicle or loan. Change it from its own page so balances stay correct.",
+      "gotIt": "Got it",
+      "openDetails": "Open details",
+      "tooManyTags": "Up to {max} tags per transaction"
     }
   },
   "records": {

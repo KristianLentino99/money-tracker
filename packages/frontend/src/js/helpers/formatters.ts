@@ -178,15 +178,31 @@ export function formatLargeNumber(
   return `${formatted}${suffix}`;
 }
 
+const COMPACT_SIGNIFICANT_DIGITS = 3;
+
+// Rounds before the suffix is picked, so 999,600 reads "$1M" rather than "$1,000K".
+export const formatCompactFiat = ({ amount, currency }: { amount: number; currency?: string }) =>
+  formatLargeNumber(Number(amount.toPrecision(COMPACT_SIGNIFICANT_DIGITS)), {
+    isFiat: true,
+    currency,
+    thousandSuffix: 'K',
+  });
+
 export function formatUIAmount(
   value: number,
   {
     currency,
+    fractionDigits,
   }: {
     currency?: Intl.NumberFormatOptions['currency'];
+    fractionDigits?: number;
   } = {},
 ): string {
-  if (value === Infinity || Number.isNaN(value)) return String(value);
+  if (!Number.isFinite(value)) return String(value);
 
-  return toLocalFiatCurrency(value, { currency });
+  return toLocalFiatCurrency(value, {
+    currency,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }

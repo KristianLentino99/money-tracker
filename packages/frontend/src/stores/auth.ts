@@ -1,5 +1,7 @@
+import { analyticsPlan } from '@/common/const/billing';
 import type { DemoEndReason } from '@/common/const/demo';
 import { getDeviceName } from '@/common/utils/device-name';
+import { dismissPersistentNotifications } from '@/components/notification-center';
 import { isMobileSheetOpen } from '@/composable/global-state/mobile-sheet';
 import { OAuthProviderNotConfiguredError, UnexpectedError } from '@/js/errors';
 import { authClient, getSession, signIn, signOut, signUp } from '@/lib/auth-client';
@@ -13,7 +15,7 @@ import { identifyUser, resetUser, startSessionRecording, trackAnalyticsEvent } f
 import { collectPersistedQueryGarbage, resetQueryCaches } from '@/lib/query-persister';
 import { captureException, clearSentryUser, setSentryUser } from '@/lib/sentry';
 import { useCategoriesStore, useCurrenciesStore, useUserStore } from '@/stores';
-import { OAUTH_PROVIDER, USER_ROLES, UserModel } from '@bt/shared/types';
+import { OAUTH_PROVIDER, USER_ROLES, UserInfoResponse } from '@bt/shared/types';
 import { useQueryClient } from '@tanstack/vue-query';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -23,7 +25,7 @@ import { resetAllDefinedStores } from './setup';
 /**
  * Identify user for analytics and error tracking
  */
-function identifyUserForTracking(user: UserModel) {
+function identifyUserForTracking(user: UserInfoResponse) {
   const isDemo = user.role === USER_ROLES.demo;
 
   // Demo accounts hold generated data, so recording exposes no real finances and keeps quota small.
@@ -43,11 +45,12 @@ function identifyUserForTracking(user: UserModel) {
   // PostHog analytics
   identifyUser({
     userId: user.id,
-    email: user.email,
+    email: user.email ?? undefined,
     username: user.username,
     properties: {
       is_demo: isDemo,
       user_role: user.role,
+      plan: isDemo ? 'demo' : user.entitlements && analyticsPlan({ entitlements: user.entitlements }),
       ...demoOriginProperties,
     },
   });
@@ -55,7 +58,7 @@ function identifyUserForTracking(user: UserModel) {
   // Sentry error tracking
   setSentryUser({
     userId: user.id,
-    email: user.email,
+    email: user.email ?? undefined,
     username: user.username,
   });
 }
@@ -90,7 +93,9 @@ export const useAuthStore = defineStore('auth', () => {
     const lastSeenUserId = localStorage.getItem(PERSISTED_QUERIES_USER_KEY);
 
     if (lastSeenUserId !== null && lastSeenUserId !== currentUserIdStr) {
-      await resetQueryCaches(queryClient);
+      // Keeping the previous user's stamp makes the next load retry a failed wipe.
+      const isWiped = await resetQueryCaches(queryClient);
+      if (!isWiped) return;
     }
 
     localStorage.setItem(PERSISTED_QUERIES_USER_KEY, currentUserIdStr);
@@ -286,6 +291,7 @@ export const useAuthStore = defineStore('auth', () => {
     clearSentryUser();
 
     isMobileSheetOpen.value = false;
+    dismissPersistentNotifications();
     // Set logged out state before resetting stores
     isLoggedIn.value = false;
     // Cancel in-flight queries, drop the in-memory cache, and wipe the on-device

@@ -57,7 +57,9 @@
       "scopes": {
         "financeRead": "Lettura dati finanziari",
         "profileRead": "Lettura profilo",
-        "offlineAccess": "Accesso offline"
+        "offlineAccess": "Accesso offline",
+        "financeWrite": "Edit financial data",
+        "financeDelete": "Delete financial data"
       }
     }
   }

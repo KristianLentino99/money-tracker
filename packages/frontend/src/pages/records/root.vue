@@ -1,5 +1,31 @@
 <template>
   <PageWrapper>
+    <DefineTableSettings>
+      <ColumnConfigPopover
+        :configurable-columns="configurableColumns"
+        @toggle="toggleColumn"
+        @reorder="reorderColumns"
+        @reset="resetToDefaults"
+      >
+        <template #settings>
+          <div class="flex items-center justify-between gap-2 rounded-md px-2 py-2">
+            <span class="flex flex-col">
+              <span class="text-sm font-medium">{{
+                $t('transactions.table.columnConfig.alwaysShowLockedCells.label')
+              }}</span>
+              <span class="text-muted-foreground text-xs">
+                {{ $t('transactions.table.columnConfig.alwaysShowLockedCells.description') }}
+              </span>
+            </span>
+            <Switch
+              :model-value="alwaysShowLockedCells"
+              @update:model-value="(value) => setAlwaysShowLockedCells(!!value)"
+            />
+          </div>
+        </template>
+      </ColumnConfigPopover>
+    </DefineTableSettings>
+
     <div
       ref="pageContentRef"
       :class="[
@@ -42,6 +68,7 @@
           </div>
 
           <div class="flex items-center gap-2">
+            <TableSettings v-if="activeView === 'table'" />
             <DesktopOnlyTooltip :content="$t('transactions.table.fullscreen.enter')">
               <Button
                 variant="secondary"
@@ -64,7 +91,7 @@
             <ScrollArea class="h-full" :scroll-area-id="SCROLL_AREA_IDS.transactionsPage">
               <!-- No top padding: the list's bulk toolbar is sticky top-0 and must sit flush
                    with the scroll viewport edge, otherwise rows peek through the gap -->
-              <div v-if="isFetched" class="px-3 pb-3">
+              <div v-if="isFetched" class="pb-3 sm:px-3">
                 <TransactionsList
                   ref="transactionsListRef"
                   enable-bulk-edit
@@ -184,12 +211,7 @@
           </template>
 
           <template #actions>
-            <ColumnConfigPopover
-              :configurable-columns="configurableColumns"
-              @toggle="toggleColumn"
-              @reorder="reorderColumns"
-              @reset="resetToDefaults"
-            />
+            <TableSettings />
             <DesktopOnlyTooltip :content="$t('transactions.table.fullscreen.enter')">
               <Button
                 variant="secondary"
@@ -228,12 +250,7 @@
                 @reset-filters="resetFilters"
               >
                 <template #actions>
-                  <ColumnConfigPopover
-                    :configurable-columns="configurableColumns"
-                    @toggle="toggleColumn"
-                    @reorder="reorderColumns"
-                    @reset="resetToDefaults"
-                  />
+                  <TableSettings />
                   <DesktopOnlyTooltip :content="$t('transactions.table.fullscreen.exit')">
                     <Button
                       variant="secondary"
@@ -266,14 +283,17 @@
                 {{ $t('transactions.table.fullscreen.exit') }}
               </Button>
 
-              <FiltersDialog v-model:open="isFiltersDialogOpen" :is-any-filters-applied="isAnyFiltersApplied">
-                <FiltersPanel
-                  v-model:filters="filters"
-                  :is-reset-button-disabled="isResetButtonDisabled"
-                  :is-filters-out-of-sync="false"
-                  @reset-filters="resetFilters"
-                />
-              </FiltersDialog>
+              <div class="flex items-center gap-2">
+                <TableSettings />
+                <FiltersDialog v-model:open="isFiltersDialogOpen" :is-any-filters-applied="isAnyFiltersApplied">
+                  <FiltersPanel
+                    v-model:filters="filters"
+                    :is-reset-button-disabled="isResetButtonDisabled"
+                    :is-filters-out-of-sync="false"
+                    @reset-filters="resetFilters"
+                  />
+                </FiltersDialog>
+              </div>
             </div>
           </template>
 
@@ -287,7 +307,7 @@
                page itself slightly taller than the viewport, so the user can
                swipe up to push the view toggle / filters bar off-screen and
                gain extra rows of table. -->
-          <Card v-show="showTableCard" :class="['flex-1 overflow-hidden', tableCardSizingClass]">
+          <Card v-show="showTableCard" :class="['overflow-hidden', tableCardSizingClass]">
             <TransactionsTable
               ref="tableRef"
               :transactions="transactionsPages?.pages.flat() ?? []"
@@ -298,6 +318,7 @@
               :is-fetched="isFetched"
               :is-mobile-mode="isMobileMode"
               :selection-scope-key="selectionScopeKey"
+              :always-show-locked-cells="alwaysShowLockedCells"
               @update:sorting="onSortingChange"
               @fetch-next-page="fetchNextPage"
               @reset-filters="resetFilters"
@@ -313,6 +334,7 @@
 import PageWrapper from '@/components/common/page-wrapper.vue';
 import MobileViewSwitcher from '@/components/common/mobile-view-switcher.vue';
 import { Button } from '@/components/lib/ui/button';
+import { Switch } from '@/components/lib/ui/switch';
 import { Card } from '@/components/lib/ui/card';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { SCROLL_AREA_IDS } from '@/components/lib/ui/scroll-area/types';
@@ -324,7 +346,7 @@ import { parseStoredFilters, useTransactionsWithFilters } from '@/components/rec
 import { useFiltersFromQuery } from '@/components/records-filters/use-filters-from-query';
 import TransactionsList from '@/components/transactions-list/transactions-list.vue';
 import { ListIcon, Maximize2Icon, Minimize2Icon, Table2Icon } from '@lucide/vue';
-import { useDebounceFn, useElementSize, useEventListener, useMediaQuery } from '@vueuse/core';
+import { createReusableTemplate, useDebounceFn, useElementSize, useEventListener, useMediaQuery } from '@vueuse/core';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -368,7 +390,10 @@ const { width: pageContentWidth } = useElementSize(pageContentRef);
 // so the page doesn't flash the mobile layout on wide screens.
 const isMobileMode = computed(() => pageContentWidth.value > 0 && pageContentWidth.value < MOBILE_MODE_MAX_WIDTH_PX);
 
-const { mobileView, setMobileView, desktopView, setDesktopView } = useTransactionsView();
+const { mobileView, setMobileView, desktopView, setDesktopView, alwaysShowLockedCells, setAlwaysShowLockedCells } =
+  useTransactionsView();
+
+const [DefineTableSettings, TableSettings] = createReusableTemplate();
 
 const { data: userSettings, patch: patchSettings } = useUserSettings();
 
@@ -425,8 +450,14 @@ const enterFullscreen = () => {
 const exitFullscreen = () => {
   isFullscreenMode.value = false;
 };
+// An open reka layer (dialog, popover, select) takes Escape first. This listener is registered before any layer's
+// window listener, so the layer is still open here. Tooltip layers use other data-state values and don't block.
 useEventListener('keydown', (event: KeyboardEvent) => {
-  if (event.key === 'Escape' && isFullscreenMode.value && !isFiltersDialogOpen.value) {
+  if (
+    event.key === 'Escape' &&
+    isFullscreenMode.value &&
+    !document.querySelector('[data-dismissable-layer][data-state="open"]')
+  ) {
     exitFullscreen();
   }
 });
@@ -443,11 +474,11 @@ const useUnboundedPageHeight = computed(
   () => isMobileMode.value && !isFullscreenMode.value && activeView.value === 'table',
 );
 
-// Mobile non-fullscreen: pin the card to ~viewport height to force page-level
-// overflow (lets the user swipe away the toolbar). All other cases let flex-1
-// share the remaining space inside the fixed-height container.
+// Mobile non-fullscreen: pin the card to viewport height so the page overflows
+// (swipe-away toolbar). Must be a definite `h-`, not `min-h-` + flex-1: the table's
+// `h-full` would resolve to auto and the virtualizer would mount every row.
 const tableCardSizingClass = computed(() =>
-  isFullscreenMode.value || !isMobileMode.value ? 'min-h-0' : 'min-h-[calc(100dvh-var(--header-height))]',
+  isFullscreenMode.value || !isMobileMode.value ? 'min-h-0 flex-1' : 'h-[calc(100dvh-var(--header-height))] shrink-0',
 );
 
 // Filters apply automatically – no Apply button. One debounce window covers

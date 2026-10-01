@@ -62,7 +62,29 @@
         "tokenFormat": "{inputTokens}K input, ~{outputTokens}K output",
         "pdfPasswordLabel": "Password del PDF",
         "pdfPasswordPlaceholder": "Inserisci la password del documento",
-        "pdfPasswordSubmit": "Sblocca e analizza"
+        "pdfPasswordSubmit": "Sblocca e analizza",
+        "clickOrDragStatements": "Click or drag statement files here",
+        "filesLabel": "Files",
+        "analyzingFiles": "Analyzing files...",
+        "totalForFiles": "total for {count} files",
+        "estimateFailedSome": "{count} of {total} files could not be analyzed:",
+        "extractionFailedSome": "{count} of {total} files could not be parsed. The rest are ready to import.",
+        "retryFailed": "Retry failed files",
+        "progressFile": "Parsing {name} ({current} of {total})",
+        "acrossFiles": "across {count} files",
+        "currencyConflict": "The selected statements report different currencies ({currencies}). They will all be imported into one account, using that account's currency.",
+        "unsupportedFileNamed": "{name} is not a PDF, CSV or TXT file",
+        "unreadableFiles": "Could not read: {files}",
+        "fileStatus": {
+          "pending": "Not analyzed",
+          "estimating": "Analyzing...",
+          "estimated": "Ready",
+          "estimateFailed": "Could not analyze",
+          "extracting": "Parsing...",
+          "extracted": "{count} transaction | {count} transactions",
+          "failed": "Failed"
+        },
+        "continueButton": "Continue to Account"
       },
       "accountSelect": {
         "newlyCreated": "(appena creato)",
@@ -83,7 +105,10 @@
         "createNew": "Crea nuovo",
         "back": "Indietro",
         "importTransactions": "Importa transazioni",
-        "checkForDuplicates": "Controlla duplicati"
+        "checkForDuplicates": "Controlla duplicati",
+        "files": "Statements:",
+        "filesList": "From: {files}",
+        "currencyConflict": "The statements report different currencies ({currencies}). Pick the currency the account should use:"
       },
       "createAccountDialog": {
         "title": "Crea conto per l'importazione",
@@ -124,7 +149,8 @@
         "backButton": "Indietro",
         "continueButton": "Continua all'importazione",
         "transactionCount": "({count} transazioni)",
-        "duplicateCheckFailed": "Non è stato possibile confrontare questo estratto conto con le tue transazioni esistenti, quindi il conteggio dei duplicati qui sotto non è disponibile. Rivedi l'elenco prima di importare."
+        "duplicateCheckFailed": "Non è stato possibile confrontare questo estratto conto con le tue transazioni esistenti, quindi il conteggio dei duplicati qui sotto non è disponibile. Rivedi l'elenco prima di importare.",
+        "fromFiles": "from {count} statements"
       },
       "droppedRowsWarning": "{count} riga della risposta dell'IA non è stata leggibile ed è stata saltata. Il conteggio importato qui sotto potrebbe essere inferiore a quello effettivo nel file. | {count} righe della risposta dell'IA non sono state leggibili e sono state saltate. Il conteggio importato qui sotto potrebbe essere inferiore a quello effettivo nel file.",
       "importResults": {
@@ -151,7 +177,9 @@
         "errorHeader": "Errore",
         "batchIdNote": "ID lotto di importazione: {batchId}. Puoi usare questo ID per trovare e gestire tutte le transazioni importate.",
         "viewTransactionsButton": "Visualizza transazioni",
-        "startNewImportButton": "Avvia nuova importazione"
+        "startNewImportButton": "Avvia nuova importazione",
+        "statementsLabel": "Statements:",
+        "jobFailedDescription": "The import stopped before it finished. Some transactions may already have been created. Check your transactions before importing this statement again."
       }
     }
   }

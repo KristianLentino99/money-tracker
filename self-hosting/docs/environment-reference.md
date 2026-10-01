@@ -20,12 +20,13 @@ boot; everything else is optional.
 
 ## Compose-level (optional, defaults shown)
 
-| Variable                   | Purpose                                                                                                                                                        |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `HTTP_PORT` (`8080`)       | Host port the app is served on; set `127.0.0.1:8080` to make it reachable only from the server itself (when a reverse proxy on the same server fronts the app) |
-| `IMAGE_TAG` (`latest`)     | Image tag to pull; set `sha-<commit>` to pin                                                                                                                   |
-| `DB_HOST_PORT` (`5432`)    | Postgres admin port; used only if you uncomment the db `ports:` line in `docker-compose.yml` (binds to localhost)                                              |
-| `REDIS_HOST_PORT` (`6379`) | Redis admin port; used only if you uncomment the redis `ports:` line in `docker-compose.yml` (binds to localhost)                                              |
+| Variable                   | Purpose                                                                                                                                                                                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HTTP_PORT` (`8080`)       | Host port the app is served on; set `127.0.0.1:8080` to make it reachable only from the server itself (when a reverse proxy on the same server fronts the app)                                                                                          |
+| `LISTEN_PORT` (`80`)       | Port nginx binds inside the frontend container. Set it above 1024 (e.g. `8080`) on hosts that reserve low ports for root, such as Synology Container Manager; proxies on the Docker network then reach the app at `http://budget-tracker:<LISTEN_PORT>` |
+| `IMAGE_TAG` (`latest`)     | Image tag to pull; set `sha-<commit>` to pin                                                                                                                                                                                                            |
+| `DB_HOST_PORT` (`5432`)    | Postgres admin port; used only if you uncomment the db `ports:` line in `docker-compose.yml` (binds to localhost)                                                                                                                                       |
+| `REDIS_HOST_PORT` (`6379`) | Redis admin port; used only if you uncomment the redis `ports:` line in `docker-compose.yml` (binds to localhost)                                                                                                                                       |
 
 ## Traefik overlay only
 
@@ -80,6 +81,7 @@ Interpolated into the frontend container's `environment:` block. Change and
 | `API_HTTP`, `API_VER`                        | Point the SPA at a separate API origin (leave unset for same-origin)    |
 | `CSP_EXTRA_CONNECT`, `CSP_EXTRA_FORM_ACTION` | Extra CSP allow-list hosts (default to `API_HTTP`)                      |
 | `CSP_EXTRA_ANALYTICS`                        | CSP allow-list for analytics — **set this if you use Sentry**           |
+| `SKIP_LANDING`                               | `true` (default) redirects `/` to `/dashboard`; `false` serves landing  |
 
 `CSP_EXTRA_ANALYTICS` defaults to `VITE_POSTHOG_HOST` only. Sentry's ingest host
 is not derivable from the DSN by the entrypoint, so a Sentry deployment that
@@ -131,7 +133,10 @@ after an image already exists only changes the runtime value — rebuild
 `IS_SELF_HOST` is written straight into `docker-compose.yml`, on both the
 backend and the frontend. There is nothing to put in `.env` — anything you set
 there is ignored. It marks the stack as yours rather than the hosted service,
-which turns on two things:
+which turns on four things:
+
+- **No plans, no trial, no billing.** Every feature is on for every user, no
+  trial clock starts at signup, and the billing routes answer 404.
 
 - **A custom AI endpoint can point at a server on your own network.** On the
   hosted service the app refuses private addresses (`localhost`, `192.168.x.x`,
@@ -141,6 +146,26 @@ which turns on two things:
 - **Restoring a backup fills in price history.** After a restore, your stocks
   and crypto get their past prices fetched again, so charts and past valuations
   look right instead of starting from the restore date.
+- **A backup from another account restores fine.** The hosted service refuses
+  archives exported by a different user; on your own stack you may be moving
+  data between instances, so that check is off.
+
+## Hosted service only
+
+Read by the billing code, which never runs on a self-hosted stack – the billing
+routes answer 404 and no entitlement depends on them. Listed so a variable you
+see in the codebase is not mistaken for something your instance needs.
+
+All three are read by the backend only – the frontend container has no Stripe
+variable of its own. `AUTH_ORIGIN` must also be set, because it is the origin
+Stripe-hosted checkout and the billing portal return the buyer to.
+
+| Variable                | Purpose                                                               |
+| ----------------------- | --------------------------------------------------------------------- |
+| `STRIPE_ENV`            | `test` or `live`; picks which set of Stripe price ids the app accepts |
+| `STRIPE_SECRET_KEY`     | Stripe API key used to mint checkout and billing-portal sessions      |
+| `STRIPE_WEBHOOK_SECRET` | Signing secret Stripe webhooks are verified against                   |
+| `AUTH_ORIGIN`           | Frontend origin Stripe returns to after checkout or the portal        |
 
 ---
 

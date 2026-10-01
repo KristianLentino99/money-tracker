@@ -1,87 +1,73 @@
 import { SUPPORTED_LOCALES } from '@bt/shared/i18n/locales';
 import {
-  AICustomEndpointInfo,
+  AIConnectionInfo,
   AI_CUSTOM_INSTRUCTIONS_MAX_LENGTH,
-  AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
   AI_FEATURE,
-  AI_KEY_PROVIDERS,
+  AI_PROVIDER,
+  FIRE_LIMITS,
+  FIRE_MAX_EXCLUDED_CATEGORIES,
+  FIRE_TARGET_TYPES,
+  MAX_AI_CONNECTIONS,
   MAX_CATEGORY_MAPPING_PRESETS,
   NOTIFICATION_TYPES,
+  PAYMENT_TYPES,
   RecordId,
   TRANSACTION_OPTIONAL_FIELDS,
   endpointsTypes,
-  isCustomModelId,
 } from '@bt/shared/types';
-import type { CategoryMappingPreset, Equals, Expect } from '@bt/shared/types';
+import type { CategoryMappingPreset, Equals, Expect, FireSettings, MutuallyAssignable } from '@bt/shared/types';
 import { dateRange, withDateOrder } from '@common/lib/zod/custom-types';
 import { IdColumn } from '@common/types/id-column';
 import {
   baseUrlField,
-  defaultModelField,
+  modelField,
   nameField,
-} from '@controllers/user-settings/ai-custom-endpoint/endpoint-field-schemas';
+} from '@controllers/user-settings/ai-connections/connection-field-schemas';
 import { Table, Column, Model, ForeignKey, DataType, BelongsTo, Index } from 'sequelize-typescript';
 import { z } from 'zod';
 
 import Users from './users.model';
 
-const ZodAiApiKeyStatusSchema = z.enum(['valid', 'invalid']);
-
-const ZodAiApiKeySchema = z.object({
-  provider: z.enum(AI_KEY_PROVIDERS),
-  model: z.string().trim().min(1).max(AI_CUSTOM_MODEL_NAME_MAX_LENGTH).optional(),
-  keyEncrypted: z.string(),
-  createdAt: z.string().datetime(),
-  status: ZodAiApiKeyStatusSchema.optional(),
-  lastValidatedAt: z.string().datetime().optional(),
-  lastError: z.string().optional(),
-  invalidatedAt: z.string().datetime().optional(),
+/** `connectionId: null` is an explicit pick of the included server model. */
+const ZodAiFeatureConfigSchema = z.object({
+  feature: z.nativeEnum(AI_FEATURE),
+  connectionId: z.string().nullable(),
 });
 
-const ZodAiFeatureConfigSchema = z
+// Field constraints are shared with the create/update routes so a restored row can't be
+// shaped differently from a created one.
+const ZodAiConnectionSchema = z
   .object({
-    feature: z.nativeEnum(AI_FEATURE),
-    modelId: z.string(), // Format: 'provider/model', e.g., 'openai/gpt-5.6-terra'
-    customEndpointId: z.string().optional(),
+    id: z.string(),
+    provider: z.nativeEnum(AI_PROVIDER),
+    name: nameField,
+    baseUrl: baseUrlField.optional(),
+    keyEncrypted: z.string().optional(),
+    model: modelField,
+    createdAt: z.string().datetime(),
+    status: z.enum(['valid', 'invalid']),
+    lastValidatedAt: z.string().datetime(),
+    lastError: z.string().optional(),
+    invalidatedAt: z.string().datetime().optional(),
   })
-  .superRefine((config, ctx) => {
-    // A 'custom/*' model without its endpoint id is permanently undialable, and an endpoint id
-    // on a catalog model is dead weight. Rejecting both here keeps either out of storage.
-    if (isCustomModelId({ modelId: config.modelId }) !== Boolean(config.customEndpointId)) {
+  .superRefine((connection, ctx) => {
+    // Native providers always dial their official API, so a stored base URL would be dead weight.
+    if ((connection.provider === AI_PROVIDER.custom) !== Boolean(connection.baseUrl)) {
       ctx.addIssue({
         code: 'custom',
-        path: ['customEndpointId'],
-        message: 'customEndpointId must be set exactly when modelId is a custom/* ID',
+        path: ['baseUrl'],
+        message: 'baseUrl must be set exactly when provider is custom',
       });
     }
   });
 
-/** Cap per user: each entry is a URL the server dials, and the whole list lives in one settings row. */
-export const MAX_CUSTOM_ENDPOINTS = 5;
-
-// One of the user's own OpenAI-compatible endpoints. Field constraints are shared with the
-// create/update routes so a restored row can't be shaped differently from a created one.
-const ZodAiCustomEndpointSchema = z.object({
-  id: z.string(),
-  name: nameField,
-  baseUrl: baseUrlField,
-  keyEncrypted: z.string().optional(),
-  defaultModel: defaultModelField,
-  createdAt: z.string().datetime(),
-  status: ZodAiApiKeyStatusSchema,
-  lastValidatedAt: z.string().datetime(),
-  lastError: z.string().optional(),
-  invalidatedAt: z.string().datetime().optional(),
-});
-
-export type StoredCustomEndpoint = z.infer<typeof ZodAiCustomEndpointSchema>;
+export type StoredConnection = z.infer<typeof ZodAiConnectionSchema>;
 
 const ZodAiSettingsSchema = z.object({
-  apiKeys: z.array(ZodAiApiKeySchema).default([]),
-  defaultProvider: z.enum(AI_KEY_PROVIDERS).optional(),
-  featureConfigs: z.array(ZodAiFeatureConfigSchema).default([]),
+  featureConfigs: z.array(ZodAiFeatureConfigSchema).optional(),
   customInstructions: z.string().max(AI_CUSTOM_INSTRUCTIONS_MAX_LENGTH).optional(),
-  customEndpoints: z.array(ZodAiCustomEndpointSchema).max(MAX_CUSTOM_ENDPOINTS).optional(),
+  /** List order is priority: the first dialable connection answers unconfigured features. */
+  connections: z.array(ZodAiConnectionSchema).max(MAX_AI_CONNECTIONS).optional(),
 });
 
 const ZodNotificationPreferencesSchema = z.object({
@@ -170,6 +156,8 @@ const ZodTransactionsTableSettingsSchema = z.object({
   desktopView: z.enum(['list', 'table']).optional(),
   /** Filters added on top of the always-visible ones. Plain strings, like column ids. */
   extraFilters: z.array(z.string()).optional(),
+  /** Shades non-editable cells on every row instead of only the hovered one. */
+  alwaysShowLockedCells: z.boolean().optional(),
 });
 
 const ZodInvestmentTransactionsTableSettingsSchema = z.object({
@@ -189,6 +177,8 @@ const ZodTransactionFormSettingsSchema = z.object({
   optionalFields: z.array(z.enum(TRANSACTION_OPTIONAL_FIELDS)).optional(),
   /** Whether the transaction form may load map tiles and address search from OpenStreetMap. */
   mapPicker: z.boolean().optional(),
+  /** Payment type preselected on new transactions. Credit card when unset. */
+  defaultPaymentType: z.enum(PAYMENT_TYPES).optional(),
 });
 
 // UI-state preferences (table layouts, view modes). Functional settings keep
@@ -265,15 +255,31 @@ const ZodSavedPivotViewSchema = z.object({
 
 const ZodDistanceUnitSchema = z.enum(['km', 'mi']);
 
+const fireRange = ({ key }: { key: keyof typeof FIRE_LIMITS }) =>
+  z.number().min(FIRE_LIMITS[key].min).max(FIRE_LIMITS[key].max);
+
+// No `.default()` anywhere: the PATCH deep merge would write defaults over stored values.
+const ZodFireSettingsSchema = z.object({
+  annualSpendingOverride: z.number().min(0).nullable().optional(),
+  monthlyContributionOverride: z.number().nullable().optional(),
+  spendingExcludedCategoryIds: z.array(z.uuid()).max(FIRE_MAX_EXCLUDED_CATEGORIES).optional(),
+  includeVentures: z.boolean().optional(),
+  includeVehicles: z.boolean().optional(),
+  includeLoans: z.boolean().optional(),
+  returnIndicatorId: z.string().max(64).optional(),
+  customReturnPct: fireRange({ key: 'customReturnPct' }).nullable().optional(),
+  inflationPct: fireRange({ key: 'inflationPct' }).optional(),
+  withdrawalRatePct: fireRange({ key: 'withdrawalRatePct' }).optional(),
+  leanMultiplier: fireRange({ key: 'leanMultiplier' }).optional(),
+  fatMultiplier: fireRange({ key: 'fatMultiplier' }).optional(),
+  baristaMonthlyIncome: z.number().min(0).nullable().optional(),
+  birthYear: fireRange({ key: 'birthYear' }).int().nullable().optional(),
+  coastTargetAge: fireRange({ key: 'coastTargetAge' }).int().optional(),
+  targetType: z.enum(FIRE_TARGET_TYPES).optional(),
+});
+
 export const ZodSettingsSchema = z.object({
-  locale: z
-    .enum([
-      SUPPORTED_LOCALES.ENGLISH,
-      SUPPORTED_LOCALES.UKRAINIAN,
-      SUPPORTED_LOCALES.SPANISH,
-      SUPPORTED_LOCALES.ITALIAN,
-    ])
-    .default(SUPPORTED_LOCALES.ENGLISH),
+  locale: z.enum(SUPPORTED_LOCALES).default(SUPPORTED_LOCALES.ENGLISH),
   distanceUnit: ZodDistanceUnitSchema.default('km'),
   ai: ZodAiSettingsSchema.optional(),
   notifications: ZodNotificationPreferencesSchema.optional(),
@@ -303,11 +309,15 @@ export const ZodSettingsSchema = z.object({
   // matcher. Opt-in because linking turns a manually recorded row into a transfer leg, and
   // transfer legs carry no category, so the row disappears from category stats.
   matchTransfersWithManualAccounts: z.boolean().optional(),
+  // When true, Enable Banking sync stores PDNG/HOLD payloads before the bank books them.
+  // Off by default: pending payloads often lack the merchant and final text.
+  importPendingBankTransactions: z.boolean().optional(),
   // Categories whose legs leave the cash-flow report entirely, so money moved into them counts as
   // savings rather than spend. Descendants are expanded server-side. Plain z.uuid(), not
   // recordId(): the branded RecordId output breaks the SettingsPatchSchemaIsInSync assertion below.
   savingsCategoryIds: z.array(z.uuid()).optional(),
   currencyDisplay: z.enum(endpointsTypes.CURRENCY_DISPLAY_PREFERENCES).optional(),
+  fire: ZodFireSettingsSchema.optional(),
 });
 
 // Stored settings predate the distance preference. Keep the persisted TypeScript contract
@@ -324,20 +334,10 @@ export type StoredAiSettings = NonNullable<SettingsSchema['ai']>;
  * with empty ones. Arrays stay non-partial because the merge replaces them wholesale.
  */
 export const ZodSettingsPatchSchema = z.object({
-  locale: z
-    .enum([
-      SUPPORTED_LOCALES.ENGLISH,
-      SUPPORTED_LOCALES.UKRAINIAN,
-      SUPPORTED_LOCALES.SPANISH,
-      SUPPORTED_LOCALES.ITALIAN,
-    ])
-    .optional(),
+  locale: z.enum(SUPPORTED_LOCALES).optional(),
   distanceUnit: ZodDistanceUnitSchema.optional(),
   ai: z
     .object({
-      apiKeys: z.array(ZodAiApiKeySchema).optional(),
-      defaultProvider: z.enum(AI_KEY_PROVIDERS).optional(),
-      featureConfigs: z.array(ZodAiFeatureConfigSchema).optional(),
       customInstructions: z.string().max(AI_CUSTOM_INSTRUCTIONS_MAX_LENGTH).optional(),
     })
     .optional(),
@@ -375,6 +375,7 @@ export const ZodSettingsPatchSchema = z.object({
           mobileView: z.enum(['list', 'table']).optional(),
           desktopView: z.enum(['list', 'table']).optional(),
           extraFilters: z.array(z.string()).optional(),
+          alwaysShowLockedCells: z.boolean().optional(),
         })
         .optional(),
       transactionsList: z
@@ -386,6 +387,7 @@ export const ZodSettingsPatchSchema = z.object({
         .object({
           optionalFields: z.array(z.enum(TRANSACTION_OPTIONAL_FIELDS)).optional(),
           mapPicker: z.boolean().optional(),
+          defaultPaymentType: z.enum(PAYMENT_TYPES).optional(),
         })
         .optional(),
       investmentTransactionsTable: z
@@ -416,8 +418,10 @@ export const ZodSettingsPatchSchema = z.object({
   showSupportButton: z.boolean().optional(),
   hideZeroBalances: z.boolean().optional(),
   matchTransfersWithManualAccounts: z.boolean().optional(),
+  importPendingBankTransactions: z.boolean().optional(),
   savingsCategoryIds: z.array(z.uuid()).optional(),
   currencyDisplay: z.enum(endpointsTypes.CURRENCY_DISPLAY_PREFERENCES).optional(),
+  fire: ZodFireSettingsSchema.optional(),
 });
 
 export type SettingsPatchSchema = z.infer<typeof ZodSettingsPatchSchema>;
@@ -432,7 +436,7 @@ type DeepPartial<T> = {
 };
 
 type PatchableSettings = Omit<SettingsSchema, 'onboarding' | 'ai'> & {
-  ai?: Omit<NonNullable<SettingsSchema['ai']>, 'customEndpoints'>;
+  ai?: Omit<NonNullable<SettingsSchema['ai']>, 'connections' | 'featureConfigs'>;
 };
 
 /**
@@ -442,6 +446,9 @@ type PatchableSettings = Omit<SettingsSchema, 'onboarding' | 'ai'> & {
  * @public exported only so the assertion isn't flagged as unused.
  */
 export type SettingsPatchSchemaIsInSync = Expect<Equals<SettingsPatchSchema, DeepPartial<PatchableSettings>>>;
+
+/** @public exported only so the assertion isn't flagged as unused. */
+export type FireSettingsSchemaIsInSync = Expect<Equals<z.infer<typeof ZodFireSettingsSchema>, FireSettings>>;
 
 /**
  * Compile-time drift guard: the persisted saved-pivot-view schema must infer exactly the shared
@@ -474,13 +481,19 @@ export type SidebarSectionsSchemaIsInSync = Expect<
 >;
 
 /**
- * Compile-time drift guard: a stored custom endpoint and the `AICustomEndpointInfo` the API
- * returns declare the same fields apart from how the key is represented.
+ * Compile-time drift guard: a stored connection and the `AIConnectionInfo` the API returns
+ * declare the same fields apart from how the key is represented. `provider` is checked
+ * separately because Zod infers the enum member union, which `Equals` rejects.
  *
  * @public exported only so the assertion isn't flagged as unused.
  */
-export type AiCustomEndpointSchemaIsInSync = Expect<
-  Equals<Omit<StoredCustomEndpoint, 'keyEncrypted'>, Omit<AICustomEndpointInfo, 'hasApiKey'>>
+export type AiConnectionSchemaIsInSync = Expect<
+  Equals<Omit<StoredConnection, 'keyEncrypted' | 'provider'>, Omit<AIConnectionInfo, 'hasApiKey' | 'provider'>>
+>;
+
+/** @public exported only so the assertion isn't flagged as unused. */
+export type AiConnectionProviderIsInSync = Expect<
+  MutuallyAssignable<StoredConnection['provider'], AIConnectionInfo['provider']>
 >;
 
 export const DEFAULT_SETTINGS: SettingsSchema = {

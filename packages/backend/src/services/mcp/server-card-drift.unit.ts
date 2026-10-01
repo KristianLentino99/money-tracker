@@ -23,8 +23,9 @@ function extractToolNamesFromSources(): string[] {
     if (entry.includes('.unit.') || entry.includes('.e2e.')) continue;
 
     const content = fs.readFileSync(path.join(TOOLS_DIR, entry), 'utf-8');
-    const match = content.match(/server\.registerTool\(\s*['"]([^'"]+)['"]/);
-    if (match?.[1]) names.push(match[1]);
+    for (const match of content.matchAll(/server\.registerTool\(\s*['"]([^'"]+)['"]/g)) {
+      if (match[1]) names.push(match[1]);
+    }
   }
   return names;
 }

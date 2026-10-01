@@ -17,6 +17,7 @@ API_VER="${API_VER:-/api/v1}"
 # "true" — including unset, as on the hosted deployment — means not self-hosted.
 IS_SELF_HOST="${IS_SELF_HOST:-}"
 MCP_BASE_URL="${MCP_BASE_URL:-}"
+DOCS_URL="${DOCS_URL:-}"
 POSTHOG_KEY="${POSTHOG_KEY:-}"
 POSTHOG_HOST="${POSTHOG_HOST:-}"
 LOGO_DEV_TOKEN="${LOGO_DEV_TOKEN:-}"
@@ -32,6 +33,9 @@ SENTRY_RELEASE="${SENTRY_RELEASE:-${DEFAULT_SENTRY_RELEASE:-}}"
 CSP_EXTRA_CONNECT="${CSP_EXTRA_CONNECT:-}"
 CSP_EXTRA_FORM_ACTION="${CSP_EXTRA_FORM_ACTION:-}"
 CSP_EXTRA_ANALYTICS="${CSP_EXTRA_ANALYTICS:-}"
+# nginx runs unprivileged here; hosts that keep ports below 1024 root-only
+# (Synology Container Manager) need a high port such as 8080.
+LISTEN_PORT="${LISTEN_PORT:-80}"
 
 # --- Validation -------------------------------------------------------------
 
@@ -106,6 +110,7 @@ window.__APP_CONFIG__ = {
   API_VER: "$(js_escape "$API_VER")",
   IS_SELF_HOST: "$(js_escape "$IS_SELF_HOST")",
   MCP_BASE_URL: "$(js_escape "$MCP_BASE_URL")",
+  DOCS_URL: "$(js_escape "$DOCS_URL")",
   POSTHOG_KEY: "$(js_escape "$POSTHOG_KEY")",
   POSTHOG_HOST: "$(js_escape "$POSTHOG_HOST")",
   LOGO_DEV_TOKEN: "$(js_escape "$LOGO_DEV_TOKEN")",
@@ -167,10 +172,15 @@ EOF
 [ -n "$CSP_EXTRA_FORM_ACTION" ] || CSP_EXTRA_FORM_ACTION="$API_HTTP"
 [ -n "$CSP_EXTRA_ANALYTICS" ] || CSP_EXTRA_ANALYTICS="$POSTHOG_HOST"
 
-# envsubst only touches the three named placeholders; every other `$var` in the
+# 302, not 301: browsers cache a 301 indefinitely, which would keep redirecting
+# after the operator turns SKIP_LANDING back off.
+LANDING_REDIRECT=""
+[ "${SKIP_LANDING:-}" != "true" ] || LANDING_REDIRECT="return 302 /dashboard;"
+
+# envsubst only touches the named placeholders; every other `$var` in the
 # template is an nginx runtime variable and must be left intact.
-export CSP_EXTRA_CONNECT CSP_EXTRA_FORM_ACTION CSP_EXTRA_ANALYTICS
-envsubst '$CSP_EXTRA_CONNECT $CSP_EXTRA_FORM_ACTION $CSP_EXTRA_ANALYTICS' \
+export CSP_EXTRA_CONNECT CSP_EXTRA_FORM_ACTION CSP_EXTRA_ANALYTICS LANDING_REDIRECT LISTEN_PORT
+envsubst '$CSP_EXTRA_CONNECT $CSP_EXTRA_FORM_ACTION $CSP_EXTRA_ANALYTICS $LANDING_REDIRECT $LISTEN_PORT' \
   < /etc/nginx/templates/nginx.conf.template \
   > /etc/nginx/nginx.conf
 

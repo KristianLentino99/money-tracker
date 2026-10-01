@@ -168,7 +168,79 @@
         "validation": {
           "required": "Bidang ini wajib diisi",
           "minValue": "Jumlah harus lebih besar dari nol",
-          "futureDate": "Tanggal harus hari ini atau sebelumnya."
+          "futureDate": "Tanggal harus hari ini atau sebelumnya.",
+          "latitudeRange": "Latitude must be between -90 and 90",
+          "longitudeRange": "Longitude must be between -180 and 180",
+          "locationPair": "Enter both latitude and longitude",
+          "maxLength": "Must not exceed {max} characters",
+          "httpUrl": "Enter a valid http(s) URL"
+        },
+        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "externalUrlLabel": "External URL",
+        "externalUrlPlaceholder": "Link to the order, booking or receipt page",
+        "externalReferenceLabel": "External reference",
+        "externalReferencePlaceholder": "Order number, invoice number, booking reference",
+        "location": {
+          "label": "Location",
+          "useCurrent": "Use my location",
+          "clear": "Clear location",
+          "latitudePlaceholder": "Latitude, e.g. 50.4501",
+          "longitudePlaceholder": "Longitude, e.g. 30.5234",
+          "unsupported": "Your browser does not support geolocation",
+          "denied": "Location access was denied. Allow it in your browser settings or enter coordinates manually",
+          "unavailable": "Could not determine your location. Try again or enter coordinates manually",
+          "pickOnMap": "Pick on map",
+          "picker": {
+            "title": "Pick a location",
+            "searchPlaceholder": "Search address or place",
+            "noResults": "No places found",
+            "searchFailed": "Search is unavailable right now. Try again in a moment",
+            "confirm": "Use this location",
+            "loadFailed": "Could not load the map. Check your connection and try again",
+            "retry": "Coba lagi",
+            "consent": {
+              "title": "Map tiles come from OpenStreetMap",
+              "description": "Opening the map and searching addresses sends requests to openstreetmap.org, which sees your IP address. You can turn this off later in Settings.",
+              "enable": "Enable map",
+              "failed": "Could not save the setting. Try again"
+            }
+          }
+        },
+        "attachments": {
+          "label": "Attachments",
+          "loading": "Loading attachments…",
+          "listLoadFailed": "Couldn't load attachments. Close and reopen this dialog to try again.",
+          "hint": "Up to {max} files, {size} each. JPEG, PNG, WebP or PDF.",
+          "trigger": {
+            "empty": "Add attachments",
+            "count": "{count} attachment | {count} attachments",
+            "uploading": "Uploading…"
+          },
+          "dropzone": {
+            "idle": "Drop files here or click to browse",
+            "drag": "Drop to attach"
+          },
+          "errors": {
+            "unsupportedType": "Some files were skipped: only JPEG, PNG, WebP and PDF files can be attached.",
+            "tooMany": "A transaction can have at most {max} attachments.",
+            "tooLarge": "\"{filename}\" is larger than {max} and was not uploaded.",
+            "upload": "Failed to upload the attachment.",
+            "delete": "Failed to delete the attachment."
+          },
+          "deleteConfirm": {
+            "title": "Delete attachment?",
+            "description": "\"{filename}\" will be permanently deleted. This action cannot be undone."
+          },
+          "deleteAll": "Delete all",
+          "deleteAllConfirm": {
+            "title": "Delete all attachments?",
+            "description": "All {count} files will be permanently deleted. This action cannot be undone."
+          },
+          "viewer": {
+            "loadFailed": "Could not load this file.",
+            "openInNewTab": "Open in new tab",
+            "download": "Unduh"
+          }
         }
       },
       "investmentContribution": {
@@ -418,7 +490,9 @@
           "save": "Simpan templat",
           "deleteConfirmTitle": "Hapus ‘{name}’?",
           "deleteConfirmDescription": "Templat ini akan dihapus. Transaksi yang sudah Anda buat darinya tidak terpengaruh.",
-          "duplicateName": "Anda sudah memiliki templat bernama “{name}”."
+          "duplicateName": "Anda sudah memiliki templat bernama “{name}”.",
+          "originalCurrencyLabel": "Original amount currency",
+          "originalCurrencyPlaceholder": "Pilih mata uang"
         },
         "errors": {
           "create": "Tidak dapat menyimpan templat. Silakan coba lagi.",
@@ -464,7 +538,16 @@
         "success": "Kepemilikan ditambahkan.",
         "error": "Gagal menambahkan kepemilikan."
       },
-      "cryptoProviderNotConfigured": "Pencarian kripto tidak tersedia. Atur COINGECKO_API_KEY di lingkungan Anda untuk mengaktifkannya."
+      "cryptoProviderNotConfigured": "Pencarian kripto tidak tersedia. Atur COINGECKO_API_KEY di lingkungan Anda untuk mengaktifkannya.",
+      "providers": {
+        "heading": "Provider",
+        "yahoo": "Yahoo Finance",
+        "fmp": "Financial Modeling Prep",
+        "polygon": "Polygon",
+        "alphavantage": "Alpha Vantage",
+        "kraken": "Kraken",
+        "coingecko": "CoinGecko"
+      }
     },
     "deleteInvestmentTransaction": {
       "title": "Hapus Transaksi",
@@ -706,6 +789,88 @@
         "manualOnly": "Pemilih ini hanya menampilkan akun yang Anda kelola secara manual.",
         "whySynced": "Transaksi pada akun yang tersinkronisasi dengan bank diimpor langsung dari bank Anda. Mencatat pembayaran pinjaman dari akun ini akan membuat duplikat transaksi yang akan dikirim oleh bank Anda.",
         "howToLink": "Sebagai gantinya, setelah transaksi bank muncul, buka dan pilih Tautkan pembayaran untuk melampirkannya ke pinjaman ini. Ini menjaga satu sumber kebenaran dan memperbarui saldo pinjaman dengan benar."
+      }
+    },
+    "attachInvoice": {
+      "title": "Attach invoice",
+      "description": "Drop an invoice or receipt. We read the total, date and merchant, then find the transaction it belongs to.",
+      "resultsTitle": "Pick the transaction",
+      "resultsDescription": "No transactions match this invoice. | {count} transaction could belong to this invoice. | {count} transactions could belong to this invoice.",
+      "analyzing": "Reading the invoice and searching your transactions…",
+      "attaching": "Attaching the invoice to the transaction…",
+      "privacyNote": "The file goes to the AI provider for reading only. Nothing is saved until you link it to a transaction.",
+      "direction": {
+        "paid": "I paid this",
+        "gotPaid": "I got paid",
+        "paidHint": "We search your expenses for the payment.",
+        "gotPaidHint": "We search your income for the payment."
+      },
+      "invoice": {
+        "number": "Invoice №",
+        "issued": "Issued",
+        "total": "Total"
+      },
+      "fixDetails": "Fix details",
+      "form": {
+        "vendor": "Pedagang",
+        "vendorPlaceholder": "Enter the merchant name",
+        "customer": "Customer",
+        "customerPlaceholder": "Who the invoice is billed to",
+        "total": "Total",
+        "totalPlaceholder": "0.00",
+        "currency": "Mata Uang",
+        "currencyPlaceholder": "EUR",
+        "issued": "Invoice date",
+        "submit": "Search again"
+      },
+      "signals": {
+        "amountExact": "Amount exact",
+        "amountClose": "{diff} off",
+        "amountConverted": "Matches after conversion",
+        "amountUnknown": "Amount not compared",
+        "sameDay": "Same day as invoice",
+        "daysAfter": "{count} day after invoice | {count} days after invoice",
+        "daysBefore": "{count} day before invoice | {count} days before invoice",
+        "merchant": {
+          "match": "Merchant matches",
+          "partial": "Merchant looks similar",
+          "none": "Different merchant",
+          "unknown": "No payee set"
+        },
+        "customer": {
+          "match": "Customer matches",
+          "partial": "Customer looks similar",
+          "none": "Different customer",
+          "unknown": "No payee set"
+        }
+      },
+      "alreadyHasFile": "Already has a file",
+      "bestMatch": "Best match · {score}%",
+      "empty": {
+        "title": "No matching transaction",
+        "description": "We looked for about {total} from 14 days before to 30 days after the invoice date, in all accounts. The payment may not be imported yet, or the invoice was read wrong."
+      },
+      "searchManually": "Search manually",
+      "createTransaction": "Buat transaksi",
+      "link": "Link invoice",
+      "linked": "Invoice linked to the transaction",
+      "created": "Transaction created and invoice attached",
+      "openTransaction": "Open transaction",
+      "confirm": {
+        "title": "Link invoice to this transaction?",
+        "description": "{filename} will be attached to the {amount} transaction from {date}. You can remove it from the transaction later."
+      },
+      "errors": {
+        "match": "Could not read the invoice. Try again or use a clearer file.",
+        "link": "Could not link the invoice. Try again.",
+        "detailsNotFilled": "Invoice attached, but its details couldn't be copied to the transaction. Add them manually if you need them.",
+        "createdNotAttached": "Transaction created, but the invoice wasn't attached. Pick it from the list to attach it.",
+        "rematch": "Could not search again. Check the details and retry.",
+        "openTransaction": "Couldn't open the transaction. Find it in your transactions list."
+      },
+      "trial": {
+        "left": "1 free try left of {limit} | {count} free tries left of {limit}",
+        "spent": "You've used all your free tries. Upgrade to Plus to keep attaching invoices with AI."
       }
     }
   }

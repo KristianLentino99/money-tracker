@@ -37,6 +37,9 @@
       "plannedFilter": {
         "label": "Planificadas"
       },
+      "attachments": {
+        "label": "Adjuntos"
+      },
       "filterOperation": {
         "all": "Todos",
         "exclude": "Excluir",
@@ -52,7 +55,8 @@
         "tagSingular": "etiqueta",
         "tagPlural": "etiquetas",
         "selected": "seleccionadas",
-        "searchPlaceholder": "Buscar etiquetas…"
+        "searchPlaceholder": "Buscar etiquetas…",
+        "blankOption": "Sin etiquetas"
       },
       "payees": {
         "label": "Beneficiarios",
@@ -75,7 +79,8 @@
         "toPortfolio": "Al portafolio",
         "toVenture": "A proyecto de inversión",
         "selectedCount": "{n} seleccionados"
-      }
+      },
+      "uncategorized": "Uncategorized"
     },
     "list": {
       "noMoreData": "No hay más transacciones",
@@ -114,9 +119,11 @@
       "tagModeAdd": "Añadir a etiquetas existentes",
       "tagModeReplace": "Reemplazar todas las etiquetas",
       "tagModeRemove": "Eliminar estas etiquetas",
-      "unselectableReasons": {
-        "split": "No se puede seleccionar: las transacciones divididas no admiten edición masiva. Edítela individualmente.",
-        "sharedAccount": "No se puede seleccionar: esta transacción pertenece a una cuenta compartida contigo, y solo su propietario puede editarla."
+      "totals": {
+        "income": "Ingreso",
+        "expense": "Gasto",
+        "net": "Neto",
+        "transfers": "Transferencias"
       }
     },
     "bulkLinkSubscription": {
@@ -180,6 +187,10 @@
       "expiredTooltip": "Se esperaba hace {days} días, sin transacción bancaria coincidente",
       "mergedTooltip": "Confirmada a partir de un movimiento planificado del {date}"
     },
+    "pending": {
+      "label": "Pendiente",
+      "tooltip": "El banco no ha reservado esta transacción todavía. No afecta el saldo de la cuenta."
+    },
     "table": {
       "columns": {
         "date": "Fecha",
@@ -198,13 +209,18 @@
       },
       "outOfWallet": "Desde cartera",
       "hint": "Haga clic en una fila para ver los detalles. Seleccione filas para edición masiva.",
+      "plannedRows": "{count} planned transactions",
       "emptyTitle": "Ninguna transacción coincide con estos filtros",
       "emptyDescription": "Intente ajustar o restablecer los filtros.",
       "columnConfig": {
         "title": "Configuración de tabla",
         "columns": "Columnas",
         "visibleCount": "{count} visibles",
-        "resetDefaults": "Restablecer valores por defecto"
+        "resetDefaults": "Restablecer valores por defecto",
+        "alwaysShowLockedCells": {
+          "label": "Always show locked cells",
+          "description": "Shade cells you can't edit here on every row, not only on hover."
+        }
       },
       "categorizationSourceValues": {
         "manual": "Manual",
@@ -231,6 +247,16 @@
       "confirmDescription": "Esta acción no se puede deshacer. Se eliminarán ambos lados de las transferencias.",
       "successMessage": "{count} transacciones eliminadas",
       "unexpectedError": "No se pudieron eliminar las transacciones. Por favor, intente de nuevo."
+    },
+    "inlineEdit": {
+      "saveFailed": "Couldn't save {field}. Try again.",
+      "bankTitle": "Set by your bank",
+      "bankDescription": "Date, account and amount sync from your bank connection. Everything else on this transaction is yours to change.",
+      "managedTitle": "Managed elsewhere",
+      "managedDescription": "This transaction belongs to a portfolio, investment, vehicle or loan. Change it from its own page so balances stay correct.",
+      "gotIt": "Entendido",
+      "openDetails": "Open details",
+      "tooManyTags": "Up to {max} tags per transaction"
     }
   },
   "records": {

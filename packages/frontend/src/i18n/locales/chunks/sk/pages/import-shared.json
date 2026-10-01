@@ -1,0 +1,96 @@
+{
+  "pages": {
+    "importExport": {
+      "progress": {
+        "jobExpired": "Úloha importu vypršala, alebo sa nenašla.",
+        "lostContact": "Stratené spojenie s úlohou importu."
+      }
+    }
+  },
+  "importShared": {
+    "action": {
+      "createNew": "Vytvoriť nový",
+      "linkExisting": "Prepojiť s existujúcim",
+      "skip": "Preskočiť"
+    },
+    "selectAction": "Vyberte akciu",
+    "resolvedCounterWord": "vyriešené",
+    "quickActionsMenuLabel": "Hromadné akcie",
+    "quickActions": {
+      "menu": "Akcie"
+    },
+    "columns": {
+      "sourceName": "Zdrojový názov",
+      "currency": "Mena",
+      "action": "Akcia",
+      "target": "Cieľ"
+    },
+    "account": {
+      "selectTarget": "Vyberte účet",
+      "noMatchingCurrency": "Žiadny účet s menou {currency}",
+      "willCreate": "Vytvorí sa {name} ({currency})",
+      "empty": "Nie sú žiadne účty na priradenie",
+      "willSkip": "Neimportuje sa"
+    },
+    "category": {
+      "selectTarget": "Vyberte kategóriu",
+      "willCreate": "Vytvorí sa {name}",
+      "empty": "Nie sú žiadne kategórie na priradenie"
+    },
+    "recalculateBalance": {
+      "label": "Aktualizovať zostatky účtov podľa importovaných transakcií",
+      "hint": "Transakcie staršie než najnovšia existujúca transakcia účtu sa považujú za spätné doplnenie a nemenia jeho aktuálny zostatok.",
+      "loadFailedHint": "Vaše uložené nastavenie sa nepodarilo načítať — predvolene je vypnuté."
+    },
+    "balanceChanges": {
+      "title": "Zmeny zostatkov účtov",
+      "columns": {
+        "account": "Účet",
+        "before": "Pred",
+        "after": "Po",
+        "delta": "Zmeniť",
+        "newRows": "Nové riadky",
+        "backfillRows": "Riadky spätného doplnenia"
+      },
+      "newAccount": "Nový účet"
+    },
+    "duplicatesTable": {
+      "columnHeaders": {
+        "row": "Riadok",
+        "match": "Zhoda",
+        "csvTransaction": "Transakcia z CSV",
+        "existingTransaction": "Existujúca transakcia",
+        "csvShort": "CSV",
+        "existingShort": "Existujúca"
+      },
+      "matchTypeLabels": {
+        "exact": "Presná",
+        "idMatch": "Zhoda podľa ID",
+        "fuzzy": "Približná"
+      },
+      "fieldLabels": {
+        "amount": "Suma",
+        "date": "Dátum",
+        "note": "Poznámka",
+        "category": "Kategória"
+      },
+      "importAnywayAriaLabel": "Napriek tomu importovať riadok {row}"
+    },
+    "aiMapping": {
+      "action": "Priradenie pomocou AI",
+      "tooltipCategories": "Nechajte AI, aby prepojila každú zdrojovú kategóriu s najbližšou existujúcou kategóriou. Riadky, ktoré ste už prepojili s kategóriou, zostanú nezmenené.",
+      "failed": "Priradenie pomocou AI zlyhalo. Skúste to znova, prosím.",
+      "inProgress": "Prebieha priradenie pomocou AI…"
+    },
+    "categoryPreset": {
+      "menuTrigger": "Použiť priradenie",
+      "currentLayout": "Rozloženie tohto súboru",
+      "savedTemplates": "Uložené šablóny",
+      "lastUsed": "Naposledy použité priradenie",
+      "namePlaceholder": "Pomenujte toto priradenie",
+      "renameAria": "Premenovať priradenie",
+      "deleteAria": "Zmazať priradenie",
+      "confirmRenameAria": "Uložiť názov"
+    }
+  }
+}

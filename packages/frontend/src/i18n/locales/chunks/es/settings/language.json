@@ -2,7 +2,18 @@
   "settings": {
     "language": {
       "title": "Idioma",
-      "description": "Idioma de visualización de la interfaz de la aplicación."
+      "description": "Idioma de visualización de la interfaz de la aplicación.",
+      "community": {
+        "title": "Traducciones por la comunidad",
+        "hint": "Traducido por voluntarios en Crowdin. Todo lo que aún no se ha traducido se muestra en inglés."
+      },
+      "contribute": {
+        "title": "Missing or wrong translations?",
+        "description": "Community languages are translated on Crowdin. You can request a new language, suggest corrections, or translate strings yourself – no coding required.",
+        "requestNote": "Prefer not to use Crowdin? Request a language on our {boardLink}.",
+        "requestNoteLink": "feature board",
+        "action": "Contribute on Crowdin"
+      }
     }
   }
 }

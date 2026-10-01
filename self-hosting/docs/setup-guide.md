@@ -1,6 +1,6 @@
 # Setup Guide
 
-Run Budget Tracker on your own server. The stack pulls published multi-arch
+Run MoneyMatter on your own server. The stack pulls published multi-arch
 images and exposes the whole app on **one host port**. You put whatever reverse
 proxy you already run in front of it – Nginx Proxy Manager, npmplus, Caddy,
 Traefik, or nothing at all for a LAN / localhost trial. A bundled Traefik
@@ -66,7 +66,8 @@ rate-data sidecar are reachable only from the `budget-tracker` network.
 5. [Backups](#5-backups)
 6. [Updating](#6-updating)
 
-Reference docs: [reverse proxies](reverse-proxies.md) ·
+Reference docs: [Portainer](portainer.md) ·
+[reverse proxies](reverse-proxies.md) ·
 [Traefik overlay](traefik-overlay.md) ·
 [environment variables](environment-reference.md) ·
 [troubleshooting](troubleshooting.md)
@@ -94,8 +95,8 @@ live in it, and the backend reads `.env` from that same directory. (Building
 from source still needs the full repo checkout.)
 
 ```bash
-git clone https://github.com/letehaha/budget-tracker.git
-cd budget-tracker/self-hosting
+git clone https://github.com/letehaha/moneymatter.git
+cd moneymatter/self-hosting
 cp .env.example .env
 ```
 
@@ -255,9 +256,9 @@ OOMs, add 2 GB of swap (see [troubleshooting.md](troubleshooting.md)).
 
 ## 5. Backups
 
-The two stateful volumes are `db_data` (Postgres) and `redis_data` (Redis).
-Redis is queue-only – its data is regenerated on the fly, so back up Postgres
-only.
+The stateful volumes are `db_data` (Postgres), `attachments_data` (files
+attached to transactions) and `redis_data` (Redis). Redis is queue-only – its
+data is regenerated on the fly, so back up Postgres and the attachments.
 
 The single-quoted `$POSTGRES_USER` / `$POSTGRES_DB` below expand **inside the
 db container** (compose sets them there from your `.env`), so the commands work
@@ -268,6 +269,13 @@ from any host shell without exporting anything.
 docker compose exec -T db \
   sh -c 'pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB"' \
   | gzip > "backup-$(date +%F).sql.gz"
+```
+
+```bash
+# Attachments (skip if ATTACHMENTS_PATH points at a host directory you
+# already back up, or if you store them in S3)
+docker run --rm -v budget-tracker-prod_attachments_data:/data:ro -v "$PWD":/backup \
+  alpine tar czf "/backup/attachments-$(date +%F).tar.gz" -C /data .
 ```
 
 Restore:

@@ -110,15 +110,22 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   analyticsInvestmentContributions: [transactionChange, 'analytics-investment-contributions'] as const,
   analyticsVentureContributions: [transactionChange, 'analytics-venture-contributions'] as const,
   analyticsPivotReport: [transactionChange, 'analytics-pivot-report'] as const,
+  fireNetWorthHistory: [transactionChange, securityPriceChange, ventureChange, 'fire-net-worth-history'] as const,
+  fireCashFlow: [transactionChange, 'fire-cash-flow'] as const,
+  fireVentureContributions: [transactionChange, ventureChange, 'fire-venture-contributions'] as const,
   analyticsCumulative: [transactionChange, 'analytics-cumulative'] as const,
   analyticsSpendingsByCategories: [transactionChange, 'analytics-spendings-by-categories'] as const,
   earliestTransactionDate: [transactionChange, 'earliest-transaction-date'] as const,
 
   recordsPageRecordsList: [transactionChange, 'records-page-records-list'] as const,
 
+  transactionAttachments: ['transaction-attachments'] as const,
+
   recordsPageTransactionList: [transactionChange, 'records-page'] as const,
 
   accountSpecificTransactions: [transactionChange, 'account-transactions'] as const,
+
+  accountTransactionCount: [transactionChange, 'account-transaction-count'] as const,
 
   allAccounts: [transactionChange, securityPriceChange, 'all-accounts'] as const,
 
@@ -143,6 +150,8 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   portfolioTransfers: [securityPriceChange, 'portfolio-transfers'] as const,
   portfolioSummary: [securityPriceChange, 'portfolio-summary'] as const,
   manualPortfolioValues: [securityPriceChange, 'manual-portfolio-values'] as const,
+  // Must stay nested under portfolioSummary: invalidating that prefix is what refetches the batch.
+  portfolioSummaries: [securityPriceChange, 'portfolio-summary', 'all'] as const,
   portfolioAnnualizedReturns: [securityPriceChange, 'portfolio-annualized-returns'] as const,
   portfolioBalances: [securityPriceChange, 'portfolio-balances'] as const,
   transactionPortfolioLink: [transactionChange, 'transaction-portfolio-link'] as const,
@@ -173,7 +182,6 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   subscriptionsList: [transactionChange, 'subscriptions-list'] as const,
   subscriptionDetails: [transactionChange, 'subscription-details'] as const,
   subscriptionsSummary: [transactionChange, 'subscriptions-summary'] as const,
-  widgetSubscriptionsUpcoming: [transactionChange, 'widget-subscriptions-upcoming'] as const,
   recordsUpcomingPayments: [transactionChange, 'records-upcoming-payments'] as const,
   subscriptionCandidates: ['subscription-candidates'] as const,
 
@@ -213,10 +221,10 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   mcpConnectedApps: ['mcp-connected-apps'] as const,
 
   // AI settings
-  aiApiKeyStatus: ['ai-settings', 'api-keys'] as const,
   aiFeaturesStatus: ['ai-settings', 'features'] as const,
   aiCustomInstructions: ['ai-settings', 'custom-instructions'] as const,
-  aiCustomEndpoints: ['ai-settings', 'custom-endpoints'] as const,
+  aiConnections: ['ai-settings', 'connections'] as const,
+  aiConnectionModels: ['ai-settings', 'connection-models'] as const,
 
   // A finished categorization run rewrites categories, so the transactionChange
   // invalidation refreshes the candidate list and its total.
@@ -224,6 +232,9 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   aiCategorizationHistory: [transactionChange, 'ai-categorization-history'] as const,
   // Callers append the run's `categorizedAt` stamp, so each run caches separately.
   aiCategorizationRunTransactions: [transactionChange, 'ai-categorization-run-transactions'] as const,
+
+  reconciliationStuckPending: [transactionChange, 'reconciliation-stuck-pending'] as const,
+  reconciliationHistory: [transactionChange, 'reconciliation-history'] as const,
 
   // A completed import creates transactions, so the transactionChange invalidation
   // refreshes the batch list alongside everything else it creates/moves.

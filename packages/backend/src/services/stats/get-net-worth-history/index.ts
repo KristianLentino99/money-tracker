@@ -7,9 +7,11 @@ import UsersCurrencies from '@models/users-currencies.model';
 import { withTransaction } from '@services/common/with-transaction';
 import { calculateVehiclesBalanceHistory } from '@services/stats/calculate-vehicles-balance-history';
 import { calculateVentureBalanceHistory } from '@services/stats/calculate-venture-balance-history';
-import { getAggregatedBalanceHistory, getPerAccountBalanceHistory } from '@services/stats/get-balance-history';
+import { getPerAccountBalanceHistory } from '@services/stats/get-balance-history';
+import { getCreditLimitCentsByAccount } from '@services/stats/get-credit-limit-adjustment';
 import { generatePeriodBuckets } from '@services/stats/utils';
 import { format } from 'date-fns';
+import { Op } from 'sequelize';
 
 import { buildDenseDateRange } from '../get-net-worth-drivers/date-range';
 import { assembleNetWorthPoint } from './assemble-point';
@@ -18,7 +20,7 @@ import type { NetWorthHistoryResultCents } from './types';
 
 export type { NetWorthHistoryResultCents } from './types';
 
-// `getAggregatedBalanceHistory` keys each day by `format(new Date(dateStr), 'yyyy-MM-dd')`
+// `getPerAccountBalanceHistory` keys each day by `format(new Date(dateStr), 'yyyy-MM-dd')`
 // — a `yyyy-MM-dd` string parsed as UTC midnight, then re-formatted in server-local time.
 // Snapshot calendar strings must pass through the identical transform to line up under a
 // negative-offset server timezone; without it the lookup shifts a calendar day and every
@@ -28,7 +30,7 @@ const toAccountsDateKey = (dayStr: string): string => format(new Date(dayStr), '
 /**
  * Balance at each snapshot date for one account partition. A missing snapshot key
  * on a NON-empty history is a key-derivation bug, not a zero balance —
- * `getAggregatedBalanceHistory` fills every day in its range — so it fails loud
+ * every account series fills every day in its range — so it fails loud
  * instead of letting `?? 0` silently drop the partition. An empty history (no
  * accounts in the partition) is a real zero.
  */
@@ -61,9 +63,10 @@ const buildPartitionResolver = ({
 };
 
 /**
- * Split one per-account balance series at a snapshot date by balance sign:
- * accounts currently owing (negative) sum into `owedCents`, accounts holding the
- * user's own funds (positive) into `surplusCents`. Used for every account class
+ * Split one per-account balance series at a snapshot date by balance sign, after
+ * netting each balance against the account's credit limit (absent when the
+ * setting is off): accounts currently owing (negative) sum into `owedCents`,
+ * accounts holding the user's own funds (positive) into `surplusCents`. Used for every account class
  * that can sit on either side of zero — cards, overdrafts and plain deposit
  * accounts alike — so an overdrawn account counts as debt, not a negative asset.
  * A missing snapshot key on a present account is a key-derivation bug — the series
@@ -74,19 +77,21 @@ const splitSeriesBySign = ({
   snapshotDate,
   partition,
   userId,
+  creditLimitCentsByAccount,
 }: {
   series: Record<string, Record<string, number>>;
   snapshotDate: string;
   partition: string;
   userId: number;
+  creditLimitCentsByAccount: Map<string, Cents>;
 }): { owedCents: Cents; surplusCents: Cents } => {
   const dateKey = toAccountsDateKey(snapshotDate);
   let owed = 0;
   let surplus = 0;
 
-  for (const [accountId, centsByDate] of Object.entries(series)) {
-    const cents = centsByDate[dateKey];
-    if (cents === undefined) {
+  for (const [accountId, rawCentsByDate] of Object.entries(series)) {
+    const rawCents = rawCentsByDate[dateKey];
+    if (rawCents === undefined) {
       logger.error('Net-worth history: per-account series missing a snapshot day', {
         userId,
         partition,
@@ -98,6 +103,7 @@ const splitSeriesBySign = ({
         message: `Net-worth history: ${partition} account series is missing a snapshot day.`,
       });
     }
+    const cents = rawCents - (creditLimitCentsByAccount.get(accountId) ?? 0);
     if (cents < 0) owed += cents;
     else surplus += cents;
   }
@@ -167,19 +173,22 @@ const buildDegraded = ({
  * always liabilities at their whole signed value. All amounts are base-currency
  * cents; the serializer converts to decimals.
  *
- * The `includeCreditLimitInStats` setting is deliberately ignored: net worth
- * reflects actual balances, and available credit is not debt.
+ * `includeCreditLimit` means a stored balance on an account with a limit embeds
+ * that limit. Subtract it per account before the sign split, or undrawn credit
+ * counts as cash.
  */
 export const getNetWorthHistory = async ({
   userId,
   from,
   to,
   granularity,
+  includeCreditLimit = false,
 }: {
   userId: number;
   from: string;
   to: string;
   granularity: endpointsTypes.NetWorthHistoryGranularity;
+  includeCreditLimit?: boolean;
 }): Promise<NetWorthHistoryResultCents> => {
   // Weekly buckets follow ISO weeks (Monday start) — the shared spec every stats
   // report uses, so week edges line up across the analytics pages.
@@ -218,13 +227,11 @@ export const getNetWorthHistory = async ({
   // below, rather than each branch checking out its own and a burst of report
   // loads draining the pool.
   const [
-    assetAccountsSeries,
-    creditCardSeries,
-    overdraftSeries,
-    loanHistory,
+    { accountSeries, categoryByAccount },
     vehicleValuesByDate,
     portfolioValuation,
     ventureValuesByDate,
+    creditLimitCentsByAccount,
   ] = await withTransaction(async () => {
     // Shared by every sub-calculator that converts to base currency — fetch once.
     const userBaseCurrencyPromise = UsersCurrencies.findOne({
@@ -233,62 +240,70 @@ export const getNetWorthHistory = async ({
       attributes: ['currencyCode'],
     }) as Promise<Pick<UsersCurrencies, 'currencyCode'> | null>;
 
-    // Each partition is a separate filtered aggregation so it keeps its own
-    // forward-fill (a loan anchor date must not forward-fill into the cash series).
     return Promise.all([
-      // Per-account (not pre-summed) so the sign split is per account: one deposit
-      // account overdrawn −500 and another holding +300 on the same day land on
-      // opposite sides of the split, rather than netting to a single +/−200 figure.
-      // Vehicles are excluded here because they enter assets through their own
-      // depreciation series below, not through Balances rows; the liability kinds
-      // are excluded because cards/overdrafts/loans get their own series.
-      getPerAccountBalanceHistory({
-        userId,
-        accountScope: 'owned',
-        ...accountsRange,
-        categoryFilter: { exclude: [ACCOUNT_CATEGORIES.vehicle, ...endpointsTypes.NET_WORTH_LIABILITY_KINDS] },
-      }),
-      // Per-account (not pre-summed) series: the sign classification is per
-      // account, so one card owing −500 and another holding +300 on the same day
-      // must land on opposite sides of the split.
-      getPerAccountBalanceHistory({
-        userId,
-        accountScope: 'owned',
-        ...accountsRange,
-        categoryFilter: { only: [ACCOUNT_CATEGORIES.creditCard] },
-      }),
-      getPerAccountBalanceHistory({
-        userId,
-        accountScope: 'owned',
-        ...accountsRange,
-        categoryFilter: { only: [ACCOUNT_CATEGORIES.overdraft] },
-      }),
+      // One per-account series for every non-vehicle account, split by category
+      // after the fetch. Fill and back-fill are decided per account, so splitting
+      // afterwards yields the same numbers as one filtered read per partition.
+      // Vehicles enter assets through their own depreciation series below.
       (async () => {
-        // Back-fill each loan's pre-anchor days from its opening balance
-        // (`refInitialBalance` — the outstanding as-of the anchor date) rather than
-        // from the anchor-day Balances row. A payment only ever writes
-        // `currentBalance`, so the opening is immutable; this stops a payoff dated
-        // on the anchor day (which folds the anchor row toward zero) from
-        // retroactively rewriting the loan balance shown on earlier days.
-        const loanAccounts = await Accounts.findAll({
-          where: { userId, accountCategory: ACCOUNT_CATEGORIES.loan, excludeFromStats: false },
-          attributes: ['id', 'refInitialBalance'],
+        const accounts = await Accounts.findAll({
+          where: { userId, excludeFromStats: false, accountCategory: { [Op.ne]: ACCOUNT_CATEGORIES.vehicle } },
+          attributes: ['id', 'accountCategory', 'refInitialBalance'],
         });
-        const openingCentsByAccount = new Map(loanAccounts.map((a) => [a.id, a.refInitialBalance.toCents()]));
+        // Back-fill each loan's pre-anchor days from its opening balance
+        // (`refInitialBalance`, immutable on payment) so a payoff dated on the
+        // anchor day can't retroactively rewrite the loan balance on earlier days.
+        const openingCentsByAccount = new Map(
+          accounts
+            .filter((a) => a.accountCategory === ACCOUNT_CATEGORIES.loan)
+            .map((a) => [a.id, a.refInitialBalance.toCents()]),
+        );
 
-        return getAggregatedBalanceHistory({
+        const series = await getPerAccountBalanceHistory({
           userId,
           accountScope: 'owned',
           ...accountsRange,
-          categoryFilter: { only: [ACCOUNT_CATEGORIES.loan] },
+          categoryFilter: { exclude: [ACCOUNT_CATEGORIES.vehicle] },
           openingCentsByAccount,
         });
+
+        return {
+          accountSeries: series,
+          categoryByAccount: new Map(accounts.map((a) => [a.id as string, a.accountCategory])),
+        };
       })(),
       calculateVehiclesBalanceHistory({ userId, maxDate, uniqueDates: snapshotDates, userBaseCurrencyPromise }),
       calculatePortfolioValueByDate({ userId, snapshotDates, denseDates, userBaseCurrencyPromise }),
       calculateVentureBalanceHistory({ userId, minDate, maxDate, uniqueDates: snapshotDates, userBaseCurrencyPromise }),
+      includeCreditLimit ? getCreditLimitCentsByAccount({ userId, accountScope: 'owned' }) : new Map<string, Cents>(),
     ]);
   })();
+
+  // Per-account (not pre-summed) so the sign split is per account: one account
+  // owing −500 and another holding +300 on the same day land on opposite sides.
+  // An account missing from the category map (created between the two reads)
+  // counts as an asset account rather than being dropped.
+  const assetAccountsSeries: Record<string, Record<string, number>> = {};
+  const creditCardSeries: Record<string, Record<string, number>> = {};
+  const overdraftSeries: Record<string, Record<string, number>> = {};
+  const loanCentsByDate = new Map<string, number>();
+
+  for (const [accountId, centsByDate] of Object.entries(accountSeries)) {
+    const category = categoryByAccount.get(accountId);
+    if (category === ACCOUNT_CATEGORIES.creditCard) {
+      creditCardSeries[accountId] = centsByDate;
+    } else if (category === ACCOUNT_CATEGORIES.overdraft) {
+      overdraftSeries[accountId] = centsByDate;
+    } else if (category === ACCOUNT_CATEGORIES.loan) {
+      for (const [date, cents] of Object.entries(centsByDate)) {
+        loanCentsByDate.set(date, (loanCentsByDate.get(date) ?? 0) + cents);
+      }
+    } else {
+      assetAccountsSeries[accountId] = centsByDate;
+    }
+  }
+
+  const loanHistory = Array.from(loanCentsByDate, ([date, amount]) => ({ date, amount }));
 
   const resolveLoan = buildPartitionResolver({ history: loanHistory, partition: ACCOUNT_CATEGORIES.loan, userId });
 
@@ -304,18 +319,21 @@ export const getNetWorthHistory = async ({
         snapshotDate: dateStr,
         partition: 'asset-accounts',
         userId,
+        creditLimitCentsByAccount,
       }),
       creditCard: splitSeriesBySign({
         series: creditCardSeries,
         snapshotDate: dateStr,
         partition: ACCOUNT_CATEGORIES.creditCard,
         userId,
+        creditLimitCentsByAccount,
       }),
       overdraft: splitSeriesBySign({
         series: overdraftSeries,
         snapshotDate: dateStr,
         partition: ACCOUNT_CATEGORIES.overdraft,
         userId,
+        creditLimitCentsByAccount,
       }),
       loanCents: resolveLoan(dateStr),
       portfolioCents: asCents(

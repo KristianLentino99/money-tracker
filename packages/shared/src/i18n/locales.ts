@@ -8,6 +8,8 @@ export const SUPPORTED_LOCALES = {
   SPANISH: 'es',
   INDONESIAN: 'id',
   ITALIAN: 'it',
+  RUSSIAN: 'ru',
+  SLOVAK: 'sk',
 } as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[keyof typeof SUPPORTED_LOCALES];
@@ -18,6 +20,8 @@ export const DEFAULT_LOCALE: SupportedLocale = SUPPORTED_LOCALES.ENGLISH;
 export const COMMUNITY_LOCALES: ReadonlySet<SupportedLocale> = new Set([
   SUPPORTED_LOCALES.SPANISH,
   SUPPORTED_LOCALES.INDONESIAN,
+  SUPPORTED_LOCALES.RUSSIAN,
+  SUPPORTED_LOCALES.SLOVAK,
 ]);
 
 export const LOCALE_NAMES: Record<SupportedLocale, { native: string; english: string }> = {
@@ -40,6 +44,14 @@ export const LOCALE_NAMES: Record<SupportedLocale, { native: string; english: st
   [SUPPORTED_LOCALES.ITALIAN]: {
     native: 'Italiano',
     english: 'Italian',
+  },
+  [SUPPORTED_LOCALES.RUSSIAN]: {
+    native: 'Русский',
+    english: 'Russian',
+  },
+  [SUPPORTED_LOCALES.SLOVAK]: {
+    native: 'Slovenčina',
+    english: 'Slovak',
   },
 };
 

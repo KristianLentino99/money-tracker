@@ -40,34 +40,47 @@ const GUARD_EXEMPT_ROUTES = new Set<string>([
   'POST /api/v1/notifications/read-all',
   'POST /api/v1/notifications/:id/read',
 
+  // Billing and admin plan grants: Stripe sessions and plan flags, no monetary data.
+  'PATCH /api/v1/admin/users/:id/plan',
+  'POST /api/v1/billing/checkout',
+  'POST /api/v1/billing/portal',
+
   // Lease extension writes no financial data, and refusing it mid-wizard would
   // drop the user's upload for nothing.
   'POST /api/v1/resource-leases/refresh',
 
   // User profile / settings / AI settings / data-export — authenticated but touch no
   // monetary data; blocking them for the duration of a migration is user-hostile.
-  'DELETE /api/v1/user/settings/ai/api-keys',
-  'DELETE /api/v1/user/settings/ai/api-keys/all',
-  'DELETE /api/v1/user/settings/ai/custom-endpoints/:id',
+  'DELETE /api/v1/user/settings/ai/connections/:id',
   'DELETE /api/v1/user/settings/ai/features/:feature',
   'DELETE /api/v1/user/settings/mcp/connected-apps/:clientId',
   'PATCH /api/v1/user/settings',
   'POST /api/v1/user/backup',
   'POST /api/v1/user/data-export',
-  'POST /api/v1/user/settings/ai/custom-endpoints',
-  'POST /api/v1/user/settings/ai/custom-endpoints/test',
+  'POST /api/v1/user/feature-trials/:feature',
+  'POST /api/v1/user/settings/ai/connections',
+  'POST /api/v1/user/settings/ai/connections/:id/default',
+  'POST /api/v1/user/settings/ai/connections/models',
+  'POST /api/v1/user/settings/ai/connections/test',
   'PUT /api/v1/user/settings',
-  'PUT /api/v1/user/settings/ai/api-keys',
-  'PUT /api/v1/user/settings/ai/api-keys/default',
-  'PUT /api/v1/user/settings/ai/custom-endpoints/:id',
+  'PUT /api/v1/user/settings/ai/connections/:id',
   'PUT /api/v1/user/settings/ai/custom-instructions',
   'PUT /api/v1/user/settings/ai/features/:feature',
   'PUT /api/v1/user/settings/onboarding',
   'PUT /api/v1/user/update',
 
+  // Invoice matching only ranks candidates; the one write is the non-monetary trial counter.
+  'POST /api/v1/transactions/match-invoice',
+  'POST /api/v1/transactions/match-invoice/candidates',
+
   // AI categorization writes categoryId/categorizationMeta only, never ref amounts,
   // so a base-currency migration and a run cannot corrupt each other.
   'POST /api/v1/user/ai/categorization/trigger',
+
+  // Attachments are files on a transaction; they touch no amounts.
+  'DELETE /api/v1/attachments/:id',
+  'POST /api/v1/transactions/:transactionId/attachments',
+  'POST /api/v1/tests/attachment-upload-token',
 
   // AI suggestion call — reads nothing monetary, writes nothing.
   'POST /api/v1/import/ai-map-categories',

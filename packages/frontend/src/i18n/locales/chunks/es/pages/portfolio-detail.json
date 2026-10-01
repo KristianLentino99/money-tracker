@@ -173,6 +173,7 @@
         "addFirstButton": "Añadir primera transacción"
       },
       "closedPositions": "Posiciones cerradas ({count})",
+      "stalePrice": "Último precio disponible. El valor del mercado y las ganancias pueden estar desactualizadas.",
       "deleteHolding": {
         "ariaLabel": "Eliminar posición",
         "title": "Eliminar posición",

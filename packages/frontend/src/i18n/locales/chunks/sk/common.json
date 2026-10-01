@@ -1,0 +1,479 @@
+{
+  "common": {
+    "loading": "Načítavanie...",
+    "new": "Nové",
+    "actions": {
+      "loading": "Načítavanie...",
+      "signUp": "Zaregistrovať sa",
+      "save": "Uložiť",
+      "cancel": "Zrušiť",
+      "back": "Späť",
+      "accept": "Potvrdiť",
+      "delete": "Zmazať",
+      "edit": "Upraviť",
+      "addSubcategory": "Pridať podkategóriu",
+      "settings": "Nastavenia",
+      "confirm": "Potvrdiť",
+      "viewTransactions": "Zobraziť transakcie",
+      "viewAnalytics": "Zobraziť analytiku",
+      "saving": "Ukladanie...",
+      "saveChanges": "Uložiť zmeny",
+      "done": "Hotovo",
+      "failed": "Zlyhalo",
+      "viewAll": "Zobraziť všetko",
+      "scan": "Skenovať",
+      "link": "Odkaz",
+      "clear": "Vymazať",
+      "apply": "Použiť",
+      "retry": "Skúsiť znova",
+      "copyInviteLink": "Kopírovať pozývací odkaz",
+      "moveTo": "Presunúť do…",
+      "learnMore": "Zistiť viac"
+    },
+    "ui": {
+      "close": "Zavrieť",
+      "actions": "Akcie",
+      "chooseAction": "Vyberte akciu",
+      "other": "Ostatné",
+      "refund": "Vrátenie platby",
+      "split": "Rozdeliť",
+      "deletedBadge": "Zmazané"
+    },
+    "components": {
+      "statusIndicator": {
+        "autoMatched": "Automaticky priradené",
+        "suggested": "Navrhnuté",
+        "willCreate": "Vytvorí sa",
+        "needsAttention": "Vyžaduje pozornosť",
+        "invalid": "Neplatné",
+        "optional": "Voliteľné",
+        "skipped": "Preskočené"
+      },
+      "selectField": {
+        "clearSelection": "Zrušiť výber"
+      }
+    },
+    "errors": {
+      "copyToClipboardFailed": "Kopírovanie do schránky zlyhalo"
+    },
+    "notifications": {
+      "subscriptionCurrencyNotConnected": "Súhrn predplatných nedokáže prepočítať {currencies} na vašu základnú menu. Pripojte menu v Nastavenia → Meny.",
+      "backgroundJobFailed": "Počas vašej neprítomnosti zlyhala úloha na pozadí: {error}",
+      "inviteLinkCopied": "Pozývací odkaz skopírovaný do schránky"
+    },
+    "sharing": {
+      "emailNotSent": "Odosielanie emailov nie je nastavené — zdieľajte pozývací odkaz ručne"
+    },
+    "labels": {
+      "email": "Email",
+      "password": "Heslo",
+      "system": "systém",
+      "unknown": "Neznáme",
+      "total": "Spolu"
+    },
+    "placeholders": {
+      "email": "vas{'@'}email.sk",
+      "password": "Vaše heslo"
+    },
+    "dialogs": {
+      "createAccount": "Vytvoriť účet",
+      "createVehicle": "Pridať vozidlo",
+      "editVehicle": "Upraviť vozidlo"
+    },
+    "accountCategories": {
+      "general": "Všeobecné",
+      "cash": "Hotovosť",
+      "currentAccount": "Bežný účet",
+      "creditCard": "Kreditná karta",
+      "saving": "Sporiaci účet",
+      "bonus": "Bonus",
+      "insurance": "Poistenie",
+      "investment": "Investície",
+      "loan": "Pôžička",
+      "mortgage": "Hypotéka",
+      "overdraft": "Kontokorent",
+      "crypto": "Kryptomeny",
+      "vehicle": "Vozidlo"
+    },
+    "paymentTypes": {
+      "creditCard": "Kreditná karta",
+      "bankTransfer": "Bankový prevod",
+      "cash": "Hotovosť",
+      "debitCard": "Debetná karta",
+      "mobilePayment": "Mobilná platba",
+      "voucher": "Poukaz",
+      "webPayment": "Platba cez web"
+    },
+    "vehicleClasses": {
+      "sedan": "Sedan",
+      "suv": "SUV",
+      "truck": "Nákladné vozidlo",
+      "luxury": "Luxusné vozidlo",
+      "ev": "Elektrické vozidlo",
+      "motorcycle": "Motorka",
+      "other": "Ostatné"
+    },
+    "depreciationPresets": {
+      "classDefault": "Predvolené pre triedu",
+      "slow": "Pomalé",
+      "average": "Priemer",
+      "fast": "Rýchle",
+      "custom": "Vlastná sadzba"
+    },
+    "aiFeatures": {
+      "categorization": {
+        "name": "Kategorizácia transakcií",
+        "description": "Automaticky zaraďuje transakcie do kategórií na základe popisu a obchodníka"
+      },
+      "statementParsing": {
+        "name": "Analyzátor výpisov",
+        "description": "Vyťaženie transakcií z bankových výpisov (PDF, CSV, TXT) pomocou AI"
+      },
+      "investmentTransactionsParsing": {
+        "name": "Import investičných transakcií",
+        "description": "Transakcie nákupu a predaja vyťažené pomocou AI z exportov z burzy, výpisov brokera alebo vloženého textu."
+      },
+      "receiptParsing": {
+        "name": "Priraďovanie faktúr",
+        "description": "Prečíta nahranú faktúru alebo účtenku a nájde transakciu, ku ktorej patrí."
+      }
+    },
+    "transactions": {
+      "delete": {
+        "success": "Úspešne odstránené",
+        "error": "Transakciu sa nepodarilo zmazať!"
+      },
+      "submit": {
+        "unexpectedError": "Neočakávaná chyba!"
+      },
+      "unlink": {
+        "error": "Transakcie sa nepodarilo odpojiť!"
+      },
+      "record": {
+        "addedByTooltip": "Túto transakciu priradil k rozpočtu používateľ {handle}",
+        "externalLinkTooltip": "Otvoriť externý odkaz",
+        "locationTooltip": "Otvoriť polohu na mape",
+        "attachmentsTooltip": "Obsahuje prílohy",
+        "hiddenAccount": "Skrytý účet",
+        "selectRow": "Vybrať transakciu",
+        "unselectableReasons": {
+          "sharedAccount": "Nedá sa vybrať: táto transakcia je na účte zdieľanom s vami a upravovať ju môže len jeho vlastník."
+        }
+      }
+    },
+    "outOfWallet": "Mimo peňaženky",
+    "dateSelector": {
+      "dialogTitle": "Rozsah dátumov",
+      "dueDate": "Dátum splatnosti",
+      "quickSelect": "Rýchly výber",
+      "apply": "Použiť",
+      "periodTypes": {
+        "day": "Deň",
+        "month": "Mesiac",
+        "quarter": "Štvrťrok",
+        "halfYear": "Polrok",
+        "year": "Rok"
+      },
+      "filterModes": {
+        "is": "je",
+        "before": "pred",
+        "after": "po",
+        "between": "medzi"
+      },
+      "currentMonth": "Aktuálny mesiac",
+      "placeholders": {
+        "day": "Skúste: 2025-03-15, 03/15/2025",
+        "month": "Skúste: Jan 2025, 03/2025",
+        "quarter": "Skúste: Q1, Q4 2025",
+        "halfYear": "Skúste: H1, H2 2025",
+        "year": "Skúste: 2025, 2024",
+        "default": "Skúste: 2025, Q4, Jan 2025"
+      }
+    },
+    "appUpdate": {
+      "title": "K dispozícii je aktualizácia",
+      "description": "Je pripravená nová verzia. Obnovte stránku a získajte najnovšie vylepšenia.",
+      "reload": "Obnoviť"
+    },
+    "resourceLease": {
+      "activeLabel": "Záznamy aktívne",
+      "expiredLabel": "Relácia vypršala",
+      "defaultResourceLabel": "Tento zdroj",
+      "activeTooltip": "{resource} zostáva na serveri a povolená je približne {duration} nečinnosti. Ak budete pokračovať v práci, zostane dostupný.",
+      "countingDownTooltip": "{resource} sa uvoľní za {time} kvôli neaktivite. Ak s ním chcete pracovať ďalej, urobte na stránke nejakú akciu.",
+      "cappedTooltip": "{resource} sa uvoľní za {time}. Bola dosiahnutá maximálna dĺžka relácie, preto sa už nedá predĺžiť.",
+      "expiredTooltip": "{resource} bol zo servera uvoľnený. Ak chcete pokračovať, začnite znova.",
+      "status": {
+        "active": "{resource} zostáva dostupný.",
+        "countingDown": "{resource} sa čoskoro uvoľní.",
+        "expired": "{resource} bol uvoľnený."
+      },
+      "duration": {
+        "seconds": "{count} sekunda | {count} sekúnd",
+        "minutes": "{count} minúta | {count} minút",
+        "hours": "{count} hodina | {count} hodín"
+      }
+    },
+    "logo": {
+      "tabs": {
+        "brand": "Značka",
+        "letters": "Písmená"
+      },
+      "searchPlaceholder": "Názov značky alebo doména",
+      "searchHint": "Zadajte názov značky alebo doménu, napríklad amazon.com",
+      "noResults": "Nenašli sa žiadne zodpovedajúce značky.",
+      "noResultsLettersHint": "Použiť namiesto toho písmená",
+      "useDomainDirectly": "Použiť {domain}",
+      "autoLabel": "Automaticky (z názvu)",
+      "domainHint": "Ak chcete nájsť presnú značku, zadajte doménu webovej stránky spoločnosti (napr. amazon.com) — tá vždy priradí správne logo.",
+      "searchError": "Logá sa nepodarilo načítať — skúste to znova",
+      "brandNotConfigured": "Logá značiek nie sú na tejto inštancii nastavené. Požiadajte správcu o nastavenie VITE_LOGO_DEV_TOKEN, alebo použite namiesto toho písmená.",
+      "editAriaLabel": "Upraviť logo",
+      "dialogTitle": "Zmeniť logo",
+      "resetToAuto": "Vrátiť na automatické",
+      "remove": "Odstrániť logo",
+      "lettersLabel": "Písmená (1-2)",
+      "lettersPlaceholder": "AB",
+      "colorLabel": "Farba",
+      "colorSwatchAriaLabel": "Použiť farbu {color}",
+      "customColorAriaLabel": "Vybrať vlastnú farbu",
+      "applyLetters": "Použiť",
+      "lettersSelectedLabel": "Písmená “{letters}”"
+    },
+    "importBatchDeleteOverlay": {
+      "title": "Mažú sa importované transakcie",
+      "description": "Odstraňuje sa veľká dávka importu. Po jej dokončení sa prepočítajú zostatky, dovtedy je aplikácia uzamknutá.",
+      "deleting": "Mažú sa transakcie",
+      "preparing": "Pripravuje sa",
+      "finishing": "Dokončuje sa",
+      "takingLong": "Toto trvá dlhšie než zvyčajne — veľké dávky môžu trvať niekoľko minút. Nechajte túto stránku otvorenú.",
+      "unreachableTitle": "Server nedostupný",
+      "unreachableDescription": "Mazanie stále môže prebiehať. Toto okno zavrite, ak chcete pokračovať v používaní aplikácie, a výsledok zistíte neskôr obnovením stránky.",
+      "failedTitle": "Zmazanie zlyhalo",
+      "dismiss": "Zavrieť"
+    },
+    "duration": {
+      "years": "{n} r. | {n} r.",
+      "months": "{n} mes. | {n} mes."
+    },
+    "fire": {
+      "targets": {
+        "lean": "Lean FIRE",
+        "regular": "FIRE",
+        "fat": "Fat FIRE"
+      }
+    },
+    "cancel": "Cancel"
+  },
+  "accountGroups": {
+    "create": {
+      "error": "Vytvorenie skupiny zlyhalo"
+    },
+    "update": {
+      "success": "Skupina bola aktualizovaná",
+      "error": "Skupinu sa nepodarilo aktualizovať"
+    },
+    "delete": {
+      "success": "Skupina bola zmazaná",
+      "error": "Skupinu sa nepodarilo zmazať"
+    },
+    "link": {
+      "success": "Účet bol pridaný do skupiny",
+      "error": "Účet sa nepodarilo pridať do skupiny"
+    },
+    "unlink": {
+      "success": "Účet bol odstránený zo skupiny",
+      "error": "Účet sa nepodarilo odstrániť zo skupiny"
+    }
+  },
+  "validation": {
+    "minLength": "Minimálna dĺžka je {length}.",
+    "emailInvalid": "Zadajte platnú emailovú adresu, prosím.",
+    "passwordsNoMatch": "Heslá sa nezhodujú"
+  },
+  "notifications": {
+    "title": "Upozornenia",
+    "markAllAsRead": "Označiť všetky ako prečítané",
+    "empty": "Zatiaľ žiadne upozornenia",
+    "containerAriaLabel": "Upozornenia",
+    "closeToast": "Zavrieť upozornenie",
+    "viewOnGitHub": "Zobraziť na GitHub",
+    "newVersion": "Nová verzia {version}",
+    "newRelease": "Nová verzia",
+    "tagReminder": {
+      "thresholdMessage": "minuté {amount} (hranica: {threshold})",
+      "existenceMessage": "{count} transakcia | {count} transakcií"
+    },
+    "share": {
+      "sendFailedHint": "Ak chcete odoslať znova, otvorte panel zdieľania."
+    }
+  },
+  "currencyNames": {
+    "UAH": "Ukrajinská hrivna",
+    "USD": "Americký dolár",
+    "EUR": "Euro",
+    "GBP": "Britská libra šterling",
+    "JPY": "Japonský jen",
+    "CHF": "Švajčiarsky frank",
+    "CAD": "Kanadský dolár",
+    "AUD": "Austrálsky dolár",
+    "NZD": "Novozélandský dolár",
+    "CNY": "Čínsky juan",
+    "HKD": "Hongkongský dolár",
+    "SGD": "Singapúrsky dolár",
+    "SEK": "Švédska koruna",
+    "NOK": "Nórska koruna",
+    "DKK": "Dánska koruna",
+    "PLN": "Poľský zlotý",
+    "CZK": "Česká koruna",
+    "HUF": "Maďarský forint",
+    "RON": "Rumunský lei",
+    "BGN": "Bulharský lev",
+    "HRK": "Chorvátska kuna",
+    "RSD": "Srbský dinár",
+    "TRY": "Turecká líra",
+    "RUB": "Ruský rubeľ",
+    "BYN": "Bieloruský rubeľ",
+    "KZT": "Kazašské tenge",
+    "INR": "Indická rupia",
+    "IDR": "Indonézska rupia",
+    "MYR": "Malajzský ringgit",
+    "PHP": "Filipínske peso",
+    "THB": "Thajský baht",
+    "VND": "Vietnamský dong",
+    "KRW": "Juhokórejský won",
+    "TWD": "Nový taiwanský dolár",
+    "BRL": "Brazílsky real",
+    "MXN": "Mexické peso",
+    "ARS": "Argentínske peso",
+    "CLP": "Čílske peso",
+    "COP": "Kolumbijské peso",
+    "PEN": "Peruánsky sol",
+    "ZAR": "Juhoafrický rand",
+    "EGP": "Egyptská libra",
+    "AED": "Dirham",
+    "SAR": "Saudský rijál",
+    "ILS": "Izraelský nový šekel",
+    "QAR": "Katarský rial",
+    "KWD": "Kuvajtský dinár",
+    "BHD": "Bahrajnský dinár",
+    "OMR": "Ománsky rial",
+    "JOD": "Jordánsky dinár",
+    "MAD": "Marocký dirham",
+    "NGN": "Nigérijská naira",
+    "KES": "Keňský šiling",
+    "GHS": "Ghanské cedi",
+    "XOF": "CFA Franc BCEAO",
+    "XAF": "CFA Franc BEAC",
+    "BTC": "Bitcoin",
+    "ETH": "Ethereum"
+  },
+  "fileDropzone": {
+    "clickOrDrag": "Kliknite sem alebo sem presuňte súbor",
+    "clickOrDragMultiple": "Kliknite sem alebo sem presuňte CSV súbory",
+    "dropHere": "Súbor pustite sem a nahrajte ho",
+    "dropHereMultiple": "Súbory pustite sem",
+    "removeFile": "Odstrániť súbor",
+    "fileTooLarge": "Súbor je príliš veľký. Maximálna veľkosť je {max}.",
+    "fileTooLargeNamed": "{name} je väčší než {max}",
+    "filesSelected": "Vybraný súbor: {count} | Vybrané súbory: {count}",
+    "clearAll": "Vymazať všetko",
+    "onlyFirstFileTaken": "Bolo pretiahnutých viac súborov — použil sa len prvý."
+  },
+  "demo": {
+    "featureNotAvailable": "Táto funkcia nie je v demo režime dostupná",
+    "passwordChangeRestricted": "Zmena hesla nie je v demo režime dostupná",
+    "investmentsRestricted": {
+      "title": "Investície nie sú v demo verzii dostupné",
+      "description": "Funkcia investícií nie je v demo režime dostupná. Ak chcete sledovať investície, zaregistrujte si, prosím, plný účet."
+    },
+    "banner": {
+      "message": "Prezeráte si demo s ukážkovými údajmi{time}. {signUpLink} a vytvorte si vlastný účet.",
+      "resets": "reset o {time}",
+      "signUp": "Zaregistrovať sa",
+      "timeFormat": {
+        "hoursMinutes": "{hours} h {minutes} min",
+        "minutes": "{minutes} min"
+      }
+    },
+    "sessionExpiredNotice": "Vaša demo relácia sa skončila. Ak chcete pokračovať, vytvorte si bezplatný účet, alebo sa nižšie prihláste, ak už účet máte."
+  },
+  "billing": {
+    "seePlans": "Zobraziť plány",
+    "updatePaymentMethod": "Aktualizovať spôsob platby",
+    "planRequired": {
+      "essential": "Súčasť plánu Essential",
+      "plus": "Súčasť plánu Plus",
+      "hint": "Váš súčasný plán túto funkciu neobsahuje. Ak ju chcete odomknúť, prejdite na vyšší plán."
+    },
+    "banner": {
+      "trial": "V skúšobnej verzii zostáva {count} deň · {link} | V skúšobnej verzii zostáva {count} dní · {link}",
+      "readOnly": "Vaša skúšobná verzia sa skončila. Údaje si môžete prezerať a exportovať; na ich ďalšiu úpravu si predplaťte plán. {link}",
+      "subscriptionEnded": "Vaše predplatné sa skončilo. {link}, ak chcete pokračovať v úprave svojich údajov.",
+      "pastDue": "Vaša posledná platba zlyhala. {link}, ak si chcete plán zachovať."
+    }
+  },
+  "settings": {
+    "currencies": {
+      "setBase": {
+        "overlay": {
+          "title": "Mení sa vaša základná mena",
+          "description": "Prepočítavame všetky sumy na vašu novú základnú menu. Môže to trvať niekoľko minút — nechajte túto kartu otvorenú, prosím.",
+          "takingLong": "Toto trvá dlhšie než zvyčajne. Vaše údaje sú v bezpečí — stále na tom pracujeme.",
+          "failedTitle": "Zmena základnej meny zlyhala",
+          "unreachableTitle": "Stav zmeny sa nedá overiť",
+          "unreachableDescription": "Server neodpovedá. Túto obrazovku môžete zavrieť — ak zmena stále prebieha, aplikácia sa pri ďalšej akcii znova uzamkne.",
+          "dismiss": "Zavrieť",
+          "preparing": "Všetko pripravujeme…",
+          "finishing": "Dokončujeme...",
+          "steps": {
+            "transactions": "Aktualizujú sa transakcie",
+            "accounts": "Aktualizujú sa účty",
+            "loanDetails": "Aktualizujú sa pôžičky",
+            "balances": "Prestavuje sa história zostatkov",
+            "investmentTransactions": "Aktualizujú sa investičné transakcie",
+            "portfolioTransfers": "Aktualizujú sa prevody portfólia",
+            "holdings": "Aktualizujú sa pozície",
+            "portfolioBalances": "Prestavujú sa zostatky portfólia"
+          }
+        }
+      }
+    }
+  },
+  "ai": {
+    "estimatedCost": {
+      "yourApiKey": "(váš API kľúč)",
+      "setByEndpoint": "Ocenené vaším poskytovateľom"
+    }
+  },
+  "transactionGroups": {
+    "groupDialog": {
+      "editTitle": "Upraviť skupinu",
+      "nameLabel": "Názov",
+      "noteLabel": "Poznámka (voliteľné)",
+      "notePlaceholder": "Voliteľná poznámka...",
+      "loadingText": "Načítavanie...",
+      "savingAction": "Uložiť",
+      "cancelButton": "Zrušiť",
+      "editAction": "Upraviť",
+      "deleteAction": "Zmazať skupinu",
+      "transactionsLabel": "Transakcie",
+      "deleteGroupTitle": "Zmazať skupinu",
+      "deleteGroupDescription": "Naozaj chcete zmazať „{groupName}\"? Transakcie zmazané nebudú.",
+      "removeTransactionTitle": "Odstrániť transakciu zo skupiny",
+      "removeTransactionDescription": "V skupine by tak zostali menej než 2 transakcie, preto sa skupina zmaže. Pokračovať?",
+      "removeTransactionDescriptionNormal": "Naozaj chcete odstrániť túto transakciu zo skupiny?",
+      "removeButtonText": "Odstrániť",
+      "removeAndDeleteButtonText": "Odstrániť a zmazať skupinu",
+      "summary": {
+        "transactions": "Transakcie",
+        "net": "Čistý zostatok",
+        "moneyIn": "Prijaté",
+        "moneyOut": "Odoslané"
+      }
+    },
+    "transactionGroupRecord": {
+      "transactionCountLabel": "transakcie"
+    }
+  }
+}

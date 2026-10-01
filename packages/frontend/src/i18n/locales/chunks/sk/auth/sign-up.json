@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "signup": {
+      "title": "Vytvoriť účet",
+      "divider": "alebo pokračujte pomocou emailu",
+      "submitButton": "Zaregistrovať sa",
+      "alreadyHaveAccount": "Už máte účet?\t",
+      "signInLink": "Prihlásiť sa",
+      "labels": {
+        "displayName": "Zobrazované meno",
+        "verifyPassword": "Overenie hesla"
+      },
+      "placeholders": {
+        "displayName": "napr. Janko Mrkvička",
+        "verifyPassword": "Potvrďte heslo"
+      },
+      "errors": {
+        "invalidEmail": "Zadajte platnú emailovú adresu, prosím.",
+        "passwordTooShort": "Heslo je príliš krátke.",
+        "passwordTooLong": "Heslo je príliš dlhé.",
+        "invalidPassword": "Neplatné heslo.",
+        "userExists": "Používateľ s týmto emailom už existuje.",
+        "signupsDisabled": "Správca tejto inštancie zakázal registráciu.",
+        "genericErrorRetry": "Vyskytla sa chyba. Skúste to znova, prosím.",
+        "oauthFailed": "Registrácia cez {provider} sa nepodarila. Skúste to znovu, prosím.",
+        "oauthNotConfigured": "Na tomto serveri nie je nakonfigurované prihlasovanie cez {provider}."
+      }
+    },
+    "shared": {
+      "divider": "alebo pokračujte pomocou",
+      "passkeyButton": {
+        "signIn": "Prihláste sa pomocou prístupového kľúča",
+        "register": "Pridať prístupový kľúč"
+      },
+      "oauthButton": {
+        "signIn": "Prihlásiť sa cez {provider}",
+        "signUp": "Zaregistrovať sa cez {provider}"
+      }
+    }
+  }
+}

@@ -1,10 +1,5 @@
 <template>
   <div class="@container/pivot-report space-y-5">
-    <div>
-      <h1 class="text-lg font-semibold">{{ $t('pivotReport.title') }}</h1>
-      <p class="text-muted-foreground text-sm">{{ $t('pivotReport.subtitle') }}</p>
-    </div>
-
     <PivotConfigPanel
       v-model:row-dimension="persisted.rowDimension"
       v-model:granularity="persisted.granularity"
@@ -74,6 +69,7 @@
 
 <script setup lang="ts">
 import type { SavedPivotView, SavedPivotViewConfig } from '@/api/user-settings';
+import { randomId } from '@/common/utils/random-id';
 import Button from '@/components/lib/ui/button/Button.vue';
 import { useNotificationCenter } from '@/components/notification-center';
 import { useUserSettings } from '@/composable/data-queries/user-settings';
@@ -186,7 +182,7 @@ const applySavedConfig = (config: SavedPivotViewConfig) => {
 
 const onSaveView = async ({ name }: { name: string }) => {
   try {
-    const newView: SavedPivotView = { id: crypto.randomUUID(), name, config: currentSavedConfig.value };
+    const newView: SavedPivotView = { id: randomId(), name, config: currentSavedConfig.value };
     await patchAsync({ savedPivotViews: [...savedViews.value, newView] });
     addSuccessNotification(t('pivotReport.savedViews.savedToast'));
   } catch {

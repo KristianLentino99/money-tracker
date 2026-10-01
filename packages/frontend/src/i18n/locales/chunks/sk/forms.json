@@ -1,0 +1,385 @@
+{
+  "forms": {
+    "investmentTransaction": {
+      "typeLabel": "Typ transakcie",
+      "types": {
+        "buy": "Nákup",
+        "sell": "Predaj",
+        "dividend": "Dividenda",
+        "fee": "Poplatok",
+        "tax": "Daň"
+      },
+      "securityLabel": "Cenný papier",
+      "securityPlaceholder": "Vyberte cenný papier",
+      "quantityLabel": "Množstvo",
+      "quantityPlaceholder": "0,00",
+      "priceLabel": "Cena za akciu",
+      "pricePlaceholder": "0,00",
+      "priceHelp": "Použite 0 pri stakingových odmenách, airdropoch alebo úpravách zostatku.",
+      "feesLabel": "Poplatky (voliteľné)",
+      "feesPlaceholder": "0,00",
+      "dateLabel": "Dátum transakcie",
+      "noteLabel": "Poznámka",
+      "notePlaceholder": "Voliteľné. Pridajte poznámku k tejto transakcii",
+      "cancelButton": "Zrušiť",
+      "submitButton": "Vytvoriť transakciu",
+      "submitButtonLoading": "Vytváranie...",
+      "notifications": {
+        "success": "Transakcia bola úspešne vytvorená.",
+        "error": "Transakciu sa nepodarilo vytvoriť."
+      },
+      "settlement": {
+        "toggleLabel": "Zadajte skutočnú hotovostnú sumu",
+        "toggleHint": "Použite, keď sa obchod vyrovnal v inej mene, alebo keď poznáte len celkovú sumu a chcete, aby sa poplatok odvodil automaticky",
+        "currencyLabel": "Mena platby",
+        "currencyPlaceholder": "Vyberte menu",
+        "totalPaidLabel": "Celkovo zaplatené",
+        "totalReceivedLabel": "Celkovo prijaté",
+        "totalPlaceholder": "napr. 1700",
+        "feeLabel": "Poplatok (v mene platby)",
+        "feePlaceholder": "0",
+        "sameCurrencyFeeHint": "Poplatok sa zaznamená ako rozdiel medzi celkovou sumou a súčinom množstva a ceny.",
+        "crossCurrencyFeeHint": "Explicitný poplatok od brokera. Akýkoľvek rozdiel z výmenného kurzu sa zachytí v prepočítacom kurze obchodu.",
+        "modeFee": "Poznám poplatok",
+        "modeAuto": "Automaticky",
+        "modeRate": "Poznám poplatok",
+        "rateLabel": "Výmenný kurz",
+        "ratePlaceholder": "napr. 3.66",
+        "rateHint": "Jednotky vyrovnávacej meny na 1 jednotku meny cenného papiera. Poplatok sa zaznamená ako rozdiel medzi celkovou sumou a súčinom množstva, ceny a kurzu.",
+        "autoHint": "Poplatok sa odvodí automaticky podľa trhového výmenného kurzu k dátumu transakcie.",
+        "previewRate": "≈ zaznamená sa výmenný kurz {rate}",
+        "previewFee": "≈ zaznamená sa poplatok {fee} {currency} (kurz {rate})",
+        "previewUnavailable": "Pre tento dátum sa nenašiel žiadny trhový kurz — zadajte poplatok alebo výmenný kurz ručne.",
+        "previewFetchFailed": "Trhové kurzy sa nepodarilo načítať. Skontrolujte pripojenie, alebo zadajte kurz ručne.",
+        "previewPlaceholder": "Náhľad sa zobrazí tu, ako budete vypĺňať formulár."
+      }
+    },
+    "portfolioSettings": {
+      "nameLabel": "Názov portfólia",
+      "namePlaceholder": "Moje investičné portfólio",
+      "nameRequired": "Názov je povinný",
+      "typeLabel": "Typ portfólia",
+      "typePlaceholder": "Vyberte typ portfólia",
+      "descriptionLabel": "Popis (voliteľný)",
+      "descriptionPlaceholder": "Krátky popis tohto portfólia...",
+      "displayCurrencyLabel": "Zobrazovaná mena",
+      "displayCurrencyPlaceholder": "Vyberte zobrazovanú menu",
+      "displayCurrencyBaseOption": "Základná mena ({code})",
+      "displayCurrencyDescription": "Hodnota portfólia a štatistiky sa prepočítavajú na túto menu podľa aktuálneho výmenného kurzu.",
+      "cancelButton": "Zrušiť",
+      "submitButton": "Uložiť zmeny",
+      "submitButtonLoading": "Ukladanie...",
+      "notifications": {
+        "success": "Portfólio bolo úspešne aktualizované.",
+        "error": "Portfólio sa nepodarilo aktualizovať. Skúste to znova, prosím."
+      },
+      "manualTrackingLabel": "Track value manually",
+      "manualTrackingDescription": "Uses this portfolio display currency for reported valuations. This choice is locked after portfolio history exists."
+    },
+    "portfolioTransfer": {
+      "transferTypeLabel": "Typ prevodu",
+      "transferTypes": {
+        "portfolioToPortfolio": "Do iného portfólia",
+        "portfolioToAccount": "Na účet",
+        "accountToPortfolio": "Do portfólia"
+      },
+      "comingSoonNotice": "💡 Prevody z účtu do portfólia pribudnú v budúcej aktualizácii!",
+      "fromPortfolioLabel": "Z portfólia",
+      "fromPortfolioPlaceholder": "Vyberte zdrojové portfólio",
+      "fromAccountLabel": "Z účtu",
+      "fromAccountPlaceholder": "Vyberte zdrojový účet",
+      "toPortfolioLabel": "Do portfólia",
+      "toPortfolioPlaceholder": "Vyberte cieľové portfólio",
+      "toAccountLabel": "Na účet",
+      "toAccountPlaceholder": "Vyberte cieľový účet",
+      "currencyLabel": "Mena",
+      "currencyPlaceholder": "Vyberte menu",
+      "amountLabel": "Suma",
+      "amountLabelWithCurrency": "Suma ({currency})",
+      "amountPlaceholder": "0,00",
+      "dateLabel": "Dátum",
+      "descriptionLabel": "Popis (voliteľný)",
+      "descriptionPlaceholder": "Pridajte poznámku k tomuto prevodu...",
+      "cancelButton": "Zrušiť",
+      "submitButton": "Prevod",
+      "submitButtonLoading": "Prebieha spracovanie...",
+      "confirmDialog": {
+        "title": "Potvrďte prevod",
+        "description": "Vytvorí sa {action} vo výške {amount} z {from} do {to}",
+        "actionTransfer": "prevod",
+        "actionWithdrawal": "výber",
+        "actionDeposit": "vklad",
+        "cancelButton": "Zrušiť",
+        "confirmButton": "Potvrďte prevod"
+      },
+      "validation": {
+        "required": "Toto pole je povinné",
+        "minValue": "Suma musí byť väčšia než 0"
+      },
+      "notifications": {
+        "comingSoon": "Prevody z účtu do portfólia pribudnú v budúcej aktualizácii!",
+        "success": "Prevod bol úspešne dokončený.",
+        "error": "Prevod zlyhal. Skúste to znova, prosím."
+      },
+      "linkExistingTransaction": "Prepojiť s existujúcou transakciou",
+      "linkedTransactionLabel": "Transakcia",
+      "noPortfoliosAvailable": "Nie sú dostupné žiadne iné portfóliá"
+    },
+    "createAccount": {
+      "nameLabel": "Názov účtu",
+      "namePlaceholder": "Názov účtu",
+      "currencyLabel": "Mena",
+      "currencyPlaceholder": "Vyberte menu",
+      "addCurrencyButton": "Pridať novú menu +",
+      "initialBalanceLabel": "Počiatočný zostatok",
+      "initialBalancePlaceholder": "Počiatočný zostatok",
+      "initialBalanceHelpLink": "Čo mám zadať?",
+      "accountCategoryLabel": "Kategória účtu",
+      "accountCategoryPlaceholder": "Vyberte kategóriu účtu",
+      "creditLimitLabel": "Úverový limit",
+      "creditLimitPlaceholder": "Úverový limit",
+      "submitButton": "Vytvoriť",
+      "submitButtonLoading": "Vytváranie...",
+      "notifications": {
+        "success": "Úspešne vytvorené.",
+        "error": "Neočakávaná chyba."
+      }
+    },
+    "directCashTransaction": {
+      "methodTypes": {
+        "direct": "Priama",
+        "transfer": "Prevod"
+      },
+      "operationTypes": {
+        "deposit": "Vklad",
+        "withdrawal": "Výber"
+      },
+      "fromAccountLabel": "Z účtu",
+      "toAccountLabel": "Na účet",
+      "accountPlaceholder": "Vyberte účet",
+      "orSeparator": "alebo",
+      "linkExistingTransaction": "Prepojiť s existujúcou transakciou",
+      "linkedTransactionLabel": "Prepojená transakcia",
+      "amountLabel": "Suma",
+      "amountPlaceholder": "Zadajte sumu",
+      "currencyLabel": "Mena",
+      "currencyPlaceholder": "Vyberte menu",
+      "dateLabel": "Dátum",
+      "descriptionLabel": "Popis",
+      "adjustmentLabel": "Toto je úprava zostatku",
+      "adjustmentHint": "Hotovostný zostatok sa aj tak zmení, no v prehľade Vklady do investícií sa to nezapočíta ako vami vložené peniaze.",
+      "descriptionPlaceholder": "Voliteľný popis",
+      "cancelButton": "Zrušiť",
+      "submitButton": "Odoslať",
+      "submitButtonLoading": "Odosielanie...",
+      "confirmDialog": {
+        "title": "Potvrďte prevod",
+        "description": "Vytvorí sa {action} vo výške {amount} z {from} do {to}",
+        "cancelButton": "Zrušiť",
+        "confirmButton": "Potvrdiť",
+        "actionDeposit": "vklad",
+        "actionWithdrawal": "výber"
+      },
+      "validation": {
+        "required": "Toto pole je povinné",
+        "minValue": "Suma musí byť väčšia než 0"
+      },
+      "notifications": {
+        "success": "Hotovostná transakcia bola úspešne vytvorená",
+        "error": "Hotovostnú transakciu sa nepodarilo vytvoriť"
+      }
+    },
+    "validators": {
+      "invalidCurrencyDecimal": "Zadajte platnú sumu (najviac 2 desatinné miesta)",
+      "mustBePositive": "Suma musí byť kladná"
+    },
+    "exchangeCurrency": {
+      "fromCurrencyLabel": "Zdrojová mena",
+      "toCurrencyLabel": "Cieľová mena",
+      "currencyPlaceholder": "Vyberte menu",
+      "fromAmountLabel": "Zdrojová suma",
+      "toAmountLabel": "Cieľová suma",
+      "amountPlaceholder": "0,00",
+      "maxButton": "Max: {amount}",
+      "dateLabel": "Dátum výmeny",
+      "descriptionLabel": "Popis (voliteľný)",
+      "descriptionPlaceholder": "Pridajte poznámku k tejto výmene...",
+      "cancelButton": "Zrušiť",
+      "submitButton": "Vymeniť",
+      "submitButtonLoading": "Prebieha spracovanie...",
+      "validation": {
+        "required": "Toto pole je povinné",
+        "minValue": "Suma musí byť väčšia než 0",
+        "sameCurrency": "Zdrojová a cieľová mena musia byť odlišné"
+      },
+      "notifications": {
+        "success": "Mena bola úspešne vymenená",
+        "error": "Menu sa nepodarilo vymeniť"
+      }
+    },
+    "createVehicle": {
+      "nameLabel": "Názov vozidla",
+      "namePlaceholder": "napr. Moja Camry",
+      "currencyLabel": "Mena",
+      "makeLabel": "Značka",
+      "modelLabel": "Model",
+      "trimLabel": "Úroveň výbavy (voliteľné)",
+      "yearLabel": "Rok",
+      "vehicleClassLabel": "Trieda vozidla",
+      "purchasePriceLabel": "Nákupná cena",
+      "purchaseDateLabel": "Dátum nákupu",
+      "depreciationPresetLabel": "Vzorec odpisovania",
+      "customAnnualRatePctLabel": "Vlastná ročná sadzba odpisovania (%)",
+      "salvageFloorPctLabel": "Minimálna zostatková hodnota (% z kúpnej ceny)",
+      "currentMileageLabel": "Aktuálny stav kilometrov (voliteľné)",
+      "currentMileagePlaceholder": "e.g. 45000",
+      "submitButton": "Pridať vozidlo",
+      "submitButtonLoading": "Pridávanie...",
+      "notifications": {
+        "success": "Vozidlo pridané",
+        "error": "Vozidlo sa nepodarilo pridať"
+      }
+    },
+    "editVehicle": {
+      "submitButton": "Ulož zmeny",
+      "submitButtonLoading": "Ukladanie...",
+      "notifications": {
+        "success": "Vozidlo aktualizované",
+        "error": "Vozidlo sa nepodarilo aktualizovať"
+      }
+    },
+    "loan": {
+      "nameLabel": "Názov pôžičky",
+      "namePlaceholder": "napr. Hlavná hypotéka",
+      "loanTypeLabel": "Typ pôžičky",
+      "loanTypePlaceholder": "Vyberte typ pôžičky",
+      "currencyLabel": "Mena",
+      "currencyPlaceholder": "Vyberte menu",
+      "originalPrincipalLabel": "Pôvodná istina",
+      "originalPrincipalPlaceholder": "napr. 320000",
+      "initialBalanceLabel": "Aktuálny nesplatený zostatok",
+      "initialBalancePlaceholder": "Koľko dnes dlžíte",
+      "interestRateLabel": "Úroková sadzba (RPMN %)",
+      "interestRatePlaceholder": "napr. 6.25",
+      "minPaymentEstimateTooltip": "Odhadované z istiny, ročnej úrokovej sadzby a doby splácania podľa štandardného amortizačného vzorca.",
+      "minPaymentApplyEstimateAriaLabel": "Použiť odhadovanú minimálnu splátku",
+      "termMonthsLabel": "Doba splácania (mesiace)",
+      "termPresetsAriaLabel": "Predvoľby doby splácania",
+      "termPresetsHeader": "Bežné doby splácania",
+      "termMonthsSuffix": "mes.",
+      "termPresetYears": "{count} rok | {count} rokov",
+      "termMonthsPlaceholder": "napr. 360 pre 30-ročnú pôžičku",
+      "startDateLabel": "Dátum začiatku",
+      "startDatePlaceholder": "DD/MM/YYYY",
+      "startDateTooltip": "Dátum vzniku pôžičky — kedy ste si ju zobrali. Slúži len na informáciu a nemení aktuálny nesplatený zostatok ani projekciu splatenia.",
+      "plannedPaymentLabel": "Plánovaná mesačná splátka",
+      "plannedPaymentPlaceholder": "Koľko skutočne platíte",
+      "minPaymentLabel": "Minimálna mesačná splátka",
+      "minPaymentPlaceholder": "Voliteľné, od vášho veriteľa",
+      "paymentDayLabel": "Deň splátky v mesiaci",
+      "paymentDayPlaceholder": "1–31",
+      "lenderNameLabel": "Veriteľ",
+      "lenderNamePlaceholder": "napr. Tatra banka, Slovenská sporiteľňa",
+      "accountNumberLabel": "Číslo účtu / pôžičky",
+      "accountNumberPlaceholder": "Voliteľné",
+      "currentBalanceLabel": "Aktuálny nesplatený zostatok",
+      "balanceAsOfLabel": "Zostatok k",
+      "balanceAsOfPlaceholder": "DD/MM/YYYY",
+      "saveButton": "Ulož zmeny",
+      "submitButton": "Vytvoriť pôžičku",
+      "submitButtonLoading": "Vytváranie…",
+      "cancelButton": "Zrušiť",
+      "notifications": {
+        "success": "Pôžička vytvorená.",
+        "error": "Pôžičku sa nepodarilo vytvoriť. Skúste to znova, prosím.",
+        "updateSuccess": "Pôžička aktualizovaná",
+        "updateError": "Pôžičku sa nepodarilo aktualizovať"
+      },
+      "errors": {
+        "required": "Toto pole je povinné.",
+        "mustBePositive": "Musí byť väčšie než 0.",
+        "mustBeNonNegative": "Musí byť 0 alebo väčšie.",
+        "interestRateRange": "Úroková sadzba musí byť medzi 0 a 99,9999.",
+        "termRange": "Doba splácania musí byť medzi 1 a 1200 mesiacmi.",
+        "paymentDayRange": "Deň v mesiaci musí byť medzi 1 a 31.",
+        "asOfInFuture": "Dátum nemôže byť v budúcnosti"
+      },
+      "balanceExceedsPrincipalWarning": "Nesplatený zostatok je vyšší než pôvodná istina — skontrolujte tieto sumy."
+    }
+  },
+  "fields": {
+    "categorySelect": {
+      "noCategoriesFound": "Nenašli sa žiadne kategórie",
+      "selectCategoryLabel": "Vyberte kategóriu",
+      "searchCategoryLabel": "Vyhľadať kategóriu",
+      "clearSearchLabel": "Vymazať vyhľadávanie",
+      "clearSelectionLabel": "Zrušiť výber",
+      "searchPlaceholder": "Hľadať...",
+      "sharedOwnerNotice": "Zobrazujú sa kategórie používateľa {owner}",
+      "sharedOwnerNoticeTooltip": "Transakcie na zdieľanom účte vždy používajú kategórie vlastníka. Čokoľvek tu uložíte, sa zaradí do sady kategórií používateľa {owner}, aby ste obaja videli rovnaké súčty.",
+      "sharedOwnerCategoriesLoadError": "Kategórie pre zdieľaný účet sa nepodarilo načítať. Skúste to znova, prosím."
+    },
+    "select": {
+      "selectOption": "Vyberte možnosť",
+      "searchPlaceholder": "Hľadať..."
+    },
+    "currencySelect": {
+      "yourCurrencies": "Vaše meny",
+      "otherCurrencies": "Ostatné meny"
+    },
+    "comboboxAccounts": {
+      "allAccounts": "Všetky účty",
+      "account": "účet",
+      "accountsSelected": "vybraných účtov",
+      "selectedOne": "Vybraný 1 účet",
+      "selectedMany": "Vybraných účtov: {n}",
+      "searchPlaceholder": "Hľadať účty...",
+      "noResults": "Nenašli sa žiadne výsledky."
+    },
+    "comboboxCategories": {
+      "searchPlaceholder": "Hľadať kategórie...",
+      "unselectedPlaceholder": "Všetky kategórie",
+      "selectedOne": "Vybraná 1 kategória",
+      "selectedMany": "Vybrané kategórie: {n}",
+      "excludingOne": "Vylúčená 1 kategória",
+      "excludingMany": "Vylúčené kategórie: {n}"
+    },
+    "accountMultiSelect": {
+      "ungrouped": "Bez skupiny"
+    },
+    "tagSelect": {
+      "placeholder": "Vyberte štítky...",
+      "noTagsAvailable": "Nie sú dostupné žiadne štítky"
+    },
+    "categoryMultiSelect": {
+      "placeholder": "Vyberte kategórie...",
+      "searchPlaceholder": "Hľadať kategórie...",
+      "noCategoriesFound": "Nenašli sa žiadne kategórie"
+    },
+    "payeeMultiSelect": {
+      "label": "Všetky protistrany",
+      "searchPlaceholder": "Hľadať protistrany",
+      "selectedMany": "Vybrané protistrany: {n}",
+      "noResults": "Nenašli sa žiadne protistrany",
+      "unknownPayee": "Neznáma protistrana",
+      "loadError": "Protistrany sa nepodarilo načítať. Skúste to znova, prosím.",
+      "blankOption": "Bez protistrany"
+    },
+    "budgetMultiSelect": {
+      "label": "Všetky rozpočty",
+      "selectedMany": "Vybrané rozpočty: {n}",
+      "searchPlaceholder": "Hľadať rozpočty",
+      "noResults": "Nenašli sa žiadne rozpočty",
+      "unknownBudget": "Neznámy rozpočet",
+      "loadError": "Rozpočty sa nepodarilo načítať. Skúste to znova, prosím."
+    },
+    "payeeSelect": {
+      "placeholder": "Vyberte protistranu",
+      "searchPlaceholder": "Hľadať protistrany...",
+      "empty": "Zatiaľ žiadne protistrany",
+      "createAffordance": "Vytvoriť protistranu „{name}\"",
+      "createNew": "Vytvoriť novú protistranu",
+      "sharedOwnerPayeesLoadError": "Protistrany pre zdieľaný účet sa nepodarilo načítať. Skúste to znova, prosím."
+    }
+  }
+}

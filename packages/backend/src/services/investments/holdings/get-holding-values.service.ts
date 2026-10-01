@@ -7,7 +7,7 @@ import Portfolios from '@models/investments/portfolios.model';
 import Securities from '@models/investments/securities.model';
 import SecurityPricing from '@models/investments/security-pricing.model';
 import * as UsersCurrencies from '@models/users-currencies.model';
-import { calculateRefAmount, calculateRefAmountFromParams } from '@services/calculate-ref-amount.service';
+import { calculateRefAmountFromParams } from '@services/calculate-ref-amount.service';
 import { withDeduplication } from '@services/common/with-deduplication';
 import { calculateAllGains } from '@services/investments/gains/gains-calculator.utils';
 import * as userExchangeRateService from '@services/user-exchange-rate';
@@ -60,6 +60,8 @@ interface HoldingValue {
   displayMarketValue?: string;
   displayUnrealizedGainValue?: string;
   displayRealizedGainValue?: string;
+  // Internal: holding→base rate already resolved here; not part of the holdings API response
+  baseRate?: number;
 }
 
 /**
@@ -155,15 +157,9 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
     SecurityPricing
   >;
 
-  // Resolve the user's base currency ONCE up front. Without this,
-  // `calculateRefAmount` looks it up on every holding (and its Redis cache
-  // can't help — the cache key includes each holding's amount, so it's a miss
-  // every time). That per-holding lookup was the N+1 flagged on
-  // GET /portfolios/*/summary. Passing the resolved code as `quoteCode` below
-  // is behaviour-identical: when omitted, calculateRefAmount falls back to this
-  // exact default currency. Left undefined if the user has no base currency —
-  // calculateRefAmount then takes its original (throwing) path, which the loop
-  // already tolerates.
+  // Base and display rates are resolved once per distinct holding currency below:
+  // every rate lookup queries the user's currency connection before any cache,
+  // so a per-holding call is an N+1 on GET /portfolios/*/summary.
   let baseCurrencyCode: string | undefined;
   let displayCurrencyCode: string | undefined;
   if (userId) {
@@ -178,7 +174,33 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
     }
   }
 
-  // One native→display rate per distinct holding currency; a failed lookup is cached as null so those holdings omit display fields.
+  // A failed base-rate lookup is cached as null so those holdings report refMarketValue 0.
+  const baseRates = new Map<string, number | null>();
+  const getBaseRate = async (holdingCurrencyCode: string): Promise<number | null> => {
+    if (!baseCurrencyCode || !userId) return null;
+    if (!baseRates.has(holdingCurrencyCode)) {
+      try {
+        const { rate } = await userExchangeRateService.getExchangeRate({
+          userId,
+          date: date || new Date(),
+          baseCode: holdingCurrencyCode,
+          quoteCode: baseCurrencyCode,
+        });
+        baseRates.set(holdingCurrencyCode, rate);
+      } catch (error) {
+        logger.error('Failed to resolve holding base rate; refMarketValue defaults to 0', {
+          portfolioId,
+          holdingCurrencyCode,
+          baseCurrencyCode,
+          error,
+        });
+        baseRates.set(holdingCurrencyCode, null);
+      }
+    }
+    return baseRates.get(holdingCurrencyCode)!;
+  };
+
+  // A failed display-rate lookup is cached as null so those holdings omit display fields.
   const displayRates = new Map<string, number | null>();
   const getDisplayRate = async (holdingCurrencyCode: string): Promise<number | null> => {
     if (!displayCurrencyCode || !userId) return null;
@@ -222,6 +244,7 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
     let refMarketValue = '0';
     let latestPrice: string | undefined;
     let priceDate: Date | undefined;
+    let baseRate: number | null = null;
 
     if (price) {
       latestPrice = price.priceClose.toDecimalString(INVESTMENT_DECIMAL_SCALE);
@@ -229,20 +252,13 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
       const priceClose = price.priceClose.toBig();
       marketValue = quantity.times(priceClose).toFixed(10);
 
-      // Calculate reference market value if userId provided
-      if (userId && parseFloat(marketValue) > 0) {
-        try {
-          const refAmount = await calculateRefAmount({
+      if (parseFloat(marketValue) > 0) {
+        baseRate = await getBaseRate(holding.currencyCode);
+        if (baseRate !== null) {
+          refMarketValue = calculateRefAmountFromParams({
             amount: Money.fromDecimal(marketValue),
-            baseCode: holding.currencyCode,
-            quoteCode: baseCurrencyCode,
-            userId,
-            date: date || new Date(),
-          });
-          refMarketValue = refAmount.toDecimalString(INVESTMENT_DECIMAL_SCALE);
-        } catch {
-          // If reference conversion fails, keep as 0
-          refMarketValue = '0';
+            rate: baseRate,
+          }).toDecimalString(INVESTMENT_DECIMAL_SCALE);
         }
       }
     }
@@ -276,6 +292,7 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
       unrealizedGainPercent: gains.unrealizedGainPercent.toFixed(2),
       realizedGainValue: gains.realizedGainValue.toFixed(2),
       realizedGainPercent: gains.realizedGainPercent.toFixed(2),
+      ...(baseRate !== null && { baseRate }),
       ...(displayRate !== null && {
         displayCurrencyCode,
         displayCostBasis: toDisplay({

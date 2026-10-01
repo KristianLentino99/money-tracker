@@ -7,6 +7,7 @@ import {
   UpdatePayeePayload,
   addIgnoredName,
   applyPayeeTagsToExisting,
+  bulkDeletePayees,
   bulkUpdateCategorizationMode,
   createPayee,
   createPayeeAlias,
@@ -378,6 +379,18 @@ export const useDeletePayeeAndIgnore = () => {
       queryClient.invalidateQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });
       invalidatePayeesScope(queryClient);
       invalidateIgnoredNames(queryClient);
+    },
+  });
+};
+
+export const useBulkDeletePayees = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ ids, ignoreFuture }: { ids: string[]; ignoreFuture: boolean }) =>
+      bulkDeletePayees({ ids, ignoreFuture }),
+    onSuccess: (_data, { ignoreFuture }) => {
+      invalidatePayeesScope(queryClient);
+      if (ignoreFuture) invalidateIgnoredNames(queryClient);
     },
   });
 };

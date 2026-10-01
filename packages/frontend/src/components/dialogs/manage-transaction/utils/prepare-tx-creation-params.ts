@@ -45,16 +45,15 @@ export const prepareTxCreationParams = ({
     note,
     externalUrl: form.externalUrl?.trim() || undefined,
     externalReference: form.externalReference?.trim() || undefined,
-    location: resolveFormLocation(form) ?? undefined,
+    location: resolveFormLocation(form),
     time: time.toUTCString(),
     transactionType: getTxTypeFromFormType(formTxType),
     paymentType: paymentType!.value,
     accountId,
-    // Always send the array, even empty: an explicit `tagIds` tells the
-    // backend the client already computed the final tag set (payee tags are
-    // applied client-side in this form), so it must not auto-apply the
-    // payee's default tags on top. Omitting it would re-add tags the user
-    // deliberately deselected.
+    // Always send the array, even empty: payee tags are applied client-side
+    // here, and sending the set stops the backend re-adding tags the user
+    // deselected for a payee they picked. A payee the backend matches itself
+    // still merges its defaults on top.
     tagIds: form.tagIds ?? [],
   };
 

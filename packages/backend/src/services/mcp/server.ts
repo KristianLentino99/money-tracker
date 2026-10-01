@@ -10,7 +10,9 @@ import { registerAdjustAccountBalance } from './tools/adjust-account-balance';
 import { registerArchiveAccount } from './tools/archive-account';
 import { registerAssignTagsToTransaction } from './tools/assign-tags-to-transaction';
 import { registerBulkUpdateTransactions } from './tools/bulk-update-transactions';
+import { registerCreateAttachmentUploadUrl } from './tools/create-attachment-upload-url';
 import { registerCreateCategory } from './tools/create-category';
+import { registerCreateHolding } from './tools/create-holding';
 import { registerCreateInvestmentTransaction } from './tools/create-investment-transaction';
 import { registerCreatePayee } from './tools/create-payee';
 import { registerCreatePortfolio } from './tools/create-portfolio';
@@ -53,13 +55,44 @@ import { registerGetTransactionAutomations } from './tools/get-transaction-autom
 import { registerGetTransactionGroups } from './tools/get-transaction-groups';
 import { registerGetUpcomingSubscriptionPayments } from './tools/get-upcoming-subscription-payments';
 import { registerGetUserProfile } from './tools/get-user-profile';
+import { registerInvestmentContributionTools } from './tools/investment-contribution-tools';
 import { registerLinkRefund } from './tools/link-refund';
 import { registerLinkTransactionToPortfolio } from './tools/link-transaction-to-portfolio';
 import { registerLinkTransactionsToSubscription } from './tools/link-transactions-to-subscription';
 import { registerLinkTransfer } from './tools/link-transfer';
 import { registerListPortfolioTransfers } from './tools/list-portfolio-transfers';
 import { registerListSubscriptionCandidates } from './tools/list-subscription-candidates';
+import {
+  registerGetLoans,
+  registerGetLoan,
+  registerGetLoanBalanceHistory,
+  registerCreateLoan,
+  registerUpdateLoan,
+  registerDeleteLoan,
+  registerAppendLoanNote,
+  registerLinkLoanPayments,
+  registerUnlinkLoanPayment,
+} from './tools/loan-tools';
+import { registerManualPortfolioTools } from './tools/manual-portfolio-tools';
 import { registerMergePayees } from './tools/merge-payees';
+import {
+  registerGetPlans,
+  registerCreatePlan,
+  registerGetPlan,
+  registerGetPlanView,
+  registerUpdatePlan,
+  registerArchivePlan,
+  registerDeletePlan,
+  registerAddPlanCategory,
+  registerSetPlanCategoryTarget,
+  registerDeletePlanCategoryTarget,
+  registerAssignPlanCategory,
+  registerBulkAssignPlanCategories,
+  registerMovePlanMoney,
+  registerPreviewPlanAutoAssign,
+  registerAutoAssignPlan,
+  registerUndoPlanAllocation,
+} from './tools/plan-tools';
 import { registerPreviewTransactionAutomation } from './tools/preview-transaction-automation';
 import { registerRemoveTagsFromTransaction } from './tools/remove-tags-from-transaction';
 import { registerRemoveTransactionsFromGroup } from './tools/remove-transactions-from-group';
@@ -67,6 +100,17 @@ import { registerReorderTransactionAutomations } from './tools/reorder-transacti
 import { registerSearchSecurities } from './tools/search-securities';
 import { registerSearchTransactions } from './tools/search-transactions';
 import { registerSplitTransaction } from './tools/split-transaction';
+import {
+  registerGetSubscriptionPeriods,
+  registerGetSubscriptionPayPreview,
+  registerPaySubscriptionPeriod,
+  registerSkipSubscriptionPeriod,
+  registerUnlinkSubscriptionPeriodTransaction,
+  registerRevertSubscriptionPeriod,
+  registerSuggestSubscriptionMatches,
+  registerLinkInstallmentToLoan,
+  registerUnlinkInstallmentFromLoan,
+} from './tools/subscription-period-tools';
 import { registerToggleSubscriptionActive } from './tools/toggle-subscription-active';
 import { registerTransferAccountToPortfolio } from './tools/transfer-account-to-portfolio';
 import { registerTransferPortfolioToAccount } from './tools/transfer-portfolio-to-account';
@@ -83,6 +127,7 @@ import { registerUpdateTag } from './tools/update-tag';
 import { registerUpdateTransaction } from './tools/update-transaction';
 import { registerUpdateTransactionAutomation } from './tools/update-transaction-automation';
 import { registerUpdateTransactionGroup } from './tools/update-transaction-group';
+import { registerVehicleTools } from './tools/vehicle-tools';
 import {
   registerCreateVentureDeal,
   registerCreateVentureEvent,
@@ -145,6 +190,7 @@ export function createMcpServer(): McpServer {
   // Transactions (read + CRUD + splits + refunds + transfer linking)
   registerSearchTransactions(server);
   registerCreateTransaction(server);
+  registerCreateAttachmentUploadUrl(server);
   registerUpdateTransaction(server);
   registerDeleteTransaction(server);
   registerBulkUpdateTransactions(server);
@@ -251,6 +297,46 @@ export function createMcpServer(): McpServer {
   registerCreateVentureEvent(server);
   registerUpdateVentureEvent(server);
   registerDeleteVentureEvent(server);
+
+  // Fork capabilities: plans, loans, recurring periods, maintenance and manual/grouped investments.
+  registerGetPlans(server);
+  registerCreatePlan(server);
+  registerGetPlan(server);
+  registerGetPlanView(server);
+  registerUpdatePlan(server);
+  registerArchivePlan(server);
+  registerDeletePlan(server);
+  registerAddPlanCategory(server);
+  registerSetPlanCategoryTarget(server);
+  registerDeletePlanCategoryTarget(server);
+  registerAssignPlanCategory(server);
+  registerBulkAssignPlanCategories(server);
+  registerMovePlanMoney(server);
+  registerPreviewPlanAutoAssign(server);
+  registerAutoAssignPlan(server);
+  registerUndoPlanAllocation(server);
+  registerGetLoans(server);
+  registerGetLoan(server);
+  registerGetLoanBalanceHistory(server);
+  registerCreateLoan(server);
+  registerUpdateLoan(server);
+  registerDeleteLoan(server);
+  registerAppendLoanNote(server);
+  registerLinkLoanPayments(server);
+  registerUnlinkLoanPayment(server);
+  registerGetSubscriptionPeriods(server);
+  registerGetSubscriptionPayPreview(server);
+  registerPaySubscriptionPeriod(server);
+  registerSkipSubscriptionPeriod(server);
+  registerUnlinkSubscriptionPeriodTransaction(server);
+  registerRevertSubscriptionPeriod(server);
+  registerSuggestSubscriptionMatches(server);
+  registerLinkInstallmentToLoan(server);
+  registerUnlinkInstallmentFromLoan(server);
+  registerVehicleTools(server);
+  registerInvestmentContributionTools(server);
+  registerManualPortfolioTools(server);
+  registerCreateHolding(server);
 
   return server;
 }

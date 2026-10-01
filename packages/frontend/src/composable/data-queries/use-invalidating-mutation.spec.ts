@@ -9,9 +9,11 @@ import { useInvalidatingMutation } from './use-invalidating-mutation';
 
 const addSuccessNotification = vi.fn();
 const addErrorNotification = vi.fn();
+const addNotification = vi.fn();
 
 vi.mock('@/components/notification-center', () => ({
-  useNotificationCenter: () => ({ addSuccessNotification, addErrorNotification }),
+  NotificationType: { error: 'error' },
+  useNotificationCenter: () => ({ addNotification, addSuccessNotification, addErrorNotification }),
 }));
 
 // Echoes the key so an assertion reads as the key the UI renders.
@@ -28,11 +30,15 @@ interface Variables {
 const mountMutation = ({
   mutationFn,
   successKey,
+  successMessage,
   silentErrorCodes,
+  persistentErrorId,
 }: {
   mutationFn: (variables: Variables) => Promise<string>;
   successKey?: string;
+  successMessage?: (data: string) => string;
   silentErrorCodes?: API_ERROR_CODES[];
+  persistentErrorId?: string;
 }) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
   const invalidateQueries = vi.spyOn(queryClient, 'invalidateQueries');
@@ -44,8 +50,10 @@ const mountMutation = ({
         mutationFn,
         invalidateKeys: [KEY_A, KEY_B],
         successKey,
+        successMessage,
         errorKey: ERROR_KEY,
         silentErrorCodes,
+        persistentErrorId,
       });
       return () => null;
     },
@@ -96,6 +104,19 @@ describe('useInvalidatingMutation', () => {
     expect(addSuccessNotification).toHaveBeenCalledWith('toasts.saved');
   });
 
+  it('builds the success toast from the response, over the success key', async () => {
+    const { mutation } = mountMutation({
+      mutationFn: () => Promise.resolve('3 rows'),
+      successKey: 'toasts.saved',
+      successMessage: (data) => `Merged ${data}`,
+    });
+
+    await mutation.mutateAsync({ value: 1 });
+
+    expect(addSuccessNotification).toHaveBeenCalledTimes(1);
+    expect(addSuccessNotification).toHaveBeenCalledWith('Merged 3 rows');
+  });
+
   it('toasts the server message over the fallback key', async () => {
     const error = apiError({ code: API_ERROR_CODES.conflict, message: 'Name already taken' });
     const { mutation } = mountMutation({ mutationFn: () => Promise.reject(error) });
@@ -103,6 +124,21 @@ describe('useInvalidatingMutation', () => {
     await expect(mutation.mutateAsync({ value: 1 })).rejects.toBe(error);
 
     expect(addErrorNotification).toHaveBeenCalledWith('Name already taken');
+  });
+
+  it('keeps the error toast up under the given id when asked to', async () => {
+    const error = apiError({ code: API_ERROR_CODES.conflict, message: 'Name already taken' });
+    const { mutation } = mountMutation({ mutationFn: () => Promise.reject(error), persistentErrorId: 'write-error' });
+
+    await expect(mutation.mutateAsync({ value: 1 })).rejects.toBe(error);
+
+    expect(addNotification).toHaveBeenCalledWith({
+      id: 'write-error',
+      text: 'Name already taken',
+      type: 'error',
+      persistent: true,
+    });
+    expect(addErrorNotification).not.toHaveBeenCalled();
   });
 
   it('skips the toast for a code the caller renders itself', async () => {

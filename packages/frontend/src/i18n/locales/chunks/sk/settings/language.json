@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "language": {
+      "title": "Jazyk",
+      "description": "Zobrazovací jazyk rozhrania aplikácie.",
+      "community": {
+        "title": "Preklady od komunity",
+        "hint": "Prekladajú ho dobrovoľníci na Crowdine. Čo ešte nie je preložené, zobrazuje sa v angličtine."
+      },
+      "contribute": {
+        "title": "Chýbajúce alebo nesprávne preklady?",
+        "description": "Jazyky komunity sa prekladajú na Crowdine. Môžete požiadať o nový jazyk, navrhnúť opravy, alebo si preklady urobiť sami — programovanie nie je potrebné.",
+        "requestNote": "Radšej nechcete používať Crowdin? Požiadajte o jazyk na našej {boardLink}.",
+        "requestNoteLink": "nástenke návrhov",
+        "action": "Prispieť na Crowdine"
+      }
+    }
+  }
+}

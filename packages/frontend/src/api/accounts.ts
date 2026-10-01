@@ -3,6 +3,7 @@ import {
   ACCOUNT_CATEGORIES,
   AccountModel,
   AccountWithRelinkStatus,
+  type LinkResidualTarget,
   TransactionModel,
   endpointsTypes,
 } from '@bt/shared/types';
@@ -25,6 +26,10 @@ export const editAccount = async ({
   id: string;
 }): Promise<AccountModel> => {
   return api.put(`/accounts/${id}`, data);
+};
+
+export const getAccountTransactionCount = async ({ id }: { id: string }): Promise<{ transactionCount: number }> => {
+  return api.get(`/accounts/${id}/transaction-count`);
 };
 
 export interface DeleteAccountPayload {
@@ -63,19 +68,21 @@ interface LinkAccountToBankConnectionPayload {
   accountId: string;
   connectionId: string;
   externalAccountId: string;
+  residualTarget?: LinkResidualTarget;
 }
 export const linkAccountToBankConnection = async ({
   accountId,
   connectionId,
   externalAccountId,
+  residualTarget,
 }: LinkAccountToBankConnectionPayload): Promise<{
   account: AccountModel;
   balanceDifference: number;
-  balanceAdjustmentTransaction: TransactionModel | null;
   message: string;
 }> => {
   return api.post(`/accounts/${accountId}/link`, {
     connectionId,
     externalAccountId,
+    residualTarget,
   });
 };

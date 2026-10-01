@@ -15,6 +15,16 @@
         "successNotification": "Transfer matching setting updated",
         "errorNotification": "Failed to update transfer matching setting"
       },
+      "pendingBankTransactions": {
+        "label": "Import pending bank transactions",
+        "description": "Store Enable Banking transactions before the bank books them. They're marked as pending, never change the account balance, and often lack merchant details until booked. Other providers aren't affected: SimpleFIN and LunchFlow always import booked transactions only, and Monobank imports every transaction as a regular one.",
+        "successNotification": "Pending transactions setting updated",
+        "errorNotification": "Failed to update pending transactions setting"
+      },
+      "quickStart": {
+        "label": "Quick Start guide",
+        "description": "Show the onboarding checklist on the dashboard. Turn it off to hide the guide; turn it back on to bring it back at any time."
+      },
       "savingsCategories": {
         "label": "Count categories as savings",
         "description": "Spending in these categories (and their subcategories) is excluded from expenses in cash-flow analytics, so it counts toward monthly savings and the savings rate.",
@@ -76,6 +86,13 @@
           "label": "Map picker",
           "description": "Pick transaction locations on a map and search addresses. Map tiles and search come from OpenStreetMap, which receives your IP address when the map opens."
         }
+      },
+      "defaultPaymentType": {
+        "label": "Default payment type",
+        "description": "Preselected when you add a new transaction.",
+        "placeholder": "Select a payment type",
+        "successNotification": "Default payment type updated",
+        "errorNotification": "Failed to update default payment type"
       }
     }
   }

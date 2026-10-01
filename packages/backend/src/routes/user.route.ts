@@ -1,3 +1,4 @@
+import { FEATURES } from '@bt/shared/types';
 import { categorizationCandidatesController } from '@controllers/ai-categorization/candidates.controller';
 import { categorizationStatusController } from '@controllers/ai-categorization/categorization-status.controller';
 import { categorizationHistoryController } from '@controllers/ai-categorization/history.controller';
@@ -13,25 +14,19 @@ import editCurrencyExchangeRate from '@controllers/currencies/edit-currency-exch
 import { exportDataController } from '@controllers/data-export/export-data.controller';
 import { getConnectedAppsController, revokeConnectedAppController } from '@controllers/mcp/connected-apps.controller';
 import {
-  deleteAiApiKey,
-  deleteAllAiApiKeys,
-  getAiApiKeyStatus,
-  setAiApiKeyController,
-  setDefaultAiProviderController,
-} from '@controllers/user-settings/ai-api-key';
-import {
-  createCustomEndpointController,
-  deleteCustomEndpointController,
-  getCustomEndpointsController,
-  testCustomEndpointController,
-  updateCustomEndpointController,
-} from '@controllers/user-settings/ai-custom-endpoint';
+  createConnectionController,
+  deleteConnectionController,
+  getConnectionsController,
+  listConnectionModelsController,
+  setDefaultConnectionController,
+  testConnectionController,
+  updateConnectionController,
+} from '@controllers/user-settings/ai-connections';
 import {
   getCustomInstructionsController,
   setCustomInstructionsController,
 } from '@controllers/user-settings/ai-custom-instructions';
 import {
-  getAvailableModelsController,
   getFeatureConfigController,
   getFeaturesStatus,
   resetFeatureConfigController,
@@ -51,15 +46,17 @@ import {
   getUserCurrencies,
   removeUserCurrencyExchangeRate,
   setBaseUserCurrency,
+  startFeatureTrial,
   updateUser,
   wipeUserData,
 } from '@controllers/user.controller';
 import { authenticateSession } from '@middlewares/better-auth';
 import { blockDemoUsers } from '@middlewares/block-demo-users';
 import { checkBaseCurrencyLock } from '@middlewares/check-base-currency-lock';
+import { requireFeature, requireFireSettingsAccess } from '@middlewares/entitlements';
 import {
-  aiCustomEndpointTestRateLimit,
-  aiCustomModelProbeRateLimit,
+  aiConnectionModelsRateLimit,
+  aiConnectionProbeRateLimit,
   backupRateLimit,
   backupRestoreRateLimit,
   dataExportRateLimit,
@@ -70,6 +67,12 @@ import { Router } from 'express';
 const router = Router({});
 
 router.get('/', authenticateSession, validateEndpoint(getUser.schema), getUser.handler);
+router.post(
+  '/feature-trials/:feature',
+  authenticateSession,
+  validateEndpoint(startFeatureTrial.schema),
+  startFeatureTrial.handler,
+);
 router.put('/update', authenticateSession, validateEndpoint(updateUser.schema), updateUser.handler);
 router.delete(
   '/delete',
@@ -88,6 +91,7 @@ router.post(
 router.post(
   '/data-export',
   authenticateSession,
+  requireFeature(FEATURES.data_export),
   dataExportRateLimit,
   validateEndpoint(exportDataController.schema),
   exportDataController.handler,
@@ -95,6 +99,7 @@ router.post(
 router.post(
   '/backup',
   authenticateSession,
+  requireFeature(FEATURES.backup_export),
   backupRateLimit,
   validateEndpoint(exportBackupController.schema),
   exportBackupController.handler,
@@ -102,6 +107,7 @@ router.post(
 router.post(
   '/backup/restore',
   authenticateSession,
+  requireFeature(FEATURES.backup_restore),
   // Guard the most destructive write like every other mutating route: 423 while a
   // base-currency migration (or an in-flight restore, which takes the same lock) runs.
   checkBaseCurrencyLock,
@@ -199,7 +205,13 @@ router.delete(
 
 router.get('/settings', authenticateSession, validateEndpoint(getUserSettings.schema), getUserSettings.handler);
 router.put('/settings', authenticateSession, validateEndpoint(updateUserSettings.schema), updateUserSettings.handler);
-router.patch('/settings', authenticateSession, validateEndpoint(patchUserSettings.schema), patchUserSettings.handler);
+router.patch(
+  '/settings',
+  authenticateSession,
+  requireFireSettingsAccess,
+  validateEndpoint(patchUserSettings.schema),
+  patchUserSettings.handler,
+);
 
 // Onboarding (Quick Start)
 router.get('/settings/onboarding', authenticateSession, validateEndpoint(getOnboarding.schema), getOnboarding.handler);
@@ -210,71 +222,52 @@ router.put(
   updateOnboarding.handler,
 );
 
-// AI API Key management
+// AI connections (the user's own models)
 router.get(
-  '/settings/ai/api-keys',
+  '/settings/ai/connections',
   authenticateSession,
-  validateEndpoint(getAiApiKeyStatus.schema),
-  getAiApiKeyStatus.handler,
-);
-router.put(
-  '/settings/ai/api-keys',
-  authenticateSession,
-  validateEndpoint(setAiApiKeyController.schema),
-  setAiApiKeyController.handler,
-);
-router.put(
-  '/settings/ai/api-keys/default',
-  authenticateSession,
-  validateEndpoint(setDefaultAiProviderController.schema),
-  setDefaultAiProviderController.handler,
-);
-router.delete(
-  '/settings/ai/api-keys',
-  authenticateSession,
-  validateEndpoint(deleteAiApiKey.schema),
-  deleteAiApiKey.handler,
-);
-router.delete(
-  '/settings/ai/api-keys/all',
-  authenticateSession,
-  validateEndpoint(deleteAllAiApiKeys.schema),
-  deleteAllAiApiKeys.handler,
-);
-
-// AI Custom OpenAI-compatible endpoints
-router.get(
-  '/settings/ai/custom-endpoints',
-  authenticateSession,
-  validateEndpoint(getCustomEndpointsController.schema),
-  getCustomEndpointsController.handler,
+  validateEndpoint(getConnectionsController.schema),
+  getConnectionsController.handler,
 );
 router.post(
-  '/settings/ai/custom-endpoints',
+  '/settings/ai/connections',
   authenticateSession,
-  aiCustomEndpointTestRateLimit,
-  validateEndpoint(createCustomEndpointController.schema),
-  createCustomEndpointController.handler,
+  aiConnectionProbeRateLimit,
+  validateEndpoint(createConnectionController.schema),
+  createConnectionController.handler,
 );
 router.post(
-  '/settings/ai/custom-endpoints/test',
+  '/settings/ai/connections/test',
   authenticateSession,
-  aiCustomEndpointTestRateLimit,
-  validateEndpoint(testCustomEndpointController.schema),
-  testCustomEndpointController.handler,
+  aiConnectionProbeRateLimit,
+  validateEndpoint(testConnectionController.schema),
+  testConnectionController.handler,
+);
+router.post(
+  '/settings/ai/connections/models',
+  authenticateSession,
+  aiConnectionModelsRateLimit,
+  validateEndpoint(listConnectionModelsController.schema),
+  listConnectionModelsController.handler,
 );
 router.put(
-  '/settings/ai/custom-endpoints/:id',
+  '/settings/ai/connections/:id',
   authenticateSession,
-  aiCustomEndpointTestRateLimit,
-  validateEndpoint(updateCustomEndpointController.schema),
-  updateCustomEndpointController.handler,
+  aiConnectionProbeRateLimit,
+  validateEndpoint(updateConnectionController.schema),
+  updateConnectionController.handler,
 );
 router.delete(
-  '/settings/ai/custom-endpoints/:id',
+  '/settings/ai/connections/:id',
   authenticateSession,
-  validateEndpoint(deleteCustomEndpointController.schema),
-  deleteCustomEndpointController.handler,
+  validateEndpoint(deleteConnectionController.schema),
+  deleteConnectionController.handler,
+);
+router.post(
+  '/settings/ai/connections/:id/default',
+  authenticateSession,
+  validateEndpoint(setDefaultConnectionController.schema),
+  setDefaultConnectionController.handler,
 );
 
 // AI Feature configuration
@@ -293,7 +286,6 @@ router.get(
 router.put(
   '/settings/ai/features/:feature',
   authenticateSession,
-  aiCustomModelProbeRateLimit,
   validateEndpoint(setFeatureConfigController.schema),
   setFeatureConfigController.handler,
 );
@@ -344,14 +336,6 @@ router.post(
   blockDemoUsers,
   validateEndpoint(triggerCategorizationController.schema),
   triggerCategorizationController.handler,
-);
-
-// AI Models
-router.get(
-  '/settings/ai/models',
-  authenticateSession,
-  validateEndpoint(getAvailableModelsController.schema),
-  getAvailableModelsController.handler,
 );
 
 // MCP Connected Apps

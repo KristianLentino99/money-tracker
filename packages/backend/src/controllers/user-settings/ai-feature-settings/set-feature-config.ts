@@ -1,45 +1,31 @@
-import { AI_CUSTOM_MODEL_PREFIX, AI_FEATURE, AI_CUSTOM_MODEL_NAME_MAX_LENGTH, AI_PROVIDER } from '@bt/shared/types';
+import { AI_FEATURE } from '@bt/shared/types';
 import { createController } from '@controllers/helpers/controller-factory';
-import { ValidationError } from '@js/errors';
-import { isRetiredModelId, isValidModelId } from '@services/ai';
-import { getStoredAiSettings } from '@services/user-settings/ai-api-key';
+import { getStoredAiSettings } from '@services/user-settings/ai-connections';
 import { setFeatureConfig } from '@services/user-settings/ai-feature-settings';
+import { resolveFeatureStatus } from '@services/user-settings/resolve-feature-model-display';
 import { z } from 'zod';
 
-import { buildFeatureStatusPayload } from './build-feature-status-payload';
+import { resolveServerKeysAllowed } from './build-feature-status-payload';
 
 const schema = z.object({
   params: z.object({
     feature: z.nativeEnum(AI_FEATURE),
   }),
   body: z.object({
-    modelId: z
-      .string()
-      .min(1)
-      .max(
-        Math.max(AI_CUSTOM_MODEL_PREFIX.length, AI_PROVIDER.openrouter.length + 1) + AI_CUSTOM_MODEL_NAME_MAX_LENGTH,
-      ),
-    // Required alongside a 'custom/*' model ID, ignored for catalog models
-    customEndpointId: z.uuid().optional(),
+    // null pins the included server model
+    connectionId: z.uuid().nullable(),
   }),
 });
 
-export const setFeatureConfigController = createController(schema, async ({ user, params, body }) => {
+export const setFeatureConfigController = createController(schema, async ({ user, params, body, req }) => {
   const { id: userId } = user;
   const { feature } = params;
-  const { modelId, customEndpointId } = body;
 
-  // Retired aliases accepted; service upgrades + persists the live ID.
-  if (!isValidModelId({ modelId }) && !isRetiredModelId({ modelId })) {
-    throw new ValidationError({
-      message: `Invalid model ID: ${modelId}`,
-    });
-  }
+  const serverKeysAllowed = await resolveServerKeysAllowed({ req, feature });
 
-  const savedConfig = await setFeatureConfig({ userId, feature, modelId, customEndpointId });
-  const aiSettings = await getStoredAiSettings({ userId });
+  await setFeatureConfig({ userId, feature, connectionId: body.connectionId, serverKeysAllowed });
 
   return {
-    data: buildFeatureStatusPayload({ feature, config: savedConfig, aiSettings }),
+    data: await resolveFeatureStatus({ feature, aiSettings: await getStoredAiSettings({ userId }), serverKeysAllowed }),
   };
 });

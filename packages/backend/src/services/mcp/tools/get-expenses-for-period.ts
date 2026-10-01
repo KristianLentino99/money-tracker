@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { getUserId, jsonContent } from './helpers';
 
 const inputSchema = {
+  excludePlanned: z.boolean().optional().describe('Exclude forecast-only rows from realized spending (default: true)'),
   startDate: z.string().optional().describe('Start date (ISO 8601). Default: start of current month'),
   endDate: z.string().optional().describe('End date (ISO 8601). Default: today'),
   accountId: recordId().optional().describe('Filter by specific account ID'),
@@ -31,6 +32,7 @@ export function registerGetExpensesForPeriod(server: McpServer) {
 
       const totalCents = await getExpensesAmountForPeriod({
         userId,
+        excludePlanned: args.excludePlanned ?? true,
         from: args.startDate ?? startOfMonth.toISOString(),
         to: args.endDate ?? now.toISOString(),
         accountId: args.accountId,

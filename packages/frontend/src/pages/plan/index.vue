@@ -15,6 +15,7 @@ import {
 } from '@/api/plans';
 import { loadUserBaseCurrency } from '@/api/currencies';
 import CategoryFormDialog from '@/components/dialogs/category-form-dialog.vue';
+import FitAmount from '@/components/common/fit-amount.vue';
 import { InputField, SelectField } from '@/components/fields';
 import PageWrapper from '@/components/common/page-wrapper.vue';
 import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
@@ -845,15 +846,23 @@ const startCreate = ({ withTemplate }: { withTemplate: boolean }) => {
                       />
                     </div>
                   </div>
-                  <span class="text-right font-medium tabular-nums">{{ formatMoney(group.aggregate.available) }}</span>
-                  <span class="hidden text-right tabular-nums @sm/plan-layout:block">{{
-                    formatMoney(group.aggregate.assigned)
-                  }}</span>
+                  <span class="text-right font-medium tabular-nums"
+                    ><FitAmount
+                      :value="group.aggregate.available"
+                      :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+                  /></span>
+                  <span class="hidden text-right tabular-nums @sm/plan-layout:block"
+                    ><FitAmount
+                      :value="group.aggregate.assigned"
+                      :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+                  /></span>
                   <span
                     class="hidden text-right tabular-nums @sm/plan-layout:block"
                     :class="group.aggregate.activity < 0 ? 'text-app-expense-color' : 'text-app-income-color'"
-                    >{{ formatMoney(group.aggregate.activity) }}</span
-                  >
+                    ><FitAmount
+                      :value="group.aggregate.activity"
+                      :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+                  /></span>
                 </div>
 
                 <template v-if="isGroupExpanded({ groupId: group.parent.id }) || !group.children.length">
@@ -914,13 +923,17 @@ const startCreate = ({ withTemplate }: { withTemplate: boolean }) => {
                     <span
                       class="hidden text-right tabular-nums @sm/plan-layout:block"
                       :class="category.activity < 0 ? 'text-app-expense-color' : 'text-app-income-color'"
-                      >{{ formatMoney(category.activity) }}</span
-                    >
+                      ><FitAmount
+                        :value="category.activity"
+                        :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+                    /></span>
                     <span
                       class="text-right font-medium tabular-nums"
                       :class="category.available < 0 ? 'text-app-expense-color' : ''"
-                      >{{ formatMoney(category.available) }}</span
-                    >
+                      ><FitAmount
+                        :value="category.available"
+                        :currency-code="planViewQuery.data.value.plan.baseCurrencyCode"
+                    /></span>
                   </div>
                 </template>
               </section>

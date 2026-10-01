@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "verifyEmail": {
+      "title": "Prüfe deine E-Mails",
+      "description": "Wir haben einen Bestätigungslink an",
+      "descriptionYourEmail": "deine E-Mail-Adresse",
+      "descriptionContinued": "Gesendet. Bitte klicke auf den Link, um dein Konto zu bestätigen.",
+      "didntReceive": "Keine E-Mail erhalten? Überprüfe deinen Spam-Ordner oder",
+      "resend": "klicke hier, um erneut zu senden",
+      "sending": "Wird gesendet...",
+      "resendIn": "Erneut senden in {count}s",
+      "backToSignIn": "Zurück zur Anmeldung",
+      "resendSuccess": "Bestätigungs-E-Mail gesendet! Bitte überprüfe dein Postfach.",
+      "resendError": "Bestätigungs-E-Mail konnte nicht erneut gesendet werden. Bitte versuche es erneut."
+    }
+  }
+}

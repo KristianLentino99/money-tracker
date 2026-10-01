@@ -2,6 +2,7 @@
 import * as Dialog from '@/components/lib/ui/dialog';
 import * as Drawer from '@/components/lib/ui/drawer';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
+import { useCloseDialogWhen } from '@/composable/use-close-dialog-when';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
 import { createReusableTemplate, useVModel } from '@vueuse/core';
 import type { HTMLAttributes } from 'vue';
@@ -11,33 +12,46 @@ const [UseFooterTemplate, FooterSlotContent] = createReusableTemplate();
 const [UseScrollArea, ScrollAreaContent] = createReusableTemplate();
 const isMobile = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile);
 
-const props = defineProps<{
-  open?: boolean;
-  dialogContentClass?: HTMLAttributes['class'];
-  drawerContentClass?: HTMLAttributes['class'];
-  customClose?: boolean;
-  /** When true, disables the internal scroll wrapper (display: contents).
-   * Use when the dialog content manages its own scrolling layout. */
-  noInternalScroll?: boolean;
-  /** When true, the footer slot is not rendered in drawer (mobile) mode.
-   * Use when the footer only contains a close action — swipe-to-close is enough on mobile. */
-  hideDrawerFooter?: boolean;
-  /** When true, the drawer (mobile) skips the grey grab-handle indicator.
-   * Use when the content paints its own flush element at the top edge. */
-  drawerCustomIndicator?: boolean;
-  /** When true, the title/description slots are rendered as visually-hidden (`sr-only`)
-   * accessible labels with no surrounding header spacing, instead of a styled visible header.
-   * Use when the content owns its own visible heading but Radix still needs a DialogTitle. */
-  srOnlyHeader?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    open?: boolean;
+    dialogContentClass?: HTMLAttributes['class'];
+    drawerContentClass?: HTMLAttributes['class'];
+    customClose?: boolean;
+    /** Closes the dialog the moment this turns true, e.g. `useIsBillingPage()` for dialogs with a "See plans" link. */
+    closeWhen?: boolean;
+    /** When true, disables the internal scroll wrapper (display: contents).
+     * Use when the dialog content manages its own scrolling layout. */
+    noInternalScroll?: boolean;
+    /** When true, the footer slot is not rendered in drawer (mobile) mode.
+     * Use when the footer only contains a close action — swipe-to-close is enough on mobile. */
+    hideDrawerFooter?: boolean;
+    /** When true, the drawer (mobile) skips the grey grab-handle indicator.
+     * Use when the content paints its own flush element at the top edge. */
+    drawerCustomIndicator?: boolean;
+    /** When true, the title/description slots are rendered as visually-hidden (`sr-only`)
+     * accessible labels with no surrounding header spacing, instead of a styled visible header.
+     * Use when the content owns its own visible heading but Radix still needs a DialogTitle. */
+    srOnlyHeader?: boolean;
+    /** When false, nothing closes the dialog but the parent flipping `open`: ESC, outside
+     * click and drawer swipe are ignored. For app-locking progress that must run to the end. */
+    dismissible?: boolean;
+  }>(),
+  { dismissible: true },
+);
 
-const emit = defineEmits(['update:open']);
+const emit = defineEmits(['update:open', 'open-auto-focus']);
 
 const isOpen = useVModel(props, 'open', emit, { passive: true });
 
-const close = () => {
-  isOpen.value = false;
+const setOpen = (open: boolean) => {
+  if (!open && !props.dismissible) return;
+  isOpen.value = open;
 };
+
+const close = () => setOpen(false);
+
+useCloseDialogWhen({ when: () => !!props.closeWhen, close });
 </script>
 
 <template>
@@ -57,7 +71,7 @@ const close = () => {
   </UseScrollArea>
 
   <template v-if="isMobile">
-    <Drawer.Drawer v-model:open="isOpen">
+    <Drawer.Drawer :open="isOpen" :dismissible="props.dismissible" @update:open="setOpen">
       <Drawer.DrawerTrigger as-child>
         <slot name="trigger" />
       </Drawer.DrawerTrigger>
@@ -69,6 +83,7 @@ const close = () => {
           'px-4 pb-4',
           drawerContentClass,
         ]"
+        @open-auto-focus="(event: Event) => emit('open-auto-focus', event)"
       >
         <template v-if="props.srOnlyHeader">
           <Drawer.DrawerTitle class="sr-only">
@@ -100,7 +115,7 @@ const close = () => {
     </Drawer.Drawer>
   </template>
   <template v-else>
-    <Dialog.Dialog v-model:open="isOpen">
+    <Dialog.Dialog :open="isOpen" @update:open="setOpen">
       <Dialog.DialogTrigger as-child>
         <slot name="trigger" />
       </Dialog.DialogTrigger>
@@ -111,6 +126,7 @@ const close = () => {
           dialogContentClass,
         ]"
         :custom-close="customClose"
+        @open-auto-focus="(event: Event) => emit('open-auto-focus', event)"
       >
         <template v-if="props.srOnlyHeader">
           <Dialog.DialogTitle class="sr-only">

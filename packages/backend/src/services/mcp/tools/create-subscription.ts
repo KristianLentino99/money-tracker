@@ -5,7 +5,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { createSubscription } from '@services/subscriptions';
 import { z } from 'zod';
 
-import { getUserId, jsonContent, requireScope } from './helpers';
+import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
 
 const inputSchema = {
   name: z.string().describe('Display name of the subscription (e.g. "Netflix", "Electricity")'),
@@ -66,7 +66,7 @@ export function registerCreateSubscription(server: McpServer) {
     },
     async (args, extra) => {
       const userId = getUserId({ extra });
-      requireScope({ extra, scope: 'finance:write' });
+      await assertMcpMutationAllowed({ extra, userId });
       trackMcpToolUsed({ userId, tool: 'create_subscription', clientId: extra.authInfo?.clientId });
 
       const result = await createSubscription({

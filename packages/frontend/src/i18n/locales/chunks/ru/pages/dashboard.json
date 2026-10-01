@@ -1,0 +1,359 @@
+{
+  "dashboard": {
+    "editMode": {
+      "customize": "Настроить",
+      "addWidgets": "Добавить виджеты",
+      "emptyState": "Нажмите «Настроить», чтобы добавить виджеты",
+      "removeWidget": "Remove widget"
+    },
+    "widgets": {
+      "common": {
+        "includePlanned": "Учитывать запланированные транзакции",
+        "includePlannedTooltip": "Учитывать ожидающие запланированные транзакции в показателях этого виджета.",
+        "includePlannedSaveError": "Не удалось сохранить настройку запланированных транзакций. Попробуйте снова."
+      },
+      "balanceTrend": {
+        "title": "Динамика баланса",
+        "balanceTypes": {
+          "total": "Итого",
+          "accounts": "Счета",
+          "portfolios": "Портфели",
+          "ventures": "Венчурные инвестиции",
+          "vehicles": "Транспорт",
+          "loans": "Кредиты"
+        },
+        "tooltip": {
+          "accounts": "Счета:",
+          "portfolios": "Портфели:",
+          "total": "Итого:",
+          "ventures": "Венчурные инвестиции:",
+          "vehicles": "Транспорт:",
+          "loans": "Кредиты:"
+        },
+        "today": "Сегодня",
+        "vsPreviousPeriod": "по сравнению с предыдущим периодом",
+        "spikePanel": {
+          "accounts": "Счета",
+          "portfolios": "Портфели",
+          "priceDrivenChange": "Изменение из-за цены — сведения о транзакциях появятся позже",
+          "noSignificantTransactions": "На эту дату нет значимых транзакций.",
+          "seeAllTransactions": "Показать все транзакции"
+        },
+        "spikeSettings": {
+          "showMarkers": "Показывать маркеры скачков",
+          "showMarkersTooltip": "Показывать на графике цветные маркеры значительных изменений баланса.",
+          "percentThreshold": "Мин. изменение %",
+          "percentThresholdTooltip": "Минимальное процентное изменение баланса между двумя соседними днями для отметки как скачка. Должен быть превышен этот или абсолютный порог. Низкие значения показывают больше маркеров.",
+          "absoluteThreshold": "Мин. изменение $",
+          "absoluteThresholdTooltip": "Минимальное абсолютное изменение баланса в базовой валюте для отметки как скачка. Должен быть превышен этот или процентный порог.",
+          "maxMarkers": "Макс. маркеров",
+          "maxMarkersTooltip": "Максимальное число маркеров скачков на графике. Если их больше лимита, отображаются только наиболее значимые.",
+          "resetDefaults": "Сбросить по умолчанию",
+          "accept": "Принять",
+          "validation": {
+            "outOfRange": "Значение вне допустимого диапазона",
+            "integer": "Требуется целое число"
+          }
+        },
+        "settings": {
+          "title": "Настройки",
+          "spikeMarkers": "Маркеры скачков",
+          "fitToLatestData": "По последним данным",
+          "fitToLatestDataTooltip": "Если включено, график заканчивается на последней точке данных. Если отключено, ось X охватывает весь выбранный период, оставляя место для будущих дат.",
+          "fitToLatestDataLockedTooltip": "Чтобы изменить это, отключите запланированные транзакции — их прогноз всегда продлевает график до конца периода.",
+          "on": "Вкл.",
+          "off": "Выкл.",
+          "includeInTotal": "Учитывать в итоге",
+          "includePlannedTooltip": "Показывать пунктирный прогноз ожидающих запланированных транзакций поверх тренда."
+        },
+        "componentsSettings": {
+          "description": "Выберите компоненты, учитываемые в линии общего баланса.",
+          "vehicles": "Транспорт",
+          "ventures": "Венчурные инвестиции",
+          "loans": "Кредиты",
+          "loansTooltip": "Если включено, непогашенные кредиты вычитаются из общего баланса (реальный чистый капитал). Если отключено, кредиты игнорируются и итог показывает только активы.",
+          "allIncluded": "Все компоненты",
+          "excluding": "Исключено: {items}"
+        },
+        "projection": {
+          "summary": "Прогноз {amount} · {count} запланированная запись до {date} | Прогноз {amount} · {count} запланированные записи до {date} | Прогноз {amount} · {count} запланированных записей до {date}"
+        }
+      },
+      "expensesStructure": {
+        "title": "Структура расходов",
+        "today": "Сегодня",
+        "vsPreviousPeriod": "по сравнению с предыдущим периодом",
+        "viewButton": "Просмотреть",
+        "allExpenses": "All expenses",
+        "loadFailed": "Couldn't load the category breakdown."
+      },
+      "latestTransactions": {
+        "title": "Последние транзакции",
+        "showAll": "Показать все"
+      },
+      "subscriptions": {
+        "title": "Подписки и счета",
+        "titleSubscriptions": "Подписки",
+        "titleBills": "Счета",
+        "titleAll": "Регулярные платежи",
+        "titleInstallments": "Рассрочки",
+        "configTypeAll": "Все",
+        "configTypeSubscriptions": "Подписки",
+        "configTypeBills": "Счета",
+        "configTypeInstallments": "Рассрочки",
+        "activeSummary": "Активных: {count}",
+        "perYear": " в год",
+        "incomeSummary": "Активных: {count} · доход {amount}/мес.",
+        "percentOfIncome": "{percent}% от среднего дохода",
+        "settings": {
+          "title": "Настройки",
+          "show": "Показывать",
+          "incomeWindow": "Период дохода",
+          "incomeWindowTooltip": "Мы усредняем входящие транзакции за этот период для расчёта доли дохода, которая тратится на регулярные платежи.",
+          "lookbackOption": {
+            "1": "Последний месяц",
+            "3": "Последние 3 месяца",
+            "6": "Последние 6 месяцев",
+            "12": "Последние 12 месяцев"
+          },
+          "showStrip": "Show 30-day chart"
+        }
+      },
+      "categoryTracker": {
+        "title": "Отслеживаемые категории",
+        "addCategory": "Добавить категорию",
+        "selectCategories": "Выберите категории"
+      },
+      "cashFlow": {
+        "title": "Денежный поток",
+        "description": "Показывает чистые сбережения: доходы минус расходы за выбранный период, а также тренд предыдущих периодов",
+        "vsPrevious": "по сравнению с предыдущим",
+        "income": "Доходы",
+        "expenses": "Расходы",
+        "saved": "Сбережено",
+        "previousPeriodsTrend": "Тренд предыдущих периодов",
+        "viewDetails": "Подробнее",
+        "notAvailable": "N/A"
+      },
+      "netWorth": {
+        "title": "Чистый капитал",
+        "description": "Как изменился ваш чистый капитал за выбранный период. Учитываются все изменения баланса: счета, инвестиции, кредиты и стоимость активов.",
+        "vsPrevious": "по сравнению с предыдущим",
+        "start": "Начало",
+        "end": "Конец",
+        "growth": "Рост",
+        "previousPeriodsTrend": "Тренд предыдущих периодов",
+        "excludedTooltip": "Не учитывается в чистом капитале: {components}",
+        "viewHistory": "История",
+        "loadFailed": "Не удалось загрузить данные чистого капитала.",
+        "components": {
+          "ventures": "Венчурные инвестиции",
+          "vehicles": "Транспорт",
+          "loans": "Кредиты"
+        },
+        "settings": {
+          "title": "Учитывать в чистом капитале",
+          "loans": "Кредиты",
+          "vehicles": "Транспорт",
+          "ventures": "Венчурные инвестиции"
+        },
+        "trendTooltip": {
+          "change": "Изменение",
+          "netWorth": "Чистый капитал",
+          "noData": "Нет данных за этот период"
+        }
+      },
+      "creditUtilization": {
+        "title": "Использование кредитного лимита",
+        "description": "Показывает, какая часть кредитных лимитов сейчас используется по всем счетам",
+        "utilized": "использовано",
+        "noAccounts": "Нет счетов с кредитными лимитами"
+      },
+      "plannedOverview": {
+        "title": "Запланированные",
+        "projectedBy": "Projected by {date}",
+        "upcoming": "Upcoming · {count}",
+        "loadFailed": "Не удалось загрузить запланированные транзакции"
+      },
+      "emptyState": "За выбранный период данных нет.",
+      "registry": {
+        "balanceTrend": {
+          "name": "Динамика баланса",
+          "description": "Отслеживайте баланс во времени"
+        },
+        "categoryTracker": {
+          "name": "Отслеживаемые категории",
+          "description": "Следите за расходами и доходами выбранных категорий"
+        },
+        "spendingCategories": {
+          "name": "Расходы по категориям",
+          "description": "Посмотрите, куда уходят деньги"
+        },
+        "latestRecords": {
+          "name": "Последние записи",
+          "description": "Ваши последние транзакции"
+        },
+        "subscriptions": {
+          "name": "Подписки и счета",
+          "description": "Обзор регулярных платежей"
+        },
+        "cashFlow": {
+          "name": "Денежный поток",
+          "description": "Доходы и расходы с нормой сбережений"
+        },
+        "netWorth": {
+          "name": "Чистый капитал",
+          "description": "Как меняется ваш общий чистый капитал с учётом инвестиций, кредитов и активов."
+        },
+        "creditUtilization": {
+          "name": "Использование кредитного лимита",
+          "description": "Использование кредитных лимитов по счетам"
+        },
+        "plannedOverview": {
+          "name": "Обзор запланированных",
+          "description": "Ожидающие запланированные транзакции и прогнозируемый баланс"
+        },
+        "fireProgress": {
+          "name": "FIRE progress",
+          "description": "How close you are to financial independence"
+        }
+      }
+    },
+    "periodSelector": {
+      "presets": {
+        "currentMonth": "Текущий месяц",
+        "last3Months": "Последние 3 месяца",
+        "last6Months": "Последние 6 месяцев",
+        "lastYear": "Последние 12 месяцев",
+        "thisYear": "Этот год",
+        "previousYear": "Предыдущий год"
+      }
+    }
+  },
+  "widgets": {
+    "subscriptionsOverview": {
+      "payAction": "Отметить оплаченным",
+      "listTitle": "Предстоящее",
+      "dueCount": "{count} due",
+      "nothingDue": "Nothing due in 3 days",
+      "overdueHint": "Overdue since {date}",
+      "dueSoonHint": "Due in the next 3 days",
+      "strip": {
+        "title": "Следующие 30 дней",
+        "goingOut": "{amount} going out",
+        "today": "Сегодня"
+      },
+      "loadFailed": "Couldn't load recurring payments"
+    },
+    "latestRecords": {
+      "config": {
+        "includeScheduled": {
+          "label": "Учитывать запланированные платежи",
+          "on": "Вкл.",
+          "off": "Выкл."
+        }
+      },
+      "settings": {
+        "excludeTitle": "Исключить транзакции",
+        "excludeTransfersDescription": "Скрывать переводы между собственными счетами",
+        "excludeOutOfWalletDescription": "Скрывать переводы на счета и со счетов, которые вы не отслеживаете",
+        "balanceAdjustmentsTitle": "Корректировки баланса",
+        "excludeBalanceAdjustmentsDescription": "Скрывать транзакции корректировки баланса",
+        "plannedTitle": "Запланированные транзакции",
+        "excludePlannedDescription": "Скрывать ожидающие запланированные транзакции из списка",
+        "nothingExcluded": "Ничего не исключено",
+        "tagsStyleTitle": "Теги",
+        "tagsStyleNames": "Names",
+        "tagsStyleBars": "Bars",
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+      },
+      "overdueBadge": "Просрочено",
+      "scheduledBadge": "Запланировано",
+      "payAction": "Отметить оплаченным"
+    },
+    "fireProgress": {
+      "title": "FIRE progress",
+      "config": {
+        "style": {
+          "label": "Style",
+          "ring": "Ring",
+          "numbers": "Numbers"
+        }
+      },
+      "openPlan": "Open FIRE plan",
+      "loadFailed": "Couldn't load FIRE progress.",
+      "toType": "to {type}",
+      "ringLabelFor": "{pct}% of {type} target reached, {duration} left",
+      "ringLabelReachedFor": "{type} target reached",
+      "ringLabelUnreachableFor": "{pct}% of {type} target reached, not reachable at your current pace",
+      "timeTo": "Time to {type}",
+      "unitYears": "{n} yrs | {n} yr | {n} yrs",
+      "unitMonths": "{n} mos | {n} mo | {n} mos",
+      "atAge": "at age {age}",
+      "nextMilestone": "Next milestone",
+      "saved": "Сбережено",
+      "progress": "Прогресс",
+      "coastFire": "Coast FIRE",
+      "reached": "Достигнуто",
+      "milestoneIn": "{pct}% in {duration}",
+      "typeNumber": "{type} number",
+      "atRate": "at {rate}%",
+      "milestonesReached": "{n} of {total} milestones",
+      "balanceOfTarget": "{balance} of {target}",
+      "reachedType": "{type} reached",
+      "supports": "Supports {amount}/mo",
+      "pctOfSpending": "{pct}% of spending",
+      "unreachable": "Not reachable at current savings",
+      "needs": "Needs about {amount}/mo to get there in {duration}",
+      "chart": {
+        "today": "Сегодня",
+        "typeTarget": "{type} · {amount}",
+        "ariaLabel": "Net worth path: actual history up to today, projected toward your FIRE number"
+      },
+      "setup": {
+        "title": "Plan your path to FIRE",
+        "description": "Uses your accounts and spending. Two numbers if you have no data yet.",
+        "action": "Set up"
+      },
+      "locked": {
+        "title": "Plan your path to FIRE",
+        "description": "Plus feature",
+        "action": "Unlock"
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Vehicle maintenance",
+        "description": "Keep track of upcoming maintenance for your vehicles.",
+        "count": "{count} reminders",
+        "unknownVehicle": "Unknown vehicle",
+        "status": {
+          "upcoming": "Upcoming",
+          "overdue": "Overdue"
+        },
+        "activity": {
+          "inspection": "Vehicle inspection",
+          "scheduled-service": "Scheduled service",
+          "oil-change": "Oil change",
+          "tires": "Tire rotation",
+          "brakes": "Brake service",
+          "battery": "Battery",
+          "other": "Other"
+        },
+        "dueDate": "Due {date}",
+        "dueDistance": "Due at {distance}",
+        "odometerLabel": "Current mileage ({unit})",
+        "odometerPlaceholder": "Enter current mileage",
+        "updateOdometer": "Update odometer",
+        "showLess": "Show less",
+        "showMore": "Show {count} more",
+        "notifications": {
+          "odometerUpdated": "Odometer updated",
+          "odometerUpdateError": "Could not update the odometer."
+        }
+      }
+    }
+  }
+}

@@ -34,6 +34,7 @@ export function slimAccountsForMcp(accounts: AccountApiResponse[]) {
 }
 
 export function slimPortfolioTransferForMcp(transfer: PortfolioTransfers) {
+  const QUANTITY_DECIMAL_SCALE = 18;
   return {
     id: transfer.id,
     date: transfer.date,
@@ -48,6 +49,35 @@ export function slimPortfolioTransferForMcp(transfer: PortfolioTransfers) {
     toAccountId: transfer.toAccountId,
     fromPortfolioId: transfer.fromPortfolioId,
     toPortfolioId: transfer.toPortfolioId,
+    ...(transfer.investmentTransactions && {
+      investmentTransactions: transfer.investmentTransactions.map((purchase) => ({
+        id: purchase.id,
+        securityId: purchase.securityId,
+        category: purchase.category,
+        date: purchase.date,
+        name: purchase.name,
+        quantity: purchase.quantity.toDecimalString(QUANTITY_DECIMAL_SCALE),
+        price: purchase.price.toDecimalString(INVESTMENT_DECIMAL_SCALE),
+        amount: purchase.amount.toDecimalString(INVESTMENT_DECIMAL_SCALE),
+        fees: purchase.fees.toDecimalString(INVESTMENT_DECIMAL_SCALE),
+        currencyCode: purchase.currencyCode,
+        settlementCurrencyCode: purchase.settlementCurrencyCode,
+        settlementAmount: purchase.settlementAmount.toDecimalString(INVESTMENT_DECIMAL_SCALE),
+        settlementFees: purchase.settlementFees.toDecimalString(INVESTMENT_DECIMAL_SCALE),
+        settlementRate: purchase.settlementRate,
+        ...(purchase.security && {
+          security: {
+            id: purchase.security.id,
+            symbol: purchase.security.symbol,
+            name: purchase.security.name,
+            providerName: purchase.security.providerName,
+            providerSymbol: purchase.security.providerSymbol,
+            priceSourceSymbol: purchase.security.priceSourceSymbol,
+            currencyCode: purchase.security.currencyCode,
+          },
+        }),
+      })),
+    }),
     ...(transfer.fromPortfolio && {
       fromPortfolio: { id: transfer.fromPortfolio.id, name: transfer.fromPortfolio.name },
     }),
@@ -98,14 +128,20 @@ export type SubscriptionDetailForMcp = Pick<
   | 'frequency'
   | 'startDate'
   | 'endDate'
+  | 'dueDate'
+  | 'loanAccountId'
+  | 'maxOccurrences'
+  | 'completedAt'
   | 'isActive'
   | 'notes'
   | 'expectedCurrencyCode'
   | 'transactionType'
 > & {
   expectedAmount: number | null;
+  tagIds?: string[];
   nextExpectedDate: Date | string | null;
   account?: Pick<Accounts, 'id' | 'name' | 'currencyCode'> | null;
+  loan?: Pick<Accounts, 'id' | 'name' | 'currencyCode'> | null;
   category?: Pick<Categories, 'id' | 'name'> | null;
   transactions?: Array<
     Pick<
@@ -117,6 +153,17 @@ export type SubscriptionDetailForMcp = Pick<
       SubscriptionTransactions?: Pick<SubscriptionTransactions, 'matchSource' | 'matchedAt'> | null;
     }
   > | null;
+  periods?: Array<{
+    id: string;
+    dueDate: string;
+    status: string;
+    paidAt: Date | null;
+    transactionId: string | null;
+    transactionAutoCreated: boolean;
+    notes: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }> | null;
 };
 
 export function slimSubscriptionDetailForMcp(sub: SubscriptionDetailForMcp) {
@@ -127,12 +174,19 @@ export function slimSubscriptionDetailForMcp(sub: SubscriptionDetailForMcp) {
     transactionType: sub.transactionType,
     expectedAmount: sub.expectedAmount,
     expectedCurrencyCode: sub.expectedCurrencyCode,
+    tagIds: sub.tagIds ?? [],
     frequency: sub.frequency,
     startDate: sub.startDate,
     endDate: sub.endDate,
+    dueDate: sub.dueDate,
+    loanAccountId: sub.loanAccountId ?? sub.loan?.id ?? null,
+    loan: sub.loan ?? null,
+    maxOccurrences: sub.maxOccurrences,
+    completedAt: sub.completedAt,
     isActive: sub.isActive,
     notes: sub.notes,
     nextExpectedDate: sub.nextExpectedDate,
+    paidPeriodsCount: (sub.periods ?? []).filter((period) => period.status === 'paid').length,
     account: sub.account ?? null,
     category: sub.category ? { id: sub.category.id, name: sub.category.name } : null,
     // Embedded transactions arrive as full Transaction models; keep only what
@@ -149,6 +203,17 @@ export function slimSubscriptionDetailForMcp(sub: SubscriptionDetailForMcp) {
       accountId: tx.accountId,
       matchSource: tx.SubscriptionTransactions?.matchSource ?? null,
       matchedAt: tx.SubscriptionTransactions?.matchedAt ?? null,
+    })),
+    periods: (sub.periods ?? []).map((period) => ({
+      id: period.id,
+      dueDate: period.dueDate,
+      status: period.status,
+      paidAt: period.paidAt,
+      transactionId: period.transactionId,
+      transactionAutoCreated: period.transactionAutoCreated,
+      notes: period.notes,
+      createdAt: period.createdAt,
+      updatedAt: period.updatedAt,
     })),
   };
 }

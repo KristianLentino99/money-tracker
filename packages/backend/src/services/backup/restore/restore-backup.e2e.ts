@@ -1,8 +1,10 @@
 import {
+  AI_FEATURE,
   AI_PROVIDER,
   API_ERROR_CODES,
   BANK_PROVIDER_TYPE,
   DEACTIVATION_REASON,
+  PLANS,
   RESOURCE_TYPES,
   type RecordId,
   SHARE_PERMISSIONS,
@@ -17,9 +19,13 @@ import { generateRandomRecordId } from '@common/lib/record-id-helpers';
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { RateLimitService } from '@services/common/rate-limit.service';
 import * as helpers from '@tests/helpers';
+import { VALID_ANTHROPIC_API_KEY } from '@tests/mocks/anthropic/mock-api';
 import { VALID_MONOBANK_TOKEN } from '@tests/mocks/monobank/mock-api';
+import { randomUUID } from 'node:crypto';
 
 type Row = Record<string, unknown>;
+
+const LEGACY_ENDPOINT_BASE_URL = 'http://ollama.home.test/v1';
 
 // Tables whose restored copy legitimately differs from the dump: `user` and
 // `user-settings` are re-created rather than bulk-inserted (fresh ids/timestamps,
@@ -55,6 +61,11 @@ function writeArchiveJson({ files, path, value }: { files: Map<string, Buffer>; 
   files.set(path, Buffer.from(JSON.stringify(value)));
 }
 
+function archiveText({ buffer }: { buffer: Buffer }): string {
+  const { files } = helpers.parseBackupArchive({ buffer });
+  return [...files.values()].map((buf) => buf.toString('utf8')).join('\n');
+}
+
 async function getCurrentUserId(): Promise<number> {
   const user = await helpers.makeRequest({ method: 'get', url: '/user', raw: true });
   return (user as { id: number }).id;
@@ -67,6 +78,13 @@ async function exportArchive(): Promise<{ buffer: Buffer; base64: string }> {
   const buffer = res.body;
   return { buffer, base64: buffer.toString('base64') };
 }
+
+const summarizeHistory = async () =>
+  (await helpers.getReconciliationHistory({ raw: true })).map((event) => ({
+    type: event.type,
+    survivorId: event.survivor?.id ?? null,
+    transactionIds: event.transactions.map((tx) => tx.id).toSorted(),
+  }));
 
 // --- Seeders -----------------------------------------------------------------
 
@@ -266,6 +284,107 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
   });
 
   describe('Round-trip', () => {
+    it('preserves grouped investment purchases and maintenance plan, activity, and transaction links', async () => {
+      const { accountA, category, tx } = await seedBasicData();
+      const portfolio = await helpers.createPortfolio({ payload: { name: 'Contribution backup' }, raw: true });
+      const securities = await helpers.seedSecurities([
+        { symbol: 'BACKUP-A', name: 'Backup Alpha', currencyCode: global.BASE_CURRENCY.code },
+        { symbol: 'BACKUP-B', name: 'Backup Beta', currencyCode: global.BASE_CURRENCY.code },
+      ]);
+      for (const security of securities) {
+        await helpers.createHolding({ payload: { portfolioId: portfolio.id, securityId: security.id }, raw: true });
+      }
+      const contributionResponse = await helpers.createInvestmentContribution({
+        portfolioId: portfolio.id,
+        payload: {
+          accountId: accountA.id,
+          categoryId: category.id,
+          amount: '1000',
+          date: '2026-09-10',
+          purchases: securities.map((security) => ({
+            securityId: security.id,
+            quantity: '2',
+            price: '100',
+            fees: '1',
+            date: '2026-09-10',
+          })),
+        },
+      });
+      expect(contributionResponse.statusCode).toBe(201);
+      const contribution = helpers.extractResponse(contributionResponse);
+      expect(contribution.investmentTransactions).toHaveLength(2);
+      const vehicle = await helpers.createVehicle({
+        name: 'Maintenance backup',
+        currencyCode: global.BASE_CURRENCY.code,
+        make: 'Toyota',
+        model: 'Corolla',
+        year: 2020,
+        vehicleClass: VEHICLE_CLASS.sedan,
+        purchasePrice: 20_000,
+        purchaseDate: '2022-01-01',
+        raw: true,
+      });
+      const activity = await helpers.createMaintenanceActivity({ name: 'Backup inspection', raw: true });
+      const plan = await helpers.createMaintenancePlan({
+        vehicleId: vehicle.id,
+        activityId: activity.id,
+        nextDueDate: '2026-09-10',
+        raw: true,
+      });
+      const visit = await helpers.createMaintenanceVisit({
+        vehicleId: vehicle.id,
+        serviceDate: '2026-09-10',
+        activities: [{ activityId: activity.id, planId: plan.id, nextDueDate: '2027-09-10' }],
+        transactionIds: [tx.id],
+        raw: true,
+      });
+
+      const first = await exportArchive();
+      const before = helpers.parseBackupArchive({ buffer: first.buffer });
+      expect(before.readData({ name: 'investment-transactions' })).toHaveLength(2);
+      const restore = await helpers.restoreBackup({ fileContent: first.base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+      expect(status.status).toBe('completed');
+      expect((status.summary?.warnings ?? []).some((warning) => warning.code.startsWith('foreign_reference_'))).toBe(
+        false,
+      );
+
+      const investments = await helpers.getInvestmentTransactions({ portfolioId: portfolio.id, raw: true });
+      expect(investments.transactions).toHaveLength(2);
+      expect(investments.transactions.every((transaction) => transaction.portfolioTransferId === contribution.id)).toBe(
+        true,
+      );
+      const maintenance = await helpers.getVehicleMaintenance({ vehicleId: vehicle.id, raw: true });
+      expect(maintenance.plans).toEqual(expect.arrayContaining([expect.objectContaining({ id: plan.id })]));
+      expect(maintenance.visits).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: visit.id,
+            transactionIds: [tx.id],
+            activities: expect.arrayContaining([expect.objectContaining({ activityId: activity.id, planId: plan.id })]),
+          }),
+        ]),
+      );
+
+      const second = await exportArchive();
+      const after = helpers.parseBackupArchive({ buffer: second.buffer });
+      for (const name of [
+        'portfolio-transfers',
+        'investment-transactions',
+        'vehicle-maintenance-activities',
+        'vehicle-maintenance-plans',
+        'vehicle-maintenance-visits',
+        'vehicle-maintenance-visit-activities',
+        'vehicle-maintenance-transaction-links',
+      ]) {
+        expect({ name, rows: canonicalRows(after.readData({ name })) }).toEqual({
+          name,
+          rows: canonicalRows(before.readData({ name })),
+        });
+      }
+    });
+
     it('restoring an export into the same user reproduces every table byte-for-byte, with no foreign-reference warnings', async () => {
       await seedRichData();
 
@@ -324,6 +443,29 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       const settingsAfter = (secondArchive.readData({ name: 'user-settings' }) as Row[])[0]!;
       expect((settingsAfter.settings as { locale?: string }).locale).toBe('uk');
     });
+
+    it('keeps merged and removed bank rows in reconciliation history', async () => {
+      const { account, transactions } = await helpers.monobank.mockTransactions({
+        transactions: [{ amount: -1000 }, { amount: -2000 }, { amount: -3000 }],
+      });
+      const [survivor, merged, removed] = transactions.filter((tx) => tx.accountId === account.id);
+      await helpers.reconciliationMerge({
+        transactionIds: [survivor!.id, merged!.id],
+        survivorId: survivor!.id,
+        raw: true,
+      });
+      await helpers.reconciliationRemove({ transactionIds: [removed!.id], raw: true });
+
+      const before = await summarizeHistory();
+      expect(before).toHaveLength(2);
+
+      const { base64 } = await exportArchive();
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      expect((await helpers.waitForRestore({ jobId: restore.jobId! })).status).toBe('completed');
+
+      expect(await summarizeHistory()).toEqual(before);
+    }, 30000);
   });
 
   describe('Cross-user restore', () => {
@@ -347,7 +489,9 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       await helpers.asUser({
         cookies: target.cookies,
         fn: async () => {
-          const restore = await helpers.restoreBackup({ fileContent: base64 });
+          // Restoring another account's archive is a self-host/cross-instance move; the
+          // cloud preflight rejects it on the manifest owner (see "Archive ownership").
+          const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
           expect(restore.statusCode).toBe(200);
           const status = await helpers.waitForRestore({ jobId: restore.jobId! });
           expect(status.status).toBe('completed');
@@ -419,7 +563,8 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
         fn: async () => {
           // Core regression: this completed only after keep-if-free remap. Before the
           // fix the worker threw the UsersCurrencies_pkey collision and the job failed.
-          const restore = await helpers.restoreBackup({ fileContent: base64 });
+          // Self-host because the cloud preflight rejects another account's manifest.
+          const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
           expect(restore.statusCode).toBe(200);
           const status = await helpers.waitForRestore({ jobId: restore.jobId! });
           expect(status.status).toBe('completed');
@@ -515,6 +660,40 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       expect(sourceAccountsAfter.some((a) => a.id === checking.id)).toBe(true);
       const sourceCurrencyCodesAfter = (await helpers.getUserCurrencies()).map((c) => c.currencyCode).toSorted();
       expect(sourceCurrencyCodesAfter).toEqual(sourceCurrencyCodes);
+    });
+
+    it('remaps the FIRE excluded categories and portfolio return source to the reminted ids', async () => {
+      const category = await helpers.addCustomCategory({ name: 'Rent', color: '#445566', raw: true });
+      const portfolio = await helpers.createPortfolio({ payload: { name: 'FIRE PF' }, raw: true });
+      await helpers.setUserBilling({ plan: PLANS.plus });
+      await helpers.patchUserSettings({
+        raw: true,
+        patch: {
+          fire: { spendingExcludedCategoryIds: [category.id], returnIndicatorId: `portfolio:${portfolio.id}` },
+        },
+      });
+
+      const { base64 } = await exportArchive();
+
+      const target = await helpers.provisionSecondUserWithBaseCurrency();
+      await helpers.asUser({
+        cookies: target.cookies,
+        fn: async () => {
+          const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
+          expect(restore.statusCode).toBe(200);
+          const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+          expect(status.status).toBe('completed');
+
+          const targetCategory = (await helpers.getCategoriesList()).find((c) => c.name === 'Rent');
+          const targetPortfolio = (await helpers.listPortfolios({ raw: true })).data.find((p) => p.name === 'FIRE PF');
+          expect(targetCategory!.id).not.toBe(category.id);
+          expect(targetPortfolio!.id).not.toBe(portfolio.id);
+
+          const { fire } = await helpers.getUserSettings({ raw: true });
+          expect(fire?.spendingExcludedCategoryIds).toEqual([targetCategory!.id]);
+          expect(fire?.returnIndicatorId).toBe(`portfolio:${targetPortfolio!.id}`);
+        },
+      });
     });
   });
 
@@ -781,24 +960,8 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       });
       const connectionId = connect.connectionId;
 
-      const aiKeyNeedle = `ai-secret-${Date.now()}`;
-      await helpers.patchUserSettings({
-        patch: {
-          ai: {
-            apiKeys: [
-              { provider: AI_PROVIDER.anthropic, keyEncrypted: aiKeyNeedle, createdAt: new Date().toISOString() },
-            ],
-          },
-        },
-        raw: true,
-      });
-
       const { buffer, base64 } = await exportArchive();
-      const archive = helpers.parseBackupArchive({ buffer });
-      const allText = [...archive.files.values()].map((buf) => buf.toString('utf8')).join('\n');
-      expect(allText).not.toContain(VALID_MONOBANK_TOKEN);
-      expect(allText).not.toContain(aiKeyNeedle);
-      expect(allText).not.toMatch(/"keyEncrypted"/);
+      expect(archiveText({ buffer })).not.toContain(VALID_MONOBANK_TOKEN);
 
       const restore = await helpers.restoreBackup({ fileContent: base64 });
       expect(restore.statusCode).toBe(200);
@@ -844,6 +1007,131 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       })) as { connectionsNeedingReauth: Array<{ connectionId: string }> };
       expect(reauthCleared.connectionsNeedingReauth.some((c) => c.connectionId === connectionId)).toBe(false);
     }, 30000);
+  });
+
+  describe('Restored AI connections', () => {
+    it('come back flagged invalid with no key material, asking for the key again', async () => {
+      const created = await helpers.createAiConnection({
+        provider: AI_PROVIDER.anthropic,
+        name: 'Claude',
+        model: 'claude-sonnet-5',
+        apiKey: VALID_ANTHROPIC_API_KEY,
+        raw: true,
+      });
+
+      const { buffer, base64 } = await exportArchive();
+      const allText = archiveText({ buffer });
+      expect(allText).not.toContain(VALID_ANTHROPIC_API_KEY);
+      expect(allText).not.toMatch(/"keyEncrypted"/);
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+      expect(status.status).toBe('completed');
+
+      expect(await helpers.getAiConnections({ raw: true })).toEqual([
+        expect.objectContaining({
+          id: created.id,
+          provider: AI_PROVIDER.anthropic,
+          model: 'claude-sonnet-5',
+          hasApiKey: false,
+          status: 'invalid',
+          lastError: expect.any(String),
+          invalidatedAt: expect.any(String),
+        }),
+      ]);
+
+      const fixed = await helpers.updateAiConnection({ id: created.id, apiKey: VALID_ANTHROPIC_API_KEY, raw: true });
+      expect(fixed).toMatchObject({ hasApiKey: true, status: 'valid' });
+      expect(fixed.lastError).toBeUndefined();
+      expect(fixed.invalidatedAt).toBeUndefined();
+    });
+
+    it('converts a pre-connections archive (API keys, custom endpoints, old feature configs) without resetting settings', async () => {
+      // The settings row is created lazily; a user with legacy AI keys always had one.
+      await helpers.updateUserSettings({ settings: { locale: 'uk' } });
+      const { buffer } = await exportArchive();
+      const { files } = helpers.parseBackupArchive({ buffer });
+
+      const endpointId = randomUUID();
+      const endpointCiphertext = `legacy-endpoint-ciphertext-${Date.now()}`;
+      const apiKeyCiphertext = `legacy-api-key-ciphertext-${Date.now()}`;
+      const createdAt = new Date().toISOString();
+      const settingsRows = readArchiveJson({ files, path: 'data/user-settings.json' }) as Row[];
+      (settingsRows[0]!.settings as Row).ai = {
+        apiKeys: [{ provider: 'anthropic', keyEncrypted: apiKeyCiphertext, createdAt }],
+        defaultProvider: 'anthropic',
+        customEndpoints: [
+          {
+            id: endpointId,
+            name: 'Home Ollama',
+            baseUrl: LEGACY_ENDPOINT_BASE_URL,
+            defaultModel: 'llama3.2',
+            keyEncrypted: endpointCiphertext,
+            createdAt,
+            status: 'valid',
+            lastValidatedAt: createdAt,
+          },
+        ],
+        featureConfigs: [
+          // A model override on the endpoint becomes its own connection.
+          { feature: AI_FEATURE.categorization, modelId: 'custom/qwen2.5', customEndpointId: endpointId },
+          // The feature's server default with no Google key stays pinned to the server model.
+          { feature: AI_FEATURE.statementParsing, modelId: 'google/gemini-3.6-flash' },
+        ],
+      };
+      writeArchiveJson({ files, path: 'data/user-settings.json', value: settingsRows });
+      const base64 = await helpers.repackBackup({ files });
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+      expect(status.status).toBe('completed');
+      expect(status.summary?.warnings.some((w) => w.code === 'settings_reset')).toBe(false);
+
+      const connections = await helpers.getAiConnections({ raw: true });
+      expect(connections).toHaveLength(3);
+      for (const connection of connections) {
+        expect(connection).toMatchObject({
+          hasApiKey: false,
+          status: 'invalid',
+          lastError: expect.any(String),
+          invalidatedAt: expect.any(String),
+        });
+      }
+
+      const [endpoint, modelOverride, anthropicKey] = connections;
+      expect(endpoint).toMatchObject({
+        id: endpointId,
+        provider: AI_PROVIDER.custom,
+        baseUrl: LEGACY_ENDPOINT_BASE_URL,
+        model: 'llama3.2',
+      });
+      expect(modelOverride).toMatchObject({
+        provider: AI_PROVIDER.custom,
+        baseUrl: LEGACY_ENDPOINT_BASE_URL,
+        model: 'qwen2.5',
+      });
+      expect(anthropicKey!.provider).toBe(AI_PROVIDER.anthropic);
+
+      const after = await exportArchive();
+      const afterText = archiveText({ buffer: after.buffer });
+      expect(afterText).not.toContain(endpointCiphertext);
+      expect(afterText).not.toContain(apiKeyCiphertext);
+
+      const [settingsAfter] = helpers
+        .parseBackupArchive({ buffer: after.buffer })
+        .readData({ name: 'user-settings' }) as Array<{ settings: { ai: Row; locale?: string } }>;
+      expect(settingsAfter!.settings.locale).toBe('uk');
+      expect(settingsAfter!.settings.ai).not.toHaveProperty('apiKeys');
+      expect(settingsAfter!.settings.ai).not.toHaveProperty('customEndpoints');
+      expect(settingsAfter!.settings.ai.featureConfigs).toEqual([
+        { feature: AI_FEATURE.categorization, connectionId: modelOverride!.id },
+        { feature: AI_FEATURE.statementParsing, connectionId: null },
+        { feature: AI_FEATURE.investmentTransactionsParsing, connectionId: anthropicKey!.id },
+        { feature: AI_FEATURE.receiptParsing, connectionId: anthropicKey!.id },
+      ]);
+    });
   });
 
   describe('Atomicity', () => {
@@ -1005,6 +1293,39 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
     });
   });
 
+  describe('Archive ownership', () => {
+    /** Repack the current user's export with a manifest attributed to somebody else. */
+    async function foreignArchive(): Promise<string> {
+      const { buffer } = await exportArchive();
+      const { files, manifest } = helpers.parseBackupArchive({ buffer });
+      manifest.user = {
+        username: 'someone-else',
+        email: 'someone-else@test.local',
+      };
+      writeArchiveJson({ files, path: 'manifest.json', value: manifest });
+      return helpers.repackBackup({ files });
+    }
+
+    it('rejects an archive exported by a different account on cloud (422)', async () => {
+      await seedBasicData();
+      const base64 = await foreignArchive();
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(422);
+      expect(restore.message).toMatch(/different account/i);
+    });
+
+    it('accepts the same archive on a self-hosted instance', async () => {
+      await seedBasicData();
+      const base64 = await foreignArchive();
+
+      const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+      expect(status.status).toBe('completed');
+    });
+  });
+
   describe('Empty state', () => {
     it('restoring an empty backup wipes a previously-seeded user back to empty', async () => {
       // Capture the fresh (empty) user's backup before seeding anything.
@@ -1048,6 +1369,54 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       // The restore completes instead of hard-failing, and warns that settings reset.
       expect(status.status).toBe('completed');
       expect(status.summary?.warnings.some((w) => w.code === 'settings_reset')).toBe(true);
+    });
+
+    it('drops only an out-of-range fire slice with a fire_settings_reset warning and keeps the other settings', async () => {
+      await helpers.updateUserSettings({ settings: { locale: 'uk' } });
+      const { buffer } = await exportArchive();
+      const { files } = helpers.parseBackupArchive({ buffer });
+
+      const settingsRows = readArchiveJson({ files, path: 'data/user-settings.json' }) as Row[];
+      (settingsRows[0]!.settings as Row).fire = { withdrawalRatePct: 99, birthYear: 1990 };
+      writeArchiveJson({ files, path: 'data/user-settings.json', value: settingsRows });
+      const base64 = await helpers.repackBackup({ files });
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+
+      expect(status.status).toBe('completed');
+      const codes = status.summary?.warnings.map((w) => w.code);
+      expect(codes).toContain('fire_settings_reset');
+      expect(codes).not.toContain('settings_reset');
+
+      const fetched = await helpers.getUserSettings({ raw: true });
+      expect(fetched.locale).toBe('uk');
+      expect(fetched.fire).toBeUndefined();
+    });
+
+    it('drops FIRE ids that point at nothing restored and falls back to the default return indicator', async () => {
+      await helpers.updateUserSettings({ settings: { locale: 'uk' } });
+      const { buffer } = await exportArchive();
+      const { files } = helpers.parseBackupArchive({ buffer });
+
+      const settingsRows = readArchiveJson({ files, path: 'data/user-settings.json' }) as Row[];
+      (settingsRows[0]!.settings as Row).fire = {
+        spendingExcludedCategoryIds: [randomUUID()],
+        returnIndicatorId: `portfolio:${randomUUID()}`,
+        withdrawalRatePct: 3.5,
+      };
+      writeArchiveJson({ files, path: 'data/user-settings.json', value: settingsRows });
+      const base64 = await helpers.repackBackup({ files });
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      expect((await helpers.waitForRestore({ jobId: restore.jobId! })).status).toBe('completed');
+
+      expect((await helpers.getUserSettings({ raw: true })).fire).toStrictEqual({
+        spendingExcludedCategoryIds: [],
+        withdrawalRatePct: 3.5,
+      });
     });
   });
 

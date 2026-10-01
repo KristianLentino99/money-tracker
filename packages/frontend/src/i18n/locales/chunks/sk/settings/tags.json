@@ -1,0 +1,98 @@
+{
+  "settings": {
+    "tags": {
+      "title": "Štítky",
+      "addButton": "Pridať štítok",
+      "empty": "Zatiaľ žiadne štítky. Vytvorte prvý štítok a usporiadajte si transakcie.",
+      "tabs": {
+        "details": "Podrobnosti",
+        "reminders": "Pripomienky"
+      },
+      "form": {
+        "createTitle": "Vytvoriť štítok",
+        "editTitle": "Upraviť štítok",
+        "name": "Názov",
+        "namePlaceholder": "Názov štítku",
+        "color": "Farba",
+        "icon": "Ikona",
+        "iconPlaceholder": "Vyberte ikonu",
+        "iconSearchPlaceholder": "Hľadať ikony...",
+        "clearIcon": "Vymazať ikonu",
+        "description": "Popis",
+        "descriptionPlaceholder": "Voliteľný popis",
+        "saveButton": "Uložiť",
+        "previewPlaceholder": "Názov štítku"
+      },
+      "delete": {
+        "title": "Zmazať štítok?",
+        "description": "Toto natrvalo zmaže „{name}\" a odstráni ho zo všetkých transakcií. Túto akciu nie je možné vrátiť späť.",
+        "deleteButton": "Zmazať",
+        "cancelButton": "Zrušiť"
+      },
+      "notifications": {
+        "createSuccess": "Štítok vytvorený",
+        "createFailed": "Štítok sa nepodarilo vytvoriť",
+        "updateSuccess": "Štítok bol aktualizovaný",
+        "updateFailed": "Štítok sa nepodarilo aktualizovať",
+        "deleteSuccess": "Štítok bol zmazaný",
+        "deleteFailed": "Štítok sa nepodarilo zmazať"
+      },
+      "reminders": {
+        "addButton": "Pridať pripomienku",
+        "empty": "Zatiaľ žiadne pripomienky. Vytvorte pripomienku a nechajte sa upozorniť na aktivitu tohto štítku.",
+        "enabled": "Zapnuté",
+        "disabled": "Vypnuté",
+        "form": {
+          "createTitle": "Vytvoriť pripomienku",
+          "editTitle": "Upraviť pripomienku",
+          "type": "Typ pripomienky",
+          "typePlaceholder": "Vyberte typ",
+          "amountThreshold": "Hraničná suma",
+          "amountThresholdPlaceholder": "Zadajte hraničnú sumu",
+          "amountThresholdHint": "Upozorníme vás, keď výdavky s týmto štítkom prekročia túto sumu",
+          "frequency": "Frekvencia",
+          "frequencyPlaceholder": "Vyberte frekvenciu",
+          "dayOfMonth": "Deň v mesiaci",
+          "dayOfMonthPlaceholder": "Vyberte deň",
+          "dayOfMonthHint": "Pri mesiacoch s menším počtom dní sa použije posledný deň",
+          "isEnabled": "Zapnuté",
+          "saveButton": "Uložiť"
+        },
+        "types": {
+          "amountThreshold": "Hraničná suma",
+          "amountThresholdDescription": "Upozorniť, keď výdavky prekročia určitú sumu",
+          "existenceCheck": "Kontrola aktivity",
+          "existenceCheckDescription": "Upozorniť, keď sa objavia transakcie s týmto štítkom"
+        },
+        "frequencies": {
+          "immediate": "Okamžite",
+          "immediateDescription": "Spustí sa pri označení transakcií štítkom (interval 24 hodín)",
+          "daily": "Denne",
+          "dailyDescription": "Kontrola každý deň",
+          "weekly": "Týždenne",
+          "weeklyDescription": "Kontrola každý pondelok",
+          "monthly": "Mesačne",
+          "monthlyDescription": "Kontrola v určený deň každého mesiaca",
+          "quarterly": "Štvrťročne",
+          "quarterlyDescription": "Kontrola každé 3 mesiace (jan, apr, júl, okt)",
+          "yearly": "Ročne",
+          "yearlyDescription": "Kontrola raz ročne v januári"
+        },
+        "delete": {
+          "title": "Zmazať pripomienku?",
+          "description": "Toto natrvalo zmaže túto pripomienku. Túto akciu nie je možné vrátiť späť.",
+          "deleteButton": "Zmazať",
+          "cancelButton": "Zrušiť"
+        },
+        "notifications": {
+          "createSuccess": "Pripomienka vytvorená",
+          "createFailed": "Pripomienku sa nepodarilo vytvoriť",
+          "updateSuccess": "Pripomienka aktualizovaná",
+          "updateFailed": "Pripomienku sa nepodarilo aktualizovať",
+          "deleteSuccess": "Pripomienka zmazaná",
+          "deleteFailed": "Pripomienku sa nepodarilo zmazať"
+        }
+      }
+    }
+  }
+}

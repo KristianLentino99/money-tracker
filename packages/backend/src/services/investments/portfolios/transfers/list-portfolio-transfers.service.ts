@@ -2,8 +2,10 @@ import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { t } from '@i18n/index';
 import Accounts from '@models/accounts.model';
 import Currencies from '@models/currencies.model';
+import InvestmentTransaction from '@models/investments/investment-transaction.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
+import Securities from '@models/investments/securities.model';
 import { Op } from 'sequelize';
 
 interface ListPortfolioTransfersParams {
@@ -70,6 +72,7 @@ export async function listPortfolioTransfers({
       { model: Accounts, as: 'toAccount', attributes: ['id', 'name', 'currencyCode', 'type'] },
       { model: Currencies, as: 'currency' },
       { model: Currencies, as: 'toCurrency' },
+      { model: InvestmentTransaction, as: 'investmentTransactions', include: [{ model: Securities, as: 'security' }] },
     ],
     order: [
       [sortBy, sortDirection],

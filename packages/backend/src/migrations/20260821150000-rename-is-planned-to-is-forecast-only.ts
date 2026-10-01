@@ -1,10 +1,6 @@
 import { QueryInterface, Transaction } from 'sequelize';
 
-import {
-  createLegacyRealTransactionsViewSql,
-  createRealTransactionsViewSql,
-  dropRealTransactionsViewSql,
-} from './utils/real-transactions-view';
+import { createLegacyRealTransactionsViewSql, dropRealTransactionsViewSql } from './utils/real-transactions-view';
 
 const OLD_COLUMN = 'isPlanned';
 const NEW_COLUMN = 'isForecastOnly';
@@ -23,7 +19,10 @@ module.exports = {
         // PostgreSQL preserves the view's original output column names when the
         // source column is renamed, so rebuild it after the table migration.
         await queryInterface.sequelize.query(dropRealTransactionsViewSql, { transaction });
-        await queryInterface.sequelize.query(createRealTransactionsViewSql, { transaction });
+        await queryInterface.sequelize.query(
+          `${dropRealTransactionsViewSql} CREATE VIEW real_transactions AS SELECT * FROM "Transactions" WHERE "isForecastOnly" = false;`,
+          { transaction },
+        );
       }
       await transaction.commit();
     } catch (error) {

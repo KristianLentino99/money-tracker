@@ -1,0 +1,105 @@
+{
+  "settings": {
+    "dataManagement": {
+      "title": "Import údajov",
+      "description": "Importujte svoje finančné údaje z rôznych zdrojov",
+      "tabs": {
+        "import": "Import",
+        "export": "Export"
+      },
+      "textSource": {
+        "title": "Import z ľubovoľného textového zdroja",
+        "aiBadge": "Poháňané AI",
+        "listDescription": "Bankové výpisy, emaily alebo akýkoľvek textový zdroj"
+      },
+      "csv": {
+        "title": "Import CSV",
+        "description": "Importujte transakcie zo súboru CSV. Môžete priradiť stĺpce, riešiť duplicity a podľa potreby vytvárať nové účty alebo kategórie.",
+        "button": "Importovať CSV súbor",
+        "cta": "Importovať CSV súbor",
+        "listDescription": "Priraďte stĺpce a vyriešte duplicity"
+      },
+      "ofx": {
+        "title": "Výpis OFX alebo QFX",
+        "listDescription": "Importujte transakcie z banky a kreditnej karty"
+      },
+      "ynab": {
+        "title": "Import z YNAB",
+        "listDescription": "Účty, transakcie, kategórie a protistrany"
+      },
+      "budget-bakers-wallet": {
+        "title": "Wallet (BudgetBakers)",
+        "listDescription": "Viacero mien s automatickým párovaním prevodov"
+      },
+      "ms-money": {
+        "title": "Microsoft Money",
+        "listDescription": "Importujte súbor .mny z Microsoft Money"
+      },
+      "importHistory": {
+        "title": "História importov",
+        "listDescription": "Prezrite si minulé importy a to, čo vytvorili"
+      },
+      "import": {
+        "back": "Späť na Import",
+        "whichImporterHint": "Neviete, ktorý použiť?",
+        "groups": {
+          "filesAndText": "Súbory a text",
+          "fromOtherApps": "Z iných aplikácií",
+          "history": "História"
+        },
+        "requestMore": {
+          "title": "Chcete viac možností? Požiadajte tu"
+        }
+      },
+      "export": {
+        "cardTitle": "Exportujte svoje údaje",
+        "backupOrExportHint": "Neviete, či potrebujete Export alebo Zálohu?",
+        "form": {
+          "title": "Exportujte svoje údaje",
+          "description": "Vyberte formát a časti údajov, ktoré chcete exportovať. Sťahovanie sa spustí hneď po potvrdení.",
+          "confirmLabel": "Stiahnuť",
+          "confirmLoading": "Pripravuje sa…",
+          "back": "Späť na Export"
+        },
+        "format": {
+          "label": "Formát",
+          "json": "JSON",
+          "csv": "CSV",
+          "xlsx": "Excel"
+        },
+        "groups": {
+          "label": "Čo zahrnúť",
+          "selectAll": "Vybrať všetko",
+          "deselectAll": "Zrušiť výber",
+          "transactions": "Transakcie a účty",
+          "transactionsDescription": "Transakcie, účty, história zostatkov, kategórie, štítky, vozidlá",
+          "budgets": "Rozpočty",
+          "budgetsDescription": "Vlastné rozpočty s priradenými kategóriami a súčtami výdavkov",
+          "subscriptions": "Predplatné a pripomienky",
+          "subscriptionsDescription": "Opakované predplatné a pripomienky platieb",
+          "investments": "Investície",
+          "investmentsDescription": "Portfóliá, pozície, investičné transakcie, prevody"
+        },
+        "notifications": {
+          "success": "Export je pripravený – sťahovanie by sa malo o chvíľu spustiť.",
+          "successWithCount": "Export je pripravený – exportovaných riadkov: {count}.",
+          "failed": "Vaše údaje sa nepodarilo exportovať. Skúste to znova, prosím.",
+          "downloadBlocked": "Export je pripravený, prehliadač však stiahnutie zablokoval. Pozrite sa do riadka s adresou, či sa tam nezobrazila výzva na stiahnutie.",
+          "tooLarge": "Vaše údaje sú na jeden export príliš veľké. Kontaktujte podporu, prosím."
+        },
+        "dateRange": {
+          "label": "Rozsah dátumov (voliteľné)",
+          "helper": "Filtrujú sa len tabuľky udalostí (transakcie, história zostatkov, investičná aktivita). Účty, kategórie a ostatné referenčné tabuľky zostanú kompletné.",
+          "placeholder": "Celé obdobie",
+          "clear": "Vymazať rozsah dátumov"
+        },
+        "accounts": {
+          "label": "Účty",
+          "helper": "Exportuje len vybrané účty s ich transakciami a históriou zostatkov. Ak chcete exportovať všetky účty, nechajte prázdne.",
+          "placeholder": "Všetky účty"
+        },
+        "listDescription": "Stiahnite si zip pre tabuľky, dane alebo presun údajov"
+      }
+    }
+  }
+}

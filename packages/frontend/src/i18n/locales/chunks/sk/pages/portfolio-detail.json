@@ -1,0 +1,234 @@
+{
+  "portfolioDetail": {
+    "loading": "Načítavanie...",
+    "loadingDetails": "Načítavanie podrobností portfólia...",
+    "loadError": "Podrobnosti portfólia sa nepodarilo načítať.",
+    "tryAgain": "Skúsiť znova",
+    "notFoundTitle": "Portfólio sa nenašlo",
+    "notFoundDescription": "Toto portfólio sa nepodarilo nájsť. Mohlo byť zmazané, alebo k nemu nemáte prístup.",
+    "backToInvestments": "Späť na Investície",
+    "subtitle": "Prehľad portfólia",
+    "actions": {
+      "transfer": "Prevod",
+      "edit": "Upraviť",
+      "delete": "Zmazať",
+      "exchangeCurrency": "Zmena meny",
+      "shareJson": "Share JSON"
+    },
+    "balance": {
+      "totalValue": "Celková hodnota",
+      "baseCurrencyEquivalent": "≈ {value} v {code}",
+      "loadError": "Súhrn portfólia sa nepodarilo načítať.",
+      "metrics": {
+        "costBasis": "Obstarávacia cena",
+        "unrealized": "Nerealizované",
+        "realized": "Realizované",
+        "totalReturn": "Celkový výnos"
+      }
+    },
+    "cashBalances": {
+      "title": "Hotovostné zostatky",
+      "emptyState": "Žiadne hotovostné zostatky",
+      "tabs": {
+        "balances": "Zostatky",
+        "cashTransactions": "Transakcie",
+        "buysSells": "Nákupy a predaje"
+      },
+      "cashTransactions": {
+        "addButton": "Pridať hotovostnú transakciu",
+        "emptyState": "Zatiaľ žiadne hotovostné transakcie",
+        "deposit": "Vklad",
+        "withdrawal": "Výber",
+        "transferIn": "Prevod dnu",
+        "transferOut": "Prevod von",
+        "exchange": "Zmena meny",
+        "deleteConfirm": "Zmazať túto hotovostnú transakciu?",
+        "linkedTransactionNote": "Tento prevod má prepojenú transakciu na účte. Čo s ňou chcete urobiť?",
+        "keepLinkedTransaction": "Ponechať transakciu na účte. Obnovia sa pôvodné údaje transakcie.",
+        "deleteLinkedTransaction": "Zmazať aj prepojenú transakciu na účte",
+        "adjustmentBadge": "Úprava",
+        "noCashBadge": "Bez vplyvu na hotovosť",
+        "markedAsAdjustment": "Označené ako úprava zostatku",
+        "markedAsContribution": "Označené ako skutočný vklad",
+        "adjustmentError": "Tento prevod sa nepodarilo aktualizovať",
+        "rowActions": "Akcie transakcie",
+        "emptyStateDescription": "Vklady, výbery a prevody tohto portfólia sa zobrazia tu.",
+        "edit": "Upraviť",
+        "editDialog": {
+          "title": "Upraviť hotovostnú transakciu",
+          "description": "Zmeňte, ako sa táto transakcia zohľadňuje v prehľadoch.",
+          "save": "Ulož zmeny"
+        }
+      },
+      "buysSells": {
+        "emptyState": "Žiadne nákupné/predajné transakcie",
+        "shares": "akcií"
+      }
+    },
+    "holdings": {
+      "title": "Pozície",
+      "subtitle": "{count} symbolov",
+      "filterPlaceholder": "Filtrovať podľa symbolu alebo názvu...",
+      "addButton": "Pridať symbol",
+      "importButton": "Importovať transakcie",
+      "importButtonShort": "Import"
+    },
+    "holdingsTable": {
+      "loadError": "Pozície sa nepodarilo načítať",
+      "empty": "Zatiaľ žiadne pozície",
+      "noFilterResults": "Žiadne zodpovedajúce pozície",
+      "noFilterResultsDescription": "Vášmu hľadaniu nezodpovedajú žiadne pozície. Skúste iný symbol alebo názov.",
+      "clearFilterButton": "Vymazať vyhľadávanie",
+      "headers": {
+        "symbol": "Symbol",
+        "name": "Názov",
+        "shares": "Akcie",
+        "price": "Cena",
+        "avgCostPerShare": "Priem. cena/akcia",
+        "totalCost": "Celková cena",
+        "marketValue": "Trhová hodnota",
+        "unrealizedGain": "Nerealizovaný zisk",
+        "realizedGain": "Realizovaný zisk"
+      },
+      "transactions": {
+        "loading": "Načítavanie transakcií…",
+        "empty": "Nenašli sa žiadne transakcie.",
+        "addFirstButton": "Pridať prvú transakciu"
+      },
+      "closedPositions": "Uzavreté pozície ({count})",
+      "stalePrice": "Posledná dostupná cena. Trhová hodnota a zisky môžu byť neaktuálne.",
+      "deleteHolding": {
+        "ariaLabel": "Zmazať pozíciu",
+        "title": "Zmazať pozíciu",
+        "description": "Toto natrvalo zmaže pozíciu {symbol} a všetky jej transakcie. Túto akciu nie je možné vrátiť späť.",
+        "confirmLabel": "Zmazať pozíciu",
+        "success": "Pozícia zmazaná.",
+        "error": "Pozíciu sa nepodarilo zmazať."
+      },
+      "addTransactionDialog": {
+        "title": "Pridať transakciu",
+        "description": "Pridajte novú transakciu do svojho portfólia."
+      },
+      "tryAgainLater": "Skúste to znova, prosím",
+      "emptyDescription": "Pridajte prvú transakciu a začnite sledovať svoje investície",
+      "addFirstHolding": "Pridať prvú pozíciu",
+      "importTransactions": "Alebo importovať zo súboru"
+    },
+    "transactionsList": {
+      "title": "Transakcie",
+      "addButton": "Pridať transakciu",
+      "loadingMore": "Načítavanie ďalších transakcií…",
+      "headers": {
+        "date": "Dátum",
+        "type": "Typ",
+        "note": "Poznámka",
+        "quantity": "Množstvo",
+        "price": "Cena",
+        "fees": "Poplatky",
+        "amount": "Suma",
+        "refAmount": "Suma v základnej mene",
+        "refFees": "Poplatky v základnej mene",
+        "settlementAmount": "Hotovosť",
+        "settlementCurrency": "Mena hotovosti",
+        "settlementFees": "Poplatky v hotovosti",
+        "settlementRate": "Kurz",
+        "createdAt": "Pridané"
+      },
+      "categories": {
+        "buy": "Nákup",
+        "sell": "Predaj",
+        "dividend": "Dividenda",
+        "transfer": "Prevod",
+        "tax": "Daň",
+        "fee": "Poplatok",
+        "cancel": "Zrušiť",
+        "other": "Ostatné"
+      },
+      "headerTooltips": {
+        "amount": "Celková suma transakcie v obchodnej mene cenného papiera.",
+        "refAmount": "Celková suma transakcie prepočítaná na vašu základnú menu.",
+        "settlementAmount": "Hotovosť skutočne zaplatená alebo prijatá na vašom účte, vo vyrovnávacej mene účtu."
+      },
+      "deleteTransaction": {
+        "tooltip": "Zmazať transakciu"
+      }
+    },
+    "manual": {
+      "derivedValue": "Current value (derived)",
+      "noValuation": "Add an end-of-day valuation to calculate value and performance.",
+      "lastReported": "Last reported value",
+      "activitySince": "Net activity since report",
+      "gain": "Gain",
+      "contributions": "Contributions",
+      "reportedEstimated": "Reported / estimated",
+      "stale": "Reported value may be stale",
+      "addTransaction": "Add manual transaction",
+      "addValuation": "Add valuation",
+      "transactionDescription": "Record a contribution, fee, tax, or other movement from the fund.",
+      "valuationDescription": "Enter the value reported by the fund for the selected date.",
+      "editingTransaction": "Editing transaction",
+      "editingValuation": "Editing valuation",
+      "date": "Date",
+      "category": "Category",
+      "amount": "Amount",
+      "value": "Reported value",
+      "note": "Note (optional)",
+      "source": "Source (optional)",
+      "save": "Save",
+      "saveTransaction": "Save transaction",
+      "saveValuation": "Save valuation",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "transactionSaved": "Transaction saved.",
+      "valuationSaved": "Valuation saved.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "timeline": "Timeline",
+      "valuation": "Valuation",
+      "valueVsCapital": "Value vs invested capital",
+      "reportedLegend": "Reported value",
+      "capitalLegend": "Invested capital",
+      "jsonTitle": "Share portfolio as JSON",
+      "jsonDescription": "Copy this portfolio's manual transactions and valuations, then paste the JSON into the same panel in another account. Linked transfers are exported as standalone records.",
+      "copyJson": "Copy JSON",
+      "pasteJson": "Paste JSON",
+      "jsonFieldLabel": "Portfolio JSON",
+      "jsonPlaceholder": "Paste a portfolio JSON export here",
+      "importJson": "Import JSON",
+      "jsonMergeDescription": "Existing matching records are skipped; nothing is deleted or overwritten.",
+      "jsonCopied": "Portfolio JSON copied to the clipboard.",
+      "jsonCopyError": "Could not copy JSON. Select the text from the field and copy it manually.",
+      "jsonPasteError": "Could not read the clipboard. Paste the JSON into the field manually.",
+      "jsonInvalid": "The pasted content is not valid JSON.",
+      "jsonImportSuccess": "Imported {imported} record(s); skipped {skipped} existing record(s).",
+      "import": "Import manual records",
+      "importDescription": "Paste text or upload a PDF, CSV, or TXT statement. Review the extracted records before importing.",
+      "paste": "Paste text",
+      "file": "Upload file",
+      "aiExtraction": "Extract with AI",
+      "localCsv": "Parse CSV locally",
+      "review": "Review extracted records",
+      "kindTransaction": "Transaction",
+      "kindValuation": "Valuation",
+      "skip": "Skip",
+      "currency": "Currency",
+      "confidence": "Confidence",
+      "sourceContext": "Source context",
+      "possibleDuplicate": "Possible duplicate",
+      "currencyMismatch": "Currency does not match this portfolio. Edit it to {currency} or skip the record.",
+      "missingFields": "Complete the highlighted fields before importing.",
+      "executeImport": "Import reviewed records",
+      "discardImport": "Discard review",
+      "importContentDiscarded": "The original pasted/uploaded content is discarded after extraction.",
+      "importSuccess": "Imported {imported} record(s); skipped {skipped}.",
+      "categories": {
+        "contribution": "Contribution",
+        "withdrawal": "Withdrawal",
+        "fee": "Fee",
+        "tax": "Tax",
+        "other_income": "Other income",
+        "distribution": "Distribution"
+      }
+    }
+  }
+}

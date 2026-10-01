@@ -1,5 +1,12 @@
 import { api } from '@/api/_api';
-import { CATEGORIZATION_MODE, EntityLogoPayload, PayeeLookupItem, PayeeModel, PayeeStats } from '@bt/shared/types';
+import {
+  CATEGORIZATION_MODE,
+  EntityLogoPayload,
+  PayeeLookupItem,
+  PayeeModel,
+  PayeeStats,
+  TransactionLocation,
+} from '@bt/shared/types';
 
 export type PayeeWithStats = PayeeModel & { stats: PayeeStats | null };
 
@@ -8,6 +15,7 @@ export interface CreatePayeePayload extends EntityLogoPayload {
   defaultCategoryId?: string | null;
   categorizationMode?: CATEGORIZATION_MODE;
   defaultTagIds?: string[];
+  defaultLocation?: TransactionLocation | null;
 }
 
 export interface UpdatePayeePayload extends EntityLogoPayload {
@@ -15,9 +23,10 @@ export interface UpdatePayeePayload extends EntityLogoPayload {
   defaultCategoryId?: string | null;
   categorizationMode?: CATEGORIZATION_MODE;
   defaultTagIds?: string[];
+  defaultLocation?: TransactionLocation | null;
 }
 
-export type PayeeSortBy = 'lastSeen' | 'name' | 'netFlow' | 'transactionCount';
+export type PayeeSortBy = 'lastSeen' | 'name' | 'netFlow' | 'transactionCount' | 'defaultTagsCount';
 export type PayeeSortDir = 'asc' | 'desc';
 
 interface ListPayeesParams {
@@ -91,6 +100,16 @@ export const deletePayee = async ({ id }: { id: string }): Promise<void> => {
 
 export const deletePayeeAndIgnore = async ({ id }: { id: string }): Promise<{ ignoredAddedCount: number }> => {
   return api.delete(`/payees/${id}?ignoreFuture=true`, {});
+};
+
+export const bulkDeletePayees = async ({
+  ids,
+  ignoreFuture,
+}: {
+  ids: string[];
+  ignoreFuture: boolean;
+}): Promise<{ deletedCount: number; ignoredAddedCount: number }> => {
+  return api.post('/payees/bulk-delete', { ids, ignoreFuture });
 };
 
 export interface IgnoredName {

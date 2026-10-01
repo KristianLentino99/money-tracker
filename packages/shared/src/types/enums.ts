@@ -173,6 +173,7 @@ export enum TRANSACTION_SORT_FIELD {
   accountName = 'accountName',
   categoryName = 'categoryName',
   payeeName = 'payeeName',
+  note = 'note',
   categorizationSource = 'categorizationSource',
 }
 
@@ -365,9 +366,7 @@ export type LogoResolutionState = LogoSource | null;
 /**
  * Supported AI providers for features like transaction categorization.
  *
- * `custom` is the user's own OpenAI-compatible endpoint (Ollama, vLLM, a proxy). It has no
- * catalog models and no `apiKeys` entry, so use `AIKeyProvider` wherever a provider means an
- * API-key slot.
+ * `custom` is any OpenAI-compatible endpoint (OpenRouter, Ollama, a proxy).
  */
 export enum AI_PROVIDER {
   anthropic = 'anthropic',
@@ -386,6 +385,7 @@ export enum AI_FEATURE {
   categorization = 'categorization',
   statementParsing = 'statement_parsing',
   investmentTransactionsParsing = 'investment_transactions_parsing',
+  receiptParsing = 'receipt_parsing',
   // Future features:
   // insights = 'insights',
   // receiptParsing = 'receipt_parsing',
@@ -403,6 +403,8 @@ export const NOTIFICATION_TYPES = {
   vehicleMaintenanceReminder: 'vehicle_maintenance_reminder',
   /** A bank sync confirmed N planned transactions by merging real rows into them. */
   plannedConfirmed: 'planned_confirmed',
+  /** Enable Banking rows still pending after a week; the user should check them with the bank. */
+  stuckPending: 'stuck_pending',
   shareInvitationReceived: 'share_invitation_received',
   shareInvitationSendFailed: 'share_invitation_send_failed',
   shareAccepted: 'share_accepted',
@@ -647,8 +649,8 @@ export type TransactionsWriteScope = (typeof TRANSACTIONS_WRITE_SCOPES)[keyof ty
 /**
  * Hardcoded sharing-related limits. Bumping these is a code-only change.
  *
- * `maxRecipientsPerResource` is the free-tier cap; lifts to 50 once a paid
- * tier exists. Counts only accepted shares (recipients), not pending invitations.
+ * Accepted-recipient caps live in `SEATS_BY_PLAN` (billing.ts) and are read
+ * through `getEntitlementsByUserId().seats`.
  *
  * `maxPendingInvitationsPerResource` caps how many concurrent pending invitations a
  * single owner can have for one resource. The smaller test value keeps the relevant
@@ -659,11 +661,6 @@ export type TransactionsWriteScope = (typeof TRANSACTIONS_WRITE_SCOPES)[keyof ty
  * `services/sharing/limits.ts` so the test override is centralized.
  */
 export const SHARING_LIMITS = {
-  maxRecipientsPerResource: 2,
-  // Household membership cap (free tier). One household = one grantor and up to
-  // this many recipients with access to every account the grantor owns. Lifts
-  // alongside `maxRecipientsPerResource` in the paid tier.
-  maxHouseholdMembers: 2,
   maxPendingInvitationsPerResource: 10,
   maxPendingInvitationsPerResourceTest: 3,
   invitationExpirationDays: 7,

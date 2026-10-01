@@ -14,6 +14,7 @@
             </div>
             <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
               {{ $t('settings.general.creditLimit.description') }}
+              <DocsLink path="/settings/general-settings/#include-credit-limits-in-balance" />
             </p>
           </div>
           <Switch
@@ -32,12 +33,31 @@
             </div>
             <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
               {{ $t('settings.general.manualTransferMatching.description') }}
+              <DocsLink path="/settings/general-settings/#match-transfers-with-manual-accounts" />
             </p>
           </div>
           <Switch
             :model-value="matchTransfersWithManualAccounts"
             :disabled="isUpdating"
             @update:model-value="handleManualTransferMatchingToggle"
+          />
+        </div>
+
+        <Separator />
+
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="text-sm font-medium">
+              {{ $t('settings.general.pendingBankTransactions.label') }}
+            </div>
+            <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              {{ $t('settings.general.pendingBankTransactions.description') }}
+            </p>
+          </div>
+          <Switch
+            :model-value="importPendingBankTransactions"
+            :disabled="isUpdating"
+            @update:model-value="handlePendingBankTransactionsToggle"
           />
         </div>
 
@@ -50,6 +70,7 @@
             </div>
             <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
               {{ $t('settings.general.savingsCategories.description') }}
+              <DocsLink path="/stats/how-stats-are-calculated/#savings-categories" />
             </p>
           </div>
           <!-- The field's own root is w-full, so the width lives on a wrapper instead of its class. -->
@@ -129,6 +150,24 @@
         <div class="flex items-center justify-between gap-4">
           <div class="flex-1">
             <div class="text-sm font-medium">
+              {{ $t('settings.general.quickStart.label') }}
+            </div>
+            <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              {{ $t('settings.general.quickStart.description') }}
+            </p>
+          </div>
+          <Switch
+            :model-value="!isQuickStartDismissed"
+            :disabled="!isOnboardingInitialized"
+            @update:model-value="handleQuickStartToggle"
+          />
+        </div>
+
+        <Separator />
+
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="text-sm font-medium">
               {{ $t('settings.general.showUpcomingTransactions.label') }}
             </div>
             <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
@@ -140,6 +179,29 @@
             :disabled="isPatching"
             @update:model-value="handleShowUpcomingToggle"
           />
+        </div>
+
+        <Separator />
+
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="min-w-48 flex-1">
+            <div class="text-sm font-medium">
+              {{ $t('settings.general.defaultPaymentType.label') }}
+            </div>
+            <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              {{ $t('settings.general.defaultPaymentType.description') }}
+            </p>
+          </div>
+          <div class="w-64 shrink-0">
+            <SelectField
+              :model-value="defaultPaymentType"
+              :values="VERBOSE_PAYMENT_TYPES"
+              :label-key="(item) => $t(item.label)"
+              :placeholder="$t('settings.general.defaultPaymentType.placeholder')"
+              :disabled="isDefaultPaymentTypeUpdating || !userSettings"
+              @update:model-value="handleDefaultPaymentTypeChange"
+            />
+          </div>
         </div>
 
         <Separator />
@@ -200,7 +262,9 @@
 </template>
 
 <script setup lang="ts">
-import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
+import { VERBOSE_PAYMENT_TYPES, VUE_QUERY_CACHE_KEYS, type VerbosePaymentType } from '@/common/const';
+import DocsLink from '@/components/common/docs-link.vue';
+import { useDefaultPaymentType } from '@/components/dialogs/manage-transaction/composables/use-default-payment-type';
 import { useMapPickerSetting } from '@/components/dialogs/manage-transaction/composables/use-map-picker-setting';
 import { useOptionalFields } from '@/components/dialogs/manage-transaction/composables/use-optional-fields';
 import AccountSelectField from '@/components/fields/account-select-field.vue';
@@ -213,6 +277,7 @@ import { useNotificationCenter } from '@/components/notification-center';
 import { useUserSettings } from '@/composable/data-queries/user-settings';
 import { filterDropdownAccounts, useAccountDropdownPrefs } from '@/composable/use-account-dropdown-prefs';
 import { useAccountsStore } from '@/stores';
+import { useOnboardingStore } from '@/stores/onboarding';
 import { AccountModel, TRANSACTION_OPTIONAL_FIELDS, TransactionOptionalField } from '@bt/shared/types';
 import { useQueryClient } from '@tanstack/vue-query';
 import { storeToRefs } from 'pinia';
@@ -226,6 +291,8 @@ const queryClient = useQueryClient();
 const { addSuccessNotification, addErrorNotification } = useNotificationCenter();
 const { data: userSettings, mutateAsync, patchAsync, isUpdating, isPatching } = useUserSettings();
 const { accountsRecord, txTargetableSourceAccountsActiveFirst } = storeToRefs(useAccountsStore());
+const onboardingStore = useOnboardingStore();
+const { isDismissed: isQuickStartDismissed, isInitialized: isOnboardingInitialized } = storeToRefs(onboardingStore);
 const {
   defaultAccountId,
   showArchivedInDropdowns,
@@ -240,6 +307,8 @@ const {
   isUpdating: isOptionalFieldsUpdating,
 } = useOptionalFields();
 
+const { defaultPaymentType, setDefaultPaymentType, isUpdating: isDefaultPaymentTypeUpdating } = useDefaultPaymentType();
+
 const {
   enabled: isMapPickerEnabled,
   setEnabled: setMapPicker,
@@ -248,6 +317,7 @@ const {
 
 const includeCreditLimitInStats = computed(() => userSettings.value?.includeCreditLimitInStats ?? false);
 const matchTransfersWithManualAccounts = computed(() => userSettings.value?.matchTransfersWithManualAccounts ?? false);
+const importPendingBankTransactions = computed(() => userSettings.value?.importPendingBankTransactions ?? false);
 const savingsCategoryIds = computed(() => userSettings.value?.savingsCategoryIds ?? []);
 const distanceUnit = computed(() => userSettings.value?.distanceUnit ?? 'km');
 const distanceUnitOptions = computed(() => [
@@ -301,6 +371,19 @@ const handleManualTransferMatchingToggle = async (value: boolean) => {
   }
 };
 
+const handlePendingBankTransactionsToggle = async (value: boolean) => {
+  try {
+    await mutateAsync({
+      ...userSettings.value,
+      importPendingBankTransactions: value,
+    });
+
+    addSuccessNotification(t('settings.general.pendingBankTransactions.successNotification'));
+  } catch {
+    addErrorNotification(t('settings.general.pendingBankTransactions.errorNotification'));
+  }
+};
+
 const handleSavingsCategoriesChange = async (value: string[]) => {
   try {
     await mutateAsync({
@@ -315,6 +398,7 @@ const handleSavingsCategoriesChange = async (value: string[]) => {
       queryClient.invalidateQueries({ queryKey: [...VUE_QUERY_CACHE_KEYS.widgetCashFlow] }),
       queryClient.invalidateQueries({ queryKey: [...VUE_QUERY_CACHE_KEYS.widgetCashFlowPrev] }),
       queryClient.invalidateQueries({ queryKey: [...VUE_QUERY_CACHE_KEYS.widgetCashFlowTrend] }),
+      queryClient.invalidateQueries({ queryKey: [...VUE_QUERY_CACHE_KEYS.fireCashFlow] }),
     ]);
   } catch {
     addErrorNotification(t('settings.general.savingsCategories.errorNotification'));
@@ -346,6 +430,8 @@ const handleDistanceUnitChange = async (value: { value: 'km' | 'mi' } | null) =>
     addErrorNotification(t('settings.general.distanceUnit.errorNotification'));
   }
 };
+const handleQuickStartToggle = (value: boolean) =>
+  value ? onboardingStore.reopen() : onboardingStore.dismissPermanently();
 
 const handleShowUpcomingToggle = async (value: boolean) => {
   try {
@@ -362,6 +448,16 @@ const handleOptionalFieldToggle = async ({ field, value }: { field: TransactionO
     addSuccessNotification(t('settings.general.transactionFields.successNotification'));
   } catch {
     addErrorNotification(t('settings.general.transactionFields.errorNotification'));
+  }
+};
+
+const handleDefaultPaymentTypeChange = async (item: VerbosePaymentType | null) => {
+  if (!item) return;
+  try {
+    await setDefaultPaymentType({ value: item.value });
+    addSuccessNotification(t('settings.general.defaultPaymentType.successNotification'));
+  } catch {
+    addErrorNotification(t('settings.general.defaultPaymentType.errorNotification'));
   }
 };
 

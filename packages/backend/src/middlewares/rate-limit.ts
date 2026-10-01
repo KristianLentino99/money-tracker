@@ -1,4 +1,3 @@
-import { isCustomModelId } from '@bt/shared/types';
 import { errorHandler } from '@controllers/helpers';
 import { t } from '@i18n/index';
 import { TooManyRequests } from '@js/errors';
@@ -139,6 +138,39 @@ export const demoStartRateLimit = createRateLimit({
 });
 
 /**
+ * Landing FAQ assistant, per IP: 10 questions per 10 minutes. Every call spends the
+ * operator's AI key on an unauthenticated route, hence `failClosed`.
+ */
+export const landingFaqIpRateLimit = createRateLimit({
+  windowSeconds: 10 * 60,
+  maxAttempts: 10,
+  keyGenerator: (req: Request) => `landing-faq:ip:${req.ip}`,
+  failClosed: true,
+});
+
+/**
+ * Landing FAQ assistant, all visitors combined: 1000 questions per day. Caps the daily AI
+ * spend when a botnet rotates IPs past the per-IP limit.
+ */
+export const landingFaqGlobalRateLimit = createRateLimit({
+  windowSeconds: 24 * 60 * 60,
+  maxAttempts: 1000,
+  keyGenerator: () => 'landing-faq:global',
+  failClosed: true,
+});
+
+/**
+ * Stripe webhook rate limit (per IP, 120 deliveries per minute). Stripe retries and
+ * backfills arrive in bursts, so the budget only has to stop a flood of forged bodies
+ * reaching signature verification. Fail-open: a Redis outage must not drop real events.
+ */
+export const stripeWebhookRateLimit = createRateLimit({
+  windowSeconds: 60,
+  maxAttempts: 120,
+  keyGenerator: (req: Request) => `stripe-webhook:ip:${req.ip}`,
+});
+
+/**
  * CSV import rate limit (per user, 30 attempts per 5 minutes). Bounds the cost of repeated
  * 10MB CSV submissions across the whole import flow, not just one step.
  */
@@ -152,14 +184,22 @@ export const csvImportRateLimit = createRateLimit({
 });
 
 /**
- * Per-user limit shared by the export/backup/restore endpoints. The prefix keeps each
- * endpoint's budget independent.
+ * Per-user limit for the heavy endpoints. The prefix keeps each endpoint's budget
+ * independent; the window and attempts default to 5 per 15 minutes.
  */
-const perUserNonDevRateLimit = ({ prefix }: { prefix: string }) =>
+const perUserNonDevRateLimit = ({
+  prefix,
+  windowSeconds = 15 * 60,
+  maxAttempts = 5,
+}: {
+  prefix: string;
+  windowSeconds?: number;
+  maxAttempts?: number;
+}) =>
   nonDev(
     createRateLimit({
-      windowSeconds: 15 * 60,
-      maxAttempts: 5,
+      windowSeconds,
+      maxAttempts,
       keyGenerator: (req: Request) => {
         const user = req.user as Users;
         return `${prefix}:user:${user.id}`;
@@ -188,6 +228,12 @@ export const backupRateLimit = perUserNonDevRateLimit({ prefix: 'backup' });
 export const backupRestoreRateLimit = perUserNonDevRateLimit({ prefix: 'backup-restore' });
 
 /**
+ * Billing rate limit. Every checkout/portal call mints a Stripe session, so this bounds
+ * how fast a hijacked session or a stuck frontend can hammer Stripe on a user's behalf.
+ */
+export const billingRateLimit = perUserNonDevRateLimit({ prefix: 'billing', windowSeconds: 60, maxAttempts: 10 });
+
+/**
  * Microsoft Money upload rate limit. The upload buffers a file of up to 50MB and
  * decrypts and parses it synchronously on the API thread, so it is far heavier
  * than the id-and-mapping steps that follow it and must not share their
@@ -195,6 +241,16 @@ export const backupRestoreRateLimit = perUserNonDevRateLimit({ prefix: 'backup-r
  * gets to send the bytes.
  */
 export const msMoneyUploadRateLimit = perUserNonDevRateLimit({ prefix: 'ms-money-upload' });
+
+/**
+ * Attachment upload rate limit. Each call buffers a file of up to 10MB and writes it to
+ * object storage, so the budget bounds both memory churn and storage spend per user.
+ */
+export const attachmentUploadRateLimit = perUserNonDevRateLimit({
+  prefix: 'attachment-upload',
+  windowSeconds: 60,
+  maxAttempts: 30,
+});
 
 /**
  * Resource-lease refresh rate limit (per user, 150 refreshes per 5 minutes).
@@ -231,34 +287,32 @@ export const shareInvitationSendRateLimit = createRateLimit({
 });
 
 /**
- * Custom AI endpoint probe rate limit (per user, 15 attempts per minute). One budget shared
- * by create, update, test and feature-config writes, since each makes the server dial a
+ * AI connection probe rate limit (per user, 15 attempts per minute). One budget shared by
+ * create, update and test, since each makes the server call a provider, sometimes at a
  * user-supplied URL. Fail-open, so a Redis blip can't break the settings page, where saving
- * an endpoint depends on a probe succeeding.
+ * a connection depends on a probe succeeding.
  */
-export const aiCustomEndpointTestRateLimit = createRateLimit({
+export const aiConnectionProbeRateLimit = createRateLimit({
   windowSeconds: 60,
   maxAttempts: 15,
   keyGenerator: (req: Request) => {
     const user = req.user as Users;
-    return `ai-custom-endpoint-test:user:${user.id}`;
+    return `ai-connection-probe:user:${user.id}`;
   },
 });
 
 /**
- * Applies the probe budget to a feature-config write only when the body carries a `custom/*`
- * model, the only case that dials the user's endpoint. Runs ahead of schema validation, so
- * the body is still unvalidated input here.
+ * AI model listing rate limit (per user, 60 per minute). The model-name field asks while the
+ * user types, so it gets the logo-search budget rather than the probe one.
  */
-export const aiCustomModelProbeRateLimit = (req: Request, res: Response, next: NextFunction) => {
-  const modelId = (req.body as { modelId?: unknown } | undefined)?.modelId;
-
-  if (typeof modelId !== 'string' || !isCustomModelId({ modelId })) {
-    return next();
-  }
-
-  return aiCustomEndpointTestRateLimit(req, res, next);
-};
+export const aiConnectionModelsRateLimit = createRateLimit({
+  windowSeconds: 60,
+  maxAttempts: 60,
+  keyGenerator: (req: Request) => {
+    const user = req.user as Users;
+    return `ai-connection-models:user:${user.id}`;
+  },
+});
 
 /**
  * Logo search rate limit (per user, 60 searches per minute). Each call hits logo.dev's Brand

@@ -212,27 +212,39 @@ const getPortfolioSummaryImpl = async ({
   let totalUnrealizedGainInBase = Money.zero();
   let totalRealizedGainInBase = Money.zero();
 
+  // One rate lookup per distinct holding currency: every lookup queries the user's
+  // currency connection before any cache, so a per-holding call is an N+1.
+  const baseRates = new Map<string, number>();
+  for (const h of holdings) if (h.baseRate !== undefined) baseRates.set(h.currencyCode, h.baseRate);
+  const toBase = async ({ amount, currencyCode }: { amount: Money; currencyCode: string }): Promise<Money> => {
+    let rate = baseRates.get(currencyCode);
+    if (rate === undefined) {
+      ({ rate } = await userExchangeRateService.getExchangeRate({
+        userId,
+        date: conversionDate,
+        baseCode: currencyCode,
+        quoteCode: baseCurrencyCode,
+      }));
+      baseRates.set(currencyCode, rate);
+    }
+    return calculateRefAmountFromParams({ amount, rate });
+  };
+
   for (const holding of holdings) {
     const marketValueInBase = Money.fromDecimal(holding.refMarketValue || '0');
 
     // Cost basis is converted at the same date as the market value, so the unrealized
     // gain reflects one FX rate instead of mixing today's rate with historical ones.
-    const costBasisInBase = await calculateRefAmount({
+    const costBasisInBase = await toBase({
       amount: Money.fromDecimal(holding.costBasis || '0'),
-      userId,
-      date: conversionDate,
-      baseCode: holding.currencyCode,
-      quoteCode: baseCurrencyCode,
+      currencyCode: holding.currencyCode,
     });
 
     const unrealizedGainInBase = marketValueInBase.subtract(costBasisInBase);
 
-    const realizedGainInBase = await calculateRefAmount({
+    const realizedGainInBase = await toBase({
       amount: Money.fromDecimal(holding.realizedGainValue || '0'),
-      userId,
-      date: conversionDate,
-      baseCode: holding.currencyCode,
-      quoteCode: baseCurrencyCode,
+      currencyCode: holding.currencyCode,
     });
 
     totalCurrentValueInBase = totalCurrentValueInBase.add(marketValueInBase);

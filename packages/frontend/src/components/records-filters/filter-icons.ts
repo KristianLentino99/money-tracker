@@ -4,6 +4,7 @@ import {
   BanknoteIcon,
   CalendarClockIcon,
   LayersIcon,
+  PaperclipIcon,
   StickyNoteIcon,
   StoreIcon,
   TagIcon,
@@ -28,4 +29,5 @@ export const FILTER_ICONS: Record<ExtraFilterKey, FunctionalComponent> = {
   transfers: ArrowLeftRightIcon,
   planned: CalendarClockIcon,
   note: StickyNoteIcon,
+  attachments: PaperclipIcon,
 };

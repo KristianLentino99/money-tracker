@@ -1,5 +1,6 @@
 import {
   currencyDisplayPreference,
+  formatCompactFiat,
   formatFiat,
   formatLargeNumber,
   formatUIAmount,
@@ -16,6 +17,7 @@ describe('js/helpers/formatters', () => {
       [0.0125, '$0.01'],
       [NaN, 'NaN'],
       [Infinity, 'Infinity'],
+      [-Infinity, '-Infinity'],
     ])('%s to be %s', (value, expected) => {
       expect(formatUIAmount(value)).toBe(expected);
     });
@@ -62,6 +64,11 @@ describe('js/helpers/formatters', () => {
     test('malformed currency code degrades to a bare number + code instead of throwing', () => {
       expect(formatUIAmount(1234.5, { currency: 'USDT' })).toBe('1,234.50 USDT');
     });
+
+    test('fractionDigits overrides the currency decimals', () => {
+      expect(formatUIAmount(72_187.5, { currency: 'USD', fractionDigits: 0 })).toBe('$72,188');
+      expect(formatUIAmount(1234.5, { currency: 'USDT', fractionDigits: 0 })).toBe('1,235 USDT');
+    });
   });
 
   describe('currencyDisplayPreference', () => {
@@ -71,13 +78,13 @@ describe('js/helpers/formatters', () => {
 
     test('symbol (default) keeps disambiguating codes', () => {
       expect(currencyDisplayPreference.value).toBe('symbol');
-      expect(formatUIAmount(1234.5, { currency: 'IDR' })).toBe('IDR\u00a01,234.50');
+      expect(formatUIAmount(1234.5, { currency: 'PLN' })).toBe('PLN\u00a01,234.50');
       expect(formatUIAmount(1234.5, { currency: 'CAD' })).toBe('CA$1,234.50');
     });
 
     test('narrowSymbol renders the local short symbol', () => {
       currencyDisplayPreference.value = 'narrowSymbol';
-      expect(formatUIAmount(1234.5, { currency: 'IDR' })).toBe('Rp\u00a01,234.50');
+      expect(formatUIAmount(1234.5, { currency: 'PLN' })).toBe('zł\u00a01,234.50');
       expect(formatUIAmount(1234.5, { currency: 'CAD' })).toBe('$1,234.50');
     });
 
@@ -133,8 +140,26 @@ describe('js/helpers/formatters', () => {
       [0.0125, '0.01'],
       [NaN, 'NaN'],
       [Infinity, 'Infinity'],
+      [-Infinity, '-Infinity'],
     ])('%s to be %s', (value, expected) => {
       expect(formatFiat(value)).toBe(expected);
+    });
+  });
+
+  describe('formatCompactFiat', () => {
+    it.each([
+      [950, '$950'],
+      [75_000, '$75K'],
+      [52_500, '$52.5K'],
+      [254_930, '$255K'],
+      [700_000, '$700K'],
+      [999_600, '$1M'],
+      [1_019_999, '$1.02M'],
+      [1_500_000, '$1.5M'],
+      [0, '$0'],
+      [-52_500, '-$52.5K'],
+    ])('%d → %s', (amount, expected) => {
+      expect(formatCompactFiat({ amount, currency: 'USD' })).toBe(expected);
     });
   });
 });

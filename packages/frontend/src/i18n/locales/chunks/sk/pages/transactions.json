@@ -1,0 +1,282 @@
+{
+  "transactions": {
+    "filters": {
+      "filtersLabel": "Filtre",
+      "selectFilters": "Vyberte filtre",
+      "reset": "Vynulovať",
+      "apply": "Použiť",
+      "dateRange": {
+        "placeholder": "Dátum alebo rozsah",
+        "presets": {
+          "thisMonth": "Tento mesiac",
+          "last3Months": "Posledné 3 mesiace",
+          "last6Months": "Posledných 6 mesiacov",
+          "last12Months": "Posledných 12 mesiacov"
+        }
+      },
+      "transactionType": {
+        "label": "Typ transakcie:",
+        "income": "Příjem",
+        "expense": "Výdavok",
+        "allTypes": "Všetky typy"
+      },
+      "amountRange": {
+        "from": "Suma od (vrátane)",
+        "to": "Do (vrátane)",
+        "placeholderFrom": ">= než",
+        "placeholderTo": "<= než",
+        "compactFrom": "Minimálna suma",
+        "compactTo": "Maximálna suma"
+      },
+      "refundsFilter": {
+        "label": "Vratky"
+      },
+      "transferFilter": {
+        "label": "Prevody"
+      },
+      "plannedFilter": {
+        "label": "Naplánované"
+      },
+      "attachments": {
+        "label": "Prílohy"
+      },
+      "filterOperation": {
+        "all": "Všetky",
+        "exclude": "Vylúčiť",
+        "only": "Iba"
+      },
+      "noteIncludes": {
+        "label": "Poznámka obsahuje (oddelené čiarkami):",
+        "placeholder": "Amazon,nike",
+        "compactPlaceholder": "Hľadať v poznámkach"
+      },
+      "tags": {
+        "allTags": "Všetky značky",
+        "tagSingular": "štítok",
+        "tagPlural": "značky",
+        "selected": "vybrané",
+        "searchPlaceholder": "Hľadať značky...",
+        "blankOption": "Bez značiek"
+      },
+      "payees": {
+        "label": "Príjemcovia",
+        "selectedOne": "1 vybraný príjemca",
+        "selectedMany": "{n} vybraných príjemcov"
+      },
+      "removeFilter": "Odstrániť filter",
+      "menu": {
+        "type": "Typ",
+        "tags": "Štítky",
+        "budgets": "Rozpočty",
+        "amount": "Rozsah sumy",
+        "note": "Poznámky"
+      },
+      "transferNature": {
+        "label": "Druhy prevodov",
+        "disabledTooltip": "Prevody sú vylúčené vyššie uvedeným filtrom, takže typy prevodov nemajú žiadny vplyv.",
+        "commonTransfer": "Medzi účtami",
+        "outOfWallet": "Mimo peňaženky",
+        "toPortfolio": "Do portfólia",
+        "toVenture": "Do rizikového kapitálu",
+        "selectedCount": "{n} vybraný"
+      },
+      "uncategorized": "Uncategorized"
+    },
+    "list": {
+      "noMoreData": "Žiadne ďalšie transakcie",
+      "loadingMore": "Načítavanie ďalších...",
+      "detailsTitle": "Podrobnosti transakcie",
+      "detailsDescription": "Zobrazte a upravte transakciu"
+    },
+    "bulkEdit": {
+      "selectAll": "Vybrať všetko",
+      "cancelSelection": "Zrušiť výber",
+      "editButton": "Upraviť",
+      "selectedCount": "Vybraných: {count}",
+      "dialogTitle": "Upraviť {count} transakcií",
+      "dialogDescription": "Zmeny sa použijú na všetky vybrané transakcie. Aktualizujú sa len vyplnené polia.",
+      "categoryLabel": "Kategória",
+      "categoryPlaceholder": "Vyberte kategóriu...",
+      "payeeLabel": "Protistrana",
+      "payeePlaceholder": "Vyberte protistranu...",
+      "tagsLabel": "Štítky",
+      "tagsPlaceholder": "Vyberte štítky...",
+      "noteLabel": "Poznámka",
+      "notePlaceholder": "Zadajte poznámku...",
+      "applyButton": "Použiť zmeny",
+      "applyingButton": "Uplatňovanie...",
+      "confirmTitle": "Potvrdiť zmeny",
+      "confirmDescription": "Chystáte sa aktualizovať {count} transakcií:",
+      "confirmCategoryLabel": "Kategória",
+      "confirmPayeeLabel": "Protistrana",
+      "confirmTagsLabel": "Štítky",
+      "confirmNoteLabel": "Poznámka",
+      "cancelButton": "Zrušiť",
+      "confirmApplyButton": "Použiť",
+      "successMessage": "Úspešne aktualizovaných {count} transakcií",
+      "unexpectedError": "Vyskytla sa neočakávaná chyba",
+      "tagModeLabel": "Akcia so štítkami",
+      "tagModeAdd": "Pridať k existujúcim štítkom",
+      "tagModeReplace": "Nahradiť všetky štítky",
+      "tagModeRemove": "Odstrániť tieto štítky",
+      "totals": {
+        "income": "Príjmy",
+        "expense": "Výdavky",
+        "net": "Čistý zostatok",
+        "transfers": "Prevody"
+      }
+    },
+    "transactionGroups": {
+      "bulkActions": {
+        "createNewGroup": "Vytvoriť novú skupinu",
+        "addToExistingGroup": "Pridať do existujúcej skupiny",
+        "groupButton": "Skupina"
+      },
+      "addToGroupDialog": {
+        "title": "Pridať do existujúcej skupiny",
+        "searchPlaceholder": "Hľadať skupiny...",
+        "noGroupsMessage": "Zatiaľ žiadne skupiny. Najprv nejakú vytvorte.",
+        "noSearchResultsMessage": "Vášmu hľadaniu nezodpovedajú žiadne skupiny.",
+        "addingText": "Pridávanie...",
+        "buttonLabel": "Pridať do skupiny",
+        "cancelButton": "Zrušiť",
+        "transactionCountLabel": "transakcie"
+      },
+      "createGroupDialog": {
+        "title": "Vytvoriť skupinu transakcií",
+        "descriptionPrefix": "Skupina",
+        "groupNameLabel": "Názov",
+        "groupNamePlaceholder": "napr. Prevod májovej výplaty",
+        "noteLabel": "Poznámka (voliteľné)",
+        "notePlaceholder": "Voliteľný popis...",
+        "creatingText": "Vytváranie...",
+        "buttonLabel": "Vytvoriť skupinu",
+        "cancelButton": "Zrušiť"
+      },
+      "groupsPage": {
+        "title": "Skupiny transakcii",
+        "searchPlaceholder": "Prehľadávať skupiny...",
+        "noGroupsMessage": "Zatiaľ neexistujú žiadne skupiny transakcií.",
+        "emptyStateHint": "Na stránke „Transakcie“ vyberte transakcie a kliknite na „Vytvoriť skupinu“, aby ste mohli začať.",
+        "transactionCountLabel": "transakcie",
+        "deleteError": "Vymazanie skupiny zlyhalo. Skúste to znovu, prosím."
+      },
+      "errors": {
+        "nameRequired": "Názov skupiny je povinný",
+        "minTransactions": "Vyberte aspoň {min} transakcie",
+        "alreadyInGroup": "Niektoré vybrané transakcie už do skupiny patria",
+        "createFailed": "Vytvorenie skupiny zlyhalo",
+        "addFailed": "Pridanie do skupiny transakcií zlyhalo"
+      }
+    },
+    "planned": {
+      "label": "Naplánované",
+      "confirmedLabel": "Potvrdené",
+      "plannedTooltip": "Naplánovaná transakcia",
+      "expiredTooltip": "Očakávalo sa pred {days} dňami, žiadna zodpovedajúca banková transakcia",
+      "mergedTooltip": "Potvrdené z plánovaného záznamu z {date}"
+    },
+    "pending": {
+      "label": "Čakajúce",
+      "tooltip": "Banka túto transakciu ešte nezaúčtovala. Neovplyvňuje zostatok účtu."
+    },
+    "table": {
+      "columns": {
+        "date": "Dátum",
+        "account": "Účet",
+        "category": "Kategória",
+        "payee": "Protistrana",
+        "amount": "Suma",
+        "refAmount": "Suma v základnej mene",
+        "originalAmount": "Pôvodná suma",
+        "note": "Poznámka",
+        "tags": "Štítky",
+        "categorizationSource": "Zaradil",
+        "group": "Skupina",
+        "refund": "Vrátenie platby",
+        "split": "Rozdeliť"
+      },
+      "outOfWallet": "Mimo peňaženky",
+      "hint": "Kliknutím na bunku ju upravíte, alebo ↗ otvorte celú transakciu. Výberom riadkov ich upravíte hromadne.",
+      "plannedRows": "Plánované transakcie: {count}",
+      "emptyTitle": "Týmto filtrom nezodpovedajú žiadne transakcie",
+      "emptyDescription": "Skúste filtre upraviť alebo vynulovať.",
+      "columnConfig": {
+        "title": "Nastavenia tabuľky",
+        "columns": "Stĺpce",
+        "visibleCount": "Viditeľných: {count}",
+        "resetDefaults": "Obnoviť predvolené",
+        "alwaysShowLockedCells": {
+          "label": "Vždy zobraziť uzamknuté bunky",
+          "description": "Zvýrazniť bunky, ktoré tu nemôžete upraviť, v každom riadku, nielen pri prejdení kurzorom."
+        }
+      },
+      "categorizationSourceValues": {
+        "manual": "Ručne",
+        "ai": "AI",
+        "mcc_rule": "Pravidlo MCC",
+        "user_rule": "Používateľské pravidlo",
+        "subscription_rule": "Pravidlo predplatného",
+        "payee_rule": "Pravidlo protistrany"
+      },
+      "viewToggle": {
+        "list": "Zoznamové zobrazenie",
+        "table": "Tabuľkové zobrazenie"
+      },
+      "fullscreen": {
+        "enter": "Režim zamerania",
+        "exit": "Ukončiť režim zamerania"
+      }
+    },
+    "bulkDelete": {
+      "button": "Zmazať",
+      "externalTooltip": "Výber obsahuje transakcie synchronizované s bankou, ktoré nemožno zmazať.",
+      "confirmButton": "Zmazať",
+      "confirmTitle": "Zmazať {count} transakcií?",
+      "confirmDescription": "Túto akciu nie je možné vrátiť späť. Pri prevodoch sa odstránia obe strany.",
+      "successMessage": "Zmazaných {count} transakcií",
+      "unexpectedError": "Transakcie sa nepodarilo zmazať. Skúste to znova, prosím."
+    },
+    "inlineEdit": {
+      "saveFailed": "{field} sa nepodarilo uložiť. Skúste to znova.",
+      "bankTitle": "Nastavené vašou bankou",
+      "bankDescription": "Dátum, účet a suma sa synchronizujú z vášho bankového pripojenia. Všetko ostatné na tejto transakcii môžete zmeniť.",
+      "managedTitle": "Spravované inde",
+      "managedDescription": "Táto transakcia patrí k portfóliu, investícii, vozidlu alebo pôžičke. Upravte ju na jej vlastnej stránke, aby zostali zostatky správne.",
+      "gotIt": "Rozumiem",
+      "openDetails": "Otvoriť podrobnosti",
+      "tooManyTags": "Najviac {max} štítkov na transakciu"
+    },
+    "bulkLinkSubscription": {
+      "button": "Link to recurring payment",
+      "title": "Link transactions to a recurring payment",
+      "description": "Link the selected transactions to one recurring payment. Income and expense transactions cannot be linked together.",
+      "selectLabel": "Recurring payment",
+      "selectPlaceholder": "Select a recurring payment",
+      "mixedTypes": "Income and expense transactions cannot be linked together. Select transactions of the same type.",
+      "confirmButton": "Link transactions",
+      "successMessage": "Selected transactions linked to the recurring payment",
+      "errorMessage": "Failed to link transactions to the recurring payment"
+    }
+  },
+  "records": {
+    "upcomingSection": {
+      "title": "Nadchádzajúce",
+      "overdueBadge": "Po splatnosti",
+      "scheduledBadge": "Naplánované",
+      "payAction": "Označiť ako zaplatené",
+      "hideToggle": "Skryť nadchádzajúce platby",
+      "expectedBadge": "Očakávané",
+      "unconfirmedBadge": "Nepotvrdené",
+      "morePlans": "+{count} ďalších plánovaných",
+      "morePlansAtLeast": "+{count}+ ďalších plánovaných",
+      "deletePlanTitle": "Zmazať plánovanú transakciu?",
+      "deletePlanDescription": "Túto akciu nie je možné vrátiť späť.",
+      "plansLoadFailed": "Plánované transakcie sa nepodarilo načítať",
+      "confirmAction": "Potvrdiť",
+      "confirmTooltip": "Peniaze sa presunuli — zaznamenajte to a aktualizujte zostatok",
+      "confirmPlanSuccess": "Plán zaznamenaný — zostatok aktualizovaný",
+      "confirmPlanError": "Plán sa nepodarilo zaznamenať"
+    }
+  }
+}

@@ -1,0 +1,363 @@
+{
+  "planned": {
+    "budgets": {
+      "backToList": "Späť na Rozpočty"
+    },
+    "subscriptions": {
+      "notFound": "Pravidelná platba sa nenašla",
+      "notFoundDescription": "Túto pravidelnú platbu sa nepodarilo nájsť. Mohla byť zmazaná, alebo k nej nemáte prístup.",
+      "title": "Pravidelné platby",
+      "description": "Sledujte pravidelné platby, účty a príjmy",
+      "addSubscription": "Pridať pravidelnú platbu",
+      "addSubscriptionShort": "Pridať",
+      "backToList": "Späť na pravidelné platby",
+      "createTitle": "Vytvoriť pravidelnú platbu",
+      "typeSubscription": "Predplatné",
+      "typeBill": "Účet",
+      "typeInstallment": "Splátka",
+      "completed": "Dokončené",
+      "paused": "Pozastavené",
+      "cancel": "Zrušiť",
+      "pauseSubscription": "Pozastaviť",
+      "resumeSubscription": "Obnoviť",
+      "deleteSubscription": "Zmazať",
+      "amount": "Suma",
+      "frequencyLabel": "Frekvencia",
+      "nextExpected": "Ďalšia očakávaná",
+      "startDate": "Dátum začiatku",
+      "linkedTransactions": "{count} prepojená transakcia | {count} prepojených transakcií",
+      "linkedTransactionsTitle": "Prepojené transakcie",
+      "noLinkedTransactions": "Zatiaľ žiadne prepojené transakcie",
+      "unlinkTransaction": "Odpojiť transakciu",
+      "suggestMatches": "Navrhnúť zhody",
+      "suggestMatchesTitle": "Navrhnuté zhody",
+      "suggestMatchesDescription": "Transakcie zodpovedajúce pravidlám vášho predplatného",
+      "noSuggestedMatches": "Nenašli sa žiadne zodpovedajúce transakcie",
+      "linkSelected": "Prepojiť vybrané ({count})",
+      "addMatchingRules": "Pridať pravidlá priraďovania",
+      "updateMatchingRules": "Aktualizovať pravidlá priraďovania",
+      "linked": {
+        "totalPaid": "Celkovo zaplatené",
+        "average": "Priemer",
+        "lastPayment": "Posledná platba",
+        "driftUp": "↑ {percent} % od prvej platby ({date})",
+        "driftDown": "↓ {percent} % od prvej platby ({date})",
+        "yearPayments": "{count} platba | {count} platieb",
+        "legendRule": "Priradené pravidlom",
+        "legendAi": "Priradené pomocou AI",
+        "legendManual": "Prepojené ručne",
+        "chartLabel": "Vývoj súm platieb v čase",
+        "gapTooltip": "Žiadne platby · {range}",
+        "convertedTooltip": "Prepočítané kurzom platným pri každej platbe"
+      },
+      "quickAdd": {
+        "currencyPlaceholder": "Vyberte menu",
+        "nextPaymentLabel": "Ďalšia platba",
+        "nextPaymentHint": "Voliteľné. Nastavte dátum a sledujte splatné platby a dostávajte pripomienky.",
+        "refineHint": "Účet, kategóriu, štítky, pripomienky a automatizáciu môžete pridať hneď po vytvorení."
+      },
+      "frequency": {
+        "weekly": "Týždenne",
+        "biweekly": "Dvojtýždenne",
+        "monthly": "Mesačne",
+        "quarterly": "Štvrťročne",
+        "semiAnnual": "Polročne",
+        "annual": "Ročne"
+      },
+      "matchSource": {
+        "manual": "Ručne",
+        "rule": "Pravidlo",
+        "ai": "AI"
+      },
+      "form": {
+        "nameLabel": "Názov",
+        "namePlaceholder": "napr. Netflix, účet za elektrinu",
+        "logoLabel": "Logo",
+        "typeLabel": "Typ",
+        "typeSubscriptionDesc": "Pravidelná platba za službu",
+        "typeBillDesc": "Pravidelný účet alebo služba",
+        "transactionTypeLabel": "Typ transakcie",
+        "transactionTypeExpense": "Výdavok",
+        "transactionTypeIncome": "Príjem",
+        "transactionTypeExpenseDesc": "Pravidelný odchádzajúci tok peňazí",
+        "transactionTypeIncomeDesc": "Pravidelná výplata, paušálna platba alebo naplánovaný vklad",
+        "transactionTypeLockedTooltip": "Typ transakcie sa po vytvorení pravidelnej platby nedá zmeniť",
+        "amountLabel": "Očakávaná suma",
+        "amountPlaceholder": "0,00",
+        "currencyLabel": "Mena",
+        "frequencyLabel": "Frekvencia",
+        "startDateLabel": "Dátum začiatku",
+        "endDateLabel": "Dátum konca",
+        "accountLabel": "Účet",
+        "noAccount": "Žiadny konkrétny účet",
+        "categoryLabel": "Kategória",
+        "categoryPlaceholder": "Vyberte kategóriu",
+        "payeeLabel": "Protistrana",
+        "payeePlaceholder": "Vyberte protistranu",
+        "payeeHint": "Priradí sa k zodpovedajúcim transakciám, ktoré ešte nemajú protistranu.",
+        "tagsLabel": "Štítky",
+        "tagsPlaceholder": "Vyberte štítky",
+        "tagsHint": "Pridá sa ku každej transakcii prepojenej s týmto predplatným. Existujúce štítky zostanú zachované.",
+        "matchingRulesLabel": "Pravidlá priraďovania",
+        "matchingRulesDescription": "Definujte pravidlá na automatické priraďovanie transakcií k tomuto predplatnému",
+        "notesLabel": "Poznámky",
+        "notesPlaceholder": "Voliteľné poznámky k tomuto predplatnému",
+        "update": "Aktualizovať",
+        "create": "Vytvoriť",
+        "rulesCount": "Nastavené pravidlá priraďovania: {count}",
+        "validationAmountCurrency": "Sumu aj menu treba zadať spolu.",
+        "validationSubscriptionRequiresAmount": "Predplatné vyžaduje sumu a menu.",
+        "typeInstallmentDesc": "Financovaný nákup splácaný v pevne určenom počte splátok",
+        "installmentScheduleHint": "Ak chcete tento plán sledovať, nastavte dátum prvej splátky a počet splátok.",
+        "installmentTotalCommitment": "Celkový záväzok: {total}",
+        "validationInstallmentRequiresSchedule": "Splátky vyžadujú dátum harmonogramu platieb.",
+        "validationInstallmentRequiresCount": "Splátky vyžadujú počet platieb.",
+        "dueDateLabel": "Dátum harmonogramu platieb",
+        "dueDateDescription": "Po nastavení získa toto predplatné harmonogram platieb, ktoré môžete v každom fakturačnom cykle označiť ako zaplatené.",
+        "maxOccurrencesLabel": "Počet splátok",
+        "maxOccurrencesPlaceholder": "Nechajte prázdne pre neurčitý počet",
+        "remindBeforeLabel": "Upozorniť pred dátumom splatnosti",
+        "remindBeforeHelper": "Pripomienky sa zobrazujú v aplikácii. Ak ich chcete dostávať aj e-mailom, zapnite to nižšie. Vyberte najviac 3.",
+        "notifyEmailLabel": "Poslať aj emailom",
+        "remindPresets": {
+          "0_days": "V deň splatnosti",
+          "1_day": "1 deň vopred",
+          "2_days": "2 dni vopred",
+          "3_days": "3 dni vopred",
+          "5_days": "5 dní vopred",
+          "1_week": "1 týždeň vopred",
+          "2_weeks": "2 týždne vopred",
+          "1_month": "1 mesiac vopred"
+        }
+      },
+      "progress": {
+        "title": "Priebeh splácania",
+        "titleGeneric": "Priebeh platieb",
+        "paidOfTotal": "Splatené {paid} z {total}",
+        "remaining": "Zostáva {count} platieb",
+        "remainingTotal": "Zostáva {amount}",
+        "completedNote": "Plán dokončený"
+      },
+      "rules": {
+        "selectField": "Vyberte pole",
+        "noteDescription": "Transakcia sa priradí, ak jej poznámka obsahuje niektoré z týchto kľúčových slov",
+        "keywordPlaceholder": "Zadajte kľúčové slovo",
+        "addKeyword": "Pridať kľúčové slovo",
+        "minAmount": "Min. suma",
+        "maxAmount": "Max. suma",
+        "currencyCode": "Kód meny",
+        "addRule": "Pridať pravidlo",
+        "fieldOptions": {
+          "note": "Poznámka",
+          "amount": "Suma",
+          "transactionType": "Typ transakcie",
+          "account": "Účet",
+          "payee": "Payee"
+        },
+        "transactionTypeOptions": {
+          "income": "Príjem",
+          "expense": "Výdavok"
+        },
+        "payeePlaceholder": "Select a payee"
+      },
+      "createSuccess": "Pravidelná platba bola úspešne vytvorená",
+      "createError": "Pravidelnú platbu sa nepodarilo vytvoriť",
+      "updateSuccess": "Pravidelná platba bola úspešne aktualizovaná",
+      "updateError": "Pravidelnú platbu sa nepodarilo aktualizovať",
+      "deleteSuccess": "Pravidelná platba bola úspešne zmazaná",
+      "deleteError": "Pravidelnú platbu sa nepodarilo zmazať",
+      "deleteConfirmTitle": "Zmazať pravidelnú platbu?",
+      "deleteConfirmDescription": "Naozaj chcete zmazať túto pravidelnú platbu? Túto akciu nie je možné vrátiť späť.",
+      "deleteConfirm": "Zmazať",
+      "toggleError": "Stav pravidelnej platby sa nepodarilo aktualizovať",
+      "unlinkSuccess": "Transakcia bola úspešne odpojená",
+      "unlinkError": "Transakciu sa nepodarilo odpojiť",
+      "unlinkConfirmTitle": "Odpojiť túto platbu?",
+      "unlinkConfirmDescription": "{payment} sa odstráni z histórie tohto predplatného. Samotná transakcia sa nezmaže.",
+      "unlinkConfirmAction": "Odpojiť",
+      "suggestError": "Navrhnuté zhody sa nepodarilo načítať",
+      "linkSuccess": "Transakcie boli úspešne prepojené",
+      "linkError": "Transakcie sa nepodarilo prepojiť",
+      "emptyState": {
+        "title": "Zatiaľ žiadne pravidelné platby",
+        "description": "Pridajte prvý pravidelný poplatok alebo účet a začnite sledovať pravidelné platby"
+      },
+      "sort": {
+        "label": "Zoradiť",
+        "ariaLabel": "Zoradiť pravidelné platby",
+        "dueDate": "Dátum splatnosti · najskôr",
+        "amount": "Suma · od najvyššej",
+        "name": "Názov · A–Z",
+        "recent": "Nedávno pridané"
+      },
+      "groups": {
+        "overdue": "Po splatnosti ({count})",
+        "dueSoon": "Splatné tento týždeň ({count})",
+        "thisMonth": "Neskôr tento mesiac ({count})",
+        "later": "Nadchádzajúce ({count})",
+        "noSchedule": "Bez harmonogramu ({count})",
+        "active": "Aktívne ({count})",
+        "paused": "Pozastavené ({count})"
+      },
+      "errorState": {
+        "title": "Vaše predplatné sa nepodarilo načítať",
+        "description": "Pri načítavaní zoznamu sa niečo pokazilo. Skontrolujte pripojenie a skúste to znova.",
+        "retry": "Skúsiť znova"
+      },
+      "summary": {
+        "filterAll": "Všetko",
+        "filterSubscriptions": "Predplatné",
+        "filterBills": "Účty",
+        "filterInstallments": "Splátky",
+        "spendingLabel": "Mesačné výdavky",
+        "monthlyCost": "~{amount}/mes.",
+        "incomeLabel": "Očakávaný príjem",
+        "monthlyIncome": "~{amount}/mes.",
+        "acrossIncome": "naprieč {count} aktívnou príjmovou platbou | naprieč {count} aktívnymi príjmovými platbami",
+        "percentOfIncome": "{percent}% z priem. príjmu",
+        "projectedPerYearLabel": "Odhad / rok",
+        "activeCountLabel": "Aktívne",
+        "loadError": "Súhrn sa nepodarilo načítať."
+      },
+      "candidates": {
+        "discover": "Objaviť",
+        "title": "Objaviť predplatné",
+        "description": "Analyzujeme históriu vašich transakcií a hľadáme pravidelné platby, ktoré by mohli byť predplatným.",
+        "lastScanned": "Naposledy prehľadané {time}",
+        "emptyTitle": "Nenašlo sa žiadne nové predplatné",
+        "emptyDescription": "V histórii vašich transakcií sa nenašli žiadne nové vzory pravidelných platieb.",
+        "add": "Pridať",
+        "dismiss": "Zamietnuť",
+        "basedOnTransactions": "Na základe {count} transakcií",
+        "confidence": {
+          "likely": "Pravdepodobná zhoda",
+          "possible": "Možná zhoda",
+          "weak": "Slabá zhoda"
+        },
+        "dismissed": "Kandidát zamietnutý",
+        "dismissError": "Kandidáta sa nepodarilo zamietnuť",
+        "close": "Zavrieť",
+        "possibleMatch": "Podobné existujúcemu: {name}",
+        "linkToExisting": "Prepojiť s existujúcim",
+        "linkSuccess": "Kandidát prepojený s existujúcim predplatným",
+        "linkError": "Kandidáta sa nepodarilo prepojiť",
+        "outdatedWarning": "Toto predplatné nebolo aktívne aspoň 2 fakturačné cykly a už nemusí byť pravidelné.",
+        "viewTransactions": "Zobraziť transakcie",
+        "sampleTransactionsTitle": "Ukážkové transakcie",
+        "sampleTransactionsDescription": "Toto sú ukážkové transakcie, ktoré viedli k rozpoznaniu tohto predplatného.",
+        "noTransactionsFound": "Nenašli sa žiadne transakcie",
+        "acceptLinkFailed": "Pravidelná platba bola vytvorená, objaveného kandidáta sa však nepodarilo označiť ako prijatého. Môže sa znova objaviť v sekcii Objaviť."
+      },
+      "periods": {
+        "status": {
+          "paid": "Zaplatené",
+          "overdue": "Po splatnosti",
+          "skipped": "Preskočené",
+          "upcoming": "Nadchádzajúce"
+        },
+        "nextDue": "Ďalšia splatnosť",
+        "overdueBadge": "Po splatnosti",
+        "inDays": "o {count} dní",
+        "paymentHistory": "História platieb",
+        "noPaymentPeriods": "Zatiaľ žiadne platobné obdobia.",
+        "dueOn": "Splatné {date}",
+        "paidAt": "Zaplatené {date}",
+        "viewTransaction": "Zobraziť transakciu",
+        "actions": {
+          "markPaid": "Označiť ako zaplatené",
+          "skip": "Preskočiť"
+        },
+        "tooltips": {
+          "markAsPaid": "Označiť ako zaplatené",
+          "skip": "Preskočiť",
+          "unlinkTransaction": "Odpojiť transakciu",
+          "revert": "Vrátiť"
+        },
+        "dialogs": {
+          "revertTitle": "Vrátiť späť na nezaplatené",
+          "revertConfirm": "Vrátiť",
+          "revertDescription": "Toto obdobie sa znova označí ako nezaplatené.",
+          "revertDescriptionUnlinksTransaction": "Prepojená transakcia sa odpojí a toto obdobie sa označí ako nezaplatené.",
+          "revertDescriptionDeletesTransaction": "Vygenerovaná transakcia sa zmaže a toto obdobie sa označí ako nezaplatené."
+        },
+        "notifications": {
+          "periodSkipped": "Obdobie preskočené",
+          "skipFailed": "Obdobie sa nepodarilo preskočiť",
+          "transactionUnlinked": "Obdobie odpojené",
+          "unlinkFailed": "Transakciu sa nepodarilo odpojiť",
+          "periodReverted": "Obdobie vrátené",
+          "revertFailed": "Obdobie sa nepodarilo vrátiť",
+          "transactionLoadFailed": "Transakciu sa nepodarilo načítať"
+        }
+      },
+      "actions": {
+        "more": "Ďalšie akcie"
+      },
+      "periodFilter": {
+        "next7Days": "Nasledujúcich 7 dní",
+        "next30Days": "Nasledujúcich 30 dní",
+        "next3Months": "Nasledujúce 3 mesiace",
+        "next6Months": "Nasledujúcich 6 mesiacov",
+        "nextYear": "Nasledujúci rok",
+        "all": "Celé obdobie"
+      },
+      "editors": {
+        "basics": {
+          "title": "Základné údaje",
+          "description": "Názov, druh a očakávaná suma.",
+          "edit": "Upraviť základné údaje",
+          "kindPlaceholder": "Vyberte druh",
+          "currencyPlaceholder": "Vyberte menu",
+          "firstPaymentDueLabel": "Prvá splátka splatná",
+          "installmentScheduleRequired": "Splátkový plán vyžaduje dátum prvej splátky a počet splátok."
+        },
+        "schedule": {
+          "title": "Harmonogram",
+          "description": "Ako často sa opakuje a kedy je splatná.",
+          "edit": "Upraviť harmonogram",
+          "frequencyPlaceholder": "Vyberte frekvenciu",
+          "clearDueDate": "Vymazať",
+          "detectionOnlyHint": "Bez dátumu splatnosti toto predplatné len rozpoznáva zodpovedajúce transakcie — bez platobných období či pripomienok.",
+          "emailOn": "Zap.",
+          "emailOff": "Vyp."
+        },
+        "automation": {
+          "title": "Automatizácia",
+          "description": "Vyberte, ako sa platby dostanú do vášho záznamu.",
+          "edit": "Upraviť automatizáciu",
+          "modeMatchLabel": "Priraďovať bankové transakcie",
+          "modeMatchDesc": "Automaticky prepojiť zodpovedajúce bankové transakcie.",
+          "modeRecordLabel": "Automaticky zaznamenávať platby",
+          "modeRecordDesc": "Zaúčtovať platbu za mňa v deň splatnosti.",
+          "modeManualLabel": "Vybavím to sám",
+          "modeManualDesc": "Platby si označím ako zaplatené sám.",
+          "accountPlaceholder": "Vyberte účet",
+          "accountOptionalHint": "Použije sa pri zaúčtovaní platieb.",
+          "accountRequiredHint": "Platby sa zaúčtujú na tento účet.",
+          "recordNeedsAmount": "Najprv nastavte sumu a menu v Základných údajoch — automatické zaznamenávanie zaúčtuje pevnú sumu.",
+          "matchNeedsRule": "Pridajte aspoň jedno úplné pravidlo — bez neho priraďovanie nemôže fungovať.",
+          "summaryRecord": "Automaticky zaznamenáva na {account}",
+          "summaryRecordNoAccount": "Automaticky zaznamenáva platby v deň splatnosti",
+          "summaryManual": "Platby označujete ako zaplatené vy",
+          "selectTransactionType": "Vyberte typ",
+          "removeRule": "Odstrániť pravidlo",
+          "removeKeyword": "Odstrániť kľúčové slovo"
+        },
+        "organize": {
+          "title": "Usporiadanie",
+          "description": "Kategória, protistrana, štítky a poznámky.",
+          "edit": "Upraviť usporiadanie",
+          "notesAdded": "Pridané",
+          "notesEmpty": "Žiadne",
+          "tagsMore": "+{count} ďalších"
+        }
+      },
+      "linkTransaction": "Link transaction",
+      "markPaid": {
+        "overpayTitle": "Payment exceeds the balance",
+        "overpayDescription": "This payment exceeds the remaining balance by {amount}. Mark it as paid anyway?",
+        "overpayConfirmButton": "Mark as paid anyway"
+      }
+    }
+  }
+}

@@ -38,10 +38,10 @@ import {
   isTwoLegTransfer,
   ACCOUNT_CATEGORIES,
   ACCOUNT_TYPES,
-  PAYMENT_TYPES,
   TRANSACTION_TRANSFER_NATURE,
   TRANSACTION_TYPES,
   type CurrencyModel,
+  type TransactionLocation,
   type TransactionModel,
 } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
@@ -67,6 +67,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
 import AccountField from './components/account-field.vue';
+import AttachmentsSection from './components/attachments-section.vue';
 import FormRow from './components/form-row.vue';
 import DestinationPanel from './components/destination-panel.vue';
 import LinkTransactionSection from './components/link-transaction-section.vue';
@@ -100,6 +101,7 @@ import {
   useUnlinkTransactions,
 } from './composables';
 import type { TransferDestinationType } from './composables/transfer-form';
+import { useDefaultPaymentType } from './composables/use-default-payment-type';
 import { useMapPickerSetting } from './composables/use-map-picker-setting';
 import { useOptionalFields } from './composables/use-optional-fields';
 import { useReverseGeocodedLabel } from './composables/use-reverse-geocoded-label';
@@ -114,7 +116,7 @@ import {
   prepopulateForm,
   resolveInitialTransactionAccount,
 } from './helpers';
-import { FORM_TYPES, UI_FORM_STRUCT, type InvestmentContributionForm } from './types';
+import { FORM_TYPES, UI_FORM_STRUCT, type InvestmentContributionForm, type TransactionPrefill } from './types';
 import { canSuggestOriginalAmount, resolveSuggestedOriginalAmount } from './utils/suggest-original-amount';
 
 defineOptions({
@@ -124,11 +126,17 @@ defineOptions({
 interface CreateRecordModalProps {
   transaction?: TransactionModel;
   oppositeTransaction?: TransactionModel;
+  /** Creation-mode starting values, laid over the form defaults. */
+  prefill?: TransactionPrefill;
+  /** Creation-mode files uploaded to the new row right after it is created. */
+  initialAttachments?: File[];
 }
 
 const props = withDefaults(defineProps<CreateRecordModalProps>(), {
   transaction: undefined,
   oppositeTransaction: undefined,
+  prefill: undefined,
+  initialAttachments: () => [],
 });
 
 // Keep `transaction` as the user-facing primary tx (set by useManageTransactionDialog
@@ -138,7 +146,10 @@ const props = withDefaults(defineProps<CreateRecordModalProps>(), {
 const transaction = computed(() => props.transaction);
 const oppositeTransaction = computed(() => props.oppositeTransaction);
 
-const emit = defineEmits(['close-modal']);
+const emit = defineEmits<{
+  'close-modal': [];
+  created: [result: { transaction: TransactionModel | undefined; attachmentsFailed: boolean }];
+}>();
 const closeModal = () => {
   emit('close-modal');
 };
@@ -191,6 +202,7 @@ tagsStore.loadTags();
 const isMobileView = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile);
 
 const isFormCreation = computed(() => !props.transaction);
+const { defaultPaymentType } = useDefaultPaymentType();
 
 const form = ref<UI_FORM_STRUCT>({
   amount: null,
@@ -201,7 +213,7 @@ const form = ref<UI_FORM_STRUCT>({
   targetAmount: null,
   category: formattedCategories.value[0] ?? null,
   time: new Date(),
-  paymentType: VERBOSE_PAYMENT_TYPES.find((item) => item.value === PAYMENT_TYPES.creditCard) ?? null,
+  paymentType: defaultPaymentType.value,
   note: undefined,
   externalUrl: undefined,
   externalReference: undefined,
@@ -245,13 +257,20 @@ const handlePayeeSelected = ({
   defaultCategoryId,
   topCategoryId,
   defaultTagIds,
+  defaultLocation,
 }: {
   payeeId: string;
   defaultCategoryId: string | null;
   topCategoryId: string | null;
   defaultTagIds: string[];
+  defaultLocation: TransactionLocation | null;
 }) => {
   applyPayeeTags({ defaultTagIds });
+
+  if (defaultLocation && !isLocationFilled.value) {
+    form.value.latitude = defaultLocation.latitude;
+    form.value.longitude = defaultLocation.longitude;
+  }
 
   if (form.value.categoryUserTouched) return;
   const targetId = defaultCategoryId ?? topCategoryId;
@@ -335,7 +354,16 @@ watch(
   { immediate: true },
 );
 
-const submitMutation = useSubmitTransaction({ onSuccess: closeModal });
+const pendingAttachments = ref<File[]>(props.initialAttachments);
+
+const submitMutation = useSubmitTransaction({
+  onSuccess: ({ created, attachmentsFailed }) => {
+    // Emitted for every creation submit: only a plain creation answers with the new row, and a
+    // listener that prefilled the form needs to know when it did not get one.
+    if (isFormCreation.value) emit('created', { transaction: created, attachmentsFailed: Boolean(attachmentsFailed) });
+    closeModal();
+  },
+});
 const unlinkMutation = useUnlinkTransactions({ onSuccess: closeModal });
 const deleteMutation = useDeleteTransaction({ onSuccess: closeModal });
 const isDeleteConfirmOpen = ref(false);
@@ -1038,6 +1066,7 @@ const submit = () => {
     transaction: transaction.value,
     linkedTransaction: linkedTransaction.value,
     oppositeTransaction: oppositeTransaction.value,
+    pendingAttachments: pendingAttachments.value,
   });
 };
 
@@ -1082,15 +1111,22 @@ const [DefineMoreOptions, ReuseMoreOptions] = createReusableTemplate();
 
 const { isEnabled: isOptionalFieldEnabled } = useOptionalFields();
 
-const showExternalUrl = computed(() => isOptionalFieldEnabled('externalUrl') || !!props.transaction?.externalUrl);
+const showExternalUrl = computed(
+  () => isOptionalFieldEnabled('externalUrl') || !!props.transaction?.externalUrl || !!props.prefill?.externalUrl,
+);
 const showExternalReference = computed(
-  () => isOptionalFieldEnabled('externalReference') || !!props.transaction?.externalReference,
+  () =>
+    isOptionalFieldEnabled('externalReference') ||
+    !!props.transaction?.externalReference ||
+    !!props.prefill?.externalReference,
 );
 const showOriginalAmount = computed(
   () => isOptionalFieldEnabled('originalAmount') || props.transaction?.originalAmount != null,
 );
-const showLocation = computed(() => isOptionalFieldEnabled('location') || !!props.transaction?.location);
 const isLocationFilled = computed(() => form.value.latitude != null || form.value.longitude != null);
+const showLocation = computed(
+  () => isOptionalFieldEnabled('location') || !!props.transaction?.location || isLocationFilled.value,
+);
 const externalUrlHref = computed(() => {
   const value = form.value.externalUrl?.trim();
   return value && isHttpUrl(value) ? value : null;
@@ -1187,6 +1223,8 @@ const prepopulateIfReady = () => {
       currentAccount: currentAccountFromRoute.value,
       defaultAccount: resolveDefaultAccount({ accounts: txTargetableSourceAccountsActiveFirst.value }),
     });
+    form.value.paymentType = defaultPaymentType.value;
+    Object.assign(form.value, props.prefill);
     hasPrepopulated.value = true;
     return;
   }
@@ -1412,6 +1450,13 @@ onUnmounted(() => {
         :disabled="isFormFieldsDisabled"
       />
     </FormRow>
+    <AttachmentsSection
+      v-if="transaction?.id || !form.toPortfolio"
+      v-model:pending="pendingAttachments"
+      :transaction-id="transaction?.id"
+      :mirror-transaction-id="isTransferTx ? oppositeTransaction?.id : undefined"
+      :disabled="isFormFieldsDisabled"
+    />
     <FormRow v-if="!isTransferTx && showOriginalAmount">
       <AmountWithCurrencyField
         v-model:amount="form.originalAmount"

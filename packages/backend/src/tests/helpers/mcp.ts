@@ -1,7 +1,10 @@
 import { authPool } from '@config/auth';
+import { app } from '@root/app';
 import { ConnectedApp } from '@services/mcp/connected-apps';
 import * as helpers from '@tests/helpers';
 import { CustomResponse } from '@tests/helpers';
+import { createHash, randomUUID } from 'node:crypto';
+import request from 'supertest';
 
 export async function getOAuthClientInfo({
   clientId,
@@ -214,4 +217,109 @@ export async function getTestOAuthRecordCounts({ clientId }: { clientId: string 
     refreshTokens: refreshTokenResult.rows[0]?.count ?? 0,
     consents: consentResult.rows[0]?.count ?? 0,
   };
+}
+
+export interface McpTestSession {
+  token: string;
+  sessionId: string;
+}
+
+interface McpRpcResult<T> {
+  jsonrpc: string;
+  id?: number;
+  result?: T;
+  error?: { code: number; message: string };
+}
+
+export interface McpToolResult {
+  content: Array<{ type: string; text?: string }>;
+  isError?: boolean;
+}
+
+function decodeMcpResponse<T>({ response }: { response: request.Response }): McpRpcResult<T> {
+  if (response.body?.jsonrpc) return response.body as McpRpcResult<T>;
+  const events = response.text.split('\n').filter((line) => line.startsWith('data: '));
+  if (!events.length) throw new Error(`Missing MCP JSON-RPC response (${response.status}): ${response.text}`);
+  return JSON.parse(events[events.length - 1]!.slice(6)) as McpRpcResult<T>;
+}
+
+export async function initializeMcpSession({
+  scopes = ['finance:read', 'finance:write', 'finance:delete', 'profile:read'],
+}: { scopes?: string[] } = {}): Promise<McpTestSession> {
+  const client = await createTestOAuthClient();
+  const token = randomUUID();
+  await createTestOAuthAccessToken({
+    id: `test-access-token-${randomUUID()}`,
+    token: createHash('sha256').update(token).digest('base64url'),
+    clientId: client.clientId,
+    scopes: JSON.stringify(scopes),
+  });
+  const response = await request(app)
+    .post('/mcp')
+    .set('Authorization', `Bearer ${token}`)
+    .set('Accept', 'application/json, text/event-stream')
+    .send({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'initialize',
+      params: {
+        protocolVersion: '2025-03-26',
+        capabilities: {},
+        clientInfo: { name: 'money-tracker-e2e', version: '1.0.0' },
+      },
+    });
+  if (response.status !== 200 || !response.headers['mcp-session-id']) {
+    throw new Error(`MCP initialization failed (${response.status}): ${response.text}`);
+  }
+  const session = { token, sessionId: String(response.headers['mcp-session-id']) };
+  await request(app)
+    .post('/mcp')
+    .set('Authorization', `Bearer ${token}`)
+    .set('Mcp-Session-Id', session.sessionId)
+    .set('Accept', 'application/json, text/event-stream')
+    .send({ jsonrpc: '2.0', method: 'notifications/initialized' });
+  return session;
+}
+
+export async function listMcpTools({ session }: { session: McpTestSession }) {
+  const response = await request(app)
+    .post('/mcp')
+    .set('Authorization', `Bearer ${session.token}`)
+    .set('Mcp-Session-Id', session.sessionId)
+    .set('Accept', 'application/json, text/event-stream')
+    .send({ jsonrpc: '2.0', id: 2, method: 'tools/list' });
+  return decodeMcpResponse<{ tools: Array<{ name: string; inputSchema: Record<string, unknown> }> }>({ response });
+}
+
+export async function callMcpTool({
+  session,
+  name,
+  args = {},
+}: {
+  session: McpTestSession;
+  name: string;
+  args?: Record<string, unknown>;
+}): Promise<McpRpcResult<McpToolResult>> {
+  const response = await request(app)
+    .post('/mcp')
+    .set('Authorization', `Bearer ${session.token}`)
+    .set('Mcp-Session-Id', session.sessionId)
+    .set('Accept', 'application/json, text/event-stream')
+    .send({ jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name, arguments: args } });
+  return decodeMcpResponse<McpToolResult>({ response });
+}
+
+export async function closeMcpSession({ session }: { session: McpTestSession }): Promise<void> {
+  await request(app)
+    .delete('/mcp')
+    .set('Authorization', `Bearer ${session.token}`)
+    .set('Mcp-Session-Id', session.sessionId)
+    .set('Accept', 'application/json, text/event-stream');
+}
+
+export function parseMcpToolData<T>({ response }: { response: McpRpcResult<McpToolResult> }): T {
+  if (response.error || response.result?.isError) throw new Error(JSON.stringify(response));
+  const text = response.result?.content.find((item) => item.type === 'text')?.text;
+  if (text === undefined) throw new Error('Missing MCP text content');
+  return JSON.parse(text) as T;
 }

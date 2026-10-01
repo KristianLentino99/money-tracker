@@ -1,0 +1,134 @@
+{
+  "pages": {
+    "importExport": {
+      "budgetBakersWalletImport": {
+        "pageTitle": "Import z Wallet (BudgetBakers)",
+        "pageDescription": "Importujte transakcie exportované z aplikácie Wallet od BudgetBakers.",
+        "fileUpload": {
+          "stepTitle": "Nahrajte svoj CSV súbor z Wallet",
+          "description": "Nahrajte jeden alebo viac exportovaných CSV súborov z Wallet a importujte transakcie. Všetky súbory musia mať rovnaké stĺpce.",
+          "maxSize": "Maximálna veľkosť súboru: 10 MB",
+          "parsing": "Spracúvanie…",
+          "errors": {
+            "invalidFormatNamed": "„{name}\" nie je súbor CSV.",
+            "parseFailed": "Súbor sa nepodarilo spracovať. Skontrolujte formát a skúste to znova, prosím.",
+            "merge": {
+              "emptySelection": "Vyberte aspoň jeden CSV súbor",
+              "fileReadFailed": "„{file}\" sa nepodarilo prečítať",
+              "fileEmpty": "„{file}\" je prázdny",
+              "fileNoDataRows": "„{file}\" neobsahuje žiadne dátové riadky",
+              "headerMismatch": "Stĺpce v „{file}\" sa nezhodujú s prvým súborom. Všetky súbory musia mať rovnaké stĺpce v rovnakom poradí.",
+              "forbiddenHeader": "„{file}\" používa vyhradený názov stĺpca",
+              "tooManyRows": "Vybrané súbory obsahujú spolu viac než {max} riadkov. Odstráňte niektoré súbory alebo riadky a skúste to znova.",
+              "parseError": "„{file}\" sa nepodarilo spracovať. Uistite sa, že ide o platný CSV súbor."
+            }
+          },
+          "continue": "Pokračovať"
+        },
+        "preview": {
+          "accountsHelper": "Nastavte, ako sa má pri importe naložiť s každým rozpoznaným účtom.",
+          "accounts": "Účty",
+          "transactions": "Transakcie",
+          "rowPrefix": "Riadok {rowIndex}: "
+        },
+        "accountRow": {
+          "transactionsCount": "{count} transakcie | {count} transakcia | {count} transakcií",
+          "modeLabel": "Akcia",
+          "modePlaceholder": "Vyberte akciu",
+          "modeCreateNew": "Vytvoriť nový účet",
+          "modeLinkExisting": "Prepojiť s existujúcim účtom",
+          "currentBalanceLabel": "Aktuálny zostatok (voliteľné)",
+          "currentBalancePlaceholder": "napr. 1234,56",
+          "currentBalanceHint": "Nechajte prázdne, ak chcete začať od súčtu importovaných transakcií.",
+          "linkTargetLabel": "Existujúci účet",
+          "linkTargetPlaceholder": "Vyberte účet",
+          "keepBalanceNote": "Aktuálny zostatok existujúceho účtu zostane zachovaný. História sa doplní spätne."
+        },
+        "execute": {
+          "starting": "Spúšťanie importu…",
+          "progressCount": "{processed} / {total}",
+          "statusQueued": "V rade",
+          "statusRunning": "Importovanie...",
+          "statusCompleted": "Dokončené",
+          "statusFailed": "Zlyhalo",
+          "failed": "Import zlyhal.",
+          "partialImportNote": "Niektoré riadky mohli byť importované ešte pred týmto zlyhaním. Opätovný import by mohol vytvoriť duplicity."
+        },
+        "done": {
+          "successTitle": "Import dokončený",
+          "successDescription": "Vaše údaje z Wallet boli úspešne importované.",
+          "partialTitle": "Importované s chybami ({count})",
+          "partialDescription": "Niektoré riadky sa importovali úspešne, pri ostatných sa vyskytli chyby.",
+          "allFailedTitle": "Import zlyhal",
+          "allFailedDescription": "Nebol importovaný žiadny riadok. Pozrite si chyby nižšie a skúste to znova.",
+          "accountsCreated": "Vytvorené účty",
+          "accountsLinked": "Prepojené účty",
+          "accountsSkipped": "Preskočené účty",
+          "categoriesCreated": "Vytvorené kategórie",
+          "tagsCreated": "Vytvorené štítky",
+          "transactionsImported": "Importované transakcie",
+          "transfersImported": "Importované prevody",
+          "outOfWalletImported": "Importované mimo peňaženky",
+          "mergedIntoPlanned": "Zlúčené s plánovanými",
+          "duplicatesSkipped": "Preskočené duplicity",
+          "errorsTitle": "Zlyhalo riadkov: {count} | Zlyhal {count} riadok | Zlyhali {count} riadky",
+          "errorsOverflow": "+{count} ďalších",
+          "balanceWarningTitle": "Niektoré zostatky účtov môžu byť nesprávne",
+          "balanceWarningBody": "Po importe sa nepodarilo obnoviť zostatok na jednom alebo viacerých existujúcich účtoch. Skontrolujte dotknuté účty.",
+          "viewTransactions": "Zobraziť transakcie",
+          "importAnother": "Importovať ďalší súbor"
+        },
+        "stepper": {
+          "steps": {
+            "upload": "Nahratie",
+            "resolve": "Vyriešiť",
+            "review": "Kontrola",
+            "results": "Hotovo"
+          }
+        },
+        "resolve": {
+          "resolvedCounterWord": "vyriešené",
+          "accounts": {
+            "sectionTitle": "Účty",
+            "currentBalanceLabel": "Aktuálny zostatok (voliteľné)",
+            "currentBalancePlaceholder": "Nechajte prázdne, ak chcete použiť importovaný súčet",
+            "willCreateHint": "Vytvorí sa nový účet v mene {currency}",
+            "skippedNote": "Preskočené účty: {count}. Ich transakcie — a akékoľvek prevody z nich alebo na ne — sa neimportujú."
+          },
+          "categories": {
+            "sectionTitle": "Kategórie"
+          },
+          "quickActions": {
+            "mapExactMatches": "Priradiť presné zhody",
+            "createNewForUnmatched": "Vytvoriť nové pre nezhodné",
+            "reset": "Vynulovať",
+            "tooltips": {
+              "mapExactMatchesAccounts": "Prepojí každý účet, ktorého názov presne zodpovedá existujúcemu účtu",
+              "mapExactMatchesCategories": "Prepojí každú kategóriu, ktorej názov presne zodpovedá existujúcej kategórii",
+              "createNewForUnmatched": "Pri všetkých doteraz nepriradených riadkoch nastaví vytvorenie nového záznamu",
+              "reset": "Vymaže všetky voľby a znova automaticky priradí podľa názvu"
+            }
+          },
+          "footer": {
+            "back": "Späť",
+            "continue": "Pokračovať"
+          }
+        },
+        "review": {
+          "transactions": "Transakcie",
+          "transfersDetected": "Rozpoznané prevody",
+          "outOfWallet": "Mimo peňaženky",
+          "duplicatesSkipped": "Preskočené duplicity",
+          "willImport": "Importuje sa",
+          "warningsTitle": "Upozornenia: {count}",
+          "rowPrefix": "Riadok {rowIndex}:",
+          "duplicatesTitle": "Možné duplicity: {count}",
+          "duplicatesHint": "Označené riadky sa importujú aj tak; neoznačené duplicity sa preskočia.",
+          "back": "Späť",
+          "importButton": "Importovať {count} transakcií",
+          "importing": "Importovanie..."
+        }
+      }
+    }
+  }
+}

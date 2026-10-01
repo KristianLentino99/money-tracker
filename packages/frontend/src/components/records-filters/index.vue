@@ -22,6 +22,7 @@
       :refund-filter="filters.refundFilter"
       :transfer-filter="filters.transferFilter"
       :planned-filter="filters.plannedFilter"
+      :hide-planned="hidePlanned"
       @update:refund-filter="$emit('update:filters', { ...filters, refundFilter: $event })"
       @update:transfer-filter="$emit('update:filters', { ...filters, transferFilter: $event })"
       @update:planned-filter="$emit('update:filters', { ...filters, plannedFilter: $event })"
@@ -36,6 +37,12 @@
     <NoteIncludesFilter
       :note-includes="filters.noteIncludes"
       @update:note-includes="$emit('update:filters', { ...filters, noteIncludes: $event })"
+    />
+
+    <OperationPills
+      :label="$t('transactions.filters.attachments.label')"
+      :model-value="filters.attachmentFilter"
+      @update:model-value="$emit('update:filters', { ...filters, attachmentFilter: $event })"
     />
 
     <AccountMultiSelectField
@@ -97,6 +104,7 @@ import AmountRangeFilter from './filters/amount-range-filter.vue';
 import DateRangeFilter from './filters/date-range-filter.vue';
 import ExclusionsFilter from './filters/exclusions.vue';
 import NoteIncludesFilter from './filters/note-includes.vue';
+import OperationPills from './filters/operation-pills.vue';
 import PayeeMultiSelectField from '@/components/fields/payee-multi-select-field.vue';
 import TagFilter from './filters/tag-filter.vue';
 import TransactionTypeFilter from './filters/transaction-type-filter.vue';
@@ -110,6 +118,7 @@ withDefaults(
     isFiltersOutOfSync: boolean;
     /** Surface the sticky footer must blend with: the panel renders both in dialogs and inline on cards. */
     surface?: 'dialog' | 'card';
+    hidePlanned?: boolean;
   }>(),
   { surface: 'dialog' },
 );

@@ -4,11 +4,12 @@ import * as userSettingsService from '@services/user-settings/update-settings';
 import { z } from 'zod';
 
 /**
- * Key material is omitted from the body because `GET /user/settings` redacts it, so a client
- * echoing back the settings it read must not be rejected over fields it never received.
+ * Service-owned AI slices and `fire` are dropped unvalidated. `fire` is PATCH-only: PUT echoes the
+ * client's cached copy, which can be older than the stored one, and a stored `fire` that fails a
+ * later-tightened limit must not break unrelated PUTs.
  */
-const ZodUpdateSettingsBodySchema = ZodSettingsSchema.extend({
-  ai: ZodSettingsSchema.shape.ai.unwrap().omit({ apiKeys: true, customEndpoints: true }).optional(),
+const ZodUpdateSettingsBodySchema = ZodSettingsSchema.omit({ fire: true }).extend({
+  ai: ZodSettingsSchema.shape.ai.unwrap().omit({ connections: true, featureConfigs: true }).optional(),
 });
 
 const schema = z.object({

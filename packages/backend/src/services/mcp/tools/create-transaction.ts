@@ -1,12 +1,12 @@
 import { PAYMENT_TYPES, TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES } from '@bt/shared/types';
-import { recordId } from '@common/lib/zod/custom-types';
+import { currencyCode, recordId } from '@common/lib/zod/custom-types';
 import { trackMcpToolUsed } from '@js/utils/posthog';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { deserializeCreateTransaction, serializeTransactionTuple } from '@root/serializers';
 import { createTransaction } from '@services/transactions/create-transaction';
 import { z } from 'zod';
 
-import { getUserId, jsonContent, requireScope } from './helpers';
+import { assertMcpMutationAllowed, assertOriginalCurrencyArgs, getUserId, jsonContent } from './helpers';
 
 const inputSchema = {
   accountId: recordId().describe('ID of the account the transaction belongs to'),
@@ -57,6 +57,19 @@ const inputSchema = {
     .boolean()
     .optional()
     .describe('Mark the transaction as planned rather than an already-happened record'),
+  originalAmount: z
+    .number()
+    .nonnegative()
+    .finite()
+    .optional()
+    .describe(
+      'Amount in the currency the purchase was originally priced in (decimal), e.g. 66.42 for a PLN invoice paid from a UAH account. Informational only: never affects balances. Requires originalCurrencyCode',
+    ),
+  originalCurrencyCode: currencyCode()
+    .optional()
+    .describe(
+      'ISO 4217 code of originalAmount (e.g. "PLN"). Requires originalAmount. Cannot be combined with transfer fields',
+    ),
 };
 
 export function registerCreateTransaction(server: McpServer) {
@@ -64,13 +77,15 @@ export function registerCreateTransaction(server: McpServer) {
     'create_transaction',
     {
       description:
-        'Create a new transaction (income, expense, or transfer). Requires accountId, amount (decimal), transactionType, paymentType, and transferNature. For transfers, also provide destinationAccountId and destinationAmount. Use splits to categorize portions of the amount.',
+        'Create a new transaction (income, expense, or transfer). Requires accountId, amount (decimal), transactionType, paymentType, and transferNature. For transfers, also provide destinationAccountId and destinationAmount. Use splits to categorize portions of the amount. Use originalAmount + originalCurrencyCode to record what the purchase cost in its invoice currency when that differs from the account currency.',
       inputSchema,
     },
     async (args, extra) => {
       const userId = getUserId({ extra });
-      requireScope({ extra, scope: 'finance:write' });
+      await assertMcpMutationAllowed({ extra, userId });
       trackMcpToolUsed({ userId, tool: 'create_transaction', clientId: extra.authInfo?.clientId });
+
+      assertOriginalCurrencyArgs({ args });
 
       const params = deserializeCreateTransaction(
         {
@@ -88,6 +103,8 @@ export function registerCreateTransaction(server: McpServer) {
           splits: args.splits,
           tagIds: args.tagIds,
           isForecastOnly: args.isForecastOnly,
+          originalAmount: args.originalAmount,
+          originalCurrencyCode: args.originalCurrencyCode,
         },
         userId,
       );

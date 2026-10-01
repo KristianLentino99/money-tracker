@@ -23,6 +23,7 @@ RUN npm ci --include=dev
 # Copy source codes
 COPY packages/backend ./packages/backend
 COPY packages/shared ./packages/shared
+COPY packages/frontend/public/.well-known/mcp/server-card.json ./packages/frontend/public/.well-known/mcp/server-card.json
 
 # Run this command to keep container alive. Without it will be demounted right after deps installation
 CMD ["tail", "-f", "/dev/null"]

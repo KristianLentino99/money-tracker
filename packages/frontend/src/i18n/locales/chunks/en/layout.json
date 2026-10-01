@@ -21,7 +21,9 @@
       "planned": "Forecast",
       "subscriptions": "Recurring Payments"
     },
-    "venture": "Venture"
+    "venture": "Venture",
+    "helpAndDocs": "Help & docs",
+    "appVersion": "App version {version}"
   },
   "mobileHubs": {
     "accounts": {
@@ -35,6 +37,8 @@
     "addTransaction": "Add transaction"
   },
   "sidebar": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
     "settings": {
       "title": "Settings",
       "sections": {
@@ -75,7 +79,8 @@
       "synchronizing": "Synchronizing...",
       "syncedTime": "Synced {time}",
       "syncingAccounts": "Syncing {count} accounts",
-      "stuck": "Sync stuck"
+      "stuck": "Sync stuck",
+      "failed": "Sync failed, some accounts need attention"
     },
     "categorization": {
       "title": "AI Categorization",
@@ -88,7 +93,11 @@
       "allSkipped": "AI couldn't confidently categorize the transaction | AI couldn't confidently categorize any of the {count} transactions",
       "queued": "Waiting to start...",
       "transactions": "transactions"
-    }
+    },
+    "moreActions": "More ways to add data",
+    "importDataHint": "CSV file or bank statement",
+    "attachInvoice": "Attach invoice",
+    "attachInvoiceHint": "We find the transaction it belongs to"
   },
   "themeSelector": {
     "light": "Light",
@@ -268,8 +277,8 @@
             "description": "Explore available AI capabilities"
           },
           "configure-ai": {
-            "title": "Set your own API key",
-            "description": "Use your AI API key for the unlimited and uninterrupted access"
+            "title": "Add your own AI model",
+            "description": "Connect OpenAI, Claude, Gemini or a local model."
           },
           "invite-household-member": {
             "title": "Invite a household member",

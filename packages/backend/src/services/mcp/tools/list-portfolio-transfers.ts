@@ -20,7 +20,7 @@ export function registerListPortfolioTransfers(server: McpServer) {
     'list_portfolio_transfers',
     {
       description:
-        'Cash movement history of a portfolio: account↔portfolio transfers, direct deposits/withdrawals, linked bank transactions, and currency exchanges. Each entry names the source/destination portfolio or account. Sorted by date, newest first. Returns { transfers, totalCount }.',
+        'Cash movement history of a portfolio: account↔portfolio transfers, direct deposits/withdrawals, linked bank transactions, grouped investment contributions with their purchases, and currency exchanges. Each entry names the source/destination portfolio or account. Sorted by date, newest first. Returns { transfers, totalCount }.',
       inputSchema,
     },
     async (args, extra) => {

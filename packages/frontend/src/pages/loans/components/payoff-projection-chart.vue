@@ -163,6 +163,7 @@ import { useChartTooltipPosition } from '@/composable/charts/use-chart-tooltip-p
 import { useUpdateLoan } from '@/composable/data-queries/loans';
 import { useFormatCurrency } from '@/composable/formatters';
 import { useDateLocale } from '@/composable/use-date-locale';
+import { formatDuration } from '@/js/helpers/format-duration';
 import { captureException } from '@/lib/sentry';
 import { refDebounced, useResizeObserver } from '@vueuse/core';
 import { parseISO, startOfToday } from 'date-fns';
@@ -190,7 +191,11 @@ const updateLoanMutation = useUpdateLoan();
 // Reference "now" anchoring every scenario; fixed for the component's lifetime.
 const today = startOfToday();
 
-const MONTHS_PER_YEAR = 12;
+const DURATION_KEYS = {
+  years: 'loans.detail.payoffChart.yearsLabel',
+  months: 'loans.detail.payoffChart.monthsLabel',
+  yearsMonths: 'loans.detail.payoffChart.yearsMonthsLabel',
+};
 // Typographic minus (U+2212), not a hyphen-minus, to align with the `+` glyph in tabular figures.
 const MINUS_SIGN = '−';
 
@@ -218,8 +223,12 @@ const minimumPayment = computed<number | null>(() => {
   });
 });
 
-// Seeds from the planned (or minimum) payment so the curve starts on a sensible value to nudge.
+// Seeds from the planned (or minimum) payment so the curve starts on a sensible value to nudge,
+// and re-seeds when either changes so an edited loan is reflected in the field, curve and legend.
 const customPayment = ref<number | null>(plannedPayment.value ?? minimumPayment.value ?? null);
+watch([plannedPayment, minimumPayment], () => {
+  customPayment.value = plannedPayment.value ?? minimumPayment.value ?? null;
+});
 
 const onCustomInput = (value: string | number | null) => {
   customPayment.value = typeof value === 'number' ? value : null;
@@ -306,14 +315,6 @@ const legendEntries = computed(() =>
     })),
 );
 
-const formatDuration = (totalMonths: number): string => {
-  const years = Math.floor(totalMonths / MONTHS_PER_YEAR);
-  const months = totalMonths % MONTHS_PER_YEAR;
-  if (years === 0) return t('loans.detail.payoffChart.monthsLabel', { n: months });
-  if (months === 0) return t('loans.detail.payoffChart.yearsLabel', { n: years });
-  return t('loans.detail.payoffChart.yearsMonthsLabel', { y: years, m: months });
-};
-
 // Per-scenario comparison vs the planned baseline; falls back to an absolute summary without one.
 const comparisons = computed(() => {
   const planned = scenarioMap.value.planned?.scenario;
@@ -358,8 +359,12 @@ const comparisons = computed(() => {
         timeText: sameTime
           ? t('loans.detail.payoffChart.sameAsPlanned')
           : monthsDelta < 0
-            ? t('loans.detail.payoffChart.earlierBy', { time: formatDuration(Math.abs(monthsDelta)) })
-            : t('loans.detail.payoffChart.laterBy', { time: formatDuration(monthsDelta) }),
+            ? t('loans.detail.payoffChart.earlierBy', {
+                time: formatDuration({ months: Math.abs(monthsDelta), t, keys: DURATION_KEYS }),
+              })
+            : t('loans.detail.payoffChart.laterBy', {
+                time: formatDuration({ months: monthsDelta, t, keys: DURATION_KEYS }),
+              }),
       });
     } else {
       result.push({

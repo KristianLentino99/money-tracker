@@ -11,7 +11,9 @@
             "map": "Mappa colonne",
             "resolve": "Risolvi valori",
             "review": "Revisione",
-            "results": "Fatto"
+            "results": "Fatto",
+            "resolveAccounts": "Conti",
+            "resolveCategories": "Categorie"
           }
         },
         "steps": {
@@ -136,7 +138,8 @@
           "failed": "Non riuscite",
           "noErrors": "Nessun errore",
           "balanceWarningTitle": "I saldi dei conti potrebbero non essere sincronizzati",
-          "balanceWarningBody": "Le transazioni sono state importate, ma non è stato possibile aggiornare i saldi di alcuni conti in seguito. Rivedi questi conti e regola manualmente i saldi se necessario."
+          "balanceWarningBody": "Le transazioni sono state importate, ma non è stato possibile aggiornare i saldi di alcuni conti in seguito. Rivedi questi conti e regola manualmente i saldi se necessario.",
+          "accountsSkipped": "Conti omessi"
         }
       },
       "columnMapping": {
@@ -260,7 +263,8 @@
           "empty": "Nessun conto trovato nel CSV",
           "currentBalanceLabel": "Saldo attuale",
           "currentBalancePlaceholder": "0,00",
-          "currentBalanceHint": "Il saldo attualmente detenuto da questo conto: l'importazione imposterà il conto esattamente su questo valore. Lascia vuoto per usare la somma delle transazioni importate."
+          "currentBalanceHint": "Il saldo attualmente detenuto da questo conto: l'importazione imposterà il conto esattamente su questo valore. Lascia vuoto per usare la somma delle transazioni importate.",
+          "skippedNote": "{count} account(s) will be skipped. Their transactions will not be imported."
         },
         "categories": {
           "sectionTitle": "Mappatura categorie",

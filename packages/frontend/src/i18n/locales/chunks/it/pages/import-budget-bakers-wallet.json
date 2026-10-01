@@ -75,7 +75,8 @@
           "balanceWarningTitle": "Alcuni saldi dei conti potrebbero non essere corretti",
           "balanceWarningBody": "Non è stato possibile azzerare il saldo di uno o più conti esistenti dopo l'importazione. Rivedi i conti interessati.",
           "viewTransactions": "Visualizza transazioni",
-          "importAnother": "Importa un altro file"
+          "importAnother": "Importa un altro file",
+          "accountsSkipped": "Conti omessi"
         },
         "stepper": {
           "steps": {
@@ -91,7 +92,8 @@
             "sectionTitle": "Conti",
             "currentBalanceLabel": "Saldo attuale (facoltativo)",
             "currentBalancePlaceholder": "Lascia vuoto per usare il totale importato",
-            "willCreateHint": "Verrà creato un nuovo conto in {currency}"
+            "willCreateHint": "Verrà creato un nuovo conto in {currency}",
+            "skippedNote": "{count} account(s) will be skipped. Their transactions — and any transfers to or from them — will not be imported."
           },
           "categories": {
             "sectionTitle": "Categorie"

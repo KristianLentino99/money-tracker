@@ -101,6 +101,7 @@
       "archive": {
         "title": "Arsipkan Akun",
         "description": "Pengarsipan menyimpan semua transaksi tetapi menghapus akun dari daftar aktif Anda. Koneksi bank dan keanggotaan grup akan diputuskan.",
+        "compareOptionsLink": "Archive, exclude or delete?",
         "archiveButton": "Arsipkan Akun",
         "confirmTitle": "Arsipkan Akun",
         "confirmDescription": "Yakin ingin mengarsipkan \"{name}\"? Ini akan:",
@@ -142,7 +143,13 @@
         "balanceComparison": "Perbandingan Saldo Saat Ini:",
         "systemAccount": "Akun Sistem:",
         "externalAccount": "Akun Eksternal:",
-        "adjustmentNote": "Jika saldo berbeda, transaksi penyesuaian akan dibuat secara otomatis."
+        "difference": "Difference",
+        "residualTitle": "How should we handle the difference?",
+        "residualAdjustmentLabel": "Add a balance correction",
+        "residualAdjustmentDescription": "Adds one balance adjustment transaction dated today. Your past balances stay exactly as they are.",
+        "residualOpeningLabel": "Change the starting balance",
+        "residualOpeningDescription": "Moves the account's starting balance by the difference, so every past balance shifts too. Pick this if transactions are missing from the start of the history.",
+        "residualHint": "The final amount is set after the first sync, so it can differ a little from this preview."
       },
       "tabs": {
         "details": "Detail",
@@ -152,11 +159,17 @@
       },
       "details": {
         "creditLimit": "Batas Kredit:",
+        "creditLimitHint": "Set this only if the bank balance already includes the credit line.",
         "editCreditLimit": "Edit batas kredit",
         "creditLimitUpdateSuccess": "Batas kredit diperbarui",
         "creditLimitUpdateError": "Gagal memperbarui batas kredit",
         "save": "Simpan",
         "initialBalance": "Saldo Awal:",
+        "editInitialBalance": "Edit initial balance",
+        "initialBalancePlaceholder": "Enter initial balance",
+        "initialBalanceHint": "Changing the initial balance also changes your current balance and your entire balance history by the same amount.",
+        "initialBalanceUpdateSuccess": "Initial balance updated",
+        "initialBalanceUpdateError": "Failed to update initial balance",
         "accountType": "Tipe Akun:",
         "accountCategory": "Kategori Akun:",
         "editAccountCategory": "Edit kategori",
@@ -202,6 +215,17 @@
         "syncStarted": "Sinkronisasi dimulai...",
         "accessForbidden": "Akses ditolak",
         "failed": "Gagal menyinkronkan transaksi"
+      },
+      "reconcileDuplicates": {
+        "title": "Merge duplicate transactions",
+        "description": "Folds leftover pending rows into the booked transactions that replaced them.",
+        "button": "Merge duplicates",
+        "running": "Merging…",
+        "confirm": "Gabungkan",
+        "confirmTitle": "Merge duplicate transactions?",
+        "confirmDescription": "Pending rows that match a booked transaction on this account will be deleted. Notes and categories you set on them move to the booked transaction. This cannot be undone.",
+        "result": "Merged {merged} duplicate(s), skipped {skipped}.",
+        "failed": "Failed to merge duplicates."
       },
       "relinkWarning": {
         "title": "Enable Banking: Akun perlu diperbarui",
@@ -494,7 +518,8 @@
             "quickExpenseRequired": "Pilih akun dan kategori, lalu masukkan jumlah.",
             "quickExpensePositive": "Jumlah pengeluaran harus lebih dari nol.",
             "freeActivityLabelTooLong": "Nama aktivitas harus terdiri dari maksimal 100 karakter."
-          }
+          },
+          "record": "Record visit"
         }
       }
     }

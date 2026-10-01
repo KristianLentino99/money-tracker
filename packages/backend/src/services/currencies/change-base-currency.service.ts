@@ -4,6 +4,7 @@ import {
   API_ERROR_CODES,
   type BaseCurrencyBlocker,
   type BaseCurrencyChangeStep,
+  FIRE_AMOUNT_KEYS,
   type RecalculateResult,
   RESOURCE_TYPES,
 } from '@bt/shared/types';
@@ -25,6 +26,7 @@ import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
 import { findTransactions } from '@models/transactions-query';
 import Transactions from '@models/transactions.model';
+import UserSettings from '@models/user-settings.model';
 import { getBaseCurrency, updateCurrencies } from '@models/users-currencies.model';
 import { isRevaluedAccount, revalueBalanceHistory } from '@services/balances/revalue-balance-history.service';
 import { calculateRefAmountFromParams } from '@services/calculate-ref-amount.service';
@@ -57,6 +59,8 @@ import { Op, QueryTypes, Transaction as SequelizeTransaction } from 'sequelize';
  * PortfolioBalances.refTotalCash
  * 6. PortfolioTransfers
  * PortfolioTransfers.refAmount
+ * 7. UserSettings
+ * settings.fire amount overrides
  *
  * TODO: Remaining performance optimizations:
  * 1. N+1 Query Problem - Exchange Rate Fetching.
@@ -284,6 +288,13 @@ export async function changeBaseCurrencyImpl({
       transaction: dbTransaction,
     });
 
+    await convertFireSettingsAmounts({
+      userId,
+      oldCurrencyCode: oldBaseCurrency.currencyCode,
+      newCurrencyCode,
+      transaction: dbTransaction,
+    });
+
     // Flip the base currency flag onto the new currency.
     await updateCurrencies({
       userId,
@@ -360,6 +371,7 @@ async function rebuildTransactions(params: {
     balanceAdjustments: 'include',
     completeness: 'all',
     transaction,
+    paranoid: false,
   });
 
   logger.info(`Recalculating ${transactions.length} transactions for user ${userId}`);
@@ -862,6 +874,38 @@ async function recalculatePortfolioBalances(params: {
   }
 
   return portfolioBalances.length;
+}
+
+async function convertFireSettingsAmounts({
+  userId,
+  oldCurrencyCode,
+  newCurrencyCode,
+  transaction,
+}: {
+  userId: number;
+  oldCurrencyCode: string;
+  newCurrencyCode: string;
+  transaction: SequelizeTransaction;
+}): Promise<void> {
+  const userSettings = await UserSettings.findOne({ where: { userId }, lock: true, transaction });
+  const fire = userSettings?.settings.fire;
+  if (!userSettings || !fire || FIRE_AMOUNT_KEYS.every((key) => fire[key] == null)) return;
+
+  const { rate } = await userExchangeRateService.getExchangeRate({
+    userId,
+    baseCode: oldCurrencyCode,
+    quoteCode: newCurrencyCode,
+    date: new Date(),
+  });
+  const converted = { ...fire };
+  for (const key of FIRE_AMOUNT_KEYS) {
+    const value = fire[key];
+    if (value == null) continue;
+    converted[key] = calculateRefAmountFromParams({ amount: Money.fromDecimal(value), rate }).toNumber();
+  }
+
+  userSettings.settings = { ...userSettings.settings, fire: converted };
+  await userSettings.save({ transaction });
 }
 
 /**

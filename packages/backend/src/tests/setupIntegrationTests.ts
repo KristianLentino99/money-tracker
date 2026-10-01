@@ -6,6 +6,7 @@ import { i18nextReady } from '@i18n/index';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, jest } from '@jest/globals';
 import Categories from '@models/categories.model';
 import { connection } from '@models/index';
+import UsersModel from '@models/users.model';
 import { serverInstance } from '@root/app';
 import { loadCurrencyRatesJob } from '@root/crons/exchange-rates';
 import { REDIS_KEY_PREFIX, redisClient, redisReady } from '@root/redis-client';
@@ -13,6 +14,7 @@ import { categorizationQueue, categorizationWorker } from '@services/ai-categori
 import { flushAllPendingCategorizationBuffers } from '@services/ai-categorization/event-listeners';
 import { backupRestoreQueue, backupRestoreWorker } from '@services/backup/restore/restore-queue';
 import { closeAllMonobankQueueBundles } from '@services/bank-data-providers/monobank/transaction-sync-queue';
+import { accountSyncQueue, accountSyncWorker } from '@services/bank-data-providers/sync/account-sync-queue';
 import { logoResolutionQueue, logoResolutionWorker } from '@services/brand-logos';
 import { baseCurrencyChangeQueue, baseCurrencyChangeWorker } from '@services/currencies/base-currency-change-queue';
 import {
@@ -20,15 +22,20 @@ import {
   budgetBakersWalletImportWorker,
 } from '@services/import-export/budget-bakers-wallet-import';
 import { csvImportQueue, csvImportWorker } from '@services/import-export/csv-import/csv-import-queue';
+import { importBatchDeleteQueue, importBatchDeleteWorker } from '@services/import-export/delete-batch-queue';
 import { msMoneyImportQueue, msMoneyImportWorker } from '@services/import-export/ms-money-import';
 import { ofxImportQueue, ofxImportWorker } from '@services/import-export/ofx-import';
+import {
+  statementImportQueue,
+  statementImportWorker,
+} from '@services/import-export/statement-parser/statement-import-queue';
 import { ynabImportQueue, ynabImportWorker } from '@services/import-export/ynab-import';
 import {
   subscriptionReminderEmailQueue,
   subscriptionReminderEmailWorker,
 } from '@services/subscriptions/reminder-email-queue';
 import { createAppUserWithUniqueUsername, seedUserDefaults } from '@services/user/create-user-with-defaults.service';
-import { extractCookies, makeAuthRequest, makeRequest } from '@tests/helpers';
+import { STRIPE_TEST_WEBHOOK_SECRET, extractCookies, makeAuthRequest, makeRequest } from '@tests/helpers';
 import { startOfDay } from 'date-fns';
 
 import { resetSessionCounter } from './mocks/enablebanking/mock-api';
@@ -149,6 +156,12 @@ process.env.KRAKEN_SEARCH_ENABLED = 'false';
  * fail loud.
  */
 process.env.LOGO_DEV_SECRET_KEY = process.env.LOGO_DEV_SECRET_KEY || 'test';
+
+/** Price-id map the billing fixtures and webhook mapping are written against. */
+process.env.STRIPE_ENV = 'test';
+process.env.STRIPE_WEBHOOK_SECRET ??= STRIPE_TEST_WEBHOOK_SECRET;
+/** Matches the config default, so the Stripe client's "returns buyers to localhost" guard passes. */
+process.env.AUTH_ORIGIN ??= 'https://localhost:8100';
 
 /**
  * On CI, retry a failed test in-process before failing the run. A single flaky
@@ -410,8 +423,13 @@ beforeEach(async () => {
     const seedAppUser = await createAppUserWithUniqueUsername({
       username: 'test1',
       authUserId: 'test-user-id',
+      email: testEmail,
     });
     await seedUserDefaults({ userId: seedAppUser.id, locale: 'en' });
+
+    // The suite's default user sits on the legacy (pre-trial) entitlement path, which
+    // grants every plus feature. A trial would strip backup/export from most suites.
+    await UsersModel.update({ trialEndsAt: null }, { where: { id: seedAppUser.id } });
 
     // Stash a default category UUID for helpers that build transaction payloads.
     // Pre-UUID-migration this was hardcoded to `categoryId: 1`; now we resolve
@@ -492,7 +510,9 @@ beforeEach(async () => {
   }
 }, 20_000); // Timeout for test setup (truncate + create user + sign-in)
 
-afterAll(async () => {
+global.closeE2eResources = closeAllE2eResources;
+
+async function closeAllE2eResources() {
   try {
     // Flush debounced categorization buffers before closing queues
     await flushAllPendingCategorizationBuffers();
@@ -500,6 +520,8 @@ afterAll(async () => {
     // Close ALL BullMQ workers and queues first to ensure no pending operations
     // This prevents "The client is closed" errors when workers try to access Redis
     await closeAllMonobankQueueBundles();
+    await accountSyncWorker.close();
+    await accountSyncQueue.close();
     await categorizationWorker.close();
     await categorizationQueue.close();
     await ynabImportWorker.close();
@@ -512,8 +534,12 @@ afterAll(async () => {
     await ofxImportQueue.close();
     await csvImportWorker.close();
     await csvImportQueue.close();
+    await statementImportWorker.close();
+    await statementImportQueue.close();
     await backupRestoreWorker.close();
     await backupRestoreQueue.close();
+    await importBatchDeleteWorker.close();
+    await importBatchDeleteQueue.close();
     await logoResolutionWorker.close();
     await logoResolutionQueue.close();
     await subscriptionReminderEmailWorker.close();
@@ -528,4 +554,4 @@ afterAll(async () => {
   } catch (err) {
     console.log('afterAll', err);
   }
-});
+}

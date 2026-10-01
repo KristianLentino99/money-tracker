@@ -11,6 +11,14 @@
       "aiCategorization": {
         "title": "Categorizzazione IA",
         "description": "Lascia che l'IA ordini le transazioni senza categoria e rivedi le esecuzioni passate."
+      },
+      "applyRules": {
+        "title": "Apply a rule to past transactions",
+        "description": "Pick one of your automations and run it over transactions you already have."
+      },
+      "reconciliation": {
+        "title": "Riconciliazione",
+        "description": "Unisci le transazioni bancarie duplicate, rimuovi quelle errate e risolvi le transazioni in sospeso mai contabilizzate dalla banca."
       }
     },
     "aiCategorization": {
@@ -65,7 +73,8 @@
         "limitsOwnCredentials": "Illimitate — eseguite con la tua chiave",
         "changeModel": "Cambia nelle impostazioni IA",
         "errorChip": "Problema di configurazione IA",
-        "loadError": "Impossibile caricare la tua configurazione IA."
+        "loadError": "Impossibile caricare la tua configurazione IA.",
+        "connection": "AI model"
       },
       "run": {
         "button": "Categorizza con IA (tutte)",
@@ -126,6 +135,123 @@
         "linkError": "Impossibile collegare le transazioni",
         "skipSuccess": "Suggerimento ignorato",
         "skipError": "Impossibile saltare il suggerimento"
+      }
+    },
+    "reconciliation": {
+      "title": "Riconciliazione delle transazioni",
+      "tabs": {
+        "transactions": "Transazioni",
+        "stuckPending": "In sospeso da troppo tempo",
+        "history": "Cronologia"
+      },
+      "table": {
+        "hint": "Seleziona le transazioni bancarie per unire i duplicati o rimuovere quelle in eccesso"
+      },
+      "actions": {
+        "merge": "Unisci",
+        "remove": "Rimuovi"
+      },
+      "blockReasons": {
+        "header": {
+          "merge": "Impossibile unire per {count} motivi:",
+          "remove": "Impossibile rimuovere per {count} motivi:"
+        },
+        "notBankConnected": "Si possono riconciliare solo le transazioni collegate a una banca.",
+        "planned": "Le transazioni pianificate non possono essere riconciliate.",
+        "linkedTransfer": "I trasferimenti collegati non possono essere riconciliati. Scollega prima il trasferimento.",
+        "refundLinked": "Le transazioni collegate a un rimborso non possono essere riconciliate. Scollega prima il rimborso.",
+        "tooFew": "Seleziona almeno 2 transazioni da unire.",
+        "tooMany": "Troppe transazioni selezionate: fino a {mergeMax} per l'unione e {removeMax} per la rimozione.",
+        "differentAccounts": "Tutte le transazioni devono appartenere allo stesso conto."
+      },
+      "merge": {
+        "title": "Unisci transazioni",
+        "description": "Scegli la transazione da mantenere. Le altre verranno rimosse e potranno essere ripristinate dalla cronologia.",
+        "fields": {
+          "payee": "Beneficiario",
+          "status": "Stato",
+          "time": "Ora"
+        },
+        "status": {
+          "pending": "In attesa",
+          "booked": "Contabilizzata"
+        },
+        "keep": "Mantieni",
+        "remove": "Rimuovi",
+        "sameInAll": "Uguale per tutte:",
+        "confirm": "Unisci e rimuovi {count} transazione | Unisci e rimuovi {count} transazioni"
+      },
+      "remove": {
+        "title": "Rimuovere {count} transazione? | Rimuovere {count} transazioni?",
+        "description": "Le transazioni rimosse non contribuiscono più ai saldi e alle statistiche. I collegamenti a budget, gruppi e abbonamenti vengono rimossi. Puoi ripristinare le transazioni dalla cronologia, ma i collegamenti non verranno recuperati.",
+        "confirm": "Rimuovi"
+      },
+      "restoreDialog": {
+        "title": "Ripristinare {count} transazione? | Ripristinare {count} transazioni?",
+        "description": "Le transazioni ripristinate contribuiscono di nuovo ai saldi e alle statistiche. Se erano state unite, la transazione mantenuta resta, quindi potresti ritrovare dei duplicati. I collegamenti a budget, gruppi e abbonamenti rimossi non vengono recuperati.",
+        "confirm": "Ripristina"
+      },
+      "notifications": {
+        "removed": "Rimossa {count} transazione | Rimosse {count} transazioni",
+        "merged": "Transazioni unite, rimosso {count} duplicato | Transazioni unite, rimossi {count} duplicati",
+        "restored": "Ripristinata {count} transazione | Ripristinate {count} transazioni",
+        "keptAsBooked": "Segnata come contabilizzata",
+        "checkedWithBank": "Verificata con la banca",
+        "unexpectedError": "Si è verificato un errore. Riprova.",
+        "bankCheck": {
+          "allBooked": "La banca ha contabilizzato la transazione | La banca ha contabilizzato tutte le {count} transazioni",
+          "someBooked": "La banca ha contabilizzato {count} transazione | La banca ha contabilizzato {count} transazioni",
+          "noneBooked": "La banca non ne ha ancora contabilizzata nessuna",
+          "stillPending": "{count} è ancora in sospeso. | {count} sono ancora in sospeso.",
+          "someFailed": "Impossibile raggiungere la banca per {count} conto. | Impossibile raggiungere la banca per {count} conti."
+        }
+      },
+      "stuckPending": {
+        "loadError": "Impossibile caricare le transazioni rimaste in sospeso.",
+        "emptyTitle": "Nessuna transazione bloccata in sospeso",
+        "emptyDescription": "Qui compaiono le transazioni in sospeso da più di 7 giorni, così puoi risolverle.",
+        "checkWithBank": "Verifica con la banca",
+        "summaryTooOld": "{count} transazione è ancora in sospeso dopo una settimana. È troppo vecchia per verificarla con la banca. | {count} transazioni sono ancora in sospeso dopo una settimana. Sono troppo vecchie per verificarle con la banca.",
+        "checking": "Verifica con la banca…",
+        "checkAgain": "Verifica di nuovo",
+        "keepAsBooked": "Mantieni come contabilizzata",
+        "header": {
+          "title": "{count} transazione bloccata in sospeso | {count} transazioni bloccate in sospeso",
+          "description": "In sospeso da più di una settimana su {count} conto. | In sospeso da più di una settimana su {count} conti.",
+          "titleChecked": "{count} transazione ancora in sospeso | {count} transazioni ancora in sospeso",
+          "descriptionChecked": "Verificate con la banca. Decidi cosa fare con ciascuna."
+        },
+        "checkFirstHint": "Verifica prima con la banca. Le transazioni che nel frattempo ha contabilizzato scompaiono dall'elenco.",
+        "columns": {
+          "account": "Conto",
+          "date": "Data",
+          "category": "Categoria",
+          "pendingFor": "In sospeso da",
+          "amount": "Importo",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "pendingDaysShort": "{count} g",
+        "status": {
+          "tooOld": "Troppo vecchia per la verifica",
+          "tooOldHint": "La banca condivide circa 90 giorni di cronologia, quindi questa transazione non può essere verificata. Mantienila se l'addebito è avvenuto, rimuovila altrimenti.",
+          "duplicate": "Possibile duplicato",
+          "duplicateHint": "Una transazione contabilizzata dello stesso beneficiario del {date} sembra corrispondere allo stesso pagamento. Uniscile per mantenerne una sola.",
+          "notFound": "Non trovata presso la banca",
+          "notFoundHint": "La banca non ha una copia contabilizzata di questa transazione: potrebbe essere una preautorizzazione annullata. Mantienila se l'addebito è avvenuto, rimuovila altrimenti."
+        }
+      },
+      "history": {
+        "loadError": "Impossibile caricare la cronologia delle riconciliazioni.",
+        "emptyTitle": "Nessuna riconciliazione nella cronologia",
+        "emptyDescription": "Le transazioni unite e rimosse compaiono qui, così puoi ripristinarle.",
+        "type": {
+          "merge": "Unite",
+          "remove": "Rimosse"
+        },
+        "restore": "Ripristina",
+        "kept": "Mantenuta",
+        "removedRows": "{count} transazione rimossa | {count} transazioni rimosse"
       }
     }
   }

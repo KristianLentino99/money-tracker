@@ -14,7 +14,8 @@
       "errors": {
         "unableToLoadCurrencies": "Impossibile caricare l'elenco delle valute. Riprova più tardi.",
         "unableToSetCurrency": "Errore imprevisto. Impossibile impostare la valuta principale. Riprova più tardi oppure contatta il supporto."
-      }
+      },
+      "trialStarted": "La tua prova gratuita è cominciata, tutte le funzionalità sono sbloccate per {count} giorno. {link} | La tua prova gratuita è cominciata, tutte le funzionalità sono sbloccate per {count} giorni. {link}"
     },
     "oauthCallback": {
       "completingSignIn": "Completamento dell'accesso…",

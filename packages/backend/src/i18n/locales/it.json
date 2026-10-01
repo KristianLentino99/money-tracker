@@ -1,7 +1,8 @@
 {
   "common": {
     "processAlreadyLocked": "Il processo di sincronizzazione per \"{{lockKey}}\" è già bloccato.",
-    "serviceTemporarilyUnavailable": "Servizio temporaneamente non disponibile. Riprova."
+    "serviceTemporarilyUnavailable": "Servizio temporaneamente non disponibile. Riprova.",
+    "jobInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto l'operazione prima che terminasse. Non è stato modificato nulla."
   },
   "accounts": {
     "groupNotFound": "Gruppo o conto non trovato.",
@@ -14,12 +15,15 @@
     "deleteBlockedByLoanPayments": "Questo conto contiene pagamenti di prestiti. Eliminali o riassegnali prima di eliminare il conto.",
     "loanBalanceUseUpdateLoan": "Modifica il saldo residuo del prestito dalla pagina del prestito, non dalle impostazioni del conto.",
     "loanCategoryImmutable": "La categoria di un conto prestito non può essere modificata.",
-    "dedicatedFlowCategoryNotAllowed": "I conti prestito e veicolo devono essere creati tramite i rispettivi endpoint dedicati, non tramite l'endpoint generico dei conti."
+    "dedicatedFlowCategoryNotAllowed": "I conti prestito e veicolo devono essere creati tramite i rispettivi endpoint dedicati, non tramite l'endpoint generico dei conti.",
+    "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
   },
   "balanceAdjustment": {
     "defaultNote": "Rettifica del saldo",
     "accountNotFound": "Conto con ID \"{{accountId}}\" non trovato.",
-    "vehicleUseOverride": "Il valore di un veicolo può essere modificato solo dalla pagina del veicolo."
+    "vehicleUseOverride": "Il valore di un veicolo può essere modificato solo dalla pagina del veicolo.",
+    "vehicleNegativeValue": "Il valore di un veicolo non può essere negativo."
   },
   "accountGroups": {
     "groupNotFound": "Gruppo non trovato.",
@@ -92,6 +96,27 @@
       "splitNotFound": "Suddivisione non trovata.",
       "cannotDeleteWithRefunds": "Impossibile eliminare una suddivisione a cui sono destinati rimborsi.",
       "cannotReduceBelowRefunded": "Questa suddivisione ha rimborsi per un totale di {{refundsText}}. Non puoi ridurla al di sotto dell'importo rimborsato. Per ridurla ulteriormente, scollega prima i rimborsi."
+    },
+    "reconciliation": {
+      "systemNotAllowed": "Si possono unire o rimuovere solo le transazioni collegate a una banca.",
+      "plannedNotAllowed": "Le transazioni pianificate non possono essere unite o rimosse.",
+      "transferNotAllowed": "I trasferimenti collegati non possono essere uniti o rimossi. Scollega prima il trasferimento.",
+      "refundNotAllowed": "Le transazioni collegate a un rimborso non possono essere unite o rimosse. Scollega prima il rimborso.",
+      "survivorPending": "Scegli di mantenere la transazione contabilizzata. Una transazione in sospeso resterebbe bloccata in quello stato.",
+      "survivorNotSelected": "La transazione da mantenere deve essere una di quelle selezionate.",
+      "differentAccounts": "Si possono unire solo transazioni dello stesso conto.",
+      "budgetConflict": "Le transazioni selezionate appartengono a budget diversi. Assegna loro lo stesso budget prima di unirle.",
+      "groupConflict": "Le transazioni selezionate appartengono a gruppi diversi. Assegna loro lo stesso gruppo prima di unirle.",
+      "subscriptionConflict": "Le transazioni selezionate sono collegate ad abbonamenti diversi. Assegna loro lo stesso abbonamento prima di unirle.",
+      "accountDisconnected": "Impossibile ripristinare: il conto non è più collegato alla banca.",
+      "bankCheckUnsupported": "La verifica con la banca è disponibile solo per i conti Enable Banking.",
+      "notPending": "Solo le transazioni in sospeso possono essere mantenute come contabilizzate.",
+      "stuckPendingNotification": {
+        "title": "Alcuni pagamenti con carta non sono stati contabilizzati",
+        "message_one": "1 transazione è in sospeso da oltre una settimana. Verificala con la banca per mantenere il saldo corretto.",
+        "message_other": "{{count}} transazioni sono in sospeso da oltre una settimana. Verificale con la banca per mantenere il saldo corretto."
+      },
+      "maintenanceConflict": "Le transazioni selezionate appartengono a interventi di manutenzione diversi."
     }
   },
   "tags": {
@@ -171,7 +196,12 @@
     "unlinkPaymentNotFound": "Pagamento del prestito non trovato.",
     "unlinkPaymentInvalidSelection": "Questa transazione non è un pagamento di questo prestito.",
     "correctionAsOfBeforeStartDate": "currentBalanceAsOf non può essere precedente alla data di inizio del prestito.",
-    "correctionOverpay": "Il saldo corretto comporterebbe un pagamento in eccesso di {{overpayAmount}} sul prestito: i pagamenti per un totale di {{paymentsTotal}} sono in data pari o successiva a {{asOfDate}}."
+    "correctionOverpay": "Il saldo corretto comporterebbe un pagamento in eccesso di {{overpayAmount}} sul prestito: i pagamenti per un totale di {{paymentsTotal}} sono in data pari o successiva a {{asOfDate}}.",
+    "loanNotActive": "Questo prestito non è più attivo o è già stato saldato.",
+    "loanInstallmentOnly": "Solo le rate di spesa possono essere collegate a un prestito.",
+    "loanInstallmentAlreadyLinked": "Questa rata è già collegata a un prestito.",
+    "loanInstallmentSourceAccount": "Il conto di origine della rata non può essere il conto del prestito.",
+    "loanInstallmentRequiresTransaction": "Una rata collegata a un prestito deve creare o collegare una transazione reale."
   },
   "errors": {
     "connectionNotFound": "Connessione non trovata.",
@@ -269,7 +299,8 @@
       "invalidApiKey": "Chiave API Walutomat o chiave privata non valida.",
       "accountNoExternalId": "Il conto Walutomat non ha un ID esterno.",
       "walletNotFound": "Portafoglio Walutomat non trovato per la valuta: {{currency}}"
-    }
+    },
+    "accountAlreadyConnectedToAnotherConnection": "Account \"{{account}}\" is already connected through \"{{connection}}\". Disconnect it there first."
   },
   "csvImport": {
     "headersCannotBeParsed": "Impossibile analizzare le intestazioni.",
@@ -347,7 +378,25 @@
     "customEndpointLimitReached": "Puoi salvare fino a {{max}} endpoint personalizzati. Rimuovine uno prima di aggiungerne un altro.",
     "customEndpointStoredKeyUnreadable": "Non è più possibile leggere la chiave API salvata per questo endpoint. Inseriscila nuovamente.",
     "categorizationAlreadyRunning": "La categorizzazione AI è già in corso. Attendi che termini prima di avviarne un'altra.",
-    "categorizationRateLimited": "Hai avviato la categorizzazione AI troppe volte di recente. Riprova più tardi."
+    "categorizationRateLimited": "Hai avviato la categorizzazione AI troppe volte di recente. Riprova più tardi.",
+    "connectionNotFound": "Modello IA non trovato.",
+    "connectionNameTaken": "Hai già un modello IA con questo nome.",
+    "connectionLimitReached": "Puoi aggiungere fino a {{max}} modelli IA.",
+    "connectionNameInvalidLength": "Il nome deve contenere da 1 a {{max}} caratteri.",
+    "connectionModelRequired": "Inserisci il nome del modello.",
+    "connectionBaseUrlRequired": "Inserisci l'URL di base del server compatibile con OpenAI.",
+    "connectionBaseUrlNotAllowed": "Questo provider usa sempre l'indirizzo API ufficiale, quindi non accetta un URL di base.",
+    "connectionApiKeyRequired": "Inserisci la chiave API.",
+    "connectionProviderMismatch": "Quel modello IA usa un provider diverso.",
+    "connectionKeySourceMissing": "Il modello IA da cui stai copiando non ha una chiave API. Inseriscine una.",
+    "connectionStoredKeyUnreadable": "La chiave API salvata per questo modello IA non è più leggibile. Inseriscila di nuovo.",
+    "connectionKeyRejected": "Il provider ha rifiutato questa chiave API. Verifica che sia corretta, attiva e disponga di credito.",
+    "connectionModelNotAvailable": "Questa chiave API non può usare il modello \"{{model}}\". Controlla il nome del modello.",
+    "connectionProviderUnreachable": "Impossibile raggiungere il provider. Riprova tra poco.",
+    "connectionValidationFailed": "Il provider ha rifiutato la richiesta di prova: {{reason}}",
+    "serverModelUnavailable": "Il modello IA incluso di MoneyMatter non è disponibile nel tuo piano.",
+    "connectionKeyNotInBackup": "La chiave API non è inclusa nei backup. Modifica questo modello e inserisci di nuovo la chiave.",
+    "customInstructionsNeedConnection": "Aggiungi un modello IA in Impostazioni → IA per usare istruzioni personalizzate."
   },
   "middleware": {
     "tooManyRequests": "Troppe richieste. Riprova più tardi."
@@ -505,9 +554,71 @@
     "notFound": "Veicolo non trovato."
   },
   "plans": {
-    "targetAmountMustBePositive": "L'importo obiettivo deve essere maggiore di zero."
+    "targetAmountMustBePositive": "L'importo obiettivo deve essere maggiore di zero.",
+    "categoriesNotAllowedInSpendingPlan": "Le categorie di entrata non possono essere aggiunte a un Piano di spesa."
   },
   "stats": {
     "netWorthHistoryTooManyPoints": "Questo intervallo di date e questa granularità producono troppi punti dati. Scegli una granularità più ampia o un intervallo più breve."
+  },
+  "categories": {
+    "notFound": "La categoria con id fornito non esiste.",
+    "systemCannotBeMoved": "Le categorie di sistema non possono essere spostate.",
+    "parentNotFound": "La categoria con tale ID padre non esiste.",
+    "systemParentForbidden": "Le categorie di sistema non possono essere usate come padre.",
+    "ownParent": "Una categoria non può essere il suo stesso padre.",
+    "underOwnSubcategory": "Una categoria non può essere spostata all'interno della propria sottocategoria.",
+    "nestingTooDeep": "Le categorie non possono essere nidificate più in profondità di {{max}} livelli."
+  },
+  "budgets": {
+    "budgetNotFound": "Budget not found",
+    "someTransactionIdsInvalid": "Some transactions IDs are invalid",
+    "transactionsAddedSuccessfully": "Transactions added successfully",
+    "cannotManuallyLinkToCategoryBudget": "Cannot manually link transactions to category-based budgets. Transactions are tracked automatically by category.",
+    "someCategoryIdsInvalid": "Some category IDs are invalid or do not exist",
+    "notCategoryBudget": "This endpoint is only available for category-based budgets"
+  },
+  "landingFaq": {
+    "unavailable": "The assistant is unavailable right now. Please try again later or email support@moneymatter.app."
+  },
+  "importExport": {
+    "batchDeleteBankLinkedAccount": "This import can no longer be undone because its account is now connected to a bank. Deleting these transactions could throw off the synced balance.",
+    "batchDeleteLinkedLoanTransfer": "This import is linked to a loan payment and can't be undone on its own. Enable \"also delete linked transfer transactions\" to remove it.",
+    "batchDeleteInProgress": "An import batch is already being deleted. Wait for it to finish before starting another.",
+    "statementImportInProgress": "A statement import is already running. Wait for it to finish before starting another one.",
+    "importInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto questa importazione. Le transazioni già salvate sono state mantenute. Elimina questa importazione dalla \"Cronologia importazioni\" prima di importare di nuovo il file, altrimenti le transazioni verranno duplicate."
+  },
+  "transactionTemplates": {
+    "notFound": "Transaction template not found.",
+    "nameAlreadyExists": "A transaction template with this name already exists.",
+    "amountRequiresAccount": "An amount can only be saved together with an account.",
+    "accountNotFound": "Account not found or does not belong to user.",
+    "accountMustBeSystem": "Only manually managed accounts can be used in a transaction template.",
+    "accountArchived": "Archived accounts can't be used in a template.",
+    "categoryNotFound": "Category not found or does not belong to user.",
+    "payeeNotFound": "Payee not found or does not belong to user.",
+    "tagsNotFound": "One or more tags were not found or do not belong to user."
+  },
+  "automations": {
+    "automationNotFound": "Automation not found.",
+    "previewRequiresConditions": "Provide either conditions or a saved automation to preview.",
+    "reorderStale": "The automation list has changed. Refresh and try again.",
+    "ruleLimitReached": "You have reached the maximum number of automations.",
+    "staleReference": "This automation references an item that no longer exists."
+  },
+  "attachments": {
+    "transactionNotFound": "Transazione non trovata.",
+    "attachmentNotFound": "Allegato non trovato.",
+    "fileNotFound": "File dell'allegato non trovato.",
+    "unsupportedFileType": "Tipo di file non supportato. Carica un file JPEG, PNG, WebP o PDF.",
+    "tooManyAttachments": "Una transazione può contenere al massimo {{max}} allegati.",
+    "quotaExceeded": "Spazio disponibile per gli allegati esaurito.",
+    "noFileUploaded": "Nessun file caricato."
+  },
+  "invoiceMatching": {
+    "unsupportedFileType": "Tipo di file non supportato. Carica una fattura in formato JPEG, PNG, WebP o PDF.",
+    "notAnInvoice": "Questo documento non sembra una fattura o uno scontrino.",
+    "incompleteInvoice": "Impossibile leggere il venditore, l'importo totale e la data della fattura.",
+    "pdfWithoutText": "Le connessioni IA personalizzate non possono ricevere direttamente file PDF e questo file non può essere aperto per convertirlo, ad esempio perché è protetto da password. Convertilo in un'immagine PNG o JPEG, come uno screenshot della fattura, e carica quella.",
+    "noFileUploaded": "Nessun file caricato."
   }
 }

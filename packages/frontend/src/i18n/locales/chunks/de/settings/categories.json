@@ -1,0 +1,53 @@
+{
+  "settings": {
+    "categories": {
+      "title": "Kategorien",
+      "description": "Organisiere deine Transaktionen in Kategorien und Unterkategorien. Ziehe eine Kategorie, um sie unter eine andere Überkategorie oder auf die oberste Ebene zu verschieben.",
+      "addButton": "Kategorie hinzufügen",
+      "organizeButton": "Organisieren",
+      "empty": "Noch keine Kategorien. Erstelle deine erste Kategorie, um loszulegen.",
+      "categoriesCount": "{n} Kategorie | {n} Kategorien",
+      "organizeHint": "Auf eine neue Überkategorie ziehen oder hier ablegen für die oberste Ebene.",
+      "dropToTopLevel": "Hier ablegen, um \"{name}\" zu einer Kategorie der obersten Ebene zu machen",
+      "movesQueued": "{n} Verschiebung in die Warteschlange eingereiht | {n} Verschiebungen in die Warteschlange eingereiht",
+      "unqueueMove": "Diese Verschiebung entfernen",
+      "topLevel": "Oberste Ebene",
+      "saveChanges": "Änderungen speichern",
+      "parentField": {
+        "label": "Überkategorie",
+        "placeholder": "Überkategorie auswählen",
+        "hiddenHint": "Kategorien, die nicht als Überkategorie verwendet werden können, sind in der Liste ausgeblendet."
+      },
+      "moveDialog": {
+        "title": "\"{name}\" verschieben",
+        "description": "Wähle eine neue Überkategorie.",
+        "moveButton": "Verschieben"
+      },
+      "delete": {
+        "title": "Kategorie löschen?",
+        "description": "Dadurch wird \"{name}\" dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+        "deleteButton": "Löschen",
+        "cancelButton": "Abbrechen"
+      },
+      "errors": {
+        "cannotLoad": "Kategorien konnten nicht geladen werden"
+      },
+      "notifications": {
+        "deleteSuccess": "Kategorie gelöscht",
+        "deleteFailed": "Kategorie konnte nicht gelöscht werden",
+        "checkFailed": "Kategorie konnte nicht überprüft werden",
+        "moveFailed": "Kategorie konnte nicht verschoben werden.",
+        "saveSuccess": "Änderungen gespeichert.",
+        "staleMovesRemoved": "{n} nicht mehr gültige Verschiebung entfernt | {n} nicht mehr gültige Verschiebungen entfernt"
+      },
+      "dropErrors": {
+        "currentParent": "Bereits in dieser Kategorie",
+        "insideItself": "Eine Kategorie kann nicht in ihre eigene Unterkategorie verschoben werden",
+        "internalTarget": "Systemkategorien können keine anderen Kategorien enthalten",
+        "tooDeep": "Kategorien können maximal {max} Ebenen tief verschachtelt werden",
+        "childrenTooDeep": "Die Unterkategorien würden tiefer sein als {max} Ebenen",
+        "alreadyTopLevel": "Bereits auf der obersten Ebene"
+      }
+    }
+  }
+}

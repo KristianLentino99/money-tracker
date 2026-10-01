@@ -1,0 +1,248 @@
+{
+  "automations": {
+    "title": "Automatizácie",
+    "subtitle": "Spúšťajú sa pri nových transakciách z bankovej synchronizácie aj importu súborov. Platí prvé pravidlo, ktoré sa zhoduje — poradie zmeníte presunutím.",
+    "newAutomation": "Nová automatizácia",
+    "new": "Nová",
+    "dragHint": "Presunutím zmeníte poradie",
+    "toggleAriaLabel": "Zapnúť automatizáciu",
+    "menuAriaLabel": "Akcie automatizácie",
+    "disabledPill": "Vypnuté",
+    "mcpTip": {
+      "trigger": "Tipy",
+      "text": "Automatizácie môžete spravovať aj pomocou AI cez pripojenie MCP — požiadajte ju, aby vaše pravidlá zoradila, alebo skontrolovala duplicity a konflikty.",
+      "link": "Nastaviť MCP pripojenie"
+    },
+    "statusFilter": {
+      "all": "Zobraziť všetky",
+      "enabled": "Len aktívne",
+      "disabled": "Len vypnuté",
+      "empty": "Tomuto filtru nezodpovedá žiadna automatizácia."
+    },
+    "pausedMissingRef": "Pozastavené — {refType} „{label}\" bolo zmazané",
+    "pausedMissingRefUnnamed": "Pozastavené: {refType}, na ktorý sa toto pravidlo odkazovalo, bol zmazaný",
+    "matchStats": "{count} zhoda · naposledy {date} | {count} zhôd · naposledy {date}",
+    "matchStatsNever": "Zatiaľ sa nezhodlo",
+    "loadError": "Automatizácie sa nepodarilo načítať. Skontrolujte pripojenie a skúste to znova.",
+    "reorderDisabledFiltered": "Ak chcete meniť poradie, zrušte filter stavu",
+    "density": {
+      "comfortable": "Podrobné",
+      "compact": "Kompaktné"
+    },
+    "chips": {
+      "when": "Keď",
+      "then": "Potom",
+      "not": "nie",
+      "day": "deň",
+      "more": "+{count} ďalších",
+      "less": "Zobraziť menej",
+      "noteReplace": "nastaviť poznámku",
+      "noteAppend": "pripojiť na koniec",
+      "notePrepend": "pripojiť na začiatok",
+      "note": {
+        "containsAny": "poznámka obsahuje",
+        "notContainsAny": "poznámka neobsahuje",
+        "startsWithAny": "poznámka začína na",
+        "endsWithAny": "poznámka končí na",
+        "equalsAny": "poznámka je",
+        "isEmpty": "poznámka je prázdna"
+      },
+      "merchant": {
+        "containsAny": "obchodník obsahuje",
+        "notContainsAny": "obchodník neobsahuje",
+        "startsWithAny": "obchodník začína na",
+        "endsWithAny": "obchodník končí na",
+        "equalsAny": "obchodník je",
+        "isEmpty": "obchodník je prázdny"
+      }
+    },
+    "refType": {
+      "category": "kategória",
+      "tag": "štítok",
+      "account": "účet",
+      "accountGroup": "skupina účtov",
+      "bankConnection": "bankové pripojenie",
+      "payee": "protistrana"
+    },
+    "emptyState": {
+      "title": "Zatiaľ žiadne automatizácie",
+      "description": "Automatizácie zaraďujú transakcie do kategórií, priraďujú im štítky a poznámky hneď, ako prídu z bankovej synchronizácie alebo importu súboru.",
+      "cta": "Vytvorte prvú automatizáciu"
+    },
+    "delete": {
+      "title": "Zmazať automatizáciu?",
+      "description": "„{name}\" sa prestane spúšťať na nové transakcie. Transakcie, ktoré už zaradila, si ponechajú svoju kategóriu, štítky aj poznámku.",
+      "confirm": "Vymazať"
+    },
+    "notifications": {
+      "deleteSuccess": "Automatizácia zmazaná.",
+      "deleteError": "Automatizáciu sa nepodarilo zmazať. Skúste to znova, prosím.",
+      "toggleError": "Stav automatizácie sa nepodarilo zmeniť. Skúste to znova, prosím.",
+      "reorderError": "Nové poradie sa nepodarilo uložiť. Skúste to znova, prosím.",
+      "staleReference": "Táto automatizácia odkazuje na niečo, čo bolo zmazané. Otvorte ju a vyberte náhradu.",
+      "openRule": "Otvoriť pravidlo"
+    },
+    "fields": {
+      "note": "Poznámka",
+      "merchant": "Obchodník",
+      "payee": "Protistrana",
+      "amount": "Suma",
+      "transactionType": "Typ transakcie",
+      "account": "Účet",
+      "accountGroup": "Skupina účtu",
+      "bankConnection": "Bankové pripojenie",
+      "dayOfMonth": "Deň v mesiaci"
+    },
+    "operators": {
+      "contains_any": "obsahuje niektorý z",
+      "not_contains_any": "neobsahuje",
+      "starts_with_any": "začína na",
+      "ends_with_any": "končí na",
+      "equals_any": "zodpovedá niektorej z",
+      "is_empty": "je prázdne",
+      "in": "je jedno z",
+      "not_in": "nie je žiadne z",
+      "gte": "je aspoň",
+      "lte": "je najviac",
+      "between": "je medzi",
+      "equals": "sa rovná"
+    },
+    "actions": {
+      "set_category": "Nastaviť kategóriu",
+      "set_payee": "Nastaviť protistranu",
+      "add_tags": "Pridať štítky",
+      "set_note": "Nastaviť poznámku",
+      "noteMode": {
+        "replace": "Nahradiť",
+        "append": "Pripojiť na koniec",
+        "prepend": "Pripojiť na začiatok"
+      }
+    },
+    "editor": {
+      "titleNew": "Nová automatizácia",
+      "titleEdit": "Upraviť automatizáciu",
+      "back": "Späť na Automatizácie",
+      "enabled": "Zapnuté",
+      "nameLabel": "Názov",
+      "namePlaceholder": "napr. Nákupy z Lidla",
+      "conditionsHeader": "Zhoda s {match} z týchto podmienok",
+      "matchAll": "všetkými",
+      "matchAny": "niektorou",
+      "joinAnd": "A",
+      "joinOr": "ALEBO",
+      "addCondition": "Pridať podmienku",
+      "removeCondition": "Odstrániť podmienku",
+      "removeKeyword": "Odstrániť kľúčové slovo",
+      "fieldPlaceholder": "Vyberte pole",
+      "operatorPlaceholder": "Vyberte podmienku",
+      "keywordPlaceholder": "Zadajte kľúčové slovo a stlačte Enter",
+      "amountPlaceholder": "Zadajte sumu",
+      "minPlaceholder": "Minimálna suma",
+      "maxPlaceholder": "Maximálna suma",
+      "currencyPlaceholder": "Vyberte menu",
+      "currency": {
+        "transaction": "Mena transakcie",
+        "base": "Základná mena ({code})",
+        "specific": "v {code}"
+      },
+      "accountsPlaceholder": "Vyberte účty",
+      "accountGroupPlaceholder": "Vyberte skupinu účtov",
+      "bankConnectionPlaceholder": "Vyberte bankové pripojenie",
+      "dayFromPlaceholder": "Odo dňa",
+      "dayToPlaceholder": "Do dňa",
+      "actionsHeader": "Potom vykonať toto",
+      "addAction": "Pridať akciu",
+      "removeAction": "Odstrániť akciu",
+      "categoryPlaceholder": "Vyberte kategóriu",
+      "payeePlaceholder": "Vyberte protistranu",
+      "tagsPlaceholder": "Vyberte štítky",
+      "notePlaceholder": "Zadajte text poznámky",
+      "saveSuccess": "Automatizácia uložená.",
+      "notFound": {
+        "title": "Automatizácia sa nenašla",
+        "description": "Táto automatizácia už neexistuje alebo bola zmazaná.",
+        "link": "Späť na Automatizácie"
+      },
+      "unsaved": {
+        "title": "Zahodiť neuložené zmeny?",
+        "description": "Táto automatizácia obsahuje neuložené zmeny. Ak teraz odídete, zmeny sa zahodia.",
+        "confirm": "Zahodiť zmeny"
+      },
+      "preview": {
+        "title": "Náhľad",
+        "run": "Náhľad zhôd",
+        "hint": "Dokončite pravidlo, aby ste videli náhľad transakcií, ktorým by zodpovedalo.",
+        "summary": "Z posledných {scanned} transakcií by sa toto pravidlo dalo použiť na {matched}",
+        "empty": "Žiadne zhody",
+        "stale": "Podmienky sa od tohto náhľadu zmenili.",
+        "error": "Náhľad sa nepodarilo spustiť. Skúste to znova, prosím."
+      },
+      "errors": {
+        "nameRequired": "Zadajte názov tejto automatizácie.",
+        "nameTooLong": "Názov môže mať najviac {max} znakov.",
+        "conditionsRequired": "Pridajte aspoň jednu podmienku.",
+        "actionsRequired": "Pridajte aspoň jednu akciu.",
+        "keywordsRequired": "Pridajte aspoň jedno kľúčové slovo.",
+        "keywordsMax": "Použite najviac {max} kľúčových slov.",
+        "keywordTooLong": "Každé kľúčové slovo môže mať najviac {max} znakov.",
+        "selectionRequired": "Vyberte aspoň jednu možnosť.",
+        "selectionMax": "Vyberte najviac {max} možností.",
+        "missingRef": "bolo zmazané — vyberte iné, alebo tento riadok odstráňte",
+        "amountRequired": "Zadajte sumu.",
+        "amountBoundsRequired": "Zadajte minimálnu aj maximálnu sumu.",
+        "amountRange": "Minimálna suma nesmie byť väčšia než maximálna.",
+        "dayRange": "Zadajte rozsah dní od 1 do 31, pričom prvý deň musí byť pred posledným (alebo rovnaký).",
+        "categoryRequired": "Vyberte kategóriu.",
+        "payeeRequired": "Vyberte protistranu.",
+        "tagsRequired": "Vyberte aspoň jeden štítok.",
+        "noteRequired": "Zadajte text poznámky.",
+        "noteTooLong": "Poznámka môže mať najviac {max} znakov.",
+        "saveFailed": "Automatizáciu sa nepodarilo uložiť. Skúste to znova, prosím.",
+        "transactionTypeDuplicate": "Povolená je len jedna podmienka typu transakcie"
+      },
+      "noResults": "Žiadne výsledky"
+    },
+    "summary": {
+      "missingRef": "(zmazané)",
+      "currency": {
+        "transaction": "(mena transakcie)",
+        "base": "(základná mena)"
+      },
+      "transactionTypeValue": {
+        "income": "príjem",
+        "expense": "výdavok"
+      }
+    },
+    "applyToHistory": {
+      "trigger": "Použiť na minulé transakcie",
+      "saveFirst": "Najprv uložte zmeny",
+      "pickTitle": "Použiť pravidlo na minulé transakcie",
+      "pickHint": "Vyberte pravidlo. Zodpovedajúce transakcie si prezriete ešte pred vykonaním akýchkoľvek zmien.",
+      "title": "Použiť „{name}\" na minulé transakcie",
+      "noRules": "Zatiaľ nemáte žiadne automatizácie.",
+      "summary": "Tomuto pravidlu zodpovedá {count} minulá transakcia | Tomuto pravidlu zodpovedá {count} minulých transakcií",
+      "moreMatches": "Zobrazených je len {shown} najnovších zhôd. Použite ich a potom spustite znova.",
+      "scanCapped": "Skontrolovaných bolo len vašich {limit} najnovších transakcií.",
+      "emptyState": {
+        "settledTitle": "Všetko vybavené",
+        "settledDescription": "Toto pravidlo už nemá čo zmeniť na jedinej zodpovedajúcej minulej transakcii. | Toto pravidlo už nemá čo zmeniť na {count} zodpovedajúcich minulých transakciách.",
+        "noneTitle": "Zatiaľ žiadne zhody",
+        "noneDescription": "Žiadna minulá transakcia na vašich synchronizovaných ani importovaných účtoch nezodpovedá týmto podmienkam."
+      },
+      "selectAll": "Vybrať všetko",
+      "selectedCount": "Vybraných: {count}",
+      "irreversible": "Túto akciu nie je možné vrátiť späť. Zoznam si dôkladne skontrolujte.",
+      "applyAction": "Použiť na {count} transakcií",
+      "confirm": {
+        "title": "Použiť toto pravidlo?",
+        "action": "Použiť",
+        "description": "Ihneď sa aktualizuje {count} transakcií.",
+        "payeeNote": "Protistrana pri týchto transakciách sa bude považovať za nastavenú vami, takže ju automatické rozpoznávanie protistrany neskôr nezmení."
+      },
+      "success": "Použité na {applied} transakcií",
+      "successWithSkipped": "Použité na {applied} transakcií, preskočených: {skipped}",
+      "nothingApplied": "Nič sa nepoužilo. Preskočených transakcií: {skipped}.",
+      "applyError": "Pravidlo sa nepodarilo použiť na minulé transakcie."
+    }
+  }
+}

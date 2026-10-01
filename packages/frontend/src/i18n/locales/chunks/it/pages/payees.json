@@ -11,14 +11,16 @@
       "category": "Categoria",
       "categoryHint": "Categoria effettiva per questo beneficiario. Mostra quella predefinita se ne hai impostata una — altrimenti la categoria usata più di frequente nelle transazioni passate. Compilata automaticamente quando crei una nuova transazione.",
       "topCategory": "Categoria principale",
-      "defaultCategory": "Categoria predefinita"
+      "defaultCategory": "Categoria predefinita",
+      "defaultTags": "Default tags"
     },
     "sort": {
       "label": "Ordina per",
       "transactionCount": "Importo transazioni",
       "netFlow": "Flusso netto",
       "name": "Nome",
-      "lastSeen": "Attività recente"
+      "lastSeen": "Attività recente",
+      "defaultTags": "Default tags"
     },
     "actions": {
       "menu": "Azioni",
@@ -75,7 +77,12 @@
       "defaultTagsLabel": "Applica tag automaticamente",
       "defaultTagsPlaceholder": "Seleziona i tag da applicare automaticamente",
       "defaultTagsHint": "Questi tag vengono aggiunti automaticamente alle nuove transazioni collegate a questo beneficiario (sincronizzazioni bancarie e importazioni).",
-      "applyTagsToExisting": "Applica alle transazioni esistenti"
+      "applyTagsToExisting": "Applica alle transazioni esistenti",
+      "defaultLocationLabel": "Default location",
+      "defaultLocationEmpty": "No location set",
+      "defaultLocationHint": "Transactions linked to this payee that have no location of their own get this one, both at creation and during bank sync.",
+      "clearDefaultLocationTitle": "Remove default location?",
+      "clearDefaultLocationDescription": "New transactions linked to this payee will no longer get this location. Existing transactions keep theirs."
     },
     "logo": {
       "change": "Cambia logo",
@@ -104,7 +111,9 @@
       "aliasDeleted": "Alias rimosso",
       "aliasAdded": "Alias aggiunto",
       "deletedAndIgnored": "Beneficiario eliminato e aggiunto all'elenco dei nomi ignorati",
-      "tagsAppliedToExisting": "Tag applicati a {count} transazioni"
+      "tagsAppliedToExisting": "Tag applicati a {count} transazioni",
+      "bulkDeleted": "Deleted {count} payee | Deleted {count} payees",
+      "bulkDeletedAndIgnored": "Deleted and ignored {count} payee | Deleted and ignored {count} payees"
     },
     "errors": {
       "collision": "Esiste già un beneficiario con questo nome. Usa invece l'unione.",
@@ -131,6 +140,13 @@
         "confirmDescription": "Tutti i beneficiari verranno impostati su {mode}. Potrai comunque modificare ogni beneficiario singolarmente in seguito.",
         "successNotification": "Aggiornati {count} beneficiari.",
         "errorNotification": "Impossibile aggiornare i beneficiari. Riprova."
+      },
+      "howDetectionWorks": "How detection works",
+      "promotionThreshold": {
+        "label": "Create a payee after N occurrences",
+        "description": "How many transactions must share the same merchant name before a payee is created automatically. Set to 1 to create payees from the first transaction.",
+        "successNotification": "Payee creation threshold updated",
+        "errorNotification": "Failed to update payee creation threshold"
       }
     },
     "ignoredNames": {
@@ -149,6 +165,18 @@
       "conflictDescription": "Esiste già un beneficiario con lo stesso nome normalizzato di \"{name}\". Continuando verrà eliminato quel beneficiario (le transazioni restano, ma perdono il collegamento).",
       "forceConfirm": "Elimina beneficiario e ignora"
     },
-    "loadingMore": "Caricamento in corso…"
+    "loadingMore": "Caricamento in corso…",
+    "bulk": {
+      "select": "Select",
+      "selectedCount": "{count} selected",
+      "clearSelection": "Pulisci la selezione",
+      "selectAll": "Select all loaded payees",
+      "selectRow": "Select {name}",
+      "deleteTitle": "Delete {count} payee? | Delete {count} payees?",
+      "deleteDescription": "Their transactions stay, but lose the payee link. This can't be undone.",
+      "deleteAndIgnoreTitle": "Delete and ignore {count} payee? | Delete and ignore {count} payees?",
+      "deleteAndIgnoreDescription": "Their names go on the ignored list, so imports and bank syncs won't recreate them. Their transactions stay, but lose the payee link."
+    },
+    "txCount": "{count} tx"
   }
 }

@@ -1,3 +1,4 @@
+import { config } from '@/common/config';
 import { useUserSettings } from '@/composable/data-queries/user-settings';
 import { computed } from 'vue';
 
@@ -9,9 +10,13 @@ import { computed } from 'vue';
 export const useSupportButton = () => {
   const { data: userSettings, patchAsync, isPatching } = useUserSettings();
 
-  const isSupportButtonVisible = computed(() => userSettings.value?.showSupportButton ?? true);
+  const isSupportButtonAvailable = computed(() => config.isSelfHost);
+
+  const isSupportButtonVisible = computed(
+    () => isSupportButtonAvailable.value && (userSettings.value?.showSupportButton ?? true),
+  );
 
   const setSupportButtonVisible = (value: boolean) => patchAsync({ showSupportButton: value });
 
-  return { isSupportButtonVisible, setSupportButtonVisible, isUpdating: isPatching };
+  return { isSupportButtonAvailable, isSupportButtonVisible, setSupportButtonVisible, isUpdating: isPatching };
 };

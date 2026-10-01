@@ -26,6 +26,7 @@ export interface FiltersStruct {
   transferNatures: TRANSACTION_TRANSFER_NATURE[];
   accountIds: string[];
   noteIncludes: string;
+  attachmentFilter: FILTER_OPERATION;
   categoryIds: string[];
   uncategorizedOnly: boolean;
   tagIds: string[];
@@ -47,6 +48,7 @@ export const DEFAULT_FILTERS: FiltersStruct = {
   transferNatures: [...SELECTABLE_TRANSFER_NATURES],
   accountIds: [],
   noteIncludes: '',
+  attachmentFilter: FILTER_OPERATION.all,
   categoryIds: [],
   uncategorizedOnly: false,
   tagIds: [],

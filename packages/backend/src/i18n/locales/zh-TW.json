@@ -1,7 +1,8 @@
 {
   "common": {
     "processAlreadyLocked": "Sync process for \"{{lockKey}}\" is already locked.",
-    "serviceTemporarilyUnavailable": "Service temporarily unavailable. Please try again."
+    "serviceTemporarilyUnavailable": "Service temporarily unavailable. Please try again.",
+    "jobInterruptedByServerUpdate": "A server update interrupted this before it finished, so nothing was changed."
   },
   "accounts": {
     "groupNotFound": "Group or account not found",
@@ -14,7 +15,9 @@
     "deleteBlockedByLoanPayments": "This account has loan payments. Delete or reassign them before deleting the account.",
     "loanBalanceUseUpdateLoan": "Change a loan's outstanding balance from its loan page, not from account settings.",
     "loanCategoryImmutable": "A loan account's category can't be changed.",
-    "dedicatedFlowCategoryNotAllowed": "Loan and vehicle accounts must be created through their dedicated endpoints, not the generic accounts endpoint."
+    "dedicatedFlowCategoryNotAllowed": "Loan and vehicle accounts must be created through their dedicated endpoints, not the generic accounts endpoint.",
+    "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
   },
   "balanceAdjustment": {
     "defaultNote": "Balance adjustment",
@@ -101,6 +104,27 @@
       "splitNotFound": "Split not found",
       "cannotDeleteWithRefunds": "Cannot delete split that has refunds targeting it",
       "cannotReduceBelowRefunded": "This split has refunds totaling {{refundsText}}. You cannot reduce it below the refunded amount. To reduce further, first unlink the refunds."
+    },
+    "reconciliation": {
+      "systemNotAllowed": "Only bank-connected transactions can be merged or removed.",
+      "plannedNotAllowed": "Planned transactions can't be merged or removed.",
+      "transferNotAllowed": "Linked transfers can't be merged or removed. Unlink the transfer first.",
+      "refundNotAllowed": "Refund-linked transactions can't be merged or removed. Unlink the refund first.",
+      "survivorPending": "Pick the booked transaction as the one to keep. A pending survivor would stay stuck as pending.",
+      "survivorNotSelected": "The transaction to keep must be one of the selected transactions.",
+      "differentAccounts": "Only transactions from the same account can be merged.",
+      "budgetConflict": "The selected transactions belong to different budgets. Align their budgets before merging.",
+      "groupConflict": "The selected transactions belong to different transaction groups. Align their groups before merging.",
+      "subscriptionConflict": "The selected transactions are linked to different subscriptions. Align their subscriptions before merging.",
+      "accountDisconnected": "Can't restore: the account is no longer connected to the bank.",
+      "bankCheckUnsupported": "Checking with the bank is only available for Enable Banking accounts.",
+      "notPending": "Only pending transactions can be kept as booked.",
+      "stuckPendingNotification": {
+        "title": "Some card payments haven't cleared",
+        "message_one": "1 transaction has been pending for over a week. Check it with your bank so your balance stays accurate.",
+        "message_other": "{{count}} transactions have been pending for over a week. Check them with your bank so your balance stays accurate."
+      },
+      "maintenanceConflict": "所選交易屬於不同的保養紀錄。"
     }
   },
   "tags": {
@@ -171,6 +195,9 @@
     "contributionSourceMustBeExpense": "只有支出交易可以記錄為投資投入。",
     "contributionDeletePurchasesConfirmationRequired": "刪除此項投入需要明確確認才能刪除其關聯的投資買入。"
   },
+  "landingFaq": {
+    "unavailable": "The assistant is unavailable right now. Please try again later or email support@moneymatter.app."
+  },
   "loans": {
     "loanNotFound": "Loan not found.",
     "createAccountFailed": "Failed to create loan account",
@@ -180,7 +207,12 @@
     "unlinkPaymentNotFound": "Loan payment not found.",
     "unlinkPaymentInvalidSelection": "This transaction is not a payment on this loan.",
     "correctionAsOfBeforeStartDate": "currentBalanceAsOf cannot be earlier than the loan start date",
-    "correctionOverpay": "Corrected balance would overpay the loan by {{overpayAmount}}: payments totaling {{paymentsTotal}} are dated on/after {{asOfDate}}"
+    "correctionOverpay": "Corrected balance would overpay the loan by {{overpayAmount}}: payments totaling {{paymentsTotal}} are dated on/after {{asOfDate}}",
+    "loanNotActive": "This loan is no longer active or has already been paid off.",
+    "loanInstallmentOnly": "Only expense installments can be linked to a loan.",
+    "loanInstallmentAlreadyLinked": "This installment is already linked to a loan.",
+    "loanInstallmentSourceAccount": "The installment source account cannot be the loan account.",
+    "loanInstallmentRequiresTransaction": "A loan-linked installment must create or link a real transaction."
   },
   "errors": {
     "connectionNotFound": "Connection not found",
@@ -212,6 +244,7 @@
     "failedToFetchBanks": "Failed to fetch banks. Please check your credentials and country code.",
     "failedToFetchCountries": "Failed to fetch countries. Please check your credentials.",
     "accountNotLinkedToConnection": "Account not found or not linked to this connection",
+    "accountAlreadyConnectedToAnotherConnection": "Account \"{{account}}\" is already connected through \"{{connection}}\". Disconnect it there first.",
     "cannotLoadBeforeLinkDate": "Cannot load transactions before account link date ({{linkedAt}}). This account was linked using \"forward-only\" strategy to prevent data duplication.",
     "dateRangeExceedsLimit": "Date range cannot exceed 1 year.",
     "fromAfterTo": "\"from\" date must be before \"to\" date",
@@ -300,7 +333,9 @@
   "importExport": {
     "batchDeleteBankLinkedAccount": "This import can no longer be undone because its account is now connected to a bank. Deleting these transactions could throw off the synced balance.",
     "batchDeleteLinkedLoanTransfer": "This import is linked to a loan payment and can't be undone on its own. Enable \"also delete linked transfer transactions\" to remove it.",
-    "batchDeleteTooLarge": "This import has too many transactions to undo in one request right now. Please contact support if you need help removing it."
+    "batchDeleteInProgress": "An import batch is already being deleted. Wait for it to finish before starting another.",
+    "statementImportInProgress": "A statement import is already running. Wait for it to finish before starting another one.",
+    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated."
   },
   "statementParser": {
     "invalidFile": "Invalid file",
@@ -343,8 +378,23 @@
     "defaultCurrencyNotPresent": "Cannot delete currency. Default currency is not present in the system"
   },
   "ai": {
-    "apiKeyValidationFailed": "API key validation failed",
-    "noApiKeyForProvider": "No API key configured for provider: {{provider}}",
+    "connectionNotFound": "AI model not found.",
+    "connectionNameTaken": "You already have an AI model with this name.",
+    "connectionLimitReached": "You can add up to {{max}} AI models.",
+    "connectionNameInvalidLength": "Name must be between 1 and {{max}} characters.",
+    "connectionModelRequired": "Enter a model name.",
+    "connectionBaseUrlRequired": "Enter the base URL of your OpenAI-compatible server.",
+    "connectionBaseUrlNotAllowed": "This provider always uses its official API address, so it doesn't take a base URL.",
+    "connectionApiKeyRequired": "Enter the API key.",
+    "connectionProviderMismatch": "That AI model uses a different provider.",
+    "connectionKeySourceMissing": "The AI model you're copying from has no API key. Enter one.",
+    "connectionStoredKeyUnreadable": "The API key saved for this AI model can no longer be read. Enter it again.",
+    "connectionKeyRejected": "The provider rejected this API key. Check that it's correct, active, and has credits.",
+    "connectionModelNotAvailable": "This API key can't use the model \"{{model}}\". Check the model name.",
+    "connectionProviderUnreachable": "Couldn't reach the provider. Try again in a moment.",
+    "connectionValidationFailed": "The provider refused the test request: {{reason}}",
+    "serverModelUnavailable": "The included MoneyMatter AI model isn't available on your plan.",
+    "connectionKeyNotInBackup": "API key isn't included in backups. Edit this model and enter the key again.",
     "customEndpointUnreachable": "Could not reach the endpoint. Check the base URL and make sure the server is running and reachable from the internet.",
     "customEndpointAuthFailed": "The endpoint rejected the API key. Check that the key is correct and has the required permissions.",
     "customEndpointModelNotFound": "The endpoint does not serve a model named \"{{model}}\".",
@@ -352,16 +402,9 @@
     "customEndpointMoreModels": "and {{count}} more",
     "customEndpointNotApiResponse": "The server at this URL answered with HTTP {{status}} instead of an OpenAI-compatible response. Check that the server is running and that the base URL is correct — it usually ends with /v1.",
     "customEndpointValidationFailed": "The endpoint did not return a usable response. Check the base URL, model name and API key.",
-    "customEndpointMissingFields": "A base URL and a model name are required.",
-    "customEndpointNameTaken": "You already have an endpoint with this name.",
-    "customEndpointNameInvalidLength": "Endpoint name must be between 1 and 50 characters.",
-    "customEndpointNotFound": "Custom endpoint not found.",
-    "customEndpointIdRequired": "Select which custom endpoint serves this model.",
-    "customModelNameInvalidLength": "The model name must be between 1 and 200 characters.",
-    "customEndpointLimitReached": "You can store up to {{max}} custom endpoints. Remove one before adding another.",
-    "customEndpointStoredKeyUnreadable": "The saved API key for this endpoint can no longer be read. Please enter it again.",
     "categorizationAlreadyRunning": "AI categorization is already running. Wait for it to finish before starting another run.",
-    "categorizationRateLimited": "You've started AI categorization too many times recently. Please try again later."
+    "categorizationRateLimited": "You've started AI categorization too many times recently. Please try again later.",
+    "customInstructionsNeedConnection": "Add an AI model in Settings → AI to use custom instructions."
   },
   "middleware": {
     "tooManyRequests": "Too many requests. Please try again later."
@@ -534,8 +577,29 @@
   },
   "automations": {
     "automationNotFound": "Automation not found.",
+    "previewRequiresConditions": "Provide either conditions or a saved automation to preview.",
     "reorderStale": "The automation list has changed. Refresh and try again.",
     "ruleLimitReached": "You have reached the maximum number of automations.",
     "staleReference": "This automation references an item that no longer exists."
+  },
+  "attachments": {
+    "transactionNotFound": "Transaction not found.",
+    "attachmentNotFound": "Attachment not found.",
+    "fileNotFound": "Attachment file not found.",
+    "unsupportedFileType": "Unsupported file type. Upload a JPEG, PNG, WebP or PDF file.",
+    "tooManyAttachments": "A transaction can hold at most {{max}} attachments.",
+    "quotaExceeded": "Attachment storage quota exceeded.",
+    "noFileUploaded": "No file was uploaded."
+  },
+  "invoiceMatching": {
+    "unsupportedFileType": "Unsupported file type. Upload a JPEG, PNG, WebP or PDF invoice.",
+    "notAnInvoice": "This document does not look like an invoice or a receipt.",
+    "incompleteInvoice": "Could not read a vendor, total amount and date from this invoice.",
+    "pdfWithoutText": "Custom AI connections can't receive PDF files directly, and this one couldn't be opened to convert it (for example, it's password-protected). Convert it to an image (PNG or JPEG), such as a screenshot of the invoice, and upload that instead.",
+    "noFileUploaded": "No file was uploaded."
+  },
+  "plans": {
+    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan.",
+    "targetAmountMustBePositive": "Target amount must be greater than zero."
   }
 }

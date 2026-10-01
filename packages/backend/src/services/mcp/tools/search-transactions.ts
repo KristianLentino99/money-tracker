@@ -11,6 +11,11 @@ import { z } from 'zod';
 import { getUserId, jsonContent } from './helpers';
 
 const inputSchema = {
+  isForecastOnly: z
+    .boolean()
+    .optional()
+    .describe('true: only forecast rows; false: actual rows; omitted: actual plus own forecasts'),
+  excludeBalanceAdjustments: z.boolean().optional().describe('Exclude balance adjustment entries'),
   startDate: z.string().optional().describe('Start date (ISO 8601). Default: 30 days ago'),
   endDate: z.string().optional().describe('End date (ISO 8601). Default: today'),
   accountIds: z.array(recordId()).optional().describe('Filter by account IDs'),
@@ -51,6 +56,8 @@ export function registerSearchTransactions(server: McpServer) {
 
       const filterParams = {
         userId,
+        isForecastOnly: args.isForecastOnly,
+        excludeBalanceAdjustments: args.excludeBalanceAdjustments,
         startDate,
         endDate,
         accountIds: args.accountIds,

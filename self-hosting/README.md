@@ -1,6 +1,6 @@
-# Budget Tracker – Self-Hosting
+# MoneyMatter – Self-Hosting
 
-Run Budget Tracker on your own server with Docker Compose. The stack pulls
+Run MoneyMatter on your own server with Docker Compose. The stack pulls
 published multi-arch images and exposes the whole app on **one host port** –
 put whatever reverse proxy you already run in front of it (Nginx Proxy
 Manager, npmplus, Caddy, Traefik), or nothing at all for a LAN / localhost
@@ -9,8 +9,8 @@ trial.
 ## Quickstart
 
 ```bash
-git clone https://github.com/letehaha/budget-tracker.git
-cd budget-tracker/self-hosting
+git clone https://github.com/letehaha/moneymatter.git
+cd moneymatter/self-hosting
 cp .env.example .env   # then fill the REQUIRED section
 docker compose up -d
 ```
@@ -22,6 +22,8 @@ Open `http://<host>:8080`. Full walkthrough:
 
 - [Setup guide](docs/setup-guide.md) – prerequisites, quickstart, exposing
   the app publicly, building from source, backups.
+- [Portainer](docs/portainer.md) – deploy the same stack from the Portainer
+  UI instead of the CLI.
 - [Reverse proxies](docs/reverse-proxies.md) – requirements any proxy must
   meet + recipes per proxy (Nginx Proxy Manager, Caddy).
 - [Traefik overlay](docs/traefik-overlay.md) – bundled TLS termination with
@@ -43,5 +45,5 @@ Open `http://<host>:8080`. Full walkthrough:
 
 ## Where to get help
 
-- Issues: https://github.com/letehaha/budget-tracker/issues
+- Issues: https://github.com/letehaha/moneymatter/issues
 - License: AGPL-3.0 – see `LICENSE`

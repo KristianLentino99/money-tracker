@@ -4,10 +4,13 @@ import AccountGroup from '@models/accounts-groups/account-groups.model';
 import Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
+import BillingSubscriptions from '@models/billing-subscriptions.model';
+import BillingWebhookEvents from '@models/billing-webhook-events.model';
 import BrandLogos from '@models/brand-logos.model';
 import Categories from '@models/categories.model';
 import Currencies from '@models/currencies.model';
 import ExchangeRates from '@models/exchange-rates.model';
+import FeatureUsages from '@models/feature-usages.model';
 import Holdings from '@models/investments/holdings.model';
 import InvestmentTransaction from '@models/investments/investment-transaction.model';
 import ManualPortfolioTransactions from '@models/investments/manual-portfolio-transaction.model';
@@ -35,6 +38,7 @@ import Plans from '@models/plan.model';
 import RefundTransactions from '@models/refund-transactions.model';
 import ResourceShares from '@models/resource-shares.model';
 import ShareInvitations from '@models/share-invitations.model';
+import SignupLedger from '@models/signup-ledger.model';
 import SubscriptionCandidates from '@models/subscription-candidates.model';
 import SubscriptionPeriodNotifications from '@models/subscription-period-notifications.model';
 import SubscriptionPeriods from '@models/subscription-periods.model';
@@ -43,6 +47,7 @@ import SubscriptionTransactions from '@models/subscription-transactions.model';
 import Subscriptions from '@models/subscriptions.model';
 import TagReminders from '@models/tag-reminders.model';
 import Tags from '@models/tags.model';
+import TransactionAttachments from '@models/transaction-attachments.model';
 import TransactionAutomations from '@models/transaction-automations.model';
 import TransactionGroupItems from '@models/transaction-group-items.model';
 import TransactionGroups from '@models/transaction-groups.model';
@@ -135,7 +140,7 @@ export interface BackupTableDef {
   /** Self-referential parent column needing the two-pass restore. */
   selfRefColumn?: string;
   /** Encrypted blob to blank before writing (undecryptable on another instance). */
-  stripSecret?: 'bankCredentials' | 'aiApiKeys';
+  stripSecret?: 'bankCredentials' | 'aiKeys';
   /** Attach the MCC's natural `code` so restore can remap the integer `mccId`. */
   enrichMccCode?: boolean;
   /** Drop a row on restore whose `currencyCode` isn't seeded on the target instance. */
@@ -168,7 +173,7 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     tier: 2,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'zodSettings',
-    stripSecret: 'aiApiKeys',
+    stripSecret: 'aiKeys',
   },
   {
     fileName: 'users-currencies',
@@ -372,6 +377,8 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     tier: 4,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
+    paranoid: true,
+    selfRefColumn: 'mergedIntoId',
   },
   {
     fileName: 'vehicle-maintenance-plans',
@@ -402,6 +409,13 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     restoreMode: 'insert',
   },
   {
+    fileName: 'portfolio-transfers',
+    model: PortfolioTransfers,
+    tier: 4,
+    scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
+  },
+  {
     fileName: 'investment-transactions',
     model: InvestmentTransaction,
     tier: 4,
@@ -427,13 +441,6 @@ export const BACKUP_TABLES: readonly BackupTableDef[] = [
     model: PortfolioBalances,
     tier: 4,
     scope: { strategy: 'viaParent', fk: 'portfolioId', parent: 'portfolios' },
-    restoreMode: 'insert',
-  },
-  {
-    fileName: 'portfolio-transfers',
-    model: PortfolioTransfers,
-    tier: 4,
-    scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
   },
   {
@@ -639,6 +646,22 @@ export const BACKUP_EXCLUDED: readonly BackupExcludedDef[] = [
     model: SecurityPricing,
     reason:
       'Global derived price history, refetched from the market-data provider. Never trusted from an uploaded backup — writing it from an archive would let a crafted backup poison prices for securities other users hold.',
+  },
+  {
+    model: BillingSubscriptions,
+    reason:
+      'Mirror of Stripe, keyed to a Stripe customer — Stripe re-sends it by webhook, restoring it would bind another account.',
+  },
+  { model: BillingWebhookEvents, reason: 'Webhook dedupe markers for a Stripe account, meaningless outside it.' },
+  { model: SignupLedger, reason: 'Global signup/trial ledger keyed by email hash, not per-user data.' },
+  {
+    model: FeatureUsages,
+    reason: 'Feature-trial counters. Restoring them would hand back spent tries on every restore.',
+  },
+  {
+    model: TransactionAttachments,
+    reason:
+      'Rows point at files in attachment storage, which the backup archive does not carry — restoring rows alone would list attachments that cannot be opened. Attachments are not part of backup/restore.',
   },
 ];
 

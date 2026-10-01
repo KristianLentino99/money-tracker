@@ -27,7 +27,8 @@
       "apply": "Aplicar",
       "retry": "Reintentar",
       "copyInviteLink": "Copiar enlace de invitación",
-      "moveTo": "Mover a…"
+      "moveTo": "Mover a…",
+      "learnMore": "Saber más"
     },
     "ui": {
       "close": "Cerrar",
@@ -131,6 +132,10 @@
       "investmentTransactionsParsing": {
         "name": "Importación de transacciones de inversión",
         "description": "Transacciones de compra/venta extraídas por IA de exportaciones de exchanges, extractos de brokers o texto pegado."
+      },
+      "receiptParsing": {
+        "name": "Coincidencia de factura",
+        "description": "Lee una factura o recibo subido y encuentra la transacción a la que pertenece."
       }
     },
     "transactions": {
@@ -145,7 +150,15 @@
         "error": "Error al desvincular las transacciones"
       },
       "record": {
-        "hiddenAccount": "Cuenta oculta"
+        "hiddenAccount": "Cuenta oculta",
+        "externalLinkTooltip": "Abrir enlace externo",
+        "locationTooltip": "Abrir ubicación en el mapa",
+        "attachmentsTooltip": "Tiene adjuntos",
+        "selectRow": "Seleccionar transacción",
+        "unselectableReasons": {
+          "sharedAccount": "No se puede seleccionar: esta transacción pertenece a una cuenta compartida contigo, y solo su propietario puede editarla."
+        },
+        "addedByTooltip": "This transaction was attached to the budget by {handle}"
       }
     },
     "outOfWallet": "Fuera de cartera",
@@ -214,6 +227,7 @@
       "autoLabel": "Automático (desde el nombre)",
       "domainHint": "Para encontrar la marca exacta, escriba el dominio del sitio web de la empresa (p. ej. amazon.com) – eso siempre coincide con el logotipo correcto.",
       "searchError": "No se pudieron cargar los logotipos – intente de nuevo",
+      "brandNotConfigured": "Los logos de marca no están configurados en esta instancia. Pida al administrador que establezca VITE_LOGO_DEV_TOKEN, o utilice letras en su lugar.",
       "editAriaLabel": "Editar logo",
       "dialogTitle": "Cambiar logo",
       "resetToAuto": "Restablecer a automático",
@@ -225,7 +239,31 @@
       "customColorAriaLabel": "Elegir un color personalizado",
       "applyLetters": "Aplicar",
       "lettersSelectedLabel": "Letras “{letters}”"
-    }
+    },
+    "importBatchDeleteOverlay": {
+      "title": "Eliminando transacciones importadas",
+      "description": "Se está eliminando un gran lote de importación. Los saldos se recalculan cuando termina, por lo que la aplicación está bloqueada hasta entonces.",
+      "deleting": "Eliminando transacción",
+      "preparing": "Preparándose",
+      "finishing": "Finalizando",
+      "takingLong": "Esto está tardando más de lo habitual, grandes lotes pueden tardar varios minutos. Mantenga esta página abierta.",
+      "unreachableTitle": "No se puede contactar con el servidor",
+      "unreachableDescription": "El borrado puede estar ejecutándose. Descartar para seguir usando la aplicación, y volver a cargar más tarde para ver el resultado.",
+      "failedTitle": "No se pudo eliminar",
+      "dismiss": "Descartar"
+    },
+    "duration": {
+      "years": "{n} yr | {n} yrs",
+      "months": "{n} mo | {n} mos"
+    },
+    "fire": {
+      "targets": {
+        "lean": "Lean FIRE",
+        "regular": "FIRE",
+        "fat": "Fat FIRE"
+      }
+    },
+    "cancel": "Cancel"
   },
   "accountGroups": {
     "create": {
@@ -373,7 +411,6 @@
           "dismiss": "Descartar",
           "preparing": "Preparando todo…",
           "finishing": "Finalizando…",
-          "stepCounter": "Paso {current} de {total}",
           "steps": {
             "transactions": "Actualizando transacciones",
             "accounts": "Actualizando cuentas",
@@ -422,6 +459,21 @@
     },
     "transactionGroupRecord": {
       "transactionCountLabel": "transacciones"
+    }
+  },
+  "billing": {
+    "seePlans": "Ver planes",
+    "updatePaymentMethod": "Actualice su método de pago",
+    "planRequired": {
+      "essential": "Incluido en el Plan Esencial",
+      "plus": "Incluido en el Plan Plus",
+      "hint": "Su plan actual no incluye esta característica. Actualice para desbloquearlo."
+    },
+    "banner": {
+      "trial": "Queda {count} día de prueba · {link} | Quedan {count} días de prueba · {link}",
+      "readOnly": "Tu prueba ha terminado. Puedes ver y exportar tus datos, suscríbete para seguir editando. {link}",
+      "subscriptionEnded": "Tu suscripción ha terminado. {link} para seguir editando tus datos.",
+      "pastDue": "Tu último pago falló. {link} para mantener tu plan."
     }
   }
 }

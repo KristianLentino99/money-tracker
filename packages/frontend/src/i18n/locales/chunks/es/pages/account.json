@@ -101,6 +101,7 @@
       "archive": {
         "title": "Archivar cuenta",
         "description": "Al archivar se conservan todas las transacciones, pero se elimina la cuenta de su lista activa. Las conexiones bancarias y los grupos de pertenencia se desconectarán.",
+        "compareOptionsLink": "¿Archivar, excluir o eliminar?",
         "archiveButton": "Archivar cuenta",
         "confirmTitle": "Archivar cuenta",
         "confirmDescription": "¿Está seguro de que desea archivar \"{name}\"? Esto hará lo siguiente:",
@@ -142,7 +143,13 @@
         "balanceComparison": "Comparación de saldo actual:",
         "systemAccount": "Cuenta del sistema:",
         "externalAccount": "Cuenta externa:",
-        "adjustmentNote": "Si los saldos difieren, se creará automáticamente una transacción de ajuste."
+        "difference": "Difference",
+        "residualTitle": "How should we handle the difference?",
+        "residualAdjustmentLabel": "Add a balance correction",
+        "residualAdjustmentDescription": "Adds one balance adjustment transaction dated today. Your past balances stay exactly as they are.",
+        "residualOpeningLabel": "Change the starting balance",
+        "residualOpeningDescription": "Moves the account's starting balance by the difference, so every past balance shifts too. Pick this if transactions are missing from the start of the history.",
+        "residualHint": "The final amount is set after the first sync, so it can differ a little from this preview."
       },
       "tabs": {
         "details": "Detalles",
@@ -158,6 +165,11 @@
         "creditLimitUpdateError": "Error al actualizar el límite de crédito",
         "save": "Guardar",
         "initialBalance": "Saldo inicial:",
+        "editInitialBalance": "Edit initial balance",
+        "initialBalancePlaceholder": "Enter initial balance",
+        "initialBalanceHint": "Changing the initial balance also changes your current balance and your entire balance history by the same amount.",
+        "initialBalanceUpdateSuccess": "Initial balance updated",
+        "initialBalanceUpdateError": "Failed to update initial balance",
         "accountType": "Tipo de cuenta:",
         "accountCategory": "Categoría de cuenta:",
         "editAccountCategory": "Editar categoría",
@@ -203,6 +215,17 @@
         "syncStarted": "Sincronización iniciada...",
         "accessForbidden": "Acceso denegado",
         "failed": "Error al sincronizar las transacciones"
+      },
+      "reconcileDuplicates": {
+        "title": "Fusionar transacciones duplicadas",
+        "description": "Pega las filas pendientes en las transacciones reservadas que las reemplazaron.",
+        "button": "Fusionar duplicados",
+        "running": "Fusionando…",
+        "confirm": "Combinar",
+        "confirmTitle": "¿Fusionar transacciones duplicadas?",
+        "confirmDescription": "Los registros pendientes que coincidan con una transacción reservada en esta cuenta serán eliminados. Notas y categorías que ha establecido al mover a la transacción reservada. Esto no se puede deshacer.",
+        "result": "Fusionado {merged} duplicado(s), omitió {skipped}.",
+        "failed": "Error al fusionar duplicados."
       },
       "relinkWarning": {
         "title": "Enable Banking: la cuenta necesita actualización",
@@ -495,7 +518,8 @@
             "quickExpenseRequired": "Selecciona una cuenta y una categoría e introduce un importe.",
             "quickExpensePositive": "El importe del gasto debe ser mayor que cero.",
             "freeActivityLabelTooLong": "Los nombres de las actividades deben tener 100 caracteres o menos."
-          }
+          },
+          "record": "Record visit"
         }
       }
     }

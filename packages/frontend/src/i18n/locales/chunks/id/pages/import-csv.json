@@ -106,7 +106,12 @@
           "noInvalidRows": "Tidak ada baris tidak valid",
           "noDuplicates": "Tidak ada duplikat",
           "expand": "Tampilkan data lengkap",
-          "collapse": "Sembunyikan data lengkap"
+          "collapse": "Sembunyikan data lengkap",
+          "columnHeaders": {
+            "row": "Row",
+            "problem": "Problem",
+            "data": "Data"
+          }
         },
         "results": {
           "completeTitle": "Impor Selesai!",

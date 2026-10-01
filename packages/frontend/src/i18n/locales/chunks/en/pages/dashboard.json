@@ -3,7 +3,8 @@
     "editMode": {
       "customize": "Customize",
       "addWidgets": "Add widgets",
-      "emptyState": "Click Customize to add widgets"
+      "emptyState": "Click Customize to add widgets",
+      "removeWidget": "Remove widget"
     },
     "widgets": {
       "common": {
@@ -114,7 +115,8 @@
             "3": "Last 3 months",
             "6": "Last 6 months",
             "12": "Last 12 months"
-          }
+          },
+          "showStrip": "Show 30-day chart"
         }
       },
       "categoryTracker": {
@@ -126,6 +128,7 @@
         "title": "Cash Flow",
         "description": "Shows your net savings: income minus expenses for the selected period, with a trend of previous periods",
         "vsPrevious": "vs previous",
+        "notAvailable": "N/A",
         "income": "Income",
         "expenses": "Expenses",
         "saved": "Saved",
@@ -168,9 +171,8 @@
       },
       "plannedOverview": {
         "title": "Planned",
-        "projectedTotal": "Projected balance",
-        "pendingCount": "{count} planned entry | {count} planned entries",
-        "through": "Through {date}",
+        "projectedBy": "Projected by {date}",
+        "upcoming": "Upcoming · {count}",
         "loadFailed": "Couldn't load planned transactions"
       },
       "emptyState": "There are no data in selected time interval.",
@@ -210,6 +212,10 @@
         "plannedOverview": {
           "name": "Planned overview",
           "description": "Pending planned transactions and your projected balance"
+        },
+        "fireProgress": {
+          "name": "FIRE progress",
+          "description": "How close you are to financial independence"
         }
       }
     },
@@ -226,13 +232,18 @@
   },
   "widgets": {
     "subscriptionsOverview": {
-      "upcoming": {
-        "collapsed": "{count} upcoming payments",
-        "collapsedAction": "Open"
+      "payAction": "Mark paid",
+      "listTitle": "Upcoming",
+      "dueCount": "{count} due",
+      "nothingDue": "Nothing due in 3 days",
+      "overdueHint": "Overdue since {date}",
+      "dueSoonHint": "Due in the next 3 days",
+      "strip": {
+        "title": "Next 30 days",
+        "goingOut": "{amount} going out",
+        "today": "Today"
       },
-      "empty": "All caught up — nothing due in the next 3 days.",
-      "overdueBadge": "Overdue",
-      "payAction": "Mark paid"
+      "loadFailed": "Couldn't load recurring payments"
     },
     "latestRecords": {
       "config": {
@@ -250,11 +261,65 @@
         "excludeBalanceAdjustmentsDescription": "Hide balance adjustment transactions",
         "plannedTitle": "Planned transactions",
         "excludePlannedDescription": "Hide pending planned transactions from the list",
-        "nothingExcluded": "Nothing excluded"
+        "nothingExcluded": "Nothing excluded",
+        "tagsStyleTitle": "Tags",
+        "tagsStyleNames": "Names",
+        "tagsStyleBars": "Bars",
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
       },
       "overdueBadge": "Overdue",
       "scheduledBadge": "Scheduled",
       "payAction": "Mark paid"
+    },
+    "fireProgress": {
+      "title": "FIRE progress",
+      "config": {
+        "style": {
+          "label": "Style",
+          "ring": "Ring",
+          "numbers": "Numbers"
+        }
+      },
+      "openPlan": "Open FIRE plan",
+      "loadFailed": "Couldn't load FIRE progress.",
+      "toType": "to {type}",
+      "ringLabelFor": "{pct}% of {type} target reached, {duration} left",
+      "ringLabelReachedFor": "{type} target reached",
+      "ringLabelUnreachableFor": "{pct}% of {type} target reached, not reachable at your current pace",
+      "timeTo": "Time to {type}",
+      "unitYears": "{n} yrs | {n} yr | {n} yrs",
+      "unitMonths": "{n} mos | {n} mo | {n} mos",
+      "atAge": "at age {age}",
+      "nextMilestone": "Next milestone",
+      "saved": "Saved",
+      "progress": "Progress",
+      "coastFire": "Coast FIRE",
+      "reached": "Reached",
+      "milestoneIn": "{pct}% in {duration}",
+      "typeNumber": "{type} number",
+      "atRate": "at {rate}%",
+      "milestonesReached": "{n} of {total} milestones",
+      "balanceOfTarget": "{balance} of {target}",
+      "reachedType": "{type} reached",
+      "supports": "Supports {amount}/mo",
+      "pctOfSpending": "{pct}% of spending",
+      "unreachable": "Not reachable at current savings",
+      "needs": "Needs about {amount}/mo to get there in {duration}",
+      "chart": {
+        "today": "Today",
+        "typeTarget": "{type} · {amount}",
+        "ariaLabel": "Net worth path: actual history up to today, projected toward your FIRE number"
+      },
+      "setup": {
+        "title": "Plan your path to FIRE",
+        "description": "Uses your accounts and spending. Two numbers if you have no data yet.",
+        "action": "Set up"
+      },
+      "locked": {
+        "title": "Plan your path to FIRE",
+        "description": "Plus feature",
+        "action": "Unlock"
+      }
     }
   },
   "pages": {

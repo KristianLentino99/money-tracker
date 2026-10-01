@@ -7,11 +7,14 @@ import AccountGroupsModel from './accounts-groups/account-groups.model';
 import AccountsModel from './accounts.model';
 import BalancesModel from './balances.model';
 import BankDataProviderConnectionsModel from './bank-data-provider-connections.model';
+import BillingSubscriptionsModel from './billing-subscriptions.model';
+import BillingWebhookEventsModel from './billing-webhook-events.model';
 import BrandLogosModel from './brand-logos.model';
 import CategoriesModel from './categories.model';
 import { connection } from './connection';
 import CurrenciesModel from './currencies.model';
 import ExchangeRatesModel from './exchange-rates.model';
+import FeatureUsagesModel from './feature-usages.model';
 import HoldingsModel from './investments/holdings.model';
 import InvestmentTransactionModel from './investments/investment-transaction.model';
 import ManualPortfolioTransactionModel from './investments/manual-portfolio-transaction.model';
@@ -39,6 +42,7 @@ import PlanModel from './plan.model';
 import RefundTransactionsModel from './refund-transactions.model';
 import ResourceSharesModel from './resource-shares.model';
 import ShareInvitationsModel from './share-invitations.model';
+import SignupLedgerModel from './signup-ledger.model';
 import SubscriptionCandidatesModel from './subscription-candidates.model';
 import SubscriptionPeriodNotificationsModel from './subscription-period-notifications.model';
 import SubscriptionPeriodsModel from './subscription-periods.model';
@@ -47,6 +51,7 @@ import SubscriptionTransactionsModel from './subscription-transactions.model';
 import SubscriptionsModel from './subscriptions.model';
 import TagRemindersModel from './tag-reminders.model';
 import TagsModel from './tags.model';
+import TransactionAttachmentsModel from './transaction-attachments.model';
 import TransactionAutomationsModel from './transaction-automations.model';
 import TransactionGroupItemsModel from './transaction-group-items.model';
 import TransactionGroupsModel from './transaction-groups.model';
@@ -96,6 +101,7 @@ const models = [
   CategoriesModel,
   CurrenciesModel,
   ExchangeRatesModel,
+  FeatureUsagesModel,
   MerchantCategoryCodesModel,
   NotificationsModel,
   RefundTransactionsModel,
@@ -122,6 +128,9 @@ const models = [
   TransactionGroupsModel,
   TransactionGroupItemsModel,
   TransactionTemplatesModel,
+  BillingSubscriptionsModel,
+  BillingWebhookEventsModel,
+  SignupLedgerModel,
   TransactionTemplateTagsModel,
   HoldingsModel,
   InvestmentTransactionModel,
@@ -157,6 +166,7 @@ const models = [
   VehicleMaintenanceVisitActivitiesModel,
   LoanDetailsModel,
   TransactionAutomationsModel,
+  TransactionAttachmentsModel,
 ];
 
 const sequelize = new Sequelize({

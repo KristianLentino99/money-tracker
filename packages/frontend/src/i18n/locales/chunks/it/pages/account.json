@@ -95,7 +95,8 @@
         "transactionCount": "Hai {count} transazioni associate a questo conto, verranno eliminate anche quelle.",
         "deleteConfirm": "Vuoi davvero eliminare questo conto?",
         "noTransactions": "Non hai transazioni associate.",
-        "accountNameLabel": "Nome del conto (fai clic per copiare)"
+        "accountNameLabel": "Nome del conto (fai clic per copiare)",
+        "removePortfolioTransfers": "Also delete portfolio contribution records linked to this account"
       },
       "archive": {
         "title": "Archivia conto",
@@ -113,7 +114,8 @@
         "error": "Impossibile aggiornare il conto",
         "archivedTitle": "Conto archiviato",
         "archivedDescription": "Questo conto è archiviato. Non apparirà nella tua barra laterale né accetterà nuove transazioni.",
-        "unarchiveButton": "Ripristina dall'archivio"
+        "unarchiveButton": "Ripristina dall'archivio",
+        "compareOptionsLink": "Archive, exclude or delete?"
       },
       "link": {
         "selectConnection": "Seleziona un banca connessione",
@@ -141,7 +143,14 @@
         "balanceComparison": "Confronto saldo attuale:",
         "systemAccount": "Conto di sistema:",
         "externalAccount": "Conto esterno:",
-        "adjustmentNote": "Se i saldi differiscono, verrà creata automaticamente una transazione di rettifica."
+        "adjustmentNote": "Se i saldi differiscono, verrà creata automaticamente una transazione di rettifica.",
+        "difference": "Difference",
+        "residualTitle": "How should we handle the difference?",
+        "residualAdjustmentLabel": "Add a balance correction",
+        "residualAdjustmentDescription": "Adds one balance adjustment transaction dated today. Your past balances stay exactly as they are.",
+        "residualOpeningLabel": "Change the starting balance",
+        "residualOpeningDescription": "Moves the account's starting balance by the difference, so every past balance shifts too. Pick this if transactions are missing from the start of the history.",
+        "residualHint": "The final amount is set after the first sync, so it can differ a little from this preview."
       },
       "tabs": {
         "details": "Dettagli",
@@ -163,7 +172,16 @@
         "exchangeRate": "Tasso di cambio:",
         "exchangeRateLiveUpdate": "Aggiornamento live del tasso di cambio:",
         "enabled": "Abilitato",
-        "disabled": "Disabilitato"
+        "disabled": "Disabilitato",
+        "creditLimitHint": "Set this only if the bank balance already includes the credit line.",
+        "editInitialBalance": "Edit initial balance",
+        "initialBalancePlaceholder": "Enter initial balance",
+        "initialBalanceHint": "Changing the initial balance also changes your current balance and your entire balance history by the same amount.",
+        "initialBalanceUpdateSuccess": "Initial balance updated",
+        "initialBalanceUpdateError": "Failed to update initial balance",
+        "editAccountCategory": "Edit category",
+        "accountCategoryUpdateSuccess": "Account category updated",
+        "accountCategoryUpdateError": "Failed to update account category"
       },
       "group": {
         "label": "Conto gruppo",
@@ -265,6 +283,17 @@
           "cancelSuccess": "Invito annullato.",
           "cancelError": "Impossibile annullare l'invito."
         }
+      },
+      "reconcileDuplicates": {
+        "title": "Unisci transazioni duplicate",
+        "description": "Unisce le transazioni rimaste in sospeso a quelle contabilizzate che le hanno sostituite.",
+        "button": "Unisci duplicati",
+        "running": "Unione in corso…",
+        "confirm": "Unisci",
+        "confirmTitle": "Unire le transazioni duplicate?",
+        "confirmDescription": "Le transazioni in sospeso che corrispondono a una transazione contabilizzata su questo conto verranno eliminate. Le note e le categorie assegnate verranno trasferite alla transazione contabilizzata. L'operazione è irreversibile.",
+        "result": "Uniti {merged} duplicati, ignorati {skipped}.",
+        "failed": "Impossibile unire i duplicati."
       }
     },
     "vehicleDetails": {

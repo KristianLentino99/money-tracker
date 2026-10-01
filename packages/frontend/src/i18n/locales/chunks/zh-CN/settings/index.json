@@ -7,7 +7,6 @@
       "accountsGroups": "Accounts groups",
       "importData": "Import/Export",
       "ai": "AI",
-      "aiIntegrations": "AI Integrations",
       "security": "Security",
       "admin": "Admin",
       "sharedWithMe": "Shared with me",
@@ -15,10 +14,12 @@
       "personalGroup": "Personal",
       "workspaceGroup": "Workspace",
       "appearance": "Appearance",
-      "language": "Language",
+      "language": "语言",
       "general": "General",
       "payees": "Payees",
-      "subscriptions": "Scheduled payments"
+      "subscriptions": "Scheduled payments",
+      "planBilling": "订阅与支付",
+      "collapse": "Collapse"
     },
     "backToSettings": "Back to Settings"
   }

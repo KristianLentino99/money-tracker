@@ -31,6 +31,7 @@ export const useAccountsStore = defineStore('accounts', () => {
     data: accounts,
     refetch: refetchAccounts,
     isFetched: isAccountsFetched,
+    isError: isAccountsError,
   } = useQuery({
     queryKey: VUE_QUERY_CACHE_KEYS.allAccounts,
     queryFn: apiLoadAccounts,
@@ -114,6 +115,15 @@ export const useAccountsStore = defineStore('accounts', () => {
     queryClient.invalidateQueries({
       queryKey: VUE_QUERY_CACHE_KEYS.accountGroups,
     });
+
+    if ('initialBalance' in data || 'currentBalance' in data) {
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const queryKey = query.queryKey as string[];
+          return queryKey.includes(VUE_QUERY_GLOBAL_PREFIXES.transactionChange);
+        },
+      });
+    }
   };
 
   const deleteAccount = async ({ id, removePortfolioTransfers }: DeleteAccountPayload) => {
@@ -171,6 +181,7 @@ export const useAccountsStore = defineStore('accounts', () => {
     accountsCurrencyCodes,
     accountsNeedingRelink,
     isAccountsFetched,
+    isAccountsError,
 
     loadAccounts: refetchAccounts,
     refetchAccounts,

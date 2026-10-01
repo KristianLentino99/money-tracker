@@ -106,7 +106,12 @@
           "noInvalidRows": "No hay filas inválidas",
           "noDuplicates": "No hay duplicados",
           "expand": "Mostrar datos completos",
-          "collapse": "Ocultar datos completos"
+          "collapse": "Ocultar datos completos",
+          "columnHeaders": {
+            "row": "Row",
+            "problem": "Problem",
+            "data": "Data"
+          }
         },
         "results": {
           "completeTitle": "¡Importación completada!",

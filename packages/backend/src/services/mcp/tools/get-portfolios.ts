@@ -21,7 +21,7 @@ export function registerGetPortfolios(server: McpServer) {
     'get_portfolios',
     {
       description:
-        "List the user's investment portfolios. Returns id, name, portfolio type (investment/retirement/savings/other), description, enabled state, and creation date. Use the returned id with get_portfolio_summary, get_portfolio_holdings, get_portfolio_balances, and get_investment_transactions.",
+        "List the user's investment portfolios. Returns id, name, portfolio type (investment/retirement/savings/other), description, enabled state, displayCurrencyCode, isManualTracking, and creation date. Use the returned id with get_portfolio_summary, get_portfolio_holdings, get_portfolio_balances, and get_investment_transactions.",
       inputSchema,
     },
     async (args, extra) => {
@@ -43,6 +43,8 @@ export function registerGetPortfolios(server: McpServer) {
         portfolioType: p.portfolioType,
         description: p.description,
         isEnabled: p.isEnabled,
+        displayCurrencyCode: p.displayCurrencyCode,
+        isManualTracking: p.isManualTracking,
         createdAt: p.createdAt,
       }));
 

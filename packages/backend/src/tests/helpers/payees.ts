@@ -1,4 +1,11 @@
-import { CATEGORIZATION_MODE, EntityLogoPayload, PayeeLookupItem, PayeeModel, PayeeStats } from '@bt/shared/types';
+import {
+  CATEGORIZATION_MODE,
+  EntityLogoPayload,
+  PayeeLookupItem,
+  PayeeModel,
+  PayeeStats,
+  TransactionLocation,
+} from '@bt/shared/types';
 
 import { makeRequest } from './common';
 
@@ -7,6 +14,7 @@ export interface CreatePayeePayload extends EntityLogoPayload {
   defaultCategoryId?: string | null;
   categorizationMode?: CATEGORIZATION_MODE;
   defaultTagIds?: string[];
+  defaultLocation?: TransactionLocation | null;
 }
 
 export interface UpdatePayeePayload extends EntityLogoPayload {
@@ -14,6 +22,7 @@ export interface UpdatePayeePayload extends EntityLogoPayload {
   defaultCategoryId?: string | null;
   categorizationMode?: CATEGORIZATION_MODE;
   defaultTagIds?: string[];
+  defaultLocation?: TransactionLocation | null;
 }
 
 export type PayeeWithStats = PayeeModel & { stats: PayeeStats | null };
@@ -36,11 +45,21 @@ export async function createPayee<R extends boolean | undefined = undefined>({
 export async function listPayees<R extends boolean | undefined = undefined>({
   q,
   accountId,
+  sortBy,
+  sortDir,
   raw,
-}: { q?: string; accountId?: string; raw?: R } = {}) {
+}: {
+  q?: string;
+  accountId?: string;
+  sortBy?: 'lastSeen' | 'name' | 'netFlow' | 'transactionCount' | 'defaultTagsCount';
+  sortDir?: 'asc' | 'desc';
+  raw?: R;
+} = {}) {
   const search = new URLSearchParams();
   if (q !== undefined) search.set('q', q);
   if (accountId !== undefined) search.set('accountId', accountId);
+  if (sortBy !== undefined) search.set('sortBy', sortBy);
+  if (sortDir !== undefined) search.set('sortDir', sortDir);
   const qs = search.toString();
   return makeRequest<PayeeWithStats[], R>({
     method: 'get',
@@ -217,6 +236,23 @@ export async function deletePayeeAndIgnore<R extends boolean | undefined = undef
   return makeRequest<{ ignoredAddedCount: number }, R>({
     method: 'delete',
     url: `/payees/${id}?ignoreFuture=true`,
+    raw,
+  });
+}
+
+export async function bulkDeletePayees<R extends boolean | undefined = undefined>({
+  ids,
+  ignoreFuture,
+  raw,
+}: {
+  ids: string[];
+  ignoreFuture?: boolean;
+  raw?: R;
+}) {
+  return makeRequest<{ deletedCount: number; ignoredAddedCount: number }, R>({
+    method: 'post',
+    url: '/payees/bulk-delete',
+    payload: { ids, ignoreFuture },
     raw,
   });
 }

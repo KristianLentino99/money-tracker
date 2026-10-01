@@ -25,7 +25,10 @@
       "link": "Collega",
       "clear": "Cancella",
       "apply": "Applica",
-      "retry": "Riprova"
+      "retry": "Riprova",
+      "copyInviteLink": "Copia il link d'invito",
+      "moveTo": "Sposta in…",
+      "learnMore": "Learn more"
     },
     "ui": {
       "close": "Chiudi",
@@ -55,7 +58,8 @@
     },
     "notifications": {
       "subscriptionCurrencyNotConnected": "Il riepilogo degli abbonamenti non può convertire {currencies} nella tua valuta principale. Collega la valuta in Impostazioni → valute.",
-      "backgroundJobFailed": "Un processo in background non è riuscito mentre eri assente: {error}"
+      "backgroundJobFailed": "Un processo in background non è riuscito mentre eri assente: {error}",
+      "inviteLinkCopied": "Link d'invito copiato negli appunti"
     },
     "labels": {
       "email": "Email",
@@ -125,6 +129,10 @@
       "investmentTransactionsParsing": {
         "name": "Importazione transazioni di investimento",
         "description": "Transazioni di acquisto/vendita estratte dall’IA da esportazioni di cambio, estratti conto del broker o testo incollato."
+      },
+      "receiptParsing": {
+        "name": "Invoice matching",
+        "description": "Reads an uploaded invoice or receipt and finds the transaction it belongs to."
       }
     },
     "transactions": {
@@ -139,7 +147,15 @@
         "error": "Impossibile scollegare le transazioni!"
       },
       "record": {
-        "hiddenAccount": "Conto nascosto"
+        "hiddenAccount": "Conto nascosto",
+        "addedByTooltip": "This transaction was attached to the budget by {handle}",
+        "externalLinkTooltip": "Open external link",
+        "locationTooltip": "Open location on the map",
+        "attachmentsTooltip": "Contiene allegati",
+        "selectRow": "Select transaction",
+        "unselectableReasons": {
+          "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
+        }
       }
     },
     "outOfWallet": "Fuori portafoglio",
@@ -218,8 +234,36 @@
       "colorSwatchAriaLabel": "Usa Colore {color}",
       "customColorAriaLabel": "Scegli un colore personalizzato",
       "applyLetters": "Applica",
-      "lettersSelectedLabel": "Lettere “{letters}”"
-    }
+      "lettersSelectedLabel": "Lettere “{letters}”",
+      "brandNotConfigured": "Brand logos are not configured on this instance. Ask the admin to set VITE_LOGO_DEV_TOKEN, or use letters instead."
+    },
+    "sharing": {
+      "emailNotSent": "Invio email non configurato — condividi manualmente il link di invito"
+    },
+    "importBatchDeleteOverlay": {
+      "title": "Deleting imported transactions",
+      "description": "A large import batch is being removed. Balances are recalculated when it finishes, so the app is locked until then.",
+      "deleting": "Deleting transactions",
+      "preparing": "Getting ready",
+      "finishing": "Finishing up",
+      "takingLong": "This is taking longer than usual — large batches can take several minutes. Keep this page open.",
+      "unreachableTitle": "Can't reach the server",
+      "unreachableDescription": "The delete may still be running. Dismiss to keep using the app, and reload later to see the result.",
+      "failedTitle": "Delete failed",
+      "dismiss": "Dismiss"
+    },
+    "duration": {
+      "years": "{n} yr | {n} yrs",
+      "months": "{n} mo | {n} mos"
+    },
+    "fire": {
+      "targets": {
+        "lean": "Lean FIRE",
+        "regular": "FIRE",
+        "fat": "Fat FIRE"
+      }
+    },
+    "cancel": "Annulla"
   },
   "accountGroups": {
     "create": {
@@ -416,6 +460,21 @@
     },
     "transactionGroupRecord": {
       "transactionCountLabel": "Transazioni"
+    }
+  },
+  "billing": {
+    "seePlans": "See plans",
+    "updatePaymentMethod": "Update your payment method",
+    "planRequired": {
+      "essential": "Included in the Essential plan",
+      "plus": "Included in the Plus plan",
+      "hint": "Your current plan doesn't include this feature. Upgrade to unlock it."
+    },
+    "banner": {
+      "trial": "{count} day left in your trial · {link} | {count} days left in your trial · {link}",
+      "readOnly": "Your trial has ended. You can view and export your data; subscribe to keep editing. {link}",
+      "subscriptionEnded": "Your subscription has ended. {link} to keep editing your data.",
+      "pastDue": "Your last payment failed. {link} to keep your plan."
     }
   }
 }

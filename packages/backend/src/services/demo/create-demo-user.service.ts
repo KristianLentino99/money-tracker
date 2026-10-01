@@ -42,7 +42,6 @@ export async function createDemoUserFast(): Promise<DemoUserResult> {
 
   const appUser = await createUser({
     username: demoUsername,
-    email: demoEmail,
     authUserId,
     role: USER_ROLES.demo,
   });

@@ -1,0 +1,876 @@
+{
+  "dialogs": {
+    "linkAccountGroup": {
+      "title": "Prepojiť skupinu účtov",
+      "createNewGroup": "Vytvoriť novú skupinu",
+      "noGroup": "Žiadna skupina",
+      "noGroupDescription": "Ponechať tento účet mimo skupiny",
+      "current": "Aktuálne",
+      "syncHint": "Skupiny slúžia len na organizáciu účtov — presun účtu nikdy neovplyvní bankovú synchronizáciu.",
+      "accountsCount": "{count} účet | {count} účtov"
+    },
+    "reassignCategory": {
+      "title": "Priradiť transakcie inam",
+      "description": "Táto kategória obsahuje transakcie (počet: {count}). Pred zmazaním vyberte novú kategóriu pre transakcie z „{categoryName}\".",
+      "newCategoryLabel": "Nová kategória",
+      "newCategoryPlaceholder": "Vyberte kategóriu",
+      "cancelButton": "Zrušiť",
+      "reassignButton": "Priradiť inam a zmazať",
+      "reassignButtonLoading": "Prebieha priraďovanie...",
+      "notifications": {
+        "success": "Priradených transakcií k {newCategoryName}: {count}",
+        "error": "Transakcie sa nepodarilo priradiť inam"
+      }
+    },
+    "syncConfirmation": {
+      "title": "Synchronizácia bola nedávno dokončená",
+      "description": "Účty ste synchronizovali pred {time}. Naozaj chcete synchronizovať znova?",
+      "syncAnyway": "Synchronizovať aj tak",
+      "cancel": "Zrušiť",
+      "timeUnits": {
+        "someTime": "pred chvíľou",
+        "hours": "{count} hodina | {count} hodín",
+        "minutes": "{count} minúta | {count} minút"
+      }
+    },
+    "createPortfolio": {
+      "title": "Vytvoriť portfólio",
+      "description": "Vytvorte nové investičné portfólio a sledujte svoje pozície a transakcie.",
+      "assetSupportNotice": "Momentálne podporuje akcie, ETF a kryptomeny. Dlhopisy, opcie a ostatné cenné papiere sú na {roadmapLink} – dajte nám vedieť, čo potrebujete, cez {feedbackLink}.",
+      "assetSupportRoadmapLink": "hlasujte, čo pridať ďalej",
+      "assetSupportFeedbackLink": "navrhnite funkciu",
+      "form": {
+        "nameLabel": "Názov portfólia",
+        "namePlaceholder": "Moje investičné portfólio",
+        "typeLabel": "Typ portfólia",
+        "typePlaceholder": "Vyberte typ portfólia",
+        "portfolioTypes": {
+          "investment": "Investície",
+          "retirement": "Dôchodkové",
+          "savings": "Úspory",
+          "other": "Ostatné"
+        },
+        "descriptionLabel": "Popis (voliteľný)",
+        "descriptionPlaceholder": "Krátky popis tohto portfólia...",
+        "submitButton": "Vytvoriť portfólio",
+        "submitButtonLoading": "Vytváranie...",
+        "manualTrackingLabel": "Track value manually",
+        "manualTrackingDescription": "Use dated reported values instead of holdings and market prices. The display currency becomes locked after your first record."
+      },
+      "notifications": {
+        "success": "Portfólio bolo úspešne vytvorené.",
+        "error": "Portfólio sa nepodarilo vytvoriť. Skúste to znova, prosím."
+      }
+    },
+    "editPortfolio": {
+      "title": "Upraviť portfólio",
+      "description": "Aktualizujte názov, typ alebo popis svojho portfólia."
+    },
+    "deletePortfolio": {
+      "title": "Zmazať portfólio",
+      "description": "Toto portfólio sa presunie do koša a do 30 dní ho môžete obnoviť. Po uplynutí tejto lehoty sa natrvalo zmaže spolu so všetkými pozíciami a transakciami.",
+      "cancelButton": "Zrušiť",
+      "deleteButton": "Presunúť do koša",
+      "deleteButtonLoading": "Presúvanie...",
+      "notifications": {
+        "success": "Portfólio bolo presunuté do koša. Do 30 dní ho môžete obnoviť na stránke Investície.",
+        "error": "Portfólio sa nepodarilo zmazať."
+      }
+    },
+    "manageTransaction": {
+      "addTitle": "Pridať transakciu",
+      "editTitle": "Upraviť transakciu",
+      "detailsTitle": "Podrobnosti transakcie",
+      "title": "Spravovať transakciu",
+      "description": "Vytvoriť alebo upraviť transakciu",
+      "linkSection": {
+        "linkButton": "Prepojiť druhú stranu",
+        "title": "Nájsť druhú stranu tohto prevodu",
+        "description": "Vyberte zodpovedajúcu transakciu z druhého účtu. Oba záznamy sa spoja do jedného prevodu — nič sa nezmaže.",
+        "orDivider": "alebo",
+        "linkHint": "Je už zaznamenaná na inom účte? Namiesto toho oba záznamy spojte.",
+        "unlinkButton": "Odpojiť transakcie",
+        "cancelLinkingAriaLabel": "Zrušiť prepájanie",
+        "linkedTransactionLabel": "Prepojená transakcia"
+      },
+      "typeSelector": {
+        "expense": "Výdavok",
+        "income": "Príjem",
+        "transfer": "Prevod",
+        "selectExpense": "Vybrerte výdavok",
+        "selectIncome": "Vyberte príjem",
+        "selectTransfer": "Vyberte prevod"
+      },
+      "recordList": {},
+      "form": {
+        "payeeLabel": "Protistrana",
+        "outOfWalletDocsLink": "Čo znamená Mimo peňaženky?",
+        "destinationGroupLabel": "Kam smerujú peniaze",
+        "paymentTypeLabel": "Typ platby",
+        "noteLabel": "Poznámka",
+        "notePlaceholder": "Poznámka",
+        "externalUrlLabel": "Externá URL",
+        "externalUrlPlaceholder": "Odkaz na stránku objednávky, rezervácie alebo účtenky",
+        "externalReferenceLabel": "Externý odkaz",
+        "externalReferencePlaceholder": "Číslo objednávky, číslo faktúry, referencia rezervácie",
+        "location": {
+          "label": "Poloha",
+          "useCurrent": "Použiť moju polohu",
+          "clear": "Vymazať polohu",
+          "latitudePlaceholder": "Zemepisná šírka, napr. 50,4501",
+          "longitudePlaceholder": "Zemepisná dĺžka, napr. 30,5234",
+          "unsupported": "Váš prehliadač nepodporuje geolokáciu",
+          "denied": "Prístup k polohe bol zamietnutý. Povoľte ho v nastaveniach prehliadača, alebo zadajte súradnice ručne",
+          "unavailable": "Vašu polohu sa nepodarilo určiť. Skúste to znova, alebo zadajte súradnice ručne",
+          "pickOnMap": "Vybrať na mape",
+          "picker": {
+            "title": "Vyberte polohu",
+            "searchPlaceholder": "Hľadať adresu alebo miesto",
+            "noResults": "Nenašli sa žiadne miesta",
+            "searchFailed": "Vyhľadávanie je momentálne nedostupné. Skúste to znova o chvíľu",
+            "confirm": "Použiť túto polohu",
+            "loadFailed": "Mapu sa nepodarilo načítať. Skontrolujte pripojenie a skúste to znova",
+            "retry": "Skúsiť znova",
+            "consent": {
+              "title": "Mapové podklady poskytuje OpenStreetMap",
+              "description": "Otvorenie mapy a vyhľadávanie adries odosiela požiadavky na openstreetmap.org, ktorý tak vidí vašu IP adresu. Neskôr to môžete vypnúť v Nastaveniach.",
+              "enable": "Povoliť mapu",
+              "failed": "Nastavenie sa nepodarilo uložiť. Skúste to znova"
+            }
+          }
+        },
+        "tagsLabel": "Štítky",
+        "originalAmountLabel": "Pôvodná suma",
+        "originalAmountPlaceholder": "Suma v cudzej mene",
+        "originalAmountTooltip": "Ak bola transakcia uskutočnená v inej mene, než je mena účtu, ide o skutočne zaplatenú sumu v tejto mene. Hlavná suma zostáva v mene účtu. Neovplyvňuje štatistiky.",
+        "originalCurrencyLabel": "Pôvodná mena",
+        "originalCurrencyTriggerEmpty": "Mena",
+        "originalCurrencyNone": "Bez meny",
+        "originalAmountSuggestHint": "{amount} — kurz k {date}",
+        "originalAmountSuggestApply": "Použiť",
+        "amountLabel": "Suma",
+        "amountPlaceholder": "Suma",
+        "categoryLabel": "Kategória",
+        "selectCategoryPlaceholder": "Vyberte kategóriu",
+        "targetAmountLabel": "Cieľová suma",
+        "targetAmountPlaceholder": "Cieľová suma",
+        "plannedLabel": "Plánované",
+        "plannedUnavailableNotification": "Plánované transakcie tu nie sú dostupné, preto sa táto možnosť vypla.",
+        "plannedTooltip": "Zaznamenajte nadchádzajúcu transakciu. Váš zostatok zostane nezmenený, kým sa neuskutoční.",
+        "plannedConnectedAccountTooltip": "Na k banke pripojenom účte môžu byť len plánované transakcie. Vypnutím tejto možnosti sa vymaže účet aj dátum.",
+        "plannedConfirmTooltip": "Vypnite, keď sa peniaze presunú — uloženie ich zaznamená vo vašom zostatku.",
+        "plannedAccountsUnlockedHint": "K banke pripojené účty sú teraz vyberateľné",
+        "plannedDatesUnlockedHint": "Budúce dátumy odomknuté",
+        "datetimeLabel": "Dátum a čas",
+        "splitInfo": "Rozdelené do {count} kategórií",
+        "editSplit": "Upraviť",
+        "splitPillLabel": "Rozdeliť",
+        "moreOptionsButton": "Ďalšie možnosti",
+        "closeButton": "Zavrieť",
+        "deleteButton": "Zmazať",
+        "deleteAriaLabel": "Zmazať transakciu",
+        "deleteConfirmTitle": "Zmazať túto transakciu?",
+        "deleteConfirmDescription": "Túto akciu nie je možné vrátiť späť. Odstránia sa aj všetky rozdelenia a prepojenia na vrátenia platby priradené k nej.",
+        "createAriaLabel": "Vytvoriť transakciu",
+        "editAriaLabel": "Upraviť transakciu",
+        "loadingButton": "Načítavanie...",
+        "createButton": "Vytvoriť",
+        "editButton": "Upraviť",
+        "fromAccountLabel": "Z účtu",
+        "toAccountLabel": "Na účet",
+        "accountLabel": "Účet",
+        "selectAccountPlaceholder": "Vyberte účet",
+        "noAccountExists": "Neexistuje žiadny účet",
+        "addNewAccountButton": "Pridať nový účet",
+        "createAccountLink": "Vytvoriť účet",
+        "destinationTypeAccount": "Účet",
+        "destinationTypePortfolio": "Portfólio",
+        "toPortfolioLabel": "Do portfólia",
+        "portfolioCashAlreadyReflectedLabel": "Zostatok portfólia už tieto peniaze zahŕňa",
+        "portfolioCashAlreadyReflectedHint": "Zaznamená prevod do histórie vkladov bez pridania hotovosti do portfólia. Použite pri starých transakciách, keď bolo portfólio nastavené so svojím aktuálnym zostatkom.",
+        "selectPortfolioPlaceholder": "Vyberte portfólio",
+        "noPortfoliosExist": "Neexistujú žiadne portfóliá",
+        "destinationTypeLoan": "Pôžička",
+        "toLoanLabel": "Na pôžičku",
+        "selectLoanPlaceholder": "Vyberte pôžičku",
+        "noLoansExist": "Neexistujú žiadne pôžičky",
+        "validation": {
+          "required": "Toto pole je povinné",
+          "minValue": "Suma musí byť 0 alebo väčšia",
+          "futureDate": "Dátum musí byť dnešný alebo skorší.",
+          "latitudeRange": "Zemepisná šírka musí byť medzi -90 a 90",
+          "longitudeRange": "Zemepisná dĺžka musí byť medzi -180 a 180",
+          "locationPair": "Zadajte zemepisnú šírku aj dĺžku",
+          "maxLength": "Nesmie presiahnuť {max} znakov",
+          "httpUrl": "Zadajte platnú URL adresu vo formáte http(s)"
+        },
+        "attachments": {
+          "label": "Prílohy",
+          "loading": "Načítavanie príloh…",
+          "listLoadFailed": "Prílohy sa nepodarilo načítať. Zatvorte toto okno a otvorte ho znova, aby ste to skúsili opäť.",
+          "hint": "Najviac {max} súborov, každý do {size}. JPEG, PNG, WebP alebo PDF.",
+          "trigger": {
+            "empty": "Pridať prílohy",
+            "count": "{count} príloha | {count} príloh",
+            "uploading": "Nahrávanie…"
+          },
+          "dropzone": {
+            "idle": "Súbory pustite sem, alebo kliknite a vyberte ich",
+            "drag": "Pustením priložíte"
+          },
+          "errors": {
+            "unsupportedType": "Niektoré súbory boli preskočené: prikladať sa dajú len súbory JPEG, PNG, WebP a PDF.",
+            "tooMany": "Transakcia môže mať najviac {max} príloh.",
+            "tooLarge": "„{filename}\" je väčší než {max} a nebol nahraný.",
+            "upload": "Prílohu sa nepodarilo nahrať.",
+            "delete": "Prílohu sa nepodarilo zmazať."
+          },
+          "deleteConfirm": {
+            "title": "Zmazať prílohu?",
+            "description": "„{filename}\" bude natrvalo zmazaný. Túto akciu nie je možné vrátiť späť."
+          },
+          "deleteAll": "Zmazať všetko",
+          "deleteAllConfirm": {
+            "title": "Zmazať všetky prílohy?",
+            "description": "Natrvalo sa zmaže všetkých {count} súborov. Túto akciu nie je možné vrátiť späť."
+          },
+          "viewer": {
+            "loadFailed": "Tento súbor sa nepodarilo načítať.",
+            "openInNewTab": "Otvoriť na novej karte",
+            "download": "Stiahnuť"
+          }
+        },
+        "recurringPaymentLabel": "Recurring payment (optional)",
+        "recurringPaymentPlaceholder": "Select a recurring payment"
+      },
+      "refundRecordsList": {
+        "filtersDialogTitle": "Vyberte filtre",
+        "fromDateLabel": "Od dátumu",
+        "toDateLabel": "Do dátumu",
+        "amountFromLabel": "Suma od (vrátane)",
+        "amountFromPlaceholder": ">= než",
+        "amountToLabel": "Do (vrátane)",
+        "amountToPlaceholder": "<= než",
+        "resetButton": "Vynulovať",
+        "applyButton": "Použiť",
+        "noMoreTransactions": "Žiadne ďalšie transakcie na načítanie",
+        "noIncomeTransactions": "V systéme nie sú žiadne príjmové transakcie, ktoré by ešte neboli označené ako vrátenie platby. Ak chcete pokračovať, nejaké vytvorte",
+        "noExpenseTransactions": "V systéme nie sú žiadne výdavkové transakcie, ktoré by ešte neboli označené ako vrátenie platby. Ak chcete pokračovať, nejaké vytvorte",
+        "noTransactions": "Nie sú tu žiadne transakcie na výber. Ak chcete pokračovať, nejaké vytvorte",
+        "resetFiltersButton": "Vynulovať filtre",
+        "recommendedLabel": "Odporúčané",
+        "allTransactionsLabel": "Všetky transakcie",
+        "searchPlaceholder": "Hľadať v poznámkach...",
+        "filtersLabel": "Filtre",
+        "noSearchResults": "Ničomu nezodpovedá „{query}\"",
+        "clearSearchButton": "Vymazať vyhľadávanie"
+      },
+      "splitDialog": {
+        "title": "Rozdeliť do kategórií",
+        "description": "Rozdeľte túto transakciu medzi viacero kategórií. Nerozdelená suma zostane v hlavnej kategórii.",
+        "mainCategoryLabel": "Hlavná kategória",
+        "selectCategoryPlaceholder": "Vyberte kategóriu",
+        "amountPlaceholder": "0",
+        "addCategoryButton": "Pridať kategóriu",
+        "removeRowLabel": "Odstrániť kategóriu",
+        "totalAmountLabel": "Celková suma",
+        "splitTotalLabel": "Súčet rozdelenia",
+        "mainCategoryKeepsLabel": "Hlavná kategória obsahuje",
+        "exceedsTransactionTotal": "Súčet rozdelenia presahuje celkovú sumu transakcie",
+        "cancelButton": "Zrušiť",
+        "removeSplitsButton": "Odstrániť rozdelenie",
+        "saveSplitsButton": "Uložiť rozdelenie",
+        "errors": {
+          "amountMustBePositive": "Suma musí byť kladná",
+          "duplicateCategory": "Duplicitná kategória",
+          "cannotUseMainCategory": "Hlavnú kategóriu nemožno použiť v rozdelení"
+        }
+      },
+      "markAsRefund": {
+        "linkRefund": "Prepojiť vrátenie platby",
+        "selectTransaction": "Vyberte transakciu",
+        "selectRefundingTransaction": "Vyberte pôvodnú transakciu, ktorú tento záznam vracia.",
+        "selectRefundedByTransactions": "Vyberte transakcie, ktoré sú vrátením platby k tomuto záznamu.",
+        "refundsLabel": "Vrátenia platby",
+        "refundedByLabel": "Vrátené prostredníctvom",
+        "refundedByCreationHint": "„Vrátené prostredníctvom\" bude dostupné až po vytvorení transakcie.",
+        "saveButton": "Uložiť",
+        "confirmButton": "Potvrdiť",
+        "linkedRefunds": "Prepojené vrátenia platby",
+        "unlinkRefund": "Odpojiť vrátenie platby",
+        "refundsPortion": "Vracia časť: {name}",
+        "selectOnlyOne": "* môžete vybrať len jednu transakciu",
+        "selectMultipleWithLimit": "* môžete vybrať viacero transakcií, ich súčet však nesmie prevýšiť sumu pôvodnej transakcie",
+        "selectWhichPartToRefund": "Vyberte, ktorú časť chcete vrátiť",
+        "transactionSplitInfo": "Táto transakcia je rozdelená medzi viacero kategórií. Vyberte, ktorú časť chcete vrátiť.",
+        "amountTooSmallWarning": "Možnosti menšie než suma vášho vrátenia platby",
+        "amountDisabled": "sú zablokované.",
+        "amountMayBeSmaller": "Niektoré možnosti môžu byť menšie než suma vášho vrátenia platby",
+        "finalValidationWarning": "Konečné overenie použije prepočítané sumy.",
+        "mainCategoryLabel": "(hlavná)",
+        "linkRemovedOnTypeChange": "Prepojenie na vrátenie platby bolo odstránené, pretože sa zmenil typ transakcie.",
+        "modeRefunds": "Vracia platbu za transakciu",
+        "helperRefunds": "Tento záznam je vrátenie platby — vyberte tú jednu transakciu, ktorú vracia.",
+        "helperRefundedBy": "Tento záznam vracajú iné položky — vyberte ľubovoľný počet, spolu do výšky {amount}.",
+        "helperRefundedByNoLimit": "Tento záznam vracajú iné položky — môžete vybrať viacero.",
+        "thisEntry": "Tento záznam",
+        "linkWordRefunds": "vrátenia platby",
+        "linkWordRefundedBy": "vrátené prostredníctvom",
+        "slotEmptyRefunds": "Nižšie vyberte pôvodnú transakciu",
+        "slotEmptyRefundedBy": "Nižšie vyberte transakcie vrátenia platby",
+        "slotSelectedCount": "{count} transakcia | {count} transakcií",
+        "clearSelection": "Zrušiť výber",
+        "linkedAmountLabel": "Prepojené: {amount}",
+        "linkedOfLimit": "z {amount}",
+        "limitExceeded": "limit {amount} prekročený",
+        "summaryEmpty": "Zatiaľ nič nie je vybrané",
+        "summaryCountOnly": "Vybraných: {count}",
+        "summarySelected": "Vybraných: {count} · {amount}",
+        "summaryOfLimit": "Vybraných: {count} · {amount} z {limit}",
+        "summaryExceedsBy": "Vybraných: {count} · {amount} — prevyšuje pôvodnú sumu o {excess}",
+        "summaryExceeds": "Vybraných: {count} · {amount} — prevyšuje pôvodnú sumu",
+        "summaryBelowRefund": "{amount} — menej než toto vrátenie vo výške {limit}"
+      },
+      "refundInfo": {
+        "trigger": "Ako to funguje?",
+        "title": "O vráteniach platby",
+        "description": "Táto akcia prepojí aktuálnu transakciu [výdavok/príjem] ako vrátenie platby k už existujúcej transakcii.",
+        "howItWorks": {
+          "title": "Ako to funguje:",
+          "expenseRefund": "Pri vrátení výdavku: vyberte pôvodnú príjmovú transakciu.",
+          "incomeRefund": "Pri vrátení príjmu: vyberte pôvodnú výdavkovú transakciu.",
+          "noOriginal": "Ktorúkoľvek transakciu môžete označiť ako vrátenie platby, aj keď v systéme nie je žiadna „pôvodná\" transakcia. Hodí sa to vtedy, keď účet s pôvodnou transakciou v systéme nemáte."
+        },
+        "benefits": {
+          "title": "Výhody:",
+          "accuracy": "Zvyšuje presnosť financií tým, že zo štatistík výdavkov alebo príjmov vylúči vrátené sumy.",
+          "tracking": "Pomáha sledovať súvisiace transakcie a spresniť váš prehľad."
+        },
+        "notes": {
+          "title": "Dôležité upozornenia:",
+          "recordKeeping": "Toto prepojenie slúži len na evidenčné účely.",
+          "noBalanceAdjust": "Nijako neupravuje zostatok pôvodnej transakcie.",
+          "canUnlink": "Prepojenie transakcií môžete kedykoľvek zrušiť."
+        },
+        "examples": {
+          "title": "Príklady:",
+          "customerPayment": "Vrátenie platby zákazníkovi: vytvorte výdavok a prepojte ho s pôvodným príjmom.",
+          "vendorRefund": "Prijatie vrátenia platby od dodávateľa: vytvorte príjem a prepojte ho s pôvodným výdavkom.",
+          "noOriginalTx": "Zaznamenanie vrátenia platby bez pôvodnej transakcie: Niekedy môže byť potrebné zaznamenať vrátenie platby za transakciu, ktorá nie je vo vašom systéme. Napríklad ak zaznamenávate vrátenie hotovostnej platby, ktorá pôvodne nebola zaevidovaná, môžete napriek tomu vytvoriť záznam o vrátení. Vďaka tomu ostanú vaše záznamy presné aj v prípade, že pôvodná transakcia nebola digitálne zaznamenaná."
+        }
+      },
+      "transferRecordsList": {
+        "filtersDialogTitle": "Filtre",
+        "fromDateLabel": "Od dátumu",
+        "toDateLabel": "Do dátumu",
+        "amountFromLabel": "Suma od",
+        "amountFromPlaceholder": "Min",
+        "amountToLabel": "Suma do",
+        "amountToPlaceholder": "Max",
+        "resetButton": "Vynulovať",
+        "applyButton": "Použiť",
+        "recommendedLabel": "Odporúčané",
+        "allTransactionsLabel": "Všetky transakcie",
+        "noMoreTransactions": "Žiadne ďalšie transakcie",
+        "noIncomeTransactions": "Nenašli sa žiadne príjmové transakcie. Skúste upraviť filtre.",
+        "noExpenseTransactions": "Nenašli sa žiadne výdavkové transakcie. Skúste upraviť filtre.",
+        "noTransactions": "Nenašli sa žiadne transakcie. Skúste upraviť filtre.",
+        "resetFiltersButton": "Vynulovať filtre"
+      },
+      "portfolioLinked": {
+        "title": "Transakcia prepojená s portfóliom",
+        "linkedAs": "Táto transakcia je prepojená ako {type} k",
+        "deposit": "vklad",
+        "withdrawal": "výber",
+        "unlinkButton": "Odpojiť od portfólia",
+        "unlinkWarning": "Odpojením sa zníži hotovostný zostatok portfólia {portfolio}.",
+        "unlinkWarningNoCash": "Tento prevod nikdy nezmenil hotovostný zostatok portfólia {portfolio}, preto odpojenie zostatok nezmení.",
+        "unlinkDescription": "Obnovia sa pôvodné údaje transakcie.",
+        "cancelButton": "Zrušiť",
+        "confirmUnlink": "Potvrdiť odpojenie",
+        "purchasesTitle": "Linked investment purchases",
+        "editPurchasesButton": "Edit purchases",
+        "cancelEdit": "Cancel",
+        "saveEdit": "Save purchases",
+        "deleteContributionButton": "Delete contribution",
+        "deleteContributionTitle": "Delete linked investment contribution?",
+        "deleteContributionDescription": "This deletes the account expense, the portfolio transfer, and all linked investment purchases. This action cannot be undone.",
+        "confirmDeleteContribution": "Delete contribution",
+        "deletePurchaseButton": "Delete purchase",
+        "deletePurchaseTitle": "Delete linked purchase?",
+        "deletePurchaseDescription": "This removes the selected investment purchase but keeps the account expense and portfolio contribution.",
+        "confirmDeletePurchase": "Delete purchase"
+      },
+      "ventureLinked": {
+        "title": "Transakcia prepojená s rizikovým kapitálom",
+        "description": "Táto transakcia je prepojená s udalosťou v rizikovom kapitáli.",
+        "editHint": "Upravte ju alebo zrušte prepojenie na časovej osi udalostí súvisiaceho obchodu.",
+        "openVenture": "Otvoriť Rizikový kapitál"
+      },
+      "vehicleLinked": {
+        "title": "Úprava hodnoty vozidla",
+        "description": "Táto transakcia je záznamom o ručnej úprave hodnoty pre {name}.",
+        "editHint": "Ak chcete zmeniť hodnotu, dátum, alebo túto úpravu zmazať, urobte to na stránke s podrobnosťami vozidla.",
+        "openVehicle": "Otvoriť {name}"
+      },
+      "templates": {
+        "trigger": "Šablóny",
+        "filterPlaceholder": "Hľadať šablónu...",
+        "emptyState": "Šablóny vyplnia tento formulár údajmi, ktoré zadávate často — sumou, účtom, kategóriou, protistranou, štítkami, poznámkou. Samy od seba nič nepridávajú; na niečo, čo sa opakuje podľa harmonogramu, použite Opakované platby.",
+        "noMatches": "Žiadna šablóna nezodpovedá.",
+        "loadError": "Vaše šablóny sa nepodarilo načítať.",
+        "saveCurrent": "Uložiť aktuálne ako šablónu",
+        "updateApplied": "Aktualizovať „{name}\"",
+        "saveAsNew": "Uložiť ako novú",
+        "newTemplate": "Nová šablóna",
+        "use": "Použiť šablónu",
+        "edit": "Upraviť",
+        "tapHint": "Ťuknutím na šablónu vyplníte formulár",
+        "toggleDetails": "Zobraziť podrobnosti",
+        "noAmount": "žiadna uložená suma",
+        "keepsAccount": "zachová vybraný účet",
+        "stale": {
+          "categoryDeleted": "kategória zmazaná",
+          "accountUnavailable": "účet nedostupný"
+        },
+        "removeAriaLabel": "Odstrániť šablónu, obnoviť formulár",
+        "announceApplied": "Použitá šablóna {name} — vyplnené pole: {count}. Suma je prázdna. | Použitá šablóna {name} — vyplnené polia: {count}. Suma je prázdna.",
+        "announceAppliedWithAmount": "Použitá šablóna {name} — vyplnené pole: {count}. Suma nastavená na {amount}. | Použitá šablóna {name} — vyplnené polia: {count}. Suma nastavená na {amount}.",
+        "categoryDeletedHint": "Kategória tejto šablóny bola zmazaná — vyberte inú.",
+        "alsoSet": "Šablóna zároveň nastavila: {fields}",
+        "tagsCount": "{count} štítok | {count} štítkov",
+        "applyConfirmTitle": "Použiť šablónu?",
+        "applyConfirmDescription": "Použitím sa nahradí vaše rozdelenie aj prepojenie na vrátenie platby.",
+        "toasts": {
+          "savedFromForm": "Uložené „{name}\" — teraz je to aktívna šablóna.",
+          "saved": "Šablóna uložená.",
+          "deleted": "Šablóna zmazaná."
+        },
+        "form": {
+          "titleNew": "Nová šablóna",
+          "titleEdit": "Upraviť šablónu",
+          "titleSaveCurrent": "Uložiť ako šablónu",
+          "nameLabel": "Názov",
+          "namePlaceholder": "napr. Ranná káva",
+          "typeLabel": "Typ",
+          "keepAccount": "Zachovať účet vybraný v čase použitia",
+          "noAmount": "Neukladať sumu — zadám ju vždy ručne",
+          "delete": "Zmazať šablónu",
+          "save": "Uložiť šablónu",
+          "deleteConfirmTitle": "Zmazať „{name}\"?",
+          "deleteConfirmDescription": "Táto šablóna sa odstráni. Transakcie, ktoré ste už podľa nej vytvorili, tým nie sú dotknuté.",
+          "duplicateName": "Šablónu s názvom „{name}\" už máte.",
+          "originalCurrencyLabel": "Mena pôvodnej sumy",
+          "originalCurrencyPlaceholder": "Vyberte menu"
+        },
+        "errors": {
+          "create": "Šablónu sa nepodarilo uložiť. Skúste to znova, prosím.",
+          "update": "Šablónu sa nepodarilo aktualizovať. Skúste to znova, prosím.",
+          "delete": "Šablónu sa nepodarilo zmazať. Skúste to znova, prosím."
+        }
+      },
+      "investmentContribution": {
+        "title": "Investment purchases",
+        "hint": "Record one or more securities bought with this expense. Any unused amount stays as portfolio cash.",
+        "toggleLabel": "Record linked investment purchases",
+        "toggleHint": "The expense will fund the selected portfolio and group the purchases below.",
+        "portfolioLabel": "Portfolio",
+        "portfolioPlaceholder": "Select a portfolio",
+        "purchaseNumber": "Purchase {number}",
+        "removePurchase": "Remove purchase",
+        "securityPlaceholder": "Select a security",
+        "securitySearchPlaceholder": "Search securities",
+        "securitySearchHint": "Type a symbol or name to search.",
+        "securityNoResults": "No securities found.",
+        "quantityLabel": "Quantity",
+        "priceLabel": "Unit price",
+        "feesLabel": "Fees",
+        "dateLabel": "Purchase date",
+        "rowTotal": "Purchase total",
+        "useSettlement": "Different cash currency",
+        "settlementCurrencyLabel": "Cash currency",
+        "settlementAmountLabel": "Cash paid",
+        "settlementFeesLabel": "Cash fees",
+        "noteLabel": "Purchase note",
+        "notePlaceholder": "Optional note",
+        "changeSecurity": "Change security",
+        "addPurchase": "Add another purchase",
+        "totalLabel": "Purchases total",
+        "residualLabel": "Cash remaining",
+        "validationError": "Choose a portfolio and complete every purchase before saving."
+      }
+    },
+    "portfolioTransfer": {
+      "portfolio": {
+        "title": "Prevod z portfólia",
+        "description": "Presuňte prostriedky z tohto portfólia do iného portfólia alebo na účet."
+      },
+      "account": {
+        "title": "Prevod z účtu",
+        "description": "Presuňte prostriedky z tohto účtu do portfólia."
+      }
+    },
+    "addSymbols": {
+      "title": "Pridať symboly",
+      "searchLabel": "Hľadať symbol alebo názov",
+      "searchPlaceholder": "AAPL",
+      "searchError": "Vyhľadávanie cenných papierov zlyhalo.",
+      "addedIndicator": "(Pridané)",
+      "noResults": "Žiadne výsledky.",
+      "emptyState": {
+        "title": "Hľadať symbol",
+        "description": "Zadajte tiker alebo názov a nájdite akcie či kryptomeny, ktoré môžete pridať do tohto portfólia."
+      },
+      "noResultsHint": "Skúste iný tiker, celý názov, alebo zmeňte filter vyššie.",
+      "clearSearch": "Vymazať vyhľadávanie",
+      "endOfList": "To je všetko",
+      "assetClass": {
+        "crypto": "Kryptomeny"
+      },
+      "filters": {
+        "all": "Všetky",
+        "stocks": "Akcie",
+        "crypto": "Kryptomeny"
+      },
+      "marketCapRank": "#{rank}",
+      "notifications": {
+        "success": "Pozícia pridaná.",
+        "error": "Pozíciu sa nepodarilo pridať."
+      },
+      "cryptoProviderNotConfigured": "Vyhľadávanie kryptomien je nedostupné. Ak ho chcete povoliť, nastavte COINGECKO_API_KEY vo vašom prostredí.",
+      "providers": {
+        "heading": "Provider",
+        "yahoo": "Yahoo Finance",
+        "fmp": "Financial Modeling Prep",
+        "polygon": "Polygon",
+        "alphavantage": "Alpha Vantage",
+        "kraken": "Kraken",
+        "coingecko": "CoinGecko"
+      }
+    },
+    "deleteInvestmentTransaction": {
+      "title": "Zmazať transakciu",
+      "description": "Naozaj chcete zmazať túto transakciu? Túto akciu nie je možné vrátiť späť.",
+      "cancelButton": "Zrušiť",
+      "deleteButton": "Zmazať",
+      "deleteButtonLoading": "Mazanie…...",
+      "notifications": {
+        "success": "Transakcia bola úspešne zmazaná.",
+        "error": "Transakciu sa nepodarilo zmazať."
+      }
+    },
+    "categoryForm": {
+      "title": {
+        "edit": "Upraviť kategóriu",
+        "add": "Pridať kategóriu"
+      },
+      "description": {
+        "addSubcategory": "Pridávanie podkategórie k {parentName}",
+        "edit": "Aktualizovať názov alebo nastavenia kategórie",
+        "add": "Vytvoriť novú kategóriu"
+      },
+      "nameLabel": "Názov kategórie",
+      "namePlaceholder": "Zadajte názov kategórie",
+      "colorLabel": "Farba",
+      "inheritParentColor": "Použiť farbu nadradenej kategórie",
+      "iconLabel": "Ikona",
+      "iconPlaceholder": "Vyberte ikonu",
+      "settingsDivider": "Nastavenia",
+      "saveButton": "Uložiť",
+      "createButton": "Vytvoriť",
+      "notifications": {
+        "updated": "Kategória aktualizovaná",
+        "created": "Kategória vytvorená",
+        "saveFailed": "Kategóriu sa nepodarilo uložiť",
+        "unexpectedError": "Neočakávaná chyba"
+      }
+    },
+    "addCurrency": {
+      "title": "Pridať novú menu",
+      "description": "Vyberte jednu menu na pridanie",
+      "selectPlaceholder": "Vyberte menu",
+      "addButton": "Pridať",
+      "notifications": {
+        "success": "Mena bola úspešne pridaná!",
+        "error": "Neočakávaná chyba. Mena nebola pridaná."
+      }
+    },
+    "accountGroups": {
+      "createDialog": {
+        "title": "Vytvoriť skupinu",
+        "nameLabel": "Názov skupiny",
+        "namePlaceholder": "Investície",
+        "createButton": "Vytvoriť"
+      }
+    },
+    "directCashTransaction": {
+      "title": "Hotovostná transakcia",
+      "description": "Pridajte vklad alebo výber do portfólia"
+    },
+    "pickTransaction": {
+      "title": "Vyberte transakciu",
+      "empty": "No transactions match these filters."
+    },
+    "attachInvoice": {
+      "title": "Priložiť faktúru",
+      "description": "Pustite sem faktúru alebo účtenku. Prečítame celkovú sumu, dátum a obchodníka a nájdeme transakciu, ku ktorej patrí.",
+      "resultsTitle": "Vyberte transakciu",
+      "resultsDescription": "Tejto faktúre nezodpovedá žiadna transakcia. | K tejto faktúre by mohla patriť {count} transakcia. | K tejto faktúre by mohlo patriť {count} transakcií.",
+      "analyzing": "Čítanie faktúry a vyhľadávanie vo vašich transakciách...",
+      "attaching": "Prikladanie faktúry k transakcii...",
+      "privacyNote": "Súbor sa pošle poskytovateľovi AI len na prečítanie. Nič sa neuloží, kým ho neprepojíte s transakciou.",
+      "direction": {
+        "paid": "Moja platba",
+        "gotPaid": "Platba pre mňa",
+        "paidHint": "Hľadáme platbu medzi vašimi výdavkami.",
+        "gotPaidHint": "Hľadáme platbu medzi vašimi príjmami."
+      },
+      "invoice": {
+        "number": "Číslo faktúry",
+        "issued": "Vystavené",
+        "total": "Spolu"
+      },
+      "fixDetails": "Opraviť údaje",
+      "form": {
+        "vendor": "Obchodník",
+        "vendorPlaceholder": "Zadajte názov obchodníka",
+        "customer": "Zákazník",
+        "customerPlaceholder": "Komu je faktúra vystavená",
+        "total": "Spolu",
+        "totalPlaceholder": "0,00",
+        "currency": "Mena",
+        "currencyPlaceholder": "EUR",
+        "issued": "Dátum faktúry",
+        "submit": "Hľadať znova"
+      },
+      "signals": {
+        "amountExact": "Presná suma",
+        "amountClose": "Rozdiel {diff}",
+        "amountConverted": "Zhoda po prepočte",
+        "amountUnknown": "Suma nebola porovnaná",
+        "sameDay": "V rovnaký deň ako faktúra",
+        "daysAfter": "{count} deň po faktúre | {count} dní po faktúre",
+        "daysBefore": "{count} deň pred faktúrou | {count} dní pred faktúrou",
+        "merchant": {
+          "match": "Obchodník sa zhoduje",
+          "partial": "Obchodník vyzerá podobne",
+          "none": "Iný obchodník",
+          "unknown": "Protistrana nie je nastavená"
+        },
+        "customer": {
+          "match": "Zákazník sa zhoduje",
+          "partial": "Zákazník vyzerá podobne",
+          "none": "Iný zákazník",
+          "unknown": "Protistrana nie je nastavená"
+        }
+      },
+      "alreadyHasFile": "Súbor už existuje",
+      "bestMatch": "Najlepšia zhoda · {score} %",
+      "empty": {
+        "title": "Žiadna zodpovedajúca transakcia",
+        "description": "Hľadali sme sumu okolo {total} v období od 14 dní pred faktúrou do 30 dní po nej, na všetkých účtoch. Platba ešte nemusí byť importovaná, alebo bola faktúra nesprávne prečítaná."
+      },
+      "searchManually": "Hľadať ručne",
+      "createTransaction": "Vytvoriť transakciu",
+      "link": "Pripojiť faktúru",
+      "linked": "Faktúra pripojená k transakcii",
+      "created": "Transakcia vytvorená a faktúra priložená",
+      "openTransaction": "Otvoriť transakciu",
+      "confirm": {
+        "title": "Pripojiť faktúru k tejto transakcii?",
+        "description": "{filename} sa priloží k transakcii na {amount} z dátumu {date}. Neskôr ju od transakcie môžete odpojiť."
+      },
+      "errors": {
+        "match": "Faktúru sa nepodarilo prečítať. Skúste to znova, alebo použite čitateľnejší súbor.",
+        "link": "Faktúru sa nepodarilo pripojiť. Skúste to znova.",
+        "detailsNotFilled": "Faktúra bola priložená, jej údaje sa však nepodarilo skopírovať do transakcie. Ak ich potrebujete, doplňte ich ručne.",
+        "createdNotAttached": "Transakcia bola vytvorená, faktúra sa však nepriložila. Ak ju chcete priložiť, vyberte ju zo zoznamu.",
+        "rematch": "Opätovné vyhľadávanie zlyhalo. Skontrolujte údaje a skúste to znova.",
+        "openTransaction": "Transakciu sa nepodarilo otvoriť. Nájdite ju v zozname transakcií."
+      },
+      "trial": {
+        "left": "Zostáva 1 bezplatný pokus z {limit} | Zostáva {count} bezplatných pokusov z {limit}",
+        "spent": "Minuli ste všetky bezplatné pokusy. Ak chcete pokračovať v prikladaní faktúr pomocou AI, prejdite na Plus."
+      }
+    },
+    "exchangeCurrency": {
+      "title": "Zmena meny",
+      "description": "Vymeňte hotovosť medzi rôznymi menami v rámci svojho portfólia"
+    },
+    "shareAccountDialog": {
+      "title": "Zdieľať účet",
+      "description": "Pozvite niekoho, aby mal prístup k {name}.",
+      "emailLabel": "Email príjemcu",
+      "emailPlaceholder": "meno{'@'}domena.sk",
+      "permissionLabel": "Oprávnenia",
+      "permissions": {
+        "read": "Len na čítanie",
+        "write": "Čítanie a pridávanie transakcií",
+        "manage": "Plný prístup"
+      },
+      "writeScopeLabel": "Rozsah úprav transakcií",
+      "writeScope": {
+        "all": "Všetky transakcie na účte",
+        "own": "Len transakcie, ktoré vytvorí"
+      },
+      "householdOverrideHint": "{invitee} je už vo vašej domácnosti s prístupom {permission}. Toto zdieľanie prekryje prístup cez domácnosť pre tento konkrétny účet.",
+      "householdLookupFailed": "Členstvo v domácnosti sa nepodarilo overiť — pokračuje sa bez upozornenia na prekrytie.",
+      "cancel": "Zrušiť",
+      "send": "Odoslať pozvánku",
+      "success": "Žiadosť o pozvanie bola odoslaná. Ak je s touto adresou zaregistrovaný nejaký používateľ, dostane pozvánku.",
+      "error": "Pozvánku sa nepodarilo odoslať. Skúste to znova, prosím.",
+      "emailSendFailedWarning": "Pozvánka bola uložená, e-mail sa však nepodarilo odoslať. Príjemca nemusel dostať upozornenie — skúste to znova neskôr."
+    },
+    "shareBudgetDialog": {
+      "title": "Zdieľať rozpočet",
+      "description": "Pozvite niekoho, aby si mohol prezerať tento rozpočet a prispievať doň vlastnými transakciami. {name}.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Email príjemcu",
+      "permissionLabel": "Oprávnenia",
+      "permissions": {
+        "read": "Len na zobrazenie",
+        "write": "Priraďovať vlastné transakcie",
+        "manage": "Spravovať"
+      },
+      "cancel": "Zrušiť",
+      "send": "Odoslať pozvánku",
+      "success": "Pozvánka bol odoslaná.",
+      "error": "Pozvánku sa nepodarilo odoslať.",
+      "emailSendFailedWarning": "Pozvánka bola vytvorená, email sa však nepodarilo doručiť."
+    },
+    "shareInvitationDialog": {
+      "titlePending": "{owner} sa s vami chce podeliť",
+      "titleAccepted": "Pozvánka prijatá",
+      "titleDeclined": "Pozvánka odmietnutá",
+      "titleCurrencyMismatch": "Základná mena sa nezhoduje",
+      "titleLoading": "Načítavanie pozvánky...",
+      "titleLoadError": "Pozvánku sa nepodarilo načítať",
+      "titleNotFound": "Pozvánka nie je dostupná",
+      "loadErrorBody": "Pri načítavaní tejto pozvánky sa niečo pokazilo. Skontrolujte pripojenie a skúste to znova.",
+      "retry": "Skúsiť znova",
+      "pendingMessage": "Dostali ste pozvánku na prístup k {resource}. Prezrite si podrobnosti nižšie a rozhodnite sa, ako odpovedať.",
+      "acceptedBody": "Teraz máte prístup k tomuto zdieľanému zdroju. Otvorte ho a začnite spolupracovať.",
+      "declinedBody": "Odosielateľa sme informovali.",
+      "currencyMismatch": "Ak chcete túto pozvánku prijať, vaša základná mena musí byť {currency}. Aktualizujte základnú menu a skúste to znova.",
+      "currencyMismatchUnknown": "Ak chcete túto pozvánku prijať, vaša základná mena sa musí zhodovať so základnou menou odosielateľa.",
+      "acceptDataRefreshFailed": "Pozvánka bola prijatá, obnovenie účtov sa však nepodarilo. Ak niečo vyzerá neaktuálne, načítajte stránku znova.",
+      "notFoundBody": "Táto pozvánka možno vypršala, bola zrušená, alebo je už vybavená. Ak stále potrebujete prístup, požiadajte odosielateľa o novú.",
+      "unexpectedError": "Niečo sa pokazilo. Skús to znovu o chvíľu.",
+      "loading": "Načítavanie pozvánky...",
+      "householdResourceLabel": "všetky vaše účty a zdieľané transakcie",
+      "permissionLabel": "Úroveň prístupu",
+      "expiresLabel": "Vyprší",
+      "permissions": {
+        "read": "Len na čítanie",
+        "write": "Čítanie a zápis",
+        "manage": "Spravovať"
+      },
+      "unknownOwner": "Používateľ MoneyMatter",
+      "unknownResource": "zdieľaný zdroj",
+      "accept": "Prijať",
+      "decline": "Odmietnuť",
+      "close": "Zavrieť",
+      "goToAccount": "Prejsť na účet",
+      "goToBudget": "Prejsť na rozpočet",
+      "updateBaseCurrency": "Aktualizovať základnú menu",
+      "acceptSuccess": "Teraz ste súčasťou tohto zdieľaného zdroja.",
+      "acceptError": "Pozvánku sa nepodarilo prijať. Skúste to znova.",
+      "declineSuccess": "Pozvánka odmietnutá.",
+      "declineError": "Pozvánku sa nepodarilo odmietnuť. Skúste to znova.",
+      "backInvite": {
+        "prompt": "Chcete zdieľať svoju domácnosť aj s {owner}? Bude môcť vidieť vaše účty a vykonávať na nich akcie.",
+        "permissionLabel": "Ich oprávnenie",
+        "writeScopeLabel": "Rozsah práva na zápis",
+        "permissions": {
+          "read": "Len na čítanie",
+          "write": "Zapisovať"
+        },
+        "writeScope": {
+          "all": "Akýkoľvek účet",
+          "own": "Len transakcie, ktoré vytvorí"
+        },
+        "send": "Zdieľať späť",
+        "notNow": "Teraz nie",
+        "done": "Hotovo",
+        "sentTitle": "Pozvánka bol odoslaná",
+        "sentBody": "Pozvánku sme odoslali {owner}. Prístup získa po jej prijatí.",
+        "success": "Pozvánka bol odoslaná.",
+        "deliveryFailed": "Pozvánka bola vytvorená, email sa však nepodarilo odoslať. Skúste to znova neskôr.",
+        "emailNotConfigured": "Pozvánka bola vytvorená, tento server však nemá nastavené odosielanie emailov. Požiadajte ich, aby si pozvánky skontrolovali priamo v aplikácii.",
+        "error": "Pozvánku sa nepodarilo odoslať."
+      }
+    },
+    "categoryExclusions": {
+      "title": "Vylúčiť kategórie",
+      "description": "Skryté z grafu a súčtov tohto widgetu",
+      "menuItem": "Vylúčiť kategórie",
+      "nothingExcluded": "Nič nie je vylúčené. Do tohto widgetu sa počítajú všetky kategórie.",
+      "excludedTag": "Vylúčené",
+      "stopExcluding": "Prestať vylučovať {name}",
+      "badgeTooltip": "1 kategória vylúčená z tohto widgetu | {count} kategórií vylúčených z tohto widgetu",
+      "andMore": "a ďalších {count}",
+      "clearAll": "Vymazať všetko",
+      "countExcluded": "1 kategória vylúčená | {count} kategórií vylúčených"
+    },
+    "subscriptionMarkPaid": {
+      "title": "Označiť platbu",
+      "description": "Zaznamenať platbu pre {name}",
+      "chooseDescription": "Ako chcete zaznamenať túto platbu pre {name}?",
+      "amountLabel": "Suma",
+      "amountPlaceholder": "0,00",
+      "estimateLoading": "Načítavanie odhadu...",
+      "crossCurrencyEstimate": "~{sourceAmount} {sourceCurrency} → {accountCurrency} (odhad)",
+      "dateLabel": "Dátum platby",
+      "accountLabel": "Účet",
+      "accountPlaceholder": "Vyberte účet",
+      "confirm": "Potvrdiť",
+      "confirmMarkOnly": "Označiť ako zaplatené",
+      "recordModeMarkTitle": "Len označiť ako zaplatené",
+      "recordModeMarkDescription": "Aktualizuje len harmonogram — transakcia sa nevytvorí.",
+      "recordModeTransactionTitle": "Vytvoriť transakciu",
+      "recordModeTransactionDescription": "Zaúčtujte skutočný výdavok na účte. Prepojí sa aj s budúcimi platbami.",
+      "notifications": {
+        "markedAsPaid": "Platba zaznamenaná",
+        "markAsPaidFailed": "Platbu sa nepodarilo zaznamenať",
+        "linkTransactionDateMismatch": "Choose a transaction recorded on the expected payment date."
+      },
+      "recordModeLinkTitle": "Link transaction",
+      "recordModeLinkDescription": "Use an existing transaction recorded on the expected payment date."
+    },
+    "loanPayment": {
+      "title": "Splátka pôžičky",
+      "description": "Zaznamenajte alebo upravte splátku tejto pôžičky.",
+      "createTitle": "Zaznamenať platbu",
+      "editTitle": "Upraviť splátku pôžičky",
+      "payingTo": "Platba pre",
+      "fromAccountLabel": "Z účtu",
+      "fromAccountPlaceholder": "Vyberte účet",
+      "amountLabel": "Suma",
+      "amountPlaceholder": "0,00",
+      "targetAmountLabel": "Suma pripísaná na pôžičku",
+      "targetAmountPlaceholder": "0,00",
+      "targetAmountTooltip": "Zdrojový účet je v mene {source}, pôžička v mene {loan}. Prepočítanú sumu predvyplníme podľa aktuálneho výmenného kurzu — upravte ju, ak vaša banka použila iný kurz.",
+      "saveButton": "Uložiť",
+      "recordButton": "Zaznamenať",
+      "overdrawWarning": "Toto je viac než zostatok na účte {account} a účet sa dostane do mínusu.",
+      "preAnchorWarning": "Táto platba je datovaná pred referenčným dátumom zostatku pôžičky ({date}), preto sa uloží len ako história a nezníži nesplatený zostatok.",
+      "overpayError": "Platba prevyšuje zostávajúci zostatok pôžičky ({max}).",
+      "deleteConfirmTitle": "Zmazať túto platbu?",
+      "deleteConfirmDescription": "Odstránia sa obe strany prevodu a zostatok pôžičky sa obnoví. Túto akciu nie je možné vrátiť späť.",
+      "preAnchorHint": "Tento dátum je pred snímkou zostatku pôžičky, preto táto platba nezmení nesplatený zostatok — je už zahrnutá v počiatočnom zostatku.",
+      "unlinkButton": "Odpojiť",
+      "unlinkConfirmTitle": "Odpojiť túto platbu?",
+      "unlinkConfirmDescription": "Transakcia zostane zachovaná ako bežný výdavok, no odstráni sa z tejto pôžičky. Zostatok pôžičky sa prepočíta.",
+      "unlinkSuccess": "Platba odpojená",
+      "unlinkError": "Platbu sa nepodarilo odpojiť. Skúste to znova, prosím.",
+      "syncedAccountHint": "Platíte zo synchronizovaného účtu? Namiesto toho použite Prepojiť platby a priložte importovaný výdavok.",
+      "sourceInfo": {
+        "trigger": "Viac podrobností",
+        "title": "Prečo len tieto účty?",
+        "manualOnly": "Tento výber zobrazuje len vaše ručne spravované účty.",
+        "whySynced": "Transakcie na bankovo synchronizovaných účtoch sa importujú priamo z banky. Zaznamenanie splátky pôžičky odtiaľto by vytvorilo duplicitu transakcie, ktorú vám banka pošle.",
+        "howToLink": "Namiesto toho, keď sa banková transakcia objaví, otvorte ju a zvoľte Prepojiť platby, aby ste ju priradili k tejto pôžičke. Tak sa zachová jediný zdroj pravdy a zostatok pôžičky sa správne aktualizuje."
+      }
+    }
+  }
+}

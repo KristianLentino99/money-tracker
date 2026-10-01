@@ -3,7 +3,8 @@
     "editMode": {
       "customize": "Customize",
       "addWidgets": "Add widgets",
-      "emptyState": "Click Customize to add widgets"
+      "emptyState": "Click Customize to add widgets",
+      "removeWidget": "Remove widget"
     },
     "widgets": {
       "common": {
@@ -16,10 +17,10 @@
         "balanceTypes": {
           "total": "Total",
           "accounts": "Accounts",
-          "portfolios": "Portfolios",
-          "ventures": "Ventures",
+          "portfolios": "投资组合",
+          "ventures": "风险投资",
           "vehicles": "Vehicles",
-          "loans": "Loans"
+          "loans": "贷款"
         },
         "tooltip": {
           "accounts": "Accounts:",
@@ -33,7 +34,7 @@
         "vsPreviousPeriod": "vs previous period",
         "spikePanel": {
           "accounts": "Accounts",
-          "portfolios": "Portfolios",
+          "portfolios": "投资组合",
           "priceDrivenChange": "Price-driven change — transaction details coming soon",
           "noSignificantTransactions": "No significant transactions for this date.",
           "seeAllTransactions": "See all transactions"
@@ -48,14 +49,14 @@
           "maxMarkers": "Max markers",
           "maxMarkersTooltip": "Maximum number of spike markers shown on the chart. When there are more spikes than this limit, only the most significant ones are displayed.",
           "resetDefaults": "Reset defaults",
-          "accept": "Accept",
+          "accept": "接受",
           "validation": {
             "outOfRange": "Value is out of allowed range",
             "integer": "Must be a whole number"
           }
         },
         "settings": {
-          "title": "Settings",
+          "title": "设置",
           "spikeMarkers": "Spike markers",
           "fitToLatestData": "Fit to latest data",
           "fitToLatestDataTooltip": "When on, the chart only spans up to your latest data point. When off, the x-axis covers the full selected period, leaving empty space for any future dates.",
@@ -68,8 +69,8 @@
         "componentsSettings": {
           "description": "Choose which components count toward the Total balance line.",
           "vehicles": "Vehicles",
-          "ventures": "Ventures",
-          "loans": "Loans",
+          "ventures": "风险投资",
+          "loans": "贷款",
           "loansTooltip": "When on, your outstanding loan balances are subtracted from the total (true net worth). When off, loans are ignored so the total shows assets only.",
           "allIncluded": "All components",
           "excluding": "Excluding {items}"
@@ -82,7 +83,9 @@
         "title": "Expenses Structure",
         "today": "Today",
         "vsPreviousPeriod": "vs previous period",
-        "viewButton": "View"
+        "viewButton": "View",
+        "allExpenses": "All expenses",
+        "loadFailed": "Couldn't load the category breakdown."
       },
       "latestTransactions": {
         "title": "Latest Transactions",
@@ -103,7 +106,7 @@
         "incomeSummary": "{count} active · {amount}/month income",
         "percentOfIncome": "{percent}% of avg income",
         "settings": {
-          "title": "Settings",
+          "title": "设置",
           "show": "Show",
           "incomeWindow": "Income window",
           "incomeWindowTooltip": "We average your incoming transactions over this period to compute the % of income spent on recurring payments.",
@@ -112,12 +115,13 @@
             "3": "Last 3 months",
             "6": "Last 6 months",
             "12": "Last 12 months"
-          }
+          },
+          "showStrip": "Show 30-day chart"
         }
       },
       "categoryTracker": {
         "title": "Categories Watchlist",
-        "addCategory": "Add category",
+        "addCategory": "添加分类",
         "selectCategories": "Select Categories"
       },
       "cashFlow": {
@@ -128,7 +132,8 @@
         "expenses": "Expenses",
         "saved": "Saved",
         "previousPeriodsTrend": "Previous periods trend",
-        "viewDetails": "View details"
+        "viewDetails": "View details",
+        "notAvailable": "N/A"
       },
       "netWorth": {
         "title": "Net Worth",
@@ -142,15 +147,15 @@
         "viewHistory": "View history",
         "loadFailed": "Couldn't load net worth data.",
         "components": {
-          "ventures": "Ventures",
+          "ventures": "风险投资",
           "vehicles": "Vehicles",
-          "loans": "Loans"
+          "loans": "贷款"
         },
         "settings": {
           "title": "Include in net worth",
-          "loans": "Loans",
+          "loans": "贷款",
           "vehicles": "Vehicles",
-          "ventures": "Ventures"
+          "ventures": "风险投资"
         },
         "trendTooltip": {
           "change": "Change",
@@ -165,10 +170,9 @@
         "noAccounts": "No accounts with credit limits"
       },
       "plannedOverview": {
-        "title": "Planned",
-        "projectedTotal": "Projected balance",
-        "pendingCount": "{count} planned entry | {count} planned entries",
-        "through": "Through {date}",
+        "title": "已规划",
+        "projectedBy": "Projected by {date}",
+        "upcoming": "Upcoming · {count}",
         "loadFailed": "Couldn't load planned transactions"
       },
       "emptyState": "There are no data in selected time interval.",
@@ -208,6 +212,10 @@
         "plannedOverview": {
           "name": "Planned overview",
           "description": "Pending planned transactions and your projected balance"
+        },
+        "fireProgress": {
+          "name": "FIRE progress",
+          "description": "How close you are to financial independence"
         }
       }
     },
@@ -224,13 +232,18 @@
   },
   "widgets": {
     "subscriptionsOverview": {
-      "upcoming": {
-        "collapsed": "{count} upcoming payments",
-        "collapsedAction": "Open"
+      "payAction": "Mark paid",
+      "listTitle": "Upcoming",
+      "dueCount": "{count} due",
+      "nothingDue": "Nothing due in 3 days",
+      "overdueHint": "Overdue since {date}",
+      "dueSoonHint": "Due in the next 3 days",
+      "strip": {
+        "title": "Next 30 days",
+        "goingOut": "{amount} going out",
+        "today": "Today"
       },
-      "empty": "All caught up — nothing due in the next 3 days.",
-      "overdueBadge": "Overdue",
-      "payAction": "Mark paid"
+      "loadFailed": "Couldn't load recurring payments"
     },
     "latestRecords": {
       "config": {
@@ -248,11 +261,99 @@
         "excludeBalanceAdjustmentsDescription": "Hide balance adjustment transactions",
         "plannedTitle": "Planned transactions",
         "excludePlannedDescription": "Hide pending planned transactions from the list",
-        "nothingExcluded": "Nothing excluded"
+        "nothingExcluded": "Nothing excluded",
+        "tagsStyleTitle": "Tags",
+        "tagsStyleNames": "Names",
+        "tagsStyleBars": "Bars",
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
       },
       "overdueBadge": "Overdue",
       "scheduledBadge": "Scheduled",
       "payAction": "Mark paid"
+    },
+    "fireProgress": {
+      "title": "FIRE progress",
+      "config": {
+        "style": {
+          "label": "Style",
+          "ring": "Ring",
+          "numbers": "Numbers"
+        }
+      },
+      "openPlan": "Open FIRE plan",
+      "loadFailed": "Couldn't load FIRE progress.",
+      "toType": "to {type}",
+      "ringLabelFor": "{pct}% of {type} target reached, {duration} left",
+      "ringLabelReachedFor": "{type} target reached",
+      "ringLabelUnreachableFor": "{pct}% of {type} target reached, not reachable at your current pace",
+      "timeTo": "Time to {type}",
+      "unitYears": "{n} yrs | {n} yr | {n} yrs",
+      "unitMonths": "{n} mos | {n} mo | {n} mos",
+      "atAge": "at age {age}",
+      "nextMilestone": "Next milestone",
+      "saved": "Saved",
+      "progress": "Progress",
+      "coastFire": "Coast FIRE",
+      "reached": "Reached",
+      "milestoneIn": "{pct}% in {duration}",
+      "typeNumber": "{type} number",
+      "atRate": "at {rate}%",
+      "milestonesReached": "{n} of {total} milestones",
+      "balanceOfTarget": "{balance} of {target}",
+      "reachedType": "{type} reached",
+      "supports": "Supports {amount}/mo",
+      "pctOfSpending": "{pct}% of spending",
+      "unreachable": "Not reachable at current savings",
+      "needs": "Needs about {amount}/mo to get there in {duration}",
+      "chart": {
+        "today": "Today",
+        "typeTarget": "{type} · {amount}",
+        "ariaLabel": "Net worth path: actual history up to today, projected toward your FIRE number"
+      },
+      "setup": {
+        "title": "Plan your path to FIRE",
+        "description": "Uses your accounts and spending. Two numbers if you have no data yet.",
+        "action": "Set up"
+      },
+      "locked": {
+        "title": "Plan your path to FIRE",
+        "description": "Plus feature",
+        "action": "Unlock"
+      }
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "title": "Vehicle maintenance",
+        "description": "Keep track of upcoming maintenance for your vehicles.",
+        "count": "{count} reminders",
+        "unknownVehicle": "Unknown vehicle",
+        "status": {
+          "upcoming": "Upcoming",
+          "overdue": "Overdue"
+        },
+        "activity": {
+          "inspection": "Vehicle inspection",
+          "scheduled-service": "Scheduled service",
+          "oil-change": "Oil change",
+          "tires": "Tire rotation",
+          "brakes": "Brake service",
+          "battery": "Battery",
+          "other": "Other"
+        },
+        "dueDate": "Due {date}",
+        "dueDistance": "Due at {distance}",
+        "odometerLabel": "Current mileage ({unit})",
+        "odometerPlaceholder": "Enter current mileage",
+        "updateOdometer": "Update odometer",
+        "showLess": "Show less",
+        "showMore": "Show {count} more",
+        "notifications": {
+          "odometerUpdated": "Odometer updated",
+          "odometerUpdateError": "Could not update the odometer."
+        }
+      }
     }
   }
 }

@@ -4,6 +4,7 @@ import {
   ACCOUNT_TYPES,
   type AccountApiResponse,
   type Decimal,
+  type LinkResidualTarget,
   type TransactionModel,
   type endpointsTypes,
 } from '@bt/shared/types';
@@ -33,6 +34,20 @@ export function getAccount({ id, raw = false }: { id: string; raw?: boolean }) {
   return makeRequest({
     method: 'get',
     url: `/accounts/${id}`,
+    raw,
+  });
+}
+
+export function getAccountTransactionCount<R extends boolean | undefined = undefined>({
+  id,
+  raw,
+}: {
+  id: string;
+  raw?: R;
+}) {
+  return makeRequest<{ transactionCount: number }, R>({
+    method: 'get',
+    url: `/accounts/${id}/transaction-count`,
     raw,
   });
 }
@@ -118,18 +133,19 @@ export function linkAccountToBankConnection<R extends boolean | undefined = unde
   id,
   connectionId,
   externalAccountId,
+  residualTarget,
   raw,
 }: {
   id: string;
   connectionId: string;
   externalAccountId: string;
+  residualTarget?: LinkResidualTarget;
   raw?: R;
 }) {
   return makeRequest<
     {
       account: Accounts;
       balanceDifference: number;
-      balanceAdjustmentTransaction: TransactionModel | null;
       message: string;
     },
     R
@@ -139,6 +155,7 @@ export function linkAccountToBankConnection<R extends boolean | undefined = unde
     payload: {
       connectionId,
       externalAccountId,
+      residualTarget,
     },
     raw,
   });

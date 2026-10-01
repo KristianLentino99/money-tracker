@@ -1,4 +1,4 @@
-import { AI_FEATURE, type RecordId, getModelNameFromModelId } from '@bt/shared/types';
+import { AI_FEATURE, type RecordId } from '@bt/shared/types';
 import {
   ASSET_CLASS,
   INVESTMENT_IMPORT_SIDE_SKIP,
@@ -11,7 +11,7 @@ import { generateRandomRecordId } from '@common/lib/record-id-helpers';
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import InvestmentTransaction from '@models/investments/investment-transaction.model';
 import Securities from '@models/investments/securities.model';
-import { getDefaultModelForFeature } from '@services/ai/models-config';
+import { SERVER_MODELS } from '@services/ai/resolution-ladder';
 import * as helpers from '@tests/helpers';
 import { GEMINI_API_URL, VALID_GEMINI_API_KEY, rejectIfWrongModel } from '@tests/mocks/gemini/mock-api';
 import { HttpResponse, http } from 'msw';
@@ -75,9 +75,7 @@ const csvRow = ({
 }) => `${symbol},${name},${date},${side},${quantity},${price},${fees},${currency},${assetClassHint},${confidence}`;
 
 /** The model the investment-import CSV extraction is actually configured to call. */
-const EXPECTED_GEMINI_MODEL = getModelNameFromModelId({
-  modelId: getDefaultModelForFeature({ feature: AI_FEATURE.investmentTransactionsParsing }),
-});
+const EXPECTED_GEMINI_MODEL = SERVER_MODELS[AI_FEATURE.investmentTransactionsParsing].model;
 
 /**
  * MSW handler that returns a fixed CSV from Gemini's generateContent endpoint.
@@ -611,6 +609,79 @@ describe('Investment transactions AI import — E2E', () => {
       // Original transaction should still be there.
       const txs = await InvestmentTransaction.findAll({ where: { securityId: btc!.id }, order: [['date', 'ASC']] });
       expect(txs).toHaveLength(2);
+    });
+
+    it('imports dividend rows as cash income and still rejects fee rows', async () => {
+      const portfolio = await helpers.createPortfolio({
+        payload: helpers.buildPortfolioPayload({ name: 'Dividends' }),
+        raw: true,
+      });
+      const [btc] = await helpers.seedSecurities([{ symbol: 'BTC', name: 'Bitcoin' }]);
+      await helpers.createHolding({
+        payload: { portfolioId: portfolio.id, securityId: btc!.id },
+      });
+
+      const buildPayload = ({ side, price, amount }: { side: 'dividend' | 'fee'; price: string; amount: string }) => ({
+        holdings: [
+          {
+            tempId: 'holding-1',
+            parsedSymbol: 'BTC',
+            parsedName: 'Bitcoin',
+            resolvedSecurity: {
+              securityId: btc!.id,
+              providerSymbol: btc!.providerSymbol,
+              symbol: 'BTC',
+              name: 'Bitcoin',
+              assetClass: btc!.assetClass,
+              providerName: btc!.providerName,
+              currencyCode: btc!.currencyCode,
+              exchangeName: btc!.exchangeName ?? undefined,
+              cryptoCurrencyCode: btc!.cryptoCurrencyCode ?? undefined,
+              alreadyInDb: true,
+            },
+            resolvedConfidence: 'auto' as const,
+            portfolioId: portfolio.id,
+            currencyCode: btc!.currencyCode,
+            hasExistingHolding: true,
+            transactions: [
+              {
+                tempId: `tx-${side}`,
+                date: '2024-02-01',
+                side,
+                quantity: '10',
+                price,
+                fees: '0',
+                amount,
+                possibleDuplicateOf: null,
+              },
+            ],
+          },
+        ],
+        skipTempIds: [],
+      });
+
+      const result = await helpers.investmentImportExecute({
+        payload: buildPayload({ side: 'dividend', price: '0.5', amount: '5' }),
+        raw: true,
+      });
+      expect(result.createdTransactions).toBe(1);
+      expect(result.failedTransactions).toBe(0);
+
+      const feeResponse = await helpers.investmentImportExecute({
+        payload: buildPayload({ side: 'fee', price: '3', amount: '30' }),
+      });
+      expect(feeResponse.statusCode).not.toBe(200);
+
+      const txs = await InvestmentTransaction.findAll({ where: { securityId: btc!.id } });
+      expect(txs).toHaveLength(1);
+      expect(txs[0]!.category).toBe(INVESTMENT_TRANSACTION_CATEGORY.dividend);
+
+      const [balance] = await helpers.getPortfolioBalance({
+        portfolioId: portfolio.id,
+        currencyCode: btc!.currencyCode,
+        raw: true,
+      });
+      expect(balance!.availableCash).toBeNumericEqual(5);
     });
 
     it('skips transactions that the user marked as duplicates via skipTempIds', async () => {

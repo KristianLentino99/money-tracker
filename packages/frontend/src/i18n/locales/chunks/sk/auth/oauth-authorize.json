@@ -1,0 +1,43 @@
+{
+  "oauth": {
+    "authorize": {
+      "title": "{name} žiada o prístup k vašim údajom v MoneyMatter",
+      "description": "Táto aplikácia žiada o tieto oprávnenia:",
+      "approve": "Schváliť",
+      "deny": "Zamietnuť",
+      "footer": "Prístup môžete kedykoľvek zrušiť v časti Nastavenia → AI → Konektory (MCP).",
+      "error": "Spracovanie požiadavky sa nepodarilo. Skúste to znovu, prosím.",
+      "unexpected_response": "Neočakávaná odpoveď zo servera. Skúste to znovu, prosím.",
+      "always_granted": "Vždy povolené",
+      "optional": "Voliteľné",
+      "delete_warning": "Udeľujte povolenia len aplikáciám, ktorým plne dôverujete",
+      "unknown_app": "Aplikácia"
+    },
+    "scopes": {
+      "finance_read": {
+        "label": "Zobraziť vaše finančné údaje",
+        "desc": "Čítať účty, transakcie, rozpočty, kategórie, štítky, portfóliá a štatistiky výdavkov."
+      },
+      "finance_write": {
+        "label": "Vytvárať a upravovať vaše finančné údaje",
+        "desc": "Pridávať a aktualizovať transakcie, rozpočty, predplatné, investičné pozície a ďalšie položky."
+      },
+      "finance_delete": {
+        "label": "Vymazať vaše finančné údaje",
+        "desc": "Trvalo vymazať transakcie, účty, rozpočty a ďalšie záznamy."
+      },
+      "profile_read": {
+        "label": "Zobraziť váš profil",
+        "desc": "Zobrazovať vaše meno, email a predvolenú menu."
+      },
+      "offline_access": {
+        "label": "Udržiavať pripojenie na pozadí",
+        "desc": "Udržiava prístup aktívny bez toho, aby sa vás pri každom prihlásení opäť pýtala na súhlas."
+      },
+      "unknown": {
+        "label": "Dodatočné oprávnenia",
+        "desc": "Aplikácia požiadala o povolenie, ktoré aplikácia MoneyMatter nerozpoznáva."
+      }
+    }
+  }
+}

@@ -1,150 +1,105 @@
-import {
-  AIApiKeyStatus,
-  AIFeatureConfig,
-  AIKeyProvider,
-  AI_FEATURE,
-  AI_PROVIDER,
-  buildCustomModelId,
-} from '@bt/shared/types';
-
-import { getDefaultModelForFeature, getFirstModelForProvider, getProviderFromModelId } from './models-config';
+import { AIConnectionStatus, AIFeatureConfig, AI_FEATURE, AI_PROVIDER } from '@bt/shared/types';
 
 // The one place that decides which model answers an AI feature. The runtime resolver and
 // the settings screens both walk this ladder, so what runs and what the UI names cannot
 // drift apart.
 
-export function getServerApiKey({ provider }: { provider: AI_PROVIDER }): string | null {
-  switch (provider) {
-    case AI_PROVIDER.google:
-      return process.env.GEMINI_API_KEY || null;
-    case AI_PROVIDER.openai:
-      return process.env.OPENAI_API_KEY || null;
-    case AI_PROVIDER.anthropic:
-      return process.env.ANTHROPIC_API_KEY || null;
-    case AI_PROVIDER.groq:
-      return process.env.GROQ_API_KEY || null;
-    case AI_PROVIDER.openrouter:
-      return process.env.OPENROUTER_API_KEY || null;
-    case AI_PROVIDER.deepseek:
-      return process.env.DEEPSEEK_API_KEY || null;
-    default:
-      return null;
-  }
+/** Paying Plus users get their own quota once GEMINI_PLUS_API_KEY is set; everyone else shares GEMINI_API_KEY. */
+export const getServerApiKey = ({ paidPlus = false }: { paidPlus?: boolean } = {}): string | null =>
+  (paidPlus && process.env.GEMINI_PLUS_API_KEY) || process.env.GEMINI_API_KEY || null;
+
+interface ServerModel {
+  provider: AI_PROVIDER.google;
+  model: string;
 }
 
-export interface LadderEndpoint {
-  id: string;
-  name: string;
-  defaultModel: string;
-  status: AIApiKeyStatus;
-}
+/** The included model per feature, served with the operator's key. */
+export const SERVER_MODELS: Record<AI_FEATURE, ServerModel> = {
+  [AI_FEATURE.categorization]: { provider: AI_PROVIDER.google, model: 'gemma-4-31b-it' },
+  [AI_FEATURE.statementParsing]: { provider: AI_PROVIDER.google, model: 'gemini-3.8-flash' },
+  [AI_FEATURE.investmentTransactionsParsing]: { provider: AI_PROVIDER.google, model: 'gemini-3.8-flash' },
+  [AI_FEATURE.receiptParsing]: { provider: AI_PROVIDER.google, model: 'gemini-3.5-flash-lite' },
+};
 
-type ResolutionStep<E extends LadderEndpoint> =
-  /** An explicit pick is dialled even while the endpoint is flagged invalid, so a recovered
-   * server heals itself on the next run. */
-  | { kind: 'configured-custom'; endpoint: E; modelId: string }
-  | { kind: 'configured-catalog'; provider: AIKeyProvider; modelId: string; usingUserKey: boolean }
-  /** No usable config: the feature default model, backed by a user or server key. */
-  | { kind: 'default-catalog'; provider: AIKeyProvider; modelId: string; usingUserKey: boolean }
-  /** No usable config or key: the first saved endpoint not flagged invalid answers. */
-  | { kind: 'fallback-endpoint'; endpoint: E; modelId: string }
-  /** The user owns endpoints and every one is flagged down. The run refuses instead of
-   * moving their data to a cloud provider they never picked. */
-  | { kind: 'all-endpoints-down'; endpoint: E }
-  | { kind: 'unserved'; reason: 'invalid-default' | 'no-credentials' };
-
-/**
- * Priority order: explicit feature config, then the feature default on the user's key, then
- * the user's first dialable endpoint, then the feature default on the server key. Pure over
- * its inputs plus the server-key env vars.
- *
- * Pass `excludedEndpointIds` to re-run the walk with an endpoint ruled out.
- */
-export function pickResolutionStep<E extends LadderEndpoint>({
+/** The included model for the feature, or null when the user can't use it or no server key backs it. */
+export function getServerModel({
   feature,
-  config,
-  keyProviders,
-  providerModels,
-  defaultProvider,
-  endpoints,
-  excludedEndpointIds,
+  serverKeysAllowed,
 }: {
   feature: AI_FEATURE;
-  /** Must already be upgraded past retired model IDs. */
+  serverKeysAllowed: boolean;
+}): ServerModel | null {
+  if (!serverKeysAllowed) return null;
+
+  const serverModel = SERVER_MODELS[feature];
+  return getServerApiKey() ? serverModel : null;
+}
+
+/** `provider/model`, e.g. `anthropic/claude-sonnet-5` or `custom/llama3.2`. */
+export function buildConnectionModelId({ provider, model }: { provider: AI_PROVIDER; model: string }): string {
+  return `${provider}/${model}`;
+}
+
+export interface LadderConnection {
+  id: string;
+  status: AIConnectionStatus;
+}
+
+type ResolutionStep<C extends LadderConnection> =
+  /** An explicit pick is dialled even while flagged invalid, so a recovered connection heals itself on the next run. */
+  | { kind: 'configured'; connection: C }
+  | { kind: 'configured-server'; model: ServerModel }
+  /** No usable config: the first connection not flagged invalid answers. */
+  | { kind: 'default-connection'; connection: C }
+  /** The user owns connections and every one is down. The run refuses instead of moving their
+   * data to the server model they never picked. */
+  | { kind: 'all-connections-down'; connection: C }
+  | { kind: 'server-default'; model: ServerModel }
+  | { kind: 'unserved' };
+
+/**
+ * Priority order: explicit feature config, then the user's first dialable connection, then
+ * the included server model, but only for a user who owns no connections at all. Pure over
+ * its inputs plus the server-key env vars.
+ *
+ * A config pointing at a deleted connection, or a server pick the user can no longer use,
+ * falls through as if unset. Pass `excludedConnectionIds` to re-run the walk with a
+ * connection ruled out.
+ */
+export function pickResolutionStep<C extends LadderConnection>({
+  feature,
+  config,
+  connections,
+  serverKeysAllowed,
+  excludedConnectionIds,
+}: {
+  feature: AI_FEATURE;
   config: AIFeatureConfig | null;
-  keyProviders: ReadonlySet<AIKeyProvider>;
-  /** User-selected model IDs for providers whose catalogs are dynamic, currently OpenRouter. */
-  providerModels?: ReadonlyMap<AIKeyProvider, string>;
-  /** User's preferred provider, used when it has a dynamic model selection. */
-  defaultProvider?: AIKeyProvider;
   /** In saved order: the first dialable one wins. */
-  endpoints: readonly E[];
-  excludedEndpointIds?: ReadonlySet<string>;
-}): ResolutionStep<E> {
-  const excluded = excludedEndpointIds ?? new Set<string>();
+  connections: readonly C[];
+  /** When false the walk behaves as if no server key existed. */
+  serverKeysAllowed: boolean;
+  excludedConnectionIds?: ReadonlySet<string>;
+}): ResolutionStep<C> {
+  const excluded = excludedConnectionIds ?? new Set<string>();
+  const serverModel = getServerModel({ feature, serverKeysAllowed });
 
   if (config) {
-    const provider = getProviderFromModelId({ modelId: config.modelId });
-
-    if (provider === AI_PROVIDER.custom) {
-      const endpoint = endpoints.find(
-        (candidate) => candidate.id === config.customEndpointId && !excluded.has(candidate.id),
+    if (config.connectionId === null) {
+      if (serverModel) return { kind: 'configured-server', model: serverModel };
+    } else {
+      const connection = connections.find(
+        (candidate) => candidate.id === config.connectionId && !excluded.has(candidate.id),
       );
-      if (endpoint) {
-        return { kind: 'configured-custom', endpoint, modelId: config.modelId };
-      }
-      // The endpoint was deleted from under the config: fall through to the defaults.
-    } else if (provider) {
-      if (keyProviders.has(provider)) {
-        return { kind: 'configured-catalog', provider, modelId: config.modelId, usingUserKey: true };
-      }
-      if (getServerApiKey({ provider })) {
-        return { kind: 'configured-catalog', provider, modelId: config.modelId, usingUserKey: false };
-      }
-      // No key anywhere for the configured provider: fall through to the defaults.
+      if (connection) return { kind: 'configured', connection };
     }
-    // A null provider means the ID is in no catalog; nothing can serve it, fall through.
   }
 
-  const defaultModelId = getDefaultModelForFeature({ feature });
-  const catalogDefaultProvider = getProviderFromModelId({ modelId: defaultModelId });
+  const dialable = connections.find((candidate) => candidate.status !== 'invalid' && !excluded.has(candidate.id));
+  if (dialable) return { kind: 'default-connection', connection: dialable };
+  if (connections.length > 0) return { kind: 'all-connections-down', connection: connections[0]! };
 
-  const selectedProviderModel =
-    defaultProvider && keyProviders.has(defaultProvider)
-      ? (providerModels?.get(defaultProvider) ?? getFirstModelForProvider({ provider: defaultProvider }))
-      : undefined;
-  if (selectedProviderModel && defaultProvider) {
-    return {
-      kind: 'default-catalog',
-      provider: defaultProvider,
-      modelId: selectedProviderModel,
-      usingUserKey: true,
-    };
-  }
+  if (serverModel) return { kind: 'server-default', model: serverModel };
 
-  if (!catalogDefaultProvider || catalogDefaultProvider === AI_PROVIDER.custom) {
-    return { kind: 'unserved', reason: 'invalid-default' };
-  }
-
-  if (keyProviders.has(catalogDefaultProvider)) {
-    return { kind: 'default-catalog', provider: catalogDefaultProvider, modelId: defaultModelId, usingUserKey: true };
-  }
-
-  const dialable = endpoints.find((candidate) => candidate.status !== 'invalid' && !excluded.has(candidate.id));
-  if (dialable) {
-    return {
-      kind: 'fallback-endpoint',
-      endpoint: dialable,
-      modelId: buildCustomModelId({ modelName: dialable.defaultModel }),
-    };
-  }
-  if (endpoints.length > 0) {
-    return { kind: 'all-endpoints-down', endpoint: endpoints[0]! };
-  }
-
-  if (getServerApiKey({ provider: catalogDefaultProvider })) {
-    return { kind: 'default-catalog', provider: catalogDefaultProvider, modelId: defaultModelId, usingUserKey: false };
-  }
-
-  return { kind: 'unserved', reason: 'no-credentials' };
+  return { kind: 'unserved' };
 }

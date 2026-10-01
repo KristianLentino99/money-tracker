@@ -3,7 +3,8 @@
     "editMode": {
       "customize": "Personalizza",
       "addWidgets": "Aggiungi widget",
-      "emptyState": "Fai clic su Personalizza per aggiungere widget"
+      "emptyState": "Fai clic su Personalizza per aggiungere widget",
+      "removeWidget": "Remove widget"
     },
     "widgets": {
       "common": {
@@ -82,7 +83,9 @@
         "title": "Struttura delle spese",
         "today": "Oggi",
         "vsPreviousPeriod": "rispetto al periodo precedente",
-        "viewButton": "Visualizza"
+        "viewButton": "Visualizza",
+        "allExpenses": "Tutte le spese",
+        "loadFailed": "Impossibile caricare la ripartizione per categoria."
       },
       "latestTransactions": {
         "title": "Ultime transazioni",
@@ -112,7 +115,8 @@
             "3": "Ultimi 3 mesi",
             "6": "Ultimi 6 mesi",
             "12": "Ultimi 12 mesi"
-          }
+          },
+          "showStrip": "Show 30-day chart"
         }
       },
       "categoryTracker": {
@@ -128,7 +132,8 @@
         "expenses": "Uscite",
         "saved": "Risparmiato",
         "previousPeriodsTrend": "Andamento dei periodi precedenti",
-        "viewDetails": "Visualizza dettagli"
+        "viewDetails": "Visualizza dettagli",
+        "notAvailable": "N/D"
       },
       "netWorth": {
         "title": "Patrimonio netto",
@@ -169,7 +174,9 @@
         "projectedTotal": "Saldo previsto",
         "pendingCount": "{count} voce pianificata | {count} voci pianificate",
         "through": "fino a {date}",
-        "loadFailed": "Impossibile caricare le transazioni pianificate"
+        "loadFailed": "Impossibile caricare le transazioni pianificate",
+        "projectedBy": "Projected by {date}",
+        "upcoming": "Upcoming · {count}"
       },
       "emptyState": "Non ci sono dati nell'intervallo di tempo selezionato.",
       "registry": {
@@ -208,6 +215,10 @@
         "plannedOverview": {
           "name": "Panoramica pianificate",
           "description": "Transazioni pianificate in sospeso e il tuo saldo previsto"
+        },
+        "fireProgress": {
+          "name": "Progressi FIRE",
+          "description": "Quanto sei vicino all'indipendenza finanziaria"
         }
       }
     },
@@ -230,7 +241,18 @@
       },
       "empty": "Tutto in ordine — nessuna scadenza nei prossimi 3 giorni.",
       "overdueBadge": "Scaduto",
-      "payAction": "Contrassegna come pagato"
+      "payAction": "Contrassegna come pagato",
+      "listTitle": "Upcoming",
+      "dueCount": "{count} due",
+      "nothingDue": "Nothing due in 3 days",
+      "overdueHint": "Overdue since {date}",
+      "dueSoonHint": "Due in the next 3 days",
+      "strip": {
+        "title": "Next 30 days",
+        "goingOut": "{amount} going out",
+        "today": "Today"
+      },
+      "loadFailed": "Couldn't load recurring payments"
     },
     "latestRecords": {
       "config": {
@@ -248,11 +270,65 @@
         "excludeBalanceAdjustmentsDescription": "Nascondi le transazioni di rettifica del saldo",
         "plannedTitle": "Transazioni pianificate",
         "excludePlannedDescription": "Nascondi le transazioni pianificate in sospeso dall'elenco",
-        "nothingExcluded": "Nessuna esclusione"
+        "nothingExcluded": "Nessuna esclusione",
+        "tagsStyleTitle": "Etichette",
+        "tagsStyleNames": "Names",
+        "tagsStyleBars": "Bars",
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
       },
       "overdueBadge": "Scaduto",
       "scheduledBadge": "Programmato",
       "payAction": "Contrassegna come pagato"
+    },
+    "fireProgress": {
+      "title": "Progressi FIRE",
+      "config": {
+        "style": {
+          "label": "Stile",
+          "ring": "Anello",
+          "numbers": "Numeri"
+        }
+      },
+      "openPlan": "Apri piano FIRE",
+      "loadFailed": "Impossibile caricare i progressi FIRE.",
+      "toType": "verso {type}",
+      "ringLabelFor": "Raggiunto il {pct}% dell'obiettivo {type}, restano {duration}",
+      "ringLabelReachedFor": "Obiettivo {type} raggiunto",
+      "ringLabelUnreachableFor": "Raggiunto il {pct}% dell'obiettivo {type}, non raggiungibile al ritmo attuale",
+      "timeTo": "Tempo per {type}",
+      "unitYears": "{n} anni | {n} anno | {n} anni",
+      "unitMonths": "{n} mesi | {n} mese | {n} mesi",
+      "atAge": "a {age} anni",
+      "nextMilestone": "Prossimo traguardo",
+      "saved": "Risparmiato",
+      "progress": "Progressi",
+      "coastFire": "Coast FIRE",
+      "reached": "Raggiunto",
+      "milestoneIn": "{pct}% tra {duration}",
+      "typeNumber": "Capitale {type}",
+      "atRate": "al {rate}%",
+      "milestonesReached": "{n} traguardi su {total}",
+      "balanceOfTarget": "{balance} su {target}",
+      "reachedType": "{type} raggiunto",
+      "supports": "Copre {amount}/mese",
+      "pctOfSpending": "{pct}% delle spese",
+      "unreachable": "Non raggiungibile con il risparmio attuale",
+      "needs": "Servono circa {amount}/mese per raggiungerlo in {duration}",
+      "chart": {
+        "today": "Oggi",
+        "typeTarget": "{type} · {amount}",
+        "ariaLabel": "Andamento del patrimonio netto: storia fino a oggi e proiezione verso il capitale FIRE necessario"
+      },
+      "setup": {
+        "title": "Pianifica il tuo percorso FIRE",
+        "description": "Usa i tuoi conti e le tue spese. Bastano due valori se non hai ancora dati.",
+        "action": "Configura"
+      },
+      "locked": {
+        "title": "Pianifica il tuo percorso FIRE",
+        "description": "Funzionalità Plus",
+        "action": "Sblocca"
+      }
     }
   },
   "pages": {

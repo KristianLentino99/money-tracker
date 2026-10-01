@@ -1,4 +1,5 @@
-import { USER_ROLES } from '@bt/shared/types';
+import { TRANSACTION_TRANSFER_NATURE, USER_ROLES } from '@bt/shared/types';
+import { isBaseCurrencyChangeLocked } from '@services/currencies/base-currency-lock';
 
 /**
  * Extract the app user ID from MCP request auth info.
@@ -18,23 +19,81 @@ export function getUserId({ extra }: { extra: { authInfo?: { extra?: { userId?: 
 /**
  * Assert the caller's access token was granted a specific scope.
  * Write and delete MCP tools call this after getUserId to enforce scope gating.
- * Demo users are rejected here regardless of granted scopes: read tools never call
- * this helper, so demo accounts keep read access but cannot mutate anything via MCP.
+ * Demo and read-only users are rejected here regardless of granted scopes: read tools
+ * never call this helper, so those accounts keep read access but cannot mutate via MCP.
  */
 export function requireScope({
   extra,
   scope,
 }: {
-  extra: { authInfo?: { scopes?: string[]; extra?: { role?: string } } };
+  extra: { authInfo?: { scopes?: string[]; extra?: { role?: string; readOnly?: boolean } } };
   scope: string;
 }): void {
   if (extra?.authInfo?.extra?.role === USER_ROLES.demo) {
     throw new Error('This action is not available in demo mode. Sign up for a free account to unlock all features.');
   }
 
+  // Missing entitlement info is treated as read-only: a write must never pass on an
+  // auth payload that failed to carry it.
+  if (extra?.authInfo?.extra?.readOnly !== false) {
+    throw new Error('Your plan no longer includes editing. Subscribe to keep editing your data.');
+  }
+
   const scopes = extra?.authInfo?.scopes ?? [];
   if (!scopes.includes(scope)) {
     throw new Error(`Missing required scope: ${scope}. Re-connect the app and grant it.`);
+  }
+}
+
+/** Applies the same mutation lock as the REST API while reference balances are recalculated. */
+export async function assertMcpMutationAllowed({
+  extra,
+  userId,
+  scope = 'finance:write',
+}: {
+  extra: Parameters<typeof requireScope>[0]['extra'];
+  userId: number;
+  scope?: 'finance:write' | 'finance:delete';
+}): Promise<void> {
+  requireScope({ extra, scope });
+  if (await isBaseCurrencyChangeLocked({ userId })) {
+    throw new Error('Base currency recalculation is in progress. Retry after it completes.');
+  }
+}
+
+/**
+ * Mirrors the REST transaction schemas: the original-currency pair is set (or cleared)
+ * together, and never rides on a payload that makes the transaction a transfer.
+ */
+export function assertOriginalCurrencyArgs({
+  args,
+}: {
+  args: {
+    originalAmount?: number | null;
+    originalCurrencyCode?: string | null;
+    transferNature?: TRANSACTION_TRANSFER_NATURE;
+    destinationAccountId?: unknown;
+    destinationAmount?: unknown;
+    destinationTransactionId?: unknown;
+  };
+}): void {
+  const { originalAmount, originalCurrencyCode } = args;
+
+  if (
+    (originalAmount === undefined) !== (originalCurrencyCode === undefined) ||
+    (originalAmount === null) !== (originalCurrencyCode === null)
+  ) {
+    throw new Error('"originalAmount" and "originalCurrencyCode" must be set, or cleared, together');
+  }
+  if (originalAmount == null) return;
+
+  const isTransfer =
+    (args.transferNature && args.transferNature !== TRANSACTION_TRANSFER_NATURE.not_transfer) ||
+    args.destinationAccountId ||
+    args.destinationAmount ||
+    args.destinationTransactionId;
+  if (isTransfer) {
+    throw new Error('Original currency metadata cannot be added to transfer transactions');
   }
 }
 

@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "subscriptions": {
+      "title": "Pravidelné platby",
+      "defaultAutoRecord": {
+        "label": "Predvolené automatické zaznamenávanie pri nových pravidelných platbách",
+        "help": "Keď je zapnuté, prepínač automatického zaznamenávania vo formulári na vytvorenie predplatného je predvolene zapnutý. Pri jednotlivom predplatnom ho môžete kedykoľvek zmeniť.",
+        "successNotification": "Nastavenie uložené",
+        "errorNotification": "Nastavenie sa nepodarilo uložiť"
+      }
+    }
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "navigation": {
+    "dashboard": "لوح المراقبة",
+    "accounts": "الحسابات",
+    "accountsList": "كل الحسابات",
+    "investments": "الاستثمارات",
+    "loans": "القروض",
+    "allTransactions": "كل المعاملات",
+    "transactions": "المعاملات",
+    "transactionGroups": "المجموعات",
+    "analytics": "التحليلات",
+    "optimizations": "Optimizations",
+    "automations": "الأتمتة",
+    "accountDetails": "تفاصيل الحساب",
+    "helpAndDocs": "المساعدة و الوثائق",
+    "logout": "تسجيل خروج",
+    "appVersion": "إصدار التطبيق ‏{version}",
+    "settings": "الإعدادات",
+    "planned": {
+      "planned": "مخطط له",
+      "subscriptions": "المدفوعات المتكررة",
+      "budgets": "الميزانيات"
+    },
+    "venture": "مشروع",
+    "home": "Home",
+    "more": "More",
+    "plan": "Budget"
+  },
+  "sidebar": {
+    "collapse": "إخفاء الشريط الجانبي",
+    "expand": "توسيع الشريط الجانبي",
+    "settings": {
+      "title": "الإعدادات",
+      "sections": {
+        "label": "الأقسام الجانبية",
+        "description": "اختر الأقسام التي تظهر في الشريط الجانبي.",
+        "alwaysVisibleTooltip": "هذا القسم مرئي دائما."
+      },
+      "hideZeroBalances": {
+        "label": "إخفاء الأرصدة الصفرية",
+        "description": "إخفاء الحسابات والمجموعات برصيد صفري"
+      }
+    },
+    "accountsView": {
+      "title": "الحسابات",
+      "bankAccounts": "الحسابات البنكية",
+      "newAccount": "حساب جديد",
+      "newAccountsGroup": "مجموعة حسابات جديدة",
+      "portfolios": "المحافظ",
+      "newPortfolio": "محفظة جديدة",
+      "noPortfolios": "لا توجد محافظ حتى الآن",
+      "ventures": "المشاريع",
+      "cars": "السيارات",
+      "loans": "القروض",
+      "collapseNavigation": "إغلاق التنقل",
+      "viaHousehold": "Shared via {handle}'s household",
+      "sharedBy": "Shared by {handle}",
+      "needsReauthTooltip": "انتهت صلاحية الاتصال. أعد الاتصال لاستئناف المزامنة."
+    }
+  },
+  "header": {
+    "add": "إضافة",
+    "importData": "استيراد البيانات",
+    "moreActions": "المزيد من الطرق لإضافة البيانات",
+    "importDataHint": "ملف CSV أو كشف حساب بنكي",
+    "attachInvoice": "إرفاق الفاتورة",
+    "attachInvoiceHint": "وجدنا المعاملة التي تنتمي اليها",
+    "language": "اللغة",
+    "newTransaction": "إضافة معاملة",
+    "settings": "الإعدادات",
+    "feedback": "أرسل ملاحظاتك",
+    "support": "تبرع",
+    "sync": {
+      "syncing": "المزامنة",
+      "synchronizing": "جاري المزامنة...",
+      "syncedTime": "تم المزامنة منذ {time}",
+      "connectBank": "الاتصال بالبنك",
+      "syncingAccounts": "مزامنة {count} حساب",
+      "stuck": "Sync stuck",
+      "failed": "فشلت المزامنة، بعض الحسابات بحاجة إلى المراجعة"
+    },
+    "categorization": {
+      "title": "تصنيفات AI",
+      "categorizing": "جاري التصنيف...",
+      "completed": "صنف الـ AI عدد {count} معاملة | صنف الـ AI عدد {count} معاملة",
+      "completedShort": "اكتمل التصنيف",
+      "completedWithSkipped": "تصنيف {count} معاملة (تخطي {skipped}) | تصنيف {count} معاملة (تخطي {skipped})",
+      "failed": "فشل التصنيف",
+      "failedShort": "فشل",
+      "allSkipped": "لا يستطيع الذكاء الصناعي تصنيف المعاملة بدقة | لا يستطيع الذكاء الصناعي تصنيف أي من هذه الـ {count} معاملة",
+      "queued": "في انتظار البدء...",
+      "transactions": "المعاملات"
+    }
+  },
+  "themeSelector": {
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "تقييم الوداع",
+      "description": "أخبرنا بما أعجبك وبما لم يعجبك.",
+      "typeLabel": "النوع",
+      "typePlaceholder": "اختر النوع",
+      "types": {
+        "bug": "خلل في النظام",
+        "featureRequest": "أريد ميزة",
+        "other": "شئ آخر"
+      },
+      "docsHint": "لست متأكدا كيف يعمل شيء ما؟ تحقق من {link} أولا.",
+      "docsHintLink": "الوثائق",
+      "messageLabel": "ملاحظاتك",
+      "messagePlaceholder": "ماذا حدث، أو ما الذي ترغب في رؤيته؟",
+      "messageRequired": "الرجاء كتابة رسالة قبل الإرسال.",
+      "submit": "إرسال",
+      "thanks": "شكرًا، نحن نقرأ كل رسالة.",
+      "unavailable": "الإرسال غير متوفر الآن. استخدم اللوحة أدناه بدلاً من ذلك.",
+      "or": "أو",
+      "board": {
+        "title": "شاركه على اللوحة العامة",
+        "description": "صوّت على أفكار الآخرين، واطلع على ما تم التخطيط له بالفعل، وستنال رد على أفكارك."
+      }
+    }
+  },
+  "syncStatusTooltip": {
+    "title": "حالة مزامنة اتصالات البنوك",
+    "syncedSuccessfully": "تمت المزامنة بنجاح",
+    "syncCompletedWithErrors": "فشلت في المزامنة بعض الحسابات",
+    "syncStuckTitle": "يبدو أن المزامنة متوقفة",
+    "syncStuckDescription": "بعض اتصالات البنوك لم تستجب في الوقت المحدد. حاول مرة أخرى، أو أعد الاتصال بها من صفحة الربط.",
+    "progress": "{current} من {total} تمت مزامنته",
+    "progressPercentage": "{percentage}%",
+    "statuses": {
+      "syncing": "المزامنة",
+      "queued": "قيد الانتظار",
+      "synced": "تمت المزامنة",
+      "failed": "فشل",
+      "idle": "خامل"
+    },
+    "lastSynced": "آخر مزامنة:",
+    "neverSynced": "لم تتم المزامنة أبداً",
+    "syncNowButton": "المزامنة الآن",
+    "noBankAccounts": "لا توجد حسابات بنكية متصلة",
+    "connectButton": "وصل",
+    "retrySyncButton": "إعادة المزامنة",
+    "manageConnectionsButton": "إدارة الاتصالات",
+    "needsReauthTitle": "تحتاج الاتصالات إلى إعادة الاتصال",
+    "needsReauthDescription": "انتهت صلاحية الاتصال. أعد الاتصال لاستئناف المزامنة.",
+    "reconnectButton": "إعادة الاتصال",
+    "affectedAccounts": "1 حساب | {count} حسابات",
+    "timeAgo": {
+      "justNow": "الآن",
+      "secondsAgo": "منذ {count} ثانية | منذ {count} ثانية",
+      "minutesAgo": "منذ {count} دققيقة | منذ {count} دقيقة",
+      "hoursAgo": "منذ {count} ساعة | منذ {count} ساعة",
+      "daysAgo": "منذ {count} يوم | منذ {count} يوم",
+      "weeksAgo": "منذ {count} أسبوع| منذ {count} أسبوع",
+      "monthsAgo": "منذ {count} شهر | منذ {count} شهر",
+      "yearsAgo": "منذ {count} عام | منذ {count} عام"
+    }
+  },
+  "banners": {
+    "recoveryMethod": {
+      "title": "أطف طريقة احتياطية لتسجيل الدخول",
+      "description": "احمِ حسابك بإضافة تسجيل الدخول عبر Google أو مفتاح مرور Passkey. يضمن ذلك أن تتمكن من الوصول إلى حسابك دائما.",
+      "actionButton": "انتقل إلى إعدادات الأمان"
+    }
+  },
+  "relinkWarning": {
+    "buttonLabel": "{count} حساب يتطلب إجراء | {count} حساب يتطلب إجراء",
+    "title": "تمكين البنك: يتطلب تفعيل",
+    "description": "هذه الحسابات المرتبطة بـتمكين البنك تحتاج إلى تحديث بسبب تغيير في مخطط البيانات. هذا إجراء لمرة واحدة لتحسين موثوقية المزامنة.",
+    "step1Full": "لتوفير وقتك، جرب أولا إعادة الاتصال الكامل بالنك. ستجد زر {reconnect} ضمن قسم {connectionValidity} في صفحة كل اتصال:",
+    "reconnectButton": "إعادة الاتصال",
+    "connectionValiditySection": "صحة الاتصال",
+    "connectionLabel": "الاتصال #{id}",
+    "step2Full": "إذا بقيت أي حسابات في الأسفل بعد إعادة الاتصال، فانتقل إلى كل حساب وقم يدويا بـ {unlink} ثم {link} مرة أخرى.",
+    "unlinkAction": "إلغاء الربط",
+    "linkAction": "ربط"
+  },
+  "pages": {
+    "integrations": {
+      "providers": {
+        "monobank": {
+          "name": "Monobank"
+        },
+        "enableBanking": {
+          "name": "تمكين البنك"
+        },
+        "lunchflow": {
+          "name": "Lunch Flow"
+        }
+      }
+    }
+  },
+  "dashboard": {
+    "onboarding": {
+      "title": "مرحبا بك في MoneyMatter",
+      "subtitle": "ابدأ من خلال إعداد حسابك الأول",
+      "createManualAccount": {
+        "title": "إنشاء حساب يدوي",
+        "description": "تتبع الكاش، المدخرات، أو أي حساب يدوياً"
+      },
+      "connectBank": {
+        "title": "قم بتوصيل حسابك البنكي",
+        "description": "مزامنة المعاملات تلقائياً من البنك الخاص بك"
+      },
+      "divider": "أو استيراد بيانات موجودة",
+      "importFile": {
+        "title": "استيراد من ملف",
+        "description": "استيراد المعاملات من كشف حساب بنكي (PDF) أو ملفات CSV"
+      },
+      "quickStart": {
+        "categories": {
+          "getting-started": {
+            "title": "ابدأ"
+          },
+          "advanced-transactions": {
+            "title": "معاملات متقدمة"
+          },
+          "organization": {
+            "title": "تنظيم مالياتك"
+          },
+          "bank-import": {
+            "title": "الاتصال والاستيراد"
+          },
+          "analytics": {
+            "title": "استكشاف التحليلات"
+          },
+          "ai-settings": {
+            "title": "مميزات الذكاء الاصطناعي"
+          },
+          "sharing": {
+            "title": "Sharing & Household"
+          }
+        },
+        "tasks": {
+          "create-account": {
+            "title": "أنشئ حسابك الأول",
+            "description": "إضافة حساب بنكي أو محفظة لتتبع"
+          },
+          "add-transaction": {
+            "title": "إضافة معاملتك الأولى",
+            "description": "تسجيل الدخل أو المصروفات"
+          },
+          "create-transfer": {
+            "title": "إنشاء تحويل",
+            "description": "نقل الأموال بين حساباتك"
+          },
+          "link-refund": {
+            "title": "ربط استرجاع",
+            "description": "ربط الاسترداد بعمليات الشراء الأصلية"
+          },
+          "link-transactions": {
+            "title": "ربط المعاملات الحالية",
+            "description": "Connect related transactions together"
+          },
+          "split-transaction": {
+            "title": "Split a transaction",
+            "description": "Divide expenses across categories"
+          },
+          "mark-transfer-out": {
+            "title": "Mark transfer out of wallet",
+            "description": "Track money leaving your accounts"
+          },
+          "create-category": {
+            "title": "Create a custom category",
+            "description": "Organize your transactions by type"
+          },
+          "create-tag": {
+            "title": "Create a tag",
+            "description": "Add tags to group related transactions"
+          },
+          "create-budget": {
+            "title": "Set up a budget",
+            "description": "Create spending limits for categories"
+          },
+          "create-subscription": {
+            "title": "Create a subscription",
+            "description": "Set up recurring payments to track your subscriptions"
+          },
+          "create-account-group": {
+            "title": "Create an account group",
+            "description": "Organize accounts by type or purpose"
+          },
+          "setup-tag-reminder": {
+            "title": "Set up a tag reminder",
+            "description": "Get notified about recurring expenses"
+          },
+          "connect-bank": {
+            "title": "Connect a bank account",
+            "description": "Sync transactions automatically"
+          },
+          "import-csv": {
+            "title": "Import from any text source",
+            "description": "Import from CSV, PDF, or bank statements"
+          },
+          "view-annual-overview": {
+            "title": "Check annual overview",
+            "description": "See yearly trends and patterns"
+          },
+          "view-cash-flow": {
+            "title": "View cash flow analytics",
+            "description": "Understand your income vs expenses"
+          },
+          "review-ai-features": {
+            "title": "Review AI features",
+            "description": "Explore available AI capabilities"
+          },
+          "configure-ai": {
+            "title": "Add your own AI model",
+            "description": "Connect OpenAI, Claude, Gemini or a local model."
+          },
+          "invite-household-member": {
+            "title": "Invite a household member",
+            "description": "Share your whole financial life with someone — they get access to every account you have now and add later."
+          },
+          "share-account": {
+            "title": "Share an account",
+            "description": "Open any account and use the Share action to grant a single user read or write access."
+          }
+        },
+        "ui": {
+          "title": "Quick Start",
+          "subtitle": "Use our Quick Start guide to learn about everything MoneyMatter can do for you.",
+          "dismissButton": "Dismiss permanently",
+          "dismissConfirmTitle": "Dismiss Quick Start?",
+          "dismissConfirmDescription": "You can always reopen the Quick Start guide from settings if you change your mind.",
+          "dismissConfirmButton": "Dismiss",
+          "triggerTooltip": "Quick Start - {count} tasks remaining",
+          "srDescription": "Complete these tasks to get started with the app",
+          "progressText": "{completed} of {total} complete",
+          "categoryProgress": "{completed} of {total} complete"
+        }
+      }
+    }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Manage accounts, loans, investments, and venture assets."
+    },
+    "more": {
+      "title": "More",
+      "description": "Explore insights, planning tools, imports, and settings."
+    },
+    "addTransaction": "Add transaction"
+  }
+}

@@ -23,6 +23,7 @@ import { calculateRefAmount } from '@services/calculate-ref-amount.service';
 import { DOMAIN_EVENTS, eventBus } from '@services/common/event-bus';
 import { assertLoanPaymentAllowed } from '@services/loans/assert-loan-payment-allowed';
 import { applyPayeeCategorization } from '@services/payees/apply-categorization';
+import { applyPayeeDefaultLocation } from '@services/payees/apply-default-location';
 import { applyPayeeDefaultTags } from '@services/payees/apply-default-tags';
 import { resolvePayeeForIncomingRow } from '@services/payees/resolve-payee-for-incoming-row';
 import {
@@ -360,6 +361,8 @@ export const createTransaction = withTransaction(
     applyAutomations = false,
     ...payload
   }: CreateTransactionParams): Promise<CreateTxResult> => {
+    if (applyAutomations) payload.externalData = { ...payload.externalData, applyAutomations: true };
+
     try {
       // Captured before the coercion below, which would hide a non-positive amount from
       // the planned-row invariants.
@@ -663,8 +666,7 @@ export const createTransaction = withTransaction(
           accountType,
           externalData: payload.externalData,
           transferNature,
-          isPlanned: Boolean(payload.isForecastOnly),
-          applyAutomations,
+          isForecastOnly: Boolean(payload.isForecastOnly),
         })
       ) {
         try {
@@ -721,11 +723,9 @@ export const createTransaction = withTransaction(
           }
         }
 
-        // Payee default tags. Only when the caller sent no tag list at all —
-        // an explicit `tagIds` (even `[]`) means the client already computed
-        // the final tag set (the transaction form applies payee tags
-        // client-side, where the user may have deselected some). Add-only,
-        // so it composes with rows that gained tags through other means.
+        // Payee default tags, add-only. An explicit `tagIds` (even `[]`) is the
+        // final tag set only when the caller also picked the payee. A payee
+        // resolved here was unknown to the caller, so its defaults merge on top.
         //
         // No catch-and-continue here: `applyPayeeDefaultTags` joins this
         // create's transaction via `withTransaction`, and a failed SQL
@@ -733,12 +733,23 @@ export const createTransaction = withTransaction(
         // error would just poison every subsequent query before commit.
         // Letting it propagate keeps the create atomic and surfaces a real
         // error to the caller instead of silently dropping tags.
-        if (tagIds === undefined) {
+        if (tagIds === undefined || !callerPayeeId) {
           await applyPayeeDefaultTags({
             accountOwnerUserId,
             transactionId: baseTransaction!.id,
             payeeId: resolvedPayeeId,
           });
+        }
+
+        // Same "caller didn't mention it" contract as tags: an explicit `location`
+        // (even null, the form's cleared state) is the client's final answer.
+        if (payload.location === undefined) {
+          const appliedLocation = await applyPayeeDefaultLocation({
+            accountOwnerUserId,
+            transactionId: baseTransaction!.id,
+            payeeId: resolvedPayeeId,
+          });
+          if (appliedLocation) transactions[0]!.location = appliedLocation;
         }
       }
 

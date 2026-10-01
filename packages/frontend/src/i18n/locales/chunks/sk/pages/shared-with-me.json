@@ -1,0 +1,35 @@
+{
+  "pages": {
+    "sharedWithMe": {
+      "title": "Zdieľané so mnou",
+      "loadError": "Nepodarilo sa načítať zdieľané zdroje.",
+      "empty": {
+        "title": "Zatiaľ s vami nebolo zdieľané nič",
+        "description": "Keď s vami niekto zdieľa účet, zobrazí sa to práve tu."
+      },
+      "sections": {
+        "account": "Účty",
+        "household": "Domácnosti",
+        "budget": "Rozpočty zdieľané s vami"
+      },
+      "sharedBy": "Zdieľané {handle}",
+      "viaHousehold": "Cez domácnosť {handle}",
+      "unnamedResource": "Bez názvu",
+      "permissions": {
+        "read": "Čítať",
+        "write": "Zapisovať",
+        "manage": "Spravovať"
+      },
+      "leave": "Odísť",
+      "leaveTitle": "Odísť zo zdieľania?",
+      "leaveDescription": "Stratíte prístup k {resource}, ktorého vlastníkom je {owner}. Vlastník o tom nebude informovaný.",
+      "leaveConfirm": "Odísť",
+      "leaveSuccess": "Odišli ste zo zdieľania.",
+      "leaveError": "Nepodarilo sa opustiť zdieľanie.",
+      "pending": {
+        "heading": "Čakajúce pozvánky",
+        "review": "Kontrola"
+      }
+    }
+  }
+}

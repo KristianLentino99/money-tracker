@@ -1,4 +1,4 @@
-# Self-host base stack for Budget Tracker — pull-based and reverse-proxy-agnostic.
+# Self-host base stack for MoneyMatter — pull-based and reverse-proxy-agnostic.
 #
 # Pulls the published images and exposes the whole app on ONE host port
 # (${HTTP_PORT:-8080}). The frontend container serves the SPA and reverse-proxies
@@ -46,7 +46,17 @@ services:
       db: { condition: service_healthy }
       redis: { condition: service_healthy }
       currency-rates-api: { condition: service_healthy }
-    env_file: .env
+    # Portainer stores the stack's variables as stack.env instead of .env, so
+    # both are optional and whichever exists is loaded.
+    env_file:
+      - { path: .env, required: false }
+      - { path: stack.env, required: false }
+    # Transaction attachments. Defaults to a Docker-managed volume; set
+    # ATTACHMENTS_PATH in .env to a host directory (absolute, or starting with
+    # ./) to keep them on a NAS/shared mount instead. The backend runs as user
+    # id 1001 and must be able to write to that directory – see ATTACHMENTS_PATH
+    # in docs/environment-reference.md for how to grant that.
+    volumes: ['${ATTACHMENTS_PATH:-attachments_data}:/app/packages/backend/data/attachments']
     environment:
       # Hardcoded, not read from .env: every stack started from this file is by
       # definition self-hosted, and `environment:` outranks `env_file:` so a
@@ -59,6 +69,10 @@ services:
       # stack has no use for them, so they default to disabled. Set
       # SYSTEM_DEMO_DISABLED=false in .env to allow them.
       SYSTEM_DEMO_DISABLED: ${SYSTEM_DEMO_DISABLED:-true}
+      # Hardcoded to the mount target above: a different in-container path would
+      # sit outside the volume and lose the files on container recreate. Move
+      # the storage with ATTACHMENTS_PATH, or set ATTACHMENTS_S3_BUCKET for S3/R2.
+      ATTACHMENTS_DIR: /app/packages/backend/data/attachments
     healthcheck:
       # BusyBox wget ships in the node:alpine image. `--spider` returns non-zero
       # on any non-2xx status, so this flips healthy only once /health answers.
@@ -86,13 +100,20 @@ services:
     # HTTP_PORT also accepts HTTP_PORT=127.0.0.1:8080 — then the port is only
     # reachable from this machine itself. Use that when a reverse proxy on the
     # same host fronts the app, so the plain-HTTP port isn't open to the world.
-    ports: ['${HTTP_PORT:-8080}:80']
+    # LISTEN_PORT is the port nginx binds inside the container. Raise it above
+    # 1024 (e.g. 8080) on hosts that reserve low ports for root, such as Synology.
+    ports: ['${HTTP_PORT:-8080}:${LISTEN_PORT:-80}']
     depends_on:
       backend: { condition: service_healthy }
     environment:
       # Hardcoded for the same reason as on the backend: the SPA needs to know
       # it is running self-hosted so its copy matches what the backend allows.
       IS_SELF_HOST: 'true'
+      # The landing page markets the hosted service, so "/" redirects straight
+      # to /dashboard (or sign-in when logged out). Set SKIP_LANDING=false in
+      # .env to serve the landing page instead.
+      SKIP_LANDING: ${SKIP_LANDING:-true}
+      LISTEN_PORT: ${LISTEN_PORT:-80}
       # Empty API_HTTP => same-origin mode: the SPA calls relative /api/v1 and
       # nginx inside this container proxies /api/ to BACKEND_URL. Set it to an
       # absolute API URL only if you serve the API from a separate origin.
@@ -130,7 +151,7 @@ services:
     # ports: ['127.0.0.1:${DB_HOST_PORT:-5432}:5432']
     environment:
       - POSTGRES_USER=${APPLICATION_DB_USERNAME}
-      - POSTGRES_PASSWORD=${APPLICATION_DB_PASSWORD}
+      - POSTGRES_PASSWORD=${APPLICATION_DB_PASSWORD:?not set - copy .env.example to .env and fill the REQUIRED section}
       - POSTGRES_DB=${APPLICATION_DB_DATABASE}
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
@@ -188,3 +209,4 @@ volumes:
   db_data:
   redis_data:
   currency_rates_data:
+  attachments_data:

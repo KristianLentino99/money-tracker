@@ -16,9 +16,15 @@
     "plan": "Budget",
     "planned": {
       "planned": "Previsioni",
-      "subscriptions": "Pagamenti ricorrenti"
+      "subscriptions": "Pagamenti ricorrenti",
+      "budgets": "Bilancio"
     },
-    "venture": "Venture"
+    "venture": "Venture",
+    "automations": "Automazioni",
+    "helpAndDocs": "Help & docs",
+    "appVersion": "Versione app {version}",
+    "home": "Home",
+    "more": "Altro"
   },
   "sidebar": {
     "settings": {
@@ -48,7 +54,9 @@
       "viaHousehold": "Condiviso tramite la famiglia di {handle}",
       "sharedBy": "Condiviso da {handle}",
       "needsReauthTooltip": "Connessione scaduta. Ricollega per riprendere la sincronizzazione."
-    }
+    },
+    "collapse": "Nascondi barra laterale",
+    "expand": "Mostra barra laterale"
   },
   "header": {
     "add": "Aggiungi",
@@ -61,7 +69,9 @@
       "synchronizing": "Sincronizzazione in corso...",
       "syncedTime": "Sincronizzato {time}",
       "syncingAccounts": "Sincronizzazione di {count} conti",
-      "stuck": "Sincronizzazione bloccata"
+      "stuck": "Sincronizzazione bloccata",
+      "connectBank": "Collega banca",
+      "failed": "Sincronizzazione non riuscita, alcuni account richiedono la tua attenzione"
     },
     "categorization": {
       "title": "Categorizzazione IA",
@@ -74,7 +84,13 @@
       "allSkipped": "L'IA non è riuscita a categorizzare con sicurezza la transazione | L'IA non è riuscita a categorizzare con sicurezza nessuna delle {count} transazioni",
       "queued": "In attesa di avvio...",
       "transactions": "transazioni"
-    }
+    },
+    "moreActions": "More ways to add data",
+    "importDataHint": "CSV file or bank statement",
+    "attachInvoice": "Allega fattura",
+    "attachInvoiceHint": "Troviamo la transazione a cui appartiene",
+    "feedback": "Invia feedback",
+    "support": "Supporto"
   },
   "themeSelector": {
     "light": "Chiaro",
@@ -115,7 +131,8 @@
       "weeksAgo": "{count} settimana fa | {count} settimane fa",
       "monthsAgo": "{count} Mese fa | {count} mesi fa",
       "yearsAgo": "{count} Anno fa | {count} anni fa"
-    }
+    },
+    "connectButton": "Connetti"
   },
   "banners": {
     "recoveryMethod": {
@@ -264,6 +281,14 @@
           "share-account": {
             "title": "Condividi un conto",
             "description": "Apri un conto qualsiasi e usa l'azione Condividi per concedere a un singolo utente l'accesso in lettura o scrittura."
+          },
+          "create-budget": {
+            "title": "Imposta un budget",
+            "description": "Crea limiti di spesa per ogni categoria"
+          },
+          "connect-bank": {
+            "title": "Collega un conto bancario",
+            "description": "Sincronizza le transazioni automaticamente"
           }
         },
         "ui": {
@@ -278,7 +303,48 @@
           "progressText": "{completed} di {total} completate",
           "categoryProgress": "{completed} di {total} completate"
         }
+      },
+      "connectBank": {
+        "title": "Collega la tua banca",
+        "description": "Sincronizza automaticamente le transazioni dalla tua banca"
       }
     }
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Lascia un feedback",
+      "description": "Diteci cosa funziona e cosa no.",
+      "typeLabel": "Tipologia",
+      "typePlaceholder": "Scegli una tipologia",
+      "types": {
+        "bug": "Qualcosa è andato storto",
+        "featureRequest": "Richiedo una funzionalità",
+        "other": "Altro..."
+      },
+      "docsHint": "Not sure how something works? Check the {link} first.",
+      "docsHintLink": "docs",
+      "messageLabel": "La tua opinione",
+      "messagePlaceholder": "Cos'è successo o cosa vorresti vedere?",
+      "messageRequired": "Scrivi un messaggio...",
+      "submit": "Invia",
+      "thanks": "Grazie, leggiamo ogni messaggio.",
+      "unavailable": "L'invio non è disponibile in questo momento. Usa il link qui sotto!",
+      "or": "oppure",
+      "board": {
+        "title": "Posta sul Forum",
+        "description": "Vota le idee degli altri, vedi quelle già pianificate e ricevi una risposta alle tue."
+      }
+    }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Conti",
+      "description": "Gestisci conti, prestiti, investimenti e beni delle attività."
+    },
+    "more": {
+      "title": "Altro",
+      "description": "Esplora analisi, strumenti di pianificazione, importazioni e impostazioni."
+    },
+    "addTransaction": "Aggiungi transazione"
   }
 }
