@@ -65,7 +65,6 @@ const MAX_WINDOW_MS = 44 * 24 * 60 * 60 * 1000;
  * older history on demand via the "load transactions for period" picker.
  */
 const INITIAL_BACKFILL_DAYS = 180;
-const SIMPLEFIN_EXPECTED_AUTH_CODES = new Set(['gen.auth', 'con.auth']);
 
 /** Per-account slice of a batched windowed `/accounts` fetch. */
 interface AccountTransactionsBucket {
@@ -945,13 +944,19 @@ export class SimplefinProvider extends BaseBankDataProvider {
     const legacy = accountSet.errors ?? [];
 
     for (const err of structured) {
-      // gen.auth is re-link churn already surfaced by the ForbiddenError; con.auth is the
-      // user's bank asking them to re-authenticate. Neither is an app fault, so both stay out of Sentry.
-      const log = SIMPLEFIN_EXPECTED_AUTH_CODES.has(err.code) ? logger.info : logger.warn;
-      log(`[SimpleFIN] Bridge error ${err.code}: ${err.msg}`);
+      // act.*/con.* are per-institution conditions and gen.auth is surfaced by the ForbiddenError,
+      // so none are app faults. Other codes keep a fixed warn message so Sentry groups them per code.
+      if (err.code === 'gen.auth' || err.code.startsWith('act.') || err.code.startsWith('con.')) {
+        logger.info(`[SimpleFIN] Bridge error ${err.code}: ${err.msg}`);
+      } else {
+        logger.warn(`[SimpleFIN] Bridge error ${err.code}`, { bridgeMessage: err.msg });
+      }
     }
-    for (const msg of legacy) {
-      logger.warn(`[SimpleFIN] Bridge warning: ${msg}`);
+    // v2 bridges repeat every errlist entry as a legacy `errors` string.
+    if (structured.length === 0) {
+      for (const msg of legacy) {
+        logger.warn(`[SimpleFIN] Bridge warning: ${msg}`);
+      }
     }
 
     const authErrors = structured.filter((e) => e.code === 'gen.auth');
