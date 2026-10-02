@@ -176,3 +176,14 @@ packages/backend/src/i18n/locales/*.missing.json
 # Python bytecode from local tooling
 __pycache__/
 .scratch
+
+# Lightsail IaC local state, plans, credentials, and migration backups.
+deploy/aws/lightsail/.terraform/
+deploy/aws/lightsail/*.tfstate*
+deploy/aws/lightsail/*.tfplan
+deploy/aws/lightsail/.migration/
+deploy/aws/lightsail/*.tfvars
+deploy/aws/lightsail/*.tfvars.json
+!deploy/aws/lightsail/production.auto.tfvars.json
+deploy/aws/lightsail/*.pem
+deploy/aws/lightsail/crash*.log
