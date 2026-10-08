@@ -21,6 +21,10 @@
         "title": "Simboli di valuta",
         "description": "Come gli importi mostrano la loro valuta. I simboli sostituiscono le sigle. Le valute che condividono un simbolo (USD, CAD, AUD, SGD) usano tutte lo stesso simbolo.",
         "narrowSymbol": "Usa simboli di valuta brevi"
+      },
+      "sidebarNav": {
+        "title": "Navigazione nella barra laterale",
+        "description": "Scegli quali pagine mostrare sotto Conti nella barra laterale."
       }
     }
   }

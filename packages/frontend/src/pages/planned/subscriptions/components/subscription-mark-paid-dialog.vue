@@ -8,6 +8,7 @@ import { VUE_QUERY_GLOBAL_PREFIXES } from '@/common/const';
 import { getAccountDisplayLabel } from '@/common/utils/account-display';
 import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import ResponsiveDialog from '@/components/common/responsive-dialog.vue';
+import { isConnectedAccount } from '@/components/dialogs/manage-transaction/helpers';
 import PickTransactionDialog from '@/components/dialogs/pick-transaction-dialog.vue';
 import AccountSelectField from '@/components/fields/account-select-field.vue';
 import DateField from '@/components/fields/date-field.vue';
@@ -51,7 +52,7 @@ interface PayableSubscription {
   periodDueDate?: string;
 }
 
-/** How an account-less payment is recorded: status-only vs. a booked expense. */
+/** Payment choices: schedule status, a booked expense, or an existing transaction. */
 type RecordMode = 'mark' | 'transaction' | 'link';
 
 const { t } = useI18n();
@@ -59,7 +60,7 @@ const queryClient = useQueryClient();
 const invalidateSubscriptionQueries = useInvalidateSubscriptionQueries();
 const { addSuccessNotification, addErrorNotification } = useNotificationCenter();
 const accountsStore = useAccountsStore();
-const { accountsRecord } = storeToRefs(accountsStore);
+const { accountsRecord, txTargetableSourceAccountsActiveFirst } = storeToRefs(accountsStore);
 const { resolveDefaultAccount } = useAccountDropdownPrefs();
 
 const emit = defineEmits<{
@@ -125,13 +126,16 @@ const overpayAmountDisplay = computed(() => {
     : '';
 });
 
-/** A subscription with an account starts in transaction mode; linking stays available from the same dialog. */
+/** An assigned account determines whether payment fields need an account picker. */
 const hasAccount = computed(() => activeSubscription.value?.accountId != null);
+const hasBankAccount = computed(() => {
+  const accountId = activeSubscription.value?.accountId;
+  const account = accountId ? accountsRecord.value[accountId] : undefined;
+  return !!account && isConnectedAccount({ account });
+});
 
 /** Whether the account/amount/date fields are shown (booking a real transaction). */
 const isBooking = computed(() => recordMode.value === 'transaction');
-
-const allAccounts = computed(() => accountsStore.accounts ?? []);
 
 const selectedAccount = computed(() =>
   selectedAccountId.value ? (accountsRecord.value[selectedAccountId.value] ?? null) : null,
@@ -178,6 +182,7 @@ const isConfirmDisabled = computed(() => {
   if (recordMode.value === 'link') return true;
   // Plain "just mark as paid" needs no input.
   if (!isBooking.value) return false;
+  if (hasBankAccount.value) return true;
   // Booking against a not-yet-linked account requires picking one.
   if (!hasAccount.value && !selectedAccountId.value) return true;
   return !amount.value || Number(amount.value) <= 0;
@@ -205,8 +210,10 @@ async function triggerPay({
   activeSubscription.value = subscription;
   activePeriodId.value = periodId;
   activePeriodDueDate.value = periodDueDate ?? subscription.periodDueDate ?? null;
-  recordMode.value = subscription.accountId == null ? 'mark' : 'transaction';
-  selectedAccountId.value = resolveDefaultAccount({ accounts: allAccounts.value, fallbackToFirst: false })?.id ?? null;
+  recordMode.value = subscription.accountId == null || hasBankAccount.value ? 'mark' : 'transaction';
+  selectedAccountId.value =
+    resolveDefaultAccount({ accounts: txTargetableSourceAccountsActiveFirst.value, fallbackToFirst: false })?.id ??
+    null;
   amount.value = subscription.expectedAmount != null ? String(subscription.expectedAmount) : '';
   paidDate.value = new Date();
   estimate.value = null;
@@ -307,7 +314,7 @@ defineExpose({ triggerPay, isPending });
       <!-- Choose whether to create a payment, only advance the schedule, or link an existing payment. -->
       <RadioGroup v-model="recordMode" class="grid gap-3">
         <Label
-          v-if="!hasAccount"
+          v-if="!hasAccount || hasBankAccount"
           :class="
             cn(
               'border-input hover:bg-accent hover:text-accent-foreground flex cursor-pointer flex-col gap-1 rounded-md border p-3 transition-colors',
@@ -324,6 +331,7 @@ defineExpose({ triggerPay, isPending });
           </span>
         </Label>
         <Label
+          v-if="!hasBankAccount"
           :class="
             cn(
               'border-input hover:bg-accent hover:text-accent-foreground flex cursor-pointer flex-col gap-1 rounded-md border p-3 transition-colors',
@@ -365,7 +373,7 @@ defineExpose({ triggerPay, isPending });
         <AccountSelectField
           v-if="!hasAccount"
           :model-value="selectedAccount"
-          :accounts="allAccounts"
+          :accounts="txTargetableSourceAccountsActiveFirst"
           :label="$t('dialogs.subscriptionMarkPaid.accountLabel')"
           :placeholder="$t('dialogs.subscriptionMarkPaid.accountPlaceholder')"
           @update:model-value="(account: AccountModel | null) => (selectedAccountId = account?.id ?? null)"

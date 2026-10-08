@@ -310,6 +310,8 @@ export function createImportJobQueue<
         jobId: job?.id,
         userId: job?.data.userId,
       });
+      // Jobs carry no batch identifier, so unfinished batches retain the undo age
+      // guard: another import for this user may still be writing to its batch.
     } else {
       logger.error({ message: `[${logLabel} Worker] Job ${job?.id} failed`, error: err });
     }

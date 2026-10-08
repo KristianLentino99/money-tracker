@@ -116,7 +116,7 @@
             "6": "Letzte 6 Monate",
             "12": "Letzte 12 Monate"
           },
-          "showStrip": "Show 30-day chart"
+          "showStrip": "30-Tage-Diagramm anzeigen"
         }
       },
       "categoryTracker": {
@@ -128,12 +128,12 @@
         "title": "Cashflow",
         "description": "Zeigt deine Nettoersparnis: Einnahmen abzüglich Ausgaben für den gewählten Zeitraum, mit Trend aus vorherigen Zeiträumen",
         "vsPrevious": "gegenüber Vorperiode",
+        "notAvailable": "N/A",
         "income": "Einnahmen",
         "expenses": "Ausgaben",
         "saved": "Gespart",
         "previousPeriodsTrend": "Trend vorheriger Zeiträume",
-        "viewDetails": "Details anzeigen",
-        "notAvailable": "N/A"
+        "viewDetails": "Details anzeigen"
       },
       "netWorth": {
         "title": "Nettovermögen",
@@ -171,8 +171,8 @@
       },
       "plannedOverview": {
         "title": "Geplant",
-        "projectedBy": "Projected by {date}",
-        "upcoming": "Upcoming · {count}",
+        "projectedBy": "Hochgerechnet bis {date}",
+        "upcoming": "Anstehend · {count}",
         "loadFailed": "Geplante Transaktionen konnten nicht geladen werden"
       },
       "emptyState": "Keine Daten im ausgewählten Zeitintervall vorhanden.",
@@ -216,6 +216,43 @@
         "fireProgress": {
           "name": "FIRE-Fortschritt",
           "description": "Wie nah du der finanziellen Unabhängigkeit bist"
+        },
+        "taxes": {
+          "name": "Average Tax Rate",
+          "description": "Share of income paid in taxes, with a 12-month trend"
+        }
+      },
+      "taxes": {
+        "title": "Average Tax Rate",
+        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
+        "ofIncome": "of income",
+        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
+        "average": "avg {amount}",
+        "amount": "Taxes",
+        "shareOfIncome": "Share of income",
+        "shareOfTaxes": "Share of taxes",
+        "other": "Other",
+        "moreCategories": "{count} more",
+        "viewDetails": "View cash flow",
+        "loadFailed": "Couldn't load tax data.",
+        "noCategories": {
+          "title": "No tax categories yet",
+          "description": "Choose which categories count as taxes to see your tax rate.",
+          "action": "Choose categories"
+        },
+        "config": {
+          "months": {
+            "label": "Averaging period",
+            "saveError": "Could not save the averaging period. Try again.",
+            "m3": "3 mo",
+            "m6": "6 mo",
+            "m12": "12 mo"
+          }
+        },
+        "lastMonths": {
+          "m3": "Last 3 months",
+          "m6": "Last 6 months",
+          "m12": "Last 12 months"
         }
       }
     },
@@ -233,17 +270,17 @@
   "widgets": {
     "subscriptionsOverview": {
       "payAction": "Bezahlt",
-      "listTitle": "Upcoming",
-      "dueCount": "{count} due",
-      "nothingDue": "Nothing due in 3 days",
-      "overdueHint": "Overdue since {date}",
-      "dueSoonHint": "Due in the next 3 days",
+      "listTitle": "Bevorstehend",
+      "dueCount": "{count} fällig",
+      "nothingDue": "Nichts fällig in 3 Tagen",
+      "overdueHint": "Überfällig seit {date}",
+      "dueSoonHint": "Fällig in den nächsten 3 Tagen",
       "strip": {
-        "title": "Next 30 days",
-        "goingOut": "{amount} going out",
+        "title": "Nächste 30 Tage",
+        "goingOut": "{amount} Abgänge",
         "today": "Heute"
       },
-      "loadFailed": "Couldn't load recurring payments"
+      "loadFailed": "Wiederkehrende Zahlungen konnten nicht geladen werden"
     },
     "latestRecords": {
       "config": {
@@ -263,9 +300,9 @@
         "excludePlannedDescription": "Ausstehende geplante Transaktionen aus der Liste ausblenden",
         "nothingExcluded": "Nichts ausgeschlossen",
         "tagsStyleTitle": "Tags",
-        "tagsStyleNames": "Names",
-        "tagsStyleBars": "Bars",
-        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+        "tagsStyleNames": "Namen",
+        "tagsStyleBars": "Balken",
+        "tagsStyleSaveError": "Tag-Stil konnte nicht gespeichert werden. Bitte versuche es erneut."
       },
       "overdueBadge": "Überfällig",
       "scheduledBadge": "Geplant",

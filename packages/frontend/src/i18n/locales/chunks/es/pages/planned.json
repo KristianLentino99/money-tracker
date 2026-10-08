@@ -126,7 +126,8 @@
           "1_week": "1 semana antes",
           "2_weeks": "2 semanas antes",
           "1_month": "1 mes antes"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "e.g. 12"
       },
       "progress": {
         "title": "Progreso de cuotas",
@@ -339,7 +340,8 @@
           "summaryManual": "Usted marca los pagos como pagados",
           "selectTransactionType": "Seleccionar un tipo",
           "removeRule": "Eliminar regla",
-          "removeKeyword": "Eliminar palabra clave"
+          "removeKeyword": "Eliminar palabra clave",
+          "recordNeedsManualAccount": "Auto-record can't book onto a bank-connected account – its transactions come from the bank sync. Pick a manual account or use matching instead."
         },
         "organize": {
           "title": "Organización",

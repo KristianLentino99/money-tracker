@@ -300,7 +300,8 @@
       "accountNoExternalId": "Il conto Walutomat non ha un ID esterno.",
       "walletNotFound": "Portafoglio Walutomat non trovato per la valuta: {{currency}}"
     },
-    "accountAlreadyConnectedToAnotherConnection": "Account \"{{account}}\" is already connected through \"{{connection}}\". Disconnect it there first."
+    "accountAlreadyConnectedToAnotherConnection": "Account \"{{account}}\" is already connected through \"{{connection}}\". Disconnect it there first.",
+    "providerNotAvailable": "Questo servizio bancario non è disponibile per nuove connessioni."
   },
   "csvImport": {
     "headersCannotBeParsed": "Impossibile analizzare le intestazioni.",
@@ -585,7 +586,9 @@
     "batchDeleteLinkedLoanTransfer": "This import is linked to a loan payment and can't be undone on its own. Enable \"also delete linked transfer transactions\" to remove it.",
     "batchDeleteInProgress": "An import batch is already being deleted. Wait for it to finish before starting another.",
     "statementImportInProgress": "A statement import is already running. Wait for it to finish before starting another one.",
-    "importInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto questa importazione. Le transazioni già salvate sono state mantenute. Elimina questa importazione dalla \"Cronologia importazioni\" prima di importare di nuovo il file, altrimenti le transazioni verranno duplicate."
+    "importInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto questa importazione. Le transazioni già salvate sono state mantenute. Elimina questa importazione dalla \"Cronologia importazioni\" prima di importare di nuovo il file, altrimenti le transazioni verranno duplicate.",
+    "batchDeleteImportStillRunning": "Questa importazione è ancora in corso. Attendi che termini prima di annullarla.",
+    "importIntoBankLinkedAccount": "Il conto \"{{accountName}}\" è collegato a una banca, quindi non è possibile importarvi transazioni. Scegli un altro conto o creane uno nuovo."
   },
   "transactionTemplates": {
     "notFound": "Transaction template not found.",

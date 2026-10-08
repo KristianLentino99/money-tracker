@@ -241,6 +241,11 @@
             "openInNewTab": "Apri in una nuova scheda",
             "download": "Scarica"
           }
+        },
+        "duplicateButton": "Duplica",
+        "createMore": {
+          "label": "Crea altre transazioni",
+          "createdToast": "Transazione creata"
         }
       },
       "investmentContribution": {

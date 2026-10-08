@@ -238,6 +238,13 @@
         "errors": {
           "connectFailed": "Impossibile connettersi a SimpleFIN. Controlla il tuo token di configurazione e riprova.",
           "importFailed": "Impossibile importare i conti. Riprova."
+        },
+        "brokerageNotice": {
+          "trigger": "Sono supportati solo i conti bancari, non i conti di investimento",
+          "title": "Cosa può importare SimpleFIN",
+          "supported": "I conti bancari, come conti correnti, conti di risparmio e carte di credito, sono pienamente supportati. Saldi e transazioni si sincronizzano automaticamente.",
+          "unsupported": "I conti di investimento e previdenziali (azioni, ETF, criptovalute, 401k, IRA) non sono supportati. Neppure SimpleFIN li supporta pienamente: non indica quali conti sono di investimento e fornisce le posizioni in un formato non ufficiale che può cambiare in qualsiasi momento.",
+          "tryAnyway": "Puoi comunque provare a collegarli: verranno importati come conti normali con il saldo e le transazioni di liquidità forniti da SimpleFIN, ma le posizioni non saranno visibili. Il corretto funzionamento non è garantito."
         }
       },
       "walutomat": {

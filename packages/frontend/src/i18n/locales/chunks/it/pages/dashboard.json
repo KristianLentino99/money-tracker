@@ -219,6 +219,43 @@
         "fireProgress": {
           "name": "Progressi FIRE",
           "description": "Quanto sei vicino all'indipendenza finanziaria"
+        },
+        "taxes": {
+          "name": "Aliquota fiscale media",
+          "description": "Quota delle entrate destinata alle imposte, con andamento su 12 mesi"
+        }
+      },
+      "taxes": {
+        "title": "Aliquota fiscale media",
+        "description": "Spese nelle categorie fiscali come quota delle entrate, calcolata in media sul periodo scelto nelle impostazioni del widget. Le barre mostrano gli ultimi 12 mesi.",
+        "ofIncome": "delle entrate",
+        "vsTrailingRate": "{delta} punti percentuali rispetto all’aliquota su 12 mesi del {rate}",
+        "average": "media {amount}",
+        "amount": "Imposte",
+        "shareOfIncome": "Quota delle entrate",
+        "shareOfTaxes": "Quota delle imposte",
+        "other": "Altro",
+        "moreCategories": "altre {count}",
+        "viewDetails": "Visualizza flusso di cassa",
+        "loadFailed": "Impossibile caricare i dati fiscali.",
+        "noCategories": {
+          "title": "Nessuna categoria fiscale impostata",
+          "description": "Scegli quali categorie rappresentano le imposte per visualizzare la tua aliquota fiscale.",
+          "action": "Scegli categorie"
+        },
+        "config": {
+          "months": {
+            "label": "Periodo per il calcolo della media",
+            "saveError": "Impossibile salvare il periodo per il calcolo della media. Riprova.",
+            "m3": "3 mesi",
+            "m6": "6 mesi",
+            "m12": "12 mesi"
+          }
+        },
+        "lastMonths": {
+          "m3": "Ultimi 3 mesi",
+          "m6": "Ultimi 6 mesi",
+          "m12": "Ultimi 12 mesi"
         }
       }
     },

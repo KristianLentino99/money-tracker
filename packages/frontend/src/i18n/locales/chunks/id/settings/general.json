@@ -93,6 +93,12 @@
         "placeholder": "Select a payment type",
         "successNotification": "Default payment type updated",
         "errorNotification": "Failed to update default payment type"
+      },
+      "taxCategories": {
+        "label": "Tax categories",
+        "description": "Spending in these categories is shown as taxes in the money flow chart instead of as an expense. Subcategories are included.",
+        "successNotification": "Tax categories updated",
+        "errorNotification": "Failed to update tax categories"
       }
     }
   }

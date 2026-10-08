@@ -8,18 +8,16 @@ import {
   ChevronRightIcon,
   CreditCardIcon,
   GroupIcon,
-  HandCoinsIcon,
   LayersIcon,
   LayoutDashboardIcon,
   RepeatIcon,
-  RocketIcon,
-  TrendingUpIcon,
   WalletIcon,
   WrenchIcon,
   ZapIcon,
 } from '@lucide/vue';
 import { watch } from 'vue';
 
+import { useAccountsNavChildren } from './nav-items';
 import { useSidebarNavCollapse } from './use-nav-collapse';
 import { useSidebarNavRoutes } from './use-nav-routes';
 
@@ -29,6 +27,8 @@ const navItemBase = 'w-full gap-2 px-3';
 const navItemActive = 'bg-primary/10 text-foreground';
 const navIconBase = 'size-4 shrink-0';
 const navIconActive = 'text-primary-text';
+
+const accountsNavChildren = useAccountsNavChildren();
 
 const { isAccountsOpen, isTransactionsOpen, isForecastOnlyOpen } = useSidebarNavCollapse();
 const { isAccountsRoute, isTransactionsRoute, isPlannedRoute: isForecastOnlyRoute } = useSidebarNavRoutes();
@@ -98,7 +98,18 @@ watch(
       </ui-button>
     </router-link>
 
-    <Collapsible v-model:open="isAccountsOpen">
+    <router-link v-if="accountsNavChildren.length === 1" :to="{ name: ROUTES_NAMES.accounts }">
+      <ui-button
+        variant="ghost"
+        as="span"
+        :class="[navItemBase, 'justify-start', isAccountsRoute && navItemActive]"
+        size="default"
+      >
+        <LayersIcon :class="[navIconBase, isAccountsRoute && navIconActive]" />
+        <span>{{ $t('navigation.accounts') }}</span>
+      </ui-button>
+    </router-link>
+    <Collapsible v-else v-model:open="isAccountsOpen">
       <CollapsibleTrigger class="w-full">
         <ui-button
           variant="ghost"
@@ -115,48 +126,20 @@ watch(
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div class="border-border/40 mt-1 ml-2 grid gap-0.5 border-l pl-2">
-          <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.accounts }">
+          <router-link
+            v-for="child in accountsNavChildren"
+            :key="child.routeName"
+            v-slot="{ isActive }"
+            :to="{ name: child.routeName }"
+          >
             <ui-button
               variant="ghost"
               as="span"
               :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
               size="sm"
             >
-              <WalletIcon :class="[navIconBase, isActive && navIconActive]" />
-              <span>{{ $t('navigation.accountsList') }}</span>
-            </ui-button>
-          </router-link>
-          <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.loans }">
-            <ui-button
-              variant="ghost"
-              as="span"
-              :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
-              size="sm"
-            >
-              <HandCoinsIcon :class="[navIconBase, isActive && navIconActive]" />
-              <span>{{ $t('navigation.loans') }}</span>
-            </ui-button>
-          </router-link>
-          <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.investments }">
-            <ui-button
-              variant="ghost"
-              as="span"
-              :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
-              size="sm"
-            >
-              <TrendingUpIcon :class="[navIconBase, isActive && navIconActive]" />
-              <span>{{ $t('navigation.investments') }}</span>
-            </ui-button>
-          </router-link>
-          <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.venture }">
-            <ui-button
-              variant="ghost"
-              as="span"
-              :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
-              size="sm"
-            >
-              <RocketIcon :class="[navIconBase, isActive && navIconActive]" />
-              <span>{{ $t('navigation.venture') }}</span>
+              <component :is="child.icon" :class="[navIconBase, isActive && navIconActive]" />
+              <span>{{ $t(child.labelKey) }}</span>
             </ui-button>
           </router-link>
         </div>

@@ -15,6 +15,8 @@ import { connection } from './connection';
 import CurrenciesModel from './currencies.model';
 import ExchangeRatesModel from './exchange-rates.model';
 import FeatureUsagesModel from './feature-usages.model';
+import ImportBatchAccountEffectsModel from './import-batch-account-effects.model';
+import ImportBatchesModel from './import-batches.model';
 import HoldingsModel from './investments/holdings.model';
 import InvestmentTransactionModel from './investments/investment-transaction.model';
 import ManualPortfolioTransactionModel from './investments/manual-portfolio-transaction.model';
@@ -167,6 +169,8 @@ const models = [
   LoanDetailsModel,
   TransactionAutomationsModel,
   TransactionAttachmentsModel,
+  ImportBatchesModel,
+  ImportBatchAccountEffectsModel,
 ];
 
 const sequelize = new Sequelize({

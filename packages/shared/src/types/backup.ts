@@ -54,6 +54,7 @@ export const BACKUP_FILE_NAMES = [
   'loan-details',
   'transaction-groups',
   'plans',
+  'import-batches',
   // tier 4
   'transactions',
   'vehicle-maintenance-plans',
@@ -67,6 +68,7 @@ export const BACKUP_FILE_NAMES = [
   'portfolio-transfers',
   'venture-events',
   'subscription-candidates',
+  'import-batch-account-effects',
   // tier 5
   'plan-periods',
   'plan-category-memberships',

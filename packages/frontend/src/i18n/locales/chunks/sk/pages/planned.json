@@ -128,7 +128,8 @@
           "1_week": "1 týždeň vopred",
           "2_weeks": "2 týždne vopred",
           "1_month": "1 mesiac vopred"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "e.g. 12"
       },
       "progress": {
         "title": "Priebeh splácania",
@@ -341,7 +342,8 @@
           "summaryManual": "Platby označujete ako zaplatené vy",
           "selectTransactionType": "Vyberte typ",
           "removeRule": "Odstrániť pravidlo",
-          "removeKeyword": "Odstrániť kľúčové slovo"
+          "removeKeyword": "Odstrániť kľúčové slovo",
+          "recordNeedsManualAccount": "Auto-record can't book onto a bank-connected account – its transactions come from the bank sync. Pick a manual account or use matching instead."
         },
         "organize": {
           "title": "Usporiadanie",

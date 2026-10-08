@@ -241,7 +241,12 @@
           }
         },
         "recurringPaymentLabel": "Recurring payment (optional)",
-        "recurringPaymentPlaceholder": "Select a recurring payment"
+        "recurringPaymentPlaceholder": "Select a recurring payment",
+        "duplicateButton": "Duplicate",
+        "createMore": {
+          "label": "Create more",
+          "createdToast": "Transaction created"
+        }
       },
       "investmentContribution": {
         "title": "投资买入",

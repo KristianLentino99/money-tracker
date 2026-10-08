@@ -96,16 +96,25 @@ export interface UI_FORM_STRUCT {
   investmentContribution?: InvestmentContributionForm | null;
 }
 
-/** Creation-mode starting values. Narrow on purpose: prefilling anything else is unsupported. */
-export type TransactionPrefill = Pick<
-  UI_FORM_STRUCT,
-  | 'type'
-  | 'account'
-  | 'amount'
-  | 'time'
-  | 'note'
-  | 'externalReference'
-  | 'externalUrl'
-  | 'originalAmount'
-  | 'originalCurrency'
->;
+/** Creation-mode starting values. */
+export type TransactionPrefill = Pick<UI_FORM_STRUCT, 'type' | 'account' | 'amount' | 'time'> &
+  Partial<
+    Pick<
+      UI_FORM_STRUCT,
+      | 'category'
+      | 'payeeId'
+      | 'tagIds'
+      | 'paymentType'
+      | 'latitude'
+      | 'longitude'
+      | 'isForecastOnly'
+      | 'splits'
+      | 'toAccount'
+      | 'targetAmount'
+      | 'note'
+      | 'externalReference'
+      | 'externalUrl'
+      | 'originalAmount'
+      | 'originalCurrency'
+    >
+  >;

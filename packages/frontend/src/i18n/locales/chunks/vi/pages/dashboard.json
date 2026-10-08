@@ -19,7 +19,7 @@
           "accounts": "Tài khoản",
           "portfolios": "Portfolios",
           "ventures": "Ventures",
-          "vehicles": "Vehicles",
+          "vehicles": "Phương tiện",
           "loans": "Loans"
         },
         "tooltip": {
@@ -68,7 +68,7 @@
         },
         "componentsSettings": {
           "description": "Choose which components count toward the Total balance line.",
-          "vehicles": "Vehicles",
+          "vehicles": "Phương tiện",
           "ventures": "Ventures",
           "loans": "Loans",
           "loansTooltip": "When on, your outstanding loan balances are subtracted from the total (true net worth). When off, loans are ignored so the total shows assets only.",
@@ -128,12 +128,12 @@
         "title": "Cash Flow",
         "description": "Shows your net savings: income minus expenses for the selected period, with a trend of previous periods",
         "vsPrevious": "vs previous",
+        "notAvailable": "N/A",
         "income": "Income",
         "expenses": "Expenses",
         "saved": "Saved",
         "previousPeriodsTrend": "Previous periods trend",
-        "viewDetails": "View details",
-        "notAvailable": "N/A"
+        "viewDetails": "View details"
       },
       "netWorth": {
         "title": "Net Worth",
@@ -148,13 +148,13 @@
         "loadFailed": "Couldn't load net worth data.",
         "components": {
           "ventures": "Ventures",
-          "vehicles": "Vehicles",
+          "vehicles": "Phương tiện",
           "loans": "Loans"
         },
         "settings": {
           "title": "Include in net worth",
           "loans": "Loans",
-          "vehicles": "Vehicles",
+          "vehicles": "Phương tiện",
           "ventures": "Ventures"
         },
         "trendTooltip": {
@@ -216,6 +216,43 @@
         "fireProgress": {
           "name": "FIRE progress",
           "description": "How close you are to financial independence"
+        },
+        "taxes": {
+          "name": "Average Tax Rate",
+          "description": "Share of income paid in taxes, with a 12-month trend"
+        }
+      },
+      "taxes": {
+        "title": "Average Tax Rate",
+        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
+        "ofIncome": "of income",
+        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
+        "average": "avg {amount}",
+        "amount": "Taxes",
+        "shareOfIncome": "Share of income",
+        "shareOfTaxes": "Share of taxes",
+        "other": "Other",
+        "moreCategories": "{count} more",
+        "viewDetails": "View cash flow",
+        "loadFailed": "Couldn't load tax data.",
+        "noCategories": {
+          "title": "No tax categories yet",
+          "description": "Choose which categories count as taxes to see your tax rate.",
+          "action": "Choose categories"
+        },
+        "config": {
+          "months": {
+            "label": "Averaging period",
+            "saveError": "Could not save the averaging period. Try again.",
+            "m3": "3 mo",
+            "m6": "6 mo",
+            "m12": "12 mo"
+          }
+        },
+        "lastMonths": {
+          "m3": "Last 3 months",
+          "m6": "Last 6 months",
+          "m12": "Last 12 months"
         }
       }
     },

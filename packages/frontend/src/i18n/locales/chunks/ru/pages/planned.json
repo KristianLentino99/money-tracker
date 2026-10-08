@@ -128,7 +128,8 @@
           "1_week": "За 1 неделю",
           "2_weeks": "За 2 недели",
           "1_month": "За 1 месяц"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "e.g. 12"
       },
       "progress": {
         "title": "Прогресс рассрочки",
@@ -341,7 +342,8 @@
           "summaryManual": "Вы отмечаете платежи как оплаченные вручную",
           "selectTransactionType": "Выберите тип",
           "removeRule": "Удалить правило",
-          "removeKeyword": "Удалить ключевое слово"
+          "removeKeyword": "Удалить ключевое слово",
+          "recordNeedsManualAccount": "Auto-record can't book onto a bank-connected account – its transactions come from the bank sync. Pick a manual account or use matching instead."
         },
         "organize": {
           "title": "Организация",

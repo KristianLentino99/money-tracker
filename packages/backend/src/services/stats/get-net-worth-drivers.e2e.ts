@@ -1119,24 +1119,30 @@ describe('GET /stats/net-worth-drivers', () => {
       await setPrice({ securityId: usdSecurity.id, date: '2025-12-31', price: '120' });
       await setPrice({ securityId: usdSecurity.id, date: JAN.end, price: '120' });
 
-      // 1 USD = 4 AED, seeded inside the report's rate-fetch window so the per-day
-      // walk carries it forward to Jan 31.
-      await ExchangeRates.create({
-        baseCode: API_LAYER_BASE_CURRENCY_CODE,
-        quoteCode: global.BASE_CURRENCY_CODE,
-        rate: 4,
-        date: new Date('2025-12-31T00:00:00.000Z'),
-      });
+      // Isolate the pair so an in-window rate from another test cannot override
+      // the fixture's USD->AED rate of 4 as the report walks forward to Jan 31.
+      const baseRatesWhere = { baseCode: API_LAYER_BASE_CURRENCY_CODE, quoteCode: global.BASE_CURRENCY_CODE };
+      const storedBaseRates = (await ExchangeRates.findAll({ where: baseRatesWhere, raw: true })).map(
+        ({ baseCode, quoteCode, date, rate, source }) => ({ baseCode, quoteCode, date, rate, source }),
+      );
+      await ExchangeRates.destroy({ where: baseRatesWhere });
 
-      const { buckets } = await helpers.getNetWorthDrivers({
-        from: JAN.start,
-        to: JAN.end,
-        granularity: 'monthly',
-        raw: true,
-      });
+      try {
+        await ExchangeRates.create({ ...baseRatesWhere, rate: 4, date: new Date('2025-12-31T00:00:00.000Z') });
 
-      // 10 shares x $120 x 4 AED/USD.
-      expect(buckets[0]!.composition.holdingsValue).toBe(4800);
+        const { buckets } = await helpers.getNetWorthDrivers({
+          from: JAN.start,
+          to: JAN.end,
+          granularity: 'monthly',
+          raw: true,
+        });
+
+        // 10 shares x $120 x 4 AED/USD.
+        expect(buckets[0]!.composition.holdingsValue).toBe(4800);
+      } finally {
+        await ExchangeRates.destroy({ where: baseRatesWhere });
+        await ExchangeRates.bulkCreate(storedBaseRates, { ignoreDuplicates: true });
+      }
     });
 
     it('flags a currency with no rate as a 1:1 fallback in degraded.fxFallbackCurrencies', async () => {

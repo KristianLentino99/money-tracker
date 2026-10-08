@@ -192,7 +192,7 @@
     },
     {
       "name": "delete_payee",
-      "description": "Delete a Payee. Linked transactions retain their categoryId but their payeeId is set to null. Use cautiously — this is irreversible."
+      "description": "Delete a Payee. Linked transactions retain their categoryId but their payeeId is set to null. Use cautiously — this is irreversible. Requires finance:delete scope."
     },
     {
       "name": "delete_plan",
@@ -200,7 +200,7 @@
     },
     {
       "name": "delete_plan_category_target",
-      "description": "Remove a category target from a plan. Requires finance:write scope."
+      "description": "Permanently remove a category target from a plan. Requires finance:delete scope."
     },
     {
       "name": "delete_portfolio",
@@ -488,7 +488,7 @@
     },
     {
       "name": "merge_payees",
-      "description": "Merge a source Payee into a target Payee. Transactions and aliases move to the target; the target wins silently on defaultCategoryId conflict; the source is deleted. Use to dedupe near-duplicates like \"Amazon\" and \"AMZN MKT\"."
+      "description": "Merge a source Payee into a target Payee. Transactions and aliases move to the target; the target wins silently on defaultCategoryId conflict; the source is deleted. Use to dedupe near-duplicates like \"Amazon\" and \"AMZN MKT\". Requires finance:delete scope."
     },
     {
       "name": "move_plan_money",

@@ -22,6 +22,13 @@ export interface DashboardWidgetConfig {
  */
 export type SidebarSectionsConfig = endpointsTypes.SidebarSectionsConfig;
 
+/** Optional links under the sidebar's Accounts nav group. Each is visible when unset. */
+export interface SidebarNavConfig {
+  loans?: boolean;
+  investments?: boolean;
+  venture?: boolean;
+}
+
 export type TransactionsView = 'list' | 'table';
 
 interface TransactionsTableSettings {
@@ -116,6 +123,7 @@ export interface UserSettingsSchema {
   /** Store bank transactions before they are booked. Off when unset. */
   importPendingBankTransactions?: boolean;
   sidebarSections?: SidebarSectionsConfig;
+  sidebarNav?: SidebarNavConfig;
   payeeExtractionUsesDescription?: boolean;
   /** Transactions sharing a raw merchant name before a Payee is auto-created. Defaults to 2. */
   payeePromotionThreshold?: 1 | 2 | 3;
@@ -139,6 +147,12 @@ export interface UserSettingsSchema {
    * expense. Subcategories inherit from their parent. Empty or unset leaves cash flow unchanged.
    */
   savingsCategoryIds?: string[];
+  /**
+   * Categories whose spending is a tax. The money-flow chart shows it as its own branch instead
+   * of as an expense. Subcategories inherit from their parent.
+   * A category also covered by `savingsCategoryIds` counts as savings.
+   */
+  taxCategoryIds?: string[];
   currencyDisplay?: endpointsTypes.CurrencyDisplayPreference;
   fire?: FireSettings;
 }

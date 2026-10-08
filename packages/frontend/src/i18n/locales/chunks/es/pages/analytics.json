@@ -78,7 +78,8 @@
         "deficitInvested": "Las contribuciones a la cartera ({invested}) superaron el ahorro neto de este período ({saved}). La diferencia se produjo con los saldos de cuentas existentes.",
         "deficitBoth": "Los gastos superaron los ingresos de {overspend} y {invested} se trasladó a portafolios. Ambos se cubrieron de los saldos de cuentas existentes.",
         "andMore": "+{count} más",
-        "settings": "Ajustes del gráfico"
+        "settings": "Ajustes del gráfico",
+        "taxes": "Taxes"
       }
     },
     "trends": {

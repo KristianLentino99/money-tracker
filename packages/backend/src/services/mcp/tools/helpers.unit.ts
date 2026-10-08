@@ -1,7 +1,7 @@
 import { TRANSACTION_TRANSFER_NATURE, USER_ROLES } from '@bt/shared/types';
 import { describe, expect, it } from '@jest/globals';
 
-import { assertOriginalCurrencyArgs, requireScope } from './helpers';
+import { assertMcpMutationAllowed, assertOriginalCurrencyArgs, requireScope } from './helpers';
 
 const authInfoFor = ({ role, scopes, readOnly = false }: { role: string; scopes: string[]; readOnly?: boolean }) => ({
   authInfo: { scopes, extra: { role, readOnly } },
@@ -37,6 +37,24 @@ describe('requireScope', () => {
     const extra = authInfoFor({ role: USER_ROLES.common, scopes: ['finance:read'] });
 
     expect(() => requireScope({ extra, scope: 'finance:write' })).toThrow(/Missing required scope/);
+  });
+});
+
+describe('assertMcpMutationAllowed scope enforcement', () => {
+  it('requires finance:write by default', async () => {
+    const extra = authInfoFor({ role: USER_ROLES.common, scopes: ['finance:read'] });
+
+    await expect(assertMcpMutationAllowed({ extra, userId: 1 })).rejects.toThrow(
+      'Missing required scope: finance:write',
+    );
+  });
+
+  it('requires finance:delete for destructive mutations even when write is granted', async () => {
+    const extra = authInfoFor({ role: USER_ROLES.common, scopes: ['finance:read', 'finance:write'] });
+
+    await expect(assertMcpMutationAllowed({ extra, userId: 1, scope: 'finance:delete' })).rejects.toThrow(
+      'Missing required scope: finance:delete',
+    );
   });
 });
 

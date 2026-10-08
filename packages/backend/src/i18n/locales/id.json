@@ -311,7 +311,8 @@
       "invalidApiKey": "Kunci API atau kunci privat Walutomat tidak valid.",
       "accountNoExternalId": "Akun Walutomat tidak memiliki ID eksternal.",
       "walletNotFound": "Dompet Walutomat tidak ditemukan untuk mata uang: {{currency}}"
-    }
+    },
+    "providerNotAvailable": "This bank provider is not available for new connections."
   },
   "csvImport": {
     "headersCannotBeParsed": "Header tidak dapat diuraikan",
@@ -335,7 +336,9 @@
     "batchDeleteLinkedLoanTransfer": "Impor ini tertaut ke pembayaran pinjaman dan tidak dapat dibatalkan sendiri. Aktifkan \"juga hapus transaksi transfer tertaut\" untuk menghapusnya.",
     "batchDeleteInProgress": "An import batch is already being deleted. Wait for it to finish before starting another.",
     "statementImportInProgress": "A statement import is already running. Wait for it to finish before starting another one.",
-    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated."
+    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated.",
+    "batchDeleteImportStillRunning": "This import is still running. Wait for it to finish before undoing it.",
+    "importIntoBankLinkedAccount": "Account \"{{accountName}}\" is connected to a bank, so transactions cannot be imported into it. Choose another account or create a new one."
   },
   "statementParser": {
     "invalidFile": "File tidak valid",

@@ -126,7 +126,8 @@
           "1_week": "1 minggu sebelumnya",
           "2_weeks": "2 minggu sebelumnya",
           "1_month": "1 bulan sebelumnya"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "e.g. 12"
       },
       "progress": {
         "title": "Progres cicilan",
@@ -339,7 +340,8 @@
           "summaryManual": "Anda menandai pembayaran sebagai dibayar",
           "selectTransactionType": "Pilih jenis",
           "removeRule": "Hapus aturan",
-          "removeKeyword": "Hapus kata kunci"
+          "removeKeyword": "Hapus kata kunci",
+          "recordNeedsManualAccount": "Auto-record can't book onto a bank-connected account – its transactions come from the bank sync. Pick a manual account or use matching instead."
         },
         "organize": {
           "title": "Atur",

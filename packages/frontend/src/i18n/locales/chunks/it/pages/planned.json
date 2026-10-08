@@ -126,7 +126,8 @@
           "1_week": "1 settimana prima",
           "2_weeks": "2 settimane prima",
           "1_month": "1 mese prima"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "es. 12"
       },
       "progress": {
         "title": "Avanzamento rate",
@@ -339,7 +340,8 @@
           "summaryManual": "Contrassegni tu i pagamenti come pagati",
           "selectTransactionType": "Seleziona un tipo",
           "removeRule": "Rimuovi regola",
-          "removeKeyword": "Rimuovi parola chiave"
+          "removeKeyword": "Rimuovi parola chiave",
+          "recordNeedsManualAccount": "La registrazione automatica non può creare transazioni su un conto collegato a una banca: le transazioni arrivano dalla sincronizzazione bancaria. Scegli un conto manuale oppure usa l’abbinamento."
         },
         "organize": {
           "title": "Organizza",

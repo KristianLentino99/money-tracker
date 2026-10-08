@@ -53,12 +53,6 @@
         "successNotification": "Unidad de distancia actualizada",
         "errorNotification": "Error al actualizar la unidad de distancia"
       },
-      "savingsCategories": {
-        "label": "Contar categorías como ahorro",
-        "description": "El gasto en estas categorías (y sus subcategorías) se excluye de los gastos en el análisis de flujo de caja, por lo que cuenta para el ahorro mensual y la tasa de ahorro.",
-        "successNotification": "Categorías de ahorro actualizadas",
-        "errorNotification": "Error al actualizar las categorías de ahorro"
-      },
       "showUpcomingTransactions": {
         "label": "Mostrar transacciones próximas",
         "description": "Fija en la parte superior de la lista de transacciones una sección con los pagos programados vencidos y los que vencen en los próximos 3 días.",
@@ -99,6 +93,12 @@
         "placeholder": "Select a payment type",
         "successNotification": "Default payment type updated",
         "errorNotification": "Failed to update default payment type"
+      },
+      "taxCategories": {
+        "label": "Tax categories",
+        "description": "Spending in these categories is shown as taxes in the money flow chart instead of as an expense. Subcategories are included.",
+        "successNotification": "Tax categories updated",
+        "errorNotification": "Failed to update tax categories"
       }
     }
   }

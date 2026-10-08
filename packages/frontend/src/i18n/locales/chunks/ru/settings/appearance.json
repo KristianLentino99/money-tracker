@@ -21,6 +21,10 @@
         "title": "Символы валют",
         "description": "Как отображать валюту рядом с суммами. Короткие символы выглядят как Rp, ₴ или zł вместо IDR, UAH или PLN, но валюты с одинаковым символом (USD, CAD, AUD, SGD) будут отображаться как $.",
         "narrowSymbol": "Использовать короткие символы валют"
+      },
+      "sidebarNav": {
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       }
     }
   }

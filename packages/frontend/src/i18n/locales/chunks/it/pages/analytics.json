@@ -75,7 +75,8 @@
         "deficitInvested": "Portfolio contributions ({invested}) exceeded this period's net savings ({saved}). The difference came from existing account balances.",
         "deficitBoth": "Expenses exceeded income by {overspend}, and {invested} was still moved into portfolios. Both were covered from existing account balances.",
         "andMore": "+{count} more",
-        "settings": "Chart settings"
+        "settings": "Chart settings",
+        "taxes": "Imposte"
       }
     },
     "trends": {
@@ -495,7 +496,7 @@
       "title": "Alcuni valori sono stimati",
       "unpricedSecurities": "Nessun dato di prezzo recente per {securities}, quindi la loro crescita è stimata dal costo.",
       "unpricedSecuritiesTruncated": "Nessun dato di prezzo recente per {securities} e altri ({count} titoli in totale); la loro crescita è stimata dal costo.",
-      "fxFallback": "Tassi di cambio mancanti per {currencies}; questi importi usano un tasso 1:1."
+      "fxFallback": "Tassi di cambio mancanti per {currencies}. Questi importi usano il primo tasso disponibile, oppure un tasso 1:1 se non ne esiste alcuno."
     },
     "states": {
       "loadError": "Impossibile caricare il report",
@@ -608,7 +609,7 @@
       "title": "Alcuni valori sono stimati",
       "unpricedSecurities": "Nessun dato di prezzo recente per {securities}, quindi sono mostrati al costo e potrebbero sottostimare il tuo patrimonio netto.",
       "unpricedSecuritiesTruncated": "Nessun dato di prezzo recente per {securities} e altri ({count} titoli in totale); sono mostrati al costo e potrebbero sottostimare il tuo patrimonio netto.",
-      "fxFallback": "Tassi di cambio mancanti per {currencies}; questi importi usano un tasso 1:1."
+      "fxFallback": "Tassi di cambio mancanti per {currencies}. Questi importi usano il primo tasso disponibile, oppure un tasso 1:1 se non ne esiste alcuno."
     },
     "states": {
       "loadError": "Impossibile caricare la cronologia del patrimonio netto. Riprova più tardi.",

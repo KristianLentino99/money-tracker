@@ -1,5 +1,6 @@
 import type { RecordId } from '@bt/shared/types';
 import Accounts from '@models/accounts.model';
+import ImportBatches from '@models/import-batches.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Payees from '@models/payees.model';
 import Plans from '@models/plan.model';
@@ -59,6 +60,7 @@ export function createScopeResolver({ userId }: { userId: number }) {
       if (subscriptionIds.length === 0) return [];
       return idsWhere({ model: SubscriptionPeriods, where: { subscriptionId: { [Op.in]: subscriptionIds } } });
     },
+    importBatches: () => idsWhere({ model: ImportBatches, where: { userId } }),
   };
 
   function getScope({ scope }: { scope: BackupParentScope }): Promise<RecordId[]> {

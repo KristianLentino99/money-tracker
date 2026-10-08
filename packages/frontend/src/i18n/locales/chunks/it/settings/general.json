@@ -93,6 +93,12 @@
         "placeholder": "Select a payment type",
         "successNotification": "Default payment type updated",
         "errorNotification": "Failed to update default payment type"
+      },
+      "taxCategories": {
+        "label": "Categorie fiscali",
+        "description": "Le spese in queste categorie vengono mostrate come imposte nel grafico dei flussi di denaro, anziché come uscite. Sono incluse anche le sottocategorie.",
+        "successNotification": "Categorie fiscali aggiornate",
+        "errorNotification": "Impossibile aggiornare le categorie fiscali"
       }
     }
   }

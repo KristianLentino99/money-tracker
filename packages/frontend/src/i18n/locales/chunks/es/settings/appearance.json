@@ -21,6 +21,10 @@
         "title": "Símbolos de moneda",
         "description": "Cómo se muestra la moneda en los importes. Los símbolos cortos se ven como Rp, ₴ o zł en lugar de IDR, UAH o PLN, pero las monedas que comparten símbolo (USD, CAD, AUD, SGD) se muestran todas como $.",
         "narrowSymbol": "Usar símbolos de moneda cortos"
+      },
+      "sidebarNav": {
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       }
     }
   }

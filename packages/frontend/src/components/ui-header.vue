@@ -6,7 +6,11 @@
       class="shadow-header border-border @container/header-bar flex items-center justify-between border-b px-4 py-2 sm:px-6"
     >
       <div class="flex items-center gap-4">
-        <ManageTransactionDialog v-if="isMobileView">
+        <ManageTransactionDialog
+          v-if="isMobileView"
+          v-model:open="isCreateTransactionDialogOpen"
+          :prefill="createTransactionPrefill"
+        >
           <Button
             data-testid="mobile-add-transaction"
             variant="default"
@@ -19,7 +23,11 @@
         </ManageTransactionDialog>
 
         <div class="flex items-center gap-px">
-          <ManageTransactionDialog v-if="!isMobileView">
+          <ManageTransactionDialog
+            v-if="!isMobileView"
+            v-model:open="isCreateTransactionDialogOpen"
+            :prefill="createTransactionPrefill"
+          >
             <Button variant="default" size="sm" class="rounded-r-none">
               <PlusIcon class="size-4" />
               {{ isMobileView ? $t('header.add') : $t('header.newTransaction') }}
@@ -151,6 +159,10 @@ import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import NotificationsPopover from '@/components/notifications-popover/index.vue';
 import SyncConfirmationDialog from '@/components/sync-confirmation-dialog.vue';
 import SyncStatusTooltip from '@/components/sync-status-tooltip.vue';
+import {
+  createTransactionPrefill,
+  isCreateTransactionDialogOpen,
+} from '@/composable/global-state/create-transaction-dialog';
 import { useCategorizationStatus } from '@/composable/use-categorization-status';
 import { useCssVarFromElementSize } from '@/composable/use-css-var-from-element-size';
 import { useDateLocale } from '@/composable/use-date-locale';

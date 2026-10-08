@@ -21,6 +21,10 @@
         "title": "Simbol mata uang",
         "description": "Cara jumlah menampilkan mata uangnya. Simbol singkat terlihat seperti Rp, ₴ atau zł, bukan IDR, UAH atau PLN, tetapi mata uang yang berbagi simbol yang sama (USD, CAD, AUD, SGD) semuanya menjadi $.",
         "narrowSymbol": "Gunakan simbol mata uang singkat"
+      },
+      "sidebarNav": {
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       }
     }
   }

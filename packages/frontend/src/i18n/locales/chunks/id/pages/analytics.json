@@ -78,7 +78,8 @@
         "deficitInvested": "Portfolio contributions ({invested}) exceeded this period's net savings ({saved}). The difference came from existing account balances.",
         "deficitBoth": "Expenses exceeded income by {overspend}, and {invested} was still moved into portfolios. Both were covered from existing account balances.",
         "andMore": "+{count} lagi",
-        "settings": "Pengaturan grafik"
+        "settings": "Pengaturan grafik",
+        "taxes": "Taxes"
       }
     },
     "trends": {

@@ -311,7 +311,8 @@
       "invalidApiKey": "Invalid Walutomat API key or private key.",
       "accountNoExternalId": "Walutomat account has no external ID.",
       "walletNotFound": "Walutomat wallet not found for currency: {{currency}}"
-    }
+    },
+    "providerNotAvailable": "This bank provider is not available for new connections."
   },
   "csvImport": {
     "headersCannotBeParsed": "Headers cannot be parsed",
@@ -335,7 +336,9 @@
     "batchDeleteLinkedLoanTransfer": "This import is linked to a loan payment and can't be undone on its own. Enable \"also delete linked transfer transactions\" to remove it.",
     "batchDeleteInProgress": "An import batch is already being deleted. Wait for it to finish before starting another.",
     "statementImportInProgress": "A statement import is already running. Wait for it to finish before starting another one.",
-    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated."
+    "importInterruptedByServerUpdate": "A server update interrupted this import. Transactions already saved were kept. Delete this import in \"Import History\" before importing the file again, or they will be duplicated.",
+    "batchDeleteImportStillRunning": "This import is still running. Wait for it to finish before undoing it.",
+    "importIntoBankLinkedAccount": "Account \"{{accountName}}\" is connected to a bank, so transactions cannot be imported into it. Choose another account or create a new one."
   },
   "statementParser": {
     "invalidFile": "Invalid file",

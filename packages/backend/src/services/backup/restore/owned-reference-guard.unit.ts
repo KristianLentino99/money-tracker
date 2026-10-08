@@ -18,6 +18,7 @@ const EXPECTED_GUARDED_COLUMNS: Record<string, string[]> = {
   balances: ['accountId'],
   categories: ['parentId'],
   holdings: ['portfolioId'],
+  'import-batch-account-effects': ['accountId', 'importBatchId'],
   'investment-transactions': ['portfolioId', 'portfolioTransferId'],
   'manual-portfolio-transactions': ['portfolioId'],
   'manual-portfolio-valuations': ['portfolioId'],

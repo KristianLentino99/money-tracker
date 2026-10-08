@@ -146,6 +146,14 @@ const ZodSidebarSectionsSchema = z.object({
   loans: z.boolean().default(true),
 });
 
+// Optional links under the sidebar's Accounts nav group; each is visible when unset.
+// No `.default()`: the PATCH deep merge would write defaults over stored values.
+const ZodSidebarNavSchema = z.object({
+  loans: z.boolean().optional(),
+  investments: z.boolean().optional(),
+  venture: z.boolean().optional(),
+});
+
 // Column ids are plain strings (not an enum) on purpose: the column set is a
 // frontend concern and may grow without a backend deploy. Unknown ids are
 // dropped client-side on read, so stale entries are harmless.
@@ -287,6 +295,7 @@ export const ZodSettingsSchema = z.object({
   dashboard: ZodDashboardSettingsSchema.optional(),
   includeCreditLimitInStats: z.boolean().optional(),
   sidebarSections: ZodSidebarSectionsSchema.optional(),
+  sidebarNav: ZodSidebarNavSchema.optional(),
   ui: ZodUiSettingsSchema.optional(),
   subscriptions: ZodSubscriptionsSettingsSchema.optional(),
   import: ZodImportSettingsSchema.optional(),
@@ -316,6 +325,8 @@ export const ZodSettingsSchema = z.object({
   // savings rather than spend. Descendants are expanded server-side. Plain z.uuid(), not
   // recordId(): the branded RecordId output breaks the SettingsPatchSchemaIsInSync assertion below.
   savingsCategoryIds: z.array(z.uuid()).optional(),
+  // Categories whose spend is a tax. Stored only: the frontend analytics decide how to present it.
+  taxCategoryIds: z.array(z.uuid()).optional(),
   currencyDisplay: z.enum(endpointsTypes.CURRENCY_DISPLAY_PREFERENCES).optional(),
   fire: ZodFireSettingsSchema.optional(),
 });
@@ -366,6 +377,7 @@ export const ZodSettingsPatchSchema = z.object({
       loans: z.boolean().optional(),
     })
     .optional(),
+  sidebarNav: ZodSidebarNavSchema.optional(),
   ui: z
     .object({
       transactionsTable: z
@@ -420,6 +432,7 @@ export const ZodSettingsPatchSchema = z.object({
   matchTransfersWithManualAccounts: z.boolean().optional(),
   importPendingBankTransactions: z.boolean().optional(),
   savingsCategoryIds: z.array(z.uuid()).optional(),
+  taxCategoryIds: z.array(z.uuid()).optional(),
   currencyDisplay: z.enum(endpointsTypes.CURRENCY_DISPLAY_PREFERENCES).optional(),
   fire: ZodFireSettingsSchema.optional(),
 });

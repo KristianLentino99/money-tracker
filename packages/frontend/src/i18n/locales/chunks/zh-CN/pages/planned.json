@@ -128,7 +128,8 @@
           "1_week": "1 week before",
           "2_weeks": "2 weeks before",
           "1_month": "1 month before"
-        }
+        },
+        "maxOccurrencesInstallmentPlaceholder": "e.g. 12"
       },
       "progress": {
         "title": "Installment progress",
@@ -341,7 +342,8 @@
           "summaryManual": "You mark payments as paid",
           "selectTransactionType": "Select a type",
           "removeRule": "Remove rule",
-          "removeKeyword": "Remove keyword"
+          "removeKeyword": "Remove keyword",
+          "recordNeedsManualAccount": "Auto-record can't book onto a bank-connected account – its transactions come from the bank sync. Pick a manual account or use matching instead."
         },
         "organize": {
           "title": "Organize",

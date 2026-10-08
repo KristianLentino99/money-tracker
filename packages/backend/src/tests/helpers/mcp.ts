@@ -153,6 +153,34 @@ export async function createTestOAuthAccessToken({
 }
 
 /**
+ * Issue a bearer token the `/mcp` route accepts: the auth DB stores the SHA-256
+ * (base64url) hash, the caller sends the raw value.
+ */
+export async function createTestMcpBearerToken({ scopes }: { scopes: string[] }): Promise<string> {
+  const token = randomUUID();
+  await createTestOAuthAccessToken({
+    id: `test-access-token-${token}`,
+    token: createHash('sha256').update(token).digest('base64url'),
+    scopes: JSON.stringify(scopes),
+  });
+  return token;
+}
+
+export function requestMcp({
+  method = 'post',
+  token,
+  body,
+}: {
+  method?: 'post' | 'get' | 'delete';
+  token?: string;
+  body?: object;
+}) {
+  const req = request(app)[method]('/mcp');
+  if (token) req.set('Authorization', `Bearer ${token}`);
+  return req.send(body);
+}
+
+/**
  * Insert a test OAuth refresh token into `ba_oauth_refresh_token`.
  * Note: `clientId` here stores the **public clientId** (from `ba_oauth_client.clientId`),
  * matching what better-auth's oauth-provider writes on token issue.

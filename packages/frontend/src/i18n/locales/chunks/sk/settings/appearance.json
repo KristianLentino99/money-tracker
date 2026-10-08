@@ -21,6 +21,10 @@
         "title": "Symboly mien",
         "description": "Ako sumy zobrazujú svoju menu. Krátke symboly vyzerajú ako Rp, ₴ alebo zł namiesto IDR, UAH alebo PLN, no meny, ktoré majú spoločný symbol (USD, CAD, AUD, SGD), sa všetky zmenia na $.",
         "narrowSymbol": "Používať krátke symboly mien"
+      },
+      "sidebarNav": {
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       }
     }
   }

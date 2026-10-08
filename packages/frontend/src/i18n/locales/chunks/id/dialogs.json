@@ -241,6 +241,11 @@
             "openInNewTab": "Open in new tab",
             "download": "Unduh"
           }
+        },
+        "duplicateButton": "Duplicate",
+        "createMore": {
+          "label": "Create more",
+          "createdToast": "Transaction created"
         }
       },
       "investmentContribution": {

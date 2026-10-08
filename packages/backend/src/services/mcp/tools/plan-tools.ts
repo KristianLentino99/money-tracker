@@ -237,12 +237,12 @@ export function registerDeletePlanCategoryTarget(server: McpServer) {
   server.registerTool(
     'delete_plan_category_target',
     {
-      description: 'Remove a category target from a plan. Requires finance:write scope.',
+      description: 'Remove a category target from a plan. Requires finance:delete scope.',
       inputSchema: deletePlanCategoryTargetInputSchema,
     },
     async (args, extra) => {
       const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
+      await assertMcpMutationAllowed({ extra, userId, scope: 'finance:delete' });
       trackMcpToolUsed({ userId, tool: 'delete_plan_category_target', clientId: extra.authInfo?.clientId });
 
       return jsonContent({ data: await plansService.deletePlanCategoryTarget({ userId, ...args }) });
