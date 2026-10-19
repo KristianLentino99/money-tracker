@@ -121,7 +121,7 @@ export interface VehicleRow {
   depreciationModel: string;
 }
 
-export interface BudgetRow {
+export interface TrackerRow {
   name: string;
   status: string;
   periodStart: string;
@@ -251,7 +251,7 @@ export type ExportTable =
   | { name: 'tags'; rows: TagRow[] }
   | { name: 'payees'; rows: PayeeRow[] }
   | { name: 'vehicles'; rows: VehicleRow[] }
-  | { name: 'budgets'; rows: BudgetRow[] }
+  | { name: 'trackers'; rows: TrackerRow[] }
   | { name: 'budget_lines'; rows: BudgetLineRow[] }
   | { name: 'budget_periods'; rows: BudgetPeriodRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }

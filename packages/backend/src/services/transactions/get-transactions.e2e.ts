@@ -139,7 +139,7 @@ describe('Retrieve transactions with filters', () => {
     };
   };
 
-  it('should retrieve transactions filtered by budgetIds correctly', async () => {
+  it('should retrieve transactions filtered by trackerIds correctly', async () => {
     const account = await helpers.createAccount({ raw: true });
     const categories = await helpers.getCategoriesList();
     const firstCategoryId = categories[0]!.id;
@@ -177,8 +177,8 @@ describe('Retrieve transactions with filters', () => {
       }),
     ]);
 
-    const budget = await helpers.createCustomBudget({
-      name: 'Test Budget',
+    const tracker = await helpers.createTracker({
+      name: 'Test Tracker',
       startDate: '2025-03-01T00:00:00Z',
       endDate: '2025-03-04T23:59:59Z',
       autoInclude: true,
@@ -187,7 +187,7 @@ describe('Retrieve transactions with filters', () => {
     });
 
     const res = await helpers.getTransactions({
-      budgetIds: [budget.id],
+      trackerIds: [tracker.id],
       limit: 30,
       raw: true,
     });
@@ -496,9 +496,9 @@ describe('Retrieve transactions with filters', () => {
       expect(sortedIds(blankOrPayee)).toEqual(sortedIds([withPayee, withoutPayee]));
     });
 
-    it('budgetIds: blank matches rows in no tracker and ORs with real ids', async () => {
+    it('trackerIds: blank matches rows in no tracker and ORs with real ids', async () => {
       const account = await helpers.createAccount({ raw: true });
-      const [inBudget] = await helpers.createTransaction({
+      const [inTracker] = await helpers.createTransaction({
         payload: helpers.buildTransactionPayload({ accountId: account.id }),
         raw: true,
       });
@@ -506,18 +506,18 @@ describe('Retrieve transactions with filters', () => {
         payload: helpers.buildTransactionPayload({ accountId: account.id }),
         raw: true,
       });
-      const budget = await helpers.createCustomBudget({ name: 'Trip', raw: true });
-      await helpers.addTransactionToCustomBudget({
-        id: budget.id,
-        payload: { transactionIds: [inBudget.id] },
+      const tracker = await helpers.createTracker({ name: 'Trip', raw: true });
+      await helpers.addTransactionsToTracker({
+        id: tracker.id,
+        payload: { transactionIds: [inTracker.id] },
         raw: true,
       });
 
-      const blankOnly = await helpers.getTransactions({ budgetIds: [BLANK_FILTER_VALUE], raw: true });
+      const blankOnly = await helpers.getTransactions({ trackerIds: [BLANK_FILTER_VALUE], raw: true });
       expect(sortedIds(blankOnly)).toEqual([unassigned.id]);
 
-      const blankOrBudget = await helpers.getTransactions({ budgetIds: [BLANK_FILTER_VALUE, budget.id], raw: true });
-      expect(sortedIds(blankOrBudget)).toEqual(sortedIds([inBudget, unassigned]));
+      const blankOrTracker = await helpers.getTransactions({ trackerIds: [BLANK_FILTER_VALUE, tracker.id], raw: true });
+      expect(sortedIds(blankOrTracker)).toEqual(sortedIds([inTracker, unassigned]));
     });
 
     it('tagIds: blank matches untagged rows and ORs with real tag ids', async () => {

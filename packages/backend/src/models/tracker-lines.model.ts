@@ -4,11 +4,11 @@ import { Money } from '@common/types/money';
 import { MoneyField } from '@common/types/money-column';
 import { Table, Column, Model, ForeignKey, BelongsTo, BelongsToMany, DataType, Index } from 'sequelize-typescript';
 
-import Budgets from './budget.model';
 import Categories from './categories.model';
 import TrackerLineCategories from './tracker-line-categories.model';
+import Trackers from './trackers.model';
 
-/** A per-category limit inside a tracker (`Budgets`). */
+/** A per-category limit inside a tracker. */
 @Table({
   tableName: 'TrackerLines',
   timestamps: true,
@@ -18,10 +18,10 @@ export default class TrackerLines extends Model {
   @Column(IdColumn())
   declare id: RecordId;
 
-  @ForeignKey(() => Budgets)
+  @ForeignKey(() => Trackers)
   @Index
   @Column({ type: DataType.UUID, allowNull: false })
-  budgetId!: RecordId;
+  trackerId!: RecordId;
 
   @Column({ type: DataType.STRING(200), allowNull: false })
   name!: string;
@@ -35,8 +35,8 @@ export default class TrackerLines extends Model {
   declare createdAt: Date;
   declare updatedAt: Date;
 
-  @BelongsTo(() => Budgets, { foreignKey: 'budgetId', onDelete: 'CASCADE' })
-  budget?: Budgets;
+  @BelongsTo(() => Trackers, { foreignKey: 'trackerId', onDelete: 'CASCADE' })
+  tracker?: Trackers;
 
   @BelongsToMany(() => Categories, {
     through: { model: () => TrackerLineCategories, unique: false },

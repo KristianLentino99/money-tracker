@@ -45,7 +45,7 @@ describe('Attachments orphan sweep', () => {
   });
 
   it('deletes a logo image blob no row references and keeps a referenced one', async () => {
-    const tracker = await helpers.createCustomBudget({ name: 'Logo', logoImage: PNG_1X1_DATA_URL, raw: true });
+    const tracker = await helpers.createTracker({ name: 'Logo', logoImage: PNG_1X1_DATA_URL, raw: true });
     await putObject({ key: `logos/${uuidv7()}`, body: PNG_BYTES, contentType: 'image/png' });
 
     const result = await attachmentsOrphanSweepCron.triggerManualSync({ minAgeMs: 0 });
