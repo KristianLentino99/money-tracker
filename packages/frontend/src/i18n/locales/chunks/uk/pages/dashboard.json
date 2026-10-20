@@ -149,6 +149,7 @@
         "start": "Початок",
         "end": "Кінець",
         "growth": "Зростання",
+        "changeInPeriod": "Зміна за {period}",
         "previousPeriodsTrend": "Тренд попередніх періодів",
         "excludedTooltip": "Виключено з чистого капіталу: {components}",
         "viewHistory": "Переглянути історію",

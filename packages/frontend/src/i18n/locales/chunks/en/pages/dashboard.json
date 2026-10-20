@@ -149,6 +149,7 @@
         "start": "Start",
         "end": "End",
         "growth": "Growth",
+        "changeInPeriod": "Change in {period}",
         "previousPeriodsTrend": "Previous periods trend",
         "excludedTooltip": "Excluded from net worth: {components}",
         "viewHistory": "View history",
