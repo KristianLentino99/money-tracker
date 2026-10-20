@@ -13,6 +13,8 @@ import { stampSubscriptionPayeeAndTags } from './stamp-payee-and-tags';
 interface MatchTransactionParams {
   transaction: Transactions.default;
   userId: number;
+  /** Link and settle, but leave the row's category as it is. */
+  preserveCategory?: boolean;
 }
 
 interface EvaluateRuleParams {
@@ -27,7 +29,7 @@ interface EvaluateRuleParams {
  * links the best match. Returns the matched subscription or null.
  */
 export const matchTransactionToSubscriptions = withTransaction(
-  async ({ transaction, userId }: MatchTransactionParams): Promise<Subscriptions | null> => {
+  async ({ transaction, userId, preserveCategory = false }: MatchTransactionParams): Promise<Subscriptions | null> => {
     // Check if already linked (active) or previously unlinked (don't re-match)
     const existingLink = await SubscriptionTransactions.findOne({
       where: { transactionId: transaction.id },
@@ -96,7 +98,7 @@ export const matchTransactionToSubscriptions = withTransaction(
     }
 
     // Apply category if subscription has one
-    if (best.subscription.categoryId) {
+    if (best.subscription.categoryId && !preserveCategory) {
       await Transactions.updateTransactionById({
         id: transaction.id,
         userId,
