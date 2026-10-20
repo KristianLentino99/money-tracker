@@ -23,6 +23,7 @@ import {
   assertTxWriteAccess,
 } from '@services/sharing/auth/authorize-account-write.service';
 import { ensureUserCurrencyConnected } from '@services/sharing/auth/ensure-currency-connected.service';
+import { settlePeriodOnConfirm } from '@services/subscriptions/settle-period-on-match';
 import * as refundsService from '@services/tx-refunds';
 
 import { withTransaction } from '../common/with-transaction';
@@ -774,6 +775,12 @@ export const updateTransaction = withTransaction(
             eventBus.emit(DOMAIN_EVENTS.TRANSACTIONS_TAGGED, { tagIds: payload.tagIds, userId: payload.userId });
           }
         }
+      }
+
+      // Confirming a plan is the moment its money moves, so a subscription it is linked to
+      // can settle its period now.
+      if (prevData.isPlanned && !baseTransaction.isPlanned) {
+        await settlePeriodOnConfirm({ transaction: baseTransaction, userId: ctx.accountOwnerUserId });
       }
 
       return updatedTransactions;
