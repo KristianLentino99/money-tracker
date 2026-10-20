@@ -15,7 +15,8 @@ import { useVirtualizedInfiniteScroll } from '@/composable/virtualized-infinite-
 import type { TransactionModel, RecordId, BulkTransferScanItem } from '@bt/shared/types';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import type { Period } from '@/composable/use-period-navigation';
-import { endOfMonth, startOfMonth, subMonths } from 'date-fns';
+import { endOfDay, endOfMonth, isValid, parseISO, startOfDay, startOfMonth, subMonths } from 'date-fns';
+import { useRoute } from 'vue-router';
 import { SearchXIcon, SparklesIcon } from '@lucide/vue';
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -41,10 +42,16 @@ const [UseDialogTemplate, SlotContent] = createReusableTemplate();
 
 const PAGE_SIZE = 20;
 
-const period = ref<Period>({
-  from: startOfMonth(subMonths(new Date(), 2)),
-  to: endOfMonth(new Date()),
-});
+const route = useRoute();
+const queryFrom = parseISO(String(route.query.from));
+const queryTo = parseISO(String(route.query.to));
+const hasQueryPeriod = isValid(queryFrom) && isValid(queryTo);
+
+const period = ref<Period>(
+  hasQueryPeriod
+    ? { from: startOfDay(queryFrom), to: endOfDay(queryTo) }
+    : { from: startOfMonth(subMonths(new Date(), 2)), to: endOfMonth(new Date()) },
+);
 const includeOutOfWallet = ref(false);
 
 // Accumulated scan results across pages
@@ -150,6 +157,8 @@ async function freshScan() {
     isScanning.value = false;
   }
 }
+
+if (hasQueryPeriod) freshScan();
 
 // Link mutation
 const linkMutation = useMutation({
