@@ -101,7 +101,9 @@ const categoryRows = computed(() =>
 );
 
 const sortBy = computed(() => readCategorySort({ config: widgetConfigRef?.value?.config }));
-const displayRows = computed(() => sortCategoryRows({ rows: categoryRows.value, sortBy: sortBy.value }));
+const displayRows = computed(() =>
+  sortCategoryRows({ rows: categoryRows.value, sortBy: sortBy.value, getAmount: (row) => row.netAmount }),
+);
 
 // Mutable copy for drag-and-drop reordering
 const draggableRows = ref<typeof categoryRows.value>([]);

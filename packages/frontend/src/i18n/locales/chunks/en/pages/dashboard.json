@@ -300,7 +300,10 @@
         "daysLeft": "{count} day left | {count} days left",
         "lastDay": "Last day of the period",
         "empty": "No budget yet",
-        "create": "Set up a budget"
+        "create": "Set up a budget",
+        "sort": {
+          "overspent": "Most overspent first"
+        }
       },
       "trackers": {
         "spentOfLimit": "{spent} of {limit}",
