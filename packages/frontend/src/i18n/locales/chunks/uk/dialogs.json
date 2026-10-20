@@ -107,6 +107,7 @@
         "paymentTypeLabel": "Тип платежу",
         "noteLabel": "Примітка (необов'язково)",
         "notePlaceholder": "Примітка",
+        "addFieldsLabel": "Додати",
         "externalUrlLabel": "Зовнішнє посилання",
         "externalUrlPlaceholder": "Посилання на замовлення, бронювання або чек",
         "externalReferenceLabel": "Зовнішній номер",

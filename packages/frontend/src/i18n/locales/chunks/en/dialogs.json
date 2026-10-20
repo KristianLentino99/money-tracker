@@ -107,6 +107,7 @@
         "paymentTypeLabel": "Payment type",
         "noteLabel": "Note",
         "notePlaceholder": "Note",
+        "addFieldsLabel": "Add",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",

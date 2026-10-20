@@ -5,7 +5,7 @@ import { useCategoriesStore } from '@/stores';
 import { TRANSACTION_TYPES, TransactionSplitModel } from '@bt/shared/types';
 import { SplitIcon } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { RefundWithSplit, RefundedByAnotherTxs, RefundsAnoterTx } from '../../types';
@@ -40,6 +40,9 @@ const emit = defineEmits<{
 }>();
 
 const { categoriesMap } = storeToRefs(useCategoriesStore());
+
+const dialogRef = ref<InstanceType<typeof MarkAsRefundDialog> | null>(null);
+defineExpose({ open: () => dialogRef.value?.open() });
 
 // `null` marks an existing link as deliberately removed; `undefined` means "never had one".
 const clearedValue = () => (props.isThereOriginalRefunds ? null : undefined);
@@ -94,11 +97,11 @@ const getSplitInfo = (refund: RefundWithSplit) => {
 
 <template>
   <MarkAsRefundDialog
+    ref="dialogRef"
     :key="transactionType"
     :refunds="refunds"
     :refunded-by="refundedBy"
     :transaction-type="transactionType"
-    :disabled="disabled"
     :is-record-creation="isRecordCreation"
     :current-transaction-splits="currentTransactionSplits"
     :current-amount="currentAmount"
