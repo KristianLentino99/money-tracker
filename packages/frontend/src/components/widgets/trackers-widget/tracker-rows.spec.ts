@@ -1,4 +1,4 @@
-import { utilizationClasses } from '@/pages/budgets/utilization-classes';
+import { utilizationClasses } from '@/pages/trackers/utilization-classes';
 import { describe, expect, it } from 'vitest';
 
 import { sortTrackerRows } from './tracker-rows';

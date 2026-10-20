@@ -89,7 +89,7 @@ const ZodAiSettingsSchema = z.object({
 const ZodNotificationPreferencesSchema = z.object({
   enabled: z.boolean().default(true),
   types: z.object({
-    [NOTIFICATION_TYPES.budgetAlert]: z.boolean().default(true),
+    [NOTIFICATION_TYPES.trackerAlert]: z.boolean().default(true),
     [NOTIFICATION_TYPES.system]: z.boolean().default(true),
     [NOTIFICATION_TYPES.changelog]: z.boolean().default(true),
   }),
@@ -389,7 +389,7 @@ export const ZodSettingsPatchSchema = z.object({
       enabled: z.boolean().optional(),
       types: z
         .object({
-          [NOTIFICATION_TYPES.budgetAlert]: z.boolean().optional(),
+          [NOTIFICATION_TYPES.trackerAlert]: z.boolean().optional(),
           [NOTIFICATION_TYPES.system]: z.boolean().optional(),
           [NOTIFICATION_TYPES.changelog]: z.boolean().optional(),
         })
