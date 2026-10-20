@@ -74,8 +74,8 @@ const refundTransactions = computed<RefundWithSplit[]>(() => {
   return [];
 });
 
-// An empty `refundedBy` array must fall back to the default trigger: rendering the
-// linked layout with zero rows would leave no way to open the picker or unlink.
+// An empty `refundedBy` array counts as unlinked, so the parent keeps offering its "Link refund" chip.
+// A linked layout with zero rows would leave no way to open the picker or unlink.
 const isLinked = computed(() => refundTransactions.value.length > 0);
 
 // Get split category info for display

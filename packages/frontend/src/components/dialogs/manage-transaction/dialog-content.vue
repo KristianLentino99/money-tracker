@@ -24,7 +24,6 @@ import HintIcon from '@/components/common/hint-icon.vue';
 import { Checkbox } from '@/components/lib/ui/checkbox';
 import { Switch } from '@/components/lib/ui/switch';
 import { cn } from '@/lib/utils';
-import * as Drawer from '@/components/lib/ui/drawer';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useNotificationCenter } from '@/components/notification-center';
@@ -47,33 +46,25 @@ import {
   type CurrencyModel,
   type TransactionLocation,
   type TransactionModel,
-  type TransactionOptionalField,
-  TRANSACTION_OPTIONAL_FIELDS,
 } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
 import { between, helpers, maxLength, minValue, required } from '@vuelidate/validators';
 import { createReusableTemplate, useEventListener, watchOnce } from '@vueuse/core';
 import { endOfDay, format } from 'date-fns';
 import {
-  ChevronUpIcon,
   CommandIcon,
   CopyIcon,
   CornerDownLeftIcon,
   ExternalLinkIcon,
-  GlobeIcon,
-  HashIcon,
-  LinkIcon,
   LocateIcon,
   MapIcon,
   MapPinIcon,
-  SlidersHorizontalIcon,
   SplitIcon,
-  Undo2Icon,
   XIcon,
 } from '@lucide/vue';
 import { storeToRefs } from 'pinia';
 import { DialogClose, DialogTitle } from 'reka-ui';
-import { type Component, computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
@@ -112,6 +103,7 @@ import {
 } from './composables';
 import type { TransferDestinationType } from './composables/transfer-form';
 import { useDefaultPaymentType } from './composables/use-default-payment-type';
+import { useFieldReveal } from './composables/use-field-reveal';
 import { useMapPickerSetting } from './composables/use-map-picker-setting';
 import { useOptionalFields } from './composables/use-optional-fields';
 import { useReverseGeocodedLabel } from './composables/use-reverse-geocoded-label';
@@ -1117,80 +1109,40 @@ const selectTransactionType = (type: FORM_TYPES, disabled = false) => {
 const previouslyFocusedElement = ref(document.activeElement);
 
 const [DefineMoreOptions, ReuseMoreOptions] = createReusableTemplate();
+const [DefineDateField, ReuseDateField] = createReusableTemplate();
+const [DefinePaymentType, ReusePaymentType] = createReusableTemplate();
 
 const { isEnabled: isOptionalFieldEnabled } = useOptionalFields();
 
 // Snapshot: the host clears its prefill on close, while this content stays mounted through the exit animation.
 const initialPrefill = props.prefill;
 
-// Fields mount in their fixed template slots, so click order never changes the layout.
-const mountedFields = ref(new Set<TransactionOptionalField>());
-
-const showExternalUrl = computed(
-  () => mountedFields.value.has('externalUrl') || !!props.transaction?.externalUrl || !!initialPrefill?.externalUrl,
-);
-const showExternalReference = computed(
-  () =>
-    mountedFields.value.has('externalReference') ||
-    !!props.transaction?.externalReference ||
-    !!initialPrefill?.externalReference,
-);
-const showOriginalAmount = computed(
-  () =>
-    mountedFields.value.has('originalAmount') ||
-    props.transaction?.originalAmount != null ||
-    initialPrefill?.originalAmount != null,
-);
+const isAttachmentsAvailable = computed(() => !!transaction.value?.id || !form.value.toPortfolio);
 const isLocationFilled = computed(() => form.value.latitude != null || form.value.longitude != null);
-const showLocation = computed(
-  () => mountedFields.value.has('location') || !!props.transaction?.location || isLocationFilled.value,
-);
 
 const isRefundAvailable = computed(() => !isTransferTx.value && !isAccountSharedWithCaller.value);
 const isRefundLinked = computed(() => !!(form.value.refundsTx || form.value.refundedByTxs?.length));
 const refundFieldRef = ref<InstanceType<typeof MarkAsRefundField> | null>(null);
 
-const OPTIONAL_FIELD_CHIPS = {
-  externalUrl: { icon: LinkIcon, labelKey: 'dialogs.manageTransaction.form.externalUrlLabel' },
-  externalReference: { icon: HashIcon, labelKey: 'dialogs.manageTransaction.form.externalReferenceLabel' },
-  location: { icon: MapPinIcon, labelKey: 'dialogs.manageTransaction.form.location.label' },
-  originalAmount: { icon: GlobeIcon, labelKey: 'dialogs.manageTransaction.form.originalAmountLabel' },
-} satisfies Record<TransactionOptionalField, { icon: Component; labelKey: string }>;
-
-type AddFieldChip = { key: string; icon: Component; label: string; onClick: () => void };
-
 const moreOptionsRef = ref<HTMLElement | null>(null);
 
-const mountField = async (field: TransactionOptionalField) => {
-  mountedFields.value.add(field);
-  await nextTick();
-  moreOptionsRef.value?.querySelector<HTMLElement>(`[data-optional-field="${field}"] input`)?.focus();
-};
-
-const addFieldChips = computed(() => {
-  const isFieldAvailable: Record<TransactionOptionalField, boolean> = {
-    externalUrl: !showExternalUrl.value,
-    externalReference: !showExternalReference.value,
-    location: !showLocation.value,
-    originalAmount: !isTransferTx.value && !showOriginalAmount.value,
-  };
-  const chips: AddFieldChip[] = TRANSACTION_OPTIONAL_FIELDS.filter(
-    (field) => isOptionalFieldEnabled(field) && isFieldAvailable[field],
-  ).map((field) => ({
-    key: field,
-    icon: OPTIONAL_FIELD_CHIPS[field].icon,
-    label: t(OPTIONAL_FIELD_CHIPS[field].labelKey),
-    onClick: () => mountField(field),
-  }));
-  if (isRefundAvailable.value && !isRefundLinked.value) {
-    chips.push({
-      key: 'refund',
-      icon: Undo2Icon,
-      label: t('dialogs.manageTransaction.markAsRefund.linkRefund'),
-      onClick: () => refundFieldRef.value!.open(),
-    });
-  }
-  return chips;
+const { shown: shownFields, chips: addFieldChips } = useFieldReveal({
+  form,
+  hasPendingAttachments: () => pendingAttachments.value.length > 0,
+  isMobileView,
+  isSavedTransaction: () => !!transaction.value?.id,
+  isTransferTx,
+  isLoanDestination,
+  isAttachmentsAvailable,
+  isRefundAvailable,
+  isRefundLinked,
+  isOptionalFieldEnabled,
+  onLinkRefund: () => refundFieldRef.value!.open(),
+  onReveal: async ({ field }) => {
+    await nextTick();
+    const fieldElement = moreOptionsRef.value?.querySelector(`[data-optional-field="${field}"]`);
+    (fieldElement?.querySelector('input') ?? fieldElement?.querySelector('button'))?.focus();
+  },
 });
 
 const externalUrlHref = computed(() => {
@@ -1225,7 +1177,6 @@ const useCurrentLocation = () => {
   );
 };
 const clearLocation = () => {
-  mountedFields.value.add('location');
   form.value.latitude = null;
   form.value.longitude = null;
 };
@@ -1253,27 +1204,6 @@ const applyPickedLocation = ({
   form.value.longitude = rounded.longitude;
   setKnownLocationLabel({ ...rounded, label });
 };
-
-// Mirrors the visibility conditions of the fields inside "More options" so the
-// mobile trigger never counts a field the drawer doesn't render. Payment type is
-// excluded – it's always preselected, so it carries no "user filled this" signal.
-const moreOptionsFilledCount = computed(() => {
-  let count = 0;
-  if (form.value.note?.trim()) count += 1;
-  if (form.value.externalUrl?.trim()) count += 1;
-  if (form.value.externalReference?.trim()) count += 1;
-  if (isLocationFilled.value) count += 1;
-  if (!isLoanDestination.value && form.value.tagIds?.length) count += 1;
-  if (!isTransferTx.value && form.value.originalAmount) count += 1;
-  if (
-    !isTransferTx.value &&
-    !isAccountSharedWithCaller.value &&
-    (form.value.refundsTx || form.value.refundedByTxs?.length)
-  ) {
-    count += 1;
-  }
-  return count;
-});
 
 // Tx prepopulation has to wait for the right category map. For owner-side / unshared txs
 // the global Pinia map is loaded synchronously on app boot; for shared-with-caller txs
@@ -1437,21 +1367,51 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <DefineDateField>
+    <div>
+      <form-row>
+        <date-field
+          :model-value="form.time"
+          :disabled="isFormFieldsDisabled || !isEditableAsManual"
+          :label="$t('dialogs.manageTransaction.form.datetimeLabel')"
+          :error-message="timeErrorMessage"
+          :hide-input-time="isMobileView"
+          :calendar-options="{
+            maxDate: form.isPlanned ? undefined : new Date(),
+          }"
+          @update:model-value="onDateUpdate"
+        />
+
+        <PlannedUnlockHint v-if="isFormCreation && form.isPlanned">
+          {{ $t('dialogs.manageTransaction.form.plannedDatesUnlockedHint') }}
+        </PlannedUnlockHint>
+      </form-row>
+
+      <p v-if="isPreAnchorLoanPayment" class="text-muted-foreground -mt-1 px-1 text-xs">
+        {{ $t('dialogs.loanPayment.preAnchorHint') }}
+      </p>
+    </div>
+  </DefineDateField>
+
+  <DefinePaymentType>
+    <FormRow v-if="!isLoanDestination">
+      <SelectField
+        v-model="form.paymentType"
+        :label="$t('dialogs.manageTransaction.form.paymentTypeLabel')"
+        :disabled="isFormFieldsDisabled || !isEditableAsManual"
+        :values="VERBOSE_PAYMENT_TYPES"
+        :label-key="(item) => t(item.label)"
+      />
+    </FormRow>
+  </DefinePaymentType>
+
   <!-- Define reusable template for "More Options" section (payment type, note, refund) -->
   <DefineMoreOptions>
     <div ref="moreOptionsRef">
-      <p class="text-muted-foreground mb-3 text-[10px] font-medium tracking-[0.16em] uppercase">
+      <p v-if="!isMobileView" class="text-muted-foreground mb-3 text-xs font-medium tracking-[0.16em] uppercase">
         {{ $t('dialogs.manageTransaction.form.moreOptionsButton') }}
       </p>
-      <FormRow v-if="!isLoanDestination">
-        <SelectField
-          v-model="form.paymentType"
-          :label="$t('dialogs.manageTransaction.form.paymentTypeLabel')"
-          :disabled="isFormFieldsDisabled || !isEditableAsManual"
-          :values="VERBOSE_PAYMENT_TYPES"
-          :label-key="(item) => t(item.label)"
-        />
-      </FormRow>
+      <ReusePaymentType v-if="!isMobileView" />
       <FormRow>
         <TextareaField
           v-model="form.note"
@@ -1462,21 +1422,22 @@ onUnmounted(() => {
           @focusout="touchField('form.note')"
         />
       </FormRow>
-      <FormRow v-if="!isLoanDestination">
+      <FormRow v-if="!isLoanDestination && shownFields.tags" data-optional-field="tags">
         <TagSelectField
           v-model="form.tagIds"
           :label="$t('dialogs.manageTransaction.form.tagsLabel')"
           :disabled="isFormFieldsDisabled"
         />
       </FormRow>
-      <AttachmentsSection
-        v-if="transaction?.id || !form.toPortfolio"
-        v-model:pending="pendingAttachments"
-        :transaction-id="transaction?.id"
-        :mirror-transaction-id="isTransferTx ? oppositeTransaction?.id : undefined"
-        :disabled="isFormFieldsDisabled"
-      />
-      <FormRow v-if="showExternalUrl" data-optional-field="externalUrl">
+      <div v-if="isAttachmentsAvailable && shownFields.attachments" data-optional-field="attachments">
+        <AttachmentsSection
+          v-model:pending="pendingAttachments"
+          :transaction-id="transaction?.id"
+          :mirror-transaction-id="isTransferTx ? oppositeTransaction?.id : undefined"
+          :disabled="isFormFieldsDisabled"
+        />
+      </div>
+      <FormRow v-if="shownFields.externalUrl" data-optional-field="externalUrl">
         <InputField
           v-model="form.externalUrl"
           type="url"
@@ -1501,7 +1462,7 @@ onUnmounted(() => {
           </template>
         </InputField>
       </FormRow>
-      <FormRow v-if="showExternalReference" data-optional-field="externalReference">
+      <FormRow v-if="shownFields.externalReference" data-optional-field="externalReference">
         <InputField
           v-model="form.externalReference"
           :placeholder="$t('dialogs.manageTransaction.form.externalReferencePlaceholder')"
@@ -1511,7 +1472,7 @@ onUnmounted(() => {
           @blur="touchField('form.externalReference')"
         />
       </FormRow>
-      <FormRow v-if="showLocation" data-optional-field="location">
+      <FormRow v-if="shownFields.location" data-optional-field="location">
         <FieldLabel :label="$t('dialogs.manageTransaction.form.location.label')" only-template>
           <template v-if="locationMapUrl" #label-after>
             <DesktopOnlyTooltip :content="$t('common.transactions.record.locationTooltip')">
@@ -1597,13 +1558,13 @@ onUnmounted(() => {
         </FieldLabel>
       </FormRow>
       <LocationPickerDialog
-        v-if="showLocation"
+        v-if="shownFields.location"
         v-model:open="isLocationPickerOpen"
         :latitude="form.latitude"
         :longitude="form.longitude"
         @select="applyPickedLocation"
       />
-      <FormRow v-if="!isTransferTx && showOriginalAmount" data-optional-field="originalAmount">
+      <FormRow v-if="!isTransferTx && shownFields.originalAmount" data-optional-field="originalAmount">
         <AmountWithCurrencyField
           v-model:amount="form.originalAmount"
           v-model:currency="form.originalCurrency"
@@ -1639,7 +1600,7 @@ onUnmounted(() => {
         />
       </div>
       <div v-if="addFieldChips.length" class="flex flex-wrap items-center gap-1.5">
-        <span class="text-muted-foreground mr-0.5 text-xs">{{
+        <span class="text-muted-foreground mr-0.5 text-sm">{{
           $t('dialogs.manageTransaction.form.addFieldsLabel')
         }}</span>
         <Button
@@ -1648,12 +1609,12 @@ onUnmounted(() => {
           type="button"
           variant="ghost"
           size="sm"
-          class="text-muted-foreground hover:text-foreground h-7 gap-1.5 border border-dashed px-2.5 text-xs"
+          class="text-muted-foreground hover:text-foreground h-8 gap-1.5 border border-dashed px-2.5 text-sm"
           :disabled="isFormFieldsDisabled"
           @click="chip.onClick"
         >
-          <component :is="chip.icon" class="size-3" />
-          {{ chip.label }}
+          <component :is="chip.icon" class="size-3.5" />
+          {{ $t(chip.labelKey) }}
         </Button>
       </div>
     </div>
@@ -1681,7 +1642,7 @@ onUnmounted(() => {
     />
     <div class="mb-2 flex items-center justify-between px-6 py-2.5">
       <div class="flex min-w-0 items-center gap-2">
-        <DialogTitle>
+        <DialogTitle class="shrink-0">
           <span class="text-xl">
             {{
               isReadOnly
@@ -1693,26 +1654,28 @@ onUnmounted(() => {
           </span>
         </DialogTitle>
 
-        <TemplatesPanel
-          v-if="templating.isVisible.value && !isMobileView"
-          v-bind="templating.listProps.value"
-          v-on="templating.listHandlers"
-        />
+        <template v-if="templating.isVisible.value">
+          <TemplatesDrawer v-if="isMobileView" v-bind="templating.listProps.value" v-on="templating.listHandlers" />
+          <TemplatesPanel v-else v-bind="templating.listProps.value" v-on="templating.listHandlers" />
+        </template>
       </div>
 
-      <DialogClose>
-        <Button variant="ghost"> {{ $t('dialogs.manageTransaction.form.closeButton') }} </Button>
+      <DialogClose as-child>
+        <Button
+          v-if="isMobileView"
+          variant="ghost"
+          size="icon"
+          class="shrink-0"
+          :aria-label="$t('dialogs.manageTransaction.form.closeButton')"
+        >
+          <XIcon class="size-5" />
+        </Button>
+        <Button v-else variant="ghost"> {{ $t('dialogs.manageTransaction.form.closeButton') }} </Button>
       </DialogClose>
     </div>
     <ScrollArea class="min-h-0">
       <div class="relative grid grid-cols-1 md:grid-cols-[450px_minmax(0,1fr)]">
-        <div :class="['px-6', isMobileView ? 'pb-1' : 'pb-6']">
-          <TemplatesDrawer
-            v-if="templating.isVisible.value && isMobileView"
-            v-bind="templating.listProps.value"
-            v-on="templating.listHandlers"
-          />
-
+        <div class="px-6 pb-6">
           <type-selector
             :selected-transaction-type="currentTxType"
             :transaction="transaction"
@@ -1724,24 +1687,27 @@ onUnmounted(() => {
           />
 
           <div>
-            <form-row>
-              <input-field
-                ref="amountFieldRef"
-                v-model="form.amount"
-                :label="$t('dialogs.manageTransaction.form.amountLabel')"
-                type="number"
-                :disabled="isFormFieldsDisabled || isAmountFieldDisabled"
-                only-positive
-                :placeholder="$t('dialogs.manageTransaction.form.amountPlaceholder')"
-                :error-message="amountErrorMessage"
-                autofocus
-                @blur="onAmountBlur"
-              >
-                <template #iconTrailing>
-                  <span>{{ currencyCode }}</span>
-                </template>
-              </input-field>
-            </form-row>
+            <div :class="isMobileView && 'grid grid-cols-2 gap-x-3'">
+              <form-row>
+                <input-field
+                  ref="amountFieldRef"
+                  v-model="form.amount"
+                  :label="$t('dialogs.manageTransaction.form.amountLabel')"
+                  type="number"
+                  :disabled="isFormFieldsDisabled || isAmountFieldDisabled"
+                  only-positive
+                  :placeholder="$t('dialogs.manageTransaction.form.amountPlaceholder')"
+                  :error-message="amountErrorMessage"
+                  autofocus
+                  @blur="onAmountBlur"
+                >
+                  <template #iconTrailing>
+                    <span>{{ currencyCode }}</span>
+                  </template>
+                </input-field>
+              </form-row>
+              <ReuseDateField v-if="isMobileView" />
+            </div>
 
             <p v-if="wouldOverdrawLoanSource" class="text-warning-text -mt-1 px-1 text-xs">
               {{ $t('dialogs.loanPayment.overdrawWarning', { account: form.account?.name ?? '' }) }}
@@ -1959,29 +1925,10 @@ onUnmounted(() => {
               </ResponsiveAlertDialog>
             </template>
 
-            <form-row>
-              <date-field
-                :model-value="form.time"
-                :disabled="isFormFieldsDisabled || !isEditableAsManual"
-                :label="$t('dialogs.manageTransaction.form.datetimeLabel')"
-                :error-message="timeErrorMessage"
-                :calendar-options="{
-                  maxDate: form.isPlanned ? undefined : new Date(),
-                }"
-                @update:model-value="onDateUpdate"
-              />
+            <ReuseDateField v-if="!isMobileView" />
 
-              <PlannedUnlockHint v-if="isFormCreation && form.isPlanned">
-                {{ $t('dialogs.manageTransaction.form.plannedDatesUnlockedHint') }}
-              </PlannedUnlockHint>
-            </form-row>
-
-            <p v-if="isPreAnchorLoanPayment" class="text-muted-foreground -mt-1 px-1 text-xs">
-              {{ $t('dialogs.loanPayment.preAnchorHint') }}
-            </p>
-
-            <template v-if="currentTxType !== FORM_TYPES.transfer">
-              <form-row>
+            <div :class="isMobileView && !isTransferTx && 'grid grid-cols-2 gap-x-3'">
+              <form-row v-if="!isTransferTx">
                 <payee-select-field
                   v-model="form.payeeId"
                   :label="$t('dialogs.manageTransaction.form.payeeLabel')"
@@ -1991,7 +1938,10 @@ onUnmounted(() => {
                   @payee-selected="handlePayeeSelected"
                 />
               </form-row>
-            </template>
+              <ReusePaymentType v-if="isMobileView" />
+            </div>
+
+            <ReuseMoreOptions v-if="isMobileView" />
           </div>
         </div>
 
@@ -2000,44 +1950,6 @@ onUnmounted(() => {
         </div>
       </div>
     </ScrollArea>
-
-    <template v-if="isMobileView">
-      <Drawer.Drawer>
-        <Drawer.DrawerTrigger as-child>
-          <Button
-            variant="ghost"
-            class="border-border bg-muted h-auto w-full justify-between rounded-none border-t px-6 py-2.5 font-normal dark:bg-black/20"
-          >
-            <span class="flex items-center gap-2">
-              <SlidersHorizontalIcon class="text-muted-foreground size-4" />
-              {{ $t('dialogs.manageTransaction.form.moreOptionsButton') }}
-              <span
-                v-if="moreOptionsFilledCount"
-                class="bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-[10px] leading-none font-semibold tabular-nums"
-              >
-                {{ moreOptionsFilledCount }}
-              </span>
-            </span>
-            <ChevronUpIcon class="text-muted-foreground size-4" />
-          </Button>
-        </Drawer.DrawerTrigger>
-
-        <Drawer.DrawerContent custom-indicator class="pb-0">
-          <Drawer.DrawerTitle></Drawer.DrawerTitle>
-          <div class="bg-muted rounded-t-[10px] px-6 pb-[env(safe-area-inset-bottom)] dark:bg-black/20">
-            <Drawer.DrawerIndicator class="mb-6" />
-            <ReuseMoreOptions />
-          </div>
-        </Drawer.DrawerContent>
-      </Drawer.Drawer>
-
-      <p
-        v-if="templating.hiddenFields.value"
-        class="text-muted-foreground border-border bg-muted border-t px-6 py-1.5 text-xs dark:bg-black/20"
-      >
-        {{ $t('dialogs.manageTransaction.templates.alsoSet', { fields: templating.hiddenFields.value }) }}
-      </p>
-    </template>
 
     <div v-if="!isReadOnly || canDelete" class="border-border bg-dialog flex items-center gap-3 border-t px-6 py-4">
       <Button

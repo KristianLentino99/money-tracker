@@ -428,8 +428,6 @@
         "announceApplied": "Застосовано {name} — заповнено {count} поле. Сума порожня. | Застосовано {name} — заповнено {count} поля. Сума порожня. | Застосовано {name} — заповнено {count} полів. Сума порожня.",
         "announceAppliedWithAmount": "Застосовано {name} — заповнено {count} поле. Сума: {amount}. | Застосовано {name} — заповнено {count} поля. Сума: {amount}. | Застосовано {name} — заповнено {count} полів. Сума: {amount}.",
         "categoryDeletedHint": "Категорію цього шаблону видалено — оберіть іншу.",
-        "alsoSet": "Шаблон також задав: {fields}",
-        "tagsCount": "{count} тег | {count} теги | {count} тегів",
         "applyConfirmTitle": "Застосувати шаблон?",
         "applyConfirmDescription": "Застосування замінить ваш розподіл і прив'язку повернення.",
         "toasts": {
