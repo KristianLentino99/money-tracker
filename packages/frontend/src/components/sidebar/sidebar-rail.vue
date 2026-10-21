@@ -40,7 +40,7 @@ import UserMenu from './user-menu.vue';
 const { t } = useI18n();
 const route = useRoute();
 const { isCollapsed } = useSidebarCollapsed();
-const { isAccountsRoute, isTransactionsRoute, isPlannedRoute } = useSidebarNavRoutes();
+const { isAccountsRoute, isTransactionsRoute, isPlannedRoute, isChildActive } = useSidebarNavRoutes();
 const accountsNavChildren = useAccountsNavChildren();
 
 const {
@@ -220,9 +220,15 @@ const sectionItems = computed<RailSectionItem[]>(() => {
                     variant="ghost"
                     as="span"
                     size="sm"
-                    :class="['w-full justify-start gap-2 px-3', isActive && 'bg-primary/10 text-foreground']"
+                    :class="[
+                      'w-full justify-start gap-2 px-3',
+                      isChildActive({ child, isActive }) && 'bg-primary/10 text-foreground',
+                    ]"
                   >
-                    <component :is="child.icon" :class="['size-4 shrink-0', isActive && 'text-primary-text']" />
+                    <component
+                      :is="child.icon"
+                      :class="['size-4 shrink-0', isChildActive({ child, isActive }) && 'text-primary-text']"
+                    />
                     <span>{{ $t(child.labelKey) }}</span>
                   </ui-button>
                 </router-link>

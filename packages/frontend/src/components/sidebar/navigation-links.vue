@@ -24,7 +24,7 @@ const navIconBase = 'size-4 shrink-0';
 const navIconActive = 'text-primary-text';
 
 const { isAccountsOpen, isTransactionsOpen, isPlannedOpen } = useSidebarNavCollapse();
-const { isAccountsRoute, isTransactionsRoute, isPlannedRoute } = useSidebarNavRoutes();
+const { isAccountsRoute, isTransactionsRoute, isPlannedRoute, isChildActive } = useSidebarNavRoutes();
 const accountsNavChildren = useAccountsNavChildren();
 
 watch(
@@ -110,10 +110,10 @@ watch(
           <ui-button
             variant="ghost"
             as="span"
-            :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
+            :class="['w-full justify-start gap-2 px-3', isChildActive({ child, isActive }) && navItemActive]"
             size="sm"
           >
-            <component :is="child.icon" :class="[navIconBase, isActive && navIconActive]" />
+            <component :is="child.icon" :class="[navIconBase, isChildActive({ child, isActive }) && navIconActive]" />
             <span>{{ $t(child.labelKey) }}</span>
           </ui-button>
         </router-link>
@@ -155,10 +155,10 @@ watch(
           <ui-button
             variant="ghost"
             as="span"
-            :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
+            :class="['w-full justify-start gap-2 px-3', isChildActive({ child, isActive }) && navItemActive]"
             size="sm"
           >
-            <component :is="child.icon" :class="[navIconBase, isActive && navIconActive]" />
+            <component :is="child.icon" :class="[navIconBase, isChildActive({ child, isActive }) && navIconActive]" />
             <span>{{ $t(child.labelKey) }}</span>
           </ui-button>
         </router-link>
@@ -192,10 +192,10 @@ watch(
           <ui-button
             variant="ghost"
             as="span"
-            :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
+            :class="['w-full justify-start gap-2 px-3', isChildActive({ child, isActive }) && navItemActive]"
             size="sm"
           >
-            <component :is="child.icon" :class="[navIconBase, isActive && navIconActive]" />
+            <component :is="child.icon" :class="[navIconBase, isChildActive({ child, isActive }) && navIconActive]" />
             <span>{{ $t(child.labelKey) }}</span>
           </ui-button>
         </router-link>
