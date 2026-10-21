@@ -7,7 +7,7 @@
       "searchPlaceholder": "Search goals",
       "filters": {
         "all": "All",
-        "behind": "Behind",
+        "behind": "Behind schedule",
         "archived": "Archived"
       },
       "sections": {

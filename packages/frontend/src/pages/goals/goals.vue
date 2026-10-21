@@ -31,26 +31,26 @@ const openForm = ({ goal }: { goal?: GoalModel } = {}) => {
   <PageWrapper class="grid max-w-5xl gap-4">
     <div class="@container/goals-header flex items-center justify-between gap-3">
       <div class="min-w-0">
-        <h1 class="text-2xl font-bold tracking-tight">{{ $t('goals.title') }}</h1>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl font-bold tracking-tight">{{ $t('goals.title') }}</h1>
+          <Button as-child variant="ghost" size="sm" class="text-muted-foreground">
+            <a
+              :href="`${config.docsUrl}/goals/overview/`"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="$t('goals.docs.howItWorks')"
+            >
+              <BookOpenIcon class="size-4" />
+              <span class="hidden @xl/goals-header:inline">{{ $t('goals.docs.howItWorks') }}</span>
+            </a>
+          </Button>
+        </div>
         <p class="text-muted-foreground mt-1 text-sm">{{ $t('goals.description') }}</p>
       </div>
-      <div class="flex shrink-0 items-center gap-2">
-        <Button as-child variant="ghost" size="sm" class="text-muted-foreground">
-          <a
-            :href="`${config.docsUrl}/goals/overview/`"
-            target="_blank"
-            rel="noopener noreferrer"
-            :aria-label="$t('goals.docs.howItWorks')"
-          >
-            <BookOpenIcon class="size-4" />
-            <span class="hidden @xl/goals-header:inline">{{ $t('goals.docs.howItWorks') }}</span>
-          </a>
-        </Button>
-        <Button v-if="canWrite" @click="openForm()">
-          <PlusIcon class="size-4" />
-          {{ $t('goals.newGoal') }}
-        </Button>
-      </div>
+      <Button v-if="canWrite" class="shrink-0" @click="openForm()">
+        <PlusIcon class="size-4" />
+        {{ $t('goals.newGoal') }}
+      </Button>
     </div>
 
     <GoalsAccessCallout />

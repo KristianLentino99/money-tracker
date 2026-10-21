@@ -7,7 +7,7 @@
       "searchPlaceholder": "Пошук цілей",
       "filters": {
         "all": "Усі",
-        "behind": "Відстають",
+        "behind": "Відстають від графіка",
         "archived": "Архівовані"
       },
       "sections": {
