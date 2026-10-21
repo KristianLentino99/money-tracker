@@ -19,7 +19,8 @@
     "planned": {
       "planned": "Заплановане",
       "subscriptions": "Регулярні платежі",
-      "budgets": "Трекери"
+      "budgets": "Трекери",
+      "goals": "Цілі"
     },
     "venture": "Венчур",
     "budget": "Бюджет"

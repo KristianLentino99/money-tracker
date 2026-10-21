@@ -1060,6 +1060,99 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
     );
   });
 
+  describe('Goals', () => {
+    it('round-trips goals and their account shares, and the restored goals read the same', async () => {
+      const savings = await helpers.createAccount({
+        payload: helpers.buildAccountPayload({ name: 'Goal savings' }),
+        raw: true,
+      });
+      const cash = await helpers.createAccount({
+        payload: helpers.buildAccountPayload({ name: 'Goal cash' }),
+        raw: true,
+      });
+      await helpers.createGoal({
+        payload: {
+          name: 'Trip',
+          targetAmount: 2500.5,
+          targetDate: '2030-06-01',
+          plannedMonthly: 150,
+          logoIcon: 'airplane',
+          accounts: [
+            { accountId: savings.id, sharePercent: 60 },
+            { accountId: cash.id, sharePercent: 33.33 },
+          ],
+        },
+        raw: true,
+      });
+      const car = await helpers.createGoal({
+        payload: { name: 'Car', accounts: [{ accountId: savings.id, sharePercent: 40 }] },
+        raw: true,
+      });
+      await helpers.updateGoal({ goalId: car.id, payload: { status: 'paused' }, raw: true });
+      const before = await helpers.listGoals({ raw: true });
+
+      const first = await exportArchive();
+      const firstArchive = helpers.parseBackupArchive({ buffer: first.buffer });
+      expect((firstArchive.readData({ name: 'goals' }) as unknown[]).length).toBe(2);
+      expect((firstArchive.readData({ name: 'goal-accounts' }) as unknown[]).length).toBe(3);
+
+      const restore = await helpers.restoreBackup({ fileContent: first.base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+      expect(status.status).toBe('completed');
+      expect(foreignReferenceWarnings(status)).toEqual([]);
+
+      expect(await helpers.listGoals({ raw: true })).toEqual(before);
+
+      const secondArchive = helpers.parseBackupArchive({ buffer: (await exportArchive()).buffer });
+      for (const name of ['goals', 'goal-accounts']) {
+        expect({ name, rows: canonicalRows(secondArchive.readData({ name })) }).toEqual({
+          name,
+          rows: canonicalRows(firstArchive.readData({ name })),
+        });
+      }
+    }, 30000);
+
+    it('re-links goal shares to the reminted accounts and gives the goal its own logo copy', async () => {
+      const account = await helpers.createAccount({
+        payload: helpers.buildAccountPayload({ name: 'Goal source' }),
+        raw: true,
+      });
+      const source = await helpers.createGoal({
+        payload: {
+          name: 'House',
+          logoImage: PNG_1X1_DATA_URL,
+          accounts: [{ accountId: account.id, sharePercent: 75 }],
+        },
+        raw: true,
+      });
+      expect(source.logoImageId).toBeTruthy();
+      const { base64 } = await exportArchive();
+
+      const target = await helpers.provisionSecondUserWithBaseCurrency();
+      await helpers.asUser({
+        cookies: target.cookies,
+        fn: async () => {
+          const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
+          expect(restore.statusCode).toBe(200);
+          const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+          expect(status.status).toBe('completed');
+          expect(foreignReferenceWarnings(status)).toEqual([]);
+
+          const targetAccount = (await helpers.getAccounts()).find((a) => a.name === 'Goal source')!;
+          expect(targetAccount.id).not.toBe(account.id);
+
+          const goals = await helpers.listGoals({ raw: true });
+          expect(goals).toHaveLength(1);
+          expect(goals[0]!.id).not.toBe(source.id);
+          expect(goals[0]!.accounts).toEqual([{ accountId: targetAccount.id, sharePercent: 75 }]);
+          expect(goals[0]!.logoImageId).toBeTruthy();
+          expect(goals[0]!.logoImageId).not.toBe(source.logoImageId);
+        },
+      });
+    }, 30000);
+  });
+
   // Backup files are user-editable (checksums recompute), so a hand-edited archive
   // can aim a child row's FK at another user's row — the DB constraint accepts ANY
   // existing row. The restore only accepts ids it inserted this run: a required

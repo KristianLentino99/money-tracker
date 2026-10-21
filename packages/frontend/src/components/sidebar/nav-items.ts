@@ -3,6 +3,7 @@ import { useUserSettings } from '@/composable/data-queries/user-settings';
 import { ROUTES_NAMES } from '@/routes/constants';
 import {
   CreditCardIcon,
+  FlagIcon,
   GroupIcon,
   HandCoinsIcon,
   RepeatIcon,
@@ -54,6 +55,7 @@ export const SIDEBAR_NAV_CHILDREN = {
   planned: [
     { routeName: ROUTES_NAMES.plannedSubscriptions, labelKey: 'navigation.planned.subscriptions', icon: RepeatIcon },
     { routeName: ROUTES_NAMES.plannedTrackers, labelKey: 'navigation.planned.budgets', icon: TargetIcon },
+    { routeName: ROUTES_NAMES.goals, labelKey: 'navigation.planned.goals', icon: FlagIcon },
   ],
 } satisfies Record<string, SidebarNavChild[]>;
 

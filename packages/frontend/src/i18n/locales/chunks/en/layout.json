@@ -19,7 +19,8 @@
     "planned": {
       "planned": "Planned",
       "subscriptions": "Recurring payments",
-      "budgets": "Trackers"
+      "budgets": "Trackers",
+      "goals": "Goals"
     },
     "venture": "Venture",
     "budget": "Budget"
