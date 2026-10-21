@@ -4,6 +4,7 @@ import {
   API_ERROR_CODES,
   BACKUP_FORMAT_VERSION,
   BANK_PROVIDER_TYPE,
+  CATEGORY_ORDER_ROOT_KEY,
   DEACTIVATION_REASON,
   ImportSource,
   PLANS,
@@ -738,6 +739,11 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
         raw: true,
         patch: {
           fire: { spendingExcludedCategoryIds: [category.id], returnIndicatorId: `portfolio:${portfolio.id}` },
+          categoryOrder: {
+            [CATEGORY_ORDER_ROOT_KEY]: [category.id],
+            [category.id]: [category.id, generateRandomRecordId()],
+            [generateRandomRecordId()]: [category.id],
+          },
           savedTransactionViews: [
             {
               id: generateRandomRecordId(),
@@ -781,7 +787,13 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
           expect(targetPayee!.id).not.toBe(payee.id);
           expect(targetTracker!.id).not.toBe(tracker.id);
 
-          const { fire, incomeCategoryIds, savedTransactionViews } = await helpers.getUserSettings({ raw: true });
+          const { fire, incomeCategoryIds, categoryOrder, savedTransactionViews } = await helpers.getUserSettings({
+            raw: true,
+          });
+          expect(categoryOrder).toStrictEqual({
+            [CATEGORY_ORDER_ROOT_KEY]: [targetCategory!.id],
+            [targetCategory!.id]: [targetCategory!.id],
+          });
           expect(incomeCategoryIds).toEqual([targetCategories.find((c) => c.key === 'income')!.id]);
           expect(fire?.spendingExcludedCategoryIds).toEqual([targetCategory!.id]);
           expect(fire?.returnIndicatorId).toBe(`portfolio:${targetPortfolio!.id}`);
