@@ -125,12 +125,14 @@ test.describe('Goals navigation, dashboard widget, deep links and mobile', () =>
     test.setTimeout(240_000);
     const request = page.request;
 
-    await test.step('Goals sits under Planned in the sidebar and opens /goals (plan D8, docs overview)', async () => {
+    await test.step('Goals sits under Planning in the sidebar and opens /goals (docs overview)', async () => {
       await page.goto('/dashboard');
-      const planned = page.getByRole('button', { name: 'Planned', exact: true });
+      const planned = page.getByRole('button', { name: 'Planning', exact: true });
       await expect(planned).toBeVisible({ timeout: 15_000 });
       if ((await planned.getAttribute('aria-expanded')) !== 'true') await planned.click();
       await expect(planned).toHaveAttribute('aria-expanded', 'true');
+      const plannedGroup = page.locator(`#${await planned.getAttribute('aria-controls')}`);
+      await expect(plannedGroup.getByRole('link')).toHaveText(['Budget', 'Goals', 'Trackers', 'Recurring payments']);
 
       await page.getByRole('link', { name: 'Goals', exact: true }).click();
       await expect(page).toHaveURL(/\/goals$/);

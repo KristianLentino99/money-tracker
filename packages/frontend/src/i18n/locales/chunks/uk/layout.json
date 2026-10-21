@@ -17,7 +17,7 @@
     "appVersion": "Версія застосунку {version}",
     "settings": "Налаштування",
     "planned": {
-      "planned": "Заплановане",
+      "planned": "Планування",
       "subscriptions": "Регулярні платежі",
       "budgets": "Трекери",
       "goals": "Цілі"

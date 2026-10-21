@@ -2,6 +2,7 @@ import type { SidebarNavConfig } from '@/api/user-settings';
 import { useUserSettings } from '@/composable/data-queries/user-settings';
 import { ROUTES_NAMES } from '@/routes/constants';
 import {
+  CalculatorIcon,
   CreditCardIcon,
   FlagIcon,
   GroupIcon,
@@ -26,13 +27,6 @@ export interface SidebarNavChild {
 
 type ToggleableNavChild = SidebarNavChild & { settingKey: keyof SidebarNavConfig };
 
-/** Top-level, ungrouped nav entry for the budget plan screen. */
-export const SIDEBAR_BUDGET_NAV_ITEM: SidebarNavChild = {
-  routeName: ROUTES_NAMES.budget,
-  labelKey: 'navigation.budget',
-  icon: WalletIcon,
-};
-
 /** Sub-links of the collapsible nav groups, rendered by both the full nav and the rail flyouts. */
 export const SIDEBAR_NAV_CHILDREN = {
   accounts: [
@@ -53,9 +47,10 @@ export const SIDEBAR_NAV_CHILDREN = {
     { routeName: ROUTES_NAMES.automations, labelKey: 'navigation.automations', icon: ZapIcon },
   ],
   planned: [
-    { routeName: ROUTES_NAMES.plannedSubscriptions, labelKey: 'navigation.planned.subscriptions', icon: RepeatIcon },
-    { routeName: ROUTES_NAMES.plannedTrackers, labelKey: 'navigation.planned.budgets', icon: TargetIcon },
+    { routeName: ROUTES_NAMES.budget, labelKey: 'navigation.budget', icon: CalculatorIcon },
     { routeName: ROUTES_NAMES.goals, labelKey: 'navigation.planned.goals', icon: FlagIcon },
+    { routeName: ROUTES_NAMES.plannedTrackers, labelKey: 'navigation.planned.budgets', icon: TargetIcon },
+    { routeName: ROUTES_NAMES.plannedSubscriptions, labelKey: 'navigation.planned.subscriptions', icon: RepeatIcon },
   ],
 } satisfies Record<string, SidebarNavChild[]>;
 
