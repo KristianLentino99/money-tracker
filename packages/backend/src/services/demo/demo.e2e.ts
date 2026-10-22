@@ -18,7 +18,7 @@ import { authPool } from '@config/auth';
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import { connection } from '@models/index';
 import Users from '@models/users.model';
-import { extractCookies, listAutomations, makeAuthRequest, makeRequest } from '@tests/helpers';
+import { extractCookies, listAutomations, listGoals, makeAuthRequest, makeRequest } from '@tests/helpers';
 import { clearMockSession, registerMockSession } from '@tests/mocks/better-auth';
 
 import { DEMO_ACCOUNT_GROUPS } from './seed-account-groups.service';
@@ -730,6 +730,14 @@ describe('Demo Mode', () => {
           .flatMap((line) => (line.goal ? [`${line.goal.frequency}/${line.goal.behavior}`] : []))
           .toSorted(),
       ).toEqual(['by_date/reach_balance', 'every_period/budget_another', 'every_period/refill_up_to']);
+
+      const goals = await listGoals({ raw: true });
+      expect(goals.map((goal) => [goal.name, goal.achievedAt !== null])).toEqual([
+        ['Emergency fund', true],
+        ['New laptop', true],
+        ['Trip to Japan', false],
+        ['Car down payment', false],
+      ]);
 
       const accountGroups = await makeRequest({
         method: 'get',
