@@ -298,28 +298,27 @@ const chipClass = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-
 <template>
   <div class="max-w-5xl">
     <Card class="divide-border @container/tracker divide-y overflow-clip">
-      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-3 @md/tracker:px-4">
-        <div class="flex min-w-0 items-center gap-3">
-          <TrackerLogo :tracker="tracker" class="size-9 rounded-lg" />
+      <div class="flex items-center gap-3 px-3 py-3 @md/tracker:px-4">
+        <div class="flex min-w-0 flex-1 items-center gap-3">
+          <TrackerLogo :tracker="tracker" class="size-9 shrink-0 rounded-lg" />
           <div class="min-w-0">
-            <h1 class="truncate text-lg font-bold @md/tracker:text-xl">{{ tracker.name }}</h1>
+            <div class="flex min-w-0 items-center gap-1.5">
+              <h1 class="truncate text-lg font-bold @md/tracker:text-xl">{{ tracker.name }}</h1>
+              <span v-if="isSharedWithCaller" :class="cn(chipClass, 'bg-primary/10 text-primary-text shrink-0')">
+                <UsersIcon class="size-3" />
+                {{ $t('budgets.share.sharedByBadge', { handle: `@${ownerHandle}` }) }}
+              </span>
+              <span v-if="statusChip" :class="cn(chipClass, statusChip.class, 'shrink-0')">{{ statusChip.text }}</span>
+              <span v-if="isArchived" :class="cn(chipClass, 'bg-muted text-muted-foreground shrink-0')">
+                <ArchiveIcon class="size-3" />
+                {{ $t('budgets.list.archivedLabel') }}
+              </span>
+            </div>
             <p v-if="caption" class="text-muted-foreground truncate text-xs">{{ caption }}</p>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span v-if="isSharedWithCaller" :class="cn(chipClass, 'bg-primary/10 text-primary-text')">
-            <UsersIcon class="size-3" />
-            {{ $t('budgets.share.sharedByBadge', { handle: `@${ownerHandle}` }) }}
-          </span>
-          <span v-if="statusChip" :class="cn(chipClass, statusChip.class)">{{ statusChip.text }}</span>
-          <span v-if="isArchived" :class="cn(chipClass, 'bg-muted text-muted-foreground')">
-            <ArchiveIcon class="size-3" />
-            {{ $t('budgets.list.archivedLabel') }}
-          </span>
-        </div>
-
-        <div v-if="canManage" class="ml-auto flex items-center gap-2">
+        <div v-if="canManage" class="flex shrink-0 items-center gap-2">
           <Button
             v-if="members.length > 1"
             variant="ghost"
