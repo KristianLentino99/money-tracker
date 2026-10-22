@@ -393,7 +393,11 @@
             "title": "Goals are locked",
             "description": "Save toward what matters and see if you're on pace. Available on paid plans.",
             "action": "Learn more"
-          }
+          },
+          "settings": {
+            "showReached": "Show reached goals"
+          },
+          "reachedSection": "Reached"
         }
       }
     },
