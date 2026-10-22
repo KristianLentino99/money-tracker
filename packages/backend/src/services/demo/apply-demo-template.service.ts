@@ -23,6 +23,7 @@ import {
   setupVehicles,
   setupVentures,
 } from './seed-demo-data.service';
+import { setupGoals } from './seed-goals.service';
 import { setupInvestments } from './seed-investments.service';
 import { seedPayees } from './seed-payees.service';
 import { setupSubscriptions } from './seed-subscriptions.service';
@@ -321,6 +322,9 @@ export async function applyDemoTemplate({
   await setupVehicles({ userId, referenceDate });
   await setupLoans({ userId, referenceDate });
   await setupVentures({ userId, referenceDate });
+  if (savingsAccountId) {
+    await setupGoals({ userId, savingsAccountId, referenceDate });
+  }
   const accountGroupIdByName = await setupAccountGroups({ userId });
   await setupAutomations({
     userId,
