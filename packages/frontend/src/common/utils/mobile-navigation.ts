@@ -1,10 +1,9 @@
 import { ROUTES_NAMES } from '@/routes/constants';
 
-export type MobilePrimaryTab = 'home' | 'plan' | 'transactions' | 'accounts' | 'more';
+export type MobilePrimaryTab = 'home' | 'transactions' | 'accounts' | 'more';
 
 export const MOBILE_PRIMARY_NAVIGATION = Object.freeze([
   { key: 'home', routeName: ROUTES_NAMES.home, labelKey: 'navigation.home' },
-  { key: 'plan', routeName: ROUTES_NAMES.plan, labelKey: 'navigation.plan' },
   { key: 'transactions', routeName: ROUTES_NAMES.transactions, labelKey: 'navigation.transactions' },
   { key: 'accounts', routeName: ROUTES_NAMES.accounts, labelKey: 'navigation.accounts' },
   { key: 'more', routeName: ROUTES_NAMES.more, labelKey: 'navigation.more' },
@@ -12,7 +11,6 @@ export const MOBILE_PRIMARY_NAVIGATION = Object.freeze([
 
 const ROUTE_NAMES_BY_TAB: Readonly<Record<MobilePrimaryTab, ReadonlySet<string>>> = {
   home: new Set([ROUTES_NAMES.home]),
-  plan: new Set([ROUTES_NAMES.plan]),
   transactions: new Set([
     ROUTES_NAMES.transactions,
     ROUTES_NAMES.transactionGroups,

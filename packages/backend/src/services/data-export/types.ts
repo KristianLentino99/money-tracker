@@ -12,7 +12,6 @@ export {
   EXPORT_SCHEMA_VERSION,
   MAX_EXPORT_ROWS,
   type ExportDateRange,
-  type ExportFileName,
   type ExportFormat,
   type ExportGroup,
 } from '@bt/shared/types';
@@ -20,7 +19,6 @@ export {
 import {
   EXPORT_SCHEMA_VERSION,
   type ExportDateRange,
-  type ExportFileName,
   type ExportFormat,
   type ExportGroup,
   type PAYMENT_TYPES,
@@ -147,6 +145,52 @@ export interface VehicleMaintenanceVisitRow {
   activitiesDetails: string;
 }
 
+export interface TrackerRow {
+  name: string;
+  status: string;
+  periodStart: string;
+  periodEnd: string;
+  limitAmount: number | null;
+  currency: string;
+  categories: string[];
+  spentAmount: number;
+}
+
+export interface BudgetLineRow {
+  plan: string;
+  group: string;
+  line: string;
+  categories: string[];
+  archived: boolean;
+  goal: string;
+  currency: string;
+}
+
+export interface BudgetPeriodRow {
+  plan: string;
+  periodStart: string;
+  periodEndInclusive: string;
+  line: string;
+  assigned: number;
+  /** Net of refunds, so negative when the line took in more than it spent. */
+  spent: number;
+  available: number;
+  currency: string;
+}
+
+export interface GoalRow {
+  name: string;
+  status: string;
+  targetAmount: number;
+  currency: string;
+  targetDate: string;
+  plannedMonthly: number | null;
+  /** One `"<account>: <share>%"` entry per backing account. */
+  accounts: string[];
+  achievedAt: string;
+  achievedAmount: number | null;
+}
+
 export interface SubscriptionRow {
   name: string;
   /**
@@ -246,12 +290,19 @@ export type ExportTable =
   | { name: 'vehicles'; rows: VehicleRow[] }
   | { name: 'vehicle_maintenance_plans'; rows: VehicleMaintenancePlanRow[] }
   | { name: 'vehicle_maintenance_visits'; rows: VehicleMaintenanceVisitRow[] }
+  | { name: 'trackers'; rows: TrackerRow[] }
+  | { name: 'budget_lines'; rows: BudgetLineRow[] }
+  | { name: 'budget_periods'; rows: BudgetPeriodRow[] }
+  | { name: 'goals'; rows: GoalRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }
   | { name: 'transaction_templates'; rows: TransactionTemplateRow[] }
   | { name: 'portfolios'; rows: PortfolioRow[] }
   | { name: 'holdings'; rows: HoldingRow[] }
   | { name: 'investment_transactions'; rows: InvestmentTransactionRow[] }
   | { name: 'portfolio_transfers'; rows: PortfolioTransferRow[] };
+
+/** File base names inside the zip, one per `ExportTable` arm. */
+export type ExportFileName = ExportTable['name'];
 
 /**
  * Closed set of filenames that may appear inside the export zip. Pinning the

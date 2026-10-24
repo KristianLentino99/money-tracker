@@ -14,16 +14,20 @@
     "accountDetails": "Деталі рахунку",
     "logout": "Вийти",
     "settings": "Налаштування",
-    "plan": "Бюджет",
     "planned": {
-      "planned": "Прогноз",
-      "subscriptions": "Регулярні платежі"
+      "planned": "Планування",
+      "subscriptions": "Регулярні платежі",
+      "budgets": "Трекери",
+      "goals": "Цілі"
     },
     "venture": "Венчур",
     "helpAndDocs": "Довідка та документація",
     "appVersion": "Версія застосунку {version}",
     "home": "Home",
-    "more": "More"
+    "more": "More",
+    "budget": "Бюджет",
+    "updateAvailable": "Доступне оновлення",
+    "updateToVersion": "Оновлення · {version}"
   },
   "sidebar": {
     "collapse": "Згорнути бічну панель",
@@ -69,7 +73,8 @@
       "syncedTime": "Синхронізовано {time}",
       "syncingAccounts": "Синхронізація {count} рахунків",
       "stuck": "Синхронізація зависла",
-      "failed": "Синхронізацію не вдалося виконати, деякі рахунки потребують уваги"
+      "failed": "Синхронізацію не вдалося виконати, деякі рахунки потребують уваги",
+      "connectBank": "Підключити банк"
     },
     "categorization": {
       "title": "AI-категоризація",
@@ -86,7 +91,9 @@
     "moreActions": "Інші способи додати дані",
     "importDataHint": "CSV-файл або банківська виписка",
     "attachInvoice": "Прикріпити інвойс",
-    "attachInvoiceHint": "Ми знайдемо транзакцію, до якої він належить"
+    "attachInvoiceHint": "Ми знайдемо транзакцію, до якої він належить",
+    "feedback": "Надіслати відгук",
+    "support": "Підтримати"
   },
   "themeSelector": {
     "light": "Світла",
@@ -127,7 +134,8 @@
       "weeksAgo": "{count} тиждень тому | {count} тижні тому | {count} тижнів тому",
       "monthsAgo": "{count} місяць тому | {count} місяці тому | {count} місяців тому",
       "yearsAgo": "{count} рік тому | {count} роки тому | {count} років тому"
-    }
+    },
+    "connectButton": "Підключити"
   },
   "banners": {
     "recoveryMethod": {
@@ -138,7 +146,7 @@
   },
   "relinkWarning": {
     "buttonLabel": "{count} рахунок потребує уваги | {count} рахунки потребують уваги | {count} рахунків потребують уваги",
-    "title": "Enable Banking: Потрібна дія",
+    "title": "Enable Banking: потрібна дія",
     "description": "Ці рахунки Enable Banking потрібно оновити через зміну схеми даних. Це одноразова дія для покращення надійності синхронізації.",
     "step1Full": "Щоб заощадити ваш час, спочатку спробуйте перепідключити все банківське підключення. Ви можете знайти кнопку {reconnect} у розділі {connectionValidity} на сторінці кожного підключення:",
     "reconnectButton": "Перепідключити",
@@ -276,6 +284,14 @@
           "share-account": {
             "title": "Поділитися рахунком",
             "description": "Відкрийте будь-який рахунок та скористайтеся дією «Поділитися», щоб надати окремому користувачу доступ для перегляду чи редагування."
+          },
+          "create-budget": {
+            "title": "Встановіть трекер",
+            "description": "Створіть ліміти витрат для категорій"
+          },
+          "connect-bank": {
+            "title": "Підключіть банківський рахунок",
+            "description": "Синхронізуйте транзакції автоматично"
           }
         },
         "ui": {
@@ -290,6 +306,10 @@
           "progressText": "{completed} з {total} завершено",
           "categoryProgress": "{completed} з {total} виконано"
         }
+      },
+      "connectBank": {
+        "title": "Підключити ваш банк",
+        "description": "Автоматично синхронізуйте транзакції з вашого банку"
       }
     }
   },
@@ -303,5 +323,31 @@
       "description": "Explore insights, planning tools, imports, and settings."
     },
     "addTransaction": "Add transaction"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Залишити відгук",
+      "description": "Розкажіть, що працює, а що ні.",
+      "typeLabel": "Тип",
+      "typePlaceholder": "Виберіть тип",
+      "types": {
+        "bug": "Щось не працює",
+        "featureRequest": "Хочу нову функцію",
+        "other": "Щось інше"
+      },
+      "docsHint": "Не впевнені, як щось працює? Спершу перегляньте {link}.",
+      "docsHintLink": "документацію",
+      "messageLabel": "Ваш відгук",
+      "messagePlaceholder": "Що сталося, або що б ви хотіли бачити?",
+      "messageRequired": "Будь ласка, напишіть повідомлення перед надсиланням.",
+      "submit": "Надіслати",
+      "thanks": "Дякуємо, ми читаємо кожне повідомлення.",
+      "unavailable": "Наразі надсилання недоступне. Скористайтеся дошкою нижче.",
+      "or": "або",
+      "board": {
+        "title": "Опублікуйте на публічній дошці",
+        "description": "Голосуйте за ідеї інших, дивіться, що вже заплановано, та отримайте відповідь на свою."
+      }
+    }
   }
 }

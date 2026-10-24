@@ -135,7 +135,7 @@
         <template #cell:problem="{ item }">
           <div class="flex items-start gap-1.5">
             <StatusIndicator status="invalid" size="xs" class="mt-px shrink-0" />
-            <span class="text-destructive-text text-xs leading-snug">{{ item.error }}</span>
+            <span class="text-destructive-text text-xs leading-snug">{{ importErrorMessage({ error: item, t }) }}</span>
           </div>
         </template>
 
@@ -161,6 +161,9 @@
       <UiButton variant="outline" @click="handleViewTransactions">
         {{ $t('pages.importExport.csvImport.results.viewTransactions') }}
       </UiButton>
+      <UiButton variant="outline" @click="handleFindTransfers">
+        {{ $t('pages.importExport.importResults.findTransfers') }}
+      </UiButton>
       <UiButton @click="handleNewImport">
         {{ $t('pages.importExport.csvImport.results.startNewImport') }}
       </UiButton>
@@ -177,6 +180,7 @@ import { StatusIndicator } from '@/components/lib/ui/status-indicator';
 import { cn } from '@/lib/utils';
 import AccountBalanceChangesTable from '@/pages/import-export/components/account-balance-changes-table.vue';
 import BalanceDesyncCallout from '@/pages/import-export/components/balance-desync-callout.vue';
+import { importErrorMessage } from '@/pages/import-export/utils/import-error-message';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useImportExportStore } from '@/stores/import-export';
 import { CircleAlertIcon, CircleCheckIcon } from '@lucide/vue';
@@ -224,6 +228,11 @@ const handleViewTransactions = () => {
   // route doesn't currently support a batch filter via query param, so we
   // navigate to the transactions list directly.
   router.push({ name: ROUTES_NAMES.transactions });
+};
+
+const handleFindTransfers = () => {
+  const dates = store.validRows.map((row) => row.date).sort();
+  router.push({ name: ROUTES_NAMES.optimizationsTransfers, query: { from: dates[0], to: dates.at(-1) } });
 };
 
 const handleNewImport = () => {

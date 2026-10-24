@@ -1,4 +1,4 @@
-import { endpointsTypes } from '@bt/shared/types';
+import type { EntityLogoFields, PivotColumn, PivotRow } from '@bt/shared/types';
 import { AccessibleCategoryInfo } from '@services/categories/get-accessible-category-map.service';
 
 // Synthetic residual-row ids/labels (rows for transactions without the grouping dimension).
@@ -14,22 +14,18 @@ export const UNKNOWN_PAYEE_LABEL = 'Unknown payee';
 // Fallback color for the uncategorized bucket / a category that fell out of the accessible map.
 const FALLBACK_COLOR = '#000000';
 
-type PivotRowKind = endpointsTypes.PivotRow['kind'];
+type PivotRowKind = PivotRow['kind'];
 
 /**
  * A single pivot row, still in integer cents. The serializer converts every amount to an API
  * decimal. `values` only contains columns with a non-zero net amount (frontend defaults
  * missing columns to 0).
  */
-export interface PivotReportRowCents {
+// The logo fields are set for the payee dimension only (via its hydrate step).
+export interface PivotReportRowCents extends Partial<EntityLogoFields> {
   id: string;
   label: string;
   color: string | null;
-  // Only populated for the payee dimension (via hydratePayeeLabels); null = payee has no logo.
-  logoDomain?: string | null;
-  // Monogram letters + '#rrggbb' background, same payee-only population as logoDomain.
-  logoInitials?: string | null;
-  logoColor?: string | null;
   parentId: string | null;
   kind: PivotRowKind;
   values: Record<string, number>;
@@ -41,7 +37,7 @@ export interface PivotReportRowCents {
  * every monetary field is integer cents.
  */
 export interface PivotReportResultCents {
-  columns: endpointsTypes.PivotColumn[];
+  columns: PivotColumn[];
   rows: PivotReportRowCents[];
   columnTotals: Record<string, number>;
   grandTotal: number;

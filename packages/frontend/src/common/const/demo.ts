@@ -14,6 +14,8 @@ export type DemoEndReason = 'signup_clicked' | 'logout' | 'expired';
 export type DemoBlockedFeature =
   | 'add_passkey'
   | 'attach_file'
+  | 'backup_export'
+  | 'backup_restore'
   | 'bank_connect_enablebanking'
   | 'bank_connect_enablebanking_import_accounts'
   | 'bank_connect_lunchflow'
@@ -28,6 +30,7 @@ export type DemoBlockedFeature =
   | 'connect_oauth_provider'
   | 'create_portfolio_empty_state'
   | 'create_portfolio_header'
+  | 'data_export'
   | 'delete_portfolio'
   | 'household_cancel_invite'
   | 'household_change_permission'
@@ -43,4 +46,9 @@ export type DemoBlockedFeature =
   | 'share_account_resend_invite'
   | 'share_account_revoke_member'
   | 'share_invitation_accept'
-  | 'share_invitation_decline';
+  | 'share_invitation_decline'
+  | 'share_tracker_cancel_invite'
+  | 'share_tracker_dialog_submit'
+  | 'share_tracker_invite'
+  | 'share_tracker_resend_invite'
+  | 'share_tracker_revoke_member';

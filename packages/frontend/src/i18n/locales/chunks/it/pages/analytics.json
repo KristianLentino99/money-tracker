@@ -58,6 +58,7 @@
         "totalIncome": "Total income",
         "incomePlusDeficit": "Income + deficit",
         "savings": "Savings",
+        "taxes": "Imposte",
         "deficit": "Deficit",
         "other": "Other",
         "noData": "No transactions in this period",
@@ -75,8 +76,7 @@
         "deficitInvested": "Portfolio contributions ({invested}) exceeded this period's net savings ({saved}). The difference came from existing account balances.",
         "deficitBoth": "Expenses exceeded income by {overspend}, and {invested} was still moved into portfolios. Both were covered from existing account balances.",
         "andMore": "+{count} more",
-        "settings": "Chart settings",
-        "taxes": "Imposte"
+        "settings": "Chart settings"
       }
     },
     "trends": {
@@ -162,9 +162,9 @@
       "rangeMin": "Min",
       "rangeMax": "Max",
       "indicators": {
-        "worldStock": "Total World Stock",
-        "usTreasury": "US Treasury Bonds",
-        "corporateBonds": "Corporate Bonds"
+        "worldStock": "Total world stock",
+        "usTreasury": "US Treasury bonds",
+        "corporateBonds": "Corporate bonds"
       }
     },
     "portfolioFilter": {

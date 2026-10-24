@@ -40,15 +40,15 @@
           "seeAllTransactions": "Alle Transaktionen anzeigen"
         },
         "spikeSettings": {
-          "showMarkers": "Ausschlag-Markierungen anzeigen",
+          "showMarkers": "Marker anzeigen",
           "showMarkersTooltip": "Farbige Markierungen im Diagramm ein-/ausschalten, die deutliche Saldoänderungen hervorheben.",
           "percentThreshold": "Min. Änderung %",
           "percentThresholdTooltip": "Mindestprozentsatz der Saldoänderung zwischen zwei aufeinanderfolgenden Tagen für eine Markierung. Entweder dieser oder der absolute Schwellenwert muss überschritten werden. Niedrige Werte zeigen mehr Markierungen an.",
-          "absoluteThreshold": "Min. Änderung $",
+          "absoluteThreshold": "Min. Änderung {symbol}",
           "absoluteThresholdTooltip": "Mindeständerung des absoluten Saldos (in deiner Basiswährung), damit ein Ausschlag vorliegt. Entweder dieser Wert oder der prozentuale Schwellwert muss überschritten werden.",
           "maxMarkers": "Max. Markierungen",
           "maxMarkersTooltip": "Maximale Anzahl der angezeigten Markierungen im Diagramm. Gibt es mehr Ausschläge als dieses Limit, werden nur die bedeutendsten angezeigt.",
-          "resetDefaults": "Auf Standardwerte zurücksetzen",
+          "resetDefaults": "Standardwerte",
           "accept": "Anwenden",
           "validation": {
             "outOfRange": "Wert liegt außerhalb des zulässigen Bereichs",
@@ -57,7 +57,7 @@
         },
         "settings": {
           "title": "Einstellungen",
-          "spikeMarkers": "Ausschlag-Markierungen",
+          "spikeMarkers": "Ausschlag-Marker",
           "fitToLatestData": "An neueste Daten anpassen",
           "fitToLatestDataTooltip": "Wenn aktiviert, reicht das Diagramm nur bis zum neuesten Datenpunkt. Wenn deaktiviert, deckt die X-Achse den gesamten gewählten Zeitraum ab und lässt Platz für zukünftige Daten.",
           "fitToLatestDataLockedTooltip": "Deaktiviere geplante Transaktionen, um dies zu ändern – deren Prognose erweitert das Diagramm immer bis zum Ende des Zeitraums.",
@@ -122,7 +122,14 @@
       "categoryTracker": {
         "title": "Kategorien-Beobachtungsliste",
         "addCategory": "Kategorie hinzufügen",
-        "selectCategories": "Kategorien auswählen"
+        "selectCategories": "Kategorien auswählen",
+        "showTrend": "6-Monats-Trend anzeigen",
+        "sort": {
+          "title": "Sortieren nach",
+          "custom": "Benutzerdefinierte Reihenfolge",
+          "spendDesc": "Höchste Ausgaben zuerst",
+          "spendAsc": "Niedrigste Ausgaben zuerst"
+        }
       },
       "cashFlow": {
         "title": "Cashflow",
@@ -133,7 +140,10 @@
         "expenses": "Ausgaben",
         "saved": "Gespart",
         "previousPeriodsTrend": "Trend vorheriger Zeiträume",
-        "viewDetails": "Details anzeigen"
+        "viewDetails": "Details anzeigen",
+        "savingsRateLine": "Sparquoten-Linie anzeigen",
+        "savingsRate": "Sparquote",
+        "noIncome": "kein Einkommen"
       },
       "netWorth": {
         "title": "Nettovermögen",
@@ -142,6 +152,7 @@
         "start": "Beginn",
         "end": "Ende",
         "growth": "Wachstum",
+        "changeInPeriod": "Änderung in {period}",
         "previousPeriodsTrend": "Trend vorheriger Zeiträume",
         "excludedTooltip": "Vom Nettovermögen ausgeschlossen: {components}",
         "viewHistory": "Verlauf anzeigen",
@@ -169,11 +180,141 @@
         "utilized": "genutzt",
         "noAccounts": "Keine Konten mit Kreditrahmen"
       },
+      "cashAccounts": {
+        "vsLastMonth": "vs. Vormonat",
+        "runwayUnit": "Mon.",
+        "runwayLabel": "an Ausgaben",
+        "loadFailed": "Deine Konten konnten nicht geladen werden",
+        "runwayHint": {
+          "description": "Es wird generell empfohlen, einen Notgroschen für 3–6 Monate deiner Ausgaben bereitzuhalten.",
+          "critical": "Unter 1 Monat: sehr wenig Puffer",
+          "low": "1–3 Monate: unter der Empfehlung",
+          "good": "3+ Monate: empfohlener Bereich"
+        }
+      },
+      "assetsLiabilities": {
+        "netWorth": "Nettovermögen",
+        "owesShare": "Du schuldest {percent} deines Vermögens",
+        "noDebt": "Keine Schulden",
+        "assets": "Vermögenswerte",
+        "liabilities": "Verbindlichkeiten",
+        "loadFailed": "Deine Vermögenswerte und Verbindlichkeiten konnten nicht geladen werden",
+        "buckets": {
+          "cash": "Bargeld",
+          "investments": "Investments",
+          "ventures": "Beteiligungen",
+          "vehicles": "Fahrzeuge",
+          "loans": "Kredite",
+          "creditAndOverdrafts": "Kredite & Dispos"
+        }
+      },
+      "spendingPace": {
+        "tabs": {
+          "lastMonth": "vs. Vormonat",
+          "average": "vs. 3-Monats-Ø"
+        },
+        "spentIn": "Ausgegeben im {month}",
+        "onTrackFor": "Auf Kurs für {amount}",
+        "vsComparison": "{percent} vs. {name}",
+        "comparison": {
+          "average": "{n}-Monats-Ø"
+        },
+        "stats": {
+          "byToday": "{name} bis heute",
+          "total": "{name} gesamt",
+          "daysLeft": "Verbleibende Tage"
+        },
+        "chart": {
+          "today": "Heute",
+          "ariaLabel": "Ausgaben diesen Monat"
+        },
+        "tooltip": {
+          "spent": "Ausgegeben",
+          "forecast": "Prognose",
+          "spikeFrom": "Ausgegeben am {date}"
+        },
+        "legend": {
+          "thisMonth": "Diesen Monat",
+          "forecast": "Prognose",
+          "averageMonth": "Durchschnittlicher Monat"
+        },
+        "hints": {
+          "noHistory": "Der Vergleich erscheint nach deinem ersten vollen Monat.",
+          "fewMonths": "Durchschnitt des {n} vollen Monats, den du bisher hast. | Durchschnitt der {n} vollen Monate, die du bisher hast."
+        },
+        "loadFailed": "Deine Ausgaben konnten nicht geladen werden.",
+        "settings": {
+          "spikes": {
+            "title": "Ausschlag-Marker",
+            "summary": "Tage mit ≥{percent}% der Monatsausgaben",
+            "inputLabel": "Einen Tag markieren, wenn er folgendes erreicht",
+            "hint": "Anteil an den Gesamtausgaben des Vormonats, 1–100%. Markierungen werden im Modus \"vs. Vormonat\" angezeigt."
+          },
+          "saved": "Einstellung aktualisiert"
+        }
+      },
       "plannedOverview": {
         "title": "Geplant",
         "projectedBy": "Hochgerechnet bis {date}",
         "upcoming": "Anstehend · {count}",
         "loadFailed": "Geplante Transaktionen konnten nicht geladen werden"
+      },
+      "taxes": {
+        "title": "Steuerquote",
+        "description": "Ausgaben in deinen Steuerkategorien als Anteil am Einkommen, gemittelt über den in den Widget-Einstellungen gewählten Zeitraum. Die Balken zeigen die letzten 12 Monate.",
+        "ofIncome": "vom Einkommen",
+        "vsTrailingRate": "{delta} Prozentpunkte ggü. 12-Monats-Satz {rate}",
+        "average": "Ø {amount}",
+        "amount": "Steuern",
+        "shareOfIncome": "Anteil an Einnahmen",
+        "shareOfTaxes": "Steueranteil",
+        "other": "Sonstiges",
+        "moreCategories": "{count} weitere",
+        "viewDetails": "Cashflow anzeigen",
+        "loadFailed": "Steuerdaten konnten nicht geladen werden.",
+        "noCategories": {
+          "title": "Noch keine Steuerkategorien",
+          "description": "Wähle aus, welche Kategorien als Steuern zählen, um deine Steuerquote zu sehen.",
+          "action": "Kategorien auswählen"
+        },
+        "config": {
+          "months": {
+            "label": "Durchschnittszeitraum",
+            "saveError": "Der Durchschnittszeitraum konnte nicht gespeichert werden. Versuche es erneut.",
+            "m3": "3 Mon.",
+            "m6": "6 Mon.",
+            "m12": "12 Mon."
+          }
+        },
+        "lastMonths": {
+          "m3": "Letzte 3 Monate",
+          "m6": "Letzte 6 Monate",
+          "m12": "Letzte 12 Monate"
+        }
+      },
+      "budget": {
+        "spent": "ausgegeben",
+        "ringLabel": "{percent}% des Budgets ausgegeben",
+        "leftOf": "übrig von {total}",
+        "overOf": "über dem Budget von {total}",
+        "headerLeft": "{amount} übrig",
+        "headerOver": "{amount} drüber",
+        "daysLeft": "Noch {count} Tag | Noch {count} Tage",
+        "lastDay": "Letzter Tag des Zeitraums",
+        "empty": "Noch kein Budget",
+        "create": "Budget einrichten",
+        "sort": {
+          "overspent": "Größte Überziehung zuerst"
+        }
+      },
+      "trackers": {
+        "spentOfLimit": "{spent} von {limit}",
+        "inOut": "{income} Einnahmen, {expense} Ausgaben",
+        "net": "Netto",
+        "noLimit": "Kein Limit",
+        "empty": "Noch keine Tracker",
+        "ended": "Beendet",
+        "create": "Tracker erstellen"
       },
       "emptyState": "Keine Daten im ausgewählten Zeitintervall vorhanden.",
       "registry": {
@@ -199,7 +340,7 @@
         },
         "cashFlow": {
           "name": "Cashflow",
-          "description": "Einkommen vs. Ausgaben mit Sparquote"
+          "description": "Einkommen gegenüber Ausgaben mit Sparquote"
         },
         "netWorth": {
           "name": "Nettovermögen",
@@ -208,6 +349,18 @@
         "creditUtilization": {
           "name": "Kreditrahmenauslastung",
           "description": "Nutzung des Kreditrahmens über deine Konten"
+        },
+        "cashAccounts": {
+          "name": "Cash & Konten",
+          "description": "Gesamte Cash-Bestände auf deinen Konten, deren Veränderung seit dem Vormonat und für wie viele Monate an Ausgaben sie reichen"
+        },
+        "assetsLiabilities": {
+          "name": "Vermögen & Verbindlichkeiten",
+          "description": "Was du besitzt, was du schuldest und das Nettovermögen dazwischen"
+        },
+        "spendingPace": {
+          "name": "Ausgabentempo",
+          "description": "Ausgaben im laufenden Monat mit einer Prognose für den Rest des Monats, verglichen mit dem Vormonat oder deinem 3-Monats-Durchschnitt."
         },
         "plannedOverview": {
           "name": "Übersicht geplanter Zahlungen",
@@ -218,41 +371,16 @@
           "description": "Wie nah du der finanziellen Unabhängigkeit bist"
         },
         "taxes": {
-          "name": "Average Tax Rate",
-          "description": "Share of income paid in taxes, with a 12-month trend"
-        }
-      },
-      "taxes": {
-        "title": "Average Tax Rate",
-        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
-        "ofIncome": "of income",
-        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
-        "average": "avg {amount}",
-        "amount": "Taxes",
-        "shareOfIncome": "Share of income",
-        "shareOfTaxes": "Share of taxes",
-        "other": "Other",
-        "moreCategories": "{count} more",
-        "viewDetails": "View cash flow",
-        "loadFailed": "Couldn't load tax data.",
-        "noCategories": {
-          "title": "No tax categories yet",
-          "description": "Choose which categories count as taxes to see your tax rate.",
-          "action": "Choose categories"
+          "name": "Steuerquote",
+          "description": "Anteil des Einkommens, der für Steuern aufgewendet wird, mit 12-Monats-Trend"
         },
-        "config": {
-          "months": {
-            "label": "Averaging period",
-            "saveError": "Could not save the averaging period. Try again.",
-            "m3": "3 mo",
-            "m6": "6 mo",
-            "m12": "12 mo"
-          }
+        "budget": {
+          "name": "Budget",
+          "description": "Zeile für Zeile, was im aktuellen Budgetzeitraum noch übrig ist"
         },
-        "lastMonths": {
-          "m3": "Last 3 months",
-          "m6": "Last 6 months",
-          "m12": "Last 12 months"
+        "trackers": {
+          "name": "Tracker",
+          "description": "Jeder aktive Tracker mit genutztem Limit und Netto-Saldo"
         }
       }
     },
@@ -302,7 +430,10 @@
         "tagsStyleTitle": "Tags",
         "tagsStyleNames": "Namen",
         "tagsStyleBars": "Balken",
-        "tagsStyleSaveError": "Tag-Stil konnte nicht gespeichert werden. Bitte versuche es erneut."
+        "tagsStyleSaveError": "Tag-Stil konnte nicht gespeichert werden. Bitte versuche es erneut.",
+        "showAccountTitle": "Konto",
+        "showAccountDescription": "Kontologo bei jeder Transaktion anzeigen",
+        "showAccountSaveError": "Die Kontoeinstellung konnte nicht gespeichert werden. Bitte versuche es erneut."
       },
       "overdueBadge": "Überfällig",
       "scheduledBadge": "Geplant",

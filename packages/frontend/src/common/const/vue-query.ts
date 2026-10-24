@@ -32,9 +32,15 @@ export const VUE_QUERY_GLOBAL_PREFIXES = Object.freeze({
 const { transactionChange, securityPriceChange, bankConnectionChange, ventureChange, notifications } =
   VUE_QUERY_GLOBAL_PREFIXES;
 
+const budgetPlans = [transactionChange, 'budget-plans'] as const;
+const goals = [transactionChange, 'goals'] as const;
+
 export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   // auth
   signupsOpen: ['signups-open'] as const,
+  authFeatures: ['auth-features'] as const,
+  // self-host update check
+  latestRelease: ['latest-release'] as const,
   // currencies
   allCurrencies: [VUE_QUERY_GLOBAL_PREFIXES.currencies, 'all'] as const,
   userCurrencies: [VUE_QUERY_GLOBAL_PREFIXES.currencies, 'user'] as const,
@@ -76,6 +82,7 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
 
   // widget category spending tracker
   widgetCategorySpendingTracker: [transactionChange, 'widget-category-spending-tracker'] as const,
+  widgetCategorySpendingTrend: [transactionChange, 'widget-category-spending-trend'] as const,
 
   // widget cash flow
   widgetCashFlow: [transactionChange, 'widget-cash-flow'] as const,
@@ -85,6 +92,19 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
 
   // widget net worth
   widgetNetWorth: [transactionChange, securityPriceChange, ventureChange, 'widget-net-worth'] as const,
+  widgetAssetsLiabilities: [
+    transactionChange,
+    securityPriceChange,
+    ventureChange,
+    'widget-assets-liabilities',
+  ] as const,
+
+  // widget cash & accounts
+  widgetCashAccountsPrevBalances: [transactionChange, 'widget-cash-accounts-prev-balances'] as const,
+  widgetCashAccountsExpenses: [transactionChange, 'widget-cash-accounts-expenses'] as const,
+
+  // widget spending pace
+  widgetSpendingPace: [transactionChange, 'widget-spending-pace'] as const,
 
   // analytics
   analyticsBalanceHistoryTrend: [
@@ -119,6 +139,8 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   earliestTransactionDate: [transactionChange, 'earliest-transaction-date'] as const,
 
   recordsPageRecordsList: [transactionChange, 'records-page-records-list'] as const,
+  recordsPageRecordsSummary: [transactionChange, 'records-page-records-summary'] as const,
+  savedTransactionViewCount: [transactionChange, 'saved-transaction-view-count'] as const,
 
   transactionAttachments: ['transaction-attachments'] as const,
 
@@ -135,10 +157,29 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   exchangeRates: ['exchange-rates'] as const,
   accountGroups: [transactionChange, 'account-groups'] as const,
 
-  plansList: ['plans-list'] as const,
-  planDetails: ['plan-details'] as const,
-  planViews: [transactionChange, 'plan-views'] as const,
-  planAutoAssignPreview: [transactionChange, 'plan-auto-assign-preview'] as const,
+  trackersList: ['trackers-list'] as const,
+  trackersListItem: ['trackers-list-item'] as const,
+
+  budgetPlans,
+  budgetPlansList: [...budgetPlans, 'list'] as const,
+  // append the planId (and, for a period view, the periodId) when using
+  budgetPlan: [...budgetPlans, 'plan'] as const,
+  budgetPlanPeriods: [...budgetPlans, 'periods'] as const,
+  budgetPlanPeriodView: [...budgetPlans, 'period-view'] as const,
+  budgetPlanTrends: [...budgetPlans, 'trends'] as const,
+  budgetPlanScheduled: [...budgetPlans, 'scheduled'] as const,
+  budgetSuggestionContext: [...budgetPlans, 'suggestion-context'] as const,
+
+  goals,
+  goalsList: [...goals, 'list'] as const,
+  // append the goalId when using
+  goalDetails: [...goals, 'details'] as const,
+
+  trackerAddingTransactionList: [transactionChange, 'tracker-adding-transaction-list'] as const,
+  trackerStats: [transactionChange, 'tracker-stats'] as const,
+  trackerSpendingStats: [transactionChange, 'tracker-spending-stats'] as const,
+  // append the trackerId when using
+  trackerSuggestions: [transactionChange, 'tracker-suggestions'] as const,
 
   /**
    * Investments
@@ -274,4 +315,5 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   ventureDealDetails: [ventureChange, 'venture-deal-details'] as const,
   ventureDealMetrics: [ventureChange, 'venture-deal-metrics'] as const,
   ventureDealEvents: [ventureChange, 'venture-deal-events'] as const,
+  transactionVentureLink: [transactionChange, ventureChange, 'transaction-venture-link'] as const,
 });

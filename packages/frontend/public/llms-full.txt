@@ -1,6 +1,6 @@
 # MoneyMatter
 
-> Free, open-source personal finance and planning app. Self-host for full data ownership or use the cloud version. Supports AI integration via MCP (Model Context Protocol) for querying your finances with Claude, ChatGPT, or any MCP-compatible client.
+> Open-source budget tracking and personal finance app. Self-host it for free with full data ownership, or use the cloud version from $30/year (40-day free trial, no card required). Supports AI integration via MCP (Model Context Protocol) for querying your finances with Claude, ChatGPT, or any MCP-compatible client.
 
 ## About
 
@@ -22,19 +22,23 @@ License: AGPL-3.0
 
 ### Bank Account Synchronization
 
-Connect bank accounts to automatically sync transactions. Currently supports Monobank, EnableBanking, and LunchFlow, with more banking integrations planned. Transactions are pulled automatically so you always have an up-to-date view of your finances.
+Connect bank accounts to automatically sync transactions. Currently supports LunchFlow, SimpleFIN, Monobank and Walutomat. Transactions are pulled automatically so you always have an up-to-date view of your finances.
 
 ### AI-Powered Transaction Categorization
 
-MoneyMatter uses AI to learn your spending patterns. Categorize a transaction once, and the AI will automatically categorize similar future transactions. No more manual sorting of every purchase.
+MoneyMatter uses AI to categorize new transactions after every bank sync and import, using your category list, the payee, the note and any instructions you write for it. Rules and a default category per payee handle the repeat cases.
 
-### Spending Plans
+### Budget Tracking
 
-Allocate income across categories in the Plan workspace and compare planned amounts with actual spending using visual progress indicators.
+Build a budget with a line per category and an amount for each period. Leftovers roll into the next period, and overspending can too. Add goals for bills and savings, and group lines your way. Budgets reset monthly, weekly, or on a schedule you pick.
 
-### Investment Portfolio Tracking (Beta)
+### Savings Goals
 
-Track investment portfolios alongside your spending plans. Monitor performance, gains/losses, and asset allocation in one place. Supports real-time market data for securities pricing.
+Set a target in any currency, with an optional date, and point it at the accounts that hold the money: a percentage of each account's balance counts toward the goal, and one account can back several goals up to 100% in total. Cash, savings, current, investment and crypto accounts all work; market moves count as progress, and projections assume no growth. Progress is read from real balances, so there is nothing to update by hand. Each goal shows its pace (the median monthly change over the last 6 full months, or your own planned monthly amount), when you will reach the target, how much you need each month and whether you are ahead, on track or behind. A What-if sandbox tries other amounts, dates and shares, a banner checks whether all goals fit in what you typically save, a dashboard widget shows them at a glance, and you get a notification when a goal is reached. Goals are included in Essential and Plus.
+
+### Investment Portfolio Tracking
+
+Track investment portfolios alongside your regular budget. Monitor performance, gains/losses, and asset allocation in one place. Security prices update automatically.
 
 ### Multi-Currency Support
 
@@ -77,6 +81,7 @@ Ask complex questions that go beyond what any dashboard can show:
 - "I want to save $500/month — analyze my spending and suggest where to realistically cut"
 - "What's my average weekly grocery spend and how has it trended?"
 - "Show me all transactions over $100 in the last quarter that weren't recurring"
+- "Am I on track for my holiday goal, and what would I need to save each month to get there by June?"
 
 ### Automation with AI agents
 
@@ -84,7 +89,7 @@ Use AI agent frameworks (OpenClaw, Claude, ChatGPT) to automate financial analys
 
 - **Weekly spending digest** — get a breakdown of your week's spending every Monday
 - **Anomaly detection** — automatically flag unusual transactions or spending spikes
-- **Monthly spending-plan health check** — automated review with saving recommendations and goal tracking
+- **Monthly budget health check** — automated review with saving recommendations and goal tracking
 
 ### Security and privacy
 
@@ -121,7 +126,7 @@ Setup guide and Docker configuration: https://github.com/letehaha/moneymatter
 
 | Feature | Mint & others | YNAB | MoneyMatter |
 |---|---|---|---|
-| Price | Free (you're the product) | $99/year | Self-host free; cloud from $30/year |
+| Price | Free (you're the product) | $109/year | Self-host free; cloud from $30/year |
 | Open Source | No | No | Yes (AGPL-3.0) |
 | Self-Hostable | No | No | Yes |
 | Data Privacy | Sells data | Stored on their servers | You own it 100% |

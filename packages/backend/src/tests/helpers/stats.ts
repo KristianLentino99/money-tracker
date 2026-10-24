@@ -1,4 +1,23 @@
-import { BalanceModel, TRANSACTION_TYPES, endpointsTypes } from '@bt/shared/types';
+import {
+  BalanceModel,
+  type CashFlowGranularity,
+  type CumulativeMetric,
+  type GetCashFlowResponse,
+  type GetCumulativeResponse,
+  type GetInvestmentContributionsResponse,
+  type GetNetWorthDriversResponse,
+  type GetNetWorthHistoryResponse,
+  type GetPivotReportResponse,
+  type GetVentureContributionsResponse,
+  type InvestmentContributionsGranularity,
+  type MonthlySpendingsByCategoriesByType,
+  type NetWorthDriversGranularity,
+  type NetWorthHistoryGranularity,
+  type PivotGranularity,
+  type PivotMeasure,
+  type PivotRowDimension,
+  TRANSACTION_TYPES,
+} from '@bt/shared/types';
 import {
   getCombinedBalanceHistory as _getCombinedBalanceHistory,
   getEarliestTransactionDate as _getEarliestTransactionDate,
@@ -99,6 +118,30 @@ export const getSpendingsByCategories = async ({
   return raw ? helpers.extractResponse(result) : result;
 };
 
+export async function getMonthlySpendingsByCategories<R extends boolean | undefined = undefined>({
+  from,
+  to,
+  categoryIds,
+  excludePlanned,
+  raw,
+}: {
+  from: string;
+  to: string;
+  categoryIds?: string[];
+  excludePlanned?: boolean;
+  raw?: R;
+}) {
+  const params = new URLSearchParams({ from, to });
+  if (categoryIds && categoryIds.length > 0) params.append('categoryIds', categoryIds.join(','));
+  if (excludePlanned !== undefined) params.append('excludePlanned', String(excludePlanned));
+
+  return helpers.makeRequest<MonthlySpendingsByCategoriesByType, R>({
+    method: 'get',
+    url: `/stats/spendings-by-categories/monthly?${params.toString()}`,
+    raw,
+  });
+}
+
 export async function getExpensesAmountForPeriod<R extends boolean | undefined = undefined>({
   from,
   to,
@@ -160,7 +203,7 @@ export async function getCashFlow<R extends boolean | undefined = undefined>({
 }: {
   from: string;
   to: string;
-  granularity: endpointsTypes.CashFlowGranularity;
+  granularity: CashFlowGranularity;
   accountId?: string;
   accountIds?: string[];
   payeeIds?: string[];
@@ -184,7 +227,7 @@ export async function getCashFlow<R extends boolean | undefined = undefined>({
   }
   if (excludePlanned !== undefined) params.append('excludePlanned', String(excludePlanned));
 
-  const result = await helpers.makeRequest<endpointsTypes.GetCashFlowResponse, R>({
+  const result = await helpers.makeRequest<GetCashFlowResponse, R>({
     method: 'get',
     url: `/stats/cash-flow?${params.toString()}`,
     raw,
@@ -202,7 +245,7 @@ export async function getNetWorthDrivers<R extends boolean | undefined = undefin
 }: {
   from: string;
   to: string;
-  granularity: endpointsTypes.NetWorthDriversGranularity;
+  granularity: NetWorthDriversGranularity;
   portfolioIds?: string[];
   raw?: R;
 }) {
@@ -212,7 +255,7 @@ export async function getNetWorthDrivers<R extends boolean | undefined = undefin
   params.append('granularity', granularity);
   if (portfolioIds && portfolioIds.length > 0) params.append('portfolioIds', portfolioIds.join(','));
 
-  const result = await helpers.makeRequest<endpointsTypes.GetNetWorthDriversResponse, R>({
+  const result = await helpers.makeRequest<GetNetWorthDriversResponse, R>({
     method: 'get',
     url: `/stats/net-worth-drivers?${params.toString()}`,
     raw,
@@ -229,7 +272,7 @@ export async function getNetWorthHistory<R extends boolean | undefined = undefin
 }: {
   from: string;
   to: string;
-  granularity: endpointsTypes.NetWorthHistoryGranularity;
+  granularity: NetWorthHistoryGranularity;
   raw?: R;
 }) {
   const params = new URLSearchParams();
@@ -237,7 +280,7 @@ export async function getNetWorthHistory<R extends boolean | undefined = undefin
   params.append('to', to);
   params.append('granularity', granularity);
 
-  const result = await helpers.makeRequest<endpointsTypes.GetNetWorthHistoryResponse, R>({
+  const result = await helpers.makeRequest<GetNetWorthHistoryResponse, R>({
     method: 'get',
     url: `/stats/net-worth-history?${params.toString()}`,
     raw,
@@ -255,7 +298,7 @@ export async function getInvestmentContributions<R extends boolean | undefined =
 }: {
   from: string;
   to: string;
-  granularity: endpointsTypes.InvestmentContributionsGranularity;
+  granularity: InvestmentContributionsGranularity;
   portfolioIds?: string[];
   raw?: R;
 }) {
@@ -265,7 +308,7 @@ export async function getInvestmentContributions<R extends boolean | undefined =
   params.append('granularity', granularity);
   if (portfolioIds && portfolioIds.length > 0) params.append('portfolioIds', portfolioIds.join(','));
 
-  const result = await helpers.makeRequest<endpointsTypes.GetInvestmentContributionsResponse, R>({
+  const result = await helpers.makeRequest<GetInvestmentContributionsResponse, R>({
     method: 'get',
     url: `/stats/investment-contributions?${params.toString()}`,
     raw,
@@ -283,7 +326,7 @@ export async function getVentureContributions<R extends boolean | undefined = un
   to: string;
   raw?: R;
 }) {
-  return helpers.makeRequest<endpointsTypes.GetVentureContributionsResponse, R>({
+  return helpers.makeRequest<GetVentureContributionsResponse, R>({
     method: 'get',
     url: `/stats/venture-contributions?from=${from}&to=${to}`,
     raw,
@@ -303,9 +346,9 @@ export async function getPivotReport<R extends boolean | undefined = undefined>(
 }: {
   from: string;
   to: string;
-  granularity: endpointsTypes.PivotGranularity;
-  rowDimension: endpointsTypes.PivotRowDimension;
-  measure: endpointsTypes.PivotMeasure;
+  granularity: PivotGranularity;
+  rowDimension: PivotRowDimension;
+  measure: PivotMeasure;
   accountIds?: string[];
   categoryIds?: string[];
   payeeIds?: string[];
@@ -321,7 +364,7 @@ export async function getPivotReport<R extends boolean | undefined = undefined>(
   if (categoryIds && categoryIds.length > 0) params.append('categoryIds', categoryIds.join(','));
   if (payeeIds && payeeIds.length > 0) params.append('payeeIds', payeeIds.join(','));
 
-  const result = await helpers.makeRequest<endpointsTypes.GetPivotReportResponse, R>({
+  const result = await helpers.makeRequest<GetPivotReportResponse, R>({
     method: 'get',
     url: `/stats/pivot?${params.toString()}`,
     raw,
@@ -346,7 +389,7 @@ export async function getCumulativeData<R extends boolean | undefined = undefine
 }: {
   from: string;
   to: string;
-  metric: endpointsTypes.CumulativeMetric;
+  metric: CumulativeMetric;
   accountId?: string;
   accountIds?: string[];
   payeeIds?: string[];
@@ -368,7 +411,7 @@ export async function getCumulativeData<R extends boolean | undefined = undefine
     params.append('excludedCategoryIds', excludedCategoryIds.join(','));
   }
 
-  const result = await helpers.makeRequest<endpointsTypes.GetCumulativeResponse, R>({
+  const result = await helpers.makeRequest<GetCumulativeResponse, R>({
     method: 'get',
     url: `/stats/cumulative?${params.toString()}`,
     raw,

@@ -13,7 +13,7 @@ interface InviteLinkTarget {
  * the landing path only decides where the recipient lands behind the dialog.
  */
 const buildShareInvitationLink = ({ token, resourceType }: InviteLinkTarget): string => {
-  const landingPath = resourceType === RESOURCE_TYPES.plan ? '/plan' : '/accounts';
+  const landingPath = resourceType === RESOURCE_TYPES.tracker ? '/planned/trackers' : '/accounts';
   return `${window.location.origin}${landingPath}?invitation_token=${encodeURIComponent(token)}`;
 };
 

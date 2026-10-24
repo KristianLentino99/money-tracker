@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { ManualPortfolioImportRecord } from '@/api/portfolios';
 import { FileDropzone } from '@/components/common/dropzone';
+import FieldLabel from '@/components/fields/components/field-label.vue';
 import InputField from '@/components/fields/input-field.vue';
-import { FieldLabel, TextareaField } from '@/components/fields';
+import TextareaField from '@/components/fields/textarea-field.vue';
 import { Button } from '@/components/lib/ui/button';
 import { Card } from '@/components/lib/ui/card';
 import { Checkbox } from '@/components/lib/ui/checkbox';

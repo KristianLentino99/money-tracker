@@ -25,19 +25,33 @@ Reverting a period deletes the transaction only if it was app-created (**Create*
 
 `subscription-mark-paid-dialog.vue` → `triggerPay`
 
+Every click first calls `GET /subscriptions/:id/pay-preview?periodId=…`. Besides the cross-currency estimate, the preview returns `linkedPayments`: transactions that already have an **active `SubscriptionTransactions` link** to this subscription (hand-linked or rule-matched), are not planned, back no `SubscriptionPeriods.transactionId` yet, and are dated inside the period window: strictly after the previous period's due day and strictly before the next period's due day (computed from the schedule when the next period row does not exist yet). A first period has no previous row, so its lower bound is one cycle length (next due day minus this due day) before its own due day. Amount mismatches do not disqualify. Ordered nearest to the due date first.
+
+A failed preview cannot rule out a linked payment, so it never books in one click: the path that would create a transaction without a dialog (manual account, fixed same-currency amount) opens the dialog on the booking fields (expected amount, today) with a notice that linked payments could not be checked. The bank-account status-only path stays immediate.
+
 ```mermaid
 flowchart TD
-    Start(["Mark paid clicked"]) --> ModeDialog["Dialog: choose mode"]
-    ModeDialog -->|No assigned account or bank account| MarkOnly["Mark only"]
-    ModeDialog -->|Manual account or no assigned account| Create["Create a transaction: confirm amount and date"]
-    Create --> NeedsAccount{"Account already assigned?"}
-    NeedsAccount -->|No| Pick["Pick a manual account"]
+    Start(["Mark paid clicked"]) --> Preview["GET pay-preview?periodId"]
+    Preview --> HasLinked{"Linked payment inside the period?"}
+    HasLinked -->|Yes| ChoiceDialog["Dialog: Use the existing payment (default) / regular option"]
+    ChoiceDialog -->|Use existing| LinkMode["Link: period paid with that transactionId, transactionAutoCreated = false, paidAt = its date"]
+    ChoiceDialog -->|No account: Mark only or Record a transaction| ModeDialog
+    ChoiceDialog -->|Bank account: Mark only| MarkOnly
+    ChoiceDialog -->|Manual account: Record a new payment| AmountDialog
+    HasLinked -->|No| HasAcc{"Subscription has an account?"}
+    HasAcc -->|No| ModeDialog["Dialog: choose mode"]
+    ModeDialog -->|Mark only| MarkOnly["Mark only"]
+    ModeDialog -->|Create a transaction| Pick["Pick a manual account, amount, date"]
     Pick --> CreateLink["Create, and save the account onto the subscription"]
-    NeedsAccount -->|Yes| CreateTx["Create on the assigned manual account"]
-    ModeDialog -->|Existing transaction| Link["Pick and link a transaction for this period"]
+    HasAcc -->|Yes| IsBank{"Bank-connected account?"}
+    IsBank -->|Yes| MarkOnly
+    IsBank -->|No| Fixed{"Fixed amount in the account currency?"}
+    Fixed -->|Yes| OneClick["Create in one click"]
+    Fixed -->|No| AmountDialog["Dialog: enter amount (cross-currency pre-filled)"]
+    AmountDialog --> CreateTx["Create"]
 ```
 
-The dialog always presents the available payment choices, including linking an existing transaction. Bank-connected subscriptions offer mark-only and linking; manual-account subscriptions offer creation and linking. The account picker lists only manual accounts (`txTargetableSourceAccountsActiveFirst`), the same list as the Add Transaction dialog. Cross-currency payments are prefilled with a conversion estimate that the user can adjust.
+The account picker lists only manual accounts (`txTargetableSourceAccountsActiveFirst`), the same list as the Add Transaction dialog.
 
 ---
 

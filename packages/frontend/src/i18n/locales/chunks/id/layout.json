@@ -14,16 +14,17 @@
     "accountDetails": "Detail akun",
     "logout": "Keluar",
     "settings": "Pengaturan",
-    "plan": "Anggaran",
     "planned": {
-      "planned": "Prakiraan",
-      "subscriptions": "Biaya Berulang"
+      "planned": "Terencana",
+      "subscriptions": "Biaya Berulang",
+      "budgets": "Anggaran"
     },
     "venture": "Venture",
     "helpAndDocs": "Help & docs",
     "appVersion": "App version {version}",
     "home": "Home",
-    "more": "More"
+    "more": "More",
+    "budget": "Budget"
   },
   "sidebar": {
     "collapse": "Collapse sidebar",
@@ -69,7 +70,8 @@
       "syncedTime": "Disinkronkan {time}",
       "syncingAccounts": "Menyinkronkan {count} akun",
       "stuck": "Sinkronisasi macet",
-      "failed": "Sync failed, some accounts need attention"
+      "failed": "Sync failed, some accounts need attention",
+      "connectBank": "Hubungkan bank"
     },
     "categorization": {
       "title": "Kategorisasi AI",
@@ -86,7 +88,9 @@
     "moreActions": "More ways to add data",
     "importDataHint": "CSV file or bank statement",
     "attachInvoice": "Attach invoice",
-    "attachInvoiceHint": "We find the transaction it belongs to"
+    "attachInvoiceHint": "We find the transaction it belongs to",
+    "feedback": "Kirim masukan",
+    "support": "Dukungan"
   },
   "themeSelector": {
     "light": "Terang",
@@ -127,7 +131,8 @@
       "weeksAgo": "{count} minggu lalu | {count} minggu lalu",
       "monthsAgo": "{count} bulan lalu | {count} bulan lalu",
       "yearsAgo": "{count} tahun lalu | {count} tahun lalu"
-    }
+    },
+    "connectButton": "Hubungkan"
   },
   "banners": {
     "recoveryMethod": {
@@ -276,6 +281,14 @@
           "share-account": {
             "title": "Bagikan akun",
             "description": "Buka akun apa pun dan gunakan tindakan Bagikan untuk memberikan akses baca atau tulis kepada satu pengguna."
+          },
+          "create-budget": {
+            "title": "Siapkan anggaran",
+            "description": "Buat batas pengeluaran untuk kategori"
+          },
+          "connect-bank": {
+            "title": "Hubungkan rekening bank",
+            "description": "Sinkronkan transaksi secara otomatis"
           }
         },
         "ui": {
@@ -290,6 +303,10 @@
           "progressText": "{completed} dari {total} selesai",
           "categoryProgress": "{completed} dari {total} selesai"
         }
+      },
+      "connectBank": {
+        "title": "Hubungkan Bank Anda",
+        "description": "Sinkronkan transaksi secara otomatis dari bank Anda"
       }
     }
   },
@@ -303,5 +320,31 @@
       "description": "Explore insights, planning tools, imports, and settings."
     },
     "addTransaction": "Add transaction"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Kirim masukan",
+      "description": "Beri tahu kami apa yang berjalan baik dan apa yang tidak.",
+      "typeLabel": "Jenis",
+      "typePlaceholder": "Pilih jenis",
+      "types": {
+        "bug": "Ada yang rusak",
+        "featureRequest": "Saya ingin fitur baru",
+        "other": "Hal lainnya"
+      },
+      "docsHint": "Not sure how something works? Check the {link} first.",
+      "docsHintLink": "docs",
+      "messageLabel": "Masukan Anda",
+      "messagePlaceholder": "Apa yang terjadi, atau apa yang ingin Anda lihat?",
+      "messageRequired": "Tulis pesan sebelum mengirim.",
+      "submit": "Kirim",
+      "thanks": "Terima kasih, kami membaca setiap pesan.",
+      "unavailable": "Pengiriman sedang tidak tersedia. Gunakan papan di bawah ini sebagai gantinya.",
+      "or": "atau",
+      "board": {
+        "title": "Posting di papan publik",
+        "description": "Beri suara pada ide orang lain, lihat apa yang sudah direncanakan, dan dapatkan balasan untuk ide Anda."
+      }
+    }
   }
 }

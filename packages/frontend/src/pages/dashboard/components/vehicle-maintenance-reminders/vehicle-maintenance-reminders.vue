@@ -6,7 +6,7 @@ import {
 } from '@/api/vehicle-maintenance';
 import { updateVehicle } from '@/api/vehicles';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
-import { InputField } from '@/components/fields';
+import InputField from '@/components/fields/input-field.vue';
 import { Button } from '@/components/lib/ui/button';
 import { Card } from '@/components/lib/ui/card';
 import { StatusBadge } from '@/components/lib/ui/status-badge';

@@ -24,7 +24,7 @@
         "preview": {
           "emptyList": "Nothing to import here.",
           "accounts": "Accounts",
-          "categories": "Categories",
+          "categories": "分类",
           "payees": "Payees",
           "tags": "Tags",
           "transactions": "Transactions",
@@ -67,6 +67,10 @@
           "transfersImported": "Transfers imported",
           "splitsDetected": "Split groups detected",
           "errorsTitle": "{count} rows failed to import",
+          "errors": {
+            "payeeCreateFailed": "Could not create payee \"{payeeName}\". Its transactions were imported without a payee.",
+            "rowImportFailed": "This row could not be imported."
+          },
           "viewTransactions": "View transactions",
           "importAnother": "Import another file"
         }

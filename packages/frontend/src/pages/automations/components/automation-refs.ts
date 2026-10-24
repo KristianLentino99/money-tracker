@@ -1,4 +1,4 @@
-import { useAccountGroupsQuery } from '@/composable/data-queries/account-groups';
+import { useAccountGroupPaths } from '@/composable/data-queries/account-groups';
 import { useBankConnectionsQuery } from '@/composable/data-queries/bank-connections';
 import { usePayeeLookup } from '@/composable/data-queries/payees';
 import { useAccountsStore, useCategoriesStore, useTagsStore } from '@/stores';
@@ -10,7 +10,10 @@ import { type InjectionKey, computed, inject, provide } from 'vue';
 type AutomationRefVisual = { name: string } & (
   | {
       type: 'account';
-      account: Pick<AccountModel, 'name' | 'logoDomain' | 'logoInitials' | 'logoColor' | 'accountCategory'>;
+      account: Pick<
+        AccountModel,
+        'name' | 'logoDomain' | 'logoInitials' | 'logoColor' | 'logoIcon' | 'logoImageId' | 'accountCategory'
+      >;
     }
   | { type: 'payee'; payee: PayeeLookupItem }
   | { type: 'category'; categoryId: RecordId }
@@ -25,7 +28,7 @@ const useAutomationRefs = () => {
   const { tagsMap, isFetched: isTagsFetched } = storeToRefs(useTagsStore());
   const { accountsRecord, isAccountsFetched } = storeToRefs(useAccountsStore());
   const { byId: payeeById, isSuccess: isPayeesLoaded } = usePayeeLookup();
-  const { data: accountGroups, isSuccess: isGroupsLoaded } = useAccountGroupsQuery();
+  const { pathById: accountGroupPaths, isSuccess: isGroupsLoaded } = useAccountGroupPaths();
   const { data: bankConnections, isSuccess: isConnectionsLoaded } = useBankConnectionsQuery();
 
   const refVisual = ({ type, id }: { type: AutomationRefType; id: RecordId }): AutomationRefVisual | undefined => {
@@ -47,7 +50,7 @@ const useAutomationRefs = () => {
         return payee && { type, name: payee.name, payee };
       }
       case 'accountGroup': {
-        const name = accountGroups.value?.find((group) => group.id === id)?.name;
+        const name = accountGroupPaths.value.get(id);
         return name === undefined ? undefined : { type, name };
       }
       case 'bankConnection': {

@@ -4,10 +4,10 @@
     "home": "Home",
     "more": "More",
     "accounts": "Accounts",
-    "accountsList": "All Accounts",
+    "accountsList": "All accounts",
     "investments": "Investments",
     "loans": "Loans",
-    "allTransactions": "All Transactions",
+    "allTransactions": "All transactions",
     "transactions": "Transactions",
     "transactionGroups": "Groups",
     "analytics": "Analytics",
@@ -16,14 +16,18 @@
     "accountDetails": "Account details",
     "logout": "Logout",
     "settings": "Settings",
-    "plan": "Budget",
     "planned": {
-      "planned": "Forecast",
-      "subscriptions": "Recurring Payments"
+      "planned": "Planning",
+      "subscriptions": "Recurring payments",
+      "budgets": "Trackers",
+      "goals": "Goals"
     },
     "venture": "Venture",
     "helpAndDocs": "Help & docs",
-    "appVersion": "App version {version}"
+    "appVersion": "App version {version}",
+    "budget": "Budget",
+    "updateAvailable": "Update available",
+    "updateToVersion": "Update · {version}"
   },
   "mobileHubs": {
     "accounts": {
@@ -53,14 +57,14 @@
     },
     "accountsView": {
       "title": "Accounts",
-      "bankAccounts": "Bank Accounts",
+      "bankAccounts": "Bank accounts",
       "newAccount": "New account",
       "newAccountsGroup": "New accounts group",
       "portfolios": "Portfolios",
       "newPortfolio": "New portfolio",
       "noPortfolios": "No portfolios yet",
       "ventures": "Ventures",
-      "cars": "Cars",
+      "cars": "Vehicles",
       "loans": "Loans",
       "collapseNavigation": "Collapse navigation",
       "viaHousehold": "Shared via {handle}'s household",
@@ -80,10 +84,11 @@
       "syncedTime": "Synced {time}",
       "syncingAccounts": "Syncing {count} accounts",
       "stuck": "Sync stuck",
-      "failed": "Sync failed, some accounts need attention"
+      "failed": "Sync failed, some accounts need attention",
+      "connectBank": "Connect bank"
     },
     "categorization": {
-      "title": "AI Categorization",
+      "title": "AI categorization",
       "categorizing": "Categorizing...",
       "completed": "AI categorized {count} transaction | AI categorized {count} transactions",
       "completedShort": "Categorization complete",
@@ -97,7 +102,9 @@
     "moreActions": "More ways to add data",
     "importDataHint": "CSV file or bank statement",
     "attachInvoice": "Attach invoice",
-    "attachInvoiceHint": "We find the transaction it belongs to"
+    "attachInvoiceHint": "We find the transaction it belongs to",
+    "feedback": "Send feedback",
+    "support": "Support"
   },
   "themeSelector": {
     "light": "Light",
@@ -121,7 +128,7 @@
     },
     "lastSynced": "Last synced:",
     "neverSynced": "Never synced",
-    "syncNowButton": "Sync Now",
+    "syncNowButton": "Sync now",
     "noBankAccounts": "No bank accounts connected",
     "retrySyncButton": "Retry sync",
     "manageConnectionsButton": "Manage connections",
@@ -138,22 +145,23 @@
       "weeksAgo": "{count} week ago | {count} weeks ago",
       "monthsAgo": "{count} month ago | {count} months ago",
       "yearsAgo": "{count} year ago | {count} years ago"
-    }
+    },
+    "connectButton": "Connect"
   },
   "banners": {
     "recoveryMethod": {
       "title": "Add a backup login method",
       "description": "Protect your account by adding Google sign-in or a passkey. This ensures you can always access your account.",
-      "actionButton": "Go to Security Settings"
+      "actionButton": "Go to security settings"
     }
   },
   "relinkWarning": {
     "buttonLabel": "{count} account needs attention | {count} accounts need attention",
-    "title": "Enable Banking: Action Required",
+    "title": "Enable Banking: Action required",
     "description": "These Enable Banking accounts need to be updated due to a data schema change. This is a one-time action to improve synchronization reliability.",
     "step1Full": "To save your time, firstly try reconnecting the whole bank connection. You can find a {reconnect} button under the {connectionValidity} section on each connection page:",
     "reconnectButton": "Reconnect",
-    "connectionValiditySection": "Connection Validity",
+    "connectionValiditySection": "Connection validity",
     "connectionLabel": "Connection #{id}",
     "step2Full": "If any accounts remain listed below after reconnection, go to each account and manually {unlink} then {link} again.",
     "unlinkAction": "Unlink",
@@ -179,36 +187,40 @@
       "title": "Welcome to MoneyMatter",
       "subtitle": "Get started by setting up your first account",
       "createManualAccount": {
-        "title": "Create Manual Account",
+        "title": "Create manual account",
         "description": "Track cash, savings, or any account manually"
+      },
+      "connectBank": {
+        "title": "Connect Your Bank",
+        "description": "Automatically sync transactions from your bank"
       },
       "divider": "or import existing data",
       "importFile": {
-        "title": "Import from File",
+        "title": "Import from file",
         "description": "Import transactions from bank statements (PDF) or CSV files"
       },
       "quickStart": {
         "categories": {
           "getting-started": {
-            "title": "Getting Started"
+            "title": "Getting started"
           },
           "advanced-transactions": {
-            "title": "Advanced Transactions"
+            "title": "Advanced transactions"
           },
           "organization": {
-            "title": "Organize Your Finances"
+            "title": "Organize your finances"
           },
           "bank-import": {
-            "title": "Connect & Import"
+            "title": "Connect & import"
           },
           "analytics": {
-            "title": "Explore Analytics"
+            "title": "Explore analytics"
           },
           "ai-settings": {
-            "title": "AI Features"
+            "title": "AI features"
           },
           "sharing": {
-            "title": "Sharing & Household"
+            "title": "Sharing & household"
           }
         },
         "tasks": {
@@ -287,20 +299,54 @@
           "share-account": {
             "title": "Share an account",
             "description": "Open any account and use the Share action to grant a single user read or write access."
+          },
+          "create-budget": {
+            "title": "Set up a tracker",
+            "description": "Create spending limits for categories"
+          },
+          "connect-bank": {
+            "title": "Connect a bank account",
+            "description": "Sync transactions automatically"
           }
         },
         "ui": {
-          "title": "Quick Start",
-          "subtitle": "Use our Quick Start guide to learn about everything MoneyMatter can do for you.",
+          "title": "Quick start",
+          "subtitle": "Use our quick start guide to learn about everything MoneyMatter can do for you.",
           "dismissButton": "Dismiss permanently",
-          "dismissConfirmTitle": "Dismiss Quick Start?",
-          "dismissConfirmDescription": "You can always reopen the Quick Start guide from settings if you change your mind.",
+          "dismissConfirmTitle": "Dismiss quick start?",
+          "dismissConfirmDescription": "You can always reopen the quick start guide from settings if you change your mind.",
           "dismissConfirmButton": "Dismiss",
-          "triggerTooltip": "Quick Start - {count} tasks remaining",
+          "triggerTooltip": "Quick start - {count} tasks remaining",
           "srDescription": "Complete these tasks to get started with the app",
           "progressText": "{completed} of {total} complete",
           "categoryProgress": "{completed} of {total} complete"
         }
+      }
+    }
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Leave feedback",
+      "description": "Tell us what is working and what is not.",
+      "typeLabel": "Type",
+      "typePlaceholder": "Choose a type",
+      "types": {
+        "bug": "Something is broken",
+        "featureRequest": "I want a feature",
+        "other": "Something else"
+      },
+      "docsHint": "Not sure how something works? Check the {link} first.",
+      "docsHintLink": "docs",
+      "messageLabel": "Your feedback",
+      "messagePlaceholder": "What happened, or what would you like to see?",
+      "messageRequired": "Please write a message before sending.",
+      "submit": "Send",
+      "thanks": "Thanks, we read every message.",
+      "unavailable": "Sending is unavailable right now. Use the board below instead.",
+      "or": "or",
+      "board": {
+        "title": "Post it on the public board",
+        "description": "Vote on other people's ideas, see what is already planned, and get a reply on yours."
       }
     }
   }

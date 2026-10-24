@@ -122,7 +122,14 @@
       "categoryTracker": {
         "title": "Отслеживаемые категории",
         "addCategory": "Добавить категорию",
-        "selectCategories": "Выберите категории"
+        "selectCategories": "Выберите категории",
+        "showTrend": "Show 6-month trend",
+        "sort": {
+          "title": "Сортировать по",
+          "custom": "Custom order",
+          "spendDesc": "Highest spend first",
+          "spendAsc": "Lowest spend first"
+        }
       },
       "cashFlow": {
         "title": "Денежный поток",
@@ -133,7 +140,10 @@
         "expenses": "Расходы",
         "saved": "Сбережено",
         "previousPeriodsTrend": "Тренд предыдущих периодов",
-        "viewDetails": "Подробнее"
+        "viewDetails": "Подробнее",
+        "savingsRateLine": "Show savings rate line",
+        "savingsRate": "Норма сбережений",
+        "noIncome": "no income"
       },
       "netWorth": {
         "title": "Чистый капитал",
@@ -142,6 +152,7 @@
         "start": "Начало",
         "end": "Конец",
         "growth": "Рост",
+        "changeInPeriod": "Change in {period}",
         "previousPeriodsTrend": "Тренд предыдущих периодов",
         "excludedTooltip": "Не учитывается в чистом капитале: {components}",
         "viewHistory": "История",
@@ -169,11 +180,141 @@
         "utilized": "использовано",
         "noAccounts": "Нет счетов с кредитными лимитами"
       },
+      "cashAccounts": {
+        "vsLastMonth": "vs last month",
+        "runwayUnit": "мес.",
+        "runwayLabel": "of expenses",
+        "loadFailed": "Couldn't load your accounts",
+        "runwayHint": {
+          "description": "It's generally recommended to keep an emergency fund that covers 3–6 months of your expenses.",
+          "critical": "Under 1 month: very little buffer",
+          "low": "1–3 months: below recommended",
+          "good": "3+ months: recommended range"
+        }
+      },
+      "assetsLiabilities": {
+        "netWorth": "Чистый капитал",
+        "owesShare": "You owe {percent} of what you own",
+        "noDebt": "No debt",
+        "assets": "Активы",
+        "liabilities": "Обязательства",
+        "loadFailed": "Couldn't load your assets and liabilities",
+        "buckets": {
+          "cash": "Наличные",
+          "investments": "Инвестиции",
+          "ventures": "Венчурные инвестиции",
+          "vehicles": "Транспортные средства",
+          "loans": "Кредиты",
+          "creditAndOverdrafts": "Credit & overdrafts"
+        }
+      },
+      "spendingPace": {
+        "tabs": {
+          "lastMonth": "vs last month",
+          "average": "vs 3-mo avg"
+        },
+        "spentIn": "Spent in {month}",
+        "onTrackFor": "On track for {amount}",
+        "vsComparison": "{percent} vs {name}",
+        "comparison": {
+          "average": "{n}-mo avg"
+        },
+        "stats": {
+          "byToday": "{name} by today",
+          "total": "{name} total",
+          "daysLeft": "Days left"
+        },
+        "chart": {
+          "today": "Сегодня",
+          "ariaLabel": "Spending this month"
+        },
+        "tooltip": {
+          "spent": "Spent",
+          "forecast": "Forecast",
+          "spikeFrom": "Spent on {date}"
+        },
+        "legend": {
+          "thisMonth": "Этот месяц",
+          "forecast": "Forecast",
+          "averageMonth": "Average month"
+        },
+        "hints": {
+          "noHistory": "The comparison appears after your first full month.",
+          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far."
+        },
+        "loadFailed": "Couldn't load your spending.",
+        "settings": {
+          "spikes": {
+            "title": "Spike marks",
+            "summary": "Days with ≥{percent}% of the month's spending",
+            "inputLabel": "Mark a day when it reaches",
+            "hint": "Share of last month's total spending, 1–100%. Marks show in “vs last month” mode."
+          },
+          "saved": "Настройка обновлена"
+        }
+      },
       "plannedOverview": {
         "title": "Запланированные",
         "projectedBy": "Projected by {date}",
         "upcoming": "Upcoming · {count}",
         "loadFailed": "Не удалось загрузить запланированные транзакции"
+      },
+      "taxes": {
+        "title": "Average tax rate",
+        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
+        "ofIncome": "of income",
+        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
+        "average": "avg {amount}",
+        "amount": "Налоги",
+        "shareOfIncome": "Доля дохода",
+        "shareOfTaxes": "Share of taxes",
+        "other": "Другое",
+        "moreCategories": "ещё {count}",
+        "viewDetails": "View cash flow",
+        "loadFailed": "Couldn't load tax data.",
+        "noCategories": {
+          "title": "No tax categories yet",
+          "description": "Choose which categories count as taxes to see your tax rate.",
+          "action": "Choose categories"
+        },
+        "config": {
+          "months": {
+            "label": "Averaging period",
+            "saveError": "Could not save the averaging period. Try again.",
+            "m3": "3 mo",
+            "m6": "6 mo",
+            "m12": "12 mo"
+          }
+        },
+        "lastMonths": {
+          "m3": "Последние 3 месяца",
+          "m6": "Последние 6 месяцев",
+          "m12": "Последние 12 месяцев"
+        }
+      },
+      "budget": {
+        "spent": "spent",
+        "ringLabel": "{percent}% of the budget is spent",
+        "leftOf": "left of {total}",
+        "overOf": "over the {total} budget",
+        "headerLeft": "{amount} left",
+        "headerOver": "{amount} over",
+        "daysLeft": "{count} day left | {count} days left",
+        "lastDay": "Last day of the period",
+        "empty": "No budget yet",
+        "create": "Set up a budget",
+        "sort": {
+          "overspent": "Most overspent first"
+        }
+      },
+      "trackers": {
+        "spentOfLimit": "{spent} of {limit}",
+        "inOut": "{income} in, {expense} out",
+        "net": "Итог",
+        "noLimit": "No limit",
+        "empty": "Бюджетов пока нет",
+        "ended": "Завершён",
+        "create": "Create a tracker"
       },
       "emptyState": "За выбранный период данных нет.",
       "registry": {
@@ -209,6 +350,18 @@
           "name": "Использование кредитного лимита",
           "description": "Использование кредитных лимитов по счетам"
         },
+        "cashAccounts": {
+          "name": "Денежные средства и счета",
+          "description": "Total cash across your accounts, its change since last month, and how many months of expenses it covers"
+        },
+        "assetsLiabilities": {
+          "name": "Assets & liabilities",
+          "description": "What you own, what you owe, and the net worth between them"
+        },
+        "spendingPace": {
+          "name": "Spending pace",
+          "description": "Month-to-date spending with a forecast for the rest of the month, compared with last month or your 3-month average."
+        },
         "plannedOverview": {
           "name": "Обзор запланированных",
           "description": "Ожидающие запланированные транзакции и прогнозируемый баланс"
@@ -218,41 +371,16 @@
           "description": "How close you are to financial independence"
         },
         "taxes": {
-          "name": "Average Tax Rate",
+          "name": "Average tax rate",
           "description": "Share of income paid in taxes, with a 12-month trend"
-        }
-      },
-      "taxes": {
-        "title": "Average Tax Rate",
-        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
-        "ofIncome": "of income",
-        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
-        "average": "avg {amount}",
-        "amount": "Taxes",
-        "shareOfIncome": "Share of income",
-        "shareOfTaxes": "Share of taxes",
-        "other": "Other",
-        "moreCategories": "{count} more",
-        "viewDetails": "View cash flow",
-        "loadFailed": "Couldn't load tax data.",
-        "noCategories": {
-          "title": "No tax categories yet",
-          "description": "Choose which categories count as taxes to see your tax rate.",
-          "action": "Choose categories"
         },
-        "config": {
-          "months": {
-            "label": "Averaging period",
-            "saveError": "Could not save the averaging period. Try again.",
-            "m3": "3 mo",
-            "m6": "6 mo",
-            "m12": "12 mo"
-          }
+        "budget": {
+          "name": "Budget",
+          "description": "What is left in the current budget period, line by line"
         },
-        "lastMonths": {
-          "m3": "Last 3 months",
-          "m6": "Last 6 months",
-          "m12": "Last 12 months"
+        "trackers": {
+          "name": "Бюджеты",
+          "description": "Each active tracker with how much of its limit is used and its net"
         }
       }
     },
@@ -302,7 +430,10 @@
         "tagsStyleTitle": "Теги",
         "tagsStyleNames": "Names",
         "tagsStyleBars": "Bars",
-        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again.",
+        "showAccountTitle": "Счёт",
+        "showAccountDescription": "Show the account logo on each transaction",
+        "showAccountSaveError": "Couldn't save the account setting. Please try again."
       },
       "overdueBadge": "Просрочено",
       "scheduledBadge": "Запланировано",

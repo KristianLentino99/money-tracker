@@ -16,7 +16,6 @@ import {
   PanelLeftIcon,
   RocketIcon,
   TrendingUpIcon,
-  WalletIcon,
 } from '@lucide/vue';
 import { type Component, computed, provide, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -41,7 +40,7 @@ import UserMenu from './user-menu.vue';
 const { t } = useI18n();
 const route = useRoute();
 const { isCollapsed } = useSidebarCollapsed();
-const { isAccountsRoute, isTransactionsRoute, isPlannedRoute } = useSidebarNavRoutes();
+const { isAccountsRoute, isTransactionsRoute, isPlannedRoute, isChildActive } = useSidebarNavRoutes();
 const accountsNavChildren = useAccountsNavChildren();
 
 const {
@@ -92,7 +91,6 @@ interface RailNavItem {
 
 const navItems = computed<RailNavItem[]>(() => [
   { routeName: ROUTES_NAMES.home, icon: LayoutDashboardIcon, label: t('navigation.dashboard') },
-  { routeName: ROUTES_NAMES.plan, icon: WalletIcon, label: t('navigation.plan') },
   {
     routeName: ROUTES_NAMES.accounts,
     icon: LayersIcon,
@@ -108,7 +106,7 @@ const navItems = computed<RailNavItem[]>(() => [
     children: SIDEBAR_NAV_CHILDREN.transactions,
   },
   {
-    routeName: ROUTES_NAMES.planned,
+    routeName: ROUTES_NAMES.budget,
     icon: CalendarClockIcon,
     label: t('navigation.planned.planned'),
     active: isPlannedRoute.value,
@@ -222,9 +220,15 @@ const sectionItems = computed<RailSectionItem[]>(() => {
                     variant="ghost"
                     as="span"
                     size="sm"
-                    :class="['w-full justify-start gap-2 px-3', isActive && 'bg-primary/10 text-foreground']"
+                    :class="[
+                      'w-full justify-start gap-2 px-3',
+                      isChildActive({ child, isActive }) && 'bg-primary/10 text-foreground',
+                    ]"
                   >
-                    <component :is="child.icon" :class="['size-4 shrink-0', isActive && 'text-primary-text']" />
+                    <component
+                      :is="child.icon"
+                      :class="['size-4 shrink-0', isChildActive({ child, isActive }) && 'text-primary-text']"
+                    />
                     <span>{{ $t(child.labelKey) }}</span>
                   </ui-button>
                 </router-link>

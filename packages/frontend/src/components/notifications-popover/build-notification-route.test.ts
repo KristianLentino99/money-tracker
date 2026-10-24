@@ -94,20 +94,51 @@ describe('buildNotificationRoute', () => {
       expect(route).toBeNull();
     });
 
-    it('returns null when resourceType has no direct router target', () => {
+    it('returns null when resourceType is not account (no router target yet)', () => {
+      // Only RESOURCE_TYPES.account has a router target; trackers land nowhere yet.
       const route = buildNotificationRoute(
         baseNotification({
           type: NOTIFICATION_TYPES.shareAccepted,
           payload: {
-            resourceType: RESOURCE_TYPES.plan,
-            resourceId: NONEXISTENT_ID,
-            resourceName: 'Monthly plan',
+            resourceType: RESOURCE_TYPES.tracker,
+            resourceId: '5',
+            resourceName: 'Groceries',
             counterpartUser: { id: 2, username: 'bob', avatar: null },
           },
         }),
       );
 
       expect(route).toBeNull();
+    });
+  });
+
+  describe('tracker_alert', () => {
+    it('returns SPA route to planned tracker details when trackerId present', () => {
+      const route = buildNotificationRoute(
+        baseNotification({
+          type: NOTIFICATION_TYPES.trackerAlert,
+          payload: { trackerId: 7 },
+        }),
+      );
+
+      expect(route).toEqual({
+        kind: 'spa',
+        to: { name: ROUTES_NAMES.plannedTrackerDetails, params: { id: 7 } },
+      });
+    });
+
+    it('falls back to planned trackers list when trackerId is missing', () => {
+      const route = buildNotificationRoute(
+        baseNotification({
+          type: NOTIFICATION_TYPES.trackerAlert,
+          payload: {},
+        }),
+      );
+
+      expect(route).toEqual({
+        kind: 'spa',
+        to: { name: ROUTES_NAMES.plannedTrackers },
+      });
     });
   });
 
@@ -124,6 +155,32 @@ describe('buildNotificationRoute', () => {
     ])('returns null for type "%s"', (type) => {
       const route = buildNotificationRoute(baseNotification({ type, payload: {} }));
       expect(route).toBeNull();
+    });
+  });
+
+  describe('tracker_ai_matches', () => {
+    it('opens the tracker transactions tab with the review expanded', () => {
+      const route = buildNotificationRoute(
+        baseNotification({
+          type: NOTIFICATION_TYPES.trackerAiMatches,
+          payload: { trackerId: 't-1', trackerName: 'Greece 2026', linkedCount: 3, suggestedCount: 4 },
+        }),
+      );
+
+      expect(route).toEqual({
+        kind: 'spa',
+        to: {
+          name: ROUTES_NAMES.plannedTrackerDetails,
+          params: { id: 't-1' },
+          query: { tab: 'transactions', review: '1' },
+        },
+      });
+    });
+
+    it('returns null without a trackerId', () => {
+      expect(
+        buildNotificationRoute(baseNotification({ type: NOTIFICATION_TYPES.trackerAiMatches, payload: {} })),
+      ).toBeNull();
     });
   });
 
@@ -234,6 +291,28 @@ describe('buildNotificationRoute', () => {
         kind: 'spa',
         to: { name: ROUTES_NAMES.settingsSharedWithMe },
       });
+    });
+  });
+
+  describe('goal_reached', () => {
+    it('returns SPA route to the goal details', () => {
+      const route = buildNotificationRoute(
+        baseNotification({
+          type: NOTIFICATION_TYPES.goalReached,
+          payload: { goalId: 'goal-1', goalName: 'Vacation', achievedAmount: 1200, currencyCode: 'USD' },
+        }),
+      );
+
+      expect(route).toEqual({
+        kind: 'spa',
+        to: { name: ROUTES_NAMES.goalDetails, params: { goalId: 'goal-1' } },
+      });
+    });
+
+    it('returns null when goalId missing', () => {
+      const route = buildNotificationRoute(baseNotification({ type: NOTIFICATION_TYPES.goalReached, payload: {} }));
+
+      expect(route).toBeNull();
     });
   });
 });

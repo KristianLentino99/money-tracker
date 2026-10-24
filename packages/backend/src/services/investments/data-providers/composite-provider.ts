@@ -4,6 +4,7 @@ import { ServiceUnavailableError } from '@js/errors';
 import { logger } from '@js/utils';
 import { isAxiosError } from 'axios';
 
+import { rememberSearchResults } from '../securities/verified-search-cache';
 import { AlphaVantageDataProvider } from './alphavantage-provider';
 import {
   BaseSecurityDataProvider,
@@ -19,6 +20,7 @@ import { CoinGeckoDataProvider } from './coingecko-provider';
 import { FmpDataProvider } from './fmp-provider';
 import { KrakenDataProvider } from './kraken-provider';
 import { PolygonDataProvider } from './polygon-provider';
+import { findTestFixtureSecurity } from './test-fixture-securities';
 import {
   getHistoricalPriceProviderPreference,
   getLatestPriceProviderPreference,
@@ -85,6 +87,12 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
    * does not sink the other catalogs.
    */
   public async searchSecurities(query: string, options?: SearchOptions): Promise<SecuritySearchResult[]> {
+    const testFixture = findTestFixtureSecurity({ query });
+    if (testFixture) {
+      await rememberSearchResults({ results: [testFixture] });
+      return [testFixture];
+    }
+
     const stocksRequested = !options?.assetClass || options.assetClass === ASSET_CLASS.stocks;
     const cryptoRequested = !options?.assetClass || options.assetClass === ASSET_CLASS.crypto;
 
@@ -135,7 +143,12 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
           : Promise.resolve<SecuritySearchResult[]>([]);
 
       const [rawStockResults, cryptoResults] = await Promise.all([stockSearch, cryptoSearch]);
-      return [...rawStockResults.filter((result) => result.assetClass !== ASSET_CLASS.crypto), ...cryptoResults];
+      const legacyResults = [
+        ...rawStockResults.filter((result) => result.assetClass !== ASSET_CLASS.crypto),
+        ...cryptoResults,
+      ];
+      await rememberSearchResults({ results: legacyResults });
+      return legacyResults;
     }
 
     const providerNames = [
@@ -154,10 +167,10 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
       }
     });
 
-    const results = await Promise.all(searches);
+    const rawResults = await Promise.all(searches);
     const seenProviderSymbols = new Set<string>();
 
-    return results.flatMap((providerResults, index) => {
+    const results = rawResults.flatMap((providerResults, index) => {
       const providerName = providerNames[index]!;
       const isStockProvider = stockProviderNames.includes(providerName);
 
@@ -170,6 +183,8 @@ export class CompositeDataProvider extends BaseSecurityDataProvider {
           return true;
         });
     });
+    await rememberSearchResults({ results });
+    return results;
   }
 
   /**

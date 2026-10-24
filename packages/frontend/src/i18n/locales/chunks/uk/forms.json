@@ -130,7 +130,7 @@
       "namePlaceholder": "Назва рахунку",
       "currencyLabel": "Валюта",
       "currencyPlaceholder": "Виберіть валюту",
-      "addCurrencyButton": "Додати нову валюту +",
+      "addCurrencyButton": "Додати нову валюту",
       "initialBalanceLabel": "Початковий баланс",
       "initialBalancePlaceholder": "Початковий баланс",
       "initialBalanceHelpLink": "Що тут вказати?",
@@ -316,6 +316,7 @@
       "clearSelectionLabel": "Очистити вибір",
       "searchPlaceholder": "Пошук...",
       "sharedOwnerNotice": "Показуємо категорії {owner}",
+      "unlistedNotice": "Скористайтеся пошуком, щоб знайти будь-яку категорію",
       "sharedOwnerNoticeTooltip": "Транзакції на спільному рахунку завжди використовують категорії його власника. Все, що ви тут створите, буде записано в наборі категорій {owner}, щоб ви обидва бачили узгоджені підсумки.",
       "sharedOwnerCategoriesLoadError": "Не вдалося завантажити категорії спільного рахунку. Спробуйте ще раз."
     },
@@ -354,7 +355,8 @@
     "categoryMultiSelect": {
       "placeholder": "Виберіть категорії...",
       "searchPlaceholder": "Шукати категорії...",
-      "noCategoriesFound": "Категорій не знайдено"
+      "noCategoriesFound": "Категорій не знайдено",
+      "takenBy": "У «{name}»"
     },
     "payeeMultiSelect": {
       "label": "Всі отримувачі",
@@ -366,12 +368,13 @@
       "blankOption": "Без отримувача"
     },
     "budgetMultiSelect": {
-      "label": "Всі бюджети",
-      "selectedMany": "{n} бюджетів вибрано",
-      "searchPlaceholder": "Пошук бюджетів",
-      "noResults": "Бюджетів не знайдено",
-      "unknownBudget": "Невідомий бюджет",
-      "loadError": "Не вдалося завантажити бюджети. Спробуйте ще раз."
+      "label": "Всі трекери",
+      "selectedMany": "{n} трекерів вибрано",
+      "searchPlaceholder": "Пошук трекерів",
+      "noResults": "Трекерів не знайдено",
+      "unknownBudget": "Невідомий трекер",
+      "blankOption": "Не в жодному трекері",
+      "loadError": "Не вдалося завантажити трекери. Спробуйте ще раз."
     },
     "payeeSelect": {
       "placeholder": "Виберіть отримувача платежу",

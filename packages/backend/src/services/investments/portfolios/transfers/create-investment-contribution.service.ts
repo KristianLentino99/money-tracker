@@ -24,7 +24,7 @@ import { Big } from 'big.js';
 import { accountToPortfolioTransfer } from './account-to-portfolio-transfer.service';
 import { linkTransactionToPortfolio } from './link-transaction-to-portfolio.service';
 
-export interface InvestmentContributionPurchaseParams {
+interface InvestmentContributionPurchaseParams {
   securityId?: string;
   searchResult?: SecuritySearchResult;
   quantity: string;
@@ -38,7 +38,7 @@ export interface InvestmentContributionPurchaseParams {
   settlementRate?: string;
 }
 
-export interface CreateInvestmentContributionParams {
+interface CreateInvestmentContributionParams {
   userId: number;
   portfolioId: string;
   accountId: string;
@@ -49,7 +49,7 @@ export interface CreateInvestmentContributionParams {
   purchases: InvestmentContributionPurchaseParams[];
 }
 
-export interface CreateInvestmentContributionFromTransactionParams {
+interface CreateInvestmentContributionFromTransactionParams {
   userId: number;
   transactionId: string;
   portfolioId: string;
@@ -57,7 +57,7 @@ export interface CreateInvestmentContributionFromTransactionParams {
   purchases: InvestmentContributionPurchaseParams[];
 }
 
-export interface UpdateInvestmentContributionParams {
+interface UpdateInvestmentContributionParams {
   userId: number;
   portfolioId: string;
   transferId: string;

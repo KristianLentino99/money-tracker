@@ -5,8 +5,7 @@ import { Checkbox } from '@/components/lib/ui/checkbox';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { formatUIAmount } from '@/js/helpers';
 import { useAccountsStore } from '@/stores';
-import type { BulkTransferScanItem, BulkTransferScanMatch } from '@bt/shared/types/endpoints';
-import type { TransactionModel } from '@bt/shared/types';
+import type { TransactionModel, BulkTransferScanItem, BulkTransferScanMatch } from '@bt/shared/types';
 import { storeToRefs } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
 import { format } from 'date-fns';
@@ -218,6 +217,7 @@ const previewIncomeAccount = computed(
   <ResponsiveAlertDialog
     v-model:open="skipDialogOpen"
     :confirm-label="$t('optimizations.transferSuggestions.skip.action')"
+    confirm-variant="destructive"
     @confirm="handleConfirmSkip"
   >
     <template #title>{{ $t('optimizations.transferSuggestions.skip.title') }}</template>

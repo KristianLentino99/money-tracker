@@ -1,4 +1,4 @@
-import type { CategoryModel, endpointsTypes } from '@bt/shared/types';
+import type { CategoryModel, SpendingStructure } from '@bt/shared/types';
 
 export interface ExpenseStructureChartDataItem {
   categoryId: string;
@@ -67,7 +67,7 @@ export const buildExpenseStructureBreakdown = ({
 }: {
   parentCategoryId: string;
   childCategoryIds: string[];
-  spendings: Record<string, endpointsTypes.SpendingStructure>;
+  spendings: Record<string, SpendingStructure>;
   otherLabel: string;
 }): ExpenseStructureChartDataItem[] => {
   const spendingsById = new Map(Object.entries(spendings));

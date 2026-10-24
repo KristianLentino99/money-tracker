@@ -1,3 +1,4 @@
+import { ensureChunkLoaded } from '@/i18n';
 import type { Component } from 'vue';
 
 export interface WidgetSize {
@@ -41,6 +42,19 @@ export const WIDGET_REGISTRY: Record<string, WidgetDefinition> = {
     ],
     component: () => import('@/components/widgets/balance-trend.vue'),
     needsPeriod: true,
+  },
+  'spending-pace': {
+    id: 'spending-pace',
+    name: 'dashboard.widgets.registry.spendingPace.name',
+    description: 'dashboard.widgets.registry.spendingPace.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [
+      { colSpan: 1, rowSpan: 1, label: '1×1' },
+      { colSpan: 2, rowSpan: 1, label: '2×1' },
+    ],
+    component: () => import('@/components/widgets/spending-pace-widget/index.vue'),
+    needsPeriod: false,
   },
   'spending-categories': {
     id: 'spending-categories',
@@ -140,6 +154,26 @@ export const WIDGET_REGISTRY: Record<string, WidgetDefinition> = {
     component: () => import('@/components/widgets/net-worth-widget/index.vue'),
     needsPeriod: true,
   },
+  'cash-accounts': {
+    id: 'cash-accounts',
+    name: 'dashboard.widgets.registry.cashAccounts.name',
+    description: 'dashboard.widgets.registry.cashAccounts.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [{ colSpan: 1, rowSpan: 1, label: '1×1' }],
+    component: () => import('@/components/widgets/cash-accounts-widget/index.vue'),
+    needsPeriod: false,
+  },
+  'assets-liabilities': {
+    id: 'assets-liabilities',
+    name: 'dashboard.widgets.registry.assetsLiabilities.name',
+    description: 'dashboard.widgets.registry.assetsLiabilities.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [{ colSpan: 1, rowSpan: 1, label: '1×1' }],
+    component: () => import('@/components/widgets/assets-liabilities-widget/index.vue'),
+    needsPeriod: false,
+  },
   'credit-utilization': {
     id: 'credit-utilization',
     name: 'dashboard.widgets.registry.creditUtilization.name',
@@ -177,6 +211,54 @@ export const WIDGET_REGISTRY: Record<string, WidgetDefinition> = {
       { colSpan: 2, rowSpan: 1, label: '2×1' },
     ],
     component: () => import('@/components/widgets/subscriptions-overview.vue'),
+    needsPeriod: false,
+  },
+  budget: {
+    id: 'budget',
+    name: 'dashboard.widgets.registry.budget.name',
+    description: 'dashboard.widgets.registry.budget.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [
+      { colSpan: 1, rowSpan: 1, label: '1×1' },
+      { colSpan: 1, rowSpan: 2, label: '1×2' },
+    ],
+    // The line rows reuse budget page components, whose copy lives outside the dashboard chunk.
+    component: () =>
+      Promise.all([import('@/components/widgets/budget-widget.vue'), ensureChunkLoaded('pages/budget-plans')]).then(
+        ([component]) => component,
+      ),
+    needsPeriod: false,
+  },
+  trackers: {
+    id: 'trackers',
+    name: 'dashboard.widgets.registry.trackers.name',
+    description: 'dashboard.widgets.registry.trackers.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [
+      { colSpan: 1, rowSpan: 1, label: '1×1' },
+      { colSpan: 1, rowSpan: 2, label: '1×2' },
+    ],
+    component: () => import('@/components/widgets/trackers-widget/index.vue'),
+    needsPeriod: false,
+  },
+  goals: {
+    id: 'goals',
+    name: 'dashboard.widgets.registry.goals.name',
+    description: 'dashboard.widgets.registry.goals.description',
+    defaultColSpan: 1,
+    defaultRowSpan: 1,
+    allowedSizes: [
+      { colSpan: 1, rowSpan: 1, label: '1×1' },
+      { colSpan: 1, rowSpan: 2, label: '1×2' },
+      { colSpan: 2, rowSpan: 1, label: '2×1' },
+    ],
+    // Status and timing copy comes from the goals page chunk.
+    component: () =>
+      Promise.all([import('@/components/widgets/goals-widget/index.vue'), ensureChunkLoaded('pages/goals')]).then(
+        ([component]) => component,
+      ),
     needsPeriod: false,
   },
   [FIRE_WIDGET_ID]: {

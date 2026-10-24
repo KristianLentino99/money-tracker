@@ -7,7 +7,7 @@ import {
   type VehicleMaintenancePlanApiResponse,
 } from './vehicle-maintenance-plans.serializer';
 
-export interface VehicleMaintenanceReminderApiResponse extends VehicleMaintenancePlanApiResponse {
+interface VehicleMaintenanceReminderApiResponse extends VehicleMaintenancePlanApiResponse {
   planId: RecordId;
   vehicleName: string;
   currentMileage: number | null;

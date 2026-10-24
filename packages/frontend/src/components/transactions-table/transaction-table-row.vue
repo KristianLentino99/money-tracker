@@ -82,6 +82,16 @@
             <BriefcaseIcon :size="13" class="text-app-transfer-color shrink-0" />
             <span class="max-w-36 truncate">{{ portfolioName }}</span>
           </template>
+          <template v-else-if="ventureLinkData">
+            <ArrowRightIcon
+              :size="13"
+              :class="['shrink-0 opacity-60', tx.transactionType === TRANSACTION_TYPES.income && 'rotate-180']"
+            />
+            <RocketIcon :size="13" class="text-app-transfer-color shrink-0" />
+            <span :class="['max-w-36 truncate', ventureLinkData.isDealDeleted && 'text-muted-foreground line-through']">
+              {{ ventureLinkData.dealName }}
+            </span>
+          </template>
         </div>
       </template>
 
@@ -100,13 +110,7 @@
       <!-- Payee -->
       <template v-else-if="column.id === TABLE_COLUMN.payee">
         <div v-if="payee" class="flex items-center gap-2">
-          <BrandLogo
-            :domain="payee.logoDomain"
-            :initials="payee.logoInitials"
-            :color="payee.logoColor"
-            :name="payee.name"
-            class="size-5 shrink-0"
-          />
+          <BrandLogo v-bind="toEntityLogoDisplayProps(payee)" :name="payee.name" class="size-5 shrink-0" />
           <DesktopOnlyTooltip :content="payee.name" only-when-truncated>
             <span class="max-w-32 truncate">{{ payee.name }}</span>
           </DesktopOnlyTooltip>
@@ -227,6 +231,7 @@
 <script lang="ts" setup>
 import AccountLogo from '@/components/common/account-logo.vue';
 import BrandLogo from '@/components/common/brand-logo.vue';
+import { toEntityLogoDisplayProps } from '@/components/common/logo-selection';
 import CategoryCircle from '@/components/common/category-circle.vue';
 import ResponsiveTooltip from '@/components/common/responsive-tooltip.vue';
 import { Button } from '@/components/lib/ui/button';
@@ -240,6 +245,7 @@ import SplitIndicator from '@/components/transactions-list/indicators/split-indi
 import { useOppositeTxRecord } from '@/composable/data-queries/opposite-tx-record';
 import type { BulkUnselectableReason } from '@/composable/transaction-selection';
 import { useTransactionPortfolioLink } from '@/composable/data-queries/portfolio-transfers';
+import { useTransactionVentureLink } from '@/composable/data-queries/venture/events';
 import { useFormatCurrency } from '@/composable/formatters';
 import { useAccountAccess } from '@/composable/use-account-access';
 import { formatUIAmount } from '@/js/helpers';
@@ -262,6 +268,7 @@ import {
   Loader2Icon,
   LockIcon,
   PencilIcon,
+  RocketIcon,
   SquareArrowOutUpRightIcon,
 } from '@lucide/vue';
 import { format } from 'date-fns';
@@ -358,6 +365,7 @@ const { data: oppositeTx } = useOppositeTxRecord(() => props.tx);
 const portfolioLinkId = computed(() => (isPortfolioLinked.value ? props.tx.id : undefined));
 const { data: portfolioLinkData } = useTransactionPortfolioLink(portfolioLinkId);
 const portfolioName = computed(() => portfolioLinkData.value?.portfolioName ?? '');
+const { data: ventureLinkData } = useTransactionVentureLink(() => props.tx);
 
 const category = computed(() => categoriesMap.value[props.tx.categoryId]);
 const accountFrom = computed(() => accountsRecord.value[props.tx.accountId]);

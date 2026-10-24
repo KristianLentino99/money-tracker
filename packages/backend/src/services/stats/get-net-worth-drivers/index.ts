@@ -1,4 +1,13 @@
-import { ACCOUNT_CATEGORIES, type Cents, type RecordId, asCents, endpointsTypes } from '@bt/shared/types';
+import {
+  ACCOUNT_CATEGORIES,
+  type Cents,
+  type NetWorthDriversDegraded,
+  type NetWorthDriversGranularity,
+  type NetWorthDriversPortfolioMeta,
+  type NetWorthDriversUnpricedSecurity,
+  type RecordId,
+  asCents,
+} from '@bt/shared/types';
 import { Money } from '@common/types/money';
 import { UnexpectedError } from '@js/errors';
 import { logger } from '@js/utils';
@@ -13,7 +22,7 @@ import UsersCurrencies from '@models/users-currencies.model';
 import { withTransaction } from '@services/common/with-transaction';
 import { API_LAYER_BASE_CURRENCY_CODE } from '@services/exchange-rates/constants';
 import { buildUsdRateLookup } from '@services/stats/build-usd-rate-lookup';
-import { getAggregatedBalanceHistory } from '@services/stats/get-balance-history';
+import { getAggregatedBalanceHistory, toBalanceDateKey } from '@services/stats/get-balance-history';
 import { fetchSavingsTransactions, generatePeriodBuckets, getScopedEnabledPortfolios } from '@services/stats/utils';
 import { endOfDay, format, parseISO, startOfDay, subDays } from 'date-fns';
 import { Op } from 'sequelize';
@@ -52,7 +61,7 @@ interface GetNetWorthDriversParams {
   userId: number;
   from: string;
   to: string;
-  granularity: endpointsTypes.NetWorthDriversGranularity;
+  granularity: NetWorthDriversGranularity;
   /**
    * Optional subset of the user's enabled portfolios to scope the investment slice
    * to (holdings, portfolio cash, flows, growth, and the unpriced-securities
@@ -75,12 +84,12 @@ interface InvestmentSlice {
   /** Sparse per-portfolio split of each bucket's growth, positionally aligned with the buckets. */
   growthByPortfolio: NetWorthDriversPortfolioSliceCents[][];
   /** Portfolios active anywhere in the window, largest absolute total growth first. */
-  portfolios: endpointsTypes.NetWorthDriversPortfolioMeta[];
+  portfolios: NetWorthDriversPortfolioMeta[];
   /**
    * Holdings the replay had no price for and therefore carried at cost basis, so
    * their price movement is understated. Empty when every holding priced.
    */
-  unpricedSecurities: endpointsTypes.NetWorthDriversUnpricedSecurity[];
+  unpricedSecurities: NetWorthDriversUnpricedSecurity[];
   /**
    * Currencies converted without a real rate for the day: at the currency's earliest
    * stored rate for earlier dates, or 1:1 when none is stored. Empty when all resolved.
@@ -122,10 +131,10 @@ const buildDegraded = ({
   unpricedSecurities,
   fxFallbackCurrencies,
 }: {
-  unpricedSecurities: endpointsTypes.NetWorthDriversUnpricedSecurity[];
+  unpricedSecurities: NetWorthDriversUnpricedSecurity[];
   fxFallbackCurrencies: string[];
-}): endpointsTypes.NetWorthDriversDegraded | undefined => {
-  const degraded: endpointsTypes.NetWorthDriversDegraded = {};
+}): NetWorthDriversDegraded | undefined => {
+  const degraded: NetWorthDriversDegraded = {};
   if (unpricedSecurities.length > 0) degraded.unpricedSecurities = unpricedSecurities;
   if (fxFallbackCurrencies.length > 0) degraded.fxFallbackCurrencies = fxFallbackCurrencies;
 
@@ -421,13 +430,10 @@ const calculateInvestmentSlice = async ({
     });
   }
 
-  const unpricedSecurities: endpointsTypes.NetWorthDriversUnpricedSecurity[] = Array.from(
-    unpricedSecurityIds,
-    (securityId) => {
-      const label = securityLabelById.get(securityId);
-      return { securityId: securityId as RecordId, symbol: label?.symbol ?? null, name: label?.name ?? null };
-    },
-  );
+  const unpricedSecurities: NetWorthDriversUnpricedSecurity[] = Array.from(unpricedSecurityIds, (securityId) => {
+    const label = securityLabelById.get(securityId);
+    return { securityId: securityId as RecordId, symbol: label?.symbol ?? null, name: label?.name ?? null };
+  });
 
   // The replays traffic in decimals; everything this service returns is cents. The
   // scope-wide holdings level is the per-date sum of the per-portfolio cents, so the
@@ -493,13 +499,6 @@ const calculateInvestmentSlice = async ({
     fxFallbackCurrencies: Array.from(missingRateCurrencies),
   };
 };
-
-// `getAggregatedBalanceHistory` keys each day by `format(new Date(dateStr), 'yyyy-MM-dd')`
-// — a `yyyy-MM-dd` string parsed as UTC midnight, then re-formatted in server-local time.
-// Boundary calendar strings must pass through the identical transform to line up under a
-// negative-offset server timezone; without it the lookup shifts a calendar day and the
-// account-cash component silently reads as zero.
-const toAccountsDateKey = (dayStr: string): string => format(new Date(dayStr), 'yyyy-MM-dd');
 
 /**
  * Per-period breakdown of what grew the user's net worth: money they saved
@@ -575,14 +574,14 @@ export const getNetWorthDrivers = async ({
   // `?? 0` silently drop the whole account-cash component of this bucket's net worth. An empty
   // history (user with no account balances at all) is a real zero.
   const resolveAccountsCents = (periodEndKey: string): Cents => {
-    const cents = accountsCentsByDate.get(toAccountsDateKey(periodEndKey));
+    const cents = accountsCentsByDate.get(toBalanceDateKey(periodEndKey));
     if (cents !== undefined) return cents;
     if (accountsBalanceHistory.length === 0) return asCents(0);
 
     logger.error('Net-worth drivers: account balance history missing a boundary day', {
       userId,
       periodEndKey,
-      accountsDateKey: toAccountsDateKey(periodEndKey),
+      accountsDateKey: toBalanceDateKey(periodEndKey),
     });
     throw new UnexpectedError({
       message: 'Net-worth drivers: account balance history is missing a period-end day.',

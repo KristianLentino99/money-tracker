@@ -78,7 +78,7 @@
                 class="border-border/60 border-b last:border-b-0"
               >
                 <td class="px-3 py-2 font-mono tabular-nums">{{ error.transactionIndex + 1 }}</td>
-                <td class="text-destructive-text px-3 py-2">{{ error.error }}</td>
+                <td class="text-destructive-text px-3 py-2">{{ formatStatementImportRowError({ error, t }) }}</td>
               </tr>
             </tbody>
           </table>
@@ -94,6 +94,9 @@
       <div class="flex flex-col gap-2 @sm/import-step:flex-row">
         <Button variant="outline" class="flex-1" @click="store.reset()">
           {{ $t('pages.statementParser.importResults.startNewImportButton') }}
+        </Button>
+        <Button variant="outline" class="flex-1" @click="handleFindTransfers">
+          {{ $t('pages.importExport.importResults.findTransfers') }}
         </Button>
         <Button class="flex-1" @click="handleViewTransactions">
           {{ $t('pages.statementParser.importResults.viewTransactionsButton') }}
@@ -205,8 +208,12 @@ import { ROUTES_NAMES } from '@/routes';
 import { useStatementParserStore } from '@/stores/statement-parser';
 import { ArrowLeftIcon, CircleCheckIcon, Loader2Icon, TriangleAlertIcon } from '@lucide/vue';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import { formatStatementImportRowError } from '../utils/import-row-error-message';
+
+const { t } = useI18n();
 const store = useStatementParserStore();
 const router = useRouter();
 
@@ -226,5 +233,10 @@ async function handleImport() {
 
 function handleViewTransactions() {
   router.push({ name: ROUTES_NAMES.transactions });
+}
+
+function handleFindTransfers() {
+  const range = store.extractedDateRange;
+  router.push({ name: ROUTES_NAMES.optimizationsTransfers, query: { from: range?.startDate, to: range?.endDate } });
 }
 </script>

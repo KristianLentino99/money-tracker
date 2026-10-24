@@ -51,7 +51,7 @@ const childState = ref<ChildState>('pending');
 /**
  * Captured at accept-time so the "go to resource" button can route to the right page
  * even after the dialog rerenders. `null` while pending; populated to the just-accepted
- * resource on success. Account and plan shares route to their respective workspaces;
+ * resource on success. Account / tracker are routed to their respective detail pages;
  * other resource types fall through to a generic "close" action.
  */
 const acceptedResource = ref<{ type: ResourceType; id: string } | null>(null);
@@ -66,11 +66,15 @@ const acceptMutation = useMutation({
   onSuccess: async (data) => {
     childState.value = 'accepted';
     acceptedResource.value = { type: data.share.resourceType, id: data.share.resourceId };
+    emit('accepted', { acceptedAccountId: acceptedAccountId.value });
     addSuccessNotification(t('dialogs.shareInvitationDialog.acceptSuccess'));
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.shareInvitationsReceived });
-    if (data.share.resourceType === RESOURCE_TYPES.plan) {
-      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.plansList });
-      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.planViews });
+    if (data.share.resourceType === RESOURCE_TYPES.tracker) {
+      // Newly accepted tracker surfaces in the owned+shared tracker list — invalidate the
+      // list query and the per-tracker detail query (in case the user opens the tracker
+      // before the list refetches).
+      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.trackersList });
+      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.trackersListItem });
     } else {
       queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
     }
@@ -86,7 +90,6 @@ const acceptMutation = useMutation({
       addErrorNotification(t('dialogs.shareInvitationDialog.acceptDataRefreshFailed'));
       captureException({ error: refreshErr, context: { source: 'shareInvitationAcceptDataRefresh' } });
     }
-    emit('accepted', { acceptedAccountId: acceptedAccountId.value });
   },
   onError: (err: unknown) => {
     const { message } = extractApiError(err);
@@ -119,16 +122,16 @@ const goToResource = () => {
     router.push({ name: ROUTES_NAMES.account, params: { id: accepted.id } });
     return;
   }
-  if (accepted.type === RESOURCE_TYPES.plan) {
-    router.push({ name: ROUTES_NAMES.plan, query: { planId: accepted.id } });
+  if (accepted.type === RESOURCE_TYPES.tracker) {
+    router.push({ name: ROUTES_NAMES.plannedTrackerDetails, params: { id: accepted.id } });
     return;
   }
   emit('close');
 };
 
 const goToResourceLabel = computed(() => {
-  if (acceptedResource.value?.type === RESOURCE_TYPES.plan) {
-    return t('navigation.plan');
+  if (acceptedResource.value?.type === RESOURCE_TYPES.tracker) {
+    return t('dialogs.shareInvitationDialog.goToBudget');
   }
   return t('dialogs.shareInvitationDialog.goToAccount');
 });

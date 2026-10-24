@@ -316,6 +316,7 @@
       "clearSelectionLabel": "Hapus pilihan",
       "searchPlaceholder": "Cari...",
       "sharedOwnerNotice": "Menampilkan kategori {owner}",
+      "unlistedNotice": "Search to find any category",
       "sharedOwnerNoticeTooltip": "Transaksi di akun bersama selalu menggunakan kategori pemilik. Apa pun yang Anda simpan di sini akan diajukan di bawah set {owner} sehingga Anda berdua melihat total yang konsisten.",
       "sharedOwnerCategoriesLoadError": "Tidak dapat memuat kategori untuk akun bersama. Silakan coba lagi."
     },
@@ -354,7 +355,8 @@
     "categoryMultiSelect": {
       "placeholder": "Pilih kategori...",
       "searchPlaceholder": "Cari kategori...",
-      "noCategoriesFound": "Tidak ada kategori ditemukan"
+      "noCategoriesFound": "Tidak ada kategori ditemukan",
+      "takenBy": "In {name}"
     },
     "payeeMultiSelect": {
       "label": "Semua penerima",
@@ -371,6 +373,7 @@
       "searchPlaceholder": "Cari anggaran",
       "noResults": "Tidak ada anggaran ditemukan",
       "unknownBudget": "Anggaran tidak diketahui",
+      "blankOption": "Not in any tracker",
       "loadError": "Tidak dapat memuat anggaran. Silakan coba lagi."
     },
     "payeeSelect": {

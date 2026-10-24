@@ -11,8 +11,10 @@ import { DEMO_CONFIG, type DemoAccountKey } from './demo-config';
 import { getDemoTemplate } from './demo-template-cache.service';
 import { setupAccountGroups } from './seed-account-groups.service';
 import { setupAutomations } from './seed-automations.service';
+import { setupBudgetPlan } from './seed-budget-plan.service';
 import {
   createAccounts,
+  createTrackers,
   createCategories,
   createTags,
   setupCurrencies,
@@ -21,12 +23,17 @@ import {
   setupVehicles,
   setupVentures,
 } from './seed-demo-data.service';
+import { setupGoals } from './seed-goals.service';
 import { setupInvestments } from './seed-investments.service';
 import { seedPayees } from './seed-payees.service';
 import { setupSubscriptions } from './seed-subscriptions.service';
 import { seedTransactionExtras } from './seed-transaction-extras.service';
+import { sumSpendByCategoryKey } from './template/budget-spend';
 import { toBaseCurrencyCents } from './template/fx';
 import type { DemoTemplateTransaction } from './template/types';
+
+/** How far back demo trackers look: a fixed window, always complete unlike a part-elapsed calendar month. */
+const TRACKER_WINDOW_DAYS = 30;
 
 interface TransferReconcilableRow {
   transferId: string | null;
@@ -265,6 +272,30 @@ export async function applyDemoTemplate({
   await updateAccountBalances({ userId });
   await rebuildBalancesHistory({ userId });
 
+  await createTrackers({
+    userId,
+    categoryMap,
+    spendByCategoryKey: sumSpendByCategoryKey({
+      template,
+      windowDays: TRACKER_WINDOW_DAYS,
+      currencyByAccountKey: accountKeyToCurrency,
+    }),
+    windowStart: subDays(referenceDate, TRACKER_WINDOW_DAYS),
+    windowEnd: referenceDate,
+  });
+
+  // A showcase extra: a failure here costs the visitor the Budget page, not the whole demo.
+  await setupBudgetPlan({
+    userId,
+    accountIds: accounts.map((account) => account.id),
+    categoryMap,
+    template,
+    currencyByAccountKey: accountKeyToCurrency,
+    referenceDate,
+  }).catch((error: unknown) => {
+    logger.error('Demo budget seeding failed', { userId, error: error as Error });
+  });
+
   const mainCheckingAccountId = accountKeyToId['main_checking'];
   if (mainCheckingAccountId) {
     await setupSubscriptions({
@@ -291,6 +322,9 @@ export async function applyDemoTemplate({
   await setupVehicles({ userId, referenceDate });
   await setupLoans({ userId, referenceDate });
   await setupVentures({ userId, referenceDate });
+  if (savingsAccountId) {
+    await setupGoals({ userId, savingsAccountId, referenceDate });
+  }
   const accountGroupIdByName = await setupAccountGroups({ userId });
   await setupAutomations({
     userId,

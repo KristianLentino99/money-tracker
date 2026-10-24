@@ -162,6 +162,11 @@ test.describe('Investment Calculator', () => {
     const horizonValue = page.getByTestId('horizon-value');
     await expect(horizonValue).toHaveText('10yr', { timeout: 10_000 });
 
+    // A non-zero balance makes the projection change when the horizon changes.
+    const balanceInput = page.locator('input[type="number"]').first();
+    await balanceInput.fill('10000');
+    await balanceInput.blur();
+
     // Record summary before change
     const summary = summaryCards(page);
     const beforeText = await summary.textContent();

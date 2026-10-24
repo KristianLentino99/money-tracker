@@ -1,16 +1,21 @@
-import type { BackupRestoreSseProgress } from './backup';
-import type { BudgetBakersWalletImportProgress } from './budget-bakers-wallet-import';
-import type { BaseCurrencyChangeStatus } from './currencies';
-import type { CsvImportProgress, ImportBatchDeleteProgress } from './import-export';
-import type { MsMoneyImportProgress } from './ms-money-import';
-import type { OfxImportProgress } from './ofx-import';
-import type { StatementImportProgress } from './statement-parser';
 /**
  * Server-Sent Events (SSE) shared types
  *
  * These types are used by both backend and frontend for real-time event communication.
  */
-import type { YnabImportProgress } from './ynab-import';
+import type { BackupRestoreSseProgress } from './backup';
+import type { BaseCurrencyChangeStatus } from './currencies';
+import type { EntityLogoFields } from './entity-logo';
+import type {
+  BudgetBakersWalletImportProgress,
+  CsvImportProgress,
+  ImportBatchDeleteProgress,
+  MsMoneyImportProgress,
+  OfxImportProgress,
+  StatementImportProgress,
+  YnabImportProgress,
+} from './import-export';
+import type { TrackerScanStatusPayload } from './trackers';
 
 /**
  * SSE Event Types - event names sent via Server-Sent Events
@@ -27,6 +32,7 @@ export const SSE_EVENT_TYPES = {
   BACKUP_RESTORE_PROGRESS: 'backup_restore_progress',
   IMPORT_BATCH_DELETE_PROGRESS: 'import_batch_delete_progress',
   STATEMENT_IMPORT_PROGRESS: 'statement_import_progress',
+  TRACKER_SCAN_STATUS: 'tracker_scan_status',
 } as const;
 
 export type SSEEventType = (typeof SSE_EVENT_TYPES)[keyof typeof SSE_EVENT_TYPES];
@@ -63,7 +69,7 @@ export type AiCategorizationStatus =
 /**
  * Account sync status for SYNC_STATUS_CHANGED event
  */
-export interface SyncAccountStatus {
+export interface SyncAccountStatus extends EntityLogoFields {
   accountId: string;
   status: string;
   startedAt: string | null;
@@ -71,6 +77,9 @@ export interface SyncAccountStatus {
   error: string | null;
   accountName: string;
   providerType: string;
+  bankDataProviderConnectionId: string;
+  /** logo.dev domain resolved from the connection's bank name; clients add their own token and size. */
+  bankLogoDomain: string | null;
 }
 
 /**
@@ -83,6 +92,7 @@ export interface ConnectionNeedingReauth {
   providerType: string;
   providerName: string;
   bankName: string | null;
+  bankLogoDomain: string | null;
   accountsCount: number;
   deactivatedAt: string | null;
 }
@@ -131,7 +141,8 @@ export type SSEEventPayload =
   | BaseCurrencyChangeStatus
   | BackupRestoreSseProgress
   | ImportBatchDeleteProgress
-  | StatementImportProgress;
+  | StatementImportProgress
+  | TrackerScanStatusPayload;
 
 /**
  * Maps each SSE event name to the payload its listeners receive. Lets a typed
@@ -152,4 +163,5 @@ export interface SSEEventPayloadMap {
   [SSE_EVENT_TYPES.BACKUP_RESTORE_PROGRESS]: BackupRestoreSseProgress;
   [SSE_EVENT_TYPES.IMPORT_BATCH_DELETE_PROGRESS]: ImportBatchDeleteProgress;
   [SSE_EVENT_TYPES.STATEMENT_IMPORT_PROGRESS]: StatementImportProgress;
+  [SSE_EVENT_TYPES.TRACKER_SCAN_STATUS]: TrackerScanStatusPayload;
 }

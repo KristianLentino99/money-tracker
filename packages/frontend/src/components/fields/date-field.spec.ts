@@ -2,6 +2,9 @@ import { mount } from '@vue/test-utils';
 
 import DateField from './date-field.vue';
 
+const safari = vi.hoisted(() => ({ isSafariMobile: false }));
+vi.mock('@/composable/detect-safari', () => ({ useSafariDetection: () => safari }));
+
 const CalendarStub = {
   name: 'CalendarStub',
   props: { modelValue: { type: Date, default: undefined } },
@@ -10,16 +13,26 @@ const CalendarStub = {
 };
 
 const SlotStub = { template: '<div><slot /></div>' };
+const PopoverStub = { name: 'PopoverStub', props: { open: Boolean }, template: '<div><slot /></div>' };
 
-const mountComponent = ({ modelValue }: { modelValue: Date }) =>
+const mountComponent = (props: {
+  modelValue: Date;
+  mode?: 'date' | 'dateTime';
+  calendarOptions?: { minDate?: Date; maxDate?: Date };
+  hideInputTime?: boolean;
+}) =>
   mount(DateField, {
-    props: { modelValue },
+    props,
     global: {
-      stubs: { Popover: SlotStub, PopoverTrigger: SlotStub, PopoverContent: SlotStub, Calendar: CalendarStub },
+      stubs: { Popover: PopoverStub, PopoverTrigger: SlotStub, PopoverContent: SlotStub, Calendar: CalendarStub },
     },
   });
 
 describe('DateField component', () => {
+  afterEach(() => {
+    safari.isSafariMobile = false;
+  });
+
   it('does not emit update:modelValue when the calendar clears its selection', async () => {
     const modelValue = new Date('2024-05-10T12:00:00.000Z');
     const wrapper = mountComponent({ modelValue });
@@ -31,6 +44,46 @@ describe('DateField component', () => {
     expect(wrapper.emitted('update:modelValue')).toBeUndefined();
     expect(calendar.props('modelValue')).toEqual(modelValue);
   });
+
+  it('keeps the time when only the date is typed into a time-hidden input', async () => {
+    const wrapper = mountComponent({ modelValue: new Date('2026-08-22T15:05:42'), hideInputTime: true });
+
+    const input = wrapper.find('input[type="date"]');
+    expect((input.element as HTMLInputElement).value).toBe('2026-08-22');
+    await input.setValue('2026-08-20');
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([new Date('2026-08-20T15:05:42')]);
+  });
+
+  it('keeps the popover open while the time changes and closes it on a day pick', async () => {
+    const wrapper = mountComponent({ modelValue: new Date(2026, 7, 22, 15, 5) });
+    const popover = wrapper.findComponent({ name: 'PopoverStub' });
+    const calendar = wrapper.findComponent({ name: 'CalendarStub' });
+    (wrapper.vm as unknown as { open: () => void }).open();
+    await wrapper.vm.$nextTick();
+
+    calendar.vm.$emit('update:modelValue', new Date(2026, 7, 22, 18, 5));
+    await wrapper.vm.$nextTick();
+    expect(popover.props('open')).toBe(true);
+
+    calendar.vm.$emit('update:modelValue', new Date(2026, 7, 20, 18, 5));
+    await wrapper.vm.$nextTick();
+    expect(popover.props('open')).toBe(false);
+  });
+
+  it.each([
+    { hideInputTime: false, isEnabled: false },
+    { hideInputTime: true, isEnabled: true },
+  ])(
+    'on Safari mobile enables the calendar trigger only when the input hides the time ($hideInputTime)',
+    ({ hideInputTime, isEnabled }) => {
+      safari.isSafariMobile = true;
+      const wrapper = mountComponent({ modelValue: new Date(2026, 7, 22, 15, 5), hideInputTime });
+
+      const trigger = wrapper.findAll('button').at(-1)!;
+      expect(trigger.attributes('disabled') === undefined).toBe(isEnabled);
+    },
+  );
 
   it('does not emit dates before year 2000 typed into the input', async () => {
     const wrapper = mountComponent({ modelValue: new Date('2026-08-22T10:00:00') });
@@ -77,5 +130,48 @@ describe('DateField component', () => {
     await wrapper.setProps({ modelValue: null });
 
     expect(wrapper.findComponent({ name: 'CalendarStub' }).props('modelValue')).toBeUndefined();
+  });
+
+  it('keeps the 4-digit-year cap and no min when no calendar bounds are given', () => {
+    const wrapper = mountComponent({ modelValue: new Date('2026-08-22T10:00:00') });
+
+    const input = wrapper.find('input[type="datetime-local"]');
+    expect(input.attributes('max')).toBe('9999-12-31T23:59');
+    expect(input.attributes('min')).toBeUndefined();
+  });
+
+  it('does not bind the calendar bounds to the native datetime input', () => {
+    const wrapper = mountComponent({
+      modelValue: new Date('2026-08-22T10:00:00'),
+      calendarOptions: { minDate: new Date(2026, 0, 5, 8, 30), maxDate: new Date(2026, 11, 24, 18, 45) },
+    });
+
+    const input = wrapper.find('input[type="datetime-local"]');
+    expect(input.attributes('min')).toBeUndefined();
+    expect(input.attributes('max')).toBe('9999-12-31T23:59');
+  });
+
+  describe('date mode', () => {
+    it('renders a date-only input bounded by the calendar options', () => {
+      const wrapper = mountComponent({
+        modelValue: new Date(2026, 7, 22, 10, 0),
+        mode: 'date',
+        calendarOptions: { minDate: new Date(2026, 0, 5, 8, 30), maxDate: new Date(2026, 11, 24, 18, 45) },
+      });
+
+      const input = wrapper.find('input[type="date"]');
+      expect((input.element as HTMLInputElement).value).toBe('2026-08-22');
+      expect(input.attributes('min')).toBe('2026-01-05');
+      expect(input.attributes('max')).toBe('2026-12-24');
+      expect(wrapper.findComponent({ name: 'CalendarStub' }).attributes('mode')).toBe('date');
+    });
+
+    it('emits a typed date as local midnight', async () => {
+      const wrapper = mountComponent({ modelValue: new Date(2026, 7, 22), mode: 'date' });
+
+      await wrapper.find('input[type="date"]').setValue('2026-03-01');
+
+      expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([new Date(2026, 2, 1)]);
+    });
   });
 });

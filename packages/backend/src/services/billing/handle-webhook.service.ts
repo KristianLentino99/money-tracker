@@ -5,6 +5,7 @@ import BillingWebhookEvents from '@models/billing-webhook-events.model';
 import Users from '@models/users.model';
 import { withTransaction } from '@services/common/with-transaction';
 
+import { sendSubscriptionWelcomeEmail } from './send-subscription-welcome-email';
 import type { ParsedSubscriptionEvent } from './stripe/parse-webhook';
 
 type WebhookOutcome = 'processed' | 'duplicate' | 'ignored' | 'stale';
@@ -99,6 +100,7 @@ export const handleBillingWebhook = async ({ event }: { event: ParsedSubscriptio
   // Tracked after commit so a rolled-back webhook never reports a conversion.
   if (startedForUserId) {
     trackSubscriptionStarted({ userId: startedForUserId, tier: event.tier, billingCycle: event.billingCycle });
+    await sendSubscriptionWelcomeEmail({ userId: startedForUserId, tier: event.tier });
   }
   return outcome;
 };

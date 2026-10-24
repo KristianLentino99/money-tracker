@@ -104,11 +104,12 @@
       "recordList": {},
       "form": {
         "payeeLabel": "收款人",
-        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "destinationGroupLabel": "钱去哪里了",
         "paymentTypeLabel": "付款方式",
         "noteLabel": "备注",
         "notePlaceholder": "备注",
+        "addFieldsLabel": "添加",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",
@@ -176,6 +177,11 @@
         "loadingButton": "加载中……",
         "createButton": "创建",
         "editButton": "编辑",
+        "duplicateButton": "Duplicate",
+        "createMore": {
+          "label": "Create more",
+          "createdToast": "Transaction created"
+        },
         "fromAccountLabel": "从账户",
         "toAccountLabel": "到账户",
         "accountLabel": "账户",
@@ -241,12 +247,7 @@
           }
         },
         "recurringPaymentLabel": "Recurring payment (optional)",
-        "recurringPaymentPlaceholder": "Select a recurring payment",
-        "duplicateButton": "Duplicate",
-        "createMore": {
-          "label": "Create more",
-          "createdToast": "Transaction created"
-        }
+        "recurringPaymentPlaceholder": "Select a recurring payment"
       },
       "investmentContribution": {
         "title": "投资买入",
@@ -420,6 +421,7 @@
         "unlinkButton": "取消链接到投资组合",
         "unlinkWarning": "取消链接将减少投资组合 {portfolio} 的余额。",
         "unlinkWarningNoCash": "此转账未改变 {portfolio} 的余额，因此取消链接不会影响余额。",
+        "noCashBadge": "No cash impact",
         "unlinkDescription": "原始交易详情将被恢复。",
         "cancelButton": "取消",
         "confirmUnlink": "确认取消链接",
@@ -472,8 +474,6 @@
         "announceApplied": "已应用 {name} — {count} 个字段已填写。金额为空。| 已应用 {name} — {count} 个字段已填写。金额为空。",
         "announceAppliedWithAmount": "已应用 {name} — {count} 个字段已填写。金额已设定为 {amount}。 | 已应用 {name} — {count} 个字段已填写。金额已设定为 {amount}。",
         "categoryDeletedHint": "此模板的分类已删除——请选择新的分类。",
-        "alsoSet": "模板也填写了：{fields}",
-        "tagsCount": "{count} 标签 | {count} 标签",
         "applyConfirmTitle": "应用模板？",
         "applyConfirmDescription": "应用将替换您的拆分和退款链接。",
         "toasts": {
@@ -580,6 +580,11 @@
       "inheritParentColor": "使用上级颜色",
       "iconLabel": "图标",
       "iconPlaceholder": "选择图标",
+      "defaultTagsLabel": "Default tags",
+      "defaultTagsPlaceholder": "Select tags",
+      "defaultTagsHint": "Added to a transaction when you pick this category.",
+      "applyTagsOnAiLabel": "Also apply when AI categorizes a transaction",
+      "applyTagsOnAiHint": "Tags stay on the transaction if you change its category later.",
       "settingsDivider": "设置",
       "saveButton": "保存",
       "createButton": "创建",
@@ -605,7 +610,11 @@
         "title": "创建分组",
         "nameLabel": "分组名",
         "namePlaceholder": "投资",
-        "createButton": "创建"
+        "createButton": "创建",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {
@@ -741,7 +750,6 @@
       "chooseDescription": "您想要如何为 {name} 记录付款？",
       "amountLabel": "金额",
       "amountPlaceholder": "0.00",
-      "estimateLoading": "正在加载估算…",
       "crossCurrencyEstimate": "~{sourceAmount} {sourceCurrency} → {accountCurrency} （估算）",
       "dateLabel": "付款日期",
       "accountLabel": "账户",
@@ -752,6 +760,13 @@
       "recordModeMarkDescription": "仅更新计划——不创建交易记录。",
       "recordModeTransactionTitle": "创建交易",
       "recordModeTransactionDescription": "在账户中记录一笔实际支出，同时关联该账户以便用于未来的付款。",
+      "useExistingTitle": "Use the existing payment",
+      "useExistingDescription": "A transaction linked to this subscription is already recorded in this period. Nothing new is added to your account.",
+      "recordNewTitle": "Record a new payment",
+      "recordNewDescription": "Adds another transaction for this period. The existing payment stays as it is.",
+      "linkedPaymentDescription": "{name} already has a payment in this period. Choose how to mark it paid.",
+      "confirmUseExisting": "Use this payment",
+      "previewUnavailable": "Couldn't check for payments already recorded in this period. Review the details before recording a new one.",
       "notifications": {
         "markedAsPaid": "已记录付款",
         "markAsPaidFailed": "无法记录付款",
@@ -803,6 +818,7 @@
       "analyzing": "Reading the invoice and searching your transactions…",
       "attaching": "Attaching the invoice to the transaction…",
       "privacyNote": "The file goes to the AI provider for reading only. Nothing is saved until you link it to a transaction.",
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options.",
       "direction": {
         "paid": "I paid this",
         "gotPaid": "I got paid",

@@ -1,4 +1,4 @@
-import { loadTransactions } from '@/api/transactions';
+import { type TransactionFilterParams, loadTransactions, loadTransactionsSummary } from '@/api/transactions';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import { DEFAULT_FILTERS, FiltersStruct, SELECTABLE_TRANSFER_NATURES } from '@/components/records-filters/const';
 import {
@@ -7,10 +7,10 @@ import {
   TRANSACTION_SORT_FIELD,
   TRANSACTION_TRANSFER_NATURE,
 } from '@bt/shared/types';
-import { keepPreviousData, useInfiniteQuery, useQueryClient } from '@tanstack/vue-query';
+import { keepPreviousData, useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/vue-query';
 import isDate from 'date-fns/isDate';
 import { isEqual, isNil, omitBy } from 'lodash-es';
-import { MaybeRef, Ref, computed, ref, unref, watch } from 'vue';
+import { MaybeRef, Ref, computed, ref, toValue, watch } from 'vue';
 
 const filterOrUndefined = (value: FILTER_OPERATION) => (value === FILTER_OPERATION.all ? undefined : value);
 
@@ -28,7 +28,7 @@ interface TransactionsSorting {
 
 const DATE_FILTER_KEYS = new Set<string>(['start', 'end']);
 
-export interface StoredFiltersState {
+interface StoredFiltersState {
   filters: Partial<FiltersStruct>;
   sorting?: TransactionsSorting;
 }
@@ -63,12 +63,42 @@ export const buildTransferNaturesParam = (filter: FiltersStruct): TRANSACTION_TR
     : [TRANSACTION_TRANSFER_NATURE.not_transfer, ...selected];
 };
 
+/** Which rows match: the query params shared by the list, its summary and filter-based bulk actions. */
+export const buildFilterParams = ({ filter }: { filter: FiltersStruct }): TransactionFilterParams =>
+  omitBy(
+    {
+      transactionType: filter.transactionType ?? undefined,
+      to: isDate(filter.end) ? filter.end!.toISOString() : undefined,
+      from: isDate(filter.start) ? filter.start!.toISOString() : undefined,
+      // A zero bound filters nothing, and the API rejects it in a request body.
+      amountGte: filter.amountGte || undefined,
+      amountLte: filter.amountLte || undefined,
+      noteSearch: filter.noteIncludes || undefined,
+      hasAttachment: buildTriStateParam({ value: filter.attachmentFilter }),
+      transferFilter: filterOrUndefined(filter.transferFilter),
+      refundFilter: filterOrUndefined(filter.refundFilter),
+      isForecastOnly: buildTriStateParam({ value: filter.plannedFilter }),
+      transferNatures: buildTransferNaturesParam(filter),
+      accountIds: filter.accountIds.length ? filter.accountIds : undefined,
+      categoryIds: filter.categoryIds.length ? filter.categoryIds : undefined,
+      uncategorizedOnly: filter.uncategorizedOnly || undefined,
+      tagIds: filter.tagIds.length ? filter.tagIds : undefined,
+      payeeIds: filter.payeeIds.length ? filter.payeeIds : undefined,
+      categorizationSource: filter.categorizationSource ?? undefined,
+      batchId: filter.batchId ?? undefined,
+      trackerIds: filter.trackerIds.length ? filter.trackerIds : undefined,
+      excludedTrackerIds: filter.excludedTrackerIds.length ? filter.excludedTrackerIds : undefined,
+    },
+    isNil,
+  ) as TransactionFilterParams;
+
 export const useTransactionsWithFilters = ({
   limit = 30,
   appendQueryKey = [],
   queryEnabled = true,
   staticFilters = {},
   sorting,
+  withSummary = false,
 }: {
   limit?: number;
   appendQueryKey?: unknown[];
@@ -76,9 +106,11 @@ export const useTransactionsWithFilters = ({
   staticFilters?: MaybeRef<Partial<FiltersStruct>>;
   /** Backend-side sorting. When omitted, defaults to time DESC. */
   sorting?: Ref<TransactionsSorting>;
+  /** Also fetch count and totals for the whole filtered set. */
+  withSummary?: boolean;
 } = {}) => {
   const queryClient = useQueryClient();
-  const defaultWithStatic = computed<FiltersStruct>(() => ({ ...DEFAULT_FILTERS, ...unref(staticFilters) }));
+  const defaultWithStatic = computed<FiltersStruct>(() => ({ ...DEFAULT_FILTERS, ...toValue(staticFilters) }));
   const filters = ref<FiltersStruct>({ ...defaultWithStatic.value });
   const appliedFilters = ref<FiltersStruct>({ ...defaultWithStatic.value });
 
@@ -113,38 +145,16 @@ export const useTransactionsWithFilters = ({
   const fetchTransactions = ({ pageParam, filter }: { pageParam: number; filter: FiltersStruct }) => {
     const offset = pageParam * limit;
 
-    return loadTransactions(
-      omitBy(
-        {
-          limit,
-          offset,
-          transactionType: filter.transactionType ?? undefined,
-          to: isDate(filter.end) ? filter.end!.toISOString() : undefined,
-          from: isDate(filter.start) ? filter.start!.toISOString() : undefined,
-          amountGte: filter.amountGte,
-          amountLte: filter.amountLte,
-          noteSearch: filter.noteIncludes,
-          hasAttachment: buildTriStateParam({ value: filter.attachmentFilter }),
-          transferFilter: filterOrUndefined(filter.transferFilter),
-          refundFilter: filterOrUndefined(filter.refundFilter),
-          isForecastOnly: buildTriStateParam({ value: filter.plannedFilter }),
-          transferNatures: buildTransferNaturesParam(filter),
-          sortBy: sorting?.value.sortBy,
-          order: sorting?.value.order,
-          accountIds: filter.accountIds.length ? filter.accountIds : undefined,
-          categoryIds: filter.categoryIds.length ? filter.categoryIds : undefined,
-          uncategorizedOnly: filter.uncategorizedOnly || undefined,
-          tagIds: filter.tagIds.length ? filter.tagIds : undefined,
-          payeeIds: filter.payeeIds.length ? filter.payeeIds : undefined,
-          categorizationSource: filter.categorizationSource ?? undefined,
-          batchId: filter.batchId ?? undefined,
-          includeSplits: true,
-          includeTags: true,
-          includeGroups: true,
-        },
-        isNil,
-      ) as Parameters<typeof loadTransactions>[0],
-    );
+    return loadTransactions({
+      ...buildFilterParams({ filter }),
+      limit,
+      offset,
+      sortBy: sorting?.value.sortBy,
+      order: sorting?.value.order,
+      includeSplits: true,
+      includeTags: true,
+      includeGroups: true,
+    });
   };
 
   const queryKey = [
@@ -161,6 +171,7 @@ export const useTransactionsWithFilters = ({
     isFetchingNextPage,
     isFetched,
     isFetching,
+    isError,
   } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) => fetchTransactions({ pageParam, filter: appliedFilters.value }),
@@ -178,6 +189,17 @@ export const useTransactionsWithFilters = ({
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey });
 
+  const filterParams = computed(() => buildFilterParams({ filter: appliedFilters.value }));
+  const { data: summary } = useQuery({
+    queryKey: [...VUE_QUERY_CACHE_KEYS.recordsPageRecordsSummary, appliedFilters, ...appendQueryKey],
+    queryFn: () => loadTransactionsSummary(filterParams.value),
+    staleTime: 1_000 * 60,
+    enabled: computed(() => withSummary && toValue(queryEnabled)),
+  });
+  const matching = computed(() =>
+    summary.value ? { summary: summary.value, filters: filterParams.value } : undefined,
+  );
+
   return {
     isResetButtonDisabled,
     isAnyFiltersApplied,
@@ -192,7 +214,9 @@ export const useTransactionsWithFilters = ({
     isFetchingNextPage,
     isFetched,
     isFetching,
+    isError,
     transactionsListRef,
     invalidate,
+    matching,
   };
 };

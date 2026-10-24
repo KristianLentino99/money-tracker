@@ -12,6 +12,7 @@ import { createTransaction } from '@services/transactions/create-transaction';
 import { buildTransactionFromSubscription } from './build-transaction-from-subscription';
 import { ensureNextPeriodExists } from './ensure-next-period';
 import { findSubscriptionOrThrow, validateAccountOwnership } from './helpers';
+import { withoutPeriodSettlement } from './period-settlement-context';
 import { stampSubscriptionPayeeAndTags } from './stamp-payee-and-tags';
 
 interface MarkPeriodPaidParams {
@@ -92,6 +93,7 @@ export const markPeriodPaid = withTransaction(
     // freshly created expense booked against the subscription's account. Both
     // paths converge on `linkedTransactionId`.
     let linkedTransactionId: string | null = transactionId;
+    let paidAt = time;
 
     if (shouldCreateTransaction) {
       // Validation (account/amount presence) happens inside the builder so the
@@ -99,7 +101,7 @@ export const markPeriodPaid = withTransaction(
       const createParams = await buildTransactionFromSubscription({ subscription, amount, time });
       // createTransaction joins the active transaction via `withTransaction`, so
       // the created tx rolls back with the period update if anything below throws.
-      const [createdBaseTx] = await createTransaction(createParams);
+      const [createdBaseTx] = await withoutPeriodSettlement({ run: () => createTransaction(createParams) });
       linkedTransactionId = createdBaseTx.id;
     } else if (transactionId != null) {
       // Validate the caller-supplied transaction.
@@ -134,6 +136,8 @@ export const markPeriodPaid = withTransaction(
           message: 'This transaction is already linked to another subscription period.',
         });
       }
+
+      paidAt ??= linkedTransaction.time;
     }
 
     if (subscription.loanAccountId != null && linkedTransactionId != null) {
@@ -147,10 +151,9 @@ export const markPeriodPaid = withTransaction(
 
     await period.update({
       status: SUBSCRIPTION_PERIOD_STATUSES.paid,
-      // Stamp the paid date with the booked transaction's date so a backdated
-      // payment reads as paid on `time`, not today. Falls back to now when the
-      // caller gives no time (e.g. a plain mark-paid).
-      paidAt: time ?? new Date(),
+      // paidAt is the payment's date (created or linked transaction), so a backdated
+      // payment reads as paid on that day, not today. A plain mark-paid uses now.
+      paidAt: paidAt ?? new Date(),
       transactionId: linkedTransactionId,
       // Only a transaction the app just generated (CREATE-mode) is app-owned and
       // safe to delete on revert. A user-linked transaction (LINK-mode) or a

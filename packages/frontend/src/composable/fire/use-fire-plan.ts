@@ -2,15 +2,16 @@ import { getCashFlow, getNetWorthHistory, getVentureContributions } from '@/api/
 import { QUERY_CACHE_STALE_TIME, VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import { usePortfoliosAnnualizedReturns } from '@/composable/data-queries/portfolios-annualized-returns';
 import { useAccountsStore } from '@/stores';
-import { type FireSettings, type endpointsTypes, isPortfolioIndicatorId } from '@bt/shared/types';
+import { type FireSettings, isPortfolioIndicatorId, type CashFlowPeriodData } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
 import { format, parseISO, startOfMonth, subMonths } from 'date-fns';
 import { storeToRefs } from 'pinia';
 import { type MaybeRefOrGetter, type Ref, computed, shallowRef, toValue, watchEffect } from 'vue';
 
 import { buildFirePlan } from './build-fire-plan';
-import { getFireSeedPeriods, getFireSeedWindow } from './derive-fire-seed';
+import { getFireSeedPeriods } from './derive-fire-seed';
 import { type ResolvedFireSettings, resolveFireSettings } from './resolve-fire-settings';
+import { useFireSeedCashFlow } from './use-fire-seed-cash-flow';
 
 const HISTORY_MONTHS = 120;
 
@@ -58,14 +59,17 @@ export const useFirePlan = ({
   const historyFrom = computed(() =>
     toValue(includeHistory) ? startOfMonth(subMonths(now, HISTORY_MONTHS - 1)) : startOfMonth(now),
   );
-  const seedWindow = getFireSeedWindow({ now });
-  const seedKey = format(seedWindow.from, 'yyyy-MM-dd');
-
   const accountsStore = useAccountsStore();
-  const { accounts, isAccountsFetched, isAccountsError } = storeToRefs(accountsStore);
-  const ownedAccountIds = computed(() =>
-    (accounts.value ?? []).filter((a) => !a.share || a.share.isOwner).map((a) => a.id),
-  );
+  const { isAccountsFetched, isAccountsError } = storeToRefs(accountsStore);
+  const {
+    query: cashFlowQuery,
+    queryKey: cashFlowQueryKey,
+    params: cashFlowParams,
+    isEnabled: isCashFlowEnabled,
+    ownedAccountIds,
+    seedWindow,
+    seedKey,
+  } = useFireSeedCashFlow({ now, enabled });
 
   const historyQuery = useQuery({
     queryKey: computed(() => [...VUE_QUERY_CACHE_KEYS.fireNetWorthHistory, format(historyFrom.value, 'yyyy-MM-dd')]),
@@ -79,37 +83,16 @@ export const useFirePlan = ({
     staleTime: QUERY_CACHE_STALE_TIME.ANALYTICS,
   });
 
-  const isCashFlowEnabled = computed(() => toValue(enabled) && ownedAccountIds.value.length > 0);
-  // An empty accountIds list widens to every accessible account on the server.
-  const cashFlowParams = () => ({
-    ...seedWindow,
-    granularity: 'monthly' as const,
-    excludePlanned: true,
-    accountIds: ownedAccountIds.value,
-  });
-  const cashFlowQuery = useQuery({
-    queryKey: computed(() => [...VUE_QUERY_CACHE_KEYS.fireCashFlow, seedKey, ownedAccountIds.value]),
-    queryFn: () => getCashFlow(cashFlowParams()),
-    enabled: isCashFlowEnabled,
-    staleTime: QUERY_CACHE_STALE_TIME.ANALYTICS,
-  });
-
   const excludedIds = computed(() => [...settings.value.spendingExcludedCategoryIds].sort());
   const isFilteredEnabled = computed(() => isCashFlowEnabled.value && excludedIds.value.length > 0);
   const filteredCashFlowQuery = useQuery({
-    queryKey: computed(() => [
-      ...VUE_QUERY_CACHE_KEYS.fireCashFlow,
-      seedKey,
-      ownedAccountIds.value,
-      'excluded',
-      excludedIds.value,
-    ]),
+    queryKey: computed(() => [...cashFlowQueryKey.value, 'excluded', excludedIds.value]),
     queryFn: () => getCashFlow({ ...cashFlowParams(), excludedCategoryIds: excludedIds.value }),
     enabled: isFilteredEnabled,
     staleTime: QUERY_CACHE_STALE_TIME.ANALYTICS,
   });
   // null until the first filtered response; a toggle keeps the last applied periods until the new ones land.
-  const appliedFilteredPeriods = shallowRef<endpointsTypes.CashFlowPeriodData[] | null>(null);
+  const appliedFilteredPeriods = shallowRef<CashFlowPeriodData[] | null>(null);
   watchEffect(() => {
     if (excludedIds.value.length === 0) appliedFilteredPeriods.value = [];
     else if (filteredCashFlowQuery.data.value) appliedFilteredPeriods.value = filteredCashFlowQuery.data.value.periods;

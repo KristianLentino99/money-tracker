@@ -13,7 +13,7 @@
  * On-disk backup shape version. Restore hard-fails a manifest whose
  * `formatVersion` is greater than this (app too old for the backup).
  */
-export const BACKUP_FORMAT_VERSION = 1;
+export const BACKUP_FORMAT_VERSION = 3;
 
 /**
  * Base names of the per-table files written under `data/` in the zip (one
@@ -53,7 +53,6 @@ export const BACKUP_FILE_NAMES = [
   'vehicle-maintenance-activities',
   'loan-details',
   'transaction-groups',
-  'plans',
   'import-batches',
   // tier 4
   'transactions',
@@ -70,10 +69,6 @@ export const BACKUP_FILE_NAMES = [
   'subscription-candidates',
   'import-batch-account-effects',
   // tier 5
-  'plan-periods',
-  'plan-category-memberships',
-  'plan-category-targets',
-  'plan-account-memberships',
   'transaction-splits',
   'transaction-tags',
   'transaction-group-items',
@@ -87,8 +82,6 @@ export const BACKUP_FILE_NAMES = [
   'vehicle-maintenance-visit-activities',
   'vehicle-maintenance-transaction-links',
   // tier 6
-  'plan-assignments',
-  'plan-allocation-events',
   'subscription-period-notifications',
   // exported but skipped on restore (counterpart users don't exist cross-instance)
   'resource-shares',
@@ -154,17 +147,27 @@ export type BackupRestoreWarningCode =
   // hand-edited archive aiming a child row at another user's row); the whole row
   // was dropped rather than attached to foreign data.
   | 'foreign_reference_dropped'
+  // A row broke an app-level rule the DB doesn't enforce (e.g. a budget plan cadence
+  // the period enumerator can't serve); the row was dropped.
+  | 'invalid_row_dropped'
   // A nullable foreign-key column pointed at data outside this backup; the column
   // was reset to null and the row kept.
   | 'foreign_reference_nulled';
 
+/**
+ * Built inside the restore worker, which has no request locale, so it carries
+ * only a code plus params and the frontend renders the translated text.
+ */
 export interface BackupRestoreWarning {
   code: BackupRestoreWarningCode;
   /** Table the warning applies to, when table-scoped. */
   table?: string;
-  message: string;
   /** How many rows/columns the warning covers, when countable. */
   count?: number;
+  /** Foreign-key column, for `foreign_reference_dropped` / `foreign_reference_nulled`. */
+  column?: string;
+  /** Dropped column names, for `unknown_column_dropped`. */
+  columns?: string[];
 }
 
 /** Coarse restore phases reported through job progress and the poll fallback. */
@@ -192,8 +195,10 @@ export interface BackupRestoreStatusResponse {
   status: BackupRestoreJobStatus;
   progress?: BackupRestoreProgress;
   summary?: BackupRestoreSummary;
-  /** Human-readable failure reason when status is `failed`. */
+  /** Translated failure reason when status is `failed`. */
   error?: string;
+  /** Untranslated technical diagnostics (table, constraint) for support, when available. */
+  errorDetail?: string;
 }
 
 /**

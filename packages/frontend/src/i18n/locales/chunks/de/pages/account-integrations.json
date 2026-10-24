@@ -116,6 +116,8 @@
             "fillForm": "Fülle das Formular mit den folgenden Werten aus:",
             "appName": "Application name:",
             "redirectUrls": "Allowed redirect URLs:",
+            "httpsRequired": "Enable Banking akzeptiert nur HTTPS-Weiterleitungs-URLs. Stelle diese Instanz über HTTPS bereit, setze {envVar} auf ihre öffentliche Callback-URL (z. B. {example}), erstelle den Backend-Container neu und gib dieselbe URL in dieses Feld ein. {link}",
+            "httpsRequiredLink": "Setup-Anleitung",
             "appDescription": "Application description:",
             "emailProtection": "Email for data protection matters:",
             "privacyUrl": "Privacy URL:",
@@ -227,6 +229,13 @@
           "step1": "Erstelle bei {link} ein SimpleFIN-Bridge-Konto und verbinde deine Bank.",
           "step2": "Generiere einen neuen Setup-Token im Bridge Dashboard.",
           "step3": "Füge den Token in das Feld ein."
+        },
+        "brokerageNotice": {
+          "trigger": "Nur Bankkonten werden unterstützt – Depotkonten nicht",
+          "title": "Was SimpleFIN importieren kann",
+          "supported": "Bankkonten – Girokonten, Sparkonten, Kreditkarten – werden vollständig unterstützt. Kontostände und Transaktionen werden automatisch synchronisiert.",
+          "unsupported": "Depots und Altersvorsorgekonten (Aktien, ETFs, Krypto, 401k, IRA) werden nicht unterstützt. SimpleFIN selbst unterstützt sie ebenfalls nicht wirklich – es gibt nicht an, welches Konto ein Depot ist, und Bestände werden in einem inoffiziellen Format geliefert, das sich jederzeit ändern kann.",
+          "tryAnyway": "Du kannst trotzdem versuchen, sie zu verbinden – sie werden als normale Konten mit dem von SimpleFIN gelieferten Kontostand und den Cash-Transaktionen importiert, aber deine Positionen werden nicht angezeigt. Keine Garantie, dass es korrekt funktioniert."
         },
         "connectButton": "Verbinden",
         "connectingButton": "Verbinden…",

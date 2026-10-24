@@ -18,7 +18,7 @@ vi.mock('@/components/notification-center', () => ({
 }));
 
 vi.mock('@/stores/categories/helpers', () => ({
-  buildCategoriesObjectGraph: vi.fn((list: CategoryModel[]) => list),
+  buildCategoriesObjectGraph: vi.fn(({ items }: { items: CategoryModel[] }) => items),
 }));
 
 const mockLoadCategoriesByAccount = vi.mocked(loadCategoriesByAccount);
@@ -42,6 +42,8 @@ const MOCK_CATEGORIES: CategoryModel[] = [
     type: CATEGORY_TYPES.custom,
     parentId: null,
     userId: 42,
+    defaultTagIds: [],
+    applyDefaultTagsOnAiCategorization: false,
   },
   {
     id: '00000000-0000-0000-0000-000000000002' as RecordId,
@@ -52,6 +54,8 @@ const MOCK_CATEGORIES: CategoryModel[] = [
     type: CATEGORY_TYPES.custom,
     parentId: null,
     userId: 42,
+    defaultTagIds: [],
+    applyDefaultTagsOnAiCategorization: false,
   },
 ];
 

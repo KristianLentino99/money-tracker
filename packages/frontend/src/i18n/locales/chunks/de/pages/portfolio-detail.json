@@ -27,8 +27,8 @@
       }
     },
     "cashBalances": {
-      "title": "Barbestände",
-      "emptyState": "Keine Barbestände",
+      "title": "Cash-Bestände",
+      "emptyState": "Keine Cash-Bestände",
       "tabs": {
         "balances": "Bestände",
         "cashTransactions": "Transaktionen",
@@ -57,7 +57,7 @@
         "editDialog": {
           "title": "Cash-Transaktion bearbeiten",
           "description": "Ändere, wie diese Transaktion in Berichten behandelt wird.",
-          "save": "Änderungen speichern"
+          "save": "Speichern"
         }
       },
       "buysSells": {

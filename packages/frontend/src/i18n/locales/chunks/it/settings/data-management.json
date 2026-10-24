@@ -93,7 +93,7 @@
         "accounts": {
           "label": "Conti",
           "helper": "Export only the selected accounts with their transactions and balance history. Leave empty to export all accounts.",
-          "placeholder": "All accounts"
+          "placeholder": "Tutti i conti"
         }
       },
       "ofx": {

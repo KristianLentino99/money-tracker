@@ -10,12 +10,12 @@
       "accountsCount": "{count} account | {count} accounts"
     },
     "reassignCategory": {
-      "title": "Reassign Transactions",
+      "title": "Reassign transactions",
       "description": "This category has {count} transaction(s). Select a new category for \"{categoryName}\" transactions before deleting.",
       "newCategoryLabel": "New category",
       "newCategoryPlaceholder": "Select a category",
       "cancelButton": "Cancel",
-      "reassignButton": "Reassign & Delete",
+      "reassignButton": "Reassign & delete",
       "reassignButtonLoading": "Reassigning...",
       "notifications": {
         "success": "{count} transaction(s) reassigned to {newCategoryName}",
@@ -23,9 +23,9 @@
       }
     },
     "syncConfirmation": {
-      "title": "Sync Recently Completed",
+      "title": "Sync recently completed",
       "description": "You synchronized your accounts {time} ago. Are you sure you want to sync again?",
-      "syncAnyway": "Sync Anyway",
+      "syncAnyway": "Sync anyway",
       "cancel": "Cancel",
       "timeUnits": {
         "someTime": "some time",
@@ -34,15 +34,15 @@
       }
     },
     "createPortfolio": {
-      "title": "Create Portfolio",
+      "title": "Create portfolio",
       "description": "Create a new investment portfolio to track your holdings and transactions.",
       "assetSupportNotice": "Currently supports stocks, ETFs and crypto. Bonds, options & other securities are on the {roadmapLink} – share what you need via {feedbackLink}.",
       "assetSupportRoadmapLink": "vote for what's next",
       "assetSupportFeedbackLink": "request a feature",
       "form": {
         "nameLabel": "Portfolio name",
-        "namePlaceholder": "My Investment Portfolio",
-        "typeLabel": "Portfolio Type",
+        "namePlaceholder": "My investment portfolio",
+        "typeLabel": "Portfolio type",
         "typePlaceholder": "Select portfolio type",
         "manualTrackingLabel": "Track value manually",
         "manualTrackingDescription": "Use dated reported values instead of holdings and market prices. The display currency becomes locked after your first record.",
@@ -54,7 +54,7 @@
         },
         "descriptionLabel": "Description (optional)",
         "descriptionPlaceholder": "A brief description of this portfolio...",
-        "submitButton": "Create Portfolio",
+        "submitButton": "Create portfolio",
         "submitButtonLoading": "Creating..."
       },
       "notifications": {
@@ -63,14 +63,14 @@
       }
     },
     "editPortfolio": {
-      "title": "Edit Portfolio",
+      "title": "Edit portfolio",
       "description": "Update name, type or description of your portfolio."
     },
     "deletePortfolio": {
-      "title": "Delete Portfolio",
+      "title": "Delete portfolio",
       "description": "This portfolio will be moved to trash and can be restored within 30 days. After that, it will be permanently deleted along with all holdings and transactions.",
       "cancelButton": "Cancel",
-      "deleteButton": "Move to Trash",
+      "deleteButton": "Move to trash",
       "deleteButtonLoading": "Moving...",
       "notifications": {
         "success": "Portfolio moved to trash. You can restore it within 30 days from the Investments page.",
@@ -78,9 +78,9 @@
       }
     },
     "manageTransaction": {
-      "addTitle": "Add Transaction",
-      "editTitle": "Edit Transaction",
-      "detailsTitle": "Transaction Details",
+      "addTitle": "Add transaction",
+      "editTitle": "Edit transaction",
+      "detailsTitle": "Transaction details",
       "title": "Manage transaction",
       "description": "Create or edit a transaction",
       "linkSection": {
@@ -106,10 +106,12 @@
         "payeeLabel": "Payee",
         "recurringPaymentLabel": "Recurring payment (optional)",
         "recurringPaymentPlaceholder": "Select a recurring payment",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "destinationGroupLabel": "Where the money goes",
         "paymentTypeLabel": "Payment type",
         "noteLabel": "Note",
         "notePlaceholder": "Note",
+        "addFieldsLabel": "Add",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",
@@ -303,7 +305,7 @@
       "splitDialog": {
         "title": "Split into categories",
         "description": "Distribute this transaction across multiple categories. The main category keeps any unallocated amount.",
-        "mainCategoryLabel": "Main Category",
+        "mainCategoryLabel": "Main category",
         "selectCategoryPlaceholder": "Select category",
         "amountPlaceholder": "0",
         "addCategoryButton": "Add category",
@@ -368,7 +370,7 @@
       },
       "refundInfo": {
         "trigger": "How it works?",
-        "title": "About Refund Transactions",
+        "title": "About refund transactions",
         "description": "This action links the current transaction [expense/income] as a refund to a previous existing transaction.",
         "howItWorks": {
           "title": "How it works:",
@@ -382,7 +384,7 @@
           "tracking": "Helps track related transactions to improve your feed."
         },
         "notes": {
-          "title": "Important Notes:",
+          "title": "Important notes:",
           "recordKeeping": "This link is for record-keeping purposes only.",
           "noBalanceAdjust": "It does not adjust the balance of the original transaction in any way.",
           "canUnlink": "You can always unlink transactions back."
@@ -413,16 +415,17 @@
         "resetFiltersButton": "Reset filters"
       },
       "portfolioLinked": {
-        "title": "Portfolio-Linked Transaction",
+        "title": "Portfolio-linked transaction",
         "linkedAs": "This transaction is linked as a {type} to",
         "deposit": "deposit",
         "withdrawal": "withdrawal",
-        "unlinkButton": "Unlink from Portfolio",
+        "unlinkButton": "Unlink from portfolio",
         "unlinkWarning": "Unlinking will reduce the cash balance of {portfolio} portfolio.",
         "unlinkWarningNoCash": "This transfer never changed {portfolio}'s cash balance, so unlinking leaves the balance untouched.",
+        "noCashBadge": "No cash impact",
         "unlinkDescription": "Original transaction details will be restored.",
         "cancelButton": "Cancel",
-        "confirmUnlink": "Confirm Unlink",
+        "confirmUnlink": "Confirm unlink",
         "purchasesTitle": "Linked investment purchases",
         "editPurchasesButton": "Edit purchases",
         "cancelEdit": "Cancel",
@@ -440,7 +443,7 @@
         "title": "Venture-linked transaction",
         "description": "This transaction is linked to a venture event.",
         "editHint": "Edit or unlink it from the related venture deal's events timeline.",
-        "openVenture": "Open Venture"
+        "openVenture": "Open venture"
       },
       "vehicleLinked": {
         "title": "Vehicle adjustment",
@@ -472,8 +475,6 @@
         "announceApplied": "Applied {name} — {count} field filled. Amount is empty. | Applied {name} — {count} fields filled. Amount is empty.",
         "announceAppliedWithAmount": "Applied {name} — {count} field filled. Amount set to {amount}. | Applied {name} — {count} fields filled. Amount set to {amount}.",
         "categoryDeletedHint": "This template’s category was deleted — pick one.",
-        "alsoSet": "Template also set: {fields}",
-        "tagsCount": "{count} tag | {count} tags",
         "applyConfirmTitle": "Apply template?",
         "applyConfirmDescription": "Applying replaces your splits and refund link.",
         "toasts": {
@@ -507,16 +508,16 @@
     },
     "portfolioTransfer": {
       "portfolio": {
-        "title": "Transfer from Portfolio",
+        "title": "Transfer from portfolio",
         "description": "Transfer funds from this portfolio to another portfolio or account."
       },
       "account": {
-        "title": "Transfer from Account",
+        "title": "Transfer from account",
         "description": "Transfer funds from this account to a portfolio."
       }
     },
     "addSymbols": {
-      "title": "Add Symbols",
+      "title": "Add symbols",
       "searchLabel": "Search symbol or name",
       "searchPlaceholder": "AAPL",
       "searchError": "Failed to search securities.",
@@ -554,7 +555,7 @@
       "cryptoProviderNotConfigured": "Crypto search is unavailable. Configure Kraken or COINGECKO_API_KEY to enable crypto support."
     },
     "deleteInvestmentTransaction": {
-      "title": "Delete Transaction",
+      "title": "Delete transaction",
       "description": "Are you sure you want to delete this transaction? This action cannot be undone.",
       "cancelButton": "Cancel",
       "deleteButton": "Delete",
@@ -566,8 +567,8 @@
     },
     "categoryForm": {
       "title": {
-        "edit": "Edit Category",
-        "add": "Add Category"
+        "edit": "Edit category",
+        "add": "Add category"
       },
       "description": {
         "addSubcategory": "Adding subcategory to {parentName}",
@@ -580,6 +581,11 @@
       "inheritParentColor": "Use parent's color",
       "iconLabel": "Icon",
       "iconPlaceholder": "Select icon",
+      "defaultTagsLabel": "Default tags",
+      "defaultTagsPlaceholder": "Select tags",
+      "defaultTagsHint": "Added to a transaction when you pick this category.",
+      "applyTagsOnAiLabel": "Also apply when AI categorizes a transaction",
+      "applyTagsOnAiHint": "Tags stay on the transaction if you change its category later.",
       "settingsDivider": "Settings",
       "saveButton": "Save",
       "createButton": "Create",
@@ -605,11 +611,15 @@
         "title": "Create group",
         "nameLabel": "Group name",
         "namePlaceholder": "Investments",
-        "createButton": "Create"
+        "createButton": "Create",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {
-      "title": "Cash Transaction",
+      "title": "Cash transaction",
       "description": "Add a deposit or withdrawal to the portfolio"
     },
     "pickTransaction": {
@@ -785,6 +795,7 @@
       "analyzing": "Reading the invoice and searching your transactions…",
       "attaching": "Attaching the invoice to the transaction…",
       "privacyNote": "The file goes to the AI provider for reading only. Nothing is saved until you link it to a transaction.",
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options.",
       "direction": {
         "paid": "I paid this",
         "gotPaid": "I got paid",
@@ -857,6 +868,188 @@
       "trial": {
         "left": "1 free try left of {limit} | {count} free tries left of {limit}",
         "spent": "You've used all your free tries. Upgrade to Plus to keep attaching invoices with AI."
+      }
+    },
+    "exchangeCurrency": {
+      "title": "Exchange currency",
+      "description": "Exchange cash between different currencies within your portfolio"
+    },
+    "shareAccountDialog": {
+      "title": "Share account",
+      "description": "Invite someone to access {name}.",
+      "emailLabel": "Recipient email",
+      "emailPlaceholder": "name{'@'}example.com",
+      "permissionLabel": "Permission",
+      "permissions": {
+        "read": "Read-only",
+        "write": "Read & add transactions",
+        "manage": "Full access"
+      },
+      "writeScopeLabel": "Transaction edit scope",
+      "writeScope": {
+        "all": "All transactions on the account",
+        "own": "Only transactions they created"
+      },
+      "householdOverrideHint": "{invitee} is already in your household with {permission} access. This share will override the household grant for this specific account.",
+      "householdLookupFailed": "Couldn't check household membership – proceeding without the override hint.",
+      "cancel": "Cancel",
+      "send": "Send invitation",
+      "success": "Invitation request submitted. If a user with that address is registered, they'll receive an invitation.",
+      "error": "Could not send invitation. Please try again.",
+      "emailSendFailedWarning": "Invitation saved, but the email could not be sent. The recipient may not have received a notification – try again later."
+    },
+    "shareBudgetDialog": {
+      "title": "Share tracker",
+      "description": "Invite someone to view this tracker and contribute their own transactions to it. {name}.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Recipient email",
+      "permissionLabel": "Permission",
+      "permissions": {
+        "read": "View only",
+        "write": "Attach own transactions",
+        "manage": "Manage"
+      },
+      "cancel": "Cancel",
+      "send": "Send invitation",
+      "success": "Invitation sent.",
+      "error": "Couldn't send invitation.",
+      "emailSendFailedWarning": "Invitation created, but the email couldn't be delivered."
+    },
+    "shareInvitationDialog": {
+      "titlePending": "{owner} wants to share with you",
+      "titleAccepted": "Invitation accepted",
+      "titleDeclined": "Invitation declined",
+      "titleCurrencyMismatch": "Base currency doesn't match",
+      "titleLoading": "Loading invitation…",
+      "titleLoadError": "Couldn't load invitation",
+      "titleNotFound": "Invitation not available",
+      "loadErrorBody": "Something went wrong while fetching this invitation. Check your connection and try again.",
+      "retry": "Try again",
+      "pendingMessage": "You've been invited to access {resource}. Review the details below and choose how to respond.",
+      "acceptedBody": "You now have access to this shared resource. Open it to start working together.",
+      "declinedBody": "We've let the sender know.",
+      "currencyMismatch": "Your base currency must be {currency} to accept this invitation. Update your base currency, then try again.",
+      "currencyMismatchUnknown": "Your base currency must match the inviter's to accept this invitation.",
+      "acceptDataRefreshFailed": "Invitation accepted, but refreshing your accounts failed. Reload the page if anything looks stale.",
+      "notFoundBody": "This invitation may have expired, been revoked, or already been actioned. Ask the sender for a new one if you still need access.",
+      "unexpectedError": "Something went wrong. Try again in a moment.",
+      "loading": "Fetching invitation…",
+      "householdResourceLabel": "all your accounts and shared transactions",
+      "permissionLabel": "Access level",
+      "expiresLabel": "Expires",
+      "permissions": {
+        "read": "Read-only",
+        "write": "Read + write",
+        "manage": "Manage"
+      },
+      "unknownOwner": "A MoneyMatter user",
+      "unknownResource": "a shared resource",
+      "accept": "Accept",
+      "decline": "Decline",
+      "close": "Close",
+      "goToAccount": "Go to account",
+      "goToBudget": "Go to tracker",
+      "updateBaseCurrency": "Update base currency",
+      "acceptSuccess": "You're now part of this shared resource.",
+      "acceptError": "Couldn't accept the invitation. Try again.",
+      "declineSuccess": "Invitation declined.",
+      "declineError": "Couldn't decline the invitation. Try again.",
+      "backInvite": {
+        "prompt": "Want to share your household with {owner} as well? They'll be able to see and act on your accounts.",
+        "permissionLabel": "Their permission",
+        "writeScopeLabel": "Write scope",
+        "permissions": {
+          "read": "Read only",
+          "write": "Write"
+        },
+        "writeScope": {
+          "all": "Any account",
+          "own": "Only transactions they create"
+        },
+        "send": "Share back",
+        "notNow": "Not now",
+        "done": "Done",
+        "sentTitle": "Invitation sent",
+        "sentBody": "We sent an invitation to {owner}. They'll get access once they accept.",
+        "success": "Invitation sent.",
+        "deliveryFailed": "Invitation created, but the email could not be sent. Try again later.",
+        "emailNotConfigured": "Invitation created, but this server has no email sending configured. Ask them to check their invitations in the app.",
+        "error": "Failed to send the invitation."
+      }
+    },
+    "categoryExclusions": {
+      "title": "Exclude categories",
+      "description": "Hidden from this widget's chart and totals",
+      "menuItem": "Exclude categories",
+      "nothingExcluded": "Nothing excluded. Every category counts toward this widget.",
+      "excludedTag": "Excluded",
+      "stopExcluding": "Stop excluding {name}",
+      "badgeTooltip": "1 category excluded from this widget | {count} categories excluded from this widget",
+      "andMore": "and {count} more",
+      "clearAll": "Clear all",
+      "countExcluded": "1 category excluded | {count} categories excluded"
+    },
+    "subscriptionMarkPaid": {
+      "title": "Mark payment",
+      "description": "Record a payment for {name}",
+      "chooseDescription": "How do you want to record this payment for {name}?",
+      "amountLabel": "Amount",
+      "amountPlaceholder": "0.00",
+      "crossCurrencyEstimate": "~{sourceAmount} {sourceCurrency} → {accountCurrency} (estimated)",
+      "dateLabel": "Payment date",
+      "accountLabel": "Account",
+      "accountPlaceholder": "Select an account",
+      "confirm": "Confirm",
+      "confirmMarkOnly": "Mark as paid",
+      "recordModeMarkTitle": "Just mark as paid",
+      "recordModeMarkDescription": "Updates the schedule only — no transaction is created.",
+      "recordModeTransactionTitle": "Create a transaction",
+      "recordModeTransactionDescription": "Book a real expense in an account. It's linked for future payments too.",
+      "useExistingTitle": "Use the existing payment",
+      "useExistingDescription": "A transaction linked to this subscription is already recorded in this period. Nothing new is added to your account.",
+      "recordNewTitle": "Record a new payment",
+      "recordNewDescription": "Adds another transaction for this period. The existing payment stays as it is.",
+      "linkedPaymentDescription": "{name} already has a payment in this period. Choose how to mark it paid.",
+      "confirmUseExisting": "Use this payment",
+      "previewUnavailable": "Couldn't check for payments already recorded in this period. Review the details before recording a new one.",
+      "notifications": {
+        "markedAsPaid": "Payment recorded",
+        "markAsPaidFailed": "Failed to record payment"
+      }
+    },
+    "loanPayment": {
+      "title": "Loan payment",
+      "description": "Record or edit a payment against this loan.",
+      "createTitle": "Record payment",
+      "editTitle": "Edit loan payment",
+      "payingTo": "Paying to",
+      "fromAccountLabel": "From account",
+      "fromAccountPlaceholder": "Select account",
+      "amountLabel": "Amount",
+      "amountPlaceholder": "0.00",
+      "targetAmountLabel": "Amount applied to loan",
+      "targetAmountPlaceholder": "0.00",
+      "targetAmountTooltip": "Source account is in {source}, loan is in {loan}. We pre-fill the converted amount using the current exchange rate – adjust if your bank applied a different rate.",
+      "saveButton": "Save",
+      "recordButton": "Record",
+      "overdrawWarning": "This is more than {account}'s balance and will overdraw the account.",
+      "preAnchorWarning": "This payment is dated before the loan's balance anchor ({date}), so it will be saved as history and won't reduce the outstanding balance.",
+      "overpayError": "Payment exceeds the remaining loan balance ({max}).",
+      "deleteConfirmTitle": "Delete this payment?",
+      "deleteConfirmDescription": "Both sides of the transfer will be removed and the loan balance will be restored. This cannot be undone.",
+      "preAnchorHint": "This date is before the loan's balance snapshot, so this payment won't change the outstanding balance – it's already included in the opening balance.",
+      "unlinkButton": "Unlink",
+      "unlinkConfirmTitle": "Unlink this payment?",
+      "unlinkConfirmDescription": "The transaction will be kept as a regular expense but removed from this loan. The loan balance will be recalculated.",
+      "unlinkSuccess": "Payment unlinked",
+      "unlinkError": "Couldn't unlink the payment. Please try again.",
+      "syncedAccountHint": "Paying from a synced account? Use Link payments to attach the imported expense instead.",
+      "sourceInfo": {
+        "trigger": "More details",
+        "title": "Why only these accounts?",
+        "manualOnly": "This picker lists only your manually-managed accounts.",
+        "whySynced": "Transactions on bank-synced accounts are imported directly from your bank. Recording a loan payment from one here would create a duplicate of the transaction your bank will send.",
+        "howToLink": "Instead, once the bank transaction appears, open it and choose Link payments to attach it to this loan. That keeps a single source of truth and updates the loan balance correctly."
       }
     }
   }

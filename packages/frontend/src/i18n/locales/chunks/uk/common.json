@@ -54,7 +54,8 @@
       }
     },
     "errors": {
-      "copyToClipboardFailed": "Не вдалося скопіювати до буфера обміну"
+      "copyToClipboardFailed": "Не вдалося скопіювати до буфера обміну",
+      "settingsSaveFailed": "Не вдалося зберегти налаштування. Спробуйте ще раз."
     },
     "notifications": {
       "subscriptionCurrencyNotConnected": "Підсумок регулярних платежів не може конвертувати {currencies} у вашу базову валюту. Підключіть валюту в «Налаштування → Валюти».",
@@ -127,7 +128,7 @@
       },
       "statementParsing": {
         "name": "Парсер виписок",
-        "description": "Вилучення транзакцій з банківських виписок (PDF, CSV, TXT) за допомогою AI"
+        "description": "Вилучення транзакцій з банківських виписок (PDF, CSV, TXT), чеків і знімків екрана за допомогою AI"
       },
       "investmentTransactionsParsing": {
         "name": "Імпорт інвестиційних транзакцій",
@@ -136,6 +137,14 @@
       "receiptParsing": {
         "name": "Зіставлення інвойсів",
         "description": "Читає завантажений інвойс або чек і знаходить транзакцію, до якої він належить."
+      },
+      "trackerMatching": {
+        "name": "Зіставлення трекерів",
+        "description": "Переглядає нові транзакції та пропонує ті, що належать до розумного трекера."
+      },
+      "transferMatching": {
+        "name": "Зіставлення переказів",
+        "description": "Перевіряє результати сканування переказів і залишає пари, схожі на справжні перекази"
       }
     },
     "transactions": {
@@ -150,7 +159,9 @@
         "error": "Не вдалося відв'язати транзакції!"
       },
       "record": {
-        "addedByTooltip": "Цю транзакцію додав до бюджету {handle}",
+        "addedByTooltip": "Цю транзакцію додав до трекера {handle}",
+        "addedByRule": "Додано за правилами трекера",
+        "matchedByAi": "Зіставлено AI",
         "externalLinkTooltip": "Відкрити зовнішнє посилання",
         "locationTooltip": "Відкрити місце на карті",
         "attachmentsTooltip": "Є вкладення",
@@ -217,7 +228,9 @@
     "logo": {
       "tabs": {
         "brand": "Бренд",
-        "letters": "Літери"
+        "letters": "Літери",
+        "icon": "Іконка",
+        "custom": "Зображення"
       },
       "searchPlaceholder": "Назва бренду або домен",
       "searchHint": "Введіть назву бренду або домен, як-от amazon.com",
@@ -237,8 +250,17 @@
       "colorLabel": "Колір",
       "colorSwatchAriaLabel": "Використати колір {color}",
       "customColorAriaLabel": "Вибрати власний колір",
-      "applyLetters": "Застосувати",
-      "lettersSelectedLabel": "Літери «{letters}»"
+      "lettersSelectedLabel": "Літери «{letters}»",
+      "lettersHint": "1–2 літери або емодзі",
+      "chooseImage": "Вибрати зображення",
+      "replaceImage": "Замінити зображення",
+      "imageHint": "Обрізається до квадрата й стискається до 200×200 на вашому пристрої.",
+      "imageTooLarge": "Після стиснення зображення все ще перевищує 50 КБ. Спробуйте простіше зображення.",
+      "imageUnreadable": "Не вдалося прочитати цей файл як зображення."
+    },
+    "iconPicker": {
+      "searchPlaceholder": "Пошук іконок...",
+      "clear": "Очистити іконку"
     },
     "importBatchDeleteOverlay": {
       "title": "Видалення імпортованих транзакцій",
@@ -281,12 +303,17 @@
       "success": "Рахунок додано до групи",
       "error": "Не вдалося додати рахунок до групи"
     },
+    "linkMany": {
+      "success": "Рахунки додано до групи",
+      "error": "Не вдалося додати рахунки до групи"
+    },
     "unlink": {
       "success": "Рахунок видалено з групи",
       "error": "Не вдалося видалити рахунок з групи"
     }
   },
   "validation": {
+    "required": "Це поле обов'язкове",
     "minLength": "Мінімальна довжина {length}.",
     "emailInvalid": "Будь ласка, введіть дійсну адресу електронної пошти.",
     "passwordsNoMatch": "Паролі не збігаються"
@@ -300,12 +327,23 @@
     "viewOnGitHub": "Переглянути на GitHub",
     "newVersion": "Нова версія {version}",
     "newRelease": "Новий реліз",
+    "trackerAiMatches": {
+      "title": "{name}: {summary}",
+      "added": "додано {count} транзакцію | додано {count} транзакції | додано {count} транзакцій",
+      "toReview": "{count} транзакція на перевірку | {count} транзакції на перевірку | {count} транзакцій на перевірку",
+      "toReviewShort": "{count} на перевірку",
+      "both": "{added}, {toReview}"
+    },
     "tagReminder": {
       "thresholdMessage": "витрачено {amount} (поріг: {threshold})",
       "existenceMessage": "{count} транзакція | {count} транзакції | {count} транзакцій"
     },
     "share": {
       "sendFailedHint": "Відкрийте панель спільного доступу, щоб надіслати повторно."
+    },
+    "goalReached": {
+      "title": "Ціль досягнуто: {name}",
+      "message": "Ви накопичили {amount}."
     }
   },
   "currencyNames": {
@@ -400,6 +438,7 @@
   },
   "billing": {
     "seePlans": "Переглянути плани",
+    "trialStartFailed": "Не вдалося почати безкоштовний пробний період. Спробуйте ще раз.",
     "updatePaymentMethod": "Оновіть спосіб оплати",
     "planRequired": {
       "essential": "Включено в план Essential",
@@ -445,6 +484,39 @@
     "estimatedCost": {
       "yourApiKey": "(ваш API-ключ)",
       "setByEndpoint": "Вартість визначає ваш провайдер"
+    }
+  },
+  "aiUsage": {
+    "title": "Включене використання AI",
+    "used": "використано",
+    "percentUsed": "Використано {percent}%",
+    "resetsOn": "Оновиться {date}",
+    "connectOwnModel": "Підключити власну модель",
+    "gotIt": "Зрозуміло",
+    "badge": {
+      "used": "Використано AI: {percent}%",
+      "reached": "Ліміт AI вичерпано"
+    },
+    "dialog": {
+      "description": "Розбір виписок, категоризація, чеки та пропозиції для бюджету використовують спільний ліміт.",
+      "status": {
+        "plusWarning": "Ви використали більшу частину AI, що входить у цей місяць. Коли ліміт вичерпається, AI-функції буде призупинено до {date}.",
+        "plusReached": "Ви використали AI, що входить у цей місяць. AI-функції призупинено до {date}.",
+        "trialWarning": "Ви використали більшу частину AI, що входить у ваш план цього місяця. Коли ліміт вичерпається, AI-функції буде призупинено.",
+        "trialReached": "Ви використали AI, що входить у ваш план цього місяця. Оформіть підписку Plus або підключіть власну модель, щоб і далі користуватися AI-функціями."
+      }
+    },
+    "options": {
+      "connectDescription": "Використовуйте власну модель Anthropic, OpenAI, Gemini або локальну. Вона ніколи не враховується в цьому ліміті.",
+      "subscribeTitle": "Оформити підписку Plus",
+      "subscribeDescription": "Отримуйте більше AI щомісяця.",
+      "waitTitle": "Дочекатися оновлення",
+      "waitDescription": "Включений AI відновиться {date}."
+    },
+    "meter": {
+      "ok": "Оновиться {date}. Ваші власні підключені моделі ніколи не враховуються.",
+      "warning": "Коли ліміт вичерпається, AI-функції буде призупинено до {date}, якщо ви не підключите власну модель.",
+      "reached": "Вичерпано до {date}. AI-функції призупинено."
     }
   },
   "transactionGroups": {

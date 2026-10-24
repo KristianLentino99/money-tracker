@@ -37,7 +37,8 @@
             "currentBalanceLabel": "Saldo attuale",
             "currentBalancePlaceholder": "Lascia vuoto per usare il totale importato",
             "willCreateHint": "Verrà creato in {currency}.",
-            "skippedNote": "{count} conto/i verranno saltati. Le loro transazioni, e gli eventuali trasferimenti da o verso di essi, non verranno importati."
+            "skippedNote": "{count} conto/i verranno saltati. Le loro transazioni, e gli eventuali trasferimenti da o verso di essi, non verranno importati.",
+            "currencyNotInFile": "Not in file"
           },
           "categories": {
             "sectionTitle": "Categorie"
@@ -77,7 +78,8 @@
             "accountNameMissing": "{count} conto/i senza nome",
             "accountNameDuplicated": "{count} conto/i condividevano lo stesso nome",
             "rowAmountUnreadable": "{count} transazione/i con importo non leggibile sono state saltate",
-            "fileSchemaUnexpected": "{count} problema/i imprevisto/i nella struttura del file"
+            "fileSchemaUnexpected": "{count} problema/i imprevisto/i nella struttura del file",
+            "accountCurrencyMissing": "{count} account(s) had no currency in the file, so your base currency was used — change it on the accounts step if that is wrong"
           },
           "includeVoided": {
             "label": "Importa {count} transazione/i annullata/e",
@@ -125,7 +127,12 @@
           "errorsOverflow": "…e altre {count}",
           "rowPrefix": "Riga {rowIndex}:",
           "viewTransactions": "Visualizza transazioni",
-          "importAnother": "Importa un altro file"
+          "importAnother": "Importa un altro file",
+          "errors": {
+            "rowsSuppressed": "{count} more row failed to import from this row onward. Only the first {listed} errors are listed. | {count} more rows failed to import from this row onward. Only the first {listed} errors are listed.",
+            "accountBalanceDesync": "An account balance could not be updated after the import. Check it and correct it manually.",
+            "rowImportFailed": "This row could not be imported."
+          }
         },
         "leaseExpired": {
           "title": "Il file caricato non è più disponibile",

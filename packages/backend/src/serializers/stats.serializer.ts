@@ -4,7 +4,19 @@
  * Serializes stats data for API responses.
  * Uses Money.fromCents() for raw cents values from services/aggregates.
  */
-import { endpointsTypes } from '@bt/shared/types';
+import type {
+  CumulativePeriodData,
+  EntityLogoFields,
+  GetCashFlowResponse,
+  GetCumulativeResponse,
+  GetInvestmentContributionsResponse,
+  GetNetWorthDriversResponse,
+  GetNetWorthHistoryResponse,
+  GetPivotReportResponse,
+  GetSpendingsByCategoriesByTypeReturnType,
+  GetSpendingsByCategoriesReturnType,
+  GetVentureContributionsResponse,
+} from '@bt/shared/types';
 import { centsToApiDecimal } from '@common/types/money';
 import type Balances from '@models/balances.model';
 import type { CombinedBalanceHistoryItem } from '@services/stats/get-combined-balance-history';
@@ -13,6 +25,8 @@ import type { NetWorthDriversResultCents } from '@services/stats/get-net-worth-d
 import type { NetWorthHistoryResultCents } from '@services/stats/get-net-worth-history';
 import type { PivotReportResultCents } from '@services/stats/get-pivot';
 import type { VentureContributionCents } from '@services/stats/get-venture-contributions';
+
+import { serializeLogoFields } from './logo-fields.serializer';
 
 // ============================================================================
 // Balance History Serializers
@@ -64,7 +78,7 @@ type GetSpendingsByCategoriesApiResponse = {
  * Serialize spendings by categories (from getSpendingsByCategories)
  */
 export function serializeSpendingsByCategories(
-  spendings: endpointsTypes.GetSpendingsByCategoriesReturnType,
+  spendings: GetSpendingsByCategoriesReturnType,
 ): GetSpendingsByCategoriesApiResponse {
   const result: GetSpendingsByCategoriesApiResponse = {};
 
@@ -94,7 +108,7 @@ type GetSpendingsByCategoriesByTypeApiResponse = {
  * Serialize per-type spendings by categories (from getSpendingsByCategoriesByType)
  */
 export function serializeSpendingsByCategoriesByType(
-  spendings: endpointsTypes.GetSpendingsByCategoriesByTypeReturnType,
+  spendings: GetSpendingsByCategoriesByTypeReturnType,
 ): GetSpendingsByCategoriesByTypeApiResponse {
   const result: GetSpendingsByCategoriesByTypeApiResponse = {};
 
@@ -144,7 +158,7 @@ interface GetCashFlowApiResponse {
 /**
  * Serialize cash flow response (from getCashFlow)
  */
-export function serializeCashFlow(cashFlow: endpointsTypes.GetCashFlowResponse): GetCashFlowApiResponse {
+export function serializeCashFlow(cashFlow: GetCashFlowResponse): GetCashFlowApiResponse {
   return {
     periods: cashFlow.periods.map((period) => ({
       periodStart: period.periodStart,
@@ -188,7 +202,7 @@ const decimalizeValues = <K extends string>(values: Record<K, number>): Record<K
  * Serialize pivot report (from getPivotReport). Converts every cents amount to an API decimal;
  * row/column identity, labels, colors and currency pass through unchanged.
  */
-export function serializePivotReport(result: PivotReportResultCents): endpointsTypes.GetPivotReportResponse {
+export function serializePivotReport(result: PivotReportResultCents): GetPivotReportResponse {
   return {
     columns: result.columns,
     rows: result.rows.map((row) => ({
@@ -196,9 +210,7 @@ export function serializePivotReport(result: PivotReportResultCents): endpointsT
       label: row.label,
       color: row.color,
       // Only the payee dimension sets the logo fields; keep them off every other dimension's rows.
-      ...(row.logoDomain !== undefined ? { logoDomain: row.logoDomain } : {}),
-      ...(row.logoInitials !== undefined ? { logoInitials: row.logoInitials } : {}),
-      ...(row.logoColor !== undefined ? { logoColor: row.logoColor } : {}),
+      ...(row.logoDomain !== undefined ? serializeLogoFields({ entity: row as EntityLogoFields }) : {}),
       parentId: row.parentId,
       kind: row.kind,
       values: decimalizeValues(row.values),
@@ -236,7 +248,7 @@ interface GetCumulativeApiResponse {
 /**
  * Serialize cumulative period data
  */
-function serializeCumulativePeriod(period: endpointsTypes.CumulativePeriodData): CumulativePeriodDataApiResponse {
+function serializeCumulativePeriod(period: CumulativePeriodData): CumulativePeriodDataApiResponse {
   return {
     year: period.year,
     data: period.data.map((monthData) => ({
@@ -252,7 +264,7 @@ function serializeCumulativePeriod(period: endpointsTypes.CumulativePeriodData):
 /**
  * Serialize cumulative response (from getCumulativeData)
  */
-export function serializeCumulativeData(cumulative: endpointsTypes.GetCumulativeResponse): GetCumulativeApiResponse {
+export function serializeCumulativeData(cumulative: GetCumulativeResponse): GetCumulativeApiResponse {
   return {
     currentPeriod: serializeCumulativePeriod(cumulative.currentPeriod),
     previousPeriod: serializeCumulativePeriod(cumulative.previousPeriod),
@@ -312,9 +324,7 @@ export function serializeExpensesAmountForPeriod(amountCents: number): number {
  * pass through as dates, the `portfolios` legend (ids and names, no money) and
  * `degraded` (securities and currency codes, no money) forward untouched.
  */
-export function serializeNetWorthDrivers(
-  result: NetWorthDriversResultCents,
-): endpointsTypes.GetNetWorthDriversResponse {
+export function serializeNetWorthDrivers(result: NetWorthDriversResultCents): GetNetWorthDriversResponse {
   return {
     buckets: result.buckets.map((bucket) => ({
       periodStart: bucket.periodStart,
@@ -356,9 +366,7 @@ export function serializeNetWorthDrivers(
  * every amount is decimalized; the snapshot dates pass through unchanged, and
  * `degraded` (securities and currency codes, no money) forwards untouched.
  */
-export function serializeNetWorthHistory(
-  result: NetWorthHistoryResultCents,
-): endpointsTypes.GetNetWorthHistoryResponse {
+export function serializeNetWorthHistory(result: NetWorthHistoryResultCents): GetNetWorthHistoryResponse {
   return {
     points: result.points.map((point) => ({
       date: point.date,
@@ -387,7 +395,7 @@ export function serializeNetWorthHistory(
  */
 export function serializeInvestmentContributions(
   result: InvestmentContributionsResultCents,
-): endpointsTypes.GetInvestmentContributionsResponse {
+): GetInvestmentContributionsResponse {
   return {
     buckets: result.buckets.map((bucket) => ({
       periodStart: bucket.periodStart,
@@ -403,8 +411,6 @@ export function serializeInvestmentContributions(
   };
 }
 
-export function serializeVentureContributions(
-  result: VentureContributionCents[],
-): endpointsTypes.GetVentureContributionsResponse {
+export function serializeVentureContributions(result: VentureContributionCents[]): GetVentureContributionsResponse {
   return result.map((deal) => ({ dealId: deal.dealId, name: deal.name, amount: centsToApiDecimal(deal.amount) }));
 }

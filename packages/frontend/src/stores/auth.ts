@@ -1,3 +1,4 @@
+import { loadUserData } from '@/api';
 import { analyticsPlan } from '@/common/const/billing';
 import type { DemoEndReason } from '@/common/const/demo';
 import { getDeviceName } from '@/common/utils/device-name';
@@ -11,6 +12,7 @@ import {
   markDemoOrigin,
   markSignedInOnDevice,
 } from '@/lib/demo-origin';
+import { setLastLoginMethod, setPendingLoginMethod } from '@/lib/last-login-method';
 import { identifyUser, resetUser, startSessionRecording, trackAnalyticsEvent } from '@/lib/posthog';
 import { collectPersistedQueryGarbage, resetQueryCaches } from '@/lib/query-persister';
 import { captureException, clearSentryUser, setSentryUser } from '@/lib/sentry';
@@ -51,6 +53,7 @@ function identifyUserForTracking(user: UserInfoResponse) {
       is_demo: isDemo,
       user_role: user.role,
       plan: isDemo ? 'demo' : user.entitlements && analyticsPlan({ entitlements: user.entitlements }),
+      granted_plan: user.entitlements?.plan ?? null,
       ...demoOriginProperties,
     },
   });
@@ -85,11 +88,8 @@ export const useAuthStore = defineStore('auth', () => {
    * before any persisted query mounts so a fresh account never restores another's
    * cached lists. No-op on first login and when the same user returns.
    */
-  const reconcilePersistedQueriesForUser = async () => {
-    const currentUserId = userStore.user?.id;
-    if (currentUserId == null) return;
-
-    const currentUserIdStr = String(currentUserId);
+  const reconcilePersistedQueriesForUser = async ({ userId }: { userId: number }) => {
+    const currentUserIdStr = String(userId);
     const lastSeenUserId = localStorage.getItem(PERSISTED_QUERIES_USER_KEY);
 
     if (lastSeenUserId !== null && lastSeenUserId !== currentUserIdStr) {
@@ -102,10 +102,14 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   /**
-   * Loads initial data after authentication (currencies, categories)
+   * Loads initial data after authentication (user, currencies, categories)
    */
   const loadPostAuthData = async () => {
-    await reconcilePersistedQueriesForUser();
+    // Publishing the user enables user-gated queries in long-lived stores; a cache
+    // wipe after that orphans their observers and they never resolve until reload.
+    const user = await loadUserData();
+    await reconcilePersistedQueriesForUser({ userId: user.id });
+    userStore.user = user;
     // Sweep abandoned persisted-query rows (see `collectPersistedQueryGarbage`);
     // not awaited – nothing below depends on it.
     void collectPersistedQueryGarbage();
@@ -130,10 +134,9 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     if (result.error) {
-      throw new UnexpectedError(result.error.message || 'Login failed');
+      throw new UnexpectedError(result.error.message, result.error);
     }
 
-    await userStore.loadUser();
     await loadPostAuthData();
 
     // Identify user for analytics and error tracking
@@ -143,6 +146,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     isLoggedIn.value = true;
     localStorage.setItem(HAS_EVER_LOGGED_IN_KEY, 'true');
+    setLastLoginMethod({ method: 'email' });
   };
 
   /**
@@ -158,6 +162,7 @@ export const useAuthStore = defineStore('auth', () => {
     from?: 'signin' | 'signup';
   }) => {
     sessionStorage.setItem('oauth_from', from);
+    setPendingLoginMethod({ method: provider });
 
     const result = await signIn.social({
       provider,
@@ -173,7 +178,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (code === 'PROVIDER_NOT_FOUND' || status === 404) {
         throw new OAuthProviderNotConfiguredError(provider);
       }
-      throw new UnexpectedError(result.error.message || `${provider} login failed`);
+      throw new UnexpectedError(result.error.message, result.error);
     }
   };
 
@@ -184,10 +189,9 @@ export const useAuthStore = defineStore('auth', () => {
     const result = await authClient.signIn.passkey();
 
     if (result.error) {
-      throw new UnexpectedError(result.error.message || 'Passkey login failed');
+      throw new UnexpectedError(result.error.message, result.error);
     }
 
-    await userStore.loadUser();
     await loadPostAuthData();
 
     // Identify user for analytics and error tracking
@@ -197,6 +201,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     isLoggedIn.value = true;
     localStorage.setItem(HAS_EVER_LOGGED_IN_KEY, 'true');
+    setLastLoginMethod({ method: 'passkey' });
   };
 
   /**
@@ -208,7 +213,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     if (result.error) {
-      throw new UnexpectedError(result.error.message || 'Failed to register passkey');
+      throw new UnexpectedError(result.error.message, result.error);
     }
 
     return result;
@@ -227,7 +232,6 @@ export const useAuthStore = defineStore('auth', () => {
         return false;
       }
 
-      await userStore.loadUser();
       await setLoggedIn();
 
       // Identify user for analytics and error tracking
@@ -262,7 +266,7 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     if (result.error) {
-      throw new UnexpectedError(result.error.message || 'Signup failed', result.error);
+      throw new UnexpectedError(result.error.message, result.error);
     }
 
     // Don't auto-login - user needs to verify email first

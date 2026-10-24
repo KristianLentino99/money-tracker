@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, type CategoryModel, type RecordId } from '@bt/shared/types';
+import { CATEGORY_ORDER_ROOT_KEY, CATEGORY_TYPES, type CategoryModel, type RecordId } from '@bt/shared/types';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
@@ -26,6 +26,10 @@ const { mockLoadSystemCategories } = vi.hoisted(() => ({ mockLoadSystemCategorie
 
 vi.mock('@/api', () => ({ loadSystemCategories: mockLoadSystemCategories }));
 
+const { mockGetUserSettings } = vi.hoisted(() => ({ mockGetUserSettings: vi.fn() }));
+
+vi.mock('@/api/user-settings', () => ({ getUserSettings: mockGetUserSettings }));
+
 vi.mock('@/components/notification-center', () => ({
   useNotificationCenter: () => ({ addErrorNotification: vi.fn() }),
 }));
@@ -47,6 +51,8 @@ const category = ({ id, name }: { id: string; name: string }): CategoryModel => 
   type: CATEGORY_TYPES.custom,
   parentId: null,
   userId: 42,
+  defaultTagIds: [],
+  applyDefaultTagsOnAiCategorization: false,
 });
 
 const FOOD = category({ id: '00000000-0000-0000-0000-000000000001', name: 'Food' });
@@ -76,7 +82,21 @@ beforeEach(() => {
   memory.clear();
   queryClient.clear();
   mockLoadSystemCategories.mockReset();
+  mockGetUserSettings.mockReset().mockResolvedValue({});
   setActivePinia(createPinia());
+});
+
+describe('categories store – categoryOrder', () => {
+  it('orders formattedCategories by the categoryOrder from user settings', async () => {
+    mockGetUserSettings.mockResolvedValue({ categoryOrder: { [CATEGORY_ORDER_ROOT_KEY]: [GROCERIES.id, FOOD.id] } });
+    const store = useCategoriesStore();
+
+    mockLoadSystemCategories.mockResolvedValue([FOOD, GROCERIES]);
+    await store.loadCategories();
+    await flushScheduler();
+
+    expect(store.formattedCategories.map(({ name }) => name)).toEqual(['Groceries', 'Food']);
+  });
 });
 
 describe('categories store – loadCategories({ force: true })', () => {

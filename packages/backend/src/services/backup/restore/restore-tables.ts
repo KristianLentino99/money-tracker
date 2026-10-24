@@ -3,20 +3,15 @@ import { DEACTIVATION_REASON } from '@bt/shared/types';
 import Currencies from '@models/currencies.model';
 import MerchantCategoryCodes from '@models/merchant-category-codes.model';
 import { encryptCredentials } from '@services/bank-data-providers/utils/credential-encryption';
+import { copyLogoImageIfPresent } from '@services/logo-images/logo-images.service';
 import { Op, type Transaction } from 'sequelize';
-import { v7 as uuidv7 } from 'uuid';
+import { validate as isUuid, v7 as uuidv7 } from 'uuid';
 
 import { BACKUP_TABLES, type BackupTableDef } from '../registry';
 import type { ArchiveAnalysis, TableColumnPlan } from './analyze-archive';
 import { buildInsertRecord, runBulkInsert } from './bulk-insert';
 import type { ParsedArchive } from './load-archive';
-import {
-  type GuardedFk,
-  buildGuardedReferenceMap,
-  foreignReferenceDroppedMessage,
-  foreignReferenceNulledMessage,
-  guardRowReferences,
-} from './owned-reference-guard';
+import { type GuardedFk, buildGuardedReferenceMap, guardRowReferences } from './owned-reference-guard';
 import { remapEmbeddedReferences } from './remap-embedded-references';
 import { legacyMileageToMeters } from './vehicle-mileage';
 
@@ -240,7 +235,8 @@ async function insertTable({
   const hasStandaloneId = pkAttrs.length === 1 && pkAttrs[0] === 'id';
 
   // Probe which backup ids another row already holds, inside the restore tx.
-  // After the wipe only OTHER users' rows survive, so a hit is a real collision.
+  // After the wipe only other users' rows and this user's rows on their shared
+  // accounts survive, so a hit is a real collision.
   // `paranoid: false` so a soft-deleted row still counts as taken — the primary
   // key ignores `deletedAt`, so keeping its id would collide on insert anyway.
   // Chunked so a table with tens of thousands of rows stays under Postgres's
@@ -274,6 +270,7 @@ async function insertTable({
   // count) instead of one warning per dropped row.
   let droppedMccCount = 0;
   let droppedCurrencyCount = 0;
+  let droppedInvalidCount = 0;
   const fkDroppedByColumn = new Map<string, number>();
   const fkNulledByColumn = new Map<string, number>();
 
@@ -298,6 +295,11 @@ async function insertTable({
       overrides[def.globalRows.ownerColumn] = null;
     }
 
+    if (def.isValidRow && !def.isValidRow({ row })) {
+      droppedInvalidCount += 1;
+      continue;
+    }
+
     const guard = guardRowReferences({ guardedFks, row, insertedIds: ctx.insertedIds });
     if (!guard.keep) {
       const column = guard.droppedColumn;
@@ -308,6 +310,13 @@ async function insertTable({
       fkNulledByColumn.set(column, (fkNulledByColumn.get(column) ?? 0) + 1);
     }
     Object.assign(overrides, guard.overrides);
+
+    // A logo blob has one owner row, which deletes it on edit or delete, so every
+    // restored row gets its own copy. Rollback orphans are left to the orphan sweep.
+    if (hasColumn({ plan, field: 'logoImageId' }) && row.logoImageId != null) {
+      const id = String(row.logoImageId);
+      overrides.logoImageId = isUuid(id) ? await copyLogoImageIfPresent({ id }) : null;
+    }
 
     // Keep the backup id when free, else mint a fresh one; record the mapping so
     // this table's FK referrers and the self-ref second pass resolve to it.
@@ -331,7 +340,6 @@ async function insertTable({
     ctx.warnings.push({
       code: 'mcc_code_missing',
       table: def.fileName,
-      message: `Dropped ${droppedMccCount} user MCC rule(s) whose merchant category code doesn't exist on this instance.`,
       count: droppedMccCount,
     });
   }
@@ -339,25 +347,21 @@ async function insertTable({
     ctx.warnings.push({
       code: 'currency_missing',
       table: def.fileName,
-      message: `Skipped ${droppedCurrencyCount} currency row(s) whose currency isn't available on this instance.`,
       count: droppedCurrencyCount,
     });
   }
-  for (const [column, count] of fkDroppedByColumn) {
+  if (droppedInvalidCount > 0) {
     ctx.warnings.push({
-      code: 'foreign_reference_dropped',
+      code: 'invalid_row_dropped',
       table: def.fileName,
-      message: foreignReferenceDroppedMessage({ table: def.fileName, column, count }),
-      count,
+      count: droppedInvalidCount,
     });
   }
+  for (const [column, count] of fkDroppedByColumn) {
+    ctx.warnings.push({ code: 'foreign_reference_dropped', table: def.fileName, column, count });
+  }
   for (const [column, count] of fkNulledByColumn) {
-    ctx.warnings.push({
-      code: 'foreign_reference_nulled',
-      table: def.fileName,
-      message: foreignReferenceNulledMessage({ table: def.fileName, column, count }),
-      count,
-    });
+    ctx.warnings.push({ code: 'foreign_reference_nulled', table: def.fileName, column, count });
   }
 
   const inserted = await runBulkInsert({ model: def.model, records, transaction: ctx.transaction });
@@ -387,7 +391,7 @@ async function insertTable({
       ctx.warnings.push({
         code: 'foreign_reference_nulled',
         table: def.fileName,
-        message: foreignReferenceNulledMessage({ table: def.fileName, column: selfRefColumn, count: selfRefNulled }),
+        column: selfRefColumn,
         count: selfRefNulled,
       });
     }
@@ -460,7 +464,6 @@ export async function insertRestoreTables({
         warnings.push({
           code: 'shares_skipped',
           table: def.fileName,
-          message: `Skipped ${count} "${def.fileName}" row(s): shared resources reference counterpart users that don't exist on this instance.`,
           count,
         });
       }

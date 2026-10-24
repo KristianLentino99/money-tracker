@@ -5,6 +5,7 @@ import {
   ACCOUNT_TYPES,
   AccountExternalData,
   BANK_PROVIDER_TYPE,
+  BUDGET_PLAN_ATTACHABLE_ACCOUNT_CATEGORIES,
   TRANSACTION_TRANSFER_NATURE,
   isDedicatedFlowAccountCategory,
 } from '@bt/shared/types';
@@ -16,13 +17,15 @@ import { logger } from '@js/utils/logger';
 import * as Accounts from '@models/accounts.model';
 import Balances from '@models/balances.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
-import PlanAccountMemberships from '@models/plan-account-memberships.model';
+import BudgetPlanAccounts from '@models/budget-plan-accounts.model';
 import { countTransactions } from '@models/transactions-query';
 import { getBaseCurrency } from '@models/users-currencies.model';
 import Users from '@models/users.model';
 import { isRevaluedAccount, scheduleBalanceRevalue } from '@services/balances/revalue-balance-history.service';
 import { applyManualLogoPatch } from '@services/brand-logos';
+import { attachEligibleAccounts } from '@services/budget-plans/auto-attach-account';
 import { calculateRefAmount } from '@services/calculate-ref-amount.service';
+import { releaseIneligibleGoalShares } from '@services/goals/release-ineligible-goal-shares';
 import { ensureUserCurrencyConnected } from '@services/sharing/auth/ensure-currency-connected.service';
 import {
   cleanupAccountSharesInTx,
@@ -203,7 +206,7 @@ export const createAccount = withTransaction(
     payload: Omit<Accounts.CreateAccountPayload, 'refCreditLimit' | 'refInitialBalance'>,
   ): Promise<Accounts.default | null> => {
     try {
-      const { logoDomain, logoInitials, logoColor, ...rest } = payload;
+      const { logoDomain, logoInitials, logoColor, logoIcon, ...rest } = payload;
       const { userId, accountCategory, creditLimit, currencyCode, initialBalance } = rest;
 
       if (accountCategory && isDedicatedFlowAccountCategory(accountCategory)) {
@@ -236,7 +239,7 @@ export const createAccount = withTransaction(
         ...rest,
         refCreditLimit,
         refInitialBalance,
-        ...applyManualLogoPatch({ patch: { logoDomain, logoInitials, logoColor } }),
+        ...applyManualLogoPatch({ patch: { logoDomain, logoInitials, logoColor, logoIcon } }),
       });
     } catch (e) {
       // A 4xx is the caller's mistake, not a failure of account creation, so it
@@ -280,6 +283,7 @@ export const updateAccount = withTransaction(
     logoDomain,
     logoInitials,
     logoColor,
+    logoIcon,
     initialBalance: nextInitialBalance,
     ...payload
   }: Accounts.UpdateAccountByIdPayload &
@@ -351,6 +355,22 @@ export const updateAccount = withTransaction(
       await performArchiveSideEffects({ account: accountData, userId: accountData.userId });
     }
 
+    const wasAttachable = BUDGET_PLAN_ATTACHABLE_ACCOUNT_CATEGORIES.includes(accountData.accountCategory);
+    const isAttachable =
+      payload.accountCategory === undefined
+        ? wasAttachable
+        : BUDGET_PLAN_ATTACHABLE_ACCOUNT_CATEGORIES.includes(payload.accountCategory);
+    if (wasAttachable && !isAttachable) {
+      await BudgetPlanAccounts.destroy({ where: { accountId: accountData.id } });
+    }
+    if (payload.accountCategory !== undefined && payload.accountCategory !== accountData.accountCategory) {
+      await releaseIneligibleGoalShares({
+        accountId: accountData.id,
+        userId: accountData.userId,
+        accountCategory: payload.accountCategory,
+      });
+    }
+
     const currentBalanceIsChanging =
       payload.currentBalance !== undefined && !payload.currentBalance.equals(accountData.currentBalance);
     let initialBalance: Money = accountData.initialBalance;
@@ -400,12 +420,8 @@ export const updateAccount = withTransaction(
     }
 
     const logoPatch = applyManualLogoPatch({
-      patch: { logoDomain, logoInitials, logoColor },
-      stored: {
-        logoDomain: accountData.logoDomain,
-        logoInitials: accountData.logoInitials,
-        logoColor: accountData.logoColor,
-      },
+      patch: { logoDomain, logoInitials, logoColor, logoIcon },
+      stored: accountData,
     });
 
     // `refInitialBalance` is intentionally NOT written here: the ref side of the
@@ -423,6 +439,10 @@ export const updateAccount = withTransaction(
 
     if (!result) {
       throw new UnexpectedError({ message: t({ key: 'accounts.accountUpdateFailed' }) });
+    }
+
+    if (!wasAttachable && isAttachable) {
+      await attachEligibleAccounts({ userId: accountData.userId, accountIds: [accountData.id] });
     }
 
     // A foreign-currency opening balance can't be shifted through history as a flat
@@ -521,11 +541,6 @@ const deleteAccountByIdInTx = withTransaction(
     // about-to-be-cascaded leg on this account. Same transaction as the destroy, so a
     // failure rolls everything back together.
     await convertCrossUserTransfersForAccountIds({ accountIds: [id], ownerUserId: userId });
-
-    await PlanAccountMemberships.update(
-      { active: false, detachedAt: new Date() },
-      { where: { accountId: id, active: true } },
-    );
 
     // The destroy cascades `Subscriptions.accountId` to NULL at the DB level, which trips
     // the auto-record check constraint on any subscription still booking into this account.

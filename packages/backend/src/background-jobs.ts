@@ -2,12 +2,16 @@ import { logger } from '@js/utils/logger';
 import { shutdownPostHog } from '@js/utils/posthog';
 import { accountSyncWorker } from '@services/bank-data-providers/sync/account-sync-queue';
 
+import { aiUsageMonthEndCron } from './crons/ai-usage-month-end';
 import { attachmentsOrphanSweepCron } from './crons/attachments-orphan-sweep';
 import { balanceRevalueSweepCron } from './crons/balance-revalue-sweep';
+import { bankAccountsSyncCron } from './crons/bank-accounts-sync';
+import { budgetPlansPurgeCron } from './crons/budget-plans-purge';
 import { cryptoPricesSyncCron } from './crons/crypto-prices-sync';
 import { demoCleanupCron } from './crons/demo-cleanup';
 import { demoTemplateRefreshCron } from './crons/demo-template-refresh';
 import { loadCurrencyRatesJob } from './crons/exchange-rates';
+import { goalsReachedCheckCron } from './crons/goals-reached-check';
 import { purgeDeletedPortfoliosCron } from './crons/purge-deleted-portfolios';
 import { securitiesDailySyncCron } from './crons/securities-daily-sync';
 import { shareInvitationsExpireCron } from './crons/share-invitations-expire';
@@ -17,7 +21,32 @@ import { subscriptionAutoRecordCron } from './crons/subscription-auto-record';
 import { subscriptionCandidateDetectionCron } from './crons/subscription-candidate-detection';
 import { subscriptionRemindersCron } from './crons/subscription-reminders-check';
 import { tagRemindersCron } from './crons/tag-reminders-check';
+import { trackerRulesSyncCron } from './crons/tracker-rules-sync';
+import { trackerSmartScanCron } from './crons/tracker-smart-scan';
 import { initializeHistoricalRates } from './services/exchange-rates/initialize-historical-rates.service';
+
+const allEnvCrons = [demoCleanupCron, demoTemplateRefreshCron];
+
+const prodOnlyCrons = [
+  securitiesDailySyncCron,
+  cryptoPricesSyncCron,
+  tagRemindersCron,
+  stuckPendingCheckCron,
+  goalsReachedCheckCron,
+  subscriptionRemindersCron,
+  subscriptionAutoRecordCron,
+  subscriptionCandidateDetectionCron,
+  shareInvitationsExpireCron,
+  shareResourceOrphanCleanupCron,
+  purgeDeletedPortfoliosCron,
+  budgetPlansPurgeCron,
+  balanceRevalueSweepCron,
+  attachmentsOrphanSweepCron,
+  bankAccountsSyncCron,
+  trackerSmartScanCron,
+  trackerRulesSyncCron,
+  aiUsageMonthEndCron,
+];
 
 export function initializeBackgroundJobs() {
   const isOfflineMode = process.env.OFFLINE_MODE === 'true';
@@ -25,48 +54,23 @@ export function initializeBackgroundJobs() {
 
   if (isOfflineMode || isTestMode) {
     logger.info(`[${isTestMode ? 'Test' : 'Offline'} Mode] Skipping background jobs that require internet connection`);
-  } else {
-    // Initialize historical exchange rates on startup (non-blocking)
-    initializeHistoricalRates();
+    return;
+  }
 
-    loadCurrencyRatesJob.start();
+  // Initialize historical exchange rates on startup (non-blocking)
+  initializeHistoricalRates();
 
-    // Demo cleanup and template refresh run in all environments (dev and prod)
-    demoCleanupCron.startCron();
-    demoTemplateRefreshCron.startCron();
+  loadCurrencyRatesJob.start();
 
-    if (process.env.NODE_ENV === 'production') {
-      securitiesDailySyncCron.startCron();
-      cryptoPricesSyncCron.startCron();
-      tagRemindersCron.startCron();
-      stuckPendingCheckCron.startCron();
-      subscriptionRemindersCron.startCron();
-      subscriptionAutoRecordCron.startCron();
-      subscriptionCandidateDetectionCron.startCron();
-      shareInvitationsExpireCron.startCron();
-      shareResourceOrphanCleanupCron.startCron();
-      purgeDeletedPortfoliosCron.startCron();
-      balanceRevalueSweepCron.startCron();
-      attachmentsOrphanSweepCron.startCron();
-    }
+  for (const cron of allEnvCrons) cron.startCron();
+
+  if (process.env.NODE_ENV === 'production') {
+    for (const cron of prodOnlyCrons) cron.startCron();
   }
 }
 
 export async function shutdownBackgroundJobs() {
-  demoCleanupCron.stopCron();
-  demoTemplateRefreshCron.stopCron();
-  securitiesDailySyncCron.stopCron();
-  cryptoPricesSyncCron.stopCron();
-  tagRemindersCron.stopCron();
-  stuckPendingCheckCron.stopCron();
-  subscriptionRemindersCron.stopCron();
-  subscriptionAutoRecordCron.stopCron();
-  subscriptionCandidateDetectionCron.stopCron();
-  shareInvitationsExpireCron.stopCron();
-  shareResourceOrphanCleanupCron.stopCron();
-  purgeDeletedPortfoliosCron.stopCron();
-  balanceRevalueSweepCron.stopCron();
-  attachmentsOrphanSweepCron.stopCron();
+  for (const cron of [...allEnvCrons, ...prodOnlyCrons]) cron.stopCron();
   loadCurrencyRatesJob.stop();
   await accountSyncWorker.close();
   // Flush remaining PostHog events before exit

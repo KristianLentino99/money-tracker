@@ -2,7 +2,8 @@ import {
   type AutomationAction,
   type AutomationConditionField,
   type AutomationConditions,
-  type BackupFileName,
+  CATEGORY_ORDER_ROOT_KEY,
+  type CategoryOrder,
   type FireSettings,
   getPortfolioIdFromIndicatorId,
   isPortfolioIndicatorId,
@@ -12,6 +13,7 @@ import {
 import AccountGroup from '@models/accounts-groups/account-groups.model';
 import Accounts from '@models/accounts.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
+import BudgetLines from '@models/budget-lines.model';
 import Categories from '@models/categories.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -20,11 +22,13 @@ import Payees from '@models/payees.model';
 import SubscriptionCandidates from '@models/subscription-candidates.model';
 import Subscriptions from '@models/subscriptions.model';
 import Tags from '@models/tags.model';
+import Trackers from '@models/trackers.model';
 import TransactionAutomations from '@models/transaction-automations.model';
 import Transactions from '@models/transactions.model';
 import VentureEventLinks from '@models/venture/venture-event-links.model';
 import { Model, type ModelStatic, type Transaction } from 'sequelize';
 
+import type { BackupFileName } from '../registry';
 import type { ParsedArchive } from './load-archive';
 
 type AnyModel = ModelStatic<Model>;
@@ -133,6 +137,7 @@ export async function remapEmbeddedReferences({
     subscriptions: String(Subscriptions.getTableName()),
     payees: String(Payees.getTableName()),
     accounts: String(Accounts.getTableName()),
+    trackers: String(Trackers.getTableName()),
     tags: String(Tags.getTableName()),
     categories: String(Categories.getTableName()),
     accountGroups: String(AccountGroup.getTableName()),
@@ -258,7 +263,7 @@ export async function remapEmbeddedReferences({
     },
   });
 
-  // 6. Notifications.payload → tagId (Tags), transactionIds[] (Transactions).
+  // 6. Notifications.payload → trackerId (Trackers), tagId (Tags), transactionIds[] (Transactions).
   //    Share payloads' invitationId/shareId/resourceId reference cross-user data
   //    that isn't restored, so they're left verbatim.
   await rewriteColumn({
@@ -271,6 +276,8 @@ export async function remapEmbeddedReferences({
     mutate: ({ draft }) => {
       if (typeof draft !== 'object' || draft === null) return;
       const p = draft as Record<string, unknown>;
+      if (typeof p.trackerId === 'string')
+        p.trackerId = remapId({ insertedIds, targetTable: tables.trackers, oldId: p.trackerId });
       if (typeof p.tagId === 'string') p.tagId = remapId({ insertedIds, targetTable: tables.tags, oldId: p.tagId });
       remapIdArrayInPlace({ arr: p.transactionIds, targetTable: tables.transactions, insertedIds });
     },
@@ -297,6 +304,17 @@ export async function remapEmbeddedReferences({
     transaction,
     mutate: mutateOriginalTransactionState,
   });
+
+  // 9. BudgetLines.archivedCategoryIds[] → Categories.
+  await rewriteColumn({
+    model: BudgetLines,
+    fileName: 'budget-lines',
+    column: 'archivedCategoryIds',
+    archive,
+    insertedIds,
+    transaction,
+    mutate: ({ draft }) => remapIdArrayInPlace({ arr: draft, targetTable: tables.categories, insertedIds }),
+  });
 }
 
 /**
@@ -317,6 +335,33 @@ export function remapSavedPivotViewIds({ views, insertedIds }: { views: unknown;
     remapIdArrayInPlace({ arr: config.accountIds, targetTable: accounts, insertedIds });
     remapIdArrayInPlace({ arr: config.categoryIds, targetTable: categories, insertedIds });
     remapIdArrayInPlace({ arr: config.payeeIds, targetTable: payees, insertedIds });
+  }
+}
+
+/** Remap the owned-id arrays inside each saved Transactions view's filters, in place. */
+export function remapSavedTransactionViewIds({
+  views,
+  insertedIds,
+}: {
+  views: unknown;
+  insertedIds: InsertedIds;
+}): void {
+  if (!Array.isArray(views)) return;
+  const targets = {
+    accountIds: Accounts,
+    categoryIds: Categories,
+    tagIds: Tags,
+    payeeIds: Payees,
+    trackerIds: Trackers,
+    excludedTrackerIds: Trackers,
+  };
+
+  for (const view of views) {
+    const filters = view?.filters;
+    if (typeof filters !== 'object' || filters === null) continue;
+    for (const [key, model] of Object.entries(targets)) {
+      remapIdArrayInPlace({ arr: filters[key], targetTable: String(model.getTableName()), insertedIds });
+    }
   }
 }
 
@@ -342,4 +387,35 @@ export function remapFireSettingsIds({
     if (portfolioId) fire.returnIndicatorId = makePortfolioIndicatorId({ portfolioId });
     else delete fire.returnIndicatorId;
   }
+}
+
+/** Remap `settings.incomeCategoryIds` in place, dropping ids the restore did not insert. */
+export function remapIncomeCategoryIds({
+  settings,
+  insertedIds,
+}: {
+  settings: { incomeCategoryIds?: string[] };
+  insertedIds: InsertedIds;
+}): void {
+  if (!settings.incomeCategoryIds) return;
+  const categories = insertedIds.get(String(Categories.getTableName()));
+  settings.incomeCategoryIds = settings.incomeCategoryIds.flatMap((id) => categories?.get(id) ?? []);
+}
+
+/** Remap `settings.categoryOrder` keys (parent ids) and values in place, dropping ids the restore did not insert. */
+export function remapCategoryOrderIds({
+  settings,
+  insertedIds,
+}: {
+  settings: { categoryOrder?: CategoryOrder };
+  insertedIds: InsertedIds;
+}): void {
+  if (!settings.categoryOrder) return;
+  const categories = insertedIds.get(String(Categories.getTableName()));
+  settings.categoryOrder = Object.fromEntries(
+    Object.entries(settings.categoryOrder).flatMap(([parentKey, ids]) => {
+      const key = parentKey === CATEGORY_ORDER_ROOT_KEY ? parentKey : categories?.get(parentKey);
+      return key ? [[key, ids.flatMap((id) => categories?.get(id) ?? [])]] : [];
+    }),
+  );
 }

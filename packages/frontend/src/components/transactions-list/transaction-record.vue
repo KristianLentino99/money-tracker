@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'hover:bg-muted/50 grid w-full cursor-pointer rounded-md px-2 py-1 transition-colors [content-visibility:auto]',
+      'group/row hover:bg-muted/50 grid w-full cursor-pointer rounded-md px-2 py-1 transition-colors [content-visibility:auto]',
       showCheckbox
         ? 'grid-cols-[auto_minmax(0,1fr)_max-content] items-center gap-2'
         : shouldShowGroupedTransfer || isLoadingGroupedTransfer
@@ -25,9 +25,23 @@
       <div v-else class="size-4" />
     </label>
 
-    <div class="flex items-center gap-2 overflow-hidden">
-      <template v-if="!isTransferTransaction && !isPortfolioLinked && category">
-        <CategoryCircle :category="category" />
+    <div class="flex items-center gap-2 overflow-x-clip">
+      <template v-if="!isTransferTransaction && !linkTarget && category">
+        <div class="relative shrink-0">
+          <CategoryCircle :category="category" />
+          <ResponsiveTooltip v-if="showAccount && accountFrom" :content="accountFrom.name" :delay-duration="100">
+            <!-- Backing tracks the row's hover fill so the badge's cut-out never shows as a halo. -->
+            <span
+              class="absolute -right-1 -bottom-0.5 cursor-help rounded-sm bg-(--badge-backing) ring-2 ring-(--badge-backing) [--badge-backing:var(--card)] group-hover/row:[--badge-backing:color-mix(in_srgb,var(--muted)_50%,var(--card))]"
+              role="img"
+              :aria-label="accountFrom.name"
+              data-testid="transaction-account-badge"
+              @click="isTouch && $event.stopPropagation()"
+            >
+              <AccountLogo :account="accountFrom" solid class="size-3.5 rounded-sm ring-0" />
+            </span>
+          </ResponsiveTooltip>
+        </div>
       </template>
 
       <div :class="isCompactInline ? 'flex w-full min-w-0 items-center gap-2 text-left' : 'w-full text-left'">
@@ -84,25 +98,23 @@
             <span class="text-amount text-app-income-color whitespace-nowrap">{{ formattedIncomeAmount }}</span>
           </div>
         </template>
-        <template v-else-if="isPortfolioLinked">
+        <template v-else-if="linkTarget">
           <div :class="['flex items-center gap-1.5', compact && 'min-w-0']">
             <AccountLogo v-if="accountFrom" :account="accountFrom" class="size-5 shrink-0" />
             <span class="line-clamp-1 text-sm tracking-wider">
               {{ accountFrom?.name }}
             </span>
-            <ArrowRight :size="14" class="shrink-0 opacity-60" />
-            <BriefcaseIcon :size="14" class="text-app-transfer-color shrink-0" />
-            <template v-if="isLoadingPortfolioLink">
-              <div class="h-4 w-16 animate-pulse rounded bg-white/10" />
-            </template>
+            <ArrowRight :size="14" :class="['shrink-0 opacity-60', linkTarget.flowsToAccount && 'rotate-180']" />
+            <component :is="linkTarget.icon" :size="14" class="text-app-transfer-color shrink-0" />
+            <div v-if="linkTarget.isLoading" class="h-4 w-16 animate-pulse rounded bg-white/10" />
             <template v-else>
               <span
                 class="line-clamp-1 text-sm tracking-wider"
-                :class="{ 'text-muted-foreground line-through': isPortfolioDeleted }"
+                :class="{ 'text-muted-foreground line-through': linkTarget.isDeleted }"
               >
-                {{ portfolioName }}
+                {{ linkTarget.name }}
               </span>
-              <DeletedBadge v-if="isPortfolioDeleted" />
+              <DeletedBadge v-if="linkTarget.isDeleted" />
             </template>
           </div>
         </template>
@@ -120,9 +132,42 @@
             <span class="text-sm tracking-wider whitespace-nowrap">
               {{ category ? category.name : t('common.ui.other') }}
             </span>
+            <ResponsiveTooltip v-if="aiMatchReason" content-class-name="max-w-64" :delay-duration="100">
+              <template #content>
+                <p class="font-medium">{{ $t('common.transactions.record.matchedByAi') }}</p>
+                <p class="text-muted-foreground">{{ aiMatchReason }}</p>
+              </template>
+              <SparklesIcon
+                class="text-primary-text size-3.5 shrink-0 cursor-help"
+                role="img"
+                :aria-label="$t('common.transactions.record.matchedByAi')"
+                @click="isTouch && $event.stopPropagation()"
+              />
+            </ResponsiveTooltip>
+            <ResponsiveTooltip
+              v-if="transaction.addedByRule"
+              :content="$t('common.transactions.record.addedByRule')"
+              content-class-name="max-w-56"
+              :delay-duration="100"
+            >
+              <ZapIcon
+                class="text-primary-text size-3.5 shrink-0 cursor-help"
+                role="img"
+                :aria-label="$t('common.transactions.record.addedByRule')"
+                @click="isTouch && $event.stopPropagation()"
+              />
+            </ResponsiveTooltip>
+            <ResponsiveTooltip
+              v-if="addedByTooltip"
+              :content="addedByTooltip"
+              content-class-name="max-w-56"
+              :delay-duration="100"
+            >
+              <UsersIcon class="text-muted-foreground size-3.5 shrink-0 cursor-help" :aria-label="addedByTooltip" />
+            </ResponsiveTooltip>
             <PlannedIndicator v-if="!(hidePlannedMarker && transaction.isForecastOnly)" :transaction="transaction" />
             <SplitIndicator :transaction="transaction" />
-            <RefundIndicator :transaction="transaction" />
+            <RefundIndicator v-if="!hideRefundMarker" :transaction="transaction" />
             <TagsIndicator :tags="transaction.tags ?? []" :variant="tagsVariant" />
             <AttachmentIndicator :transaction="transaction" />
             <ResponsiveTooltip
@@ -220,8 +265,9 @@ import { buildMapUrl } from '@/common/utils/map-url';
 import { useOppositeTxRecord } from '@/composable/data-queries/opposite-tx-record';
 import type { BulkUnselectableReason } from '@/composable/transaction-selection';
 import { useTransactionPortfolioLink } from '@/composable/data-queries/portfolio-transfers';
+import { useTransactionVentureLink } from '@/composable/data-queries/venture/events';
 import { formatUIAmount } from '@/js/helpers';
-import { useAccountsStore, useCategoriesStore } from '@/stores';
+import { useAccountsStore, useCategoriesStore, useUserStore } from '@/stores';
 import {
   isTwoLegTransfer,
   ACCOUNT_CATEGORIES,
@@ -230,7 +276,19 @@ import {
   TransactionModel,
 } from '@bt/shared/types';
 import { format } from 'date-fns';
-import { ArrowRight, BriefcaseIcon, ExternalLinkIcon, InfoIcon, HandCoinsIcon, MapPinIcon } from '@lucide/vue';
+import {
+  ArrowRight,
+  BriefcaseIcon,
+  ExternalLinkIcon,
+  InfoIcon,
+  HandCoinsIcon,
+  MapPinIcon,
+  RocketIcon,
+  SparklesIcon,
+  UsersIcon,
+  ZapIcon,
+} from '@lucide/vue';
+import { useMediaQuery } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -242,6 +300,9 @@ import SplitIndicator from './indicators/split-indicator.vue';
 import TagsIndicator, { type TagsIndicatorVariant } from '@/components/common/tags-indicator.vue';
 
 const { t } = useI18n();
+
+// On touch the tooltip opens on tap, which would also open the transaction behind it.
+const isTouch = useMediaQuery('(pointer: coarse)');
 
 const props = withDefaults(
   defineProps<{
@@ -257,7 +318,12 @@ const props = withDefaults(
     compact?: boolean;
     /** Set where planned rows already sit under their own collapsible header. */
     hidePlannedMarker?: boolean;
+    hideRefundMarker?: boolean;
     tagsVariant?: TagsIndicatorVariant;
+    /** Badges the category circle with the account logo, so it applies to category-circle rows only. */
+    showAccount?: boolean;
+    /** Marks a row smart tracking linked; the reason shows in its tooltip. */
+    aiMatchReason?: string;
   }>(),
   {
     asButton: true,
@@ -273,6 +339,8 @@ const props = withDefaults(
 const { categoriesMap } = storeToRefs(useCategoriesStore());
 const accountsStore = useAccountsStore();
 const { accountsRecord } = storeToRefs(accountsStore);
+const { user: currentUser } = storeToRefs(useUserStore());
+
 const emit = defineEmits<{
   'record-click': [[value: TransactionModel, oppositeTx: TransactionModel | undefined]];
   'selection-change': [{ value: boolean; id: string; index: number }];
@@ -299,6 +367,31 @@ const { data: portfolioLinkData, isLoading: isLoadingPortfolioLink } = useTransa
 const portfolioName = computed(() => portfolioLinkData.value?.portfolioName ?? '');
 const isPortfolioDeleted = computed(() => portfolioLinkData.value?.isPortfolioDeleted ?? false);
 
+const { data: ventureLinkData, isLoading: isLoadingVentureLink } = useTransactionVentureLink(transaction);
+
+const linkTarget = computed(() => {
+  if (isPortfolioLinked.value) {
+    return {
+      icon: BriefcaseIcon,
+      name: portfolioName.value,
+      isDeleted: isPortfolioDeleted.value,
+      isLoading: isLoadingPortfolioLink.value,
+      flowsToAccount: false,
+    };
+  }
+  if (transaction.value.transferNature === TRANSACTION_TRANSFER_NATURE.transfer_to_venture) {
+    return {
+      icon: RocketIcon,
+      name: ventureLinkData.value?.dealName ?? '',
+      isDeleted: ventureLinkData.value?.isDealDeleted ?? false,
+      isLoading: isLoadingVentureLink.value,
+      // Distributions and exits pay out of the deal into the account.
+      flowsToAccount: transaction.value.transactionType === TRANSACTION_TYPES.income,
+    };
+  }
+  return null;
+});
+
 // Show grouped transfer display when we have both sides
 const shouldShowGroupedTransfer = computed(() => {
   return (
@@ -323,6 +416,16 @@ const externalLinkHref = computed(() =>
 );
 const locationMapUrl = computed(() => (transaction.value.location ? buildMapUrl(transaction.value.location) : null));
 const accountFrom = computed(() => accountsRecord.value[transaction.value.accountId]);
+
+// Tracker-scoped fetches enrich each tx with `addedBy = { id, username }` describing who
+// attached the row to the tracker (recipient via metadata.addedByUserId, else the tracker
+// owner). The icon is only meaningful when the attacher is someone other than the
+// viewer — otherwise it reads "Added by yourself", which is noise.
+const addedByTooltip = computed(() => {
+  const addedBy = transaction.value.addedBy;
+  if (!addedBy || addedBy.id === currentUser.value?.id) return undefined;
+  return t('common.transactions.record.addedByTooltip', { handle: `@${addedBy.username}` });
+});
 
 const accountTo = computed(() =>
   oppositeTransferTransaction.value ? accountsRecord.value[oppositeTransferTransaction.value.accountId] : undefined,

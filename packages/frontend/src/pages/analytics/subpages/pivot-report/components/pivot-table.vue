@@ -109,9 +109,7 @@
                 </DesktopOnlyTooltip>
                 <BrandLogo
                   v-if="rowDimension === 'payee'"
-                  :domain="row.logoDomain ?? null"
-                  :initials="row.logoInitials ?? null"
-                  :color="row.logoColor ?? null"
+                  v-bind="toEntityLogoDisplayProps(row)"
                   :name="row.label"
                   class="size-4 shrink-0"
                 />
@@ -188,12 +186,13 @@
 
 <script setup lang="ts">
 import BrandLogo from '@/components/common/brand-logo.vue';
+import { toEntityLogoDisplayProps } from '@/components/common/logo-selection';
 import Button from '@/components/lib/ui/button/Button.vue';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useFormatCurrency } from '@/composable/formatters';
 import { cn } from '@/lib/utils';
-import type { endpointsTypes } from '@bt/shared/types';
+import type { GetPivotReportResponse, PivotMeasure, PivotRowDimension, PivotRow } from '@bt/shared/types';
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, ChevronsDownUpIcon, ChevronsUpDownIcon } from '@lucide/vue';
 import { type CSSProperties, type Component, computed, ref } from 'vue';
 
@@ -211,9 +210,9 @@ import {
 } from '../composables/pivot-derivations';
 
 const props = defineProps<{
-  data: endpointsTypes.GetPivotReportResponse;
-  measure: endpointsTypes.PivotMeasure;
-  rowDimension: endpointsTypes.PivotRowDimension;
+  data: GetPivotReportResponse;
+  measure: PivotMeasure;
+  rowDimension: PivotRowDimension;
   heatmap: boolean;
   showDelta: boolean;
   rowHeaderLabel: string;
@@ -305,7 +304,7 @@ const cellStyle = ({ value, columnKey }: { value: number; columnKey: string }): 
 
 const formatMoney = (value: number): string => formatCompactAmount(value, currencyCode.value);
 
-const deltaValue = ({ row, index }: { row: endpointsTypes.PivotRow; index: number }): number | null => {
+const deltaValue = ({ row, index }: { row: PivotRow; index: number }): number | null => {
   if (!props.showDelta || index === 0) return null;
   const currentColumn = columns.value[index];
   const previousColumn = columns.value[index - 1];
@@ -316,14 +315,14 @@ const deltaValue = ({ row, index }: { row: endpointsTypes.PivotRow; index: numbe
   return computeDelta({ current, previous });
 };
 
-const deltaLabel = ({ row, index }: { row: endpointsTypes.PivotRow; index: number }): string | null => {
+const deltaLabel = ({ row, index }: { row: PivotRow; index: number }): string | null => {
   const delta = deltaValue({ row, index });
   if (delta === null) return null;
   const pct = Math.round(delta * 100);
   return `${pct > 0 ? '+' : ''}${pct}%`;
 };
 
-const deltaClass = ({ row, index }: { row: endpointsTypes.PivotRow; index: number }): string => {
+const deltaClass = ({ row, index }: { row: PivotRow; index: number }): string => {
   const delta = deltaValue({ row, index });
   if (delta === null || delta === 0) return 'text-muted-foreground';
   return isDeltaGood({ delta, measure: props.measure }) ? 'text-app-income-color' : 'text-app-expense-color';

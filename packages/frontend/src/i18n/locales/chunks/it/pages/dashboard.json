@@ -122,7 +122,14 @@
       "categoryTracker": {
         "title": "Categorie monitorate",
         "addCategory": "Aggiungi categoria",
-        "selectCategories": "Seleziona categorie"
+        "selectCategories": "Seleziona categorie",
+        "sort": {
+          "title": "Sort by",
+          "custom": "Custom order",
+          "spendDesc": "Highest spend first",
+          "spendAsc": "Lowest spend first"
+        },
+        "showTrend": "Show 6-month trend"
       },
       "cashFlow": {
         "title": "Flusso di cassa",
@@ -133,7 +140,10 @@
         "saved": "Risparmiato",
         "previousPeriodsTrend": "Andamento dei periodi precedenti",
         "viewDetails": "Visualizza dettagli",
-        "notAvailable": "N/D"
+        "notAvailable": "N/D",
+        "savingsRateLine": "Show savings rate line",
+        "savingsRate": "Savings rate",
+        "noIncome": "no income"
       },
       "netWorth": {
         "title": "Patrimonio netto",
@@ -161,7 +171,8 @@
           "change": "Cambia",
           "netWorth": "Patrimonio netto",
           "noData": "Nessun dato per questo Periodo"
-        }
+        },
+        "changeInPeriod": "Change in {period}"
       },
       "creditUtilization": {
         "title": "Utilizzo del credito",
@@ -223,6 +234,26 @@
         "taxes": {
           "name": "Aliquota fiscale media",
           "description": "Quota delle entrate destinata alle imposte, con andamento su 12 mesi"
+        },
+        "budget": {
+          "name": "Budget",
+          "description": "What is left in the current budget period, line by line"
+        },
+        "trackers": {
+          "name": "Trackers",
+          "description": "Each active tracker with how much of its limit is used and its net"
+        },
+        "cashAccounts": {
+          "name": "Cash & accounts",
+          "description": "Total cash across your accounts, its change since last month, and how many months of expenses it covers"
+        },
+        "assetsLiabilities": {
+          "name": "Assets & liabilities",
+          "description": "What you own, what you owe, and the net worth between them"
+        },
+        "spendingPace": {
+          "name": "Spending pace",
+          "description": "Month-to-date spending with a forecast for the rest of the month, compared with last month or your 3-month average."
         }
       },
       "taxes": {
@@ -256,6 +287,103 @@
           "m3": "Ultimi 3 mesi",
           "m6": "Ultimi 6 mesi",
           "m12": "Ultimi 12 mesi"
+        }
+      },
+      "budget": {
+        "spent": "spent",
+        "ringLabel": "{percent}% of the budget is spent",
+        "leftOf": "left of {total}",
+        "overOf": "over the {total} budget",
+        "headerLeft": "{amount} left",
+        "headerOver": "{amount} over",
+        "daysLeft": "{count} day left | {count} days left",
+        "lastDay": "Last day of the period",
+        "empty": "No budget yet",
+        "create": "Set up a budget",
+        "sort": {
+          "overspent": "Most overspent first"
+        }
+      },
+      "trackers": {
+        "spentOfLimit": "{spent} of {limit}",
+        "inOut": "{income} in, {expense} out",
+        "net": "Saldo netto",
+        "noLimit": "Nessun limite",
+        "empty": "Nessun monitoraggio",
+        "ended": "Concluso",
+        "create": "Crea monitoraggio"
+      },
+      "cashAccounts": {
+        "vsLastMonth": "vs last month",
+        "runwayUnit": "mo",
+        "runwayLabel": "of expenses",
+        "loadFailed": "Couldn't load your accounts",
+        "runwayHint": {
+          "description": "It's generally recommended to keep an emergency fund that covers 3–6 months of your expenses.",
+          "critical": "Under 1 month: very little buffer",
+          "low": "1–3 months: below recommended",
+          "good": "3+ months: recommended range"
+        }
+      },
+      "assetsLiabilities": {
+        "netWorth": "Net worth",
+        "owesShare": "You owe {percent} of what you own",
+        "noDebt": "No debt",
+        "assets": "Beni",
+        "liabilities": "Passività",
+        "loadFailed": "Couldn't load your assets and liabilities",
+        "buckets": {
+          "cash": "Contanti",
+          "investments": "Investments",
+          "ventures": "Investimenti",
+          "vehicles": "Veicoli",
+          "loans": "Prestiti & Finanziamenti",
+          "creditAndOverdrafts": "Credit & overdrafts"
+        }
+      },
+      "spendingPace": {
+        "tabs": {
+          "lastMonth": "vs last month",
+          "average": "vs 3-mo avg"
+        },
+        "spentIn": "Spent in {month}",
+        "onTrackFor": "On track for {amount}",
+        "vsComparison": "{percent} vs {name}",
+        "comparison": {
+          "average": "{n}-mo avg"
+        },
+        "stats": {
+          "byToday": "{name} by today",
+          "total": "{name} total",
+          "daysLeft": "Days left"
+        },
+        "chart": {
+          "today": "Today",
+          "ariaLabel": "Spending this month"
+        },
+        "tooltip": {
+          "spent": "Spent",
+          "forecast": "Forecast",
+          "spikeFrom": "Spent on {date}"
+        },
+        "legend": {
+          "thisMonth": "This month",
+          "forecast": "Forecast",
+          "averageMonth": "Average month"
+        },
+        "hints": {
+          "noHistory": "The comparison appears after your first full month.",
+          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far."
+        },
+        "loadFailed": "Couldn't load your spending.",
+        "settings": {
+          "spikes": {
+            "title": "Spike marks",
+            "summary": "Days with ≥{percent}% of the month's spending",
+            "inputLabel": "Mark a day when it reaches",
+            "hint": "Share of last month's total spending, 1–100%. Marks show in “vs last month” mode."
+          },
+          "saved": "Setting updated"
         }
       }
     },
@@ -311,7 +439,10 @@
         "tagsStyleTitle": "Etichette",
         "tagsStyleNames": "Names",
         "tagsStyleBars": "Bars",
-        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again.",
+        "showAccountTitle": "Conto",
+        "showAccountDescription": "Show the account logo on each transaction",
+        "showAccountSaveError": "Couldn't save the account setting. Please try again."
       },
       "overdueBadge": "Scaduto",
       "scheduledBadge": "Programmato",

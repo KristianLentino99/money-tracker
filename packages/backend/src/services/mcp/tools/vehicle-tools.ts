@@ -1,13 +1,13 @@
 import { recordId } from '@common/lib/zod/custom-types';
-import createActivityController from '@controllers/vehicle-maintenance/create-activity';
-import createPlanController from '@controllers/vehicle-maintenance/create-plan';
-import createVisitController from '@controllers/vehicle-maintenance/create-visit';
+import { schema as createActivitySchema } from '@controllers/vehicle-maintenance/create-activity';
+import { schema as createPlanSchema } from '@controllers/vehicle-maintenance/create-plan';
+import { schema as createVisitSchema } from '@controllers/vehicle-maintenance/create-visit';
 import { serializeVehicleMaintenanceActivity } from '@controllers/vehicle-maintenance/serialize-activity';
-import updateActivityController from '@controllers/vehicle-maintenance/update-activity';
-import updatePlanController from '@controllers/vehicle-maintenance/update-plan';
-import updateVisitController from '@controllers/vehicle-maintenance/update-visit';
-import createVehicleController from '@controllers/vehicles/create-vehicle';
-import updateVehicleController from '@controllers/vehicles/update-vehicle';
+import { schema as updateActivitySchema } from '@controllers/vehicle-maintenance/update-activity';
+import { schema as updatePlanSchema } from '@controllers/vehicle-maintenance/update-plan';
+import { schema as updateVisitSchema } from '@controllers/vehicle-maintenance/update-visit';
+import { schema as createVehicleSchema } from '@controllers/vehicles/create-vehicle';
+import { schema as updateVehicleSchema } from '@controllers/vehicles/update-vehicle';
 import { trackMcpToolUsed } from '@js/utils/posthog';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { serializeEligibleMaintenanceTransaction } from '@root/serializers/eligible-maintenance-transactions.serializer';
@@ -37,50 +37,50 @@ import { z } from 'zod';
 import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
 
 const createVehicleInputSchema = {
-  data: createVehicleController.schema.shape.body.describe(
+  data: createVehicleSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const updateVehicleInputSchema = {
   vehicleId: recordId(),
-  data: updateVehicleController.schema.shape.body.describe(
+  data: updateVehicleSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const createActivityInputSchema = {
-  data: createActivityController.schema.shape.body.describe(
+  data: createActivitySchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const updateActivityInputSchema = {
   activityId: recordId(),
-  data: updateActivityController.schema.shape.body.describe(
+  data: updateActivitySchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const createPlanInputSchema = {
   vehicleId: recordId(),
-  data: createPlanController.schema.shape.body.describe(
+  data: createPlanSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const updatePlanInputSchema = {
   vehicleId: recordId(),
   planId: recordId(),
-  data: updatePlanController.schema.shape.body.describe(
+  data: updatePlanSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const createVisitInputSchema = {
   vehicleId: recordId(),
-  data: createVisitController.schema.shape.body.describe(
+  data: createVisitSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };
 const updateVisitInputSchema = {
   vehicleId: recordId(),
   visitId: recordId(),
-  data: updateVisitController.schema.shape.body.describe(
+  data: updateVisitSchema.shape.body.describe(
     'Fields accepted by the matching REST operation. Amounts are decimals; distance uses the user distance unit.',
   ),
 };

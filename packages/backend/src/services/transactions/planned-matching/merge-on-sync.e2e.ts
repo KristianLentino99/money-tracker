@@ -1,12 +1,15 @@
-import type { ExternalMonobankTransactionResponse, RecordId } from '@bt/shared/types';
 import {
   ACCOUNT_TYPES,
   BANK_PROVIDER_TYPE,
+  type ExternalMonobankTransactionResponse,
   RESOURCE_TYPES,
+  SUBSCRIPTION_FREQUENCIES,
+  SUBSCRIPTION_PERIOD_STATUSES,
+  type RecordId,
   SHARE_PERMISSIONS,
+  type SplitInput,
   TRANSACTIONS_WRITE_SCOPES,
 } from '@bt/shared/types';
-import type { endpointsTypes } from '@bt/shared/types';
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import ResourceShares from '@models/resource-shares.model';
 import Transactions from '@models/transactions.model';
@@ -220,6 +223,76 @@ describe('Planned transactions – merge on sync', () => {
       // survive them.
       await helpers.sleep(1000);
       expect((await helpers.getTransactionById({ id: plan.id, raw: true }))!.categoryId).toBe(categoryId);
+    }, 30000);
+
+    it('settles the subscription period a linked plan belongs to when the bank row confirms it', async () => {
+      const now = new Date();
+      const anchorTime = subDays(startOfDay(now), 10);
+      const { connectionId, accountId } = await anchoredAccount({ anchorTime });
+
+      const dueDate = format(addDays(startOfDay(now), 2), 'yyyy-MM-dd');
+      const subscription = await helpers.createSubscription({
+        name: 'Rent',
+        frequency: SUBSCRIPTION_FREQUENCIES.monthly,
+        startDate: dueDate,
+        dueDate,
+        accountId,
+        expectedAmount: 250,
+        expectedCurrencyCode: global.BASE_CURRENCY.code,
+        raw: true,
+      });
+
+      const [plan] = await helpers.createPlannedTransaction({
+        payload: { accountId, amount: 250, time: addDays(startOfDay(now), 2).toISOString(), note: 'Rent' },
+        raw: true,
+      });
+      await helpers.linkTransactionsToSubscription({ id: subscription.id, transactionIds: [plan!.id], raw: true });
+
+      const before = await helpers.getSubscriptionById({ id: subscription.id, raw: true });
+      expect(before.periods.find((p) => p.dueDate === dueDate)!.status).not.toBe(SUBSCRIPTION_PERIOD_STATUSES.paid);
+
+      const incoming = helpers.monobank.buildTransaction({
+        amount: -25000,
+        time: subDays(startOfDay(now), 1),
+        description: 'RENT LANDLORD',
+      });
+      await syncAccount({ connectionId, accountId, transactions: [incoming] });
+
+      const after = await helpers.getSubscriptionById({ id: subscription.id, raw: true });
+      const period = after.periods.find((p) => p.dueDate === dueDate)!;
+      expect(period.status).toBe(SUBSCRIPTION_PERIOD_STATUSES.paid);
+      expect(period.transactionId).toBe(plan!.id);
+    }, 30000);
+
+    it('settles the subscription period with a synced row its matching rule picks up', async () => {
+      const now = new Date();
+      const { connectionId, accountId } = await anchoredAccount({ anchorTime: subDays(startOfDay(now), 10) });
+
+      const dueDate = format(subDays(startOfDay(now), 1), 'yyyy-MM-dd');
+      const subscription = await helpers.createSubscription({
+        name: 'Netflix',
+        frequency: SUBSCRIPTION_FREQUENCIES.monthly,
+        startDate: dueDate,
+        dueDate,
+        accountId,
+        expectedAmount: 10,
+        expectedCurrencyCode: global.BASE_CURRENCY.code,
+        matchingRules: { rules: [{ field: 'note', operator: 'contains_any', value: ['netflix'] }] },
+        raw: true,
+      });
+
+      const incoming = helpers.monobank.buildTransaction({
+        amount: -1000,
+        time: subDays(startOfDay(now), 1),
+        description: 'NETFLIX.COM',
+      });
+      await syncAccount({ connectionId, accountId, transactions: [incoming] });
+
+      const synced = (await listAccountTransactions({ accountId })).find((tx) => tx.note === 'NETFLIX.COM')!;
+      const after = await helpers.getSubscriptionById({ id: subscription.id, raw: true });
+      const period = after.periods.find((p) => p.dueDate === dueDate)!;
+      expect(period.status).toBe(SUBSCRIPTION_PERIOD_STATUSES.paid);
+      expect(period.transactionId).toBe(synced.id);
     }, 30000);
 
     it('carries the bank receipt id onto the merged plan', async () => {
@@ -484,7 +557,7 @@ describe('Planned transactions – merge on sync', () => {
      * One booked row (the anchor that unlocks matching), one plan, then the pending payload
      * that confirms it. Returns the merged row id.
      */
-    const mergePendingIntoPlan = async ({ splits }: { splits?: endpointsTypes.SplitInput[] } = {}) => {
+    const mergePendingIntoPlan = async ({ splits }: { splits?: SplitInput[] } = {}) => {
       await helpers.patchUserSettings({ patch: { importPendingBankTransactions: true }, raw: true });
       helpers.enablebanking.setFixedTransactions([ANCHOR]);
       const { connectionId, accountId } = await setupConnectionWithAccount();

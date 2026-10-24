@@ -13,3 +13,5 @@ export {
   trackAutomationAppliedToHistory,
 } from './transaction-automations';
 export { trackSubscriptionStarted } from './billing';
+export { trackAiModelAttemptFailed, trackAiModelAnswered, type AiAttemptFailureKind } from './ai-fallback';
+export { trackAiCapReached, trackAiUsageMonthEnd } from './ai-allowance';

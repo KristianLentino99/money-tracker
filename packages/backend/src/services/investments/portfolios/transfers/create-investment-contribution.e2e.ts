@@ -1,6 +1,6 @@
 import { TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES, type RecordId } from '@bt/shared/types';
-import { ASSET_CLASS, SECURITY_PROVIDER } from '@bt/shared/types/investments';
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { SECURITY_PROVIDER } from '@bt/shared/types/investments';
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import { ERROR_CODES } from '@js/errors';
 import * as helpers from '@tests/helpers';
 
@@ -11,6 +11,10 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
   let accountId: RecordId;
   let categoryId: RecordId;
   let securityIds: RecordId[];
+
+  afterEach(async () => {
+    await helpers.clearExchangeRatesForDates({ dates: [new Date(`${CONTRIBUTION_DATE}T00:00:00.000Z`)] });
+  });
 
   beforeEach(async () => {
     const [portfolio, account, category, securities] = await Promise.all([
@@ -114,12 +118,22 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
   });
 
   it('resolves and creates a holding for a newly searched security', async () => {
+    await helpers.seedUsdExchangeRates({
+      date: new Date(`${CONTRIBUTION_DATE}T00:00:00.000Z`),
+      ratesPerUsd: { [global.BASE_CURRENCY.code]: helpers.AED_PER_USD },
+    });
+
     const usdAccount = await helpers.createAccount({
       payload: helpers.buildAccountPayload({ name: 'USD brokerage funding', currencyCode: 'USD' }),
       raw: true,
     });
     expect(usdAccount).toHaveProperty('id');
-    const contribution = await helpers.createInvestmentContribution({
+    const searchResult = await helpers.searchSecurityViaFmp({
+      symbol: 'CCC',
+      name: 'Gamma ETF',
+      currencyCode: 'USD',
+    });
+    const response = await helpers.createInvestmentContribution({
       portfolioId,
       payload: {
         accountId: usdAccount.id,
@@ -128,17 +142,7 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
         categoryId,
         purchases: [
           {
-            searchResult: {
-              symbol: 'CCC',
-              providerSymbol: 'CCC',
-              name: 'Gamma ETF',
-              assetClass: ASSET_CLASS.stocks,
-              providerName: SECURITY_PROVIDER.fmp,
-              currencyCode: 'USD',
-              exchangeAcronym: 'NASDAQ',
-              exchangeMic: 'XNAS',
-              exchangeName: 'NASDAQ',
-            },
+            searchResult,
             quantity: '1',
             price: '150',
             fees: '0',
@@ -146,8 +150,9 @@ describe('Investment contribution (POST /investments/portfolios/:id/contribution
           },
         ],
       },
-      raw: true,
     });
+    expect(response.statusCode).toBe(201);
+    const contribution = helpers.extractResponse(response);
 
     const searchedSecurityId = contribution.investmentTransactions![0]!.securityId;
     expect(searchedSecurityId).not.toBe(securityIds[0]);

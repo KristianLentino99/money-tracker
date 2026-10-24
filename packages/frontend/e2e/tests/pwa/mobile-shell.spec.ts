@@ -9,7 +9,7 @@ test.describe('@mobile-shell mobile application shell', () => {
   test.describe.configure({ mode: 'serial' });
 
   for (const width of MOBILE_WIDTHS) {
-    test(`keeps the five-tab bar usable at ${width}px`, async ({ page, testUser }, testInfo) => {
+    test(`keeps the four-tab bar usable at ${width}px`, async ({ page, testUser }, testInfo) => {
       await page.setViewportSize({ width, height: 844 });
       await loginViaUI({ page, email: testUser.email, password: testUser.password });
       await completeOnboarding({ request: page.request, currencyCode: CURRENCY });
@@ -19,7 +19,7 @@ test.describe('@mobile-shell mobile application shell', () => {
 
       const navigation = page.getByTestId('mobile-primary-navigation');
       await expect(navigation).toBeVisible();
-      await expect(navigation.locator('[data-mobile-tab]')).toHaveCount(5);
+      await expect(navigation.locator('[data-mobile-tab]')).toHaveCount(4);
 
       const addTransactionButton = page.getByTestId('mobile-add-transaction');
       await expect(addTransactionButton).toBeVisible();

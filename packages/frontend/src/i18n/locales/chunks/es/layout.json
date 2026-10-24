@@ -14,16 +14,17 @@
     "accountDetails": "Detalles de la cuenta",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
-    "plan": "Presupuesto",
     "planned": {
-      "planned": "Previsión",
-      "subscriptions": "Cargos recurrentes"
+      "planned": "Planificado",
+      "subscriptions": "Cargos recurrentes",
+      "budgets": "Presupuestos"
     },
     "venture": "Venture",
     "helpAndDocs": "Ayuda & Documentación",
     "appVersion": "App version {version}",
     "home": "Home",
-    "more": "More"
+    "more": "More",
+    "budget": "Presupuestos"
   },
   "sidebar": {
     "collapse": "Contraer barra lateral",
@@ -69,7 +70,8 @@
       "syncedTime": "Sincronizado {time}",
       "syncingAccounts": "Sincronizando {count} cuentas",
       "stuck": "Sincronización bloqueada",
-      "failed": "Sincronización fallida, algunas cuentas necesitan atención"
+      "failed": "Sincronización fallida, algunas cuentas necesitan atención",
+      "connectBank": "Conectar banco"
     },
     "categorization": {
       "title": "Categorización IA",
@@ -86,7 +88,9 @@
     "moreActions": "Más formas de añadir datos",
     "importDataHint": "Archivo CSV o extracto bancario",
     "attachInvoice": "Adjuntar factura",
-    "attachInvoiceHint": "Encontramos la transacción a la que pertenece"
+    "attachInvoiceHint": "Encontramos la transacción a la que pertenece",
+    "feedback": "Enviar comentarios",
+    "support": "Apoyar"
   },
   "themeSelector": {
     "light": "Claro",
@@ -127,7 +131,8 @@
       "weeksAgo": "hace {count} semana | hace {count} semanas",
       "monthsAgo": "hace {count} mes | hace {count} meses",
       "yearsAgo": "hace {count} año | hace {count} años"
-    }
+    },
+    "connectButton": "Conectar"
   },
   "banners": {
     "recoveryMethod": {
@@ -276,6 +281,14 @@
           "share-account": {
             "title": "Compartir una cuenta",
             "description": "Abra cualquier cuenta y use la acción Compartir para conceder acceso de lectura o escritura a un usuario."
+          },
+          "create-budget": {
+            "title": "Configurar un presupuesto",
+            "description": "Establezca límites de gasto por categorías"
+          },
+          "connect-bank": {
+            "title": "Conectar una cuenta bancaria",
+            "description": "Sincronice transacciones automáticamente"
           }
         },
         "ui": {
@@ -290,6 +303,10 @@
           "progressText": "{completed} de {total} completadas",
           "categoryProgress": "{completed} de {total} completadas"
         }
+      },
+      "connectBank": {
+        "title": "Conectar su banco",
+        "description": "Sincronice automáticamente las transacciones de su banco"
       }
     }
   },
@@ -303,5 +320,31 @@
       "description": "Explore insights, planning tools, imports, and settings."
     },
     "addTransaction": "Add transaction"
+  },
+  "feedback": {
+    "dialog": {
+      "title": "Dejar comentarios",
+      "description": "Cuéntenos qué funciona y qué no.",
+      "typeLabel": "Tipo",
+      "typePlaceholder": "Elija un tipo",
+      "types": {
+        "bug": "Algo no funciona",
+        "featureRequest": "Quiero una función",
+        "other": "Otra cosa"
+      },
+      "docsHint": "¿No estás seguro de cómo funciona algo? Revisa la {link} primero.",
+      "docsHintLink": "documentos",
+      "messageLabel": "Su comentario",
+      "messagePlaceholder": "¿Qué ocurrió o qué le gustaría ver?",
+      "messageRequired": "Escriba un mensaje antes de enviarlo.",
+      "submit": "Enviar",
+      "thanks": "Gracias, leemos todos los mensajes.",
+      "unavailable": "El envío no está disponible en este momento. Use el tablero de abajo en su lugar.",
+      "or": "o",
+      "board": {
+        "title": "Publíquelo en el tablero público",
+        "description": "Vote las ideas de otras personas, vea qué está ya planificado y reciba una respuesta a la suya."
+      }
+    }
   }
 }

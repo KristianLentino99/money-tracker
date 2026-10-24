@@ -1,9 +1,9 @@
-import { isLinkedTransfer } from '@bt/shared/const/transfers';
-import { ACCOUNT_TYPES, RecordId, SUBSCRIPTION_LINK_STATUS } from '@bt/shared/types';
+import { isLinkedTransfer, ACCOUNT_TYPES, RecordId, SUBSCRIPTION_LINK_STATUS } from '@bt/shared/types';
 import { t } from '@i18n/index';
 import { NotFoundError, ValidationError } from '@js/errors';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import SubscriptionTransactions from '@models/subscription-transactions.model';
+import TrackerTransactions from '@models/tracker-transactions.model';
 import TransactionGroupItems from '@models/transaction-group-items.model';
 import { dissolveUndersizedGroups } from '@models/transaction-groups.model';
 import { findTransactions, updateTransactions } from '@models/transactions-query';
@@ -57,6 +57,7 @@ export const detachLinks = async ({ transactionIds }: { transactionIds: RecordId
   const groupItems = await TransactionGroupItems.findAll({ where, attributes: ['groupId'] });
 
   await Promise.all([
+    TrackerTransactions.destroy({ where }),
     TransactionGroupItems.destroy({ where }),
     // `unlinked` markers stay so a restored row is not auto-matched back to a subscription the user unlinked.
     SubscriptionTransactions.destroy({ where: { ...where, status: SUBSCRIPTION_LINK_STATUS.active } }),

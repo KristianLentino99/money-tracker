@@ -6,6 +6,7 @@
       "submitButton": "Accedi",
       "noAccount": "Non hai un conto?",
       "signupsDisabledTooltip": "Le nuove registrazioni sono disabilitate dall’amministratore di questa istanza",
+      "forgotPassword": "Forgot password?",
       "errors": {
         "incorrectEmailOrPassword": "Email o password non corrette.",
         "incorrectPassword": "Password non corretta.",
@@ -30,7 +31,8 @@
       "oauthButton": {
         "signIn": "Accedi con {provider}",
         "signUp": "Registrati con {provider}"
-      }
+      },
+      "lastUsed": "Last used"
     }
   }
 }

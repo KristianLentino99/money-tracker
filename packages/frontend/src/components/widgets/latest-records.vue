@@ -8,6 +8,7 @@ import { useFormatCurrency } from '@/composable/formatters';
 import { buttonVariants } from '@/components/lib/ui/button';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import BrandLogo from '@/components/common/brand-logo.vue';
+import { toEntityLogoDisplayProps } from '@/components/common/logo-selection';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import TransactionsList from '@/components/transactions-list/transactions-list.vue';
@@ -31,7 +32,7 @@ import {
   readLatestRecordsExclusions,
   readLatestRecordsTagsVariant,
 } from './latest-records-config';
-import { useIncludePlannedConfig } from './use-include-planned-config';
+import { useIncludePlannedConfig, useWidgetConfigFlag } from './use-include-planned-config';
 
 // Days ahead threshold for "upcoming" payments shown in the widget.
 const UPCOMING_DAYS_WINDOW = 3;
@@ -54,6 +55,10 @@ const transferNatures = computed(() => buildLatestRecordsTransferNatures(exclusi
 const excludeBalanceAdjustments = computed(() => exclusions.value.excludeBalanceAdjustments);
 const { includePlanned } = useIncludePlannedConfig();
 const tagsVariant = computed(() => readLatestRecordsTagsVariant({ widgetConfig: widgetConfigRef?.value }));
+const { isOn: showAccount } = useWidgetConfigFlag({
+  key: 'showAccount',
+  saveErrorKey: 'widgets.latestRecords.settings.showAccountSaveError',
+});
 
 const { data: transactions, isFetching: isTxFetching } = useQuery({
   queryKey: [...VUE_QUERY_CACHE_KEYS.widgetLatestRecords, transferNatures, excludeBalanceAdjustments, includePlanned],
@@ -132,9 +137,7 @@ function handleMarkPaid({ subscription }: { subscription: SubscriptionListItem }
       name: subscription.name,
       expectedAmount: subscription.expectedAmount ?? null,
       expectedCurrencyCode: subscription.expectedCurrencyCode ?? null,
-      transactionType: subscription.transactionType,
       accountId: subscription.accountId ?? null,
-      periodDueDate: period.dueDate,
     },
     periodId: period.id,
   });
@@ -187,7 +190,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
         <ListIcon class="size-32" />
       </EmptyState>
     </template>
-    <ScrollArea v-else class="-mx-2 min-h-0 flex-1" viewport-class="px-2 md:overscroll-contain">
+    <ScrollArea v-else class="-mx-2 min-h-0 flex-1" viewport-class="px-2 md:overscroll-contain-if-scrollable">
       <!-- Scheduled payment rows: one row per item, overdue first, sorted by dueDate -->
       <template v-if="includeScheduled && scheduledRows.length > 0">
         <div
@@ -195,13 +198,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
           :key="sub.id"
           class="bg-muted/40 mb-1.5 flex items-center gap-2.5 rounded-md px-3 py-2"
         >
-          <BrandLogo
-            :domain="sub.logoDomain ?? null"
-            :initials="sub.logoInitials ?? null"
-            :color="sub.logoColor ?? null"
-            :name="sub.name"
-            class="size-5 shrink-0"
-          />
+          <BrandLogo v-bind="toEntityLogoDisplayProps(sub)" :name="sub.name" class="size-5 shrink-0" />
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm leading-tight font-medium">
               {{ sub.name }}
@@ -247,6 +244,7 @@ const isDataEmpty = computed(() => !isTxFetching.value && pastTransactions.value
         :transactions="pastTransactions"
         :max-display="txMaxDisplay"
         :tags-variant="tagsVariant"
+        :show-account="showAccount"
       />
     </ScrollArea>
 

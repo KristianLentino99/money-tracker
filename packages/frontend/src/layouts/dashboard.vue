@@ -6,7 +6,7 @@
     </template>
 
     <ScrollArea ref="scrollAreaRef" class="min-h-0 min-w-0 flex-1" :scroll-area-id="SCROLL_AREA_IDS.dashboard">
-      <ui-header class="bg-background sticky top-0 z-10 pt-[env(safe-area-inset-top)]" />
+      <ui-header class="bg-background sticky top-0 z-30 pt-[env(safe-area-inset-top)]" />
 
       <template v-if="isAppInitialized">
         <div class="max-md:pb-10">

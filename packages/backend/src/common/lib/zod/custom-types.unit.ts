@@ -15,6 +15,11 @@ describe('dateBound', () => {
       expect(schema.safeParse('2025-13-45').success).toBe(false);
     });
 
+    it('rejects a day that would roll over into the next month', () => {
+      expect(schema.safeParse('2026-02-30').success).toBe(false);
+      expect(schema.safeParse('2026-02-28').success).toBe(true);
+    });
+
     it('rejects a full ISO datetime', () => {
       expect(schema.safeParse('2025-01-15T00:00:00.000Z').success).toBe(false);
     });
@@ -180,7 +185,7 @@ describe('withDateOrder', () => {
     }
   });
 
-  // The pattern domain entities (plan, subscription) use: their own asymmetric /
+  // The pattern domain entities (tracker, subscription) use: their own asymmetric /
   // nullable bound optionality via `dateBound`, plus the shared ordering guard.
   describe('nullable / asymmetric domain-entity bounds', () => {
     const schema = withDateOrder(

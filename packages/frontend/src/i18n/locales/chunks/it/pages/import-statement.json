@@ -33,7 +33,9 @@
         "transactions": "transazioni",
         "fromLabel": "dal",
         "inLabel": "in",
+        "unreadableImageNamed": "{name} could not be read as an image",
         "continueMessage": "Continua per selezionare un conto per queste transazioni.",
+        "pasteImageButton": "Paste image",
         "tokenWarning": {
           "medium": {
             "title": "Rilevato file di grandi dimensioni",
@@ -49,7 +51,10 @@
           }
         },
         "freeApiWarning": "Stai usando l'accesso IA gratuito, che ha limiti giornalieri di utilizzo. Per un servizio rapido e senza interruzioni, aggiungi la tua chiave API.",
+        "pasteShortcutHint": "or press {shortcut}",
         "addApiKeyLink": "Aggiungi la tua chiave API nelle impostazioni →",
+        "clipboardNoImage": "No image found in the clipboard.",
+        "clipboardReadFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut.",
         "status": {
           "sendingFile": "Invio del file all'IA in corso...",
           "readingDocument": "L'IA sta leggendo il documento...",
@@ -84,7 +89,10 @@
           "extracted": "{count} transaction | {count} transactions",
           "failed": "Failed"
         },
-        "continueButton": "Continue to Account"
+        "continueButton": "Continue to account",
+        "invalidPdfNamed": "{name} doesn't appear to be a valid PDF. The file may be corrupted or renamed.",
+        "invalidImageNamed": "{name} doesn't appear to be a valid JPG, PNG or WebP image. The file may be corrupted or renamed.",
+        "invalidTextNamed": "{name} doesn't appear to be a valid {ext} file. The file may be binary or renamed."
       },
       "accountSelect": {
         "newlyCreated": "(appena creato)",
@@ -150,7 +158,8 @@
         "continueButton": "Continua all'importazione",
         "transactionCount": "({count} transazioni)",
         "duplicateCheckFailed": "Non è stato possibile confrontare questo estratto conto con le tue transazioni esistenti, quindi il conteggio dei duplicati qui sotto non è disponibile. Rivedi l'elenco prima di importare.",
-        "fromFiles": "from {count} statements"
+        "fromFiles": "from {count} statements",
+        "noDescription": "No description"
       },
       "droppedRowsWarning": "{count} riga della risposta dell'IA non è stata leggibile ed è stata saltata. Il conteggio importato qui sotto potrebbe essere inferiore a quello effettivo nel file. | {count} righe della risposta dell'IA non sono state leggibili e sono state saltate. Il conteggio importato qui sotto potrebbe essere inferiore a quello effettivo nel file.",
       "importResults": {
@@ -179,7 +188,19 @@
         "viewTransactionsButton": "Visualizza transazioni",
         "startNewImportButton": "Avvia nuova importazione",
         "statementsLabel": "Statements:",
-        "jobFailedDescription": "The import stopped before it finished. Some transactions may already have been created. Check your transactions before importing this statement again."
+        "jobFailedDescription": "The import stopped before it finished. Some transactions may already have been created. Check your transactions before importing this statement again.",
+        "rowErrors": {
+          "invalidDate": "Unrecognized date \"{date}\"",
+          "futureDate": "Date {date} is in the future",
+          "amountNotPositive": "Amount must be greater than zero (got {amount})",
+          "amountTooLarge": "Amount {amount} exceeds the maximum of {max}",
+          "rowFailed": "This transaction could not be imported"
+        }
+      },
+      "errors": {
+        "estimateFailed": "Failed to analyze the file",
+        "extractFailed": "Failed to extract transactions",
+        "importFailed": "Failed to start the import"
       }
     }
   }

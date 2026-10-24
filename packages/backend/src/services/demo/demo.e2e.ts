@@ -10,13 +10,14 @@ import {
   USER_ROLES,
   VEHICLE_CLASS,
 } from '@bt/shared/types';
+import type { BudgetPlanCarryPolicy, BudgetPlanPeriod, BudgetPlanPeriodView } from '@bt/shared/types';
 import { ASSET_CLASS } from '@bt/shared/types/investments';
 import { VENTURE_DEAL_STATUS } from '@bt/shared/types/venture';
 import { authPool } from '@config/auth';
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import { connection } from '@models/index';
 import Users from '@models/users.model';
-import { extractCookies, listAutomations, makeAuthRequest, makeRequest } from '@tests/helpers';
+import { extractCookies, listAutomations, listGoals, makeAuthRequest, makeRequest } from '@tests/helpers';
 import { clearMockSession, registerMockSession } from '@tests/mocks/better-auth';
 
 import { DEMO_ACCOUNT_GROUPS } from './seed-account-groups.service';
@@ -217,7 +218,7 @@ describe('Demo Mode', () => {
       }
     });
 
-    it('seeds accounts, transactions, budgets, categories, crypto holdings, vehicles, venture deals and loans', async () => {
+    it('seeds accounts, transactions, trackers, categories, crypto holdings, vehicles, venture deals and loans', async () => {
       const accountsRes = await makeRequest({
         method: 'get',
         url: '/accounts',
@@ -308,6 +309,15 @@ describe('Demo Mode', () => {
       // Should span at least 2 years
       const yearsDiff = (newestDate.getTime() - oldestDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
       expect(yearsDiff).toBeGreaterThanOrEqual(2);
+
+      const trackersRes = await makeRequest({
+        method: 'get',
+        url: '/trackers',
+        raw: true,
+      });
+
+      // Should have at least 3 trackers per spec
+      expect(trackersRes.length).toBeGreaterThanOrEqual(3);
 
       const categoriesRes = await makeRequest({
         method: 'get',
@@ -469,7 +479,7 @@ describe('Demo Mode', () => {
       return rows as DemoTransactionRow[];
     };
 
-    it('seeds payees, tags, transfers, splits, refunds, subscriptions, category budgets, groups, price series and automations', async () => {
+    it('seeds payees, tags, transfers, splits, refunds, subscriptions, category trackers, groups, price series and automations', async () => {
       const payees = await makeRequest({
         method: 'get',
         url: '/payees',
@@ -630,6 +640,102 @@ describe('Demo Mode', () => {
       for (const period of paidPeriods) {
         expect(period.transactionId).not.toBeNull();
       }
+
+      const trackers = await makeRequest({
+        method: 'get',
+        url: '/trackers',
+        raw: true,
+      });
+
+      expect(trackers.length).toBeGreaterThanOrEqual(3);
+
+      for (const tracker of trackers as {
+        id: string;
+        rulesEnabled: boolean;
+        startDate: string | null;
+        endDate: string | null;
+        categories: unknown[];
+      }[]) {
+        // Without rules no transactions get linked and the stats below report zero spend.
+        expect(tracker.rulesEnabled).toBe(true);
+        expect(tracker.startDate).not.toBeNull();
+        expect(tracker.endDate).not.toBeNull();
+        expect(tracker.categories.length).toBeGreaterThan(0);
+
+        const stats = await makeRequest({
+          method: 'get',
+          url: `/trackers/${tracker.id}/stats`,
+          raw: true,
+        });
+
+        expect(stats.summary.actualExpense).toBeGreaterThan(0);
+        expect(Number.isFinite(stats.summary.utilizationRate)).toBe(true);
+        expect(stats.summary.utilizationRate).toBeGreaterThan(0);
+        // Sanity band on the date window: a tracker without one totals all three
+        // years of history against a one-month limit and blows far past this.
+        expect(stats.summary.utilizationRate).toBeLessThan(400);
+      }
+
+      const plans = await makeRequest({ method: 'get', url: '/budget-plans', raw: true });
+      expect(plans.length).toBe(1);
+
+      const planPeriods: BudgetPlanPeriod[] = await makeRequest({
+        method: 'get',
+        url: `/budget-plans/${plans[0].id}/periods`,
+        raw: true,
+      });
+      const currentIndex = planPeriods.findIndex((period) => period.isCurrent);
+      // Backdated, so the visitor can page into periods that already closed.
+      expect(currentIndex).toBeGreaterThanOrEqual(3);
+
+      const viewOf = ({ index }: { index: number }): Promise<BudgetPlanPeriodView> =>
+        makeRequest({
+          method: 'get',
+          url: `/budget-plans/${plans[0].id}/periods/${planPeriods[index]!.id}`,
+          raw: true,
+        });
+
+      const closedViews: BudgetPlanPeriodView[] = [];
+      for (let index = 0; index < currentIndex; index += 1) closedViews.push(await viewOf({ index }));
+      const currentView = await viewOf({ index: currentIndex });
+
+      for (const view of [...closedViews, currentView]) {
+        expect(view.groups.length).toBe(3);
+        expect(view.lines.length).toBe(12);
+        expect(view.lines.every((line) => line.assigned > 0)).toBe(true);
+      }
+      // The current period may be a day old, so only closed ones must hold spending.
+      for (const view of closedViews) expect(view.header.totalActivity).toBeLessThan(0);
+
+      // Carry-over is the point of backdating: leftovers reach the current period,
+      // a deficit follows the one line set to carry it, and a fresh-start line never carries.
+      const carriedBy = ({ policy }: { policy: BudgetPlanCarryPolicy }) => {
+        const carried = currentView.lines.filter((line) => line.carryPolicy === policy).map((line) => line.carriedIn);
+        expect(carried.length).toBeGreaterThan(0);
+        return carried;
+      };
+      expect(carriedBy({ policy: 'floor' }).filter((carried) => carried > 0).length).toBeGreaterThanOrEqual(3);
+      expect(carriedBy({ policy: 'floor' }).every((carried) => carried >= 0)).toBe(true);
+      expect(carriedBy({ policy: 'signed' }).every((carried) => carried < 0)).toBe(true);
+      expect(carriedBy({ policy: 'none' }).every((carried) => carried === 0)).toBe(true);
+
+      const lastClosed = closedViews.at(-1)!;
+      expect(lastClosed.lines.some((line) => line.assignedSource === 'override')).toBe(true);
+      expect(closedViews.some((view) => view.lines.some((line) => line.available < 0))).toBe(true);
+
+      expect(
+        currentView.lines
+          .flatMap((line) => (line.goal ? [`${line.goal.frequency}/${line.goal.behavior}`] : []))
+          .toSorted(),
+      ).toEqual(['by_date/reach_balance', 'every_period/budget_another', 'every_period/refill_up_to']);
+
+      const goals = await listGoals({ raw: true });
+      expect(goals.map((goal) => [goal.name, goal.achievedAt !== null])).toEqual([
+        ['Emergency fund', true],
+        ['New laptop', true],
+        ['Trip to Japan', false],
+        ['Car down payment', false],
+      ]);
 
       const accountGroups = await makeRequest({
         method: 'get',

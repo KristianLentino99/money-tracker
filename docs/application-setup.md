@@ -18,7 +18,7 @@ This guide will walk you through setting up the MoneyMatter project on your loca
 
 ### Required Software
 
-- **Node.js**: v25.9.0
+- **Node.js**: v24.22.1
 - **npm**: Comes with Node.js
 - **Docker & Docker Compose**: For containerized development (essencial)
 
@@ -169,7 +169,7 @@ Key environment variables in `.env.development`:
 
 - `ALLOWED_ORIGINS`: CORS allowed origins (comma-separated)
 - `APP_SESSION_ID_SECRET`: Session secret
-- `ADMIN_USERS`: usernames of users that should be considered as admins. Admins have extra functionality available
+- `ADMIN_USERS`: comma-separated usernames (not emails) of admins, e.g. `alice,bob`. The username is the handle shown in Settings → Household, without the `@`. Mostly a legacy setting that does very little – admins only get an extra Admin tab in Settings for uploading security prices manually. Safe to leave unset
 
 ### Database Configuration
 

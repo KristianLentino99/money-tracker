@@ -68,7 +68,11 @@
           "errorsTitle": "Importazione non riuscita per {count} righe",
           "viewTransactions": "Visualizza transazioni",
           "importAnother": "Importa un altro file",
-          "accountsSkipped": "Conti omessi"
+          "accountsSkipped": "Conti omessi",
+          "errors": {
+            "payeeCreateFailed": "Could not create payee \"{payeeName}\". Its transactions were imported without a payee.",
+            "rowImportFailed": "This row could not be imported."
+          }
         }
       }
     }

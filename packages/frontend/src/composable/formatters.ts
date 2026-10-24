@@ -1,7 +1,9 @@
-import { formatCompactFiat, formatLargeNumber, formatUIAmount } from '@/js/helpers';
+import { formatCompactFiat, formatCompactUIAmount, formatShortFiat, formatUIAmount } from '@/js/helpers';
 import { useCurrenciesStore } from '@/stores';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
+
+const COMPACT_AMOUNT_THRESHOLD = 10_000;
 
 /**
  * Composable for getting translated currency names
@@ -61,6 +63,9 @@ export const useFormatCurrency = () => {
   const formatCompactBaseCurrency = ({ amount }: { amount: number }) =>
     formatCompactFiat({ amount, currency: baseCurrency.value?.currency?.code });
 
+  const formatShortBaseCurrency = ({ amount }: { amount: number }) =>
+    formatShortFiat({ amount, currency: baseCurrency.value?.currency?.code });
+
   const formatAmountByCurrencyCode = (amount: number, currencyCode: string) =>
     formatUIAmount(amount, {
       currency: currencyCode,
@@ -86,27 +91,21 @@ export const useFormatCurrency = () => {
     }
   };
 
-  /**
-   * Compact format for sidebar/overview display:
-   * - < 10k: show with cents (e.g., "UAH 9,999.99")
-   * - >= 10k: show with k/M suffix (e.g., "UAH 26.00k", "UAH 1.23M")
-   */
-  const formatCompactAmount = (amount: number, currencyCode: string) => {
-    const abs = Math.abs(amount);
+  const formatCompactAmount = (amount: number, currencyCode: string) =>
+    formatCompactUIAmount({ amount, currency: currencyCode });
 
-    if (abs >= 10_000) {
-      // Use k/M/B suffixes for 10k+
-      return formatLargeNumber(amount, {
-        currency: currencyCode,
-        isFiat: true,
-        thousandThreshold: 10_000,
-        millionThreshold: 1_000_000,
-        maximumFractionDigits: 2,
-        minimumFractionDigits: abs >= 100_000 ? 0 : 2, // Less precision for larger numbers
-      });
-    }
-    // Normal format with cents for < 10k
-    return formatUIAmount(amount, { currency: currencyCode });
+  /** Read-only stat amounts: whole units below 10k, compact (₴50.4k, ₴1.24M) from there. */
+  const formatWholeOrCompactAmount = ({ amount, currencyCode }: { amount: number; currencyCode: string }) =>
+    Math.abs(amount) >= COMPACT_AMOUNT_THRESHOLD
+      ? formatCompactUIAmount({ amount, currency: currencyCode })
+      : formatUIAmount(amount, { currency: currencyCode, fractionDigits: 0 });
+
+  /** `formatWholeOrCompactAmount` with an explicit sign: "+₴500", "−₴1.2k", "₴0". */
+  const formatSignedWholeOrCompactAmount = ({ amount, currencyCode }: { amount: number; currencyCode: string }) => {
+    const formatted = formatWholeOrCompactAmount({ amount: Math.abs(amount), currencyCode });
+    if (amount > 0) return `+${formatted}`;
+    if (amount < 0) return `−${formatted}`;
+    return formatted;
   };
 
   return {
@@ -114,7 +113,10 @@ export const useFormatCurrency = () => {
     formatWholeBaseCurrency,
     formatAmountByCurrencyCode,
     formatCompactAmount,
+    formatWholeOrCompactAmount,
+    formatSignedWholeOrCompactAmount,
     formatCompactBaseCurrency,
+    formatShortBaseCurrency,
     getCurrencySymbol,
   };
 };

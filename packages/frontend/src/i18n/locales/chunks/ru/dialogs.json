@@ -104,11 +104,12 @@
       "recordList": {},
       "form": {
         "payeeLabel": "Получатель",
-        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "destinationGroupLabel": "Куда направляются деньги",
         "paymentTypeLabel": "Тип платежа",
         "noteLabel": "Примечание",
         "notePlaceholder": "Примечание",
+        "addFieldsLabel": "Добавить",
         "externalUrlLabel": "Внешний URL",
         "externalUrlPlaceholder": "Ссылка на страницу заказа, бронирования или чека",
         "externalReferenceLabel": "Внешний идентификатор",
@@ -176,6 +177,11 @@
         "loadingButton": "Загрузка...",
         "createButton": "Создать",
         "editButton": "Изменить",
+        "duplicateButton": "Дубликат",
+        "createMore": {
+          "label": "Create more",
+          "createdToast": "Transaction created"
+        },
         "fromAccountLabel": "Со счёта",
         "toAccountLabel": "На счёт",
         "accountLabel": "Счёт",
@@ -390,6 +396,7 @@
         "unlinkButton": "Отвязать от портфеля",
         "unlinkWarning": "Отвязка уменьшит денежный баланс портфеля {portfolio}.",
         "unlinkWarningNoCash": "Этот перевод не изменял денежный баланс портфеля {portfolio}, поэтому при отвязке баланс останется прежним.",
+        "noCashBadge": "Без влияния на деньги",
         "unlinkDescription": "Исходные данные транзакции будут восстановлены.",
         "cancelButton": "Отмена",
         "confirmUnlink": "Подтвердить отвязку",
@@ -442,8 +449,6 @@
         "announceApplied": "Применён {name} — заполнено {count} поле. Сумма пуста. | Применён {name} — заполнено {count} поля. Сумма пуста. | Применён {name} — заполнено {count} полей. Сумма пуста.",
         "announceAppliedWithAmount": "Применён {name} — заполнено {count} поле. Сумма: {amount}. | Применён {name} — заполнено {count} поля. Сумма: {amount}. | Применён {name} — заполнено {count} полей. Сумма: {amount}.",
         "categoryDeletedHint": "Категория этого шаблона удалена — выберите другую.",
-        "alsoSet": "Шаблон также заполнил: {fields}",
-        "tagsCount": "{count} тег | {count} тега | {count} тегов",
         "applyConfirmTitle": "Применить шаблон?",
         "applyConfirmDescription": "Применение заменит текущие разбиения и связь возврата.",
         "toasts": {
@@ -580,6 +585,11 @@
       "inheritParentColor": "Использовать цвет родительской категории",
       "iconLabel": "Значок",
       "iconPlaceholder": "Выберите значок",
+      "defaultTagsLabel": "Default tags",
+      "defaultTagsPlaceholder": "Выберите теги",
+      "defaultTagsHint": "Added to a transaction when you pick this category.",
+      "applyTagsOnAiLabel": "Also apply when AI categorizes a transaction",
+      "applyTagsOnAiHint": "Tags stay on the transaction if you change its category later.",
       "settingsDivider": "Настройки",
       "saveButton": "Сохранить",
       "createButton": "Создать",
@@ -605,7 +615,11 @@
         "title": "Создать группу",
         "nameLabel": "Название группы",
         "namePlaceholder": "Инвестиции",
-        "createButton": "Создать"
+        "createButton": "Создать",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {
@@ -624,6 +638,7 @@
       "analyzing": "Reading the invoice and searching your transactions…",
       "attaching": "Attaching the invoice to the transaction…",
       "privacyNote": "The file goes to the AI provider for reading only. Nothing is saved until you link it to a transaction.",
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options.",
       "direction": {
         "paid": "I paid this",
         "gotPaid": "I got paid",
@@ -823,7 +838,6 @@
       "chooseDescription": "Как вы хотите записать этот платёж для {name}?",
       "amountLabel": "Сумма",
       "amountPlaceholder": "0.00",
-      "estimateLoading": "Загрузка расчёта…",
       "crossCurrencyEstimate": "~{sourceAmount} {sourceCurrency} → {accountCurrency} (оценка)",
       "dateLabel": "Дата платежа",
       "accountLabel": "Счёт",
@@ -834,6 +848,13 @@
       "recordModeMarkDescription": "Обновляет только расписание — транзакция не создаётся.",
       "recordModeTransactionTitle": "Создать транзакцию",
       "recordModeTransactionDescription": "Записывает реальный расход на счёте. Этот счёт также будет использоваться для будущих платежей.",
+      "useExistingTitle": "Use the existing payment",
+      "useExistingDescription": "A transaction linked to this subscription is already recorded in this period. Nothing new is added to your account.",
+      "recordNewTitle": "Record a new payment",
+      "recordNewDescription": "Adds another transaction for this period. The existing payment stays as it is.",
+      "linkedPaymentDescription": "{name} already has a payment in this period. Choose how to mark it paid.",
+      "confirmUseExisting": "Use this payment",
+      "previewUnavailable": "Couldn't check for payments already recorded in this period. Review the details before recording a new one.",
       "notifications": {
         "markedAsPaid": "Платёж записан",
         "markAsPaidFailed": "Не удалось записать платёж",

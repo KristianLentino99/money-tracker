@@ -13,7 +13,6 @@
     "accountDetails": "Dettagli conto",
     "logout": "Disconnetti",
     "settings": "Impostazioni",
-    "plan": "Budget",
     "planned": {
       "planned": "Previsioni",
       "subscriptions": "Pagamenti ricorrenti",
@@ -24,7 +23,8 @@
     "helpAndDocs": "Help & docs",
     "appVersion": "Versione app {version}",
     "home": "Home",
-    "more": "Altro"
+    "more": "Altro",
+    "budget": "Budget"
   },
   "sidebar": {
     "settings": {

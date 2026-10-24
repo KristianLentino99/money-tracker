@@ -41,6 +41,8 @@ interface AccountsAttributes {
   logoDomain: string | null;
   logoInitials: string | null;
   logoColor: string | null;
+  logoIcon: string | null;
+  logoImageId: string | null;
 }
 
 @Table({
@@ -167,9 +169,30 @@ export default class Accounts extends Model {
   })
   logoColor!: string | null;
 
+  @Column({
+    type: DataType.STRING(64),
+    allowNull: true,
+  })
+  logoIcon!: string | null;
+
+  @Column({
+    type: DataType.UUID,
+    allowNull: true,
+  })
+  logoImageId!: string | null;
+
   @AfterCreate
   static async updateAccountBalanceAfterCreate(instance: Accounts) {
     await Balances.handleAccountChange({ account: instance });
+  }
+
+  // A hook, not a call inside `createAccount`: bank sync inserts accounts with
+  // `Accounts.create()` directly. Lazy import, because a static one would close
+  // a model -> service -> model cycle at load time.
+  @AfterCreate
+  static async attachAccountToBudgetPlans(instance: Accounts) {
+    const { attachEligibleAccounts } = await import('@services/budget-plans/auto-attach-account');
+    await attachEligibleAccounts({ userId: instance.userId, accountIds: [instance.id] });
   }
 }
 

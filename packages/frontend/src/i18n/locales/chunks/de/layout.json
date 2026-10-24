@@ -19,12 +19,12 @@
     "planned": {
       "planned": "Geplant",
       "subscriptions": "Wiederkehrende Zahlungen",
-      "budgets": "Budgets"
+      "budgets": "Tracker"
     },
     "venture": "Beteiligungen",
     "home": "Home",
     "more": "More",
-    "plan": "Budget"
+    "budget": "Budget"
   },
   "sidebar": {
     "collapse": "Seitenleiste einklappen",
@@ -49,8 +49,8 @@
       "portfolios": "Portfolios",
       "newPortfolio": "Neues Portfolio",
       "noPortfolios": "Noch keine Portfolios",
-      "ventures": "Ventures",
-      "cars": "Autos",
+      "ventures": "Beteiligungen",
+      "cars": "Fahrzeuge",
       "loans": "Kredite",
       "collapseNavigation": "Navigation einklappen",
       "viaHousehold": "Geteilt über den Haushalt von {handle}",
@@ -64,7 +64,7 @@
     "moreActions": "Weitere Möglichkeiten zum Hinzufügen von Daten",
     "importDataHint": "CSV-Datei oder Kontoauszug",
     "attachInvoice": "Rechnung anhängen",
-    "attachInvoiceHint": "Wir finden die passende Transaktion dazu",
+    "attachInvoiceHint": "Wir finden die passende Transaktion",
     "language": "Sprache",
     "newTransaction": "Transaktion hinzufügen",
     "settings": "Einstellungen",
@@ -261,7 +261,7 @@
             "description": "Teile Ausgaben auf verschiedene Kategorien auf"
           },
           "mark-transfer-out": {
-            "title": "Umbuchung als Out of Wallet markieren",
+            "title": "Umbuchung als extern markieren",
             "description": "Verfolge Geld, dass deine Konten verlässt"
           },
           "create-category": {
@@ -273,7 +273,7 @@
             "description": "Füge Tags hinzu, um zusammengehörige Transaktionen zu gruppieren"
           },
           "create-budget": {
-            "title": "Budget einrichten",
+            "title": "Tracker einrichten",
             "description": "Erstelle Ausgabenlimits für Kategorien"
           },
           "create-subscription": {

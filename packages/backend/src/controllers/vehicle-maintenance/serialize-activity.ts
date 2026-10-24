@@ -1,7 +1,7 @@
 import type { RecordId } from '@bt/shared/types';
 import type VehicleMaintenanceActivities from '@models/vehicle-maintenance-activities.model';
 
-export interface VehicleMaintenanceActivityApiResponse {
+interface VehicleMaintenanceActivityApiResponse {
   id: RecordId;
   systemKey: VehicleMaintenanceActivities['systemKey'];
   name: string | null;

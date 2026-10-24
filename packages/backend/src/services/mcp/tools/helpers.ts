@@ -1,5 +1,10 @@
-import { TRANSACTION_TRANSFER_NATURE, USER_ROLES } from '@bt/shared/types';
+import { type Feature, type GoalModel, TRANSACTION_TRANSFER_NATURE, USER_ROLES } from '@bt/shared/types';
+import Accounts from '@models/accounts.model';
 import { isBaseCurrencyChangeLocked } from '@services/currencies/base-currency-lock';
+import { FEATURE_NOT_IN_PLAN_MESSAGE, hasFeature } from '@services/entitlements/feature-trial.service';
+import { getEntitlementsByUserId } from '@services/entitlements/resolve-entitlements.service';
+
+import { slimGoalsForMcp } from '../serializers';
 
 /**
  * Extract the app user ID from MCP request auth info.
@@ -60,6 +65,21 @@ export async function assertMcpMutationAllowed({
     throw new Error('Base currency recalculation is in progress. Retry after it completes.');
   }
 }
+
+/** MCP twin of the `requireFeature` route middleware; active feature trials count. */
+export async function requireFeature({ userId, feature }: { userId: number; feature: Feature }): Promise<void> {
+  if (!hasFeature({ entitlements: await getEntitlementsByUserId({ userId }), feature })) {
+    throw new Error(`${FEATURE_NOT_IN_PLAN_MESSAGE} Upgrade, or start its free trial in the app.`);
+  }
+}
+
+export const goalsForMcp = async ({ userId, goals }: { userId: number; goals: GoalModel[] }) => {
+  const accountIds = [...new Set(goals.flatMap((goal) => goal.accounts.map(({ accountId }) => accountId)))];
+  const accounts = accountIds.length
+    ? await Accounts.findAll({ where: { userId, id: accountIds }, attributes: ['id', 'name'] })
+    : [];
+  return slimGoalsForMcp({ goals, accountNames: new Map(accounts.map(({ id, name }) => [id, name])) });
+};
 
 /**
  * Mirrors the REST transaction schemas: the original-currency pair is set (or cleared)

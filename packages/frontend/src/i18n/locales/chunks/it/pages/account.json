@@ -215,7 +215,8 @@
         "notLinked": "Questo conto non è collegato a una connessione bancaria",
         "syncStarted": "Sincronizzazione avviata...",
         "accessForbidden": "Accesso negato",
-        "failed": "Impossibile sincronizzare le transazioni"
+        "failed": "Impossibile sincronizzare le transazioni",
+        "syncQueued": "Transaction sync queued: {batches} batch, about {minutes} min | Transaction sync queued: {batches} batches, about {minutes} min"
       },
       "relinkWarning": {
         "title": "Enable Banking: il conto richiede un aggiornamento",

@@ -1,8 +1,5 @@
 import { api } from '@/api/_api';
-import type { Entitlements, Feature } from '@bt/shared/types';
-import { UserInfoResponse } from '@bt/shared/types/db-models';
-
-export type { WipeDataSharedResources } from '@bt/shared/types';
+import { type AuthSessionInfo, type Entitlements, type Feature, UserInfoResponse } from '@bt/shared/types';
 
 export const loadUserData = async (): Promise<UserInfoResponse> => {
   const result = await api.get('/user');
@@ -20,3 +17,5 @@ export const wipeUserData = async ({ acknowledgeSharing }: { acknowledgeSharing:
 
 export const startFeatureTrial = ({ feature }: { feature: Feature }): Promise<Entitlements> =>
   api.post(`/user/feature-trials/${feature}`);
+
+export const getAuthSessions = (): Promise<AuthSessionInfo[]> => api.get('/user/sessions');

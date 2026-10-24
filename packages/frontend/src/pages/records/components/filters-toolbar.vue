@@ -110,6 +110,15 @@
           />
         </div>
 
+        <div v-else-if="filterKey === 'trackers'" class="w-44">
+          <TrackerMultiSelectField
+            hide-clear-button
+            allow-blank
+            :tracker-ids="filters.trackerIds"
+            @update:tracker-ids="emitFilters({ ...filters, trackerIds: $event })"
+          />
+        </div>
+
         <div v-else-if="filterKey === 'amount'" class="w-64">
           <AmountRangeFilter
             compact
@@ -217,13 +226,14 @@ import NoteIncludesFilter from '@/components/records-filters/filters/note-includ
 import OperationPills from '@/components/records-filters/filters/operation-pills.vue';
 import AccountMultiSelectField from '@/components/fields/account-multi-select-field.vue';
 import PayeeMultiSelectField from '@/components/fields/payee-multi-select-field.vue';
+import TrackerMultiSelectField from '@/components/fields/tracker-multi-select-field.vue';
 import TagFilter from '@/components/records-filters/filters/tag-filter.vue';
 import TransactionTypeFilter from '@/components/records-filters/filters/transaction-type-filter.vue';
 import TransferNatureFilter from '@/components/records-filters/filters/transfer-nature-filter.vue';
 import UncategorizedFilter from '@/components/records-filters/filters/uncategorized-filter.vue';
 import { trackAnalyticsEvent } from '@/lib/posthog';
 import { CheckIcon, ChevronDownIcon, XIcon } from '@lucide/vue';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useExtraFilters } from './use-extra-filters';
@@ -240,7 +250,27 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const { extraFilters, addExtraFilter, removeExtraFilter } = useExtraFilters();
+const { extraFilters: addedFilters, addExtraFilter, removeExtraFilter } = useExtraFilters();
+
+// A filter set from outside the bar (saved view, deep link) still needs a visible control. Once
+// shown it stays until removed: a control that vanished while its value is briefly empty would
+// unmount mid-edit.
+const shownFilters = ref<ExtraFilterKey[]>([]);
+watch(
+  () => props.filters,
+  (filters) => {
+    const activated = EXTRA_FILTER_KEYS.filter(
+      (key) => EXTRA_FILTERS[key].isActive(filters) && !shownFilters.value.includes(key),
+    );
+    if (activated.length) shownFilters.value = [...shownFilters.value, ...activated];
+  },
+  { immediate: true },
+);
+
+const extraFilters = computed(() => [
+  ...addedFilters.value,
+  ...shownFilters.value.filter((key) => !addedFilters.value.includes(key)),
+]);
 
 const filterMenuOptions = computed(() =>
   EXTRA_FILTER_KEYS.map((key) => ({
@@ -259,7 +289,8 @@ const addFilter = (key: ExtraFilterKey) => {
 };
 
 const removeFilter = (key: ExtraFilterKey) => {
-  removeExtraFilter(key);
+  shownFilters.value = shownFilters.value.filter((shown) => shown !== key);
+  if (addedFilters.value.includes(key)) removeExtraFilter(key);
   emitFilters({ ...props.filters, ...EXTRA_FILTERS[key].defaultSlice() });
   trackAnalyticsEvent({ event: 'transactions_filter_removed', properties: { filter: key } });
 };

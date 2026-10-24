@@ -15,7 +15,7 @@ export const readIncludePlanned = ({ config }: { config: Record<string, unknown>
  * A failed save leaves the switch snapped back to the persisted value, which reads as the
  * toggle being ignored unless the failure is surfaced.
  */
-export const useIncludePlannedSaveError = () => {
+const useConfigSaveError = ({ fallbackKey }: { fallbackKey: string }) => {
   const { addErrorNotification } = useNotificationCenter();
 
   return ({ error }: { error: unknown }) => {
@@ -24,38 +24,74 @@ export const useIncludePlannedSaveError = () => {
     } else {
       // eslint-disable-next-line no-console
       console.error(error);
-      addErrorNotification(i18n.global.t('dashboard.widgets.common.includePlannedSaveError'));
+      addErrorNotification(i18n.global.t(fallbackKey));
     }
   };
 };
 
+export const useIncludePlannedSaveError = () =>
+  useConfigSaveError({ fallbackKey: 'dashboard.widgets.common.includePlannedSaveError' });
+
+/** A missing or non-boolean stored value reads as `defaultValue`. */
+export const readWidgetConfigFlag = ({
+  config,
+  key,
+  defaultValue,
+}: {
+  config: Record<string, unknown> | undefined;
+  key: string;
+  defaultValue: boolean;
+}): boolean => {
+  const value = config?.[key];
+  return typeof value === 'boolean' ? value : defaultValue;
+};
+
 /**
- * Reads and persists a dashboard widget's `includePlanned` flag through the shared
- * widget-config injections, so every widget stores the same key the same way.
+ * Reads and persists one boolean of a dashboard widget's config through the shared
+ * widget-config injections.
  */
-export const useIncludePlannedConfig = () => {
+export const useWidgetConfigFlag = ({
+  key,
+  saveErrorKey,
+  defaultValue = true,
+}: {
+  key: string;
+  saveErrorKey: string;
+  defaultValue?: boolean;
+}) => {
   const widgetConfigRef = inject<Ref<DashboardWidgetConfig> | null>('dashboard-widget-config', null);
   const saveWidgetConfig =
     inject<(params: { widgetId: string; config: Record<string, unknown> }) => Promise<void>>(
       'dashboard-save-widget-config',
     );
 
-  const notifySaveError = useIncludePlannedSaveError();
+  const notifySaveError = useConfigSaveError({ fallbackKey: saveErrorKey });
 
-  const includePlanned = computed<boolean>(() => readIncludePlanned({ config: widgetConfigRef?.value?.config }));
+  const isOn = computed<boolean>(() =>
+    readWidgetConfigFlag({ config: widgetConfigRef?.value?.config, key, defaultValue }),
+  );
 
-  const setIncludePlanned = async ({ value }: { value: boolean }) => {
+  const setFlag = async ({ value }: { value: boolean }) => {
     if (!saveWidgetConfig || !widgetConfigRef?.value) return;
 
     try {
       await saveWidgetConfig({
         widgetId: widgetConfigRef.value.widgetId,
-        config: { includePlanned: value },
+        config: { [key]: value },
       });
     } catch (error) {
       notifySaveError({ error });
     }
   };
 
-  return { widgetConfigRef, includePlanned, setIncludePlanned };
+  return { widgetConfigRef, isOn, setFlag };
+};
+
+export const useIncludePlannedConfig = () => {
+  const { widgetConfigRef, isOn, setFlag } = useWidgetConfigFlag({
+    key: 'includePlanned',
+    saveErrorKey: 'dashboard.widgets.common.includePlannedSaveError',
+  });
+
+  return { widgetConfigRef, includePlanned: isOn, setIncludePlanned: setFlag };
 };

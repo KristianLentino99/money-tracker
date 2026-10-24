@@ -9,7 +9,7 @@ import {
   type SubscriptionStatus,
 } from '@bt/shared/types';
 import { ADMIN_USER, DEMO_USER, USER } from '@tests/mocks';
-import { addDays, addHours } from 'date-fns';
+import { addDays, addHours, addMinutes } from 'date-fns';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -21,6 +21,7 @@ const buildEntitlements = (overrides: Partial<Entitlements> = {}): Entitlements 
   seats: 1,
   plan: null,
   trialEndsAt: null,
+  budgetPlanTrialEndsAt: null,
   subscriptions: [],
   trialUsage: {},
   featureTrials: {},
@@ -210,6 +211,71 @@ describe('useUserStore', () => {
     });
   });
 
+  describe('budgetTrial', () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('counts the days left while the trial runs', () => {
+      const store = useUserStore();
+      store.user = userWith(
+        buildEntitlements({
+          features: [FEATURES.budget_plan],
+          budgetPlanTrialEndsAt: addDays(new Date(), 12).toISOString(),
+        }),
+      );
+
+      expect(store.budgetTrial).toEqual({ state: 'active', daysLeft: 12 });
+    });
+
+    it('reports the trial as ended once budgeting is gated', () => {
+      const store = useUserStore();
+      store.user = userWith(buildEntitlements({ budgetPlanTrialEndsAt: addDays(new Date(), -2).toISOString() }));
+
+      expect(store.budgetTrial).toEqual({ state: 'ended' });
+    });
+
+    it('reports the trial as ended when the server gates budgeting before the client clock reaches the end', () => {
+      const store = useUserStore();
+      store.user = userWith(buildEntitlements({ budgetPlanTrialEndsAt: addMinutes(new Date(), 5).toISOString() }));
+
+      expect(store.budgetTrial).toEqual({ state: 'ended' });
+    });
+
+    it('shows one day left when the trial ends later today', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(2026, 8, 25, 10));
+      const store = useUserStore();
+      store.user = userWith(
+        buildEntitlements({
+          features: [FEATURES.budget_plan],
+          budgetPlanTrialEndsAt: new Date(2026, 8, 25, 18).toISOString(),
+        }),
+      );
+
+      expect(store.budgetTrial).toEqual({ state: 'active', daysLeft: 1 });
+    });
+
+    it('returns null for a past end when budgeting is still granted', () => {
+      const store = useUserStore();
+      store.user = userWith(
+        buildEntitlements({
+          features: [FEATURES.budget_plan],
+          budgetPlanTrialEndsAt: addDays(new Date(), -2).toISOString(),
+        }),
+      );
+
+      expect(store.budgetTrial).toBeNull();
+    });
+
+    it('returns null before the trial has started', () => {
+      const store = useUserStore();
+      store.user = userWith(buildEntitlements({ features: [FEATURES.budget_plan] }));
+
+      expect(store.budgetTrial).toBeNull();
+    });
+  });
+
   describe('isPastDue', () => {
     it('is true for a past-due subscription whose paid period has not elapsed', () => {
       const store = useUserStore();
@@ -284,8 +350,19 @@ describe('useUserStore', () => {
 
   describe('featureTrialDaysLeft', () => {
     const feature = FEATURES.fire_planner;
+    const now = new Date('2026-09-25T12:00:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     const trialEndingIn = ({ days }: { days: number }) => ({
-      [feature]: { startedAt: new Date().toISOString(), endsAt: addDays(new Date(), days).toISOString() },
+      [feature]: { startedAt: now.toISOString(), endsAt: addDays(now, days).toISOString() },
     });
 
     it('counts the days until the trial ends', () => {
@@ -310,17 +387,6 @@ describe('useUserStore', () => {
     });
 
     describe('partial days', () => {
-      const now = new Date('2026-09-25T12:00:00Z');
-
-      beforeEach(() => {
-        vi.useFakeTimers();
-        vi.setSystemTime(now);
-      });
-
-      afterEach(() => {
-        vi.useRealTimers();
-      });
-
       it.each([
         [1, 1],
         [60, 3],

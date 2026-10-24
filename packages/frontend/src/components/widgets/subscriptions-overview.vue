@@ -14,6 +14,7 @@ import { useAnimatedNumber } from '@/composable/use-animated-number';
 import { useCurrencyNotConnectedNotification } from '@/composable/use-currency-not-connected-notification';
 import { useDateLocale } from '@/composable/use-date-locale';
 import BrandLogo from '@/components/common/brand-logo.vue';
+import { toEntityLogoDisplayProps } from '@/components/common/logo-selection';
 import { buttonVariants } from '@/components/lib/ui/button';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
@@ -224,7 +225,6 @@ function payPeriod({ subscription }: { subscription: SubscriptionListItem }) {
   markPaidRef.value?.triggerPay({
     subscription,
     periodId: subscription.currentPeriod.id,
-    periodDueDate: subscription.currentPeriod.dueDate,
   });
 }
 
@@ -293,7 +293,7 @@ function openSubscriptionsList() {
           !arrivedState.bottom && '[mask-image:linear-gradient(to_bottom,black_calc(100%-1.75rem),transparent)]',
         )
       "
-      viewport-class="px-2 md:overscroll-contain"
+      viewport-class="px-2 md:overscroll-contain-if-scrollable"
     >
       <div v-if="summary && totalActiveCount > 0" class="pb-2.5">
         <template v-if="summary.activeCount.expense > 0">
@@ -376,13 +376,7 @@ function openSubscriptionsList() {
               )
             "
           >
-            <BrandLogo
-              :domain="sub.logoDomain"
-              :initials="sub.logoInitials"
-              :color="sub.logoColor"
-              :name="sub.name"
-              class="size-5 shrink-0"
-            />
+            <BrandLogo v-bind="toEntityLogoDisplayProps(sub)" :name="sub.name" class="size-5 shrink-0" />
             <router-link
               :to="{
                 name: ROUTES_NAMES.plannedSubscriptionDetails,

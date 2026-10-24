@@ -1,5 +1,12 @@
 import type { RecordId } from '@bt/shared/types';
-import { ACCOUNT_TYPES, DEPRECIATION_PRESET, LOAN_TYPE, SUPPORTED_LOAN_TYPES, VEHICLE_CLASS } from '@bt/shared/types';
+import {
+  ACCOUNT_TYPES,
+  TRACKER_STATUSES,
+  DEPRECIATION_PRESET,
+  LOAN_TYPE,
+  SUPPORTED_LOAN_TYPES,
+  VEHICLE_CLASS,
+} from '@bt/shared/types';
 import { VENTURE_CASH_FLOW_MODE, VENTURE_EVENT_TYPE, VENTURE_SPV_SUBTYPE } from '@bt/shared/types/venture';
 import { getTranslatedCategories } from '@common/const/default-categories';
 import { getTranslatedDefaultTags } from '@common/const/default-tags';
@@ -13,6 +20,7 @@ import { adjustAccountBalance } from '@services/accounts/balance-adjustment';
 import * as categoriesService from '@services/categories.service';
 import { createLoan } from '@services/loans/create-loan.service';
 import * as tagsService from '@services/tags';
+import { createTracker } from '@services/trackers/create-tracker';
 import * as userService from '@services/user.service';
 import { createVehicle } from '@services/vehicles/create-vehicle.service';
 import { createVentureDeal } from '@services/venture/deals/create.service';
@@ -210,6 +218,75 @@ export async function createAccounts({ userId }: { userId: number }): Promise<Ac
   return accounts;
 }
 
+/** Rounds a cents amount to the nearest $10 so a derived limit reads as a number a person chose. */
+function roundToNearestTenDollars({ cents }: { cents: number }): number {
+  const step = 1000;
+  return Math.max(step, Math.round(cents / step) * step);
+}
+
+/**
+ * Seeds rule-based trackers over a trailing window. Skipping `rulesEnabled` links
+ * nothing (every card reads zero); skipping `startDate`/`endDate` totals all history
+ * against a one-month limit. Limits derive from actual spend in the window so the
+ * cards keep their under/near/over states.
+ */
+export async function createTrackers({
+  userId,
+  categoryMap,
+  spendByCategoryKey,
+  windowStart,
+  windowEnd,
+}: {
+  userId: number;
+  categoryMap: Map<string, string>;
+  spendByCategoryKey: Map<string, number>;
+  windowStart: Date;
+  windowEnd: Date;
+}): Promise<void> {
+  let created = 0;
+  let skippedUnknownCategories = 0;
+  let skippedNoSpend = 0;
+
+  for (const trackerConfig of DEMO_CONFIG.trackers) {
+    const categoryIds = trackerConfig.categoryKeys
+      .map((key) => categoryMap.get(key))
+      .filter((id): id is string => id !== undefined);
+
+    if (!categoryIds.length) {
+      skippedUnknownCategories += 1;
+      continue;
+    }
+
+    const spent = trackerConfig.categoryKeys.reduce((total, key) => total + (spendByCategoryKey.get(key) ?? 0), 0);
+    if (spent <= 0) {
+      skippedNoSpend += 1;
+      continue;
+    }
+
+    await createTracker({
+      userId,
+      name: trackerConfig.name,
+      status: TRACKER_STATUSES.active,
+      rulesEnabled: true,
+      categoryIds,
+      limitAmount: Money.fromCents(roundToNearestTenDollars({ cents: spent / trackerConfig.targetUtilization })),
+      startDate: windowStart,
+      endDate: windowEnd,
+    });
+    created += 1;
+  }
+
+  const summary = `Created ${created} of ${DEMO_CONFIG.trackers.length} demo trackers (skipped: ${skippedUnknownCategories} with no matching category, ${skippedNoSpend} with no spend in the window)`;
+
+  // Zero trackers leaves the Trackers page empty for every demo user; the skip
+  // counters above narrow it to a category-key or generator drift.
+  if (created === 0 && DEMO_CONFIG.trackers.length > 0) {
+    logger.error(summary);
+  } else {
+    logger.info(summary);
+  }
+}
+
 const DEMO_WATCHLIST_CATEGORY_KEYS = ['food', 'housing', 'transportation', 'life', 'income'];
 
 export async function setupDashboardSettings({
@@ -224,10 +301,12 @@ export async function setupDashboardSettings({
   );
 
   const taxCategoryId = categoryMap.get('financial-expenses/taxes');
+  const incomeCategoryId = categoryMap.get('income');
 
   const settings: SettingsSchema = {
     ...DEFAULT_SETTINGS,
     ...(taxCategoryId && { taxCategoryIds: [taxCategoryId] }),
+    ...(incomeCategoryId && { incomeCategoryIds: [incomeCategoryId] }),
     dashboard: {
       widgets: [
         { widgetId: 'balance-trend', colSpan: 2, rowSpan: 1 },

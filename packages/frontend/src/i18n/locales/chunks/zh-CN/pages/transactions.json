@@ -60,14 +60,14 @@
       },
       "payees": {
         "label": "Payees",
-        "selectedOne": "1 Payee selected",
+        "selectedOne": "1 payee selected",
         "selectedMany": "{n} Payees selected"
       },
       "removeFilter": "Remove filter",
       "menu": {
         "type": "Type",
         "tags": "Tags",
-        "budgets": "Budgets",
+        "budgets": "Trackers",
         "amount": "Amount range",
         "note": "Notes"
       },
@@ -85,7 +85,7 @@
     "list": {
       "noMoreData": "无更多交易",
       "loadingMore": "Loading more...",
-      "detailsTitle": "Transaction details",
+      "detailsTitle": "交易详情",
       "detailsDescription": "View and edit transaction"
     },
     "bulkEdit": {
@@ -93,6 +93,7 @@
       "cancelSelection": "Cancel selection",
       "editButton": "编辑",
       "selectedCount": "{count} selected",
+      "matchingCount": "Total: {count}",
       "dialogTitle": "Edit {count} transactions",
       "dialogDescription": "Changes will be applied to all selected transactions. Only filled fields will be updated.",
       "categoryLabel": "Category",
@@ -124,7 +125,8 @@
         "expense": "Expense",
         "net": "Net",
         "transfers": "Transfers"
-      }
+      },
+      "selectAllShort": "All"
     },
     "transactionGroups": {
       "bulkActions": {
@@ -138,23 +140,23 @@
         "noGroupsMessage": "No groups yet. Create one first.",
         "noSearchResultsMessage": "No groups match your search.",
         "addingText": "Adding...",
-        "buttonLabel": "Add to Group",
+        "buttonLabel": "Add to group",
         "cancelButton": "取消",
         "transactionCountLabel": "transactions"
       },
       "createGroupDialog": {
-        "title": "Create Transaction Group",
+        "title": "Create transaction group",
         "descriptionPrefix": "Group",
         "groupNameLabel": "Name",
         "groupNamePlaceholder": "e.g. May salary transfer",
         "noteLabel": "Note (optional)",
         "notePlaceholder": "Optional description...",
         "creatingText": "创建中……",
-        "buttonLabel": "Create Group",
+        "buttonLabel": "创建分组",
         "cancelButton": "取消"
       },
       "groupsPage": {
-        "title": "Transaction Groups",
+        "title": "Transaction groups",
         "searchPlaceholder": "Search groups...",
         "noGroupsMessage": "No transaction groups yet.",
         "emptyStateHint": "Select transactions on the Transactions page and click \"Create Group\" to get started.",
@@ -229,9 +231,9 @@
       }
     },
     "bulkDelete": {
-      "button": "Delete",
+      "button": "删除",
       "externalTooltip": "Selection contains bank-synced transactions, which cannot be deleted.",
-      "confirmButton": "Delete",
+      "confirmButton": "删除",
       "confirmTitle": "Delete {count} transactions?",
       "confirmDescription": "This action cannot be undone. Transfers will have both sides removed.",
       "successMessage": "{count} transactions deleted",
@@ -257,6 +259,31 @@
       "confirmButton": "Link transactions",
       "successMessage": "Selected transactions linked to the recurring payment",
       "errorMessage": "Failed to link transactions to the recurring payment"
+    },
+    "savedViews": {
+      "trigger": "Views",
+      "empty": "No saved views yet. Set up filters, then save them as a view.",
+      "modified": "Filters changed",
+      "update": "Update “{name}” with current filters",
+      "updateShort": "Update view",
+      "revert": "Revert",
+      "saveNew": "Save as new view",
+      "actions": "View actions",
+      "rename": "Rename",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "saveTitle": "Save view",
+      "renameTitle": "Rename view",
+      "dialogDescription": "A view keeps the current filters and sorting so you can apply them again in one click.",
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g. Groceries, last 3 months",
+      "savedToast": "View saved",
+      "updatedToast": "View updated",
+      "deletedToast": "View deleted",
+      "saveError": "Couldn't save your views. Try again.",
+      "deleteTitle": "Delete view “{name}”?",
+      "deleteDescription": "Your transactions are not affected. This can't be undone.",
+      "filtersCount": "{count} filter | {count} filters"
     }
   },
   "records": {

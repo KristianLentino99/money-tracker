@@ -3,6 +3,7 @@ import { t } from '@i18n/index';
 import { ForbiddenError, NotFoundError } from '@js/errors';
 import Accounts from '@models/accounts.model';
 import Tags from '@models/tags.model';
+import TrackerTransactions from '@models/tracker-transactions.model';
 import TransactionSplits from '@models/transaction-splits.model';
 import { findOneTransaction } from '@models/transactions-query';
 import * as Transactions from '@models/transactions.model';
@@ -11,7 +12,8 @@ import {
   type GrantedAccessResult,
   canUserAccessResource,
 } from '@services/sharing/auth/can-user-access-resource.service';
-import type { Includeable } from 'sequelize';
+import { getAccessibleTrackerIdsForUser } from '@services/sharing/auth/get-accessible-tracker-ids.service';
+import { Includeable, Op } from 'sequelize';
 
 import { withTransaction } from '../common/with-transaction';
 
@@ -130,7 +132,38 @@ export const getTransactionById = withTransaction(
     });
     if (access.granted) return { tx, access };
 
-    return null;
+    // Tracker-share visibility fallback. The list endpoint already surfaces tx rows that
+    // a caller can see only because they accepted a tracker share — keeping the detail
+    // endpoint blind to that path made GET /transactions/:id 404 for rows the caller
+    // could see in the list, which the dialog's lazy edit-access probe then misread as
+    // "unknown" and unlocked the form. Only meaningful for read requests; write paths
+    // (`requiredPermission: write`) intentionally don't fall through because tracker
+    // share grants read-only access on attached txs.
+    if (requiredPermission !== SHARE_PERMISSIONS.read) return null;
+
+    const accessibleTrackerIds = await getAccessibleTrackerIdsForUser({ userId });
+    if (!accessibleTrackerIds.length) return null;
+
+    const trackerAttachment = (await TrackerTransactions.findOne({
+      where: {
+        transactionId: id,
+        trackerId: { [Op.in]: accessibleTrackerIds },
+      },
+      attributes: ['trackerId'],
+      raw: true,
+    })) as { trackerId: string } | null;
+    if (!trackerAttachment) return null;
+
+    const trackerVisibilityAccess: GrantedAccessResult = {
+      granted: true,
+      isOwner: false,
+      effectivePermission: SHARE_PERMISSIONS.read,
+      policy: null,
+      ownerUserId: access.ownerUserId ?? tx.userId,
+      accessSource: ACCESS_SOURCES.tracker,
+    };
+
+    return { tx, access: trackerVisibilityAccess };
   },
 );
 
@@ -155,7 +188,8 @@ interface WritableTransactionAuthContext {
  *   - `ForbiddenError` (403) when the row exists but the caller has no claim. Tx ids are
  *     UUIDv7 so existence-leak via 403 vs 404 is not a meaningful side channel; surfacing
  *     "not authorized" gives a less confusing UX than the old "tx doesn't exist" message
- *     when a shared-account recipient tries to edit an owner-only transaction.
+ *     when a tracker-share recipient tries to edit an owner-only tx (e.g. visible inside
+ *     the tracker but on an account they don't have write access to).
  *   - `Unauthorized` (401) when the caller is a recipient on `'own'` scope and didn't
  *     author the row.
  *

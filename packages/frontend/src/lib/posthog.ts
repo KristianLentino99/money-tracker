@@ -1,5 +1,6 @@
 import { config } from '@/common/config';
 import type { DemoBlockedFeature, DemoEndReason } from '@/common/const/demo';
+import type { FeedbackType } from '@/components/dialogs/feedback-submission';
 import type { AI_PROVIDER, BillingCycle, BillingTier, Feature, Plan } from '@bt/shared/types';
 import posthog from 'posthog-js';
 import type { Router } from 'vue-router';
@@ -44,6 +45,9 @@ type AnalyticsEvent =
   | { event: 'transaction_created'; properties: { transaction_type: 'income' | 'expense' | 'transfer' } }
   | { event: 'transaction_template_applied' }
   | { event: 'transaction_template_saved' }
+  // Tracker creation funnel
+  | { event: 'tracker_creation_opened' }
+  | { event: 'tracker_created' }
   // Import funnel (import_completed tracked on backend)
   | {
       event: 'import_opened';
@@ -70,7 +74,11 @@ type AnalyticsEvent =
   | { event: 'fire_widget_added' }
   // Billing (completions, cancellations and refunds live in Stripe)
   | { event: 'paywall_hit'; properties: { feature: Feature; required_plan: Plan; path: string } }
-  | { event: 'checkout_opened'; properties: { tier: BillingTier; cycle: BillingCycle; plan: Plan | null } };
+  | { event: 'checkout_opened'; properties: { tier: BillingTier; cycle: BillingCycle; plan: Plan | null } }
+  // Feedback
+  | { event: 'feedback_button_clicked' }
+  | { event: 'feedback_button_hovered' }
+  | { event: 'user_feedback_submitted'; properties: { feedback_type: FeedbackType; message: string } };
 
 // ============================================
 // Core Functions
@@ -116,6 +124,13 @@ export function initPostHog(): void {
     // like another quota knob to flip off alongside autocapture, which would silently kill
     // every running survey. Demo-only targeting uses the `is_demo` person property `identifyUser` sets.
     disable_surveys: false,
+    // The survey close button hardcodes a white background and black icon, which global.css
+    // can't reach inside the shadow root. Theme colors come from the variables set there.
+    prepare_external_dependency_stylesheet: (style) => {
+      style.textContent +=
+        '.form-cancel{background:var(--ph-survey-background-color)}.form-cancel path{stroke:var(--ph-survey-text-primary-color)}';
+      return style;
+    },
     // Respect Do Not Track
     respect_dnt: true,
     // Persistence

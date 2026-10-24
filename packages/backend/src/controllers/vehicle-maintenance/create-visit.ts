@@ -49,7 +49,7 @@ const quickExpenseSchema = z.object({
   note: z.string().trim().max(1_000).nullish(),
 });
 
-const schema = z.object({
+export const schema = z.object({
   params: z.object({ id: recordId() }),
   body: z.object({
     serviceDate: dateOnly,

@@ -61,6 +61,14 @@ Container queries aren't needed everywhere — use judgement:
 - **Viewport breakpoints** (`md:`, `lg:`): showing/hiding the sidebar, header layout, simple show/hide toggles that genuinely depend on screen size
 - **`useWindowBreakpoints`**: JS-based responsive logic — toggling components, conditional rendering based on device class
 
+### KPI / summary cards collapse into rows when narrow
+
+A grid of stat cards (label on top, big value below) wastes vertical space on phones and small tablets. When the container is narrower than `@md`, render the same items as **rows**: label on the left, value (plus hint) right-aligned, one item per line, divided by hairlines. Switch to cards only from `@md` of the section's container up.
+
+- Analytics pages: use `pages/analytics/components/summary-rows.vue` for the narrow layout and the cards for wide.
+- Elsewhere: one markup with container variants, e.g. `flex items-baseline justify-between @md/section:block` on each cell and `grid-cols-1 @md/section:grid-cols-4` on the grid (see the header strip in `pages/trackers/trackers-info/tracker-details.vue`).
+- Never use a 2-column card grid as the phone fallback — it is the layout this rule replaces.
+
 ---
 
 ## Testing
@@ -99,6 +107,13 @@ Semantic colors come in pairs: the **base token is a fill** (button/badge backgr
 - Tinted chips like `bg-primary/10` still count as a dark background — text/icons inside them use `text-primary-text`
 - Borders, strokes (progress rings), and chart lines may keep using the base token — non-text UI parts only need 3:1 contrast
 
+### Font sizes
+
+- **14px (`text-sm`) is the floor for regular UI**: row titles, values, amounts, filter chips, buttons, page subtitles and empty-state copy. Leave row titles at the inherited base size.
+- Anything below 14px (`text-xs`, `text-[11px]`, `text-[13px]`, …) needs a real justification. Typical cases are tiny metadata badges/pills, secondary captions under a row title, uppercase section labels and chart axis ticks. "It fits better" or "it looks denser" is not a justification. Fix the layout instead.
+- Never go below 12px (`text-xs`). No `text-[10px]`/`text-[11px]`.
+- Reference: the recurring payments list (`pages/planned/subscriptions`). It uses a `text-sm` subtitle, base-size titles, `text-sm` amounts and `text-xs` only for captions and badges.
+
 ---
 
 ## Components
@@ -120,6 +135,20 @@ Available sizes: `default`, `sm`, `lg`, `icon`, `icon-sm`
 <!-- CORRECT -->
 <Button><PlusIcon class="size-4" /> Add item</Button>
 ```
+
+**Action icons go before the label**, never after it. This applies to buttons, link-buttons, and dropdown/combobox "add" rows alike. Never put a literal `+` (or any icon glyph) in the translation string — render the lucide icon in the template.
+
+```vue
+<!-- WRONG — trailing icon / glyph baked into the copy -->
+<Button>{{ $t('createGroup') }} <PlusIcon class="size-4" /></Button>
+<Button variant="link">{{ $t('addCurrency') }}</Button>
+<!-- "Add new currency +" -->
+
+<!-- CORRECT -->
+<Button><PlusIcon class="size-4" /> {{ $t('createGroup') }}</Button>
+```
+
+Exception: directional icons that indicate where the action leads (`ChevronRightIcon`, `ArrowRightIcon`, `ExternalLinkIcon`, dropdown `ChevronDownIcon`) stay trailing.
 
 ### Form fields
 
@@ -228,6 +257,21 @@ Not needed for plain `Button @click` with `v-model:open` — only slot-triggered
 
 When a page or section has no data, display an empty state with the following layout: **icon + title + description + action** (if applicable). Look at existing empty states in the codebase for reference before creating new ones.
 
+- **Icon is greyscale**: `bg-muted` circle with a `text-muted-foreground` icon. Don't tint it with the brand color (`bg-primary/10` + `text-primary-text`) — that's reserved for success/confirmation screens (auth, invitations), not "nothing here yet".
+- **No extra surface**: render the empty state directly on the parent card/page. Don't wrap it in its own `bg-card` / bordered box when it already sits inside a card — nested surfaces look like a different design.
+- Title and button copy follow sentence case (see **Copy & casing**).
+
+```vue
+<div class="flex flex-col items-center py-12 text-center">
+  <div class="bg-muted mb-4 flex size-12 items-center justify-center rounded-full">
+    <BriefcaseIcon class="text-muted-foreground size-6" />
+  </div>
+  <h3 class="mb-2 text-lg font-semibold">{{ $t('...title') }}</h3>       <!-- "No portfolios yet" -->
+  <p class="text-muted-foreground mb-4 max-w-md text-sm">{{ $t('...description') }}</p>
+  <Button><PlusIcon class="size-4" /> {{ $t('...action') }}</Button>    <!-- "Add a portfolio" -->
+</div>
+```
+
 ### Loading states
 
 Use **skeleton placeholders** to represent loading content. Skeletons should approximate the shape/layout of the real content to prevent layout shift.
@@ -305,6 +349,15 @@ Disable submit buttons and show loading indicators while mutations are in progre
 ---
 
 ## i18n
+
+### Copy & casing
+
+All UI copy uses **sentence case**: capitalize only the first word and proper nouns (MoneyMatter, FIRE, AI, CSV, bank/provider names). Applies to page and dialog titles, headings, buttons, tabs, menu items, labels, and empty states.
+
+- WRONG: `"No Portfolios Yet"`, `"Create Your First Portfolio"`, `"Add New Account"`
+- CORRECT: `"No portfolios yet"`, `"Create your first portfolio"`, `"Add new account"`
+
+When reviewing a diff that adds or changes `en` strings, flag any Title Case value.
 
 ### `$t` vs `t`
 

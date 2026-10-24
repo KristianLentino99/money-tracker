@@ -37,6 +37,28 @@ describe('parseAIResponse', () => {
     });
   });
 
+  describe('metadata currency', () => {
+    const ROW = '2026-10-16 18:32:37,SP STUSSY EUROPE AMSTERDAM NLD,,218.98,E,,90,937.00,PLN,';
+    const currencyOf = ({ metadataLine }: { metadataLine: string }) =>
+      parseAIResponse({ response: [metadataLine, ROW].join('\n') })?.metadata.currencyCode;
+
+    it('finds the currency when an extra field pushed a date into its slot', () => {
+      expect(currencyOf({ metadataLine: ',,,2026-10-16,2026-10-16,EUR' })).toBe('EUR');
+    });
+
+    it('uppercases a lowercase code', () => {
+      expect(currencyOf({ metadataLine: 'Revolut,2112,2026-10-16,2026-10-16,eur' })).toBe('EUR');
+    });
+
+    it.each([
+      ['a date', 'Revolut,2112,2026-10-15,2026-10-16,2026-10-16'],
+      ['a symbol', 'Revolut,2112,2026-10-16,2026-10-16,€'],
+      ['nothing', 'Revolut,2112,2026-10-16,2026-10-16,'],
+    ])('reports no currency when the line carries %s instead of a code', (_, metadataLine) => {
+      expect(currencyOf({ metadataLine })).toBeNull();
+    });
+  });
+
   describe('date formats', () => {
     it('keeps a row whose timestamp has fractional seconds', () => {
       const result = parse({ rows: ['2026-06-16 18:17:19.587,Zona;Clips BYD,Sebastian,250,E,,90'] });
@@ -59,12 +81,29 @@ describe('parseAIResponse', () => {
       expect(result?.transactions[0]?.date).toBe('2026-06-16');
     });
 
-    it('drops a row whose date is unreadable', () => {
-      const result = parse({ rows: ['16/06/2026,Zona,Sebastian,250,E,,90'] });
+    // A banking app shows "00:46", not "00:46:00", and the prompt tells the model to keep the time.
+    it.each([
+      ['2026-10-18 00:46', '2026-10-18 00:46:00'],
+      ['2026-10-18 9:05', '2026-10-18 09:05:00'],
+      ['2026-10-18T00:46Z', '2026-10-18 00:46:00'],
+      ['2026-10-18 00:46+03:00', '2026-10-18 00:46:00'],
+    ])('accepts the time %s without seconds and keeps the wall clock', (written, expected) => {
+      const result = parse({ rows: [`${written},Apple Music,APPLE.COM/BILL,10.99,E,,90`] });
 
-      expect(result?.transactions).toHaveLength(0);
-      expect(result?.droppedRowCount).toBe(1);
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]?.date).toBe(expected);
     });
+
+    // An out-of-range time would otherwise roll over into the next hour or day downstream.
+    it.each(['16/06/2026', '18 Oct 2026', '2026-10-18 25:00', '2026-10-18 9:65', '2026-10-18 12:4'])(
+      'drops a row whose date %s is unreadable',
+      (written) => {
+        const result = parse({ rows: [`${written},Zona,Sebastian,250,E,,90`] });
+
+        expect(result?.transactions).toHaveLength(0);
+        expect(result?.droppedRowCount).toBe(1);
+      },
+    );
 
     it('counts an unreadable date among the dropped rows', () => {
       const result = parse({
@@ -112,6 +151,96 @@ describe('parseAIResponse', () => {
       expect(result?.transactions[0]?.amount).toBe(640);
       expect(result?.transactions[0]?.type).toBe('income');
       expect(result?.transactions[0]?.balance).toBe(5000.25);
+    });
+  });
+
+  describe('original amount and reference columns', () => {
+    it('reads the original amount, its currency and the reference', () => {
+      const result = parse({ rows: ['2026-06-16,Netflix,Netflix,520.40,E,,95,12.99,usd,Ref 8F2K91'] });
+
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]).toEqual({
+        date: '2026-06-16',
+        description: 'Netflix',
+        merchant: 'Netflix',
+        amount: 520.4,
+        type: 'expense',
+        balance: undefined,
+        confidence: 0.95,
+        originalAmount: 12.99,
+        originalCurrencyCode: 'USD',
+        externalReference: 'Ref 8F2K91',
+      });
+    });
+
+    it('reads a 7-column row with the new fields left empty', () => {
+      const result = parse({ rows: ['2026-06-16,Shop,Shop,250,E,,90'] });
+
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]?.amount).toBe(250);
+      expect(result?.transactions[0]?.originalAmount).toBeUndefined();
+      expect(result?.transactions[0]?.originalCurrencyCode).toBeUndefined();
+      expect(result?.transactions[0]?.externalReference).toBeUndefined();
+    });
+
+    it('reads a 9-column row whose trailing reference was left off', () => {
+      const result = parse({ rows: ['2026-06-16,Netflix,Netflix,520.40,E,,95,12.99,USD'] });
+
+      expect(result?.transactions[0]?.amount).toBe(520.4);
+      expect(result?.transactions[0]?.originalAmount).toBe(12.99);
+      expect(result?.transactions[0]?.originalCurrencyCode).toBe('USD');
+      expect(result?.transactions[0]?.externalReference).toBeUndefined();
+    });
+
+    it('reads an 8-column row with E/I fifth as a normal row, not a wide one', () => {
+      const result = parse({ rows: ['2026-06-16,Shop,Shop,250,E,,90,12.99'] });
+
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]).toMatchObject({ description: 'Shop', merchant: 'Shop', amount: 250 });
+      expect(result?.transactions[0]?.originalAmount).toBeUndefined();
+    });
+
+    it.each([
+      ['an amount without a currency', '12.99,'],
+      ['a currency without an amount', ',USD'],
+      ['an unknown currency code', '12.99,ZZZ'],
+      ['a currency symbol instead of a code', '12.99,US$'],
+      ['a zero amount', '0,USD'],
+      ['an unreadable amount', '$12.99,USD'],
+    ])('keeps the row but drops the pair for %s', (_label, pair) => {
+      const result = parse({ rows: [`2026-06-16,Netflix,Netflix,520.40,E,,95,${pair},8F2K91`] });
+
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]?.amount).toBe(520.4);
+      expect(result?.transactions[0]?.originalAmount).toBeUndefined();
+      expect(result?.transactions[0]?.originalCurrencyCode).toBeUndefined();
+      expect(result?.transactions[0]?.externalReference).toBe('8F2K91');
+    });
+
+    it('caps the reference at 255 characters', () => {
+      const result = parse({ rows: [`2026-06-16,Shop,Shop,250,E,,90,,,${'A'.repeat(300)}`] });
+
+      expect(result?.transactions[0]?.externalReference).toHaveLength(255);
+    });
+
+    it('maps a wide row that also carries the new columns', () => {
+      const result = parse({
+        rows: ['2026-06-14 12:49:08,Queseria Fama,,Queseria Fama,1115,E,,80,12.50,EUR,AB12'],
+      });
+
+      expect(result?.droppedRowCount).toBe(0);
+      expect(result?.transactions[0]).toEqual({
+        date: '2026-06-14 12:49:08',
+        description: 'Queseria Fama',
+        merchant: 'Queseria Fama',
+        amount: 1115,
+        type: 'expense',
+        balance: undefined,
+        confidence: 0.8,
+        originalAmount: 12.5,
+        originalCurrencyCode: 'EUR',
+        externalReference: 'AB12',
+      });
     });
   });
 

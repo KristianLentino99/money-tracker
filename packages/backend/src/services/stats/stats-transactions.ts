@@ -9,7 +9,7 @@ import { CategoryRefundPair, resolveRefundPairs } from './category-allocation';
 
 /**
  * What counts as money movement for reporting, for the reports that aggregate transaction rows
- * over a window (cash-flow, expenses history, cumulative, pivot, savings, category spend). Reports
+ * over a window (cash-flow, expenses history, cumulative, pivot, savings, tracker spend). Reports
  * that read something other than those rows — earliest date, vehicle anchors, refund pair
  * resolution — go to the boundary directly.
  *
@@ -50,12 +50,12 @@ export interface StatsTransactionsResult {
   /**
    * Refund pairs touching `rows`, oriented into expense/income sides. Empty unless
    * `refunds: 'net'`. Reports keyed on payee/tag (pivot) or on original/refund orientation
-   * (specialized reports) resolve their own pairs — those shapes carry data a category pair cannot express.
+   * (trackers) resolve their own pairs — those shapes carry data a category pair cannot express.
    */
   refundPairs: CategoryRefundPair[];
 }
 
-const moneyMovementWhere: WhereOptions = {
+export const moneyMovementWhere: WhereOptions = {
   [Op.or]: [
     { transferNature: TRANSACTION_TRANSFER_NATURE.not_transfer },
     { transferNature: TRANSACTION_TRANSFER_NATURE.transfer_to_loan, transactionType: TRANSACTION_TYPES.expense },

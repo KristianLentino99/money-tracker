@@ -2,10 +2,14 @@ import { api } from '@/api/_api';
 import type { SupportedLocale } from '@bt/shared/i18n/locales';
 import type {
   CategoryMappingPreset,
+  CategoryOrder,
   FireSettings,
   PAYMENT_TYPES,
   TransactionOptionalField,
-  endpointsTypes,
+  SidebarSectionsConfig,
+  SavedPivotView,
+  SavedTransactionView,
+  CurrencyDisplayPreference,
 } from '@bt/shared/types';
 
 export interface DashboardWidgetConfig {
@@ -14,13 +18,6 @@ export interface DashboardWidgetConfig {
   rowSpan?: number;
   config?: Record<string, unknown>;
 }
-
-/**
- * Per-section visibility for the sidebar's Accounts panel. Re-exported from the shared contract
- * so it stays in lockstep with the backend Zod schema (`ZodSidebarSectionsSchema`), which is
- * compile-time asserted against it (`SidebarSectionsSchemaIsInSync`).
- */
-export type SidebarSectionsConfig = endpointsTypes.SidebarSectionsConfig;
 
 /** Optional links under the sidebar's Accounts nav group. Each is visible when unset. */
 export interface SidebarNavConfig {
@@ -47,6 +44,8 @@ interface TransactionsTableSettings {
   extraFilters?: string[];
   /** Shades non-editable cells on every row instead of only the hovered one. */
   alwaysShowLockedCells?: boolean;
+  /** User-resized columns. Columns absent here keep their default width and flex to fill spare space. */
+  columnWidths?: { id: string; widthPx: number }[];
 }
 
 interface TransactionsListSettings {
@@ -62,6 +61,8 @@ interface TransactionFormSettings {
   optionalFields?: TransactionOptionalField[];
   /** Whether the transaction form may load map tiles and address search from OpenStreetMap. */
   mapPicker?: boolean;
+  /** Whether the category picker lists only categories matching the transaction type. On when unset. */
+  filterCategoriesByType?: boolean;
   /** Payment type preselected on new transactions. Credit card when unset. */
   defaultPaymentType?: PAYMENT_TYPES;
 }
@@ -85,14 +86,6 @@ export interface SubscriptionsSettings {
    *  still lets the user override it per subscription. */
   defaultAutoRecord?: boolean;
 }
-
-/**
- * A saved Pivot Report view — the full configuration a user pinned so they can reload the same
- * cross-tab later. The shape is the shared contract the backend Zod schema
- * (`ZodSavedPivotViewConfigSchema`) is asserted against, so the two ends can't drift.
- */
-export type SavedPivotViewConfig = endpointsTypes.SavedPivotViewConfig;
-export type SavedPivotView = endpointsTypes.SavedPivotView;
 
 export interface UserSettingsSchema {
   locale?: SupportedLocale;
@@ -122,6 +115,8 @@ export interface UserSettingsSchema {
   matchTransfersWithManualAccounts?: boolean;
   /** Store bank transactions before they are booked. Off when unset. */
   importPendingBankTransactions?: boolean;
+  /** UTC hours of the scheduled bank sync, at most two. 06:00 and 18:00 when unset. */
+  bankSyncHoursUtc?: number[];
   sidebarSections?: SidebarSectionsConfig;
   sidebarNav?: SidebarNavConfig;
   payeeExtractionUsesDescription?: boolean;
@@ -132,11 +127,14 @@ export interface UserSettingsSchema {
   ui?: UiSettings;
   subscriptions?: SubscriptionsSettings;
   savedPivotViews?: SavedPivotView[];
+  savedTransactionViews?: SavedTransactionView[];
   /**
    * Hide zero-balance accounts (and account groups emptied by that hiding) from the sidebar
    * Accounts panel. Defaults to visible/off when unset.
    */
   hideZeroBalances?: boolean;
+  /** Hides the "turn on smart tracking" tip on every tracker. */
+  hideSmartTrackingTip?: boolean;
   accounts?: {
     /** Account preselected in the account pickers. `null` means the user explicitly cleared it. */
     defaultAccountId?: string | null;
@@ -153,7 +151,14 @@ export interface UserSettingsSchema {
    * A category also covered by `savingsCategoryIds` counts as savings.
    */
   taxCategoryIds?: string[];
-  currencyDisplay?: endpointsTypes.CurrencyDisplayPreference;
+  /**
+   * Categories listed in the picker for income transactions; the rest are listed for expenses.
+   * Subcategories inherit from their parent. Empty or unset lists every category for both.
+   */
+  incomeCategoryIds?: string[];
+  /** Custom category order: parent id (or `CATEGORY_ORDER_ROOT_KEY`) → child ids in display order. */
+  categoryOrder?: CategoryOrder;
+  currencyDisplay?: CurrencyDisplayPreference;
   fire?: FireSettings;
 }
 

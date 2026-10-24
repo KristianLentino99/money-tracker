@@ -111,6 +111,7 @@ describe('FIRE settings integrity across settings writers', () => {
             enabled: false,
             types: {
               [NOTIFICATION_TYPES.vehicleMaintenanceReminder]: false,
+              [NOTIFICATION_TYPES.trackerAlert]: false,
               [NOTIFICATION_TYPES.system]: true,
               [NOTIFICATION_TYPES.changelog]: true,
             },

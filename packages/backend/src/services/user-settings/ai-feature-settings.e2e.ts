@@ -1,6 +1,6 @@
-import { AI_FEATURE, PLANS } from '@bt/shared/types';
+import { AI_FEATURE, FEATURES, PLANS } from '@bt/shared/types';
 import { describe, expect, it } from '@jest/globals';
-import { SERVER_MODELS } from '@services/ai/resolution-ladder';
+import { FALLBACK_SERVER_MODELS } from '@services/ai/resolution-ladder';
 import * as helpers from '@tests/helpers';
 import { enableServerModel, runAsCloud, useSelfHostWithoutServerAiKeys } from '@tests/helpers/ai-test-env';
 import {
@@ -105,7 +105,7 @@ describe('AI feature settings', () => {
 
       expect(status).toMatchObject({
         servedBy: 'server',
-        modelName: SERVER_MODELS[AI_FEATURE.statementParsing].model,
+        modelName: FALLBACK_SERVER_MODELS[AI_FEATURE.statementParsing].model,
         pricing: null,
         capabilities: null,
       });
@@ -240,6 +240,29 @@ describe('AI feature settings', () => {
 
       expect(status).toMatchObject({ isConfigured: false, servedBy: 'connection', connectionId: first.id });
       expect(await readStoredFeatureConfigs({ userId })).toEqual([]);
+    });
+  });
+
+  describe('tracker matching on the smart tracking entitlement', () => {
+    const feature = AI_FEATURE.trackerMatching;
+
+    it('offers and pins the server model during a smart tracking trial', async () => {
+      runAsCloud();
+      enableServerModel();
+      await helpers.setUserBilling({ plan: PLANS.essential });
+      await helpers.startFeatureTrial({ feature: FEATURES.smart_tracking, raw: true });
+
+      expect(await helpers.getAiFeatureConfig({ feature, raw: true })).toMatchObject({ servedBy: 'server' });
+      expect((await helpers.setAiFeatureConfig({ feature, connectionId: null })).statusCode).toBe(200);
+    });
+
+    it('refuses the server model without smart tracking', async () => {
+      runAsCloud();
+      enableServerModel();
+      await helpers.setUserBilling({ plan: PLANS.essential });
+
+      expect(await helpers.getAiFeatureConfig({ feature, raw: true })).toMatchObject({ servedBy: null });
+      expect((await helpers.setAiFeatureConfig({ feature, connectionId: null })).statusCode).toBe(422);
     });
   });
 });

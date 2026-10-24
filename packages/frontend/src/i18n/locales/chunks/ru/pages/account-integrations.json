@@ -116,6 +116,8 @@
             "fillForm": "Заполните форму следующими значениями:",
             "appName": "Название приложения:",
             "redirectUrls": "Разрешённые URL перенаправления:",
+            "httpsRequired": "Enable Banking only accepts https redirect URLs. Serve this instance over HTTPS, set {envVar} to its public callback URL (e.g. {example}), recreate the backend container, and enter the same URL in this field. {link}",
+            "httpsRequiredLink": "How to set it up",
             "appDescription": "Описание приложения:",
             "emailProtection": "Email для вопросов защиты данных:",
             "privacyUrl": "URL политики конфиденциальности:",
@@ -227,6 +229,13 @@
           "step1": "Создайте аккаунт SimpleFIN Bridge на {link} и подключите свой банк.",
           "step2": "Создайте новый токен настройки на панели Bridge.",
           "step3": "Вставьте токен в поле."
+        },
+        "brokerageNotice": {
+          "trigger": "Only bank accounts are supported – brokerage accounts are not",
+          "title": "What SimpleFIN can import",
+          "supported": "Bank accounts – checking, savings, credit cards – are fully supported. Balances and transactions sync automatically.",
+          "unsupported": "Brokerage and retirement accounts (stocks, ETFs, crypto, 401k, IRA) are not supported. SimpleFIN itself doesn't truly support them either – it doesn't say which account is a brokerage one, and holdings come in an unofficial format that can change at any time.",
+          "tryAnyway": "You can still try to connect them – they'll be imported as regular accounts with whatever balance and cash transactions SimpleFIN provides, but your positions won't show up. No promises it works correctly."
         },
         "connectButton": "Подключить",
         "connectingButton": "Подключение…",

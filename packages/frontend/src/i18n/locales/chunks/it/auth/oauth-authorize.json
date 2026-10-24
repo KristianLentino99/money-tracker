@@ -11,7 +11,8 @@
       "always_granted": "Sempre concesso",
       "optional": "Facoltativo",
       "delete_warning": "Concedi l'accesso solo alle app di cui ti fidi completamente",
-      "unknown_app": "Un'applicazione"
+      "unknown_app": "Un'applicazione",
+      "redirect_notice": "After approval you will be redirected to {host}. Only continue if you recognize this address."
     },
     "scopes": {
       "finance_read": {

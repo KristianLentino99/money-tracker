@@ -29,6 +29,8 @@ import Currencies from '@models/currencies.model';
 import LoanDetails from '@models/loan-details.model';
 import Payees from '@models/payees.model';
 import Tags from '@models/tags.model';
+import TrackerTransactions from '@models/tracker-transactions.model';
+import Trackers from '@models/trackers.model';
 import TransactionGroupItems from '@models/transaction-group-items.model';
 import TransactionGroups, { dissolveUndersizedGroups } from '@models/transaction-groups.model';
 import TransactionSplits from '@models/transaction-splits.model';
@@ -204,6 +206,13 @@ export default class Transactions extends Model {
   @Column({ type: DataType.JSONB, allowNull: true, defaultValue: null })
   creatorSnapshot!: TransactionCreatorSnapshot | null;
 
+  @BelongsToMany(() => Trackers, {
+    through: { model: () => TrackerTransactions, unique: false },
+    foreignKey: 'transactionId',
+    otherKey: 'trackerId',
+  })
+  trackers!: Trackers[];
+
   @BelongsToMany(() => Tags, {
     through: { model: () => TransactionTags, unique: false },
     foreignKey: 'transactionId',
@@ -299,7 +308,7 @@ export default class Transactions extends Model {
   @MoneyField({ storage: 'cents' })
   declare cashbackAmount: Money;
 
-  // Metadata only: no balance or statistics path reads these. What the user spent in a
+  // Metadata only: no balance, statistics, tracker or budget-plan path reads these. What the user spent in a
   // foreign currency, with its ISO 4217 code. Both hold a value or both stay null.
   @MoneyField({ storage: 'cents', allowNull: true })
   declare originalAmount: Money | null;
@@ -792,6 +801,31 @@ function buildRefundCondition(filter: FILTER_OPERATION | undefined): Record<stri
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// A required include can't express "in none", so the blank case is a correlated subquery.
+// Ids are interpolated into raw SQL, so the UUID check is what keeps it injection-safe.
+function buildNoneOrAnyJunctionCondition({
+  ids,
+  paramName,
+  junctionTable,
+  alias,
+  column,
+}: {
+  ids: string[];
+  paramName: string;
+  junctionTable: string;
+  alias: string;
+  column: string;
+}) {
+  if (ids.some((id) => !UUID_PATTERN.test(id))) {
+    throw new ValidationError({ message: `"${paramName}" must contain valid record ids` });
+  }
+  const junction = `SELECT 1 FROM "${junctionTable}" ${alias} WHERE ${alias}."transactionId" = "Transactions"."id"`;
+  const inNone = `NOT EXISTS (${junction})`;
+  if (!ids.length) return literal(inNone);
+  const inAny = `EXISTS (${junction} AND ${alias}."${column}" IN (${ids.map((id) => `'${id}'`).join(', ')}))`;
+  return literal(`(${inNone} OR ${inAny})`);
+}
+
 // `refundLinked` can't express this filter: it is true for BOTH sides of a link, while
 // only the refund side is barred from being linked again.
 function buildExcludeRefundTxsCondition({ keepRefundsForTxId }: { keepRefundsForTxId?: string }) {
@@ -816,6 +850,8 @@ export const findWithFilters = async ({
   accountType,
   accountIds,
   excludeAccountIds,
+  trackerIds,
+  excludedTrackerIds,
   tagIds: requestedTagIds,
   excludedTagIds,
   order = SORT_DIRECTIONS.desc,
@@ -864,6 +900,8 @@ export const findWithFilters = async ({
   accountIds?: string[];
   /** Filter: exclude transactions from these account IDs */
   excludeAccountIds?: string[];
+  trackerIds?: string[];
+  excludedTrackerIds?: string[];
   tagIds?: string[];
   excludedTagIds?: string[];
   order?: SORT_DIRECTIONS;
@@ -978,7 +1016,7 @@ export const findWithFilters = async ({
   if (categoryIds && categoryIds.length > 0) {
     // Find transactions that have splits with any of the requested category IDs.
     // Under `access: 'pre-scoped'` we widen the lookup to any user's splits — the caller's
-    // upstream scoping (accessible accountIds) constrains the final rows, so
+    // upstream scoping (accessible accountIds / tracker ids) constrains the final rows, so
     // this stays safe.
     const splitsWhere: Record<string, unknown> = { categoryId: { [Op.in]: categoryIds } };
     if (access !== 'pre-scoped') splitsWhere.userId = access.creator;
@@ -1074,17 +1112,63 @@ export const findWithFilters = async ({
     }
   }
 
+  const hasBlankTracker = !!trackerIds?.includes(BLANK_FILTER_VALUE);
+  if (hasBlankTracker) {
+    pushAndCondition(
+      buildNoneOrAnyJunctionCondition({
+        ids: trackerIds!.filter((id) => id !== BLANK_FILTER_VALUE),
+        paramName: 'trackerIds',
+        junctionTable: 'TrackerTransactions',
+        alias: 'bt',
+        column: 'trackerId',
+      }),
+    );
+  } else if (trackerIds?.length) {
+    const trackerTransactionIds = await TrackerTransactions.findAll({
+      attributes: ['transactionId'],
+      where: {
+        trackerId: { [Op.in]: trackerIds },
+      },
+      raw: true,
+    }).then((results) => results.map((r) => r.transactionId));
+
+    whereClause.id = {
+      ...(whereClause.id as object),
+      [Op.in]: trackerTransactionIds,
+    };
+  }
+
+  if (excludedTrackerIds?.length) {
+    const excludedTransactionIds = await TrackerTransactions.findAll({
+      attributes: ['transactionId'],
+      where: {
+        trackerId: {
+          [Op.in]: excludedTrackerIds,
+        },
+      },
+      raw: true,
+    }).then((results) => results.map((r) => r.transactionId));
+
+    if (excludedTransactionIds.length > 0) {
+      whereClause.id = {
+        ...(whereClause.id as object),
+        [Op.notIn]: excludedTransactionIds,
+      };
+    }
+  }
+
   const hasBlankTag = !!requestedTagIds?.includes(BLANK_FILTER_VALUE);
   const tagIds = hasBlankTag ? requestedTagIds!.filter((id) => id !== BLANK_FILTER_VALUE) : requestedTagIds;
-  // A required include can't express "no tags", so the blank case is a correlated subquery.
   if (hasBlankTag) {
-    if (tagIds!.some((id) => !UUID_PATTERN.test(id))) {
-      throw new ValidationError({ message: '"tagIds" must contain valid record ids' });
-    }
-    const junction = `SELECT 1 FROM "TransactionTags" tt WHERE tt."transactionId" = "Transactions"."id"`;
-    const untagged = `NOT EXISTS (${junction})`;
-    const taggedWithAny = `EXISTS (${junction} AND tt."tagId" IN (${tagIds!.map((id) => `'${id}'`).join(', ')}))`;
-    pushAndCondition(literal(tagIds!.length ? `(${untagged} OR ${taggedWithAny})` : untagged));
+    pushAndCondition(
+      buildNoneOrAnyJunctionCondition({
+        ids: tagIds!,
+        paramName: 'tagIds',
+        junctionTable: 'TransactionTags',
+        alias: 'tt',
+        column: 'tagId',
+      }),
+    );
   }
 
   // Filter by tagIds - include only transactions with these tags

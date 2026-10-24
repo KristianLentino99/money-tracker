@@ -8,6 +8,7 @@ jest.mock('@js/utils/logger', () => ({
   },
 }));
 
+import { t } from '@i18n/index';
 import { BadRequestError, ForbiddenError, TooManyRequests } from '@js/errors';
 
 import { EnableBankingApiClient, classifyAspspError, isAspspDateRangeRejection, safeStringify } from './api-client';
@@ -194,6 +195,7 @@ describe('isAspspDateRangeRejection', () => {
     'The date must be less than 24 months',
     'Period must be no more than 90 days',
     'You can not request transactions more than 90 days in the past',
+    'One or more date fields are more than two years in the past.',
   ])('matches generic limit phrasings: "%s"', (aspspMessage) => {
     expect(isAspspDateRangeRejection(makeAspspBadRequest({ aspspMessage }))).toBe(true);
   });
@@ -205,6 +207,22 @@ describe('isAspspDateRangeRejection', () => {
           aspspMessage: 'Error interacting with ASPSP',
           aspspErrorDataStr: '{"status":400,"message":"date range cannot exceed 90 days"}',
         }),
+      ),
+    ).toBe(true);
+  });
+
+  it('matches the bare ASPSP_ERROR wrapper, since Enable Banking may drop the bank text (SNS NL)', () => {
+    expect(
+      isAspspDateRangeRejection(
+        makeAspspBadRequest({
+          aspspMessage: 'Error interacting with ASPSP',
+          message: 'Enable Banking API error: Error interacting with ASPSP',
+        }),
+      ),
+    ).toBe(true);
+    expect(
+      isAspspDateRangeRejection(
+        makeAspspBadRequest({ message: 'Enable Banking API error: Error interacting with ASPSP' }),
       ),
     ).toBe(true);
   });
@@ -318,6 +336,7 @@ describe('handleApiError', () => {
     });
 
     expect(() => handleApiError(error)).toThrow(TooManyRequests);
+    expect(() => handleApiError(error)).toThrow(t({ key: 'bankDataProviders.enableBanking.rateLimitExceeded' }));
     expect(() => handleApiError(error)).not.toThrow(ForbiddenError);
   });
 });

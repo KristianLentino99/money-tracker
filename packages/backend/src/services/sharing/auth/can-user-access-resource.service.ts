@@ -10,8 +10,8 @@ import {
 import { UnexpectedError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
-import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
+import Trackers from '@models/trackers.model';
 import Users from '@models/users.model';
 import { Op } from 'sequelize';
 
@@ -82,13 +82,13 @@ const RESOURCE_OWNER_RESOLVERS: Record<ResourceType, ResourceOwnerResolver> = {
   // `canUserAccessResource` itself; this resolver only feeds the shape-checking
   // branch.
   [RESOURCE_TYPES.household]: async (resourceId) => toPositiveInt(resourceId),
-  [RESOURCE_TYPES.plan]: async (resourceId) => {
-    const plan = (await Plans.findOne({
+  [RESOURCE_TYPES.tracker]: async (resourceId) => {
+    const tracker = (await Trackers.findOne({
       where: { id: resourceId },
-      attributes: ['ownerUserId'],
+      attributes: ['userId'],
       raw: true,
-    })) as { ownerUserId: number } | null;
-    return plan?.ownerUserId ?? null;
+    })) as { userId: number } | null;
+    return tracker?.userId ?? null;
   },
 };
 
@@ -117,13 +117,13 @@ const RESOURCE_NAME_RESOLVERS: Record<ResourceType, ResourceNameResolver> = {
     })) as { username: string } | null;
     return owner ? formatHouseholdLabel(owner.username) : null;
   },
-  [RESOURCE_TYPES.plan]: async (resourceId) => {
-    const plan = (await Plans.findOne({
+  [RESOURCE_TYPES.tracker]: async (resourceId) => {
+    const tracker = (await Trackers.findOne({
       where: { id: resourceId },
       attributes: ['name'],
       raw: true,
     })) as { name: string } | null;
-    return plan?.name ?? null;
+    return tracker?.name ?? null;
   },
 };
 
@@ -231,7 +231,12 @@ export const canUserAccessResource = async ({
   })) as { permission: SharePermission; policy: SharePolicy | null } | null;
 
   if (share) {
-    if (!isPermissionAtLeast({ granted: share.permission, required: requiredPermission })) {
+    if (
+      !isPermissionAtLeast({
+        granted: share.permission,
+        required: requiredPermission,
+      })
+    ) {
       // Per-resource share exists but doesn't meet the required level. Collapse to denied
       // — see step (2) in the resolution-order comment for why we don't fall through to
       // household here.
@@ -247,8 +252,12 @@ export const canUserAccessResource = async ({
     };
   }
 
-  // Plans are explicit-share only and do not inherit access from household membership.
-  if (resourceType === RESOURCE_TYPES.plan) {
+  // Trackers are explicit-share only — they do NOT inherit access from a household
+  // membership. (Decision: per-resource selective sharing for households is the
+  // future direction; "all-or-nothing" auto-grant is the wrong primitive for trackers,
+  // so we don't wire the fallthrough at all.) Stop here when no per-resource share
+  // exists for a tracker request.
+  if (resourceType === RESOURCE_TYPES.tracker) {
     return denied(ownerUserId);
   }
 
@@ -269,7 +278,12 @@ export const canUserAccessResource = async ({
     return denied(ownerUserId);
   }
 
-  if (!isPermissionAtLeast({ granted: householdShare.permission, required: requiredPermission })) {
+  if (
+    !isPermissionAtLeast({
+      granted: householdShare.permission,
+      required: requiredPermission,
+    })
+  ) {
     return denied(ownerUserId);
   }
 

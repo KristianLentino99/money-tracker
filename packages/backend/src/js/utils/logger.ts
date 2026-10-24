@@ -15,6 +15,49 @@ import { isSentryEnabled, Sentry } from './sentry';
  */
 const isExpectedClientError = (error: unknown): boolean => error instanceof CustomError && error.httpCode < 500;
 
+/**
+ * Fixed-window allowance per distinct message. Once `maxKeys` distinct messages
+ * are tracked in a window, unseen ones are refused until the window rolls over.
+ */
+export const createMessageRateLimiter = ({
+  limit,
+  windowMs,
+  maxKeys,
+}: {
+  limit: number;
+  windowMs: number;
+  maxKeys: number;
+}) => {
+  const counts = new Map<string, number>();
+  let windowStart = -Infinity;
+
+  return ({ message, now = Date.now() }: { message: string; now?: number }): boolean => {
+    if (now - windowStart >= windowMs) {
+      counts.clear();
+      windowStart = now;
+    }
+
+    const count = counts.get(message);
+    if (count === undefined && counts.size >= maxKeys) return false;
+    if (count !== undefined && count >= limit) return false;
+
+    counts.set(message, (count ?? 0) + 1);
+    return true;
+  };
+};
+
+// Every warn is a billed Sentry event, so a warn inside a loop would otherwise
+// spend the monthly error quota and hide real errors until the next cycle.
+const allowSentryWarn = createMessageRateLimiter({ limit: 20, windowMs: 60 * 60 * 1000, maxKeys: 500 });
+
+// Many warn messages interpolate ids, so each loop iteration is a distinct message
+// that the per-message limit never catches. This bounds all warns together.
+const SENTRY_WARN_DAILY_KEY = 'all';
+const allowAnySentryWarn = createMessageRateLimiter({ limit: 100, windowMs: 24 * 60 * 60 * 1000, maxKeys: 1 });
+
+// Cleared by the next allowed warn, which can only happen in a new daily window.
+let isDailyCapReported = false;
+
 const transportsArray: winston.transport[] = [new transports.Console()];
 const { GRAFANA_LOKI_HOST, GRAFANA_LOKI_AUTH, GRAFANA_LOKI_USER_ID } = process.env;
 const isGrafanaConfigured = Boolean(GRAFANA_LOKI_HOST && GRAFANA_LOKI_AUTH && GRAFANA_LOKI_USER_ID);
@@ -95,16 +138,25 @@ const createLogger =
       });
     }
 
-    if (severity === 'warn' && isSentryEnabled()) {
-      Sentry.withScope((scope) => {
-        scope.setExtras(meta);
-        const requestId = getCurrentRequestId();
-        const sessionId = getCurrentSessionId();
-        if (requestId) scope.setTag('requestId', requestId);
-        if (sessionId) scope.setTag('sessionId', sessionId);
-        Sentry.captureMessage(message, 'warning');
-      });
+    if (severity !== 'warn' || !isSentryEnabled() || !allowSentryWarn({ message })) return;
+
+    if (!allowAnySentryWarn({ message: SENTRY_WARN_DAILY_KEY })) {
+      if (!isDailyCapReported) {
+        isDailyCapReported = true;
+        Sentry.captureMessage('Sentry warn daily cap reached; further warns are dropped from Sentry', 'warning');
+      }
+      return;
     }
+
+    isDailyCapReported = false;
+    Sentry.withScope((scope) => {
+      scope.setExtras(meta);
+      const requestId = getCurrentRequestId();
+      const sessionId = getCurrentSessionId();
+      if (requestId) scope.setTag('requestId', requestId);
+      if (sessionId) scope.setTag('sessionId', sessionId);
+      Sentry.captureMessage(message, 'warning');
+    });
   };
 
 const formatErrorToString = (error: string | Error) => {
@@ -146,11 +198,21 @@ function loggerErrorHandler(
     messageResult = 'Default error message from logger';
   }
 
+  const errorObj =
+    messageParam instanceof Error
+      ? messageParam
+      : typeof messageParam === 'object' && messageParam.error
+        ? messageParam.error
+        : null;
+  const errorDetails = (errorObj as { details?: unknown } | null)?.details;
+
   if (showLogsInTests) {
     winstonLogger.error({
       message: messageResult,
       requestId: getCurrentRequestId() ?? null,
       ...extra,
+      // Self-hosters without Sentry only have this line to report upstream failures.
+      ...(errorDetails && typeof errorDetails === 'object' ? { errorDetails } : {}),
     });
   }
 
@@ -162,14 +224,6 @@ function loggerErrorHandler(
       if (requestId) scope.setTag('requestId', requestId);
       if (sessionId) scope.setTag('sessionId', sessionId);
 
-      // Extract the Error object for proper stack traces in Sentry
-      const errorObj =
-        messageParam instanceof Error
-          ? messageParam
-          : typeof messageParam === 'object' && messageParam.error
-            ? messageParam.error
-            : null;
-
       if (errorObj) {
         // A logged 4xx is not a Sentry-worthy bug — the local log above keeps it.
         if (isExpectedClientError(errorObj)) return;
@@ -179,7 +233,6 @@ function loggerErrorHandler(
         }
         // Surface CustomError.details so wrapped HTTP/upstream context lands
         // in Sentry — Sentry's default capture only serializes name/message/stack.
-        const errorDetails = (errorObj as { details?: unknown }).details;
         if (errorDetails && typeof errorDetails === 'object') {
           scope.setExtras(errorDetails as Record<string, unknown>);
         }

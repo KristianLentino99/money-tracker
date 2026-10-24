@@ -169,7 +169,7 @@
           "maxLength": "Must not exceed {max} characters",
           "httpUrl": "Enter a valid http(s) URL"
         },
-        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",
@@ -246,7 +246,8 @@
         "createMore": {
           "label": "Crea altre transazioni",
           "createdToast": "Transazione creata"
-        }
+        },
+        "addFieldsLabel": "Aggiungere"
       },
       "investmentContribution": {
         "title": "Acquisti di investimento",
@@ -435,7 +436,8 @@
         "deletePurchaseTitle": "Eliminare l'acquisto collegato?",
         "deletePurchaseDescription": "Questa operazione rimuove l'acquisto di investimento selezionato, ma mantiene l'uscita dal conto e il contributo al portafoglio.",
         "confirmDeletePurchase": "Elimina acquisto",
-        "unlinkWarningNoCash": "This transfer never changed {portfolio}'s cash balance, so unlinking leaves the balance untouched."
+        "unlinkWarningNoCash": "This transfer never changed {portfolio}'s cash balance, so unlinking leaves the balance untouched.",
+        "noCashBadge": "No cash impact"
       },
       "ventureLinked": {
         "title": "Transazione collegata a una venture",
@@ -589,7 +591,12 @@
         "saveFailed": "Impossibile salvare la categoria",
         "unexpectedError": "Errore imprevisto"
       },
-      "inheritParentColor": "Use parent's color"
+      "inheritParentColor": "Use parent's color",
+      "defaultTagsLabel": "Default tags",
+      "defaultTagsPlaceholder": "Select tags",
+      "defaultTagsHint": "Added to a transaction when you pick this category.",
+      "applyTagsOnAiLabel": "Also apply when AI categorizes a transaction",
+      "applyTagsOnAiHint": "Tags stay on the transaction if you change its category later."
     },
     "addCurrency": {
       "title": "Aggiungi nuova valuta",
@@ -606,7 +613,11 @@
         "title": "Crea gruppo",
         "nameLabel": "Nome gruppo",
         "namePlaceholder": "Investimenti",
-        "createButton": "Crea"
+        "createButton": "Crea",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {
@@ -742,7 +753,14 @@
         "markedAsPaid": "Pagamento registrato",
         "markAsPaidFailed": "Impossibile registrare il pagamento",
         "linkTransactionDateMismatch": "Scegli una transazione registrata nella data di pagamento prevista."
-      }
+      },
+      "useExistingTitle": "Use the existing payment",
+      "useExistingDescription": "A transaction linked to this subscription is already recorded in this period. Nothing new is added to your account.",
+      "recordNewTitle": "Record a new payment",
+      "recordNewDescription": "Adds another transaction for this period. The existing payment stays as it is.",
+      "linkedPaymentDescription": "{name} already has a payment in this period. Choose how to mark it paid.",
+      "confirmUseExisting": "Use this payment",
+      "previewUnavailable": "Couldn't check for payments already recorded in this period. Review the details before recording a new one."
     },
     "attachInvoice": {
       "title": "Allega fattura",
@@ -824,7 +842,8 @@
       "trial": {
         "left": "Resta 1 tentativo gratuito su {limit} | Restano {count} tentativi gratuiti su {limit}",
         "spent": "Hai usato tutti i tentativi gratuiti. Passa a Plus per continuare ad allegare fatture con l'IA."
-      }
+      },
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options."
     },
     "shareBudgetDialog": {
       "title": "Share budget",
@@ -846,8 +865,8 @@
     "loanPayment": {
       "title": "Loan payment",
       "description": "Record or edit a payment against this loan.",
-      "createTitle": "Record Payment",
-      "editTitle": "Edit Loan Payment",
+      "createTitle": "Record payment",
+      "editTitle": "Edit loan payment",
       "payingTo": "Paying to",
       "fromAccountLabel": "From account",
       "fromAccountPlaceholder": "Select account",

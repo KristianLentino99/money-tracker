@@ -361,8 +361,8 @@ export async function extractManualAi({
   let fileType: string | undefined;
   if (fileBase64) {
     const validation = validateFileBuffer({ buffer: Buffer.from(fileBase64, 'base64') });
-    if (!validation.valid || !validation.fileBuffer || !validation.fileType) {
-      throw new ValidationError({ message: validation.error?.message ?? 'Invalid import file.' });
+    if (!validation.valid) {
+      throw new ValidationError({ message: validation.error.message });
     }
     const extracted = await extractTextFromFile({ buffer: validation.fileBuffer, fileType: validation.fileType });
     if (!extracted.success || !extracted.text) {

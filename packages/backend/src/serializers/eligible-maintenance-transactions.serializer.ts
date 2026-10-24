@@ -1,7 +1,7 @@
 import type { RecordId } from '@bt/shared/types';
 import type Transactions from '@models/transactions.model';
 
-export interface EligibleMaintenanceTransactionApiResponse {
+interface EligibleMaintenanceTransactionApiResponse {
   id: RecordId;
   date: string;
   amount: number;

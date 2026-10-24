@@ -1,5 +1,6 @@
 import { i18nChunkGuard } from '@/i18n/route-guard';
 import type { I18nChunkName } from '@/i18n/types';
+import { RESET_PASSWORD_PATH } from '@/lib/reset-password-token';
 import type { RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -14,44 +15,41 @@ const routes: RouteRecordRaw[] = [
     name: ROUTES_NAMES.dashboard,
     component: () => import('@/layouts/dashboard.vue'),
     beforeEnter: [redirectRouteGuard, baseCurrencyExists],
-    redirect: () => ({ name: ROUTES_NAMES.plan }),
+    redirect: () => ({ name: ROUTES_NAMES.home }),
     meta: {
       // Layout chunks loaded for all dashboard pages. `pages/payees` is in here
       // because PayeeSelectField / the New Payee dialog can be reached from any
       // route via the transaction-create dialog; loading it lazily races the
       // first render and leaves option labels stuck on raw keys.
-      i18nChunks: ['layout', 'dialogs', 'forms', 'errors', 'pages/payees'] as I18nChunkName[],
+      i18nChunks: ['layout', 'dialogs', 'forms', 'errors', 'pages/payees'],
     },
     children: [
       {
         path: '/dashboard',
         name: ROUTES_NAMES.home,
         component: () => import('@/pages/dashboard/dashboard.vue'),
-        meta: { i18nChunks: ['pages/dashboard', 'pages/transactions'] as I18nChunkName[] },
-      },
-      {
-        path: '/plan',
-        name: ROUTES_NAMES.plan,
-        component: () => import('@/pages/plan/index.vue'),
-        meta: { i18nChunks: ['pages/plan'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/dashboard', 'pages/transactions'] },
       },
       {
         path: '/accounts',
         name: ROUTES_NAMES.accounts,
         component: () => import('@/pages/accounts/accounts.vue'),
-        meta: { i18nChunks: ['pages/accounts'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/accounts'] },
       },
       {
         path: '/account/:id',
         name: ROUTES_NAMES.account,
         component: () => import('@/pages/account/account.vue'),
-        meta: { i18nChunks: ['pages/account', 'pages/transactions'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/account', 'pages/transactions'] },
       },
       {
         path: '/accounts/vehicles/:id',
         name: ROUTES_NAMES.accountsVehicleDetails,
         component: () => import('@/pages/accounts/vehicle-details.vue'),
-        meta: { i18nChunks: ['pages/accounts', 'pages/account', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'accounts',
+          i18nChunks: ['pages/accounts', 'pages/account', 'pages/transactions'],
+        },
       },
       {
         path: '/accounts/integrations',
@@ -61,38 +59,42 @@ const routes: RouteRecordRaw[] = [
         path: '/accounts/integrations/:connectionId',
         name: ROUTES_NAMES.accountIntegrationDetails,
         component: () => import('@/pages/accounts/integrations/details.vue'),
-        meta: { i18nChunks: ['pages/account-integrations'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/account-integrations'] },
       },
       {
         path: '/bank-callback',
         name: ROUTES_NAMES.bankCallback,
         component: () => import('@/pages/bank-callback.vue'),
-        meta: { i18nChunks: ['pages/account-integrations'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/account-integrations'] },
       },
       {
         path: '/loans',
         name: ROUTES_NAMES.loans,
         component: () => import('@/pages/loans/index.vue'),
-        meta: { i18nChunks: ['pages/loans'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/loans'] },
       },
       {
         path: '/loans/:id',
         name: ROUTES_NAMES.loanDetail,
         component: () => import('@/pages/loans/detail.vue'),
-        meta: { i18nChunks: ['pages/loans', 'pages/planned', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'accounts',
+          i18nChunks: ['pages/loans', 'pages/planned', 'pages/transactions'] as I18nChunkName[],
+        },
       },
       {
         path: '/investments',
         name: ROUTES_NAMES.investments,
         component: () => import('@/pages/investments/investments.vue'),
-        meta: { i18nChunks: ['pages/investments'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/investments'] },
       },
       {
         path: '/portfolios/:portfolioId',
         name: ROUTES_NAMES.portfolioDetail,
         component: () => import('@/pages/portfolios/portfolio-detail.vue'),
         meta: {
-          i18nChunks: ['pages/portfolio-detail', 'pages/investments', 'pages/transactions'] as I18nChunkName[],
+          navSection: 'accounts',
+          i18nChunks: ['pages/portfolio-detail', 'pages/investments', 'pages/transactions'],
         },
       },
       {
@@ -100,32 +102,33 @@ const routes: RouteRecordRaw[] = [
         name: ROUTES_NAMES.portfolioTransactionsImport,
         component: () => import('@/pages/portfolios/transactions-import/page.vue'),
         meta: {
-          i18nChunks: ['pages/investments-import', 'pages/portfolio-detail'] as I18nChunkName[],
+          navSection: 'accounts',
+          i18nChunks: ['pages/investments-import', 'pages/portfolio-detail'],
         },
       },
       {
         path: '/venture',
         name: ROUTES_NAMES.venture,
         component: () => import('@/pages/venture/venture.vue'),
-        meta: { i18nChunks: ['pages/venture'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/venture'] },
       },
       {
         path: '/venture/platforms',
         name: ROUTES_NAMES.venturePlatformsList,
         component: () => import('@/pages/venture/platforms.vue'),
-        meta: { i18nChunks: ['pages/venture'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/venture'] },
       },
       {
         path: '/venture/deals/:dealId',
         name: ROUTES_NAMES.ventureDealDetail,
         component: () => import('@/pages/venture/deal-detail.vue'),
-        meta: { i18nChunks: ['pages/venture', 'pages/transactions'] as I18nChunkName[] },
+        meta: { navSection: 'accounts', i18nChunks: ['pages/venture', 'pages/transactions'] },
       },
       {
         path: '/analytics',
         name: ROUTES_NAMES.analytics,
         component: () => import('@/pages/analytics/index.vue'),
-        meta: { i18nChunks: ['pages/analytics', 'pages/transactions'] as I18nChunkName[] },
+        meta: { i18nChunks: ['pages/analytics', 'pages/transactions'] },
         children: [
           {
             path: 'trends-comparison',
@@ -169,12 +172,25 @@ const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      // The "Budget" (budget plans). Trackers live under /planned.
+      {
+        path: '/budget',
+        name: ROUTES_NAMES.budget,
+        component: () => import('@/pages/budget/budget.vue'),
+        meta: { navSection: 'planned', i18nChunks: ['pages/budget-plans'] },
+      },
+      {
+        path: '/budget/:planId',
+        name: ROUTES_NAMES.budgetPlan,
+        component: () => import('@/pages/budget/budget-plan.vue'),
+        meta: { navSection: 'planned', i18nChunks: ['pages/budget-plans'] },
+      },
       {
         path: '/planned',
         name: ROUTES_NAMES.planned,
         component: () => import('@/pages/planned/index.vue'),
         redirect: { name: ROUTES_NAMES.plannedSubscriptions },
-        meta: { i18nChunks: ['pages/planned'] as I18nChunkName[] },
+        meta: { navSection: 'planned', i18nChunks: ['pages/planned'] },
         children: [
           {
             path: 'recurring-payments',
@@ -186,7 +202,33 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.plannedSubscriptionDetails,
             component: () => import('@/pages/planned/subscriptions/subscription-details.vue'),
           },
+          {
+            path: 'trackers',
+            name: ROUTES_NAMES.plannedTrackers,
+            component: () => import('@/pages/trackers/trackers.vue'),
+            meta: { i18nChunks: ['pages/budgets'] },
+          },
+          {
+            path: 'trackers/:id',
+            name: ROUTES_NAMES.plannedTrackerDetails,
+            component: () => import('@/pages/trackers/trackers-info/index.vue'),
+            meta: {
+              i18nChunks: ['pages/budgets', 'pages/budget-details', 'pages/transactions'],
+            },
+          },
         ],
+      },
+      {
+        path: '/goals',
+        name: ROUTES_NAMES.goals,
+        component: () => import('@/pages/goals/goals.vue'),
+        meta: { navSection: 'planned', i18nChunks: ['pages/goals'] },
+      },
+      {
+        path: '/goals/:goalId',
+        name: ROUTES_NAMES.goalDetails,
+        component: () => import('@/pages/goals/goal-details.vue'),
+        meta: { navSection: 'planned', i18nChunks: ['pages/goals'] },
       },
       // Backward-compat redirects for the old /planned/subscriptions URLs, so links
       // already sent (e.g. payment reminder emails) still resolve after the rename
@@ -208,55 +250,67 @@ const routes: RouteRecordRaw[] = [
         path: '/transactions',
         name: ROUTES_NAMES.transactions,
         component: () => import('@/pages/records/root.vue'),
-        meta: { i18nChunks: ['pages/transactions'] as I18nChunkName[] },
+        meta: { navSection: 'transactions', i18nChunks: ['pages/transactions'] },
       },
       {
         path: '/transaction-groups',
         name: ROUTES_NAMES.transactionGroups,
         component: () => import('@/pages/transaction-groups/index.vue'),
-        meta: { i18nChunks: ['pages/transactions'] as I18nChunkName[] },
+        meta: { navSection: 'transactions', i18nChunks: ['pages/transactions'] },
       },
       {
         path: '/transactions/optimizations',
         name: ROUTES_NAMES.optimizations,
         component: () => import('@/pages/optimizations/index.vue'),
-        meta: { i18nChunks: ['pages/optimizations', 'pages/automations', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'transactions',
+          i18nChunks: ['pages/optimizations', 'pages/automations', 'pages/transactions'],
+        },
       },
       {
         path: '/transactions/optimizations/transfers',
         name: ROUTES_NAMES.optimizationsTransfers,
         component: () => import('@/pages/optimizations/transfers/index.vue'),
-        meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'transactions',
+          i18nChunks: ['pages/optimizations', 'pages/transactions'],
+        },
       },
       {
         path: '/transactions/optimizations/ai-categorization',
         name: ROUTES_NAMES.optimizationsAiCategorization,
         component: () => import('@/pages/optimizations/ai-categorization/index.vue'),
-        meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'transactions',
+          i18nChunks: ['pages/optimizations', 'pages/transactions'],
+        },
       },
       {
         path: '/transactions/optimizations/reconciliation',
         name: ROUTES_NAMES.optimizationsReconciliation,
         component: () => import('@/pages/optimizations/reconciliation/index.vue'),
-        meta: { i18nChunks: ['pages/optimizations', 'pages/transactions'] as I18nChunkName[] },
+        meta: {
+          navSection: 'transactions',
+          i18nChunks: ['pages/optimizations', 'pages/transactions'],
+        },
       },
       {
         path: '/transactions/automations',
         name: ROUTES_NAMES.automations,
         component: () => import('@/pages/automations/index.vue'),
-        meta: { i18nChunks: ['pages/automations'] as I18nChunkName[] },
+        meta: { navSection: 'transactions', i18nChunks: ['pages/automations'] },
       },
       {
         path: '/transactions/automations/new',
         name: ROUTES_NAMES.automationCreate,
         component: () => import('@/pages/automations/editor.vue'),
-        meta: { i18nChunks: ['pages/automations'] as I18nChunkName[] },
+        meta: { navSection: 'transactions', i18nChunks: ['pages/automations'] },
       },
       {
         path: '/transactions/automations/:id',
         name: ROUTES_NAMES.automationDetails,
         component: () => import('@/pages/automations/editor.vue'),
-        meta: { i18nChunks: ['pages/automations'] as I18nChunkName[] },
+        meta: { navSection: 'transactions', i18nChunks: ['pages/automations'] },
       },
       {
         path: '/more',
@@ -294,34 +348,34 @@ const routes: RouteRecordRaw[] = [
             'settings/security',
             'settings/admin',
             'pages/shared-with-me',
-          ] as I18nChunkName[],
+          ],
         },
         children: [
           {
             path: 'categories',
             name: ROUTES_NAMES.settingsCategories,
             component: () => import('@/pages/settings/subpages/categories/index.vue'),
-            meta: { i18nChunks: ['settings/categories'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/categories'] },
           },
           {
             path: 'plan-billing',
             name: ROUTES_NAMES.settingsPlanBilling,
             beforeEnter: billingPageGuard,
             component: () => import('@/pages/settings/subpages/plan-billing/index.vue'),
-            meta: { i18nChunks: ['settings/plan-billing'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/plan-billing'] },
           },
           {
             path: 'tags',
             name: ROUTES_NAMES.settingsTags,
             component: () => import('@/pages/settings/subpages/tags/index.vue'),
-            meta: { i18nChunks: ['settings/tags'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/tags'] },
           },
           {
             path: 'payees',
             name: ROUTES_NAMES.settingsPayees,
             component: () => import('@/pages/settings/subpages/payees/index.vue'),
             redirect: { name: ROUTES_NAMES.settingsPayeesManage },
-            meta: { i18nChunks: ['pages/payees'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/payees'] },
             children: [
               {
                 path: 'manage',
@@ -339,26 +393,26 @@ const routes: RouteRecordRaw[] = [
             path: 'payees/:id',
             name: ROUTES_NAMES.settingsPayeeDetail,
             component: () => import('@/pages/settings/subpages/payees/detail.vue'),
-            meta: { i18nChunks: ['pages/payees'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/payees'] },
           },
           {
             path: 'currencies',
             name: ROUTES_NAMES.settingsCurrencies,
             component: () => import('@/pages/settings/subpages/currencies/index.vue'),
-            meta: { i18nChunks: ['settings/currencies'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/currencies'] },
           },
           {
             path: 'accounts',
             name: ROUTES_NAMES.settingsAccounts,
             component: () => import('@/pages/settings/subpages/accounts-groups/index.vue'),
-            meta: { i18nChunks: ['settings/accounts-groups'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/accounts-groups'] },
           },
           {
             path: 'data-management',
             name: ROUTES_NAMES.settingsDataManagement,
             component: () => import('@/pages/settings/subpages/data-management/index.vue'),
             redirect: { name: ROUTES_NAMES.settingsDataManagementImport },
-            meta: { i18nChunks: ['settings/data-management'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/data-management'] },
             children: [
               {
                 path: 'import',
@@ -376,28 +430,28 @@ const routes: RouteRecordRaw[] = [
             path: 'data-management/export/configure',
             name: ROUTES_NAMES.settingsDataManagementExportConfigure,
             component: () => import('@/pages/settings/subpages/data-management/pages/export-configure.vue'),
-            meta: { i18nChunks: ['settings/data-management'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/data-management'] },
           },
           {
             path: 'data-management/import/csv',
             name: ROUTES_NAMES.importCsv,
             component: () => import('@/pages/import-export/csv-import.vue'),
             meta: {
-              i18nChunks: ['pages/import-csv', 'pages/import-shared', 'settings/data-management'] as I18nChunkName[],
+              i18nChunks: ['pages/import-csv', 'pages/import-shared', 'settings/data-management'],
             },
           },
           {
             path: 'data-management/import/text-source',
             name: ROUTES_NAMES.importStatement,
             component: () => import('@/pages/import-export/statement-parser/index.vue'),
-            meta: { i18nChunks: ['pages/import-statement', 'settings/data-management'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/import-statement', 'pages/import-shared', 'settings/data-management'] },
           },
           {
             path: 'data-management/import/ynab',
             name: ROUTES_NAMES.importYnab,
             component: () => import('@/pages/import-export/ynab-import/index.vue'),
             meta: {
-              i18nChunks: ['pages/import-ynab', 'pages/import-shared', 'settings/data-management'] as I18nChunkName[],
+              i18nChunks: ['pages/import-ynab', 'pages/import-shared', 'settings/data-management'],
             },
           },
           {
@@ -405,11 +459,7 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.importBudgetBakersWallet,
             component: () => import('@/pages/import-export/budget-bakers-wallet-import/index.vue'),
             meta: {
-              i18nChunks: [
-                'pages/import-budget-bakers-wallet',
-                'pages/import-shared',
-                'settings/data-management',
-              ] as I18nChunkName[],
+              i18nChunks: ['pages/import-budget-bakers-wallet', 'pages/import-shared', 'settings/data-management'],
             },
           },
           {
@@ -417,11 +467,7 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.importMsMoney,
             component: () => import('@/pages/import-export/ms-money-import/index.vue'),
             meta: {
-              i18nChunks: [
-                'pages/import-ms-money',
-                'pages/import-shared',
-                'settings/data-management',
-              ] as I18nChunkName[],
+              i18nChunks: ['pages/import-ms-money', 'pages/import-shared', 'settings/data-management'],
             },
           },
           {
@@ -429,38 +475,38 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.importOfx,
             component: () => import('@/pages/import-export/ofx-import/index.vue'),
             meta: {
-              i18nChunks: ['pages/import-ofx', 'pages/import-shared', 'settings/data-management'] as I18nChunkName[],
+              i18nChunks: ['pages/import-ofx', 'pages/import-shared', 'settings/data-management'],
             },
           },
           {
             path: 'data-management/import/history',
             name: ROUTES_NAMES.importHistory,
             component: () => import('@/pages/import-export/import-history/index.vue'),
-            meta: { i18nChunks: ['pages/import-history', 'settings/data-management'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/import-history', 'settings/data-management'] },
           },
           {
             path: 'appearance',
             name: ROUTES_NAMES.settingsAppearance,
             component: () => import('@/pages/settings/subpages/appearance/index.vue'),
-            meta: { i18nChunks: ['settings/appearance'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/appearance'] },
           },
           {
             path: 'language',
             name: ROUTES_NAMES.settingsLanguage,
             component: () => import('@/pages/settings/subpages/language/index.vue'),
-            meta: { i18nChunks: ['settings/language'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/language'] },
           },
           {
             path: 'general',
             name: ROUTES_NAMES.settingsGeneral,
             component: () => import('@/pages/settings/subpages/general/index.vue'),
-            meta: { i18nChunks: ['settings/general'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/general'] },
           },
           {
             path: 'admin',
             name: ROUTES_NAMES.settingsAdmin,
             component: () => import('@/pages/settings/subpages/admin/index.vue'),
-            meta: { i18nChunks: ['settings/admin'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/admin'] },
           },
           {
             path: 'ai',
@@ -468,7 +514,7 @@ const routes: RouteRecordRaw[] = [
             component: () => import('@/pages/settings/subpages/ai/index.vue'),
             redirect: { name: ROUTES_NAMES.settingsAiFeatures },
             // Chunk names match the Crowdin files, so the merged page keeps both.
-            meta: { i18nChunks: ['settings/ai', 'settings/ai-integrations'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/ai', 'settings/ai-integrations'] },
             children: [
               {
                 path: 'features',
@@ -494,7 +540,7 @@ const routes: RouteRecordRaw[] = [
             name: ROUTES_NAMES.settingsSecurity,
             component: () => import('@/pages/settings/subpages/security/index.vue'),
             redirect: { name: ROUTES_NAMES.settingsSecurityLoginMethods },
-            meta: { i18nChunks: ['settings/security'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/security'] },
             children: [
               {
                 path: 'login-methods',
@@ -531,19 +577,19 @@ const routes: RouteRecordRaw[] = [
             path: 'shared-with-me',
             name: ROUTES_NAMES.settingsSharedWithMe,
             component: () => import('@/pages/shared-with-me/shared-with-me.vue'),
-            meta: { i18nChunks: ['pages/shared-with-me'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/shared-with-me'] },
           },
           {
             path: 'household',
             name: ROUTES_NAMES.settingsHousehold,
             component: () => import('@/pages/settings/subpages/household/index.vue'),
-            meta: { i18nChunks: ['pages/household'] as I18nChunkName[] },
+            meta: { i18nChunks: ['pages/household'] },
           },
           {
             path: 'subscriptions',
             name: ROUTES_NAMES.settingsSubscriptions,
             component: () => import('@/pages/settings/subpages/subscriptions/index.vue'),
-            meta: { i18nChunks: ['settings/subscriptions'] as I18nChunkName[] },
+            meta: { i18nChunks: ['settings/subscriptions'] },
           },
         ],
       },
@@ -560,39 +606,52 @@ const routes: RouteRecordRaw[] = [
         name: ROUTES_NAMES.signIn,
         beforeEnter: authPageGuard,
         component: () => import('@/pages/auth/login.vue'),
-        meta: { i18nChunks: ['auth/sign-in'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/sign-in'] },
       },
       {
         path: '/sign-up',
         name: ROUTES_NAMES.signUp,
         beforeEnter: authPageGuard,
         component: () => import('@/pages/auth/register.vue'),
-        meta: { i18nChunks: ['auth/sign-up'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/sign-up'] },
       },
       {
         path: '/verify-email',
         name: ROUTES_NAMES.verifyEmail,
         component: () => import('@/pages/auth/verify-email.vue'),
-        meta: { i18nChunks: ['auth/verify-email'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/verify-email'] },
+      },
+      {
+        path: '/forgot-password',
+        name: ROUTES_NAMES.forgotPassword,
+        component: () => import('@/pages/auth/forgot-password.vue'),
+        meta: { i18nChunks: ['auth/password-reset'] },
+      },
+      {
+        // No authPageGuard: a signed-in user who forgot their password still needs to finish the reset.
+        path: RESET_PASSWORD_PATH,
+        name: ROUTES_NAMES.resetPassword,
+        component: () => import('@/pages/auth/reset-password.vue'),
+        meta: { i18nChunks: ['auth/password-reset'] },
       },
       {
         path: '/welcome',
         name: ROUTES_NAMES.welcome,
         beforeEnter: redirectRouteGuard,
         component: () => import('@/pages/auth/welcome.vue'),
-        meta: { i18nChunks: ['auth/welcome', 'forms'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/welcome', 'forms'] },
       },
       {
         path: '/auth/callback',
         name: ROUTES_NAMES.authCallback,
         component: () => import('@/pages/auth/oauth-callback.vue'),
-        meta: { i18nChunks: ['auth/welcome'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/welcome'] },
       },
       {
         path: '/oauth/authorize',
         name: ROUTES_NAMES.oauthAuthorize,
         component: () => import('@/pages/auth/oauth-authorize.vue'),
-        meta: { i18nChunks: ['auth/oauth-authorize'] as I18nChunkName[] },
+        meta: { i18nChunks: ['auth/oauth-authorize'] },
       },
     ],
   },
@@ -605,7 +664,7 @@ const routes: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*',
     name: ROUTES_NAMES.notFound,
     component: () => import('@/pages/not-found/not-found.vue'),
-    meta: { i18nChunks: ['errors'] as I18nChunkName[] },
+    meta: { i18nChunks: ['errors'] },
   },
 ];
 

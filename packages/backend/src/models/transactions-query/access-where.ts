@@ -1,4 +1,5 @@
 import Accounts from '@models/accounts.model';
+import TrackerTransactions from '@models/tracker-transactions.model';
 import { getAccessibleAccountIdsForUser } from '@services/sharing/auth/get-accessible-account-ids.service';
 import { Op, WhereOptions } from 'sequelize';
 
@@ -27,5 +28,11 @@ export const accessWhere = async ({ policy }: { policy: AccessPolicy }): Promise
     return { accountId: { [Op.in]: await getAccessibleAccountIdsForUser({ userId: policy.accessibleTo }) } };
   }
 
-  throw new Error(`Unsupported transaction access policy: ${JSON.stringify(policy)}`);
+  const rows = (await TrackerTransactions.findAll({
+    where: { trackerId: { [Op.in]: policy.trackerScoped } },
+    attributes: ['transactionId'],
+    raw: true,
+  })) as unknown as { transactionId: string }[];
+
+  return { id: { [Op.in]: rows.map((row) => row.transactionId) } };
 };

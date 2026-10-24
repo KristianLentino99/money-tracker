@@ -2,7 +2,7 @@ import { getExpensesAmountForPeriod, getSpendingsByCategories } from '@/api';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import { useAnimatedNumber } from '@/composable/use-animated-number';
 import { calculatePercentageDifference } from '@/js/helpers';
-import type { CategoryModel, endpointsTypes } from '@bt/shared/types';
+import type { CategoryModel, SpendingStructure } from '@bt/shared/types';
 import { useQuery } from '@tanstack/vue-query';
 import { differenceInDays, endOfMonth, format, isSameMonth, startOfMonth, subDays, subMonths } from 'date-fns';
 import { type Ref, computed, ref, watch } from 'vue';
@@ -202,7 +202,7 @@ export function useExpensesStructureData({
       }));
   });
 
-  const breakdownSpendings = computed<Record<string, endpointsTypes.SpendingStructure>>(() =>
+  const breakdownSpendings = computed<Record<string, SpendingStructure>>(() =>
     Object.fromEntries(Object.entries(breakdownQuery.data.value ?? {})),
   );
 
