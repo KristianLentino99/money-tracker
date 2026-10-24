@@ -175,9 +175,11 @@ interface AccountIndex {
 export function buildAccountIndex({
   rows,
   currencyById,
+  fallbackCurrency,
 }: {
   rows: AcctRow[];
   currencyById: Map<number, string>;
+  fallbackCurrency: string;
 }): AccountIndex {
   const accountById = new Map<number, MsMoneyParseAccount>();
   const knownAcctIds = new Set<number>();
@@ -215,7 +217,8 @@ export function buildAccountIndex({
 
     accountById.set(row.hacct, {
       originalName,
-      currency: currency ?? 'USD',
+      currency: currency ?? fallbackCurrency,
+      currencyDefaulted: !currency,
       accountType: row.at,
       transactionCount: 0,
       netImportedAmount: 0,
@@ -256,9 +259,12 @@ function buildCategoryIndex({ rows }: { rows: CatRow[] }) {
 export function parseMsMoneyFile({
   buffer,
   password = null,
+  fallbackCurrency,
 }: {
   buffer: Buffer;
   password?: string | null;
+  /** Currency given to accounts the file carries none for. */
+  fallbackCurrency: string;
 }): MsMoneyParseResult {
   const { buffer: plaintext, encryption } = decryptMsisam({ buffer, password });
 
@@ -305,6 +311,7 @@ export function parseMsMoneyFile({
     buildAccountIndex({
       rows: tables.read<AcctRow>({ name: 'ACCT', columns: ['hacct', 'szFull', 'at', 'hcrnc'] }),
       currencyById,
+      fallbackCurrency,
     });
 
   addWarning({
@@ -316,7 +323,7 @@ export function parseMsMoneyFile({
   addWarning({
     code: 'account-currency-defaulted',
     message:
-      'Some accounts carry no currency this file could resolve, so they are imported as US dollars. Change their currency after the import if that is wrong.',
+      'Some accounts carry no currency this file could resolve, so they default to your base currency. Pick another one on the accounts step if that is wrong.',
     count: defaultedCurrencies,
   });
   addWarning({

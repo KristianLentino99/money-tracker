@@ -114,7 +114,7 @@ const handlePrimaryOpenChange = (open: boolean) => {
       <template #description>
         <div class="text-left">
           {{ $t('settings.security.wipeData.dialog.description') }}
-          <ul class="mt-2 list-inside list-disc text-sm">
+          <ul class="mt-2 list-disc pl-5 text-sm">
             <li>{{ $t('settings.security.wipeData.dialog.list.accounts') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.transactions') }}</li>
             <li>{{ $t('settings.security.wipeData.dialog.list.portfolios') }}</li>
@@ -151,7 +151,7 @@ const handlePrimaryOpenChange = (open: boolean) => {
             <span class="font-medium">{{ $t('settings.security.wipeData.sharingDialog.warning') }}</span>
           </div>
           <p class="mb-3 text-sm">{{ $t('settings.security.wipeData.sharingDialog.description') }}</p>
-          <ul v-if="sharedResources?.accounts?.length" class="mb-2 list-inside list-disc text-sm">
+          <ul v-if="sharedResources?.accounts?.length" class="mb-2 list-disc pl-5 text-sm">
             <li v-for="account in sharedResources.accounts" :key="account.id">{{ account.name }}</li>
           </ul>
           <p v-if="sharedResources?.households?.length" class="text-sm">

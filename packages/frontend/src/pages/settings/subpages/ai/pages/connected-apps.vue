@@ -50,7 +50,7 @@
             </div>
             <CollapsibleContent>
               <div class="border-border border-t px-4 pt-3 pb-4">
-                <ol class="text-muted-foreground list-inside list-decimal space-y-2 text-sm">
+                <ol class="text-muted-foreground list-decimal space-y-2 pl-5 text-sm">
                   <i18n-t keypath="settings.aiIntegrations.quickConnect.claude.steps.createConnector" tag="li">
                     <template #icon>
                       <strong class="text-foreground">+</strong>
@@ -107,7 +107,7 @@
             </div>
             <CollapsibleContent>
               <div class="border-border border-t px-4 pt-3 pb-4">
-                <ol class="text-muted-foreground list-inside list-decimal space-y-2 text-sm">
+                <ol class="text-muted-foreground list-decimal space-y-2 pl-5 text-sm">
                   <i18n-t keypath="settings.aiIntegrations.quickConnect.chatgpt.steps.addConnector" tag="li">
                     <template #action>
                       <strong class="text-foreground">

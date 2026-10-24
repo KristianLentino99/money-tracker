@@ -92,6 +92,9 @@ export interface MsMoneyParseAccount {
   originalName: string;
   /** ISO code resolved through Money's currency table. */
   currency: string;
+  /** The file carries no currency for this account, so `currency` is the user's
+   *  base currency and the user may pick another one for it. */
+  currencyDefaulted: boolean;
   accountType: MsMoneyAccountType;
   /** Rows belonging to this account, including transfer legs. Informational. */
   transactionCount: number;
@@ -199,8 +202,8 @@ export interface MsMoneyParseWarning {
   code:
     /** An account was skipped because its type is out of scope (investment/loan). */
     | 'account-type-unsupported'
-    /** An account's currency was not in the file's currency table, so the import
-     *  falls back to USD for it. */
+    /** An account's currency was not in the file's currency table, so it defaults
+     *  to the user's base currency. */
     | 'account-currency-defaulted'
     /** An account carries no name in the file, so it is imported under a
      *  generated `Account <id>` name. Everything downstream keys on the account
@@ -276,10 +279,12 @@ export interface MsMoneyUploadResponse {
 /**
  * Per-account decision, discriminated on `action`:
  * - `create-new` — the import creates a fresh account. `currencyCode` comes
- *   from the file. `currentBalance` is the balance the account should show
+ *   from the file, or from the user when the account is `currencyDefaulted`.
+ *   `currentBalance` is the balance the account should show
  *   afterwards; null leaves it at the imported rows' net.
  * - `link-existing` — rows post to an existing account, whose pre-import
- *   balance is preserved. Only same-currency accounts are selectable.
+ *   balance is preserved. Its currency must match the file's, unless the
+ *   account is `currencyDefaulted`.
  * - `skip` — the account and all its rows are left out of the import.
  */
 export type MsMoneyAccountMappingValue =

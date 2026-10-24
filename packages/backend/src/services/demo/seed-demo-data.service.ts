@@ -224,10 +224,12 @@ export async function setupDashboardSettings({
   );
 
   const taxCategoryId = categoryMap.get('financial-expenses/taxes');
+  const incomeCategoryId = categoryMap.get('income');
 
   const settings: SettingsSchema = {
     ...DEFAULT_SETTINGS,
     ...(taxCategoryId && { taxCategoryIds: [taxCategoryId] }),
+    ...(incomeCategoryId && { incomeCategoryIds: [incomeCategoryId] }),
     dashboard: {
       widgets: [
         { widgetId: 'balance-trend', colSpan: 2, rowSpan: 1 },

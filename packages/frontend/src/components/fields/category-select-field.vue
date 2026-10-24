@@ -124,6 +124,9 @@
                   <InfoIcon class="text-muted-foreground size-3.5 shrink-0 cursor-help" />
                 </ResponsiveTooltip>
               </div>
+              <div v-if="unlistedIds" class="text-muted-foreground border-b px-3 py-2 text-xs" role="note">
+                {{ $t('fields.categorySelect.unlistedNotice') }}
+              </div>
               <!-- Search input -->
               <input
                 ref="inputRef"
@@ -216,6 +219,10 @@
           </ResponsiveTooltip>
         </div>
 
+        <div v-if="unlistedIds" class="text-muted-foreground mb-3 text-xs" role="note">
+          {{ $t('fields.categorySelect.unlistedNotice') }}
+        </div>
+
         <!-- Search input in drawer -->
         <div
           class="border-input bg-input-background mb-3 flex h-10 w-full items-center gap-2 rounded-md border px-3 py-2 text-sm md:h-9"
@@ -293,6 +300,8 @@ const props = withDefaults(
      */
     sharedOwnerUsername?: string;
     popoverClassName?: string;
+    /** Left out of the default list, still found by search. */
+    unlistedIds?: Set<string>;
   }>(),
   {
     label: undefined,
@@ -303,6 +312,7 @@ const props = withDefaults(
     categoriesMap: undefined,
     sharedOwnerUsername: undefined,
     popoverClassName: undefined,
+    unlistedIds: undefined,
   },
 );
 
@@ -386,7 +396,7 @@ const isSearching = computed(() => searchQuery.value.length > 0);
 
 const filteredItems = computed(() => {
   if (!searchQuery.value) {
-    return allFlatCategories.value;
+    return allFlatCategories.value.filter((category) => !props.unlistedIds?.has(category.id));
   }
 
   const query = searchQuery.value.toLowerCase();

@@ -1,5 +1,6 @@
 import { OUT_OF_WALLET_ACCOUNT_MOCK, VERBOSE_PAYMENT_TYPES } from '@/common/const';
 import type { FormattedCategory } from '@/common/types';
+import { buildDescendantMap } from '@/components/common/category-exclusions/helpers';
 import {
   isTwoLegTransfer,
   ACCOUNT_TYPES,
@@ -283,4 +284,27 @@ export const prepopulateForm = ({
     return initialFormValues;
   }
   return undefined;
+};
+
+/**
+ * Categories the picker leaves out of its default list: non-income ones for income, income ones
+ * otherwise. Returns undefined when that would leave the list empty or untouched.
+ */
+export const getUnlistedCategoryIds = ({
+  categories,
+  incomeCategoryIds,
+  isIncome,
+}: {
+  categories: FormattedCategory[];
+  incomeCategoryIds: string[] | undefined;
+  isIncome: boolean;
+}): Set<string> | undefined => {
+  if (!incomeCategoryIds?.length) return undefined;
+
+  const descendants = buildDescendantMap({ categories });
+  const allIds = Object.keys(descendants);
+  const income = new Set(incomeCategoryIds.flatMap((id) => [id, ...(descendants[id] ?? [])]));
+  const unlisted = new Set(allIds.filter((id) => income.has(id) !== isIncome));
+
+  return unlisted.size === 0 || unlisted.size === allIds.length ? undefined : unlisted;
 };

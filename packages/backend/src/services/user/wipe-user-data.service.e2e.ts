@@ -75,8 +75,9 @@ describe('User data wipe (POST /user/wipe-data)', () => {
 
     // Every owner-scoped table in the backup registry must be empty, including
     // paranoid ones (`paranoid: false` surfaces soft-deleted leftovers). Categories
-    // and tags are reseeded below, so they are checked by id instead.
-    const reseeded = new Set<BackupFileName>(['categories', 'tags']);
+    // and tags are reseeded below, so they are checked by id instead; the reseed also
+    // writes a fresh settings row pointing at the new income category.
+    const reseeded = new Set<BackupFileName>(['categories', 'tags', 'user-settings']);
     const leftovers: string[] = [];
     for (const def of BACKUP_TABLES) {
       if (def.scope.strategy !== 'userColumn' || reseeded.has(def.fileName)) continue;
@@ -97,6 +98,10 @@ describe('User data wipe (POST /user/wipe-data)', () => {
     expect(await Tags.findByPk(tag.id)).toBeNull();
     const tagsAfter = await Tags.findAll({ where: { userId } });
     expect(tagsAfter.length).toBeGreaterThan(0);
+
+    const settingsAfter = await helpers.getUserSettings({ raw: true });
+    expect(settingsAfter.locale).toBe('en');
+    expect(settingsAfter.incomeCategoryIds).toStrictEqual([categoriesAfter.find((item) => item.key === 'income')!.id]);
 
     const userAfter = await Users.findByPk(userId);
     expect(userAfter).not.toBeNull();

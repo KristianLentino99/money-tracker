@@ -2,7 +2,8 @@
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Card, CardContent, CardHeader } from '@/components/lib/ui/card';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
-import { PanelLeftIcon } from '@lucide/vue';
+import { useSupportButton } from '@/composable/use-support-button';
+import { HeartIcon, PanelLeftIcon } from '@lucide/vue';
 
 import AccountsView from './accounts-view/index.vue';
 import NavigationLinks from './navigation-links.vue';
@@ -12,6 +13,7 @@ import { useSidebarCollapsed } from './use-sidebar-collapsed';
 defineProps<{ mobileView?: boolean }>();
 
 const { isCollapsed } = useSidebarCollapsed();
+const { isSupportButtonVisible, openSupport } = useSupportButton();
 </script>
 
 <template>
@@ -28,15 +30,26 @@ const { isCollapsed } = useSidebarCollapsed();
 
       <AccountsView />
 
-      <div class="bg-border/50 mx-1 h-px" />
+      <div v-if="!mobileView" class="bg-border/50 mx-1 h-px" />
 
-      <UserMenu>
+      <UserMenu :elevated="mobileView">
         <template #trailing>
           <DesktopOnlyTooltip v-if="!mobileView" :content="$t('sidebar.collapse')">
             <UiButton variant="ghost" size="icon-sm" :aria-label="$t('sidebar.collapse')" @click="isCollapsed = true">
               <PanelLeftIcon class="size-4" />
             </UiButton>
           </DesktopOnlyTooltip>
+          <template v-else>
+            <UiButton
+              v-if="isSupportButtonVisible"
+              variant="ghost"
+              size="icon-sm"
+              :aria-label="$t('header.support')"
+              @click="openSupport"
+            >
+              <HeartIcon class="text-heart size-4 fill-current" />
+            </UiButton>
+          </template>
         </template>
       </UserMenu>
     </CardContent>

@@ -1,6 +1,7 @@
 import type { MsMoneyUploadResponse } from '@bt/shared/types';
 import { createController } from '@controllers/helpers/controller-factory';
 import { ValidationError } from '@js/errors';
+import { getUserBaseCurrencyCode } from '@services/common/transaction-linking';
 import { parseMsMoneyFile, storeMsMoneyUpload } from '@services/import-export/ms-money-import';
 import { z } from 'zod';
 
@@ -39,7 +40,11 @@ export const uploadMsMoneyController = createController(z.object({}), async ({ u
     throw new ValidationError({ message: 'The supplied file password is not valid.' });
   }
 
-  const result = parseMsMoneyFile({ buffer: body, password: parsedPassword.data || null });
+  const result = parseMsMoneyFile({
+    buffer: body,
+    password: parsedPassword.data || null,
+    fallbackCurrency: await getUserBaseCurrencyCode({ userId: user.id }),
+  });
   const { uploadId, lease } = await storeMsMoneyUpload({ userId: user.id, result });
 
   const data: MsMoneyUploadResponse = { uploadId, result, lease };

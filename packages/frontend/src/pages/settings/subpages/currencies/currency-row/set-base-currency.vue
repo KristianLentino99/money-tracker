@@ -56,12 +56,13 @@
             <p class="mb-2">
               {{ $t('settings.currencies.setBase.dialog.roundingIntro') }}
             </p>
-            <p class="mb-2">
+            <p class="mb-1">
               <strong>{{ $t('settings.currencies.setBase.dialog.roundingHow') }}</strong>
-              <br />
-              • {{ $t('settings.currencies.setBase.dialog.roundingRule1') }}<br />
-              • {{ $t('settings.currencies.setBase.dialog.roundingRule2') }}
             </p>
+            <ul class="mb-2 list-disc space-y-1 pl-5">
+              <li>{{ $t('settings.currencies.setBase.dialog.roundingRule1') }}</li>
+              <li>{{ $t('settings.currencies.setBase.dialog.roundingRule2') }}</li>
+            </ul>
             <p>
               {{ $t('settings.currencies.setBase.dialog.roundingStandard') }}
             </p>

@@ -203,7 +203,7 @@ const execute = useMutation({
 <template>
   <div class="space-y-4">
     <Callout v-if="warnings.length > 0" :title="$t('investmentsImport.review.warningsTitle')">
-      <ul class="list-inside list-disc space-y-0.5">
+      <ul class="list-disc space-y-0.5 pl-5">
         <li v-for="(w, i) in warnings" :key="i">{{ w }}</li>
       </ul>
     </Callout>

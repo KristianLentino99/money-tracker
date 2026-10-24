@@ -677,14 +677,35 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       expect(sourceCurrencyCodesAfter).toEqual(sourceCurrencyCodes);
     });
 
-    it('remaps the FIRE excluded categories and portfolio return source to the reminted ids', async () => {
+    it('remaps the FIRE settings and saved transaction view filters to the reminted ids', async () => {
       const category = await helpers.addCustomCategory({ name: 'Rent', color: '#445566', raw: true });
       const portfolio = await helpers.createPortfolio({ payload: { name: 'FIRE PF' }, raw: true });
+      const account = await helpers.createAccount({
+        payload: helpers.buildAccountPayload({ name: 'View account' }),
+        raw: true,
+      });
+      const tag = await helpers.createTag({ payload: helpers.buildTagPayload({ name: 'view-tag' }), raw: true });
+      const payee = await helpers.createPayee({
+        payload: helpers.buildPayeePayload({ name: 'View Payee' }),
+        raw: true,
+      });
       await helpers.setUserBilling({ plan: PLANS.plus });
       await helpers.patchUserSettings({
         raw: true,
         patch: {
           fire: { spendingExcludedCategoryIds: [category.id], returnIndicatorId: `portfolio:${portfolio.id}` },
+          savedTransactionViews: [
+            {
+              id: generateRandomRecordId(),
+              name: 'Remapped view',
+              filters: {
+                accountIds: [account.id],
+                categoryIds: [category.id],
+                tagIds: [tag.id],
+                payeeIds: [payee.id],
+              },
+            },
+          ],
         },
       });
 
@@ -699,14 +720,30 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
           const status = await helpers.waitForRestore({ jobId: restore.jobId! });
           expect(status.status).toBe('completed');
 
-          const targetCategory = (await helpers.getCategoriesList()).find((c) => c.name === 'Rent');
+          const targetCategories = await helpers.getCategoriesList();
+          const targetCategory = targetCategories.find((c) => c.name === 'Rent');
           const targetPortfolio = (await helpers.listPortfolios({ raw: true })).data.find((p) => p.name === 'FIRE PF');
           expect(targetCategory!.id).not.toBe(category.id);
           expect(targetPortfolio!.id).not.toBe(portfolio.id);
 
-          const { fire } = await helpers.getUserSettings({ raw: true });
+          const targetAccount = (await helpers.getAccounts()).find((a) => a.name === 'View account');
+          const targetTag = (await helpers.getTags({ raw: true })).find((t) => t.name === 'view-tag');
+          const targetPayee = (await helpers.listPayees({ raw: true })).find((p) => p.name === 'View Payee');
+          expect(targetAccount!.id).not.toBe(account.id);
+          expect(targetTag!.id).not.toBe(tag.id);
+          expect(targetPayee!.id).not.toBe(payee.id);
+
+          const { fire, incomeCategoryIds, savedTransactionViews } = await helpers.getUserSettings({ raw: true });
+          expect(incomeCategoryIds).toEqual([targetCategories.find((c) => c.key === 'income')!.id]);
           expect(fire?.spendingExcludedCategoryIds).toEqual([targetCategory!.id]);
           expect(fire?.returnIndicatorId).toBe(`portfolio:${targetPortfolio!.id}`);
+          expect(savedTransactionViews).toHaveLength(1);
+          expect(savedTransactionViews![0]!.filters).toEqual({
+            accountIds: [targetAccount!.id],
+            categoryIds: [targetCategory!.id],
+            tagIds: [targetTag!.id],
+            payeeIds: [targetPayee!.id],
+          });
         },
       });
     });

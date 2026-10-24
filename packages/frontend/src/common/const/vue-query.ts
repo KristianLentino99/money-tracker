@@ -120,6 +120,7 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
 
   recordsPageRecordsList: [transactionChange, 'records-page-records-list'] as const,
   recordsPageRecordsSummary: [transactionChange, 'records-page-records-summary'] as const,
+  savedTransactionViewCount: [transactionChange, 'saved-transaction-view-count'] as const,
 
   transactionAttachments: ['transaction-attachments'] as const,
 

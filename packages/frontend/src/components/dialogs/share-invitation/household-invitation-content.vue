@@ -108,6 +108,7 @@ const acceptMutation = useMutation({
       };
     }
     childState.value = 'accepted';
+    emit('accepted');
     addSuccessNotification(t('dialogs.shareInvitationDialog.acceptSuccess'));
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.shareInvitationsReceived });
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
@@ -119,7 +120,6 @@ const acceptMutation = useMutation({
       addErrorNotification(t('dialogs.shareInvitationDialog.acceptDataRefreshFailed'));
       console.error(refreshErr);
     }
-    emit('accepted');
   },
   onError: (err: unknown) => {
     const { code, message, details } = extractApiError(err);

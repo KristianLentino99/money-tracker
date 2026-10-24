@@ -77,7 +77,8 @@ const handleEdit = () => {
       <!-- Select all / deselect all checkbox -->
       <div class="flex cursor-pointer items-center gap-2 whitespace-nowrap" @click="handleSelectAllClick">
         <Checkbox :model-value="isAllSelected" />
-        <span class="text-sm">{{ t('transactions.bulkEdit.selectAll') }}</span>
+        <span class="text-sm @sm/bulk-toolbar:hidden">{{ t('transactions.bulkEdit.selectAllShort') }}</span>
+        <span class="hidden text-sm @sm/bulk-toolbar:inline">{{ t('transactions.bulkEdit.selectAll') }}</span>
       </div>
 
       <SelectionTotals v-if="hasSelection" :totals="selectedTotals" :selected-count="selectedCount" />

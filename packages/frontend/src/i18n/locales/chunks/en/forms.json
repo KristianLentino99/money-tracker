@@ -316,6 +316,7 @@
       "clearSelectionLabel": "Clear selection",
       "searchPlaceholder": "Search...",
       "sharedOwnerNotice": "Showing {owner}'s categories",
+      "unlistedNotice": "Search to find any category",
       "sharedOwnerNoticeTooltip": "Transactions on a shared account always use the owner's categories. Anything you save here will be filed under {owner}'s set so both of you see consistent totals.",
       "sharedOwnerCategoriesLoadError": "Couldn't load categories for the shared account. Please try again."
     },

@@ -77,7 +77,7 @@ const handleOpenChange = (open: boolean) => {
       <template #description>
         <div class="text-left">
           {{ $t('settings.security.deleteAccount.dialog.description') }}
-          <ul class="mt-2 list-inside list-disc text-sm">
+          <ul class="mt-2 list-disc pl-5 text-sm">
             <li>{{ $t('settings.security.deleteAccount.dialog.dataList.accounts') }}</li>
             <li>{{ $t('settings.security.deleteAccount.dialog.dataList.categories') }}</li>
             <li>{{ $t('settings.security.deleteAccount.dialog.dataList.portfolios') }}</li>

@@ -28,7 +28,7 @@ if (!hasFixtures) console.warn(`[parse-ms-money.unit] skipped. ${MS_MONEY_FIXTUR
 const describeWithFixtures = hasFixtures ? describe : describe.skip;
 
 const parseFixture = ({ file, password }: { file: string; password?: string | null }): MsMoneyParseResult =>
-  parseMsMoneyFile({ buffer: readMsMoneyFixture({ file }), password });
+  parseMsMoneyFile({ buffer: readMsMoneyFixture({ file }), password, fallbackCurrency: 'USD' });
 
 const warningCount = ({ result, code }: { result: MsMoneyParseResult; code: string }): number =>
   result.warnings.find((warning) => warning.code === code)?.count ?? 0;
@@ -375,8 +375,10 @@ describeWithFixtures('parseMsMoneyFile', () => {
     it('throws for bytes that are not a Money database', () => {
       const buffer = Buffer.alloc(4096 * 4, 0x07);
 
-      expect(() => parseMsMoneyFile({ buffer })).toThrow(ValidationError);
-      expect(() => parseMsMoneyFile({ buffer })).toThrow('This file is not a Microsoft Money database.');
+      expect(() => parseMsMoneyFile({ buffer, fallbackCurrency: 'USD' })).toThrow(ValidationError);
+      expect(() => parseMsMoneyFile({ buffer, fallbackCurrency: 'USD' })).toThrow(
+        'This file is not a Microsoft Money database.',
+      );
     });
 
     it('throws a readable error when the decrypted database cannot be opened', () => {
@@ -425,6 +427,7 @@ describe('buildAccountIndex', () => {
     const { accountById, synthesizedNames } = buildAccountIndex({
       rows: [acctRow({ hacct: 7, szFull: '   ' }), acctRow({ hacct: 8, szFull: null })],
       currencyById,
+      fallbackCurrency: 'USD',
     });
 
     expect(synthesizedNames).toBe(2);
@@ -440,6 +443,7 @@ describe('buildAccountIndex', () => {
         acctRow({ hacct: 3, szFull: 'Savings' }),
       ],
       currencyById,
+      fallbackCurrency: 'USD',
     });
 
     expect(duplicateNames).toBe(2);
@@ -458,6 +462,7 @@ describe('buildAccountIndex', () => {
         acctRow({ hacct: 3, szFull: 'Savings' }),
       ],
       currencyById,
+      fallbackCurrency: 'USD',
     });
 
     expect(accountById.get(3)?.originalName).toBe('Savings (3)');
@@ -467,6 +472,7 @@ describe('buildAccountIndex', () => {
     const { accountById, knownAcctIds, unsupportedAccounts } = buildAccountIndex({
       rows: [acctRow({ hacct: 4, at: MsMoneyAccountType.investment }), acctRow({ hacct: 5, at: null })],
       currencyById,
+      fallbackCurrency: 'USD',
     });
 
     expect(unsupportedAccounts).toBe(2);
@@ -474,15 +480,16 @@ describe('buildAccountIndex', () => {
     expect(knownAcctIds).toEqual(new Set([4, 5]));
   });
 
-  it('resolves the currency and falls back to US dollars when the file has none', () => {
+  it('resolves the currency and falls back to the given one when the file has none', () => {
     const { accountById, defaultedCurrencies } = buildAccountIndex({
       rows: [acctRow({ hacct: 1 }), acctRow({ hacct: 2, szFull: 'Cash', hcrnc: 42 })],
       currencyById,
+      fallbackCurrency: 'UAH',
     });
 
     expect(defaultedCurrencies).toBe(1);
-    expect(accountById.get(1)?.currency).toBe('EUR');
-    expect(accountById.get(2)?.currency).toBe('USD');
+    expect(accountById.get(1)).toMatchObject({ currency: 'EUR', currencyDefaulted: false });
+    expect(accountById.get(2)).toMatchObject({ currency: 'UAH', currencyDefaulted: true });
   });
 });
 

@@ -92,7 +92,7 @@
           total: store.fileEntries.length,
         })
       }}
-      <ul class="mt-1 list-inside list-disc">
+      <ul class="mt-1 list-disc pl-5">
         <li v-for="entry in store.estimateFailures" :key="entry.id">
           {{ entry.file.name }} — {{ entry.estimateError }}
         </li>
@@ -186,7 +186,7 @@
           total: store.fileEntries.length,
         })
       }}
-      <ul class="mt-1 list-inside list-disc">
+      <ul class="mt-1 list-disc pl-5">
         <li v-for="entry in store.extractionFailures" :key="entry.id">
           {{ entry.file.name }} — {{ entry.extractionError }}
         </li>

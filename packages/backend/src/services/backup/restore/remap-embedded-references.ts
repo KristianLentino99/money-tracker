@@ -320,6 +320,31 @@ export function remapSavedPivotViewIds({ views, insertedIds }: { views: unknown;
   }
 }
 
+/** Remap the owned-id arrays inside each saved Transactions view's filters, in place. */
+export function remapSavedTransactionViewIds({
+  views,
+  insertedIds,
+}: {
+  views: unknown;
+  insertedIds: InsertedIds;
+}): void {
+  if (!Array.isArray(views)) return;
+  const targets = {
+    accountIds: Accounts,
+    categoryIds: Categories,
+    tagIds: Tags,
+    payeeIds: Payees,
+  };
+
+  for (const view of views) {
+    const filters = view?.filters;
+    if (typeof filters !== 'object' || filters === null) continue;
+    for (const [key, model] of Object.entries(targets)) {
+      remapIdArrayInPlace({ arr: filters[key], targetTable: String(model.getTableName()), insertedIds });
+    }
+  }
+}
+
 /** Remap FIRE category ids and the `portfolio:<id>` return indicator in place. Every restored
  *  row is in `insertedIds`, so an unmapped id is dangling: it's dropped, and the indicator falls
  *  back to its default. */
@@ -342,4 +367,17 @@ export function remapFireSettingsIds({
     if (portfolioId) fire.returnIndicatorId = makePortfolioIndicatorId({ portfolioId });
     else delete fire.returnIndicatorId;
   }
+}
+
+/** Remap `settings.incomeCategoryIds` in place, dropping ids the restore did not insert. */
+export function remapIncomeCategoryIds({
+  settings,
+  insertedIds,
+}: {
+  settings: { incomeCategoryIds?: string[] };
+  insertedIds: InsertedIds;
+}): void {
+  if (!settings.incomeCategoryIds) return;
+  const categories = insertedIds.get(String(Categories.getTableName()));
+  settings.incomeCategoryIds = settings.incomeCategoryIds.flatMap((id) => categories?.get(id) ?? []);
 }

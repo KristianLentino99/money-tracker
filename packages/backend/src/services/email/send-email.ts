@@ -10,6 +10,7 @@ const resend = isEnvConfigured(EnvVar.RESEND_API_KEY, process.env.RESEND_API_KEY
 type SendEmailPayload = {
   from: string;
   to: string;
+  replyTo?: string;
   subject: string;
   html: string;
 };
