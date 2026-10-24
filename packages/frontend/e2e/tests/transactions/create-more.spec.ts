@@ -169,7 +169,8 @@ test.describe('Create more: keep the Add dialog open between entries', () => {
 
     await ui.amountInput.fill('12.5');
     await ui.accountSelect.click();
-    await page.getByRole('option', { name: EXPENSE_ACCOUNT }).click();
+    await page.getByRole('option').filter({ hasText: EXPENSE_ACCOUNT }).click();
+    await expect(ui.accountSelect).toContainText(EXPENSE_ACCOUNT);
     await pickCategory({ page });
     await ui.noteInput.fill(NOTE);
     await ui.dialog

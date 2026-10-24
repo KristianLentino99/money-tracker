@@ -17,10 +17,9 @@ const FIXTURE_PATH = path.resolve(
   '../../../../backend/src/tests/fixtures/ynab-import/register-comprehensive.csv',
 );
 
-// Worst-case the comprehensive fixture took ~7.5s in the backend e2e; allow
-// 60s headroom for browser bootstrap + SSE roundtrip + cache invalidation
-// before declaring the import hung.
-const IMPORT_DONE_TIMEOUT_MS = 60_000;
+// The browser workflow creates each imported row through the application API;
+// allow enough time for the full fixture plus the SSE roundtrip and cache refresh.
+const IMPORT_DONE_TIMEOUT_MS = 120_000;
 
 test.describe.configure({ mode: 'serial' });
 

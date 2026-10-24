@@ -61,7 +61,7 @@ module.exports = {
            JOIN "Accounts" a ON a."id" = t."accountId" AND a."excludeFromStats" = false
           WHERE tr."rulesEnabled" = true
             AND t."deletedAt" IS NULL
-            AND t."isPlanned" = false
+            AND t."isForecastOnly" = false
             AND (t."transferNature" = 'not_transfer'
                  OR (t."transferNature" = 'transfer_to_loan' AND t."transactionType" = 'expense'))
             AND (t."externalData" IS NULL OR NOT (t."externalData" @> '{"balanceAdjustment": true}'))

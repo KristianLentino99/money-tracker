@@ -120,9 +120,9 @@ describe('Investment transactions CSV import — E2E', () => {
       expect(holding.transactions).toHaveLength(2);
       expect(holding.transactions[0]!.side).toBe('buy');
       expect(holding.transactions[1]!.side).toBe('sell');
-      // amount = quantity * price + fees
+      // Buys add fees; sells subtract them from the cash proceeds.
       expect(holding.transactions[0]!.amount).toBe('2105.2500000000');
-      expect(holding.transactions[1]!.amount).toBe('1002.1000000000');
+      expect(holding.transactions[1]!.amount).toBe('997.9000000000');
       expect(result.fileType).toBe('csv');
       expect(result.tokenCount).toEqual({ input: 0, output: 0 });
     });

@@ -288,19 +288,19 @@ const TABLE_DEFS = [
     paranoid: true,
   },
   {
-    fileName: 'vehicles',
-    model: models.Vehicles,
-    tier: 3,
-    scope: { strategy: 'userColumn', column: 'userId' },
-    restoreMode: 'insert',
-  },
-  {
     fileName: 'vehicle-maintenance-activities',
     model: VehicleMaintenanceActivities,
     tier: 3,
     scope: { strategy: 'userColumn', column: 'userId', includeGlobal: true },
     restoreMode: 'insert',
     globalRows: { ownerColumn: 'userId', naturalKey: 'systemKey' },
+  },
+  {
+    fileName: 'vehicles',
+    model: models.Vehicles,
+    tier: 3,
+    scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
   },
   {
     fileName: 'loan-details',
@@ -335,6 +335,13 @@ const TABLE_DEFS = [
   {
     fileName: 'goals',
     model: models.Goals,
+    tier: 3,
+    scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'import-batches',
+    model: models.ImportBatches,
     tier: 3,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
@@ -379,6 +386,13 @@ const TABLE_DEFS = [
     restoreMode: 'insert',
   },
   {
+    fileName: 'portfolio-transfers',
+    model: models.PortfolioTransfers,
+    tier: 4,
+    scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
+  },
+  {
     fileName: 'investment-transactions',
     model: models.InvestmentTransaction,
     tier: 4,
@@ -404,13 +418,6 @@ const TABLE_DEFS = [
     model: models.PortfolioBalances,
     tier: 4,
     scope: { strategy: 'viaParent', fk: 'portfolioId', parent: 'portfolios' },
-    restoreMode: 'insert',
-  },
-  {
-    fileName: 'portfolio-transfers',
-    model: models.PortfolioTransfers,
-    tier: 4,
-    scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
   },
   {

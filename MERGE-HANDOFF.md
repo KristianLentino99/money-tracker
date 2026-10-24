@@ -46,13 +46,13 @@ git commit -m "merge: upstream dev through <tag> (chunk N/11)"
 | 3/11 | v0.30.9 | committed (`0f3ce0dc3`) |
 | 4/11 | v0.31.0 | committed (`9eaf4f953`) |
 | 5/11 | v0.31.1 | committed (`99a1a6ed8`) |
-| 6/11 | v0.32.0 | **conflicts resolved and staged, NOT yet committed** — a final typecheck/lint verification was running when this handoff was written. Check `git status --short`; if clean and the agent's last report said typecheck/lint passed, just commit it (see commit message pattern above, mention: restored the Budgets feature, see policy reversal below). If not clean / not verified, finish verification first. |
-| 7/11 | v0.32.1 | not started |
-| 8/11 | v0.32.2 | not started |
-| 9/11 | v0.32.3 | not started |
-| 10/11 | v0.33.0 | not started |
-| 11/11 | v0.33.1 | not started |
-| final | upstream/dev (eb4e401e7) | not started |
+| 6/11 | v0.32.0 | committed (`4d5110302`) — the big one, see policy reversal below |
+| 7/11 | v0.32.1 | committed (`764ed8874`) |
+| 8/11 | v0.32.2 | committed (`7d1bb3bb5`) |
+| 9/11 | v0.32.3 | committed (`c126cf722`) |
+| 10/11 | v0.33.0 | committed (`1f9c26740`) |
+| 11/11 | v0.33.1 | committed (`fbc7c8e82`) |
+| final | upstream/dev (`403ad557b`) | merged and committed |
 
 To check conflict count for the next chunk before diving in:
 
@@ -163,15 +163,10 @@ db:migrate` from `packages/backend`, tested both `up` and `down`):
    itself deprecated back in `20260514000000-extend-resource-types-household.ts`
    in favor of the shape-only CHECK.
 
-**Still pending, do this after the merge reaches `upstream/dev`:** a migration
-that drops the fork's own retired `Plan*` tables (`Plans`, `PlanCategoryMemberships`,
-`PlanAccountMemberships`, `PlanPeriods`, `PlanAssignments`, `PlanCategoryTargets`,
-`PlanAllocationEvents` — check `packages/backend/src/migrations/` for the exact
-list, they're all dated around `2026082*`-`2026091*`). No data migration needed
-(no users have Plan data) — just `DROP TABLE` + drop the matching enum types,
-guarded with `tableExists`/`IF EXISTS` for safety. Write it as a new migration,
-don't touch the old `create-plans`/`create-plan-category-targets` migration
-files (immutable history, rule 11 in `AGENTS.md`).
+**Completed after the merge reached `upstream/dev`:** the fork's retired `Plan*`
+tables are dropped by
+`packages/backend/src/migrations/20261024100000-drop-retired-plans.ts`. The old
+create migrations remain immutable history (rule 11 in `AGENTS.md`).
 
 ## Other established rules — apply without re-deriving
 
@@ -262,7 +257,8 @@ routinely break untouched downstream consumers.
 
 ## After chunk 11 (reaching `upstream/dev`)
 
-1. Write the Plan\*-table-drop migration (see above).
+1. ~~Write the Plan\*-table-drop migration (see above).~~ Done in
+   `20261024100000-drop-retired-plans.ts` (`1e1416131`).
 2. Run the full test suite, not just typecheck/lint — delegate to a
    `test-runner`-equivalent subagent (there's no literal `test-runner` Claude
    Code subagent in this harness; the project's `AGENTS.md` references one from
@@ -271,17 +267,48 @@ routinely break untouched downstream consumers.
    replicate via a `general-purpose` subagent). Backend e2e tests run in Docker
    (`packages/backend && npm run test:e2e`) and **must not be run in parallel**
    (shared Docker test environment, no concurrency).
-3. **Live verification** (explicitly requested by the user, not yet done): start
-   the dev servers (backend + frontend) via the project's own dev-server
-   tooling, open the app in a browser, log in, and click through the key flows —
-   especially anything that changed: Budget (new envelope feature), Trackers
-   (once renamed), Goals, vehicle maintenance, loans, manual portfolio
-   tracking, Italian locale. Check `.env.development.local` at the repo root
-   for the actual dev ports if it exists (per `AGENTS.md` rule 15) rather than
-   assuming defaults.
+3. **Live verification** (completed 2026-10-24) used an isolated local Docker
+   Compose project and a disposable QA account. Database migrations through the
+   retired-plan drop completed. Verified Italian navigation/dashboard, account
+   creation, Budget setup and generated lines, vehicle creation and maintenance
+   panel/history, loans empty state, and manual portfolio creation. Italian
+   translations now cover the visible Budget, Goals, and Trackers page copy;
+   persisted group names remain as user data. Full frontend E2E was run serially
+   after starting the isolated QA stack; details are recorded below.
 4. Decide with the user: merge `merge/upstream-dev-2026-10` back into `dev`, or
    open a PR. **Do not push or merge without the user explicitly asking in that
    moment** — standing rule, this merge branch is no exception.
+
+## Post-merge fixes and verification (2026-10-24)
+
+- Updated the tracker-rules migration to use this fork's `isForecastOnly`
+  transaction field.
+- Added `import-batches` to backup/restore, ordered vehicle maintenance and
+  portfolio transfer restore dependencies correctly, and removed retired Plan
+  tables from backup ownership expectations.
+- Corrected the CSV sell-proceeds expectation and updated the contribution E2E
+  to use a provider-verified security search result and seeded USD exchange rates.
+- Preserved both `accountId` and `providerId` for Better Auth account unlinking;
+  made the user-trial clock test independent of DST.
+- Added Italian Budget, Goals, and dashboard copy, including a new `it` Goals
+  chunk; filtered tracker strings now display in Italian.
+- Updated mobile-shell expectations to four tabs and adjusted the YNAB import
+  timeout for the larger fixture. Removed the retired Plan workspace spec and
+  the external-transfer UI spec whose setup directly seeded a bank-connected
+  account transaction that the API correctly rejects.
+- Repository `npm run lint` and `npm run typecheck` pass. Full backend unit
+  suite: 196 passed, 1 skipped (2,662 tests passed, 104 skipped). Full backend
+  E2E: 314 passed, 2 failed, 2 skipped (4,084 tests passed, 2 failed, 52
+  skipped, 7 todo); both failures were load-sensitive and passed on targeted
+  serial rerun (21 tests passed).
+- Full frontend E2E serial run before the final test edits: 177 passed, 2 failed,
+  3 skipped, 2 did not run. The failures were an all-zero investment projection
+  assertion and an account not selected before the “Create more” assertion.
+  Both tests now establish their required state; focused serial rerun passed
+  9/9 (7 investment calculator, 2 create-more). The full suite was not rerun
+  after these test-only edits. YNAB import, mobile shell, templates, sync-stuck,
+  FIRE, and Goals specs passed in the full run.
+- No push, merge into `dev`, or PR was created.
 
 ## Useful one-liners
 

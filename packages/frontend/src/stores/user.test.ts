@@ -350,8 +350,19 @@ describe('useUserStore', () => {
 
   describe('featureTrialDaysLeft', () => {
     const feature = FEATURES.fire_planner;
+    const now = new Date('2026-09-25T12:00:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     const trialEndingIn = ({ days }: { days: number }) => ({
-      [feature]: { startedAt: new Date().toISOString(), endsAt: addDays(new Date(), days).toISOString() },
+      [feature]: { startedAt: now.toISOString(), endsAt: addDays(now, days).toISOString() },
     });
 
     it('counts the days until the trial ends', () => {
@@ -376,17 +387,6 @@ describe('useUserStore', () => {
     });
 
     describe('partial days', () => {
-      const now = new Date('2026-09-25T12:00:00Z');
-
-      beforeEach(() => {
-        vi.useFakeTimers();
-        vi.setSystemTime(now);
-      });
-
-      afterEach(() => {
-        vi.useRealTimers();
-      });
-
       it.each([
         [1, 1],
         [60, 3],

@@ -4,7 +4,7 @@
     "loadError": "Couldn't load your budget.",
     "defaultName": "Budget",
     "settings": {
-      "title": "Budget settings",
+      "title": "Impostazioni budget",
       "description": "Changes save and apply immediately.",
       "nameLabel": "Name",
       "namePlaceholder": "Name this budget",
@@ -39,39 +39,39 @@
       "offer": "Early adopters get Essential at 50% off."
     },
     "empty": {
-      "title": "Give your money a job",
-      "description": "About two minutes to set up, a few minutes a week to keep.",
-      "action": "Start budgeting",
-      "exampleBadge": "Example budget",
+      "title": "Dai uno scopo ai tuoi soldi",
+      "description": "Bastano due minuti per impostarlo e pochi minuti a settimana per mantenerlo.",
+      "action": "Inizia a pianificare il budget",
+      "exampleBadge": "Budget di esempio",
       "steps": {
         "accounts": {
-          "title": "Pick the accounts you spend from",
-          "description": "Checking, cash, credit cards. Savings can stay out."
+          "title": "Scegli i conti che usi per le spese",
+          "description": "Conti correnti, contanti e carte di credito. Puoi escludere i risparmi."
         },
         "suggested": {
-          "title": "Start from lines we suggest",
-          "description": "Your top categories from the last 3 months, with the average already filled in."
+          "title": "Parti dalle voci che ti suggeriamo",
+          "description": "Le categorie con più spese degli ultimi 3 mesi, già compilate con il relativo importo medio."
         },
         "available": {
-          "title": "Watch what's left",
-          "description": "Every purchase counts against its line, so you see what's available instead of guessing."
+          "title": "Tieni d’occhio quanto ti resta",
+          "description": "Ogni acquisto viene conteggiato nella sua voce: saprai quanto ti resta senza doverlo stimare."
         }
       },
       "example": {
         "groups": {
-          "bills": "Bills",
-          "everyday": "Everyday",
-          "life": "Life"
+          "bills": "Bollette",
+          "everyday": "Quotidiano",
+          "life": "Vita"
         },
         "lines": {
           "rent": "Affitto",
-          "utilities": "Utilities",
-          "subscriptions": "Subscriptions",
+          "utilities": "Utenze",
+          "subscriptions": "Abbonamenti",
           "groceries": "Generi Alimentari & Supermercato",
-          "eatingOut": "Eating out",
-          "transport": "Transport",
-          "funMoney": "Fun money",
-          "savings": "Savings goal"
+          "eatingOut": "Pasti fuori casa",
+          "transport": "Trasporti",
+          "funMoney": "Svago",
+          "savings": "Obiettivo di risparmio"
         }
       }
     },
@@ -99,27 +99,27 @@
       "replaceConfirm": "Replace"
     },
     "create": {
-      "title": "Start budgeting",
-      "description": "Pick how often your budget resets and which accounts it watches.",
-      "noAccountsTitle": "No accounts to budget yet",
-      "noAccountsDescription": "A budget needs at least one checking, savings, cash or credit card account that you own. Add one on the Accounts page, then come back.",
-      "goToAccounts": "Go to accounts",
-      "cadenceLabel": "Resets",
-      "startsOnLabel": "Starts on",
+      "title": "Inizia a pianificare il budget",
+      "description": "Scegli ogni quanto reimpostare il budget e quali conti includere.",
+      "noAccountsTitle": "Non ci sono ancora conti da includere nel budget",
+      "noAccountsDescription": "Per creare un budget serve almeno un conto corrente, di risparmio, in contanti o una carta di credito intestati a te. Aggiungine uno nella pagina Conti, poi torna qui.",
+      "goToAccounts": "Vai ai conti",
+      "cadenceLabel": "Frequenza di reimpostazione",
+      "startsOnLabel": "Data di inizio",
       "accountsLabel": "Conti",
-      "accountsPlaceholder": "Select accounts",
-      "rolloverLabel": "Rollover",
-      "rolloverPlaceholder": "Select a rollover rule",
-      "submit": "Create budget",
-      "creating": "Creating…",
-      "success": "Budget created",
-      "suggestedLinesFailed": "Suggested lines couldn't be added. You can add them from the budget.",
-      "error": "Could not create the budget",
-      "suggestedLinesLabel": "Smart pre-fill",
-      "suggestedLinesHint": "Turns your last 3 months of spending into named groups and lines, with the average as each amount. With no history, adds a starter set. Takes a few seconds. Change or remove any of them later.",
-      "askQuestionsLabel": "Ask me a few questions first",
-      "askQuestionsHint": "A few short steps for a closer fit.",
-      "askQuestionsNeedsAi": "Needs AI. Suggested lines use the standard template instead.",
+      "accountsPlaceholder": "Seleziona i conti",
+      "rolloverLabel": "Riporto",
+      "rolloverPlaceholder": "Seleziona una regola di riporto",
+      "submit": "Crea budget",
+      "creating": "Creazione…",
+      "success": "Budget creato",
+      "suggestedLinesFailed": "Non è stato possibile aggiungere le voci suggerite. Puoi aggiungerle dal budget.",
+      "error": "Impossibile creare il budget",
+      "suggestedLinesLabel": "Compilazione intelligente",
+      "suggestedLinesHint": "Usa le spese degli ultimi 3 mesi per creare gruppi e voci, compilando ciascun importo con la media. Se non hai uno storico, aggiunge un modello iniziale. Bastano pochi secondi; potrai modificare o rimuovere le voci in seguito.",
+      "askQuestionsLabel": "Prima fammi qualche domanda",
+      "askQuestionsHint": "Pochi passaggi per un budget più adatto a te.",
+      "askQuestionsNeedsAi": "Richiede l’IA. In alternativa, le voci suggerite useranno il modello standard.",
       "customEveryLabel": "Every",
       "customEveryPlaceholder": "e.g. 10",
       "customUnitLabel": "Unit",
@@ -129,58 +129,58 @@
         "months": "Months"
       },
       "customEveryError": "Enter a whole number from 1 to {max}.",
-      "recommended": "Recommended"
+      "recommended": "Consigliato"
     },
     "suggest": {
-      "title": "Shape your lines",
-      "descriptionHistory": "We combine your answers with your last three months of spending.",
-      "descriptionNoHistory": "No spending yet, so your lines come from these answers.",
+      "title": "Definisci le voci del budget",
+      "descriptionHistory": "Combiniamo le tue risposte con le spese degli ultimi tre mesi.",
+      "descriptionNoHistory": "Non hai ancora registrato spese: useremo le tue risposte per creare le voci.",
       "steps": {
-        "home": "Home",
-        "life": "Lifestyle",
-        "focus": "Focus",
-        "detail": "Detail"
+        "home": "Casa",
+        "life": "Stile di vita",
+        "focus": "Priorità",
+        "detail": "Dettagli"
       },
       "back": "Indietro",
-      "next": "Next",
-      "useDefaults": "Use defaults",
+      "next": "Avanti",
+      "useDefaults": "Usa quelle predefinite",
       "defaultsConfirm": {
-        "title": "Use default lines?",
-        "description": "Your selections will be ignored and default lines will be created.",
-        "cancel": "Keep answering"
+        "title": "Usare le voci predefinite?",
+        "description": "Le tue risposte non verranno considerate e saranno create le voci predefinite.",
+        "cancel": "Continua a rispondere"
       },
       "housing": {
-        "question": "What's your housing situation?",
-        "mortgage": "Paying a mortgage",
-        "rent": "Renting",
-        "family": "Living with family",
-        "owned": "Own home outright"
+        "question": "Qual è la tua situazione abitativa?",
+        "mortgage": "Pago un mutuo",
+        "rent": "Sono in affitto",
+        "family": "Vivo con la mia famiglia",
+        "owned": "La casa è di proprietà, senza mutuo"
       },
       "transport": {
-        "question": "How do you usually get around?",
-        "car": "I own a car",
-        "transit": "Public transit",
-        "bikeWalk": "Bike or walk",
-        "multiple": "Several of these"
+        "question": "Come ti sposti di solito?",
+        "car": "Ho un’auto",
+        "transit": "Uso i mezzi pubblici",
+        "bikeWalk": "Mi sposto in bici o a piedi",
+        "multiple": "Uso più di questi mezzi"
       },
       "pets": {
-        "question": "Do you have pets?",
-        "kindQuestion": "What kind? (optional)",
-        "dog": "Dog",
-        "cat": "Cat",
-        "other": "Other"
+        "question": "Hai animali domestici?",
+        "kindQuestion": "Quali? (facoltativo)",
+        "dog": "Cane",
+        "cat": "Gatto",
+        "other": "Altro"
       },
       "eatsOut": {
-        "question": "How often do you eat out or order food?",
-        "often": "Often",
-        "sometimes": "Sometimes",
-        "rarely": "Rarely"
+        "question": "Quanto spesso mangi fuori o ordini cibo?",
+        "often": "Spesso",
+        "sometimes": "A volte",
+        "rarely": "Raramente"
       },
       "subscriptions": {
-        "question": "Paid subscriptions?",
-        "many": "Many",
-        "few": "A few",
-        "none": "None"
+        "question": "Hai abbonamenti a pagamento?",
+        "many": "Molti",
+        "few": "Qualcuno",
+        "none": "Nessuno"
       },
       "focus": {
         "questionHistory": "What do you want to watch closely?",
@@ -198,9 +198,9 @@
         "detailed": "Detailed",
         "detailedHint": "Up to 20 lines"
       },
-      "contextError": "Couldn't load your spending. Try again.",
-      "retry": "Try again",
-      "answersIgnored": "Smart suggestions weren't available, so your answers weren't used. You got the default lines."
+      "contextError": "Impossibile caricare le tue spese. Riprova.",
+      "retry": "Riprova",
+      "answersIgnored": "I suggerimenti intelligenti non erano disponibili, quindi le tue risposte non sono state usate. Sono state aggiunte le voci predefinite."
     },
     "cadence": {
       "monthly": "Monthly",
@@ -217,26 +217,26 @@
       "none": "Start fresh each period"
     },
     "period": {
-      "previous": "Previous period",
-      "next": "Next period",
-      "current": "Current",
+      "previous": "Periodo precedente",
+      "next": "Periodo successivo",
+      "current": "In corso",
       "pickerTitle": "Select period",
-      "dayOf": "Day {day} of {totalDays}"
+      "dayOf": "Giorno {day} di {totalDays}"
     },
     "tiles": {
-      "assigned": "Assigned",
-      "spent": "Spent",
-      "available": "Available",
-      "overspent": "Overspent",
-      "overspentLines": "{count} line | {count} lines"
+      "assigned": "Assegnato",
+      "spent": "Speso",
+      "available": "Disponibile",
+      "overspent": "Oltre il budget",
+      "overspentLines": "{count} voce | {count} voci"
     },
     "grid": {
-      "assigned": "Assigned",
-      "activity": "Activity",
-      "available": "Available",
+      "assigned": "Assegnato",
+      "activity": "Attività",
+      "available": "Disponibile",
       "overrideBadge": "override",
       "carriesDeficit": "carries deficit",
-      "lineActions": "Line actions",
+      "lineActions": "Azioni della voce",
       "editLine": "Edit line",
       "archiveLine": "Archive line",
       "archiveSelected": "Archive",
@@ -256,19 +256,19 @@
       "deleteHistoryDescription": "It's removed from every period, including past ones, and its assigned amounts are deleted. Its spending will show as outside your lines. This can't be undone.",
       "deletePermanently": "Delete permanently",
       "deleteArchiveHint": "We recommend archiving it instead to keep its history. You can restore it later from \"Archived\".",
-      "addLine": "Add line",
+      "addLine": "Aggiungi voce",
       "noLines": "No lines yet",
       "noLinesDescription": "Add a line to set a spending limit for a group of categories.",
       "addSuggested": "Add suggested lines",
       "suggestedAdded": "Added {count} line | Added {count} lines",
       "noSuggestions": "Nothing to suggest: the suggested categories already have lines.",
-      "totalWithLines": "Total · {count} line | Total · {count} lines",
+      "totalWithLines": "Totale · {count} voce | Totale · {count} voci",
       "assignAmountFor": "Assigned for {name}: {amount}. Change",
       "archivedBadge": "archived",
       "spentAmount": "spent {amount}",
       "percentUsed": "{percent}% used",
       "overBy": "Over by {amount}",
-      "notFunded": "Not funded"
+      "notFunded": "Non finanziata"
     },
     "archivedLines": {
       "trigger": "Archived {count}",
@@ -361,32 +361,32 @@
       "fixNoLines": "There is nothing to take back in this period."
     },
     "panel": {
-      "summary": "Summary",
-      "overview": "Period overview",
+      "summary": "Riepilogo",
+      "overview": "Riepilogo del periodo",
       "closeLine": "Close details",
       "resize": "Resize side panel",
       "open": "Open side panel",
       "collapse": "Collapse side panel",
-      "breakdown": "Breakdown",
-      "carriedOver": "Carried over",
-      "pace": "Spending pace",
-      "spent": "Spent",
-      "elapsed": "Period elapsed",
-      "spentOfTotal": "{spent} of {total}",
-      "daysLeft": "{n}d left",
-      "scheduled": "Scheduled",
+      "breakdown": "Ripartizione",
+      "carriedOver": "Riportato dal periodo precedente",
+      "pace": "Andamento delle spese",
+      "spent": "Speso",
+      "elapsed": "Periodo trascorso",
+      "spentOfTotal": "{spent} su {total}",
+      "daysLeft": "Restano {n} giorni",
+      "scheduled": "Programmate",
       "nextOn": "Next on {date}",
       "scheduledCount": "{count} scheduled",
       "outflows": "Outflows",
       "inflows": "Inflows",
       "transactionCount": "{count} transaction | {count} transactions",
-      "nothingScheduled": "Nothing scheduled",
+      "nothingScheduled": "Nessuna voce programmata",
       "trend": {
-        "title": "Assigned vs spent",
-        "assigned": "Assigned",
-        "spent": "Spent",
-        "over": "Over",
-        "spentOfAssigned": "{spent} of {assigned}",
+        "title": "Assegnato e speso",
+        "assigned": "Assegnato",
+        "spent": "Speso",
+        "over": "Fuori budget",
+        "spentOfAssigned": "{spent} su {assigned}",
         "averageUsed": "avg {percent}% used"
       },
       "nextPeriodCoverage": "Next period coverage",
@@ -394,15 +394,15 @@
       "goal": "Goal"
     },
     "groups": {
-      "headerLabel": "Line group",
-      "add": "Add group",
-      "collapseAll": "Collapse all groups",
+      "headerLabel": "Gruppo di voci",
+      "add": "Aggiungi gruppo",
+      "collapseAll": "Comprimi tutti i gruppi",
       "expandAll": "Expand all groups",
       "collapse": "Collapse {name}",
       "expand": "Expand {name}",
-      "addLine": "Add line to {name}",
+      "addLine": "Aggiungi voce a {name}",
       "selectLines": "Select all lines in {name}",
-      "actions": "Group actions",
+      "actions": "Azioni del gruppo",
       "edit": "Edit group",
       "delete": "Delete group",
       "deleteBlocked": "Move or archive its lines first",
@@ -427,7 +427,7 @@
       "layoutError": "Could not save the layout"
     },
     "options": {
-      "title": "Options",
+      "title": "Opzioni",
       "manageLayout": "Manage layout",
       "rowBars": "Row bars",
       "rowBarSpending": "Spending bar",
@@ -447,7 +447,7 @@
         "progress": "In progress"
       },
       "noGoal": "No goal set",
-      "create": "Create goal",
+      "create": "Crea obiettivo",
       "title": {
         "budget_another": "Budget {amount}",
         "refill_up_to": "Refill up to {amount}",
@@ -619,7 +619,7 @@
       }
     },
     "docs": {
-      "howItWorks": "How budgeting works"
+      "howItWorks": "Come funziona il budget"
     }
   }
 }

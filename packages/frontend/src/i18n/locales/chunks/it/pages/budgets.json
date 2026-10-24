@@ -1,12 +1,12 @@
 {
   "budgets": {
-    "title": "Trackers",
-    "description": "Track spending and monitor financial events",
+    "title": "Monitoraggi",
+    "description": "Monitora le spese e tieni sotto controllo gli eventi finanziari.",
     "notFound": "Tracker not found",
     "notFoundDescription": "We couldn't find this tracker. It may have been deleted or you might not have access to it.",
     "backToList": "Back to trackers",
-    "newBudget": "New tracker",
-    "createBudget": "Create tracker",
+    "newBudget": "Nuovo monitoraggio",
+    "createBudget": "Crea monitoraggio",
     "creation": {
       "success": "Tracker created",
       "error": "Unexpected error!",
@@ -67,15 +67,17 @@
       "showArchived": "Show archived",
       "hideArchived": "Hide archived",
       "emptyState": {
-        "title": "No trackers yet",
-        "description": "Create a tracker to start tracking your spending or monitoring specific events."
+        "title": "Nessun monitoraggio",
+        "description": "Crea un monitoraggio per seguire le spese o tenere sotto controllo eventi specifici."
       },
-      "searchPlaceholder": "Search trackers",
+      "searchPlaceholder": "Cerca monitoraggi",
       "filters": {
-        "all": "All",
-        "manual": "Manual",
-        "category": "Category",
-        "archived": "Archiviati"
+        "all": "Tutti",
+        "manual": "Manuali",
+        "category": "Per categoria",
+        "archived": "Archiviati",
+        "autoAdd": "Aggiunta automatica attiva",
+        "handPicked": "Scelti manualmente"
       },
       "groups": {
         "active": "Active now",
