@@ -75,24 +75,6 @@ import {
 } from './tools/loan-tools';
 import { registerManualPortfolioTools } from './tools/manual-portfolio-tools';
 import { registerMergePayees } from './tools/merge-payees';
-import {
-  registerGetPlans,
-  registerCreatePlan,
-  registerGetPlan,
-  registerGetPlanView,
-  registerUpdatePlan,
-  registerArchivePlan,
-  registerDeletePlan,
-  registerAddPlanCategory,
-  registerSetPlanCategoryTarget,
-  registerDeletePlanCategoryTarget,
-  registerAssignPlanCategory,
-  registerBulkAssignPlanCategories,
-  registerMovePlanMoney,
-  registerPreviewPlanAutoAssign,
-  registerAutoAssignPlan,
-  registerUndoPlanAllocation,
-} from './tools/plan-tools';
 import { registerPreviewTransactionAutomation } from './tools/preview-transaction-automation';
 import { registerRemoveTagsFromTransaction } from './tools/remove-tags-from-transaction';
 import { registerRemoveTransactionsFromGroup } from './tools/remove-transactions-from-group';
@@ -298,23 +280,7 @@ export function createMcpServer(): McpServer {
   registerUpdateVentureEvent(server);
   registerDeleteVentureEvent(server);
 
-  // Fork capabilities: plans, loans, recurring periods, maintenance and manual/grouped investments.
-  registerGetPlans(server);
-  registerCreatePlan(server);
-  registerGetPlan(server);
-  registerGetPlanView(server);
-  registerUpdatePlan(server);
-  registerArchivePlan(server);
-  registerDeletePlan(server);
-  registerAddPlanCategory(server);
-  registerSetPlanCategoryTarget(server);
-  registerDeletePlanCategoryTarget(server);
-  registerAssignPlanCategory(server);
-  registerBulkAssignPlanCategories(server);
-  registerMovePlanMoney(server);
-  registerPreviewPlanAutoAssign(server);
-  registerAutoAssignPlan(server);
-  registerUndoPlanAllocation(server);
+  // Fork capabilities: loans, recurring periods, maintenance and manual/grouped investments.
   registerGetLoans(server);
   registerGetLoan(server);
   registerGetLoanBalanceHistory(server);

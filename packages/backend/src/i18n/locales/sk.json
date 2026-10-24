@@ -608,9 +608,5 @@
     "incompleteInvoice": "Z tejto faktúry sa nepodarilo prečítať dodávateľa, celkovú sumu a dátum.",
     "pdfWithoutText": "Vlastné pripojenia AI nedokážu prijímať súbory PDF priamo a tento sa nepodarilo otvoriť ani na prevod (napríklad je chránený heslom). Prevedte ho na obrázok (PNG alebo JPEG), napríklad snímku obrazovky faktúry a nahrajte namiesto neho ten.",
     "noFileUploaded": "Nebol nahraný žiadny súbor."
-  },
-  "plans": {
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan.",
-    "targetAmountMustBePositive": "Target amount must be greater than zero."
   }
 }

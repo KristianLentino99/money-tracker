@@ -2,6 +2,7 @@
 import { getExchangeRatePair } from '@/api/currencies';
 import { loadTransactionById } from '@/api/transactions';
 import { OUT_OF_WALLET_ACCOUNT_MOCK, VERBOSE_PAYMENT_TYPES, VUE_QUERY_CACHE_KEYS } from '@/common/const';
+import type { FormattedCategory } from '@/common/types';
 import { getMaxLoanPayment, isLoanOverpayment, isLoanPaymentPreAnchor } from '@/common/utils/loan-payment';
 import { isHttpUrl } from '@/common/utils/external-url';
 import { roundCoordinate } from '@/common/utils/coordinates';
@@ -115,7 +116,7 @@ import { formToDuplicatePrefill } from './utils/form-to-duplicate-prefill';
 import { canDuplicateTransaction } from './utils/can-duplicate-transaction';
 import { resolveFormLocation } from './utils/resolve-form-location';
 import { useTransactionTemplating } from './composables/use-transaction-templating';
-import { usePayeeTagAutoApply } from '@/composable/use-payee-tag-auto-apply';
+import { useAutoTagApply } from '@/composable/use-auto-tag-apply';
 
 import {
   canDeleteTransaction,
@@ -254,20 +255,29 @@ const form = ref<UI_FORM_STRUCT>({
 // wins; the top (most-used) category is a fallback so users who never set
 // defaults still get a useful suggestion.
 //
-// Tags use a different model — see `usePayeeTagAutoApply`. In edit mode its
-// tracker starts empty, so the row's saved tags count as manual: a payee
-// change only adds, never removes. Prepopulation sets `payeeId` without going
-// through the clear path, which is consistent with that empty tracker.
+// Tags use a different model — see `useAutoTagApply`. In edit mode its
+// trackers start empty, so the row's saved tags count as manual: a payee or
+// category change only adds, never removes. Prepopulation sets `payeeId` and
+// `category` without going through the clear path, consistent with that.
 const formTagIds = computed({
   get: () => form.value.tagIds ?? [],
   set: (value: string[]) => {
     form.value.tagIds = value;
   },
 });
-const { onPayeeSelected: applyPayeeTags, reset: resetPayeeTagTracking } = usePayeeTagAutoApply({
+const { apply: applyAutoTags, reset: resetAutoTagTracking } = useAutoTagApply({
   tagIds: formTagIds,
-  payeeId: () => form.value.payeeId,
+  sources: {
+    payee: () => form.value.payeeId,
+    category: () => form.value.category?.id,
+  },
+  // Transfers carry no category.
+  suspended: { category: () => form.value.type === FORM_TYPES.transfer },
 });
+const applyCategoryTags = ({ category }: { category: FormattedCategory | null }) => {
+  if (!category) return;
+  applyAutoTags({ source: 'category', autoTagIds: category.defaultTagIds });
+};
 const handlePayeeSelected = ({
   defaultCategoryId,
   topCategoryId,
@@ -280,7 +290,7 @@ const handlePayeeSelected = ({
   defaultTagIds: string[];
   defaultLocation: TransactionLocation | null;
 }) => {
-  applyPayeeTags({ defaultTagIds });
+  applyAutoTags({ source: 'payee', autoTagIds: defaultTagIds });
 
   if (defaultLocation && !isLocationFilled.value) {
     form.value.latitude = defaultLocation.latitude;
@@ -291,10 +301,13 @@ const handlePayeeSelected = ({
   const targetId = defaultCategoryId ?? topCategoryId;
   if (!targetId) return;
   const match = findFormattedCategoryById(effectiveFormattedCategories.value, targetId);
-  if (match) form.value.category = match;
+  if (!match) return;
+  form.value.category = match;
+  applyCategoryTags({ category: match });
 };
-const handleCategoryUserTouched = () => {
+const handleCategoryPicked = (category: FormattedCategory | null) => {
   form.value.categoryUserTouched = true;
+  applyCategoryTags({ category });
 };
 
 const transferDestinationType = ref<TransferDestinationType>('account');
@@ -1266,6 +1279,8 @@ const prepopulateIfReady = () => {
     Object.assign(form.value, initialPrefill);
     // Keeps the payee auto-fill from replacing a prefilled category.
     form.value.categoryUserTouched = !!initialPrefill?.category;
+    // A prefilled category arrives with the tag list its source already settled on.
+    if (!initialPrefill?.category) applyCategoryTags({ category: form.value.category });
   } else {
     if (!isCategoriesReady.value) return;
     const data = prepopulateForm({
@@ -1300,6 +1315,7 @@ watch([effectiveFormattedCategories, isCategoriesReady], ([categories, isReady])
     // An applied template that resolved no category must stay empty, not fall back to the first.
     if (templating.applied.value) return;
     form.value.category = categories[0] ?? null;
+    applyCategoryTags({ category: form.value.category });
     return;
   }
   if (effectiveCategoriesMap.value[selected.id]) return;
@@ -1322,7 +1338,7 @@ const templating = useTransactionTemplating({
   // Templates pin the caller's own categories; the shared-account picker swaps to the owner's set.
   formattedCategories,
   currencyCode,
-  resetPayeeTagTracking,
+  resetAutoTagTracking,
   focusAmountField: () => {
     amountFieldRef.value?.focus();
     amountFieldRef.value?.select();
@@ -1813,7 +1829,7 @@ onUnmounted(() => {
                   :shared-owner-username="isAccountSharedWithCaller ? accountShare?.owner.username : undefined"
                   label-key="name"
                   :disabled="isFormFieldsDisabled"
-                  @update:model-value="handleCategoryUserTouched"
+                  @update:model-value="handleCategoryPicked"
                 >
                   <template #field-right>
                     <LabelPill

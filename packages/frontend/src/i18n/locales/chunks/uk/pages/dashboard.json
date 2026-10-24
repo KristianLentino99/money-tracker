@@ -122,7 +122,13 @@
       "categoryTracker": {
         "title": "Спостереження за категоріями",
         "addCategory": "Додати категорію",
-        "selectCategories": "Обрати категорії"
+        "selectCategories": "Обрати категорії",
+        "sort": {
+          "title": "Сортування",
+          "custom": "Власний порядок",
+          "spendDesc": "Спочатку найбільші витрати",
+          "spendAsc": "Спочатку найменші витрати"
+        }
       },
       "cashFlow": {
         "title": "Грошовий потік",
@@ -133,7 +139,10 @@
         "expenses": "Витрати",
         "saved": "Заощаджено",
         "previousPeriodsTrend": "Тренд попередніх періодів",
-        "viewDetails": "Переглянути деталі"
+        "viewDetails": "Переглянути деталі",
+        "savingsRateLine": "Показувати лінію рівня заощаджень",
+        "savingsRate": "Рівень заощаджень",
+        "noIncome": "немає доходу"
       },
       "netWorth": {
         "title": "Чистий капітал",
@@ -302,7 +311,10 @@
         "tagsStyleTitle": "Теги",
         "tagsStyleNames": "Назви",
         "tagsStyleBars": "Смужки",
-        "tagsStyleSaveError": "Не вдалося зберегти стиль тегів. Спробуйте ще раз."
+        "tagsStyleSaveError": "Не вдалося зберегти стиль тегів. Спробуйте ще раз.",
+        "showAccountTitle": "Рахунок",
+        "showAccountDescription": "Показувати логотип рахунку для кожної транзакції",
+        "showAccountSaveError": "Не вдалося зберегти налаштування рахунку. Спробуйте ще раз."
       },
       "overdueBadge": "Прострочено",
       "scheduledBadge": "Заплановано",

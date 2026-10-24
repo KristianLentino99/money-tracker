@@ -12,7 +12,6 @@ function createTestRouter() {
     history: createMemoryHistory(),
     routes: [
       { path: '/dashboard', name: ROUTES_NAMES.home, component: routeComponent },
-      { path: '/plan', name: ROUTES_NAMES.plan, component: routeComponent },
       { path: '/transactions', name: ROUTES_NAMES.transactions, component: routeComponent },
       { path: '/accounts', name: ROUTES_NAMES.accounts, component: routeComponent },
       { path: '/more', name: ROUTES_NAMES.more, component: routeComponent },
@@ -29,7 +28,6 @@ function createTestI18n() {
       en: {
         navigation: {
           home: 'Home',
-          plan: 'Plan',
           transactions: 'Transactions',
           accounts: 'Accounts',
           more: 'More',
@@ -55,10 +53,10 @@ async function mountNavigation({ routeName }: { routeName: string }) {
 }
 
 describe('MobileNavigation', () => {
-  it('renders the five primary tabs with accessible names', async () => {
+  it('renders the four primary tabs with accessible names', async () => {
     const { wrapper } = await mountNavigation({ routeName: ROUTES_NAMES.home });
 
-    expect(wrapper.findAll('[data-mobile-tab]')).toHaveLength(5);
+    expect(wrapper.findAll('[data-mobile-tab]')).toHaveLength(4);
     expect(wrapper.find('[data-mobile-tab="home"]').text()).toContain('Home');
     expect(wrapper.find('[data-mobile-tab="more"]').text()).toContain('More');
     expect(wrapper.findAll('[aria-label]').map((element) => element.attributes('aria-label'))).toContain(
@@ -66,7 +64,7 @@ describe('MobileNavigation', () => {
     );
   });
 
-  it('marks a nested settings route as More without changing the five-tab layout', async () => {
+  it('marks a nested settings route as More without changing the four-tab layout', async () => {
     const { wrapper } = await mountNavigation({ routeName: ROUTES_NAMES.settingsSecuritySessions });
 
     expect(wrapper.find('[data-mobile-tab="more"] [aria-current="page"]').exists()).toBe(true);

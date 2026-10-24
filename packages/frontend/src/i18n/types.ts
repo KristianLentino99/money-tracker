@@ -18,7 +18,6 @@ const I18N_CHUNKS = [
   'auth/welcome',
   // Main pages
   'pages/dashboard',
-  'pages/plan',
   'pages/accounts',
   'pages/account',
   'pages/account-integrations',

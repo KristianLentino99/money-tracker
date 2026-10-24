@@ -575,10 +575,6 @@
   "vehicles": {
     "notFound": "Vehículo no encontrado"
   },
-  "plans": {
-    "targetAmountMustBePositive": "El importe objetivo debe ser mayor que cero.",
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan."
-  },
   "stats": {
     "netWorthHistoryTooManyPoints": "Este rango de fechas y esta granularidad producen demasiados puntos de datos. Elija una granularidad más amplia o un rango más corto."
   },

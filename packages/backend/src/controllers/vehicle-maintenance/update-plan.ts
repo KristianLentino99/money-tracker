@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import { dateOnly } from './create-plan';
 
-const schema = z.object({
+export const schema = z.object({
   params: z.object({ id: recordId(), planId: recordId() }),
   body: z.object({
     nextDueDate: dateOnly.nullable().optional(),

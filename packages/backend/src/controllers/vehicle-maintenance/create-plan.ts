@@ -14,7 +14,7 @@ export const dateOnly = z
     return isValid(date) && format(date, 'yyyy-MM-dd') === value;
   }, 'Date must be a valid calendar date');
 
-const schema = z.object({
+export const schema = z.object({
   params: z.object({ id: recordId() }),
   body: z
     .object({

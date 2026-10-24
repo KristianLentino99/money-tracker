@@ -13,8 +13,6 @@ import {
 import { ConflictError, NotFoundError, ValidationError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
-import Plans from '@models/plan.model';
-import ResourceShares from '@models/resource-shares.model';
 import ShareInvitations from '@models/share-invitations.model';
 import { getBaseCurrency } from '@models/users-currencies.model';
 import Users from '@models/users.model';
@@ -78,16 +76,11 @@ const resolveOwnedResource = async ({
       resourceName: account.name,
     };
   }
-  if (resourceType === RESOURCE_TYPES.plan) {
-    const plan = await Plans.findOne({ where: { id: resourceId } });
-    if (!plan || plan.ownerUserId !== ownerUserId) {
-      throw new NotFoundError({ message: 'Plan not found' });
-    }
-    return {
-      ownerUserId: plan.ownerUserId,
-      ownerCurrencyCode: plan.baseCurrencyCode,
-      resourceName: plan.name,
-    };
+  if (resourceType === RESOURCE_TYPES.budget) {
+    // Budget sharing lands with the Budget/Tracker feature in a later merge chunk —
+    // no model yet, so there is nothing to resolve. Surface the same 404 a missing
+    // resource would get once the model exists.
+    throw new NotFoundError({ message: 'Budget not found' });
   }
   if (resourceType === RESOURCE_TYPES.household) {
     // A household is identified by its owner — the inviter can only invite people to
@@ -136,7 +129,10 @@ const buildCleanPolicy = ({
   if (permission === SHARE_PERMISSIONS.read) {
     return null;
   }
-  if (resourceType === RESOURCE_TYPES.plan) {
+  // Budgets have no per-tx policy in MVP — `write` here means "attach own transactions",
+  // nothing else. Storing a `transactionsWriteScope` here would leak meaningless data into
+  // the row that a future reader could mistake for a real policy. Return null.
+  if (resourceType === RESOURCE_TYPES.budget) {
     return null;
   }
   const scope = policy?.transactionsWriteScope ?? TRANSACTIONS_WRITE_SCOPES.all;
@@ -166,9 +162,6 @@ const createInvitationImpl = async (params: CreateInvitationParams): Promise<Cre
   // Owner-side validation only. Anything that would distinguish "registered" from
   // "unregistered" emails is moved to the accept endpoint to avoid user enumeration.
   const resource = await resolveOwnedResource({ ownerUserId, resourceType, resourceId: resourceIdStr });
-  if (resourceType === RESOURCE_TYPES.plan) {
-    await Plans.update({ visibility: 'shared' }, { where: { id: resourceIdStr, ownerUserId } });
-  }
 
   // Owner-side check, no enumeration leak: it reveals only the owner's own seat usage.
   await assertSeatAvailable({ ownerUserId, resourceType, resourceId: resourceIdStr, voice: 'owner' });

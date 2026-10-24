@@ -2,7 +2,6 @@ import { API_ERROR_CODES } from '@bt/shared/types';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { ConflictError, ValidationError } from '@js/errors';
 import * as Categories from '@models/categories.model';
-import PlanCategoryMemberships from '@models/plan-category-memberships.model';
 import TransactionTemplates from '@models/transaction-templates.model';
 import { updateTransactions } from '@models/transactions-query';
 import { withTransaction } from '@services/common/with-transaction';
@@ -67,11 +66,6 @@ export const deleteCategory = withTransaction(async (payload: DeleteCategoryPayl
       paranoid: false,
     });
   }
-
-  await PlanCategoryMemberships.update(
-    { active: false, detachedAt: new Date() },
-    { where: { categoryId: payload.categoryId, active: true } },
-  );
 
   // Without a successor the rules would silently lose their category action, so they are paused.
   if (replacement) {

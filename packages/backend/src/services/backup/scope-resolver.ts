@@ -1,9 +1,9 @@
 import type { RecordId } from '@bt/shared/types';
 import Accounts from '@models/accounts.model';
+import Categories from '@models/categories.model';
 import ImportBatches from '@models/import-batches.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Payees from '@models/payees.model';
-import Plans from '@models/plan.model';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import Subscriptions from '@models/subscriptions.model';
 import TransactionGroups from '@models/transaction-groups.model';
@@ -41,12 +41,12 @@ export function createScopeResolver({ userId }: { userId: number }) {
 
   const loaders: Record<BackupParentScope, () => Promise<RecordId[]>> = {
     accounts: () => idsWhere({ model: Accounts, where: { userId } }),
+    categories: () => idsWhere({ model: Categories, where: { userId } }),
     payees: () => idsWhere({ model: Payees, where: { userId } }),
     portfolios: () => idsWhere({ model: Portfolios, where: { userId } }),
     transactions: () => idsWhere({ model: Transactions, where: { userId } }),
     transactionGroups: () => idsWhere({ model: TransactionGroups, where: { userId } }),
     transactionTemplates: () => idsWhere({ model: TransactionTemplates, where: { userId } }),
-    plans: () => idsWhere({ model: Plans, where: { ownerUserId: userId } }),
     subscriptions: () => idsWhere({ model: Subscriptions, where: { userId } }),
     ventureEvents: () => idsWhere({ model: VentureEvents, where: { userId } }),
     vehicles: () => idsWhere({ model: Vehicles, where: { userId } }),

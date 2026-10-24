@@ -6,7 +6,7 @@ import { getVehicleDistanceUnit } from '@services/vehicles/helpers';
 import { updateVehicle } from '@services/vehicles/update-vehicle.service';
 import { z } from 'zod';
 
-const schema = z.object({
+export const schema = z.object({
   params: z.object({ id: recordId() }),
   body: z.object({
     name: z.string().min(1).max(200).trim().optional(),

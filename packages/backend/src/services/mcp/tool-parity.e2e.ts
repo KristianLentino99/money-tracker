@@ -1,4 +1,4 @@
-import type { LoanApiResponse, endpointsTypes } from '@bt/shared/types';
+import type { LoanApiResponse } from '@bt/shared/types';
 import type { ManualPortfolioOverviewModel } from '@bt/shared/types/investments';
 import { afterEach, describe, expect, it } from '@jest/globals';
 import type { VehicleMaintenanceVisitApiResponse } from '@root/serializers/vehicle-maintenance-visits.serializer';
@@ -6,7 +6,6 @@ import type { VehicleApiResponse } from '@root/serializers/vehicles.serializer';
 import * as helpers from '@tests/helpers';
 import * as mcp from '@tests/helpers/mcp';
 import { addMonths, format } from 'date-fns';
-import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -23,63 +22,6 @@ afterEach(async () => {
 });
 
 describe('MCP HTTP feature parity', () => {
-  it('allocates decimal plan amounts idempotently and rejects stale revisions', async () => {
-    const session = await initialize();
-    const account = await helpers.createAccount({
-      payload: helpers.buildAccountPayload({ initialBalance: 500 }),
-      raw: true,
-    });
-    const plan = mcp.parseMcpToolData<endpointsTypes.PlanSummaryResponse>({
-      response: await mcp.callMcpTool({
-        session,
-        name: 'create_plan',
-        args: {
-          name: 'MCP plan',
-          baseCurrencyCode: global.BASE_CURRENCY.code,
-          accountIds: [account.id],
-          categoryIds: [global.DEFAULT_CATEGORY_ID],
-          includeHistoricalTransactions: true,
-        },
-      }),
-    });
-    const periodStart = `${new Date().toISOString().slice(0, 7)}-01`;
-    const view = mcp.parseMcpToolData<endpointsTypes.PlanViewResponse>({
-      response: await mcp.callMcpTool({
-        session,
-        name: 'get_plan_view',
-        args: { planId: plan.id, periodStart },
-      }),
-    });
-    const args = {
-      planId: plan.id,
-      periodStart,
-      categoryId: global.DEFAULT_CATEGORY_ID,
-      assigned: 12.34,
-      expectedRevision: view.period.revision,
-      requestId: randomUUID(),
-    };
-    const first = mcp.parseMcpToolData<endpointsTypes.PlanMutationResponse>({
-      response: await mcp.callMcpTool({ session, name: 'assign_plan_category', args }),
-    });
-    const replay = mcp.parseMcpToolData<endpointsTypes.PlanMutationResponse>({
-      response: await mcp.callMcpTool({ session, name: 'assign_plan_category', args }),
-    });
-    expect(replay.mutation.eventId).toBe(first.mutation.eventId);
-    expect(replay.view.period.revision).toBe(first.view.period.revision);
-    const restView = await helpers.getPlanView({ planId: plan.id, periodStart, raw: true });
-    expect(
-      restView.groups
-        .flatMap((group) => group.categories)
-        .find((category) => category.id === global.DEFAULT_CATEGORY_ID)?.assigned,
-    ).toBe(12.34);
-    const stale = await mcp.callMcpTool({
-      session,
-      name: 'assign_plan_category',
-      args: { ...args, assigned: 99, requestId: randomUUID() },
-    });
-    expect(stale.result?.isError).toBe(true);
-  });
-
   it('creates a loan with decimal liability balances and rejects invalid update combinations', async () => {
     const session = await initialize();
     const loan = mcp.parseMcpToolData<LoanApiResponse>({
@@ -353,11 +295,6 @@ describe('MCP HTTP feature parity', () => {
     expect(new Set(names).size).toBe(names.length);
     expect(names).toEqual(
       expect.arrayContaining([
-        'get_plans',
-        'create_plan',
-        'get_plan_view',
-        'assign_plan_category',
-        'auto_assign_plan',
         'get_loans',
         'create_loan',
         'link_loan_payments',
@@ -380,32 +317,9 @@ describe('MCP HTTP feature parity', () => {
 
   it('returns empty state for the fork domain collections', async () => {
     const session = await initialize();
-    for (const name of ['get_plans', 'get_loans', 'get_vehicles', 'get_vehicle_maintenance_reminders']) {
+    for (const name of ['get_loans', 'get_vehicles', 'get_vehicle_maintenance_reminders']) {
       const response = await mcp.callMcpTool({ session, name });
       expect(mcp.parseMcpToolData<unknown>({ response })).toEqual([]);
     }
-  });
-
-  it('rejects writes with read-only OAuth scopes', async () => {
-    const session = await initialize({ scopes: ['finance:read', 'profile:read'] });
-    const response = await mcp.callMcpTool({
-      session,
-      name: 'create_plan',
-      args: {
-        name: 'Rejected MCP Plan',
-        baseCurrencyCode: global.BASE_CURRENCY.code,
-      },
-    });
-    expect(response.result?.isError).toBe(true);
-    expect(response.result?.content[0]?.text).toContain('finance:write');
-    expect(await helpers.getPlans({ raw: true })).toEqual([]);
-  });
-
-  it('rejects invalid input and inaccessible plan IDs', async () => {
-    const session = await initialize();
-    const malformed = await mcp.callMcpTool({ session, name: 'create_plan', args: { name: '' } });
-    expect(Boolean(malformed.error || malformed.result?.isError)).toBe(true);
-    const missing = await mcp.callMcpTool({ session, name: 'get_plan', args: { planId: randomUUID() } });
-    expect(missing.result?.isError).toBe(true);
   });
 });

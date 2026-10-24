@@ -99,7 +99,7 @@ describe('buildNotificationRoute', () => {
         baseNotification({
           type: NOTIFICATION_TYPES.shareAccepted,
           payload: {
-            resourceType: RESOURCE_TYPES.plan,
+            resourceType: RESOURCE_TYPES.budget,
             resourceId: NONEXISTENT_ID,
             resourceName: 'Monthly plan',
             counterpartUser: { id: 2, username: 'bob', avatar: null },

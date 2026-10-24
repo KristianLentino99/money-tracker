@@ -68,10 +68,10 @@ const acceptMutation = useMutation({
     acceptedResource.value = { type: data.share.resourceType, id: data.share.resourceId };
     addSuccessNotification(t('dialogs.shareInvitationDialog.acceptSuccess'));
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.shareInvitationsReceived });
-    if (data.share.resourceType === RESOURCE_TYPES.plan) {
-      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.plansList });
-      queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.planViews });
-    } else {
+    // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no
+    // budget-list query key exists yet, so a budget acceptance just falls through to the
+    // generic accounts invalidation below (harmless no-op until the feature returns).
+    if (data.share.resourceType !== RESOURCE_TYPES.budget) {
       queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
     }
     // Refetch accounts and reload categories in parallel — the newly accessible accounts
@@ -119,19 +119,12 @@ const goToResource = () => {
     router.push({ name: ROUTES_NAMES.account, params: { id: accepted.id } });
     return;
   }
-  if (accepted.type === RESOURCE_TYPES.plan) {
-    router.push({ name: ROUTES_NAMES.plan, query: { planId: accepted.id } });
-    return;
-  }
+  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no
+  // route exists yet, so fall through to the generic close action.
   emit('close');
 };
 
-const goToResourceLabel = computed(() => {
-  if (acceptedResource.value?.type === RESOURCE_TYPES.plan) {
-    return t('navigation.plan');
-  }
-  return t('dialogs.shareInvitationDialog.goToAccount');
-});
+const goToResourceLabel = computed(() => t('dialogs.shareInvitationDialog.goToAccount'));
 
 const closeDialog = () => emit('close');
 </script>

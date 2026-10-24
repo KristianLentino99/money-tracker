@@ -11,6 +11,7 @@ import BillingSubscriptionsModel from './billing-subscriptions.model';
 import BillingWebhookEventsModel from './billing-webhook-events.model';
 import BrandLogosModel from './brand-logos.model';
 import CategoriesModel from './categories.model';
+import CategoryTagsModel from './category-tags.model';
 import { connection } from './connection';
 import CurrenciesModel from './currencies.model';
 import ExchangeRatesModel from './exchange-rates.model';
@@ -34,13 +35,6 @@ import PayeeAliasesModel from './payee-aliases.model';
 import PayeeIgnoredNamesModel from './payee-ignored-names.model';
 import PayeeTagsModel from './payee-tags.model';
 import PayeesModel from './payees.model';
-import PlanAccountMembershipsModel from './plan-account-memberships.model';
-import PlanAllocationEventsModel from './plan-allocation-events.model';
-import PlanAssignmentsModel from './plan-assignments.model';
-import PlanCategoryMembershipsModel from './plan-category-memberships.model';
-import PlanCategoryTargetsModel from './plan-category-targets.model';
-import PlanPeriodsModel from './plan-periods.model';
-import PlanModel from './plan.model';
 import RefundTransactionsModel from './refund-transactions.model';
 import ResourceSharesModel from './resource-shares.model';
 import ShareInvitationsModel from './share-invitations.model';
@@ -116,13 +110,6 @@ const models = [
   UsersCurrenciesModel,
   AccountGroupingModel,
   AccountGroupsModel,
-  PlanModel,
-  PlanCategoryMembershipsModel,
-  PlanCategoryTargetsModel,
-  PlanAccountMembershipsModel,
-  PlanPeriodsModel,
-  PlanAssignmentsModel,
-  PlanAllocationEventsModel,
   TagsModel,
   TagRemindersModel,
   TransactionTagsModel,
@@ -155,6 +142,7 @@ const models = [
   BrandLogosModel,
   PayeeIgnoredNamesModel,
   PayeeTagsModel,
+  CategoryTagsModel,
   TransferSuggestionDismissalsModel,
   VenturePlatformsModel,
   VentureDealsModel,

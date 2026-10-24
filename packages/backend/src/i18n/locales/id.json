@@ -575,10 +575,6 @@
   "vehicles": {
     "notFound": "Kendaraan tidak ditemukan"
   },
-  "plans": {
-    "targetAmountMustBePositive": "Jumlah target harus lebih besar dari nol.",
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan."
-  },
   "stats": {
     "netWorthHistoryTooManyPoints": "Rentang tanggal dan granularitas ini menghasilkan terlalu banyak titik data. Pilih granularitas yang lebih kasar atau rentang yang lebih pendek."
   },

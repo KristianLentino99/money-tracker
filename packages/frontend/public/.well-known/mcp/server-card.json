@@ -3,7 +3,7 @@
     "name": "MoneyMatter Finance Tracker",
     "version": "1.0.0",
     "title": "MoneyMatter — Personal Finance MCP Server",
-    "description": "OAuth-secured read/write access to financial data: accounts, transactions, plans, loans and linked installments, vehicles and maintenance, subscriptions, automations, categories, tags, analytics, and investment portfolios including manual valuations and grouped purchases. Monetary inputs and outputs use decimal currency units; write and delete operations require their corresponding scopes.",
+    "description": "OAuth-secured read/write access to financial data: accounts, transactions, loans and linked installments, vehicles and maintenance, subscriptions, automations, categories, tags, analytics, and investment portfolios including manual valuations and grouped purchases. Monetary inputs and outputs use decimal currency units; write and delete operations require their corresponding scopes.",
     "website": "https://moneymatter.app",
     "documentation": "https://moneymatter.app/llms-full.txt",
     "vendor": {
@@ -43,10 +43,6 @@
   },
   "tools": [
     {
-      "name": "add_plan_category",
-      "description": "Add an eligible spending category to a plan. Requires finance:write scope."
-    },
-    {
       "name": "add_transactions_to_group",
       "description": "Add one or more transactions to an existing transaction group. Transfer pairs are auto-included. Returns the updated group with all its transactions. Requires finance:write scope."
     },
@@ -63,24 +59,8 @@
       "description": "Archive or unarchive a user account. Archiving removes the account from groups and unlinks subscriptions. Set archived=false to restore an archived account to active status."
     },
     {
-      "name": "archive_plan",
-      "description": "Archive or restore a spending plan. Requires finance:write scope."
-    },
-    {
-      "name": "assign_plan_category",
-      "description": "Set one category assignment for a plan period. Use the revision from get_plan_view and a fresh requestId; requires finance:write scope."
-    },
-    {
       "name": "assign_tags_to_transaction",
       "description": "Assign one or more tags to a transaction. Use when the user wants to label a transaction with existing tags. Already-assigned tags are silently skipped. Returns counts of added and skipped tags."
-    },
-    {
-      "name": "auto_assign_plan",
-      "description": "Apply automatic plan allocation for a period using the current revision. Requires finance:write scope."
-    },
-    {
-      "name": "bulk_assign_plan_categories",
-      "description": "Set multiple category assignments atomically for a plan period. Use the revision from get_plan_view; requires finance:write scope."
     },
     {
       "name": "bulk_update_transactions",
@@ -117,10 +97,6 @@
     {
       "name": "create_payee",
       "description": "Create a Payee (merchant/counterparty) for the user. Use when the user wants to register a new merchant before linking transactions. Returns the created Payee."
-    },
-    {
-      "name": "create_plan",
-      "description": "Create a spending plan with selected accounts and categories. Amounts in plan views are decimal values; requires finance:write scope."
     },
     {
       "name": "create_portfolio",
@@ -193,14 +169,6 @@
     {
       "name": "delete_payee",
       "description": "Delete a Payee. Linked transactions retain their categoryId but their payeeId is set to null. Use cautiously — this is irreversible. Requires finance:delete scope."
-    },
-    {
-      "name": "delete_plan",
-      "description": "Permanently delete a spending plan and its allocation data. Requires finance:delete scope."
-    },
-    {
-      "name": "delete_plan_category_target",
-      "description": "Permanently remove a category target from a plan. Requires finance:delete scope."
     },
     {
       "name": "delete_portfolio",
@@ -321,18 +289,6 @@
     {
       "name": "get_payees",
       "description": "List Payees (merchants/counterparties) for the user, optionally filtered by a substring query. Returns Payee id, name, defaultCategoryId, and aggregated stats (transactionCount, netFlowRef, top category, last seen)."
-    },
-    {
-      "name": "get_plan",
-      "description": "Retrieve a plan and its sharing permissions. Use get_plan_view for period calculations."
-    },
-    {
-      "name": "get_plan_view",
-      "description": "Get a plan period view with decimal ready-to-assign money, category assignments/activity/available balances, targets, upcoming obligations, revision, and undo state."
-    },
-    {
-      "name": "get_plans",
-      "description": "List the user's spending plans, including active or archived plans. Use get_plan_view for category balances, assignments, targets, and ready-to-assign money."
     },
     {
       "name": "get_portfolio_balances",
@@ -491,16 +447,8 @@
       "description": "Merge a source Payee into a target Payee. Transactions and aliases move to the target; the target wins silently on defaultCategoryId conflict; the source is deleted. Use to dedupe near-duplicates like \"Amazon\" and \"AMZN MKT\". Requires finance:delete scope."
     },
     {
-      "name": "move_plan_money",
-      "description": "Move available money between two categories in a plan period. Use the revision from get_plan_view; requires finance:write scope."
-    },
-    {
       "name": "pay_subscription_period",
       "description": "Mark a subscription period paid by linking an existing transaction or creating a new expense. Loan-linked installments require a real transaction and may require confirmOverpay=true. Requires finance:write scope."
-    },
-    {
-      "name": "preview_plan_auto_assign",
-      "description": "Preview automatic plan allocation for a period. Returns proposed decimal assignments, resulting ready-to-assign amount, and whether the caller can apply them."
     },
     {
       "name": "preview_transaction_automation",
@@ -531,10 +479,6 @@
       "description": "Search and filter transactions. Returns transaction amount (original + base currency), category, account, note, date, type, and tags. Use date filters to limit results. Default: last 30 days, 50 items."
     },
     {
-      "name": "set_plan_category_target",
-      "description": "Create or replace a category target amount and due date. Requires finance:write scope."
-    },
-    {
       "name": "set_portfolio_transfer_adjustment",
       "description": "Set whether an existing portfolio transfer is a balance adjustment or a contribution. This classification changes return/contribution reporting without changing the transfer amount, date or cash balance."
     },
@@ -561,10 +505,6 @@
     {
       "name": "transfer_portfolio_to_account",
       "description": "Withdraw cash from an investment portfolio into a regular account. Creates an income transaction on the account and decreases the portfolio cash balance. Use link_transaction_to_portfolio instead when the bank transaction already exists."
-    },
-    {
-      "name": "undo_plan_allocation",
-      "description": "Undo the latest eligible plan allocation event for a period. Use the eventId and revision from get_plan_view; requires finance:write scope."
     },
     {
       "name": "unlink_installment_from_loan",
@@ -613,10 +553,6 @@
     {
       "name": "update_payee",
       "description": "Rename a Payee or set/clear its defaultCategoryId. Renaming preserves the previous canonical name as an alias so historical matches still resolve."
-    },
-    {
-      "name": "update_plan",
-      "description": "Update a plan name, period start day, or default status. Requires finance:write scope."
     },
     {
       "name": "update_portfolio",

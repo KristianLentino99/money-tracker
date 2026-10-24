@@ -11,7 +11,6 @@ import {
   LayersIcon,
   LayoutDashboardIcon,
   RepeatIcon,
-  WalletIcon,
   WrenchIcon,
   ZapIcon,
 } from '@lucide/vue';
@@ -72,12 +71,6 @@ watch(
   </router-link>
 
   <template v-if="bottomNav">
-    <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.plan }">
-      <ui-button variant="ghost" as="span" :class="[navItemBase, isActive && navItemActive]" size="default">
-        <WalletIcon :class="[navIconBase, isActive && navIconActive]" />
-        <span class="max-sm:hidden"> {{ $t('navigation.plan') }} </span>
-      </ui-button>
-    </router-link>
     <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.accounts }">
       <ui-button variant="ghost" as="span" :class="[navItemBase, isActive && navItemActive]" size="default">
         <LayersIcon :class="[navIconBase, isActive && navIconActive]" />
@@ -86,18 +79,6 @@ watch(
     </router-link>
   </template>
   <template v-else>
-    <router-link v-slot="{ isActive }" :to="{ name: ROUTES_NAMES.plan }">
-      <ui-button
-        variant="ghost"
-        as="span"
-        :class="['w-full justify-start gap-2 px-3', isActive && navItemActive]"
-        size="default"
-      >
-        <WalletIcon :class="[navIconBase, isActive && navIconActive]" />
-        <span>{{ $t('navigation.plan') }}</span>
-      </ui-button>
-    </router-link>
-
     <router-link v-if="accountsNavChildren.length === 1" :to="{ name: ROUTES_NAMES.accounts }">
       <ui-button
         variant="ghost"

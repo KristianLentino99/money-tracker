@@ -60,6 +60,7 @@
     "transactionIdNotExist": "Transaction with provided `id` does not exist!",
     "notAuthorizedToEdit": "You are not authorized to edit this transaction.",
     "cannotDeleteExternal": "It's not allowed to manually delete external transactions",
+    "bulkDeleteLimitExceeded": "You can delete up to 500 transactions at once. Narrow the selection and try again.",
     "unexpectedDeleteIssue": "Unexpected issue when tried to delete transaction",
     "linkSelfNotAllowed": "Trying to link the transaction to itself.",
     "linkSameTypeNotAllowed": "Trying to link with the transaction that has the same \"transactionType\".",
@@ -223,8 +224,7 @@
     "accountIdNotFound": "Account {{accountId}} not found",
     "providerTypeMismatch": "Connection {{connectionId}} is for provider {{actualType}}, not {{expectedType}}",
     "providerAlreadyRegistered": "Provider {{providerType}} is already registered. Cannot register duplicate providers.",
-    "providerNotRegistered": "Provider {{providerType}} is not registered. Available providers: {{available}}",
-    "missingRequiredProviders": "Missing required bank data providers: {{missing}}. Please ensure these providers are registered at app startup."
+    "providerNotRegistered": "Provider {{providerType}} is not registered. Available providers: {{available}}"
   },
   "validation": {
     "dateInvalid": "\"date\" is invalid date."
@@ -574,10 +574,6 @@
   },
   "vehicles": {
     "notFound": "Vehicle not found"
-  },
-  "plans": {
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan.",
-    "targetAmountMustBePositive": "Target amount must be greater than zero."
   },
   "stats": {
     "netWorthHistoryTooManyPoints": "This date range and granularity produce too many data points. Pick a coarser granularity or a shorter range."

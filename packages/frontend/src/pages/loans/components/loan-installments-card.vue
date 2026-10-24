@@ -53,7 +53,7 @@ const availableInstallments = computed(() => {
   return (installments.value ?? []).filter((installment) => {
     if (installment.type !== SUBSCRIPTION_TYPES.installment) return false;
     if (installment.transactionType !== TRANSACTION_TYPES.expense) return false;
-    if (installment.loanAccountId != null || linkedIds.has(installment.id)) return false;
+    if (installment.accountId != null || linkedIds.has(installment.id)) return false;
     return query.length === 0 || installment.name.toLocaleLowerCase().includes(query);
   });
 });

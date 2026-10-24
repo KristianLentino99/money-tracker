@@ -400,11 +400,9 @@ const isMarkingPaid = computed(() => markPaidRef.value?.isPending ?? false);
 
 function payPeriod({ periodId }: { periodId: string }) {
   if (!subscription.value) return;
-  const period = subscription.value.periods.find(({ id }) => id === periodId);
   markPaidRef.value?.triggerPay({
     subscription: subscription.value,
     periodId,
-    periodDueDate: period?.dueDate,
   });
 }
 

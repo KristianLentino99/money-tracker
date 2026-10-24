@@ -47,7 +47,7 @@
             </Popover.PopoverTrigger>
             <Popover.PopoverContent class="grid w-72 gap-0.5 p-1.5" align="start">
               <RouterLink :to="{ name: ROUTES_NAMES.settingsDataManagement }" @click="isAddMenuOpen = false">
-                <Button variant="ghost" class="h-auto w-full justify-start gap-3 p-2 text-left">
+                <Button variant="ghost" class="h-auto w-full justify-start gap-3 p-2 text-left whitespace-normal">
                   <span
                     class="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-md"
                   >
@@ -63,7 +63,7 @@
               <Button
                 v-if="!userStore.isDemo"
                 variant="ghost"
-                class="h-auto w-full justify-start gap-3 p-2 text-left"
+                class="h-auto w-full justify-start gap-3 p-2 text-left whitespace-normal"
                 @click="openAttachInvoice"
               >
                 <span

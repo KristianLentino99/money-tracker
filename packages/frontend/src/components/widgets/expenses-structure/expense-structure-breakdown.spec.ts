@@ -1,4 +1,4 @@
-import type { CategoryModel, endpointsTypes } from '@bt/shared/types';
+import type { CategoryModel, SpendingStructure } from '@bt/shared/types';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -20,7 +20,7 @@ const spending = ({
   name: string;
   amount: number;
   color?: string;
-}): endpointsTypes.SpendingStructure => ({ name, amount, color });
+}): SpendingStructure => ({ name, amount, color });
 
 describe('formatExpenseStructureShare', () => {
   it('formats a category share as a rounded percentage', () => {

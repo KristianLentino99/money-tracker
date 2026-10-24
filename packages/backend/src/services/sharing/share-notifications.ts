@@ -678,36 +678,36 @@ export const LIFECYCLE_NOTIFIERS = {
   invitationReceived: {
     [RESOURCE_TYPES.account]: notifyInvitationReceived,
     [RESOURCE_TYPES.household]: notifyHouseholdInvitationReceived,
-    [RESOURCE_TYPES.plan]: notifyInvitationReceived,
+    [RESOURCE_TYPES.budget]: notifyInvitationReceived,
   },
   invitationAccepted: {
     [RESOURCE_TYPES.account]: notifyInvitationAccepted,
     [RESOURCE_TYPES.household]: notifyHouseholdAccepted,
-    [RESOURCE_TYPES.plan]: notifyInvitationAccepted,
+    [RESOURCE_TYPES.budget]: notifyInvitationAccepted,
   },
   invitationDeclined: {
     [RESOURCE_TYPES.account]: notifyInvitationDeclined,
     [RESOURCE_TYPES.household]: notifyHouseholdDeclined,
-    [RESOURCE_TYPES.plan]: notifyInvitationDeclined,
+    [RESOURCE_TYPES.budget]: notifyInvitationDeclined,
   },
   invitationExpired: {
     [RESOURCE_TYPES.account]: notifyInvitationExpired,
     [RESOURCE_TYPES.household]: notifyHouseholdExpired,
-    [RESOURCE_TYPES.plan]: notifyInvitationExpired,
+    [RESOURCE_TYPES.budget]: notifyInvitationExpired,
   },
   invitationSendFailed: {
     [RESOURCE_TYPES.account]: notifyInvitationSendFailed,
     [RESOURCE_TYPES.household]: notifyHouseholdInvitationSendFailed,
-    [RESOURCE_TYPES.plan]: notifyInvitationSendFailed,
+    [RESOURCE_TYPES.budget]: notifyInvitationSendFailed,
   },
   shareRevoked: {
     [RESOURCE_TYPES.account]: notifyShareRevoked,
     [RESOURCE_TYPES.household]: notifyHouseholdRevoked,
-    [RESOURCE_TYPES.plan]: notifyShareRevoked,
+    [RESOURCE_TYPES.budget]: notifyShareRevoked,
   },
   shareLeft: {
     [RESOURCE_TYPES.account]: notifyShareLeft,
     [RESOURCE_TYPES.household]: notifyHouseholdLeft,
-    [RESOURCE_TYPES.plan]: notifyShareLeft,
+    [RESOURCE_TYPES.budget]: notifyShareLeft,
   },
 } as const;

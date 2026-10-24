@@ -53,7 +53,6 @@ export const BACKUP_FILE_NAMES = [
   'vehicle-maintenance-activities',
   'loan-details',
   'transaction-groups',
-  'plans',
   'import-batches',
   // tier 4
   'transactions',
@@ -70,10 +69,6 @@ export const BACKUP_FILE_NAMES = [
   'subscription-candidates',
   'import-batch-account-effects',
   // tier 5
-  'plan-periods',
-  'plan-category-memberships',
-  'plan-category-targets',
-  'plan-account-memberships',
   'transaction-splits',
   'transaction-tags',
   'transaction-group-items',
@@ -87,8 +82,6 @@ export const BACKUP_FILE_NAMES = [
   'vehicle-maintenance-visit-activities',
   'vehicle-maintenance-transaction-links',
   // tier 6
-  'plan-assignments',
-  'plan-allocation-events',
   'subscription-period-notifications',
   // exported but skipped on restore (counterpart users don't exist cross-instance)
   'resource-shares',

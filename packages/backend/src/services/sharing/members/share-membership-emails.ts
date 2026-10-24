@@ -8,7 +8,7 @@ import { appName, appUrl, buildEmailShell, escapeHtml, fromEmail, resend } from 
 const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
   account: 'account',
   household: 'household',
-  plan: 'plan',
+  budget: 'budget',
 };
 
 // Owners managing a resource land on the dashboard surface that lists that
@@ -16,13 +16,13 @@ const RESOURCE_TYPE_LABELS: Record<ResourceType, string> = {
 const RESOURCE_OWNER_MANAGE_PATHS: Record<ResourceType, string> = {
   account: '/accounts',
   household: '/settings/household',
-  plan: '/plan',
+  budget: '/budgets',
 };
 
 const RESOURCE_OWNER_MANAGE_CTA: Record<ResourceType, string> = {
   account: 'Manage your accounts',
   household: 'Manage your household',
-  plan: 'Manage your plans',
+  budget: 'Manage your budgets',
 };
 
 interface SendShareRevokedEmailParams {

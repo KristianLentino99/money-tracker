@@ -1,6 +1,7 @@
 import { RESOURCE_TYPES, SHARE_PERMISSIONS } from '@bt/shared/types';
 import { NotFoundError, ValidationError } from '@js/errors';
 import * as Categories from '@models/categories.model';
+import { attachDefaultTagIds } from '@services/categories/default-tags';
 import { canUserAccessResource } from '@services/sharing/auth/can-user-access-resource.service';
 import { getAccessibleCategoryOwnerIds } from '@services/sharing/auth/get-accessible-category-owner-ids.service';
 
@@ -42,6 +43,7 @@ export const getCategories = withTransaction(
       throw new ValidationError({ message: '`accountId` and `includeAccessible` cannot be combined.' });
     }
 
+    let categories: Categories.default[];
     if (accountId) {
       const access = await canUserAccessResource({
         userId,
@@ -53,14 +55,14 @@ export const getCategories = withTransaction(
         throw new NotFoundError({ message: 'Account not found.' });
       }
       const scopedUserId = access.isOwner ? userId : access.ownerUserId!;
-      return Categories.getCategories({ userId: scopedUserId });
-    }
-
-    if (includeAccessible) {
+      categories = await Categories.getCategories({ userId: scopedUserId });
+    } else if (includeAccessible) {
       const ownerUserIds = await getAccessibleCategoryOwnerIds({ userId });
-      return Categories.getAccessibleCategories({ userIds: ownerUserIds, categoryIds: [] });
+      categories = await Categories.getAccessibleCategories({ userIds: ownerUserIds, categoryIds: [] });
+    } else {
+      categories = await Categories.getCategories({ userId });
     }
 
-    return Categories.getCategories({ userId });
+    return attachDefaultTagIds({ userId, categories });
   },
 );

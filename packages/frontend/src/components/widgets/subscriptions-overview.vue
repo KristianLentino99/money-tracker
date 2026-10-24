@@ -224,7 +224,6 @@ function payPeriod({ subscription }: { subscription: SubscriptionListItem }) {
   markPaidRef.value?.triggerPay({
     subscription,
     periodId: subscription.currentPeriod.id,
-    periodDueDate: subscription.currentPeriod.dueDate,
   });
 }
 

@@ -2,7 +2,7 @@
   <nav
     data-testid="mobile-primary-navigation"
     :aria-label="t('navigation.dashboard')"
-    class="grid min-w-0 grid-cols-5 gap-0.5"
+    class="grid min-w-0 grid-cols-4 gap-0.5"
   >
     <RouterLink
       v-for="tab in MOBILE_PRIMARY_NAVIGATION"
@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { isMobileTabActive, MOBILE_PRIMARY_NAVIGATION, type MobilePrimaryTab } from '@/common/utils/mobile-navigation';
-import { ChartColumnIcon, CreditCardIcon, LayersIcon, MoreHorizontalIcon, WalletIcon } from '@lucide/vue';
+import { ChartColumnIcon, CreditCardIcon, LayersIcon, MoreHorizontalIcon } from '@lucide/vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { RouterLink, useRoute } from 'vue-router';
@@ -55,7 +55,6 @@ const route = useRoute();
 
 const icons: Record<MobilePrimaryTab, Component> = {
   home: ChartColumnIcon,
-  plan: WalletIcon,
   transactions: CreditCardIcon,
   accounts: LayersIcon,
   more: MoreHorizontalIcon,

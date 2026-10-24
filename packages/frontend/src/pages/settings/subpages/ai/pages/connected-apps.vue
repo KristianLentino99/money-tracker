@@ -203,7 +203,7 @@
 
 <script setup lang="ts">
 import { getConnectedApps, getMcpServerUrl, revokeConnectedApp } from '@/api/mcp';
-import { ClickToCopy } from '@/components/common';
+import ClickToCopy from '@/components/common/click-to-copy.vue';
 import ResponsiveAlertDialog from '@/components/common/responsive-alert-dialog.vue';
 import UiButton from '@/components/lib/ui/button/Button.vue';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/lib/ui/collapsible';
@@ -213,7 +213,7 @@ import { useNotificationCenter } from '@/components/notification-center';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const';
 import { HIDDEN_OAUTH_SCOPES } from '@/common/const/oauth-scopes';
 import { useClipboard } from '@vueuse/core';
-import { format, formatDistanceToNow } from 'date-fns';
+import { useDateLocale } from '@/composable/use-date-locale';
 import ClaudeLogo from '@/assets/icons/logos/claude.svg';
 import OpenAiLogo from '@/assets/icons/logos/openai.svg';
 import { CheckIcon, ChevronDownIcon, CopyIcon, ExternalLinkIcon, PlugIcon } from '@lucide/vue';
@@ -268,8 +268,10 @@ function openChatGptSettings() {
   window.open('https://chatgpt.com/settings#settings/Connectors', '_blank');
 }
 
+const { format, formatDistanceToNow } = useDateLocale();
+
 function formatDate(dateStr: string) {
-  return format(new Date(dateStr), 'MMM d, yyyy');
+  return format(new Date(dateStr), 'PP');
 }
 
 function formatRelative(dateStr: string) {

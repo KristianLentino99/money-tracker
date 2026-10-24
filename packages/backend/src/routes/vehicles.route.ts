@@ -11,74 +11,22 @@ import getVehicles from '@controllers/vehicles/get-vehicles';
 import updateVehicle from '@controllers/vehicles/update-vehicle';
 import { authenticateSession } from '@middlewares/better-auth';
 import { checkBaseCurrencyLock } from '@middlewares/check-base-currency-lock';
-import { validateEndpoint } from '@middlewares/validations';
 import { Router } from 'express';
 
 const router = Router({});
 
-router.get('/', authenticateSession, validateEndpoint(getVehicles.schema), getVehicles.handler);
-router.get('/:id', authenticateSession, validateEndpoint(getVehicle.schema), getVehicle.handler);
-router.get(
-  '/:id/maintenance',
-  authenticateSession,
-  validateEndpoint(getVehicleMaintenance.schema),
-  getVehicleMaintenance.handler,
-);
-router.post(
-  '/',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(createVehicle.schema),
-  createVehicle.handler,
-);
-router.patch(
-  '/:id',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(updateVehicle.schema),
-  updateVehicle.handler,
-);
-router.post(
-  '/:id/maintenance/visits',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(createMaintenanceVisit.schema),
-  createMaintenanceVisit.handler,
-);
-router.delete(
-  '/:id/maintenance/visits/:visitId',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(deleteMaintenanceVisit.schema),
-  deleteMaintenanceVisit.handler,
-);
-router.patch(
-  '/:id/maintenance/visits/:visitId',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(updateMaintenanceVisit.schema),
-  updateMaintenanceVisit.handler,
-);
-router.post(
-  '/:id/maintenance/plans',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(createMaintenancePlan.schema),
-  createMaintenancePlan.handler,
-);
-router.patch(
-  '/:id/maintenance/plans/:planId',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(updateMaintenancePlan.schema),
-  updateMaintenancePlan.handler,
-);
-router.delete(
-  '/:id',
-  authenticateSession,
-  checkBaseCurrencyLock,
-  validateEndpoint(deleteVehicle.schema),
-  deleteVehicle.handler,
-);
+router.use(authenticateSession);
+
+router.get('/', getVehicles);
+router.get('/:id', getVehicle);
+router.get('/:id/maintenance', getVehicleMaintenance);
+router.post('/', checkBaseCurrencyLock, createVehicle);
+router.patch('/:id', checkBaseCurrencyLock, updateVehicle);
+router.post('/:id/maintenance/visits', checkBaseCurrencyLock, createMaintenanceVisit);
+router.delete('/:id/maintenance/visits/:visitId', checkBaseCurrencyLock, deleteMaintenanceVisit);
+router.patch('/:id/maintenance/visits/:visitId', checkBaseCurrencyLock, updateMaintenanceVisit);
+router.post('/:id/maintenance/plans', checkBaseCurrencyLock, createMaintenancePlan);
+router.patch('/:id/maintenance/plans/:planId', checkBaseCurrencyLock, updateMaintenancePlan);
+router.delete('/:id', checkBaseCurrencyLock, deleteVehicle);
 
 export default router;

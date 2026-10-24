@@ -240,7 +240,8 @@ async function insertTable({
   const hasStandaloneId = pkAttrs.length === 1 && pkAttrs[0] === 'id';
 
   // Probe which backup ids another row already holds, inside the restore tx.
-  // After the wipe only OTHER users' rows survive, so a hit is a real collision.
+  // After the wipe only other users' rows and this user's rows on their shared
+  // accounts survive, so a hit is a real collision.
   // `paranoid: false` so a soft-deleted row still counts as taken — the primary
   // key ignores `deletedAt`, so keeping its id would collide on insert anyway.
   // Chunked so a table with tens of thousands of rows stays under Postgres's

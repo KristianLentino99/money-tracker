@@ -122,7 +122,13 @@
       "categoryTracker": {
         "title": "Categories Watchlist",
         "addCategory": "Add category",
-        "selectCategories": "Select Categories"
+        "selectCategories": "Select Categories",
+        "sort": {
+          "title": "Sort by",
+          "custom": "Custom order",
+          "spendDesc": "Highest spend first",
+          "spendAsc": "Lowest spend first"
+        }
       },
       "cashFlow": {
         "title": "Cash Flow",
@@ -133,7 +139,10 @@
         "expenses": "Expenses",
         "saved": "Saved",
         "previousPeriodsTrend": "Previous periods trend",
-        "viewDetails": "View details"
+        "viewDetails": "View details",
+        "savingsRateLine": "Show savings rate line",
+        "savingsRate": "Savings rate",
+        "noIncome": "no income"
       },
       "netWorth": {
         "title": "Net Worth",
@@ -302,7 +311,10 @@
         "tagsStyleTitle": "Tags",
         "tagsStyleNames": "Names",
         "tagsStyleBars": "Bars",
-        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again.",
+        "showAccountTitle": "Account",
+        "showAccountDescription": "Show the account logo on each transaction",
+        "showAccountSaveError": "Couldn't save the account setting. Please try again."
       },
       "overdueBadge": "Overdue",
       "scheduledBadge": "Scheduled",

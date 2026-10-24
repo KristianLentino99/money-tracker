@@ -1,5 +1,5 @@
-import { RECONCILIATION_MERGE_MAX } from '@bt/shared/const/reconciliation';
 import {
+  RECONCILIATION_MERGE_MAX,
   ACCOUNT_TYPES,
   BANK_PROVIDER_TYPE,
   RecordId,
@@ -388,62 +388,6 @@ describe('Transactions reconciliation', () => {
   });
 
   describe('POST /transactions/reconciliation/merge', () => {
-    it('derives Plan spending from the live survivor across merge, removal and restore', async () => {
-      const { accountId, byAmount } = await setupEnableBanking({
-        transactions: [
-          booked({ ref: 'plan-removed', amount: '10.00' }),
-          booked({ ref: 'plan-survivor', amount: '11.00' }),
-        ],
-      });
-      const removed = byAmount({ amount: 10 });
-      const survivor = byAmount({ amount: 11 });
-      const categoryResponse = await helpers.makeRequest<{ id: RecordId }>({
-        method: 'post',
-        url: '/categories',
-        payload: { name: 'Reconciled Plan expenses', color: '#123456' },
-      });
-      expect(categoryResponse.body.response).toHaveProperty('id');
-      expect(categoryResponse.statusCode).toBe(200);
-      const category = helpers.extractResponse(categoryResponse);
-      for (const transaction of [removed, survivor]) {
-        const updated = await helpers.updateTransaction({ id: transaction.id, payload: { categoryId: category.id } });
-        expect(updated.statusCode).toBe(200);
-      }
-      const planResponse = await helpers.createPlan({
-        payload: {
-          name: 'Reconciliation Plan',
-          baseCurrencyCode: global.BASE_CURRENCY.code,
-          includeHistoricalTransactions: true,
-          categoryIds: [category.id],
-          accountIds: [accountId],
-        },
-      });
-      expect(planResponse.body.response).toHaveProperty('id');
-      const plan = helpers.extractResponse(planResponse);
-      const periodStart = `${String(survivor.time).slice(0, 7)}-01`;
-      const categoryActivity = async () => {
-        const response = await helpers.getPlanView({ planId: plan.id, periodStart });
-        expect(response.body.response).toHaveProperty('groups');
-        expect(response.statusCode).toBe(200);
-        const view = helpers.extractResponse(response);
-        return view.groups.flatMap((group) => group.categories).find((row) => row.id === category.id)!.activity;
-      };
-      expect(await categoryActivity()).toBeCloseTo(-removed.refAmount - survivor.refAmount, 2);
-
-      await helpers.reconciliationMerge({
-        transactionIds: [removed.id, survivor.id],
-        survivorId: survivor.id,
-        raw: true,
-      });
-      expect(await categoryActivity()).toBe(-survivor.refAmount);
-
-      await helpers.reconciliationRemove({ transactionIds: [survivor.id], raw: true });
-      expect(await categoryActivity()).toBe(0);
-
-      await helpers.reconciliationRestore({ transactionIds: [survivor.id], raw: true });
-      expect(await categoryActivity()).toBe(-survivor.refAmount);
-    });
-
     it('moves a maintenance expense link to the survivor and preserves its visit cost', async () => {
       const { byAmount } = await setupEnableBanking({
         transactions: [

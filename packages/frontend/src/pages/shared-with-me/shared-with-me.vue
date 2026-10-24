@@ -22,7 +22,9 @@ const router = useRouter();
 const ICON_BY_RESOURCE_TYPE: Record<ResourceType, typeof LandmarkIcon> = {
   [RESOURCE_TYPES.account]: LandmarkIcon,
   [RESOURCE_TYPES.household]: HomeIcon,
-  [RESOURCE_TYPES.plan]: WalletIcon,
+  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk —
+  // reuse the wallet icon as a generic placeholder until then.
+  [RESOURCE_TYPES.budget]: WalletIcon,
 };
 
 const sharesQuery = useQuery({
@@ -61,7 +63,7 @@ const groupedShares = computed(() => {
   const groups: Record<ResourceType, DisplayableRow[]> = {
     [RESOURCE_TYPES.account]: [],
     [RESOURCE_TYPES.household]: [],
-    [RESOURCE_TYPES.plan]: [],
+    [RESOURCE_TYPES.budget]: [],
   };
   for (const row of sharesQuery.data.value ?? []) {
     (groups[row.resourceType] ??= []).push({ ...row, route: routeForRow(row) });
@@ -110,9 +112,8 @@ const routeForRow = (row: SharedWithMeRow) => {
     // offers a Leave action inline, so the link is purely an entry to the manage UI.
     return { name: ROUTES_NAMES.settingsHousehold };
   }
-  if (row.resourceType === RESOURCE_TYPES.plan) {
-    return { name: ROUTES_NAMES.plan, query: { planId: row.resourceId } };
-  }
+  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no
+  // route exists yet, so budget rows fall through to the generic non-linked `div`.
   return null;
 };
 

@@ -22,7 +22,6 @@ import PortfolioBalances from '@models/investments/portfolio-balances.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
 import LoanDetails from '@models/loan-details.model';
-import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
 import { findTransactions } from '@models/transactions-query';
 import Transactions from '@models/transactions.model';
@@ -157,15 +156,6 @@ export async function validateBaseCurrencyChange({ userId, newCurrencyCode }: Ch
       code: API_ERROR_CODES.baseCurrencyLockedByShares,
       message: t({ key: 'currencies.baseCurrencyLockedByShares' }),
       details: { blockers },
-    });
-  }
-
-  const activePlanCount = await Plans.count({ where: { ownerUserId: userId, status: 'active' } });
-  if (activePlanCount > 0) {
-    throw new ConflictError({
-      code: API_ERROR_CODES.conflict,
-      message: t({ key: 'plans.baseCurrencyChangeBlocked' }),
-      details: { activePlanCount },
     });
   }
 

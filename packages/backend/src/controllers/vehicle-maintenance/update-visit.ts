@@ -16,7 +16,7 @@ const activitySchema = z
     message: 'Provide exactly one of activityId or label for each activity',
   });
 
-const schema = z.object({
+export const schema = z.object({
   params: z.object({ id: recordId(), visitId: recordId() }),
   body: z.object({
     serviceDate: dateOnly.optional(),

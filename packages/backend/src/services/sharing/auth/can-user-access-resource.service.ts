@@ -10,7 +10,6 @@ import {
 import { UnexpectedError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
-import Plans from '@models/plan.model';
 import ResourceShares from '@models/resource-shares.model';
 import Users from '@models/users.model';
 import { Op } from 'sequelize';
@@ -82,14 +81,8 @@ const RESOURCE_OWNER_RESOLVERS: Record<ResourceType, ResourceOwnerResolver> = {
   // `canUserAccessResource` itself; this resolver only feeds the shape-checking
   // branch.
   [RESOURCE_TYPES.household]: async (resourceId) => toPositiveInt(resourceId),
-  [RESOURCE_TYPES.plan]: async (resourceId) => {
-    const plan = (await Plans.findOne({
-      where: { id: resourceId },
-      attributes: ['ownerUserId'],
-      raw: true,
-    })) as { ownerUserId: number } | null;
-    return plan?.ownerUserId ?? null;
-  },
+  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no model yet.
+  [RESOURCE_TYPES.budget]: async () => null,
 };
 
 type ResourceNameResolver = (resourceId: string) => Promise<string | null>;
@@ -117,14 +110,8 @@ const RESOURCE_NAME_RESOLVERS: Record<ResourceType, ResourceNameResolver> = {
     })) as { username: string } | null;
     return owner ? formatHouseholdLabel(owner.username) : null;
   },
-  [RESOURCE_TYPES.plan]: async (resourceId) => {
-    const plan = (await Plans.findOne({
-      where: { id: resourceId },
-      attributes: ['name'],
-      raw: true,
-    })) as { name: string } | null;
-    return plan?.name ?? null;
-  },
+  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no model yet.
+  [RESOURCE_TYPES.budget]: async () => null,
 };
 
 /**
@@ -247,8 +234,14 @@ export const canUserAccessResource = async ({
     };
   }
 
-  // Plans are explicit-share only and do not inherit access from household membership.
-  if (resourceType === RESOURCE_TYPES.plan) {
+  // Budgets are explicit-share only — they do NOT inherit access from a household
+  // membership. (Decision: per-resource selective sharing for households is the
+  // future direction; "all-or-nothing" auto-grant is the wrong primitive for budgets,
+  // so we don't wire the fallthrough at all.) Stop here when no per-resource share
+  // exists for a budget request. Budget sharing lands with the Budget/Tracker feature
+  // in a later merge chunk — no model yet, but this business rule is self-contained
+  // and doesn't need one.
+  if (resourceType === RESOURCE_TYPES.budget) {
     return denied(ownerUserId);
   }
 

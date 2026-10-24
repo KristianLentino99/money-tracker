@@ -608,9 +608,5 @@
     "incompleteInvoice": "Could not read a vendor, total amount and date from this invoice.",
     "pdfWithoutText": "Custom AI connections can't receive PDF files directly, and this one couldn't be opened to convert it (for example, it's password-protected). Convert it to an image (PNG or JPEG), such as a screenshot of the invoice, and upload that instead.",
     "noFileUploaded": "No file was uploaded."
-  },
-  "plans": {
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan.",
-    "targetAmountMustBePositive": "Target amount must be greater than zero."
   }
 }

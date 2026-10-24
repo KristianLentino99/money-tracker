@@ -9,5 +9,5 @@ import { z } from 'zod';
 export const shareableResourceTypeEnum = z.enum([
   RESOURCE_TYPES.account,
   RESOURCE_TYPES.household,
-  RESOURCE_TYPES.plan,
+  RESOURCE_TYPES.budget,
 ] as const);

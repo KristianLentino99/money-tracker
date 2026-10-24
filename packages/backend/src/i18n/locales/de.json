@@ -608,9 +608,5 @@
     "incompleteInvoice": "Anbieter, Gesamtbetrag und Datum konnten aus dieser Rechnung nicht gelesen werden.",
     "pdfWithoutText": "Eigene KI-Verbindungen können PDF-Dateien nicht direkt empfangen, und diese Datei konnte nicht geöffnet werden, um sie zu konvertieren (z.B. weil sie passwortgeschützt ist). Konvertiere sie in ein Bild (PNG oder JPEG), wie z.B. einen Screenshot der Rechnung, und lade dieses stattdessen hoch.",
     "noFileUploaded": "Es wurde keine Datei hochgeladen."
-  },
-  "plans": {
-    "categoriesNotAllowedInSpendingPlan": "Income categories cannot be added to a spending Plan.",
-    "targetAmountMustBePositive": "Target amount must be greater than zero."
   }
 }
