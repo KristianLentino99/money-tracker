@@ -15,9 +15,10 @@
     "logout": "Вийти",
     "settings": "Налаштування",
     "planned": {
-      "planned": "Заплановане",
+      "planned": "Планування",
       "subscriptions": "Регулярні платежі",
-      "budgets": "Трекери"
+      "budgets": "Трекери",
+      "goals": "Цілі"
     },
     "venture": "Венчур",
     "helpAndDocs": "Довідка та документація",

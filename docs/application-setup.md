@@ -18,7 +18,7 @@ This guide will walk you through setting up the MoneyMatter project on your loca
 
 ### Required Software
 
-- **Node.js**: v25.9.0
+- **Node.js**: v24.22.1
 - **npm**: Comes with Node.js
 - **Docker & Docker Compose**: For containerized development (essencial)
 

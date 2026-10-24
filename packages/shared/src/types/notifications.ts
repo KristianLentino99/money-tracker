@@ -18,6 +18,7 @@ export const NOTIFICATION_TYPES = {
   stuckPending: 'stuck_pending',
   /** A smart tracking scan linked or suggested transactions for a tracker. */
   trackerAiMatches: 'tracker_ai_matches',
+  goalReached: 'goal_reached',
   shareInvitationReceived: 'share_invitation_received',
   shareInvitationSendFailed: 'share_invitation_send_failed',
   shareAccepted: 'share_accepted',
@@ -125,6 +126,14 @@ export interface TrackerAiMatchesNotificationPayload {
   suggestedCount: number;
 }
 
+export interface GoalReachedNotificationPayload {
+  goalId: RecordId;
+  goalName: string;
+  /** Decimal, goal currency. */
+  achievedAmount: number;
+  currencyCode: string;
+}
+
 export interface StuckPendingNotificationPayload {
   transactionIds: RecordId[];
 }
@@ -199,6 +208,7 @@ export type NotificationPayload =
   | TagReminderNotificationPayload
   | StuckPendingNotificationPayload
   | TrackerAiMatchesNotificationPayload
+  | GoalReachedNotificationPayload
   | ShareInvitationNotificationPayload
   | ShareLifecycleNotificationPayload
   | ShareInvitationSendFailedPayload

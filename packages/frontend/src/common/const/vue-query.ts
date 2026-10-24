@@ -33,6 +33,7 @@ const { transactionChange, securityPriceChange, bankConnectionChange, ventureCha
   VUE_QUERY_GLOBAL_PREFIXES;
 
 const budgetPlans = [transactionChange, 'budget-plans'] as const;
+const goals = [transactionChange, 'goals'] as const;
 
 export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   // auth
@@ -166,6 +167,11 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   budgetPlanTrends: [...budgetPlans, 'trends'] as const,
   budgetPlanScheduled: [...budgetPlans, 'scheduled'] as const,
   budgetSuggestionContext: [...budgetPlans, 'suggestion-context'] as const,
+
+  goals,
+  goalsList: [...goals, 'list'] as const,
+  // append the goalId when using
+  goalDetails: [...goals, 'details'] as const,
 
   trackerAddingTransactionList: [transactionChange, 'tracker-adding-transaction-list'] as const,
   trackerStats: [transactionChange, 'tracker-stats'] as const,

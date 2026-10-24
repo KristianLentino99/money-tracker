@@ -23,6 +23,7 @@ import modelsCurrenciesRoutes from './routes/currencies.route';
 import demoRoutes from './routes/demo.route';
 import exchangeRatesRoutes from './routes/exchange-rates';
 import githubRoutes from './routes/github.route';
+import goalsRoutes from './routes/goals.route';
 import aiMappingRoutes from './routes/import-export/ai-mapping.route';
 import batchesRoutes from './routes/import-export/batches.route';
 import budgetBakersWalletImportRoutes from './routes/import-export/budget-bakers-wallet.route';
@@ -76,11 +77,9 @@ export function setupRoutes(app: Express) {
   // We wrap the handler to preserve AsyncLocalStorage context for locale-aware category creation
   const authHandler = toNodeHandler(auth);
 
-  // Patch OAuth2 dynamic client registration requests so they always register as
-  // public clients.  better-auth's oauth-provider treats clients without
-  // `token_endpoint_auth_method: "none"` as confidential and rejects unauthenticated
-  // registration with 401 – even when allowUnauthenticatedClientRegistration is true.
-  // MCP clients (e.g. Claude.ai) often omit this field, so we default it here.
+  // Patch unauthenticated OAuth2 dynamic client registrations so they always register
+  // as public clients. better-auth keeps whatever token_endpoint_auth_method the request
+  // carries, and MCP clients (e.g. Claude.ai) often omit it.
   //
   // We can't patch the stream in-place (Node 25's Fetch API reads the internal
   // buffer directly), so we proxy the request through a local HTTP call with the
@@ -96,12 +95,10 @@ export function setupRoutes(app: Express) {
       try {
         const parsed = JSON.parse(Buffer.concat(chunks).toString());
         const isUnauthenticated = !req.headers.authorization && !req.headers.cookie;
-        const isConfidential = parsed.token_endpoint_auth_method && parsed.token_endpoint_auth_method !== 'none';
 
-        // Unauthenticated + confidential always fails in better-auth (401), so
-        // downgrade to public client.  Authenticated registrations and requests
-        // that are already public pass through unchanged.
-        if (isUnauthenticated && isConfidential) {
+        // An omitted method defaults to client_secret_basic, which would make a self-registered
+        // MCP client confidential and hand it a secret it must then present at the token endpoint.
+        if (isUnauthenticated && parsed.token_endpoint_auth_method !== 'none') {
           parsed.token_endpoint_auth_method = 'none';
         }
         body = Buffer.from(JSON.stringify(parsed));
@@ -192,6 +189,7 @@ export function setupRoutes(app: Express) {
   app.use(`${API_PREFIX}/currencies/rates`, exchangeRatesRoutes);
   app.use(`${API_PREFIX}/trackers`, trackersRoutes);
   app.use(`${API_PREFIX}/budget-plans`, budgetPlansRoutes);
+  app.use(`${API_PREFIX}/goals`, goalsRoutes);
   app.use(`${API_PREFIX}/subscriptions`, subscriptionsRoutes);
   app.use(`${API_PREFIX}/tags`, tagsRoutes);
   app.use(`${API_PREFIX}/tag-reminders`, tagRemindersRoutes);
