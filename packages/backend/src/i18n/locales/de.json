@@ -164,8 +164,8 @@
     "zeroSumNeedsPool": "Keeping Ready to Assign at 0 needs a plan funded from a pool.",
     "suggestedGroups": {
       "bills": "Rechnungen",
-      "everyday": "Everyday",
-      "life": "Life"
+      "everyday": "Alltag",
+      "life": "Leben"
     }
   },
   "tags": {
@@ -383,7 +383,7 @@
     "importIntoBankLinkedAccount": "Das Konto \"{{accountName}}\" ist mit einer Bank verbunden, daher können keine Transaktionen darin importiert werden. Wähle ein anderes Konto oder erstelle ein neues."
   },
   "statementParser": {
-    "invalidFile": "Ungültige Datei",
+    "imageTooLarge": "This image is over 3.75MB. Upload a smaller or lower-resolution image.",
     "textExtractionFailed": "Textextraktion fehlgeschlagen. Das PDF ist möglicherweise ein gescanntes Dokument. Bildbasierte Extraktion ist noch nicht implementiert.",
     "failedToExtractText": "Text konnte nicht aus der Datei extrahiert werden.",
     "fileContentRequired": "Dateiinhalt ist erforderlich",

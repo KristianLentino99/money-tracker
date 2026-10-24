@@ -46,6 +46,10 @@
           "server": "Server",
           "serverTooltip": "Fitur ini menggunakan kunci API bersama server kami. Gratis tetapi mungkin memiliki batasan jumlah saat permintaan tinggi. Tambahkan kunci API Anda sendiri untuk akses tak terbatas."
         },
+        "groupLabels": {
+          "groq": "Groq",
+          "deepseek": "DeepSeek"
+        },
         "modelLabel": "Model",
         "modelInfo": {
           "estimatedCost": "Perkiraan biaya:",

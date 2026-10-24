@@ -8,6 +8,7 @@ jest.mock('@js/utils/logger', () => ({
   },
 }));
 
+import { t } from '@i18n/index';
 import { BadRequestError, ForbiddenError, TooManyRequests } from '@js/errors';
 
 import { EnableBankingApiClient, classifyAspspError, isAspspDateRangeRejection, safeStringify } from './api-client';
@@ -318,6 +319,7 @@ describe('handleApiError', () => {
     });
 
     expect(() => handleApiError(error)).toThrow(TooManyRequests);
+    expect(() => handleApiError(error)).toThrow(t({ key: 'bankDataProviders.enableBanking.rateLimitExceeded' }));
     expect(() => handleApiError(error)).not.toThrow(ForbiddenError);
   });
 });

@@ -33,7 +33,9 @@
         "transactions": "transazioni",
         "fromLabel": "dal",
         "inLabel": "in",
+        "unreadableImageNamed": "{name} could not be read as an image",
         "continueMessage": "Continua per selezionare un conto per queste transazioni.",
+        "pasteImageButton": "Paste image",
         "tokenWarning": {
           "medium": {
             "title": "Rilevato file di grandi dimensioni",
@@ -49,7 +51,10 @@
           }
         },
         "freeApiWarning": "Stai usando l'accesso IA gratuito, che ha limiti giornalieri di utilizzo. Per un servizio rapido e senza interruzioni, aggiungi la tua chiave API.",
+        "pasteShortcutHint": "or press {shortcut}",
         "addApiKeyLink": "Aggiungi la tua chiave API nelle impostazioni →",
+        "clipboardNoImage": "No image found in the clipboard.",
+        "clipboardReadFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut.",
         "status": {
           "sendingFile": "Invio del file all'IA in corso...",
           "readingDocument": "L'IA sta leggendo il documento...",

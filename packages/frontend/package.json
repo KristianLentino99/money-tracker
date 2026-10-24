@@ -1,11 +1,11 @@
 {
   "name": "budget-tracker-fe",
-  "version": "0.31.0",
+  "version": "0.31.1",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "vue-tsc --noEmit && vite build && node scripts/assert-pwa-build.mjs",
-    "lint": "oxlint .",
+    "lint": "oxlint . && node scripts/check-i18n-keys.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "dev": "vite --host",
     "prod": "vite --mode production",

@@ -120,7 +120,7 @@ export function initPostHog(): void {
     // can't reach inside the shadow root. Theme colors come from the variables set there.
     prepare_external_dependency_stylesheet: (style) => {
       style.textContent +=
-        '.form-cancel{background:var(--ph-survey-background-color)}.form-cancel svg{fill:var(--ph-survey-text-primary-color)}';
+        '.form-cancel{background:var(--ph-survey-background-color)}.form-cancel path{stroke:var(--ph-survey-text-primary-color)}';
       return style;
     },
     // Respect Do Not Track

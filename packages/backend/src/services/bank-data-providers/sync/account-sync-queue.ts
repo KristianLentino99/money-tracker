@@ -1,4 +1,5 @@
 import { BANK_PROVIDER_TYPE, type RecordId } from '@bt/shared/types';
+import { type PsuContext, requestContext } from '@common/request-context';
 import { LockedError, ServiceUnavailableError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import { SentryTraceData, withQueueProcessSpan, withQueuePublishSpan } from '@js/utils/sentry';
@@ -13,6 +14,7 @@ interface AccountSyncJobData extends SentryTraceData {
   connectionId: RecordId;
   providerType: BANK_PROVIDER_TYPE;
   accountIds: RecordId[];
+  psu?: PsuContext;
 }
 
 // Mirrors the resilient settings of the main redisClient. BullMQ requires
@@ -122,7 +124,10 @@ async function processAccountSync({
 
 export const accountSyncWorker = new Worker<AccountSyncJobData>(
   queueName,
-  (job: Job<AccountSyncJobData>) => withQueueProcessSpan({ queueName, job, fn: () => processAccountSync(job.data) }),
+  (job: Job<AccountSyncJobData>) =>
+    requestContext.run({ locale: 'en', psu: job.data.psu }, () =>
+      withQueueProcessSpan({ queueName, job, fn: () => processAccountSync(job.data) }),
+    ),
   {
     connection: connectionOptions,
     concurrency: 5,
@@ -167,7 +172,13 @@ const addSyncJob = async ({
   accountIds: RecordId[];
   jobId: string;
 }): Promise<void> => {
-  const data: AccountSyncJobData = { userId, connectionId, providerType, accountIds };
+  const data: AccountSyncJobData = {
+    userId,
+    connectionId,
+    providerType,
+    accountIds,
+    psu: requestContext.getContext()?.psu,
+  };
 
   await withQueuePublishSpan({
     queueName,

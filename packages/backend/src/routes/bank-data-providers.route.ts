@@ -20,6 +20,7 @@ import * as providersController from '@controllers/bank-data-providers/providers
 import checkSync from '@controllers/bank-data-providers/sync/check-sync';
 import getSyncStatus from '@controllers/bank-data-providers/sync/get-sync-status';
 import triggerSync from '@controllers/bank-data-providers/sync/trigger-sync';
+import { attachPsuContext } from '@middlewares/attach-psu-context';
 import { authenticateSession } from '@middlewares/better-auth';
 import { blockDemoUsers } from '@middlewares/block-demo-users';
 import { checkBaseCurrencyLock } from '@middlewares/check-base-currency-lock';
@@ -41,6 +42,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   connectProvider,
 );
 router.delete(
@@ -48,6 +50,7 @@ router.delete(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   disconnectProvider,
 );
 router.post(
@@ -55,6 +58,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   reauthorizeConnection,
 );
 router.patch(
@@ -70,6 +74,7 @@ router.get(
   '/connections/:connectionId/available-accounts',
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
+  attachPsuContext,
   listExternalAccounts,
 );
 router.post(
@@ -77,6 +82,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   connectSelectedAccounts,
 );
 
@@ -86,6 +92,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   syncTransactionsForAccount,
 );
 router.post(
@@ -93,6 +100,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   syncConnection,
 );
 router.post(
@@ -107,6 +115,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   loadTransactionsForPeriod,
 );
 router.get('/connections/:connectionId/sync-job-progress', getSyncJobProgress);
@@ -119,6 +128,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   triggerSync,
 );
 router.get('/sync/status', blockDemoUsers, getSyncStatus);
@@ -143,6 +153,7 @@ router.post(
   requireFeature(FEATURES.bank_providers),
   blockDemoUsers,
   checkBaseCurrencyLock,
+  attachPsuContext,
   oauthCallback,
 );
 

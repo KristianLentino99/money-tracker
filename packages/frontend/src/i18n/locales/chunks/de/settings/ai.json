@@ -52,6 +52,10 @@
           "server": "Server",
           "serverTooltip": "Läuft auf MoneyMatter KI, in deinem Paket enthalten. Es gelten Nutzungslimits."
         },
+        "groupLabels": {
+          "groq": "Groq",
+          "deepseek": "DeepSeek"
+        },
         "sharedPoolNote": "In deinem aktuellen Paket läuft das enthaltene Modell in einem gemeinsamen Pool, sodass bei hoher Gesamtnachfrage Limits gelten können. {link}, um diese zu vermeiden.",
         "sharedPoolNoteLink": "Auf Plus upgraden",
         "modelLabel": "Modell",

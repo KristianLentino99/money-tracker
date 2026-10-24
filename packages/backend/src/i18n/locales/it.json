@@ -277,6 +277,7 @@
       "sessionExpiredReconnect": "La sessione bancaria è scaduta. Ricollega il conto bancario per continuare la sincronizzazione.",
       "apiBadRequestError": "Errore API Enable Banking: {{message}}",
       "apiGeneralError": "Errore API Enable Banking: {{message}}",
+      "rateLimitExceeded": "Il limite di richieste della banca è stato raggiunto. Alcune banche consentono solo un numero limitato di richieste al giorno e azzerano il limite a mezzanotte. Riprova più tardi.",
       "redirectUriNotAllowed": "Nell'applicazione Enable Banking manca l'URL di reindirizzamento obbligatorio. Accedi alla dashboard Enable Banking, modifica l'applicazione e aggiungi questo URL agli URL di reindirizzamento consentiti: {{redirectUrl}}"
     },
     "lunchflow": {
@@ -324,6 +325,7 @@
   },
   "statementParser": {
     "invalidFile": "File non valido.",
+    "imageTooLarge": "This image is over 3.75MB. Upload a smaller or lower-resolution image.",
     "textExtractionFailed": "Estrazione del testo non riuscita. Il PDF potrebbe essere un documento scansionato. L'estrazione basata su immagini non è ancora implementata.",
     "failedToExtractText": "Impossibile estrarre il testo dal file.",
     "fileContentRequired": "Il contenuto del file è obbligatorio.",

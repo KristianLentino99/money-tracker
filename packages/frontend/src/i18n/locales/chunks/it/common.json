@@ -54,7 +54,8 @@
       }
     },
     "errors": {
-      "copyToClipboardFailed": "Impossibile copiare negli appunti"
+      "copyToClipboardFailed": "Impossibile copiare negli appunti",
+      "settingsSaveFailed": "Couldn't save your settings. Please try again."
     },
     "notifications": {
       "subscriptionCurrencyNotConnected": "Il riepilogo degli abbonamenti non può convertire {currencies} nella tua valuta principale. Collega la valuta in Impostazioni → valute.",

@@ -88,6 +88,19 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
 
   // widget net worth
   widgetNetWorth: [transactionChange, securityPriceChange, ventureChange, 'widget-net-worth'] as const,
+  widgetAssetsLiabilities: [
+    transactionChange,
+    securityPriceChange,
+    ventureChange,
+    'widget-assets-liabilities',
+  ] as const,
+
+  // widget cash & accounts
+  widgetCashAccountsPrevBalances: [transactionChange, 'widget-cash-accounts-prev-balances'] as const,
+  widgetCashAccountsExpenses: [transactionChange, 'widget-cash-accounts-expenses'] as const,
+
+  // widget spending pace
+  widgetSpendingPace: [transactionChange, 'widget-spending-pace'] as const,
 
   // analytics
   analyticsBalanceHistoryTrend: [

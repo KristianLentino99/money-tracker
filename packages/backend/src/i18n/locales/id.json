@@ -342,7 +342,7 @@
     "importIntoBankLinkedAccount": "Account \"{{accountName}}\" is connected to a bank, so transactions cannot be imported into it. Choose another account or create a new one."
   },
   "statementParser": {
-    "invalidFile": "File tidak valid",
+    "imageTooLarge": "This image is over 3.75MB. Upload a smaller or lower-resolution image.",
     "textExtractionFailed": "Ekstraksi teks gagal. PDF mungkin merupakan dokumen hasil pindaian. Ekstraksi berbasis gambar belum diimplementasikan.",
     "failedToExtractText": "Gagal mengekstrak teks dari file.",
     "fileContentRequired": "Konten file diperlukan",

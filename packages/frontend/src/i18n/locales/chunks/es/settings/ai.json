@@ -46,6 +46,10 @@
           "server": "Servidor",
           "serverTooltip": "Esta función utiliza la clave de API compartida de nuestro servidor. Es gratuita, pero puede tener límites de velocidad durante alta demanda. Añada su propia clave de API para acceso ilimitado."
         },
+        "groupLabels": {
+          "groq": "Groq",
+          "deepseek": "DeepSeek"
+        },
         "modelLabel": "Modelo",
         "modelInfo": {
           "estimatedCost": "Coste est.:",

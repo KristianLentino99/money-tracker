@@ -52,6 +52,10 @@
           "server": "Server",
           "serverTooltip": "Beží na MoneyMatter AI, zahrnutom vo vašom pláne. Platia limity používania."
         },
+        "groupLabels": {
+          "groq": "Groq",
+          "deepseek": "DeepSeek"
+        },
         "sharedPoolNote": "Vo vašom súčasnom pláne beží zahrnutý model v zdieľanom fonde, preto pri vysokom celkovom dopyte môžu platiť limity. {link} a vyhnite sa im.",
         "sharedPoolNoteLink": "Prejdite na Plus",
         "modelLabel": "Model",
