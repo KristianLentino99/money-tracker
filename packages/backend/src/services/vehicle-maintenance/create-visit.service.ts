@@ -19,7 +19,7 @@ import { Op, Sequelize, UniqueConstraintError } from 'sequelize';
 
 import { findVehicleOrThrow, getVehicleDistanceUnit } from '../vehicles/helpers';
 
-export interface CreateVehicleMaintenanceVisitActivity {
+interface CreateVehicleMaintenanceVisitActivity {
   activityId?: RecordId;
   label?: string;
   planId?: RecordId;

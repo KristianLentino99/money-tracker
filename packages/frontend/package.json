@@ -72,6 +72,7 @@
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
     "jsdom": "^29.1.1",
+    "serialize-javascript": "^7.1.4",
     "tailwindcss": "^4.2.1",
     "tw-animate-css": "^1.3.8",
     "vite": "^7.3.6",

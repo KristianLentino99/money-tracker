@@ -22,7 +22,7 @@ import {
   remapSavedTransactionViewIds,
 } from './remap-embedded-references';
 import { resolveSecurities } from './resolve-securities';
-import { insertRestoreTables } from './restore-tables';
+import { insertRestoreTables, purgeUserOwnedRestoreTables } from './restore-tables';
 
 type Row = Record<string, unknown>;
 type ProgressCallback = (progress: BackupRestoreProgress) => void | Promise<void>;
@@ -171,6 +171,7 @@ export async function restoreUserBackup({
     failureLogMessage: 'Backup restore failed',
     destroyInTx: async ({ user, transaction }) => {
       await destroyUserOwnedData({ user });
+      await purgeUserOwnedRestoreTables({ userId: user.id, transaction });
 
       const tableResult = await insertRestoreTables({
         archive,

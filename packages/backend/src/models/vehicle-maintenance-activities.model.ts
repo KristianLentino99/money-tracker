@@ -3,7 +3,7 @@ import { IdColumn } from '@common/types/id-column';
 import Users from '@models/users.model';
 import { BelongsTo, Column, DataType, ForeignKey, Index, Model, Table } from 'sequelize-typescript';
 
-export const VEHICLE_MAINTENANCE_SYSTEM_KEYS = [
+const VEHICLE_MAINTENANCE_SYSTEM_KEYS = [
   'inspection',
   'scheduled-service',
   'oil-change',
@@ -13,7 +13,7 @@ export const VEHICLE_MAINTENANCE_SYSTEM_KEYS = [
   'other',
 ] as const;
 
-export type VehicleMaintenanceSystemKey = (typeof VEHICLE_MAINTENANCE_SYSTEM_KEYS)[number];
+type VehicleMaintenanceSystemKey = (typeof VEHICLE_MAINTENANCE_SYSTEM_KEYS)[number];
 
 @Table({
   tableName: 'VehicleMaintenanceActivities',

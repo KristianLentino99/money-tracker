@@ -13,7 +13,7 @@ import { Op } from 'sequelize';
 
 import { findVehicleOrThrow, getVehicleDistanceUnit } from '../vehicles/helpers';
 
-export interface UpdateVehicleMaintenanceVisitActivity {
+interface UpdateVehicleMaintenanceVisitActivity {
   activityId?: RecordId;
   label?: string;
 }

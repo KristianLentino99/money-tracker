@@ -6,7 +6,7 @@ import { findTransactions } from '@models/transactions-query';
 import VehicleMaintenanceTransactionLinks from '@models/vehicle-maintenance-transaction-links.model';
 import { Op } from 'sequelize';
 
-export interface GetEligibleMaintenanceTransactionsParams {
+interface GetEligibleMaintenanceTransactionsParams {
   userId: number;
 }
 
