@@ -275,6 +275,7 @@ async function insertTable({
   // count) instead of one warning per dropped row.
   let droppedMccCount = 0;
   let droppedCurrencyCount = 0;
+  let droppedInvalidCount = 0;
   const fkDroppedByColumn = new Map<string, number>();
   const fkNulledByColumn = new Map<string, number>();
 
@@ -297,6 +298,11 @@ async function insertTable({
       // Keep a missing preset global; existing presets were handled above and
       // are represented only by their source-id → target-id map entry.
       overrides[def.globalRows.ownerColumn] = null;
+    }
+
+    if (def.isValidRow && !def.isValidRow({ row })) {
+      droppedInvalidCount += 1;
+      continue;
     }
 
     const guard = guardRowReferences({ guardedFks, row, insertedIds: ctx.insertedIds });
@@ -342,6 +348,14 @@ async function insertTable({
       table: def.fileName,
       message: `Skipped ${droppedCurrencyCount} currency row(s) whose currency isn't available on this instance.`,
       count: droppedCurrencyCount,
+    });
+  }
+  if (droppedInvalidCount > 0) {
+    ctx.warnings.push({
+      code: 'invalid_row_dropped',
+      table: def.fileName,
+      message: `Dropped ${droppedInvalidCount} "${def.fileName}" row(s) that failed validation.`,
+      count: droppedInvalidCount,
     });
   }
   for (const [column, count] of fkDroppedByColumn) {

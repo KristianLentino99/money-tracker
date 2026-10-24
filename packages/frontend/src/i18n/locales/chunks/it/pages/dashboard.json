@@ -232,6 +232,14 @@
         "taxes": {
           "name": "Aliquota fiscale media",
           "description": "Quota delle entrate destinata alle imposte, con andamento su 12 mesi"
+        },
+        "budget": {
+          "name": "Budget",
+          "description": "What is left in the current budget period, line by line"
+        },
+        "trackers": {
+          "name": "Trackers",
+          "description": "Each active tracker with how much of its limit is used and its net"
         }
       },
       "taxes": {
@@ -266,6 +274,27 @@
           "m6": "Ultimi 6 mesi",
           "m12": "Ultimi 12 mesi"
         }
+      },
+      "budget": {
+        "spent": "spent",
+        "ringLabel": "{percent}% of the budget is spent",
+        "leftOf": "left of {total}",
+        "overOf": "over the {total} budget",
+        "headerLeft": "{amount} left",
+        "headerOver": "{amount} over",
+        "daysLeft": "{count} day left | {count} days left",
+        "lastDay": "Last day of the period",
+        "empty": "No budget yet",
+        "create": "Set up a budget"
+      },
+      "trackers": {
+        "spentOfLimit": "{spent} of {limit}",
+        "inOut": "{income} in, {expense} out",
+        "net": "Net",
+        "noLimit": "No limit",
+        "empty": "No trackers yet",
+        "ended": "Ended",
+        "create": "Create a tracker"
       }
     },
     "periodSelector": {

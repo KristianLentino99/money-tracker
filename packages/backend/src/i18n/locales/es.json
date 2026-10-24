@@ -260,7 +260,7 @@
     "transactionsNoneInPeriod": "El proveedor no devolvió transacciones para este período.",
     "apiError": "Error de API de {{provider}}: {{message}}",
     "currencySelectionRequired": "La cuenta \"{{account}}\" no tiene una moneda reportada por el banco — elija una moneda para ella antes de conectarla.",
-    "providerNotAvailable": "This bank provider is not available for new connections.",
+    "providerNotAvailable": "Este proveedor bancario no está disponible para nuevas conexiones.",
     "monobank": {
       "invalidCredentialsFormat": "Formato de credenciales no válido para Monobank",
       "invalidApiToken": "Token de API de Monobank no válido",
@@ -312,7 +312,8 @@
       "invalidApiKey": "Clave de API o clave privada de Walutomat no válidas.",
       "accountNoExternalId": "La cuenta de Walutomat no tiene ID externo.",
       "walletNotFound": "Cartera de Walutomat no encontrada para la moneda: {{currency}}"
-    }
+    },
+    "simplefinUnreachable": "SimpleFIN is temporarily unreachable. Please try again later."
   },
   "csvImport": {
     "headersCannotBeParsed": "No se pueden analizar las cabeceras",
@@ -363,7 +364,8 @@
     "cannotFindForRefAmount": "¡No se puede encontrar la moneda para calcular el importe de referencia!",
     "cannotCalculateRefAmount": "No se puede calcular el importe de referencia",
     "currencyNotConnected": "La moneda solicitada no está conectada",
-    "exchangeRateNotAvailable": "Tipo de cambio no disponible para {{baseCode}}/{{quoteCode}} en {{date}}"
+    "exchangeRateNotAvailable": "Tipo de cambio no disponible para {{baseCode}}/{{quoteCode}} en {{date}}",
+    "baseCurrencyLockedByBudgetPlan": "Cannot change base currency while you have an active budget plan. Delete the plan first."
   },
   "userSettings": {
     "userSettingsNotFound": "Configuración de usuario no encontrada"
@@ -600,5 +602,45 @@
     "incompleteInvoice": "No se pudo leer un proveedor, el importe total y la fecha de esta factura.",
     "pdfWithoutText": "Conexiones personalizadas de IA no pueden recibir archivos PDF directamente, y éste no puede abrirse para convertirlo (por ejemplo, está protegido por contraseña). Conviértelo a una imagen (PNG o JPEG), como una captura de pantalla de la factura y súbela en su lugar.",
     "noFileUploaded": "No se subió ningún archivo."
+  },
+  "budgets": {
+    "budgetNotFound": "Presupuesto no encontrado",
+    "someTransactionIdsInvalid": "Algunos IDs de transacciones no son válidos",
+    "transactionsAddedSuccessfully": "Transacciones añadidas correctamente",
+    "cannotManuallyLinkToCategoryBudget": "No se pueden vincular transacciones manualmente a presupuestos basados en categorías. Las transacciones se registran automáticamente por categoría.",
+    "someCategoryIdsInvalid": "Algunos IDs de categorías no son válidos o no existen",
+    "notCategoryBudget": "Este endpoint solo está disponible para presupuestos basados en categorías"
+  },
+  "budgetPlans": {
+    "planNotFound": "Budget plan not found.",
+    "activePlanExists": "You already have an active budget plan.",
+    "baseCurrencyChanged": "Your base currency changed while this budget plan was deleted, so it can no longer be restored.",
+    "epochInFuture": "A budget plan cannot start in the future.",
+    "epochTooFarBack": "A budget plan cannot start more than {{max}} periods before today.",
+    "intervalOutOfRange": "That interval is too long for this cadence.",
+    "secondAnchorDayRequired": "A semi-monthly plan needs a second day of the month.",
+    "secondAnchorDayNotAllowed": "A second day of the month only applies to semi-monthly plans.",
+    "semiMonthlyDaysTooClose": "The two days of a semi-monthly plan must be at least 10 days apart.",
+    "accountNotFound": "One of the selected accounts was not found.",
+    "lineNotFound": "Budget line not found.",
+    "goalNotFound": "Budget goal not found.",
+    "lineAlreadyArchived": "This budget line is already archived.",
+    "lineNotArchived": "This budget line is not archived.",
+    "activeFromNotPeriodStart": "The start date must be the start of a past or current period of this plan.",
+    "effectiveFromOutsideLifetime": "The effective date must be the start of a past or current period inside this line's lifetime.",
+    "categoryNotFound": "One of the categories does not exist.",
+    "lineCategoriesOverlap": "Another line of this plan already covers one of these categories in that period.",
+    "periodNotFound": "Budget period not found.",
+    "periodOutsideLifetime": "This period is outside the budget line's lifetime.",
+    "groupNotFound": "Line group not found.",
+    "groupNotEmpty": "Move or archive the lines in this group before deleting it.",
+    "layoutInvalid": "The layout must list every group of the plan once, and each of the plan's lines at most once.",
+    "openEndedGoalCannotSnooze": "An open-ended goal can't be snoozed.",
+    "zeroSumNeedsPool": "Keeping Ready to Assign at 0 needs a plan funded from a pool.",
+    "suggestedGroups": {
+      "bills": "Facturas",
+      "everyday": "Everyday",
+      "life": "Life"
+    }
   }
 }

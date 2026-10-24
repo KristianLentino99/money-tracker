@@ -357,6 +357,9 @@
           "tagsMore": "+{count} more"
         }
       }
+    },
+    "budgets": {
+      "backToList": "Back to Trackers"
     }
   }
 }

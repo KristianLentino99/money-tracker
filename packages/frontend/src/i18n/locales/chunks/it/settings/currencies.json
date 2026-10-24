@@ -81,7 +81,8 @@
         "errors": {
           "changeFailed": "Errore imprevisto. Impossibile cambiare la valuta di base.",
           "lockedHousehold": "Fai parte di {count} nucleo familiare attivo. Esci prima da Impostazioni → Nucleo familiare. | Fai parte di {count} nuclei familiari attivi. Esci prima da Impostazioni → Nucleo familiare.",
-          "lockedShares": "Hai {count} condivisione di conto attiva. Revocala prima dal conto. | Hai {count} condivisioni di conto attive. Revocale prima da ciascun conto."
+          "lockedShares": "Hai {count} condivisione di conto attiva. Revocala prima dal conto. | Hai {count} condivisioni di conto attive. Revocale prima da ciascun conto.",
+          "lockedBudgetPlan": "An active budget plan is blocking the change. Delete it first. | {count} active budget plans are blocking the change. Delete them first."
         }
       }
     }

@@ -155,13 +155,18 @@
             {{ $t('common.actions.cancel') }}
           </Button>
         </RouterLink>
-        <Button :disabled="noneSelected || isPending || isFeatureGated(FEATURES.data_export)" @click="handleConfirm">
-          {{
-            isPending
-              ? $t('settings.dataManagement.export.form.confirmLoading')
-              : $t('settings.dataManagement.export.form.confirmLabel')
-          }}
-        </Button>
+        <DemoRestricted feature="data_export">
+          <Button
+            :disabled="noneSelected || isPending || userStore.isDemo || isFeatureGated(FEATURES.data_export)"
+            @click="handleConfirm"
+          >
+            {{
+              isPending
+                ? $t('settings.dataManagement.export.form.confirmLoading')
+                : $t('settings.dataManagement.export.form.confirmLabel')
+            }}
+          </Button>
+        </DemoRestricted>
       </div>
     </CardContent>
   </Card>
@@ -169,6 +174,7 @@
 
 <script setup lang="ts">
 import PlanRestricted from '@/components/billing/plan-restricted.vue';
+import DemoRestricted from '@/components/demo/demo-restricted.vue';
 import AccountMultiSelectField from '@/components/fields/account-multi-select-field.vue';
 import { Button } from '@/components/lib/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/lib/ui/card';
@@ -193,7 +199,15 @@ import {
   type ExportFormat,
   type ExportGroup,
 } from '@bt/shared/types';
-import { ArrowRightLeftIcon, CalendarIcon, ChevronLeftIcon, RepeatIcon, TrendingUpIcon, XIcon } from '@lucide/vue';
+import {
+  ArrowRightLeftIcon,
+  CalendarIcon,
+  ChevronLeftIcon,
+  RepeatIcon,
+  TrendingUpIcon,
+  WalletIcon,
+  XIcon,
+} from '@lucide/vue';
 import { endOfMonth, format as formatDate, startOfMonth } from 'date-fns';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -206,7 +220,8 @@ defineOptions({
 const router = useRouter();
 const { t } = useI18n();
 const { addSuccessNotification, addErrorNotification } = useNotificationCenter();
-const { isFeatureGated } = useUserStore();
+const userStore = useUserStore();
+const { isFeatureGated } = userStore;
 
 const format = ref<ExportFormat>('json');
 const selectedGroups = ref<Set<ExportGroup>>(new Set(ALL_EXPORT_GROUPS));
@@ -217,6 +232,7 @@ const GROUP_ICONS: Record<ExportGroup, typeof ArrowRightLeftIcon> = {
   transactions: ArrowRightLeftIcon,
   subscriptions: RepeatIcon,
   investments: TrendingUpIcon,
+  budgets: WalletIcon,
 };
 
 const allSelected = computed(() => ALL_EXPORT_GROUPS.every((g) => selectedGroups.value.has(g)));
@@ -287,6 +303,8 @@ const handleConfirm = () => {
         router.push({ name: ROUTES_NAMES.settingsDataManagementExport });
       },
       onError: (e) => {
+        // The API client already toasted the 402 with a "See plans" action.
+        if (e instanceof ApiErrorResponseError && e.data?.code === API_ERROR_CODES.planRequired) return;
         addErrorNotification(resolveErrorMessage(e));
         const isExpected =
           e instanceof DataExportDownloadFailedError ||

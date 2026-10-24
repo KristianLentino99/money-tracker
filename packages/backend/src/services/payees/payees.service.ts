@@ -181,7 +181,12 @@ export const listPayees = withTransaction(
     // p.id ASC as a tiebreaker keeps the order deterministic across pages
     // when two rows share the same primary sort key.
     const orderBy = `${sortColumn} ${sortDirSql} NULLS LAST, p.id ASC`;
-    const nameWhere = normalizedQuery !== null ? 'AND p."normalizedName" LIKE :nameLike' : '';
+    const nameWhere =
+      normalizedQuery !== null
+        ? `AND (p."normalizedName" LIKE :nameLike
+                OR EXISTS (SELECT 1 FROM "PayeeAliases" pa
+                            WHERE pa."payeeId" = p.id AND pa."normalizedName" LIKE :nameLike))`
+        : '';
     // Scoping to a shared account narrows the stats subquery to that account, so the
     // sort keys and shown stats reflect only shared-account activity. The join stays
     // LEFT so the owner's full payee namespace still surfaces (payees unused on the

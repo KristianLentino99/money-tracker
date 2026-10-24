@@ -10,6 +10,7 @@
             :provider="OAUTH_PROVIDER.google"
             mode="signin"
             :is-loading="isOAuthLoading"
+            :is-last-used="lastLoginMethod === OAUTH_PROVIDER.google"
             @click="handleOAuthLogin({ provider: OAUTH_PROVIDER.google })"
           >
             <template #icon>
@@ -20,13 +21,19 @@
             :provider="OAUTH_PROVIDER.github"
             mode="signin"
             :is-loading="isOAuthLoading"
+            :is-last-used="lastLoginMethod === OAUTH_PROVIDER.github"
             @click="handleOAuthLogin({ provider: OAUTH_PROVIDER.github })"
           >
             <template #icon>
               <GithubIcon />
             </template>
           </OAuthButton>
-          <PasskeyButton mode="signin" :is-loading="isPasskeyLoading" @click="handlePasskeyLogin" />
+          <PasskeyButton
+            mode="signin"
+            :is-loading="isPasskeyLoading"
+            :is-last-used="lastLoginMethod === 'passkey'"
+            @click="handlePasskeyLogin"
+          />
         </div>
 
         <AuthDivider :text="$t('auth.login.divider')" />
@@ -44,7 +51,12 @@
             :placeholder="$t('common.placeholders.email')"
             :disabled="isFormLoading"
             :error-message="getFieldErrorMessage('form.email')"
-          />
+            trailing-icon-css-class="-top-2.25 right-2.5 h-auto px-0"
+          >
+            <template v-if="lastLoginMethod === 'email'" #iconTrailing>
+              <LastUsedBadge />
+            </template>
+          </input-field>
           <input-field
             v-model="form.password"
             :label="$t('common.labels.password')"
@@ -52,7 +64,17 @@
             type="password"
             :disabled="isFormLoading"
             :error-message="getFieldErrorMessage('form.password')"
-          />
+            :non-label-wrapper="isEmailEnabled"
+          >
+            <template v-if="isEmailEnabled" #label-right>
+              <router-link
+                :to="{ name: ROUTES_NAMES.forgotPassword }"
+                class="text-muted-foreground hover:text-primary-text focus-visible:text-primary-text text-sm transition-colors hover:underline"
+              >
+                {{ $t('auth.login.forgotPassword') }}
+              </router-link>
+            </template>
+          </input-field>
         </form-wrapper>
 
         <div class="flex justify-center">
@@ -78,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getSignupsOpen } from '@/api/auth';
+import { getAuthFeatures, getSignupsOpen } from '@/api/auth';
 import { getOAuthAuthorizeUrl } from '@/api/mcp';
 import { DEMO_SESSION_EXPIRED_REASON } from '@/common/const';
 import { VUE_QUERY_CACHE_KEYS } from '@/common/const/vue-query';
@@ -87,6 +109,7 @@ import {
   AuthDivider,
   GithubIcon,
   GoogleIcon,
+  LastUsedBadge,
   OAUTH_PROVIDER_NAMES,
   OAuthButton,
   PasskeyButton,
@@ -99,7 +122,8 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/lib/ui/c
 import { useNotificationCenter } from '@/components/notification-center';
 import { useFormValidation } from '@/composable';
 import { OAuthProviderNotConfiguredError } from '@/js/errors';
-import { email, minLength, required } from '@/js/helpers/validators';
+import { email, required } from '@/js/helpers/validators';
+import { getLastLoginMethod } from '@/lib/last-login-method';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useAuthStore } from '@/stores';
 import { OAUTH_PROVIDER } from '@bt/shared/types';
@@ -132,6 +156,7 @@ const formError: Ref<string | null> = ref(null);
 
 const isOAuthLoading = ref(false);
 const isPasskeyLoading = ref(false);
+const lastLoginMethod = getLastLoginMethod();
 
 // Optimistic default (open) so the link doesn't flash disabled while loading.
 const { data: signupsStatus } = useQuery({
@@ -139,6 +164,12 @@ const { data: signupsStatus } = useQuery({
   queryFn: getSignupsOpen,
 });
 const signupsOpen = computed(() => signupsStatus.value?.signupsOpen ?? true);
+
+const { data: authFeatures } = useQuery({
+  queryKey: VUE_QUERY_CACHE_KEYS.authFeatures,
+  queryFn: getAuthFeatures,
+});
+const isEmailEnabled = computed(() => authFeatures.value?.emailEnabled === true);
 
 // Check for OAuth error from callback redirect
 const oauthError = route.query.oauth_error as string | undefined;
@@ -159,16 +190,12 @@ const { isFormValid, getFieldErrorMessage } = useFormValidation(
   {
     form: {
       email: { required, email },
-      password: {
-        required,
-        passwordMinLength: minLength(6),
-      },
+      password: { required },
     },
   },
   undefined,
   {
     customValidationMessages: {
-      passwordMinLength: t('validation.minLength', { length: 6 }),
       email: t('validation.emailInvalid'),
     },
   },

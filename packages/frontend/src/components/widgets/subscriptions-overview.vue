@@ -292,7 +292,7 @@ function openSubscriptionsList() {
           !arrivedState.bottom && '[mask-image:linear-gradient(to_bottom,black_calc(100%-1.75rem),transparent)]',
         )
       "
-      viewport-class="px-2 md:overscroll-contain"
+      viewport-class="px-2 md:overscroll-contain-if-scrollable"
     >
       <div v-if="summary && totalActiveCount > 0" class="pb-2.5">
         <template v-if="summary.activeCount.expense > 0">

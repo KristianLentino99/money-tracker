@@ -55,7 +55,8 @@
       }
     },
     "errors": {
-      "copyToClipboardFailed": "Failed to copy to clipboard"
+      "copyToClipboardFailed": "Failed to copy to clipboard",
+      "settingsSaveFailed": "Couldn't save your settings. Please try again."
     },
     "notifications": {
       "subscriptionCurrencyNotConnected": "Subscriptions summary can't convert {currencies} to your base currency. Connect the currency in Settings → Currencies.",
@@ -151,7 +152,7 @@
         "error": "Failed to unlink transactions!"
       },
       "record": {
-        "addedByTooltip": "This transaction was attached to the budget by {handle}",
+        "addedByTooltip": "This transaction was attached to the tracker by {handle}",
         "externalLinkTooltip": "Open external link",
         "locationTooltip": "Open location on the map",
         "attachmentsTooltip": "Has attachments",

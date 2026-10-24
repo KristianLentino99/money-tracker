@@ -9,7 +9,8 @@
       },
       "sections": {
         "account": "Accounts",
-        "household": "Households"
+        "household": "Households",
+        "budget": "Trackers shared with you"
       },
       "sharedBy": "Shared by {handle}",
       "viaHousehold": "Via {handle} household",

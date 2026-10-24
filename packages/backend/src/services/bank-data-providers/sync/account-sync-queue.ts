@@ -1,5 +1,5 @@
 import { BANK_PROVIDER_TYPE, type RecordId } from '@bt/shared/types';
-import { LockedError } from '@js/errors';
+import { LockedError, ServiceUnavailableError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import { SentryTraceData, withQueueProcessSpan, withQueuePublishSpan } from '@js/utils/sentry';
 import { Job, Queue, Worker } from 'bullmq';
@@ -92,10 +92,21 @@ async function processAccountSync({
     const message =
       error instanceof LockedError ? 'A sync for this account is already running.' : (error as Error).message;
 
-    logger.error({
-      message: `[Account Sync Worker] Transaction sync failed for accounts ${accountIds.join(', ')}`,
-      error: error as Error,
-    });
+    if (error instanceof ServiceUnavailableError) {
+      // An unreachable bank provider is an expected outage: the accounts are marked FAILED
+      // below and the next scheduled sync retries, so it stays out of Sentry.
+      logger.info('[Account Sync Worker] Bank provider unavailable, sync skipped', {
+        accountIds,
+        connectionId,
+        providerType,
+        reason: message,
+      });
+    } else {
+      logger.error({
+        message: `[Account Sync Worker] Transaction sync failed for accounts ${accountIds.join(', ')}`,
+        error: error as Error,
+      });
+    }
     try {
       await markAccountsFailed({ accountIds, message, userId });
     } catch (statusError) {
@@ -120,7 +131,11 @@ export const accountSyncWorker = new Worker<AccountSyncJobData>(
 );
 
 accountSyncWorker.on('failed', async (job, err) => {
-  logger.error({ message: `[Account Sync Worker] Job ${job?.id} failed`, error: err });
+  if (err instanceof ServiceUnavailableError) {
+    logger.info('[Account Sync Worker] Job failed: bank provider unavailable', { jobId: job?.id });
+  } else {
+    logger.error({ message: `[Account Sync Worker] Job ${job?.id} failed`, error: err });
+  }
 
   if (!job) return;
 

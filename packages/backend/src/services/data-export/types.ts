@@ -145,6 +145,28 @@ export interface VehicleMaintenanceVisitRow {
   activitiesDetails: string;
 }
 
+export interface BudgetLineRow {
+  plan: string;
+  group: string;
+  line: string;
+  categories: string[];
+  archived: boolean;
+  goal: string;
+  currency: string;
+}
+
+export interface BudgetPeriodRow {
+  plan: string;
+  periodStart: string;
+  periodEndInclusive: string;
+  line: string;
+  assigned: number;
+  /** Net of refunds, so negative when the line took in more than it spent. */
+  spent: number;
+  available: number;
+  currency: string;
+}
+
 export interface SubscriptionRow {
   name: string;
   /**
@@ -244,6 +266,8 @@ export type ExportTable =
   | { name: 'vehicles'; rows: VehicleRow[] }
   | { name: 'vehicle_maintenance_plans'; rows: VehicleMaintenancePlanRow[] }
   | { name: 'vehicle_maintenance_visits'; rows: VehicleMaintenanceVisitRow[] }
+  | { name: 'budget_lines'; rows: BudgetLineRow[] }
+  | { name: 'budget_periods'; rows: BudgetPeriodRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }
   | { name: 'transaction_templates'; rows: TransactionTemplateRow[] }
   | { name: 'portfolios'; rows: PortfolioRow[] }

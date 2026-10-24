@@ -213,6 +213,7 @@ export function setupMiddleware(app: Express) {
   // Dev only: morgan logs the full URL, and in production that leaks query-string tokens
   // (email-verification links, OAuth code/state) into the logs.
   if (process.env.NODE_ENV === 'development') {
+    morgan.token<Request>('url', (req) => req.originalUrl.replace(/(\/reset-password\/)[^/?]+/, '$1[redacted]'));
     app.use(morgan('dev'));
   }
   app.use(sessionMiddleware);

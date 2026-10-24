@@ -125,7 +125,8 @@
         "expense": "Расход",
         "net": "Итог",
         "transfers": "Переводы"
-      }
+      },
+      "selectAllShort": "Все"
     },
     "transactionGroups": {
       "bulkActions": {
@@ -258,6 +259,31 @@
       "confirmButton": "Link transactions",
       "successMessage": "Selected transactions linked to the recurring payment",
       "errorMessage": "Failed to link transactions to the recurring payment"
+    },
+    "savedViews": {
+      "trigger": "Представления",
+      "empty": "No saved views yet. Set up filters, then save them as a view.",
+      "modified": "Filters changed",
+      "update": "Update “{name}” with current filters",
+      "updateShort": "Update view",
+      "revert": "Вернуть",
+      "saveNew": "Save as new view",
+      "actions": "View actions",
+      "rename": "Переименовать",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "saveTitle": "Сохранить представление",
+      "renameTitle": "Rename view",
+      "dialogDescription": "A view keeps the current filters and sorting so you can apply them again in one click.",
+      "nameLabel": "Название",
+      "namePlaceholder": "e.g. Groceries, last 3 months",
+      "savedToast": "Представление сохранено",
+      "updatedToast": "View updated",
+      "deletedToast": "Представление удалено",
+      "saveError": "Couldn't save your views. Try again.",
+      "deleteTitle": "Delete view “{name}”?",
+      "deleteDescription": "Your transactions are not affected. This can't be undone.",
+      "filtersCount": "{count} filter | {count} filters"
     }
   },
   "records": {

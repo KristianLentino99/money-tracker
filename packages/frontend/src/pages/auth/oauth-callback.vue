@@ -10,6 +10,7 @@
 </template>
 
 <script lang="ts" setup>
+import { consumePendingLoginMethod, setLastLoginMethod } from '@/lib/last-login-method';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useAuthStore } from '@/stores';
 import { onMounted, ref } from 'vue';
@@ -70,6 +71,7 @@ onMounted(async () => {
   const error = route.query.error as string | undefined;
   const from = getOAuthOrigin();
   const returnUrl = getReturnUrl();
+  const pendingLoginMethod = consumePendingLoginMethod();
 
   // If there's an OAuth error, redirect back to the originating page with error message
   if (error) {
@@ -94,6 +96,7 @@ onMounted(async () => {
     const isValid = await authStore.validateSession();
 
     if (isValid) {
+      if (pendingLoginMethod) setLastLoginMethod({ method: pendingLoginMethod });
       // If we have a return URL (account linking flow), go back there
       if (returnUrl) {
         router.replace({ path: returnUrl });

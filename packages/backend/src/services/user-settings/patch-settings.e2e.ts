@@ -89,6 +89,38 @@ describe('Patch user settings', () => {
     });
   });
 
+  it('replaces columnWidths wholesale so a reset column stays reset, and rejects invalid widths', async () => {
+    await helpers.patchUserSettings({
+      raw: true,
+      patch: {
+        ui: {
+          transactionsTable: {
+            columnWidths: [
+              { id: 'note', widthPx: 300 },
+              { id: 'payee', widthPx: 90 },
+            ],
+          },
+        },
+      },
+    });
+    const patched = await helpers.patchUserSettings({
+      raw: true,
+      patch: { ui: { transactionsTable: { columnWidths: [{ id: 'payee', widthPx: 90 }] } } },
+    });
+    expect(patched.ui?.transactionsTable?.columnWidths).toStrictEqual([{ id: 'payee', widthPx: 90 }]);
+
+    const cleared = await helpers.patchUserSettings({
+      raw: true,
+      patch: { ui: { transactionsTable: { columnWidths: [] } } },
+    });
+    expect(cleared.ui?.transactionsTable?.columnWidths).toStrictEqual([]);
+
+    const invalid = await helpers.patchUserSettings({
+      patch: { ui: { transactionsTable: { columnWidths: [{ id: 'note', widthPx: -5 }] } } },
+    });
+    expect(invalid.statusCode).toBe(ERROR_CODES.ValidationError);
+  });
+
   it('persists currencyDisplay in both directions and keeps it through a rejected patch', async () => {
     const patched = await helpers.patchUserSettings({ raw: true, patch: { currencyDisplay: 'narrowSymbol' } });
     expect(patched.currencyDisplay).toBe('narrowSymbol');

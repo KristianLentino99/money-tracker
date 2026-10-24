@@ -11,6 +11,7 @@ import {
   markDemoOrigin,
   markSignedInOnDevice,
 } from '@/lib/demo-origin';
+import { setLastLoginMethod, setPendingLoginMethod } from '@/lib/last-login-method';
 import { identifyUser, resetUser, startSessionRecording, trackAnalyticsEvent } from '@/lib/posthog';
 import { collectPersistedQueryGarbage, resetQueryCaches } from '@/lib/query-persister';
 import { captureException, clearSentryUser, setSentryUser } from '@/lib/sentry';
@@ -144,6 +145,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     isLoggedIn.value = true;
     localStorage.setItem(HAS_EVER_LOGGED_IN_KEY, 'true');
+    setLastLoginMethod({ method: 'email' });
   };
 
   /**
@@ -159,6 +161,7 @@ export const useAuthStore = defineStore('auth', () => {
     from?: 'signin' | 'signup';
   }) => {
     sessionStorage.setItem('oauth_from', from);
+    setPendingLoginMethod({ method: provider });
 
     const result = await signIn.social({
       provider,
@@ -198,6 +201,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     isLoggedIn.value = true;
     localStorage.setItem(HAS_EVER_LOGGED_IN_KEY, 'true');
+    setLastLoginMethod({ method: 'passkey' });
   };
 
   /**

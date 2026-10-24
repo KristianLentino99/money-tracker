@@ -1,8 +1,21 @@
 import { NotificationType, useNotificationCenter } from '@/components/notification-center';
+import { i18n } from '@/i18n';
 import { extractApiErrorMessage, isApiErrorWithCode } from '@/js/errors';
 import { API_ERROR_CODES } from '@bt/shared/types';
 import { type QueryKey, useMutation, useQueryClient } from '@tanstack/vue-query';
 import { useI18n } from 'vue-i18n';
+
+/**
+ * The API client already logs out on 401 and toasts a 402 with a "See plans" action,
+ * so a second toast would blame the operation for it.
+ */
+const isHandledByApiClient = ({ error }: { error: unknown }) =>
+  isApiErrorWithCode(error, API_ERROR_CODES.unauthorized) || isApiErrorWithCode(error, API_ERROR_CODES.planRequired);
+
+export const notifyMutationError = ({ error, fallbackKey }: { error: unknown; fallbackKey: string }) => {
+  if (isHandledByApiClient({ error })) return;
+  useNotificationCenter().addErrorNotification(extractApiErrorMessage(error) || i18n.global.t(fallbackKey));
+};
 
 /**
  * A write that refreshes the caches it invalidates before `mutateAsync` resolves, so a caller
@@ -36,7 +49,7 @@ export const useInvalidatingMutation = <TData, TVariables>({
 }) => {
   const { t } = useI18n();
   const queryClient = useQueryClient();
-  const { addNotification, addSuccessNotification, addErrorNotification } = useNotificationCenter();
+  const { addNotification, addSuccessNotification } = useNotificationCenter();
 
   return useMutation<TData, unknown, TVariables>({
     mutationFn,
@@ -47,14 +60,10 @@ export const useInvalidatingMutation = <TData, TVariables>({
       return Promise.all(invalidateKeys.map((queryKey) => queryClient.invalidateQueries({ queryKey })));
     },
     onError: (error) => {
-      // The API client already logs the user out and announces an expired session on 401,
-      // so a second toast here would blame this operation for it.
-      if (isApiErrorWithCode(error, API_ERROR_CODES.unauthorized)) return;
-      // The API client already toasted the 402 with a "See plans" action.
-      if (isApiErrorWithCode(error, API_ERROR_CODES.planRequired)) return;
       if (silentErrorCodes?.some((code) => isApiErrorWithCode(error, code))) return;
+      if (!persistentErrorId) return notifyMutationError({ error, fallbackKey: errorKey });
+      if (isHandledByApiClient({ error })) return;
       const text = extractApiErrorMessage(error) || t(errorKey);
-      if (!persistentErrorId) return addErrorNotification(text);
       addNotification({ id: persistentErrorId, text, type: NotificationType.error, persistent: true });
     },
   });

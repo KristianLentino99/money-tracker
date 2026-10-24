@@ -23,7 +23,8 @@
     },
     "venture": "مشروع",
     "home": "Home",
-    "more": "More"
+    "more": "More",
+    "budget": "Budget"
   },
   "sidebar": {
     "collapse": "إخفاء الشريط الجانبي",
@@ -272,7 +273,7 @@
             "description": "Add tags to group related transactions"
           },
           "create-budget": {
-            "title": "Set up a budget",
+            "title": "Set up a tracker",
             "description": "Create spending limits for categories"
           },
           "create-subscription": {

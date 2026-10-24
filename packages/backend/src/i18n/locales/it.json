@@ -302,7 +302,8 @@
       "walletNotFound": "Portafoglio Walutomat non trovato per la valuta: {{currency}}"
     },
     "accountAlreadyConnectedToAnotherConnection": "Account \"{{account}}\" is already connected through \"{{connection}}\". Disconnect it there first.",
-    "providerNotAvailable": "Questo servizio bancario non è disponibile per nuove connessioni."
+    "providerNotAvailable": "Questo servizio bancario non è disponibile per nuove connessioni.",
+    "simplefinUnreachable": "SimpleFIN is temporarily unreachable. Please try again later."
   },
   "csvImport": {
     "headersCannotBeParsed": "Impossibile analizzare le intestazioni.",
@@ -344,7 +345,8 @@
     "cannotFindForRefAmount": "Impossibile trovare una valuta per calcolare l'importo di riferimento.",
     "cannotCalculateRefAmount": "Impossibile calcolare l'importo di riferimento.",
     "currencyNotConnected": "La valuta richiesta non è collegata.",
-    "exchangeRateNotAvailable": "Tasso di cambio non disponibile per {{baseCode}}/{{quoteCode}} in data {{date}}."
+    "exchangeRateNotAvailable": "Tasso di cambio non disponibile per {{baseCode}}/{{quoteCode}} in data {{date}}.",
+    "baseCurrencyLockedByBudgetPlan": "Cannot change base currency while you have an active budget plan. Delete the plan first."
   },
   "userSettings": {
     "userSettingsNotFound": "Impostazioni utente non trovate."
@@ -620,5 +622,37 @@
     "incompleteInvoice": "Impossibile leggere il venditore, l'importo totale e la data della fattura.",
     "pdfWithoutText": "Le connessioni IA personalizzate non possono ricevere direttamente file PDF e questo file non può essere aperto per convertirlo, ad esempio perché è protetto da password. Convertilo in un'immagine PNG o JPEG, come uno screenshot della fattura, e carica quella.",
     "noFileUploaded": "Nessun file caricato."
+  },
+  "budgetPlans": {
+    "planNotFound": "Budget plan not found.",
+    "activePlanExists": "You already have an active budget plan.",
+    "baseCurrencyChanged": "Your base currency changed while this budget plan was deleted, so it can no longer be restored.",
+    "epochInFuture": "A budget plan cannot start in the future.",
+    "epochTooFarBack": "A budget plan cannot start more than {{max}} periods before today.",
+    "intervalOutOfRange": "That interval is too long for this cadence.",
+    "secondAnchorDayRequired": "A semi-monthly plan needs a second day of the month.",
+    "secondAnchorDayNotAllowed": "A second day of the month only applies to semi-monthly plans.",
+    "semiMonthlyDaysTooClose": "The two days of a semi-monthly plan must be at least 10 days apart.",
+    "accountNotFound": "One of the selected accounts was not found.",
+    "lineNotFound": "Budget line not found.",
+    "goalNotFound": "Budget goal not found.",
+    "lineAlreadyArchived": "This budget line is already archived.",
+    "lineNotArchived": "This budget line is not archived.",
+    "activeFromNotPeriodStart": "The start date must be the start of a past or current period of this plan.",
+    "effectiveFromOutsideLifetime": "The effective date must be the start of a past or current period inside this line's lifetime.",
+    "categoryNotFound": "One of the categories does not exist.",
+    "lineCategoriesOverlap": "Another line of this plan already covers one of these categories in that period.",
+    "periodNotFound": "Budget period not found.",
+    "periodOutsideLifetime": "This period is outside the budget line's lifetime.",
+    "groupNotFound": "Line group not found.",
+    "groupNotEmpty": "Move or archive the lines in this group before deleting it.",
+    "layoutInvalid": "The layout must list every group of the plan once, and each of the plan's lines at most once.",
+    "openEndedGoalCannotSnooze": "An open-ended goal can't be snoozed.",
+    "zeroSumNeedsPool": "Keeping Ready to Assign at 0 needs a plan funded from a pool.",
+    "suggestedGroups": {
+      "bills": "Bills",
+      "everyday": "Everyday",
+      "life": "Life"
+    }
   }
 }

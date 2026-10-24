@@ -17,6 +17,7 @@ export * from './exchange-rates';
 export * from './account-groups';
 export * from './user';
 export * from './user-settings';
+export * from './budget-plans';
 export * from './import-export';
 export * from './resource-leases';
 export * from './client-logs';

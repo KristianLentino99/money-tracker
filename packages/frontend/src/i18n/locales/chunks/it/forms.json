@@ -317,7 +317,8 @@
       "searchPlaceholder": "Cerca...",
       "sharedOwnerNotice": "Categorie di {owner}",
       "sharedOwnerNoticeTooltip": "Le transazioni di un conto condiviso usano sempre le categorie del proprietario. Tutto ciò che salvi qui verrà assegnato alle impostazioni di {owner}, così entrambi visualizzerete gli stessi totali.",
-      "sharedOwnerCategoriesLoadError": "Impossibile caricare le categorie del conto condiviso. Riprova."
+      "sharedOwnerCategoriesLoadError": "Impossibile caricare le categorie del conto condiviso. Riprova.",
+      "unlistedNotice": "Search to find any category"
     },
     "select": {
       "selectOption": "Seleziona un'opzione",
@@ -350,7 +351,8 @@
     "categoryMultiSelect": {
       "placeholder": "Seleziona categorie...",
       "searchPlaceholder": "Cerca categorie...",
-      "noCategoriesFound": "Nessuna categoria trovata"
+      "noCategoriesFound": "Nessuna categoria trovata",
+      "takenBy": "In {name}"
     },
     "payeeMultiSelect": {
       "label": "Tutti i beneficiari",

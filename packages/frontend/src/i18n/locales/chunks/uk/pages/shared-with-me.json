@@ -9,7 +9,8 @@
       },
       "sections": {
         "account": "Рахунки",
-        "household": "Сім'ї"
+        "household": "Сім'ї",
+        "budget": "Трекери, якими поділилися з вами"
       },
       "sharedBy": "Ділиться: {handle}",
       "viaHousehold": "Через сім'ю {handle}",

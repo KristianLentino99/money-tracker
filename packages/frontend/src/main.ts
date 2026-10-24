@@ -9,6 +9,7 @@ import { i18n, initializeLocale, loadChunks } from '@/i18n';
 import { initPostHog, trackPageviews } from '@/lib/posthog';
 import { initializePwa } from '@/lib/pwa';
 import { queryClient } from '@/lib/query-client';
+import { stashResetPasswordToken } from '@/lib/reset-password-token';
 import { initSentry } from '@/lib/sentry';
 import { router } from '@/routes';
 import { store } from '@/stores/setup';
@@ -20,6 +21,7 @@ import { createApp, watchEffect } from 'vue';
 
 import App from './app.vue';
 
+stashResetPasswordToken();
 identifyCurrentTheme();
 applyRuntimePwaBranding();
 patchMetaViewportMaxScaleForiOS();

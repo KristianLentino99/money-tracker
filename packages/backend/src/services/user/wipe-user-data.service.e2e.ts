@@ -3,6 +3,10 @@ import { API_ERROR_CODES, API_RESPONSE_STATUS } from '@bt/shared/types/api';
 import { VENTURE_CASH_FLOW_MODE, VENTURE_EVENT_TYPE } from '@bt/shared/types/venture';
 import { describe, expect, it } from '@jest/globals';
 import Accounts from '@models/accounts.model';
+import BudgetLineGoals from '@models/budget-line-goals.model';
+import BudgetLineGroups from '@models/budget-line-groups.model';
+import BudgetLines from '@models/budget-lines.model';
+import BudgetPlans from '@models/budget-plans.model';
 import Categories from '@models/categories.model';
 import { connection } from '@models/index';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
@@ -35,6 +39,22 @@ describe('User data wipe (POST /user/wipe-data)', () => {
       }),
       raw: true,
     });
+    // Soft-deleted on purpose: a paranoid row must be hard-deleted by the wipe too.
+    const budgetPlan = await helpers.createBudgetPlan({ raw: true });
+    const planId = budgetPlan.plan.id;
+    const lineGroup = await helpers.createBudgetLineGroup({ planId, name: 'Wipe group', raw: true });
+    const planLine = await helpers.createBudgetPlanLine({
+      planId,
+      payload: { name: 'Wipe line', categoryIds: [category.id], groupId: lineGroup.id },
+      raw: true,
+    });
+    await helpers.setBudgetLineGoal({
+      planId,
+      lineId: planLine.id,
+      payload: { frequency: 'every_period', behavior: 'budget_another', amount: 100 },
+      raw: true,
+    });
+    await helpers.deleteBudgetPlan({ planId });
     await helpers.createPortfolio({ payload: { name: 'Wipe portfolio' }, raw: true });
     const tag = await helpers.createTag({ payload: { name: 'wipe-tag', color: '#123456' }, raw: true });
     const template = await helpers.createTransactionTemplate({
@@ -85,6 +105,10 @@ describe('User data wipe (POST /user/wipe-data)', () => {
         leftovers.push(def.fileName);
     }
     expect(leftovers).toEqual([]);
+    expect(await BudgetPlans.findAll({ where: { userId }, paranoid: false })).toHaveLength(0);
+    expect(await BudgetLineGroups.findAll({ where: { planId } })).toHaveLength(0);
+    expect(await BudgetLines.findAll({ where: { planId } })).toHaveLength(0);
+    expect(await BudgetLineGoals.findAll({ where: { lineId: planLine.id } })).toHaveLength(0);
     expect(await TransactionTemplateTags.findAll({ where: { templateId: template.id } })).toHaveLength(0);
 
     // Custom category is gone but defaults are reseeded. The user gets a fresh-start state,

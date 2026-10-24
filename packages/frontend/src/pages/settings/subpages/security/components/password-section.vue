@@ -116,6 +116,7 @@ import { Button } from '@/components/lib/ui/button';
 import { useNotificationCenter } from '@/components/notification-center';
 import { useFormValidation } from '@/composable';
 import { minLength, required, sameAs } from '@/js/helpers/validators';
+import { PASSWORD_MIN_LENGTH } from '@bt/shared/const/auth';
 import { authClient, setPassword } from '@/lib/auth-client';
 import { useUserStore } from '@/stores';
 import { AlertCircleIcon, Loader2Icon } from '@lucide/vue';
@@ -151,7 +152,7 @@ const { isFormValid, getFieldErrorMessage, resetValidation } = useFormValidation
       currentPassword: { required },
       newPassword: {
         required,
-        minLength: minLength(8),
+        minLength: minLength(PASSWORD_MIN_LENGTH),
       },
       confirmPassword: {
         required,

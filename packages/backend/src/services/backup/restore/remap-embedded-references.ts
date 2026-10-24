@@ -11,6 +11,7 @@ import {
 import AccountGroup from '@models/accounts-groups/account-groups.model';
 import Accounts from '@models/accounts.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
+import BudgetLines from '@models/budget-lines.model';
 import Categories from '@models/categories.model';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
@@ -296,6 +297,17 @@ export async function remapEmbeddedReferences({
     insertedIds,
     transaction,
     mutate: mutateOriginalTransactionState,
+  });
+
+  // 9. BudgetLines.archivedCategoryIds[] → Categories.
+  await rewriteColumn({
+    model: BudgetLines,
+    fileName: 'budget-lines',
+    column: 'archivedCategoryIds',
+    archive,
+    insertedIds,
+    transaction,
+    mutate: ({ draft }) => remapIdArrayInPlace({ arr: draft, targetTable: tables.categories, insertedIds }),
   });
 }
 

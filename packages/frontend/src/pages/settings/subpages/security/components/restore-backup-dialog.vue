@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/lib/ui/checkbox';
 import { useRestoreBackup, useRestoreStatus } from '@/composable/data-queries/backup';
 import { useRestoreJobStatus, restoreDialogPresenting } from '@/composable/use-restore-job-status';
 import { useStallTimer } from '@/composable/use-stall-timer';
-import { ApiErrorResponseError } from '@/js/errors';
+import { ApiErrorResponseError, isApiErrorWithCode } from '@/js/errors';
 import { resetQueryCaches } from '@/lib/query-persister';
 import { captureException } from '@/lib/sentry';
 import { API_ERROR_CODES, type BackupRestorePhase, type WipeDataSharedResources } from '@bt/shared/types';
@@ -185,7 +185,7 @@ const submit = ({ acknowledgeSharing }: { acknowledgeSharing?: boolean }) => {
           (e instanceof ApiErrorResponseError && e.data?.message) ||
           t('settings.security.backup.restore.failed.genericError');
         step.value = 'failed';
-        if (!isValidation) {
+        if (!isValidation && !isApiErrorWithCode(e, API_ERROR_CODES.planRequired)) {
           captureException({ error: e, context: { feature: 'data-backup-restore' } });
         }
       },

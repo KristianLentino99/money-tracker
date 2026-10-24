@@ -170,6 +170,8 @@ const ZodSidebarNavSchema = z.object({
   venture: z.boolean().optional(),
 });
 
+const ZodColumnWidthSchema = z.object({ id: z.string(), widthPx: z.number().int().positive().max(5000) });
+
 // Column ids are plain strings (not an enum) on purpose: the column set is a
 // frontend concern and may grow without a backend deploy. Unknown ids are
 // dropped client-side on read, so stale entries are harmless.
@@ -182,6 +184,8 @@ const ZodTransactionsTableSettingsSchema = z.object({
   extraFilters: z.array(z.string()).optional(),
   /** Shades non-editable cells on every row instead of only the hovered one. */
   alwaysShowLockedCells: z.boolean().optional(),
+  /** User-resized column widths. An array, not a record: the PATCH deep merge replaces arrays, so dropped entries stay dropped. */
+  columnWidths: z.array(ZodColumnWidthSchema).max(100).optional(),
 });
 
 const ZodInvestmentTransactionsTableSettingsSchema = z.object({
@@ -421,6 +425,7 @@ export const ZodSettingsPatchSchema = z.object({
           desktopView: z.enum(['list', 'table']).optional(),
           extraFilters: z.array(z.string()).optional(),
           alwaysShowLockedCells: z.boolean().optional(),
+          columnWidths: z.array(ZodColumnWidthSchema).max(100).optional(),
         })
         .optional(),
       transactionsList: z

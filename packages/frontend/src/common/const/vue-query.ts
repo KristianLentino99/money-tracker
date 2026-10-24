@@ -32,9 +32,12 @@ export const VUE_QUERY_GLOBAL_PREFIXES = Object.freeze({
 const { transactionChange, securityPriceChange, bankConnectionChange, ventureChange, notifications } =
   VUE_QUERY_GLOBAL_PREFIXES;
 
+const budgetPlans = [transactionChange, 'budget-plans'] as const;
+
 export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   // auth
   signupsOpen: ['signups-open'] as const,
+  authFeatures: ['auth-features'] as const,
   // currencies
   allCurrencies: [VUE_QUERY_GLOBAL_PREFIXES.currencies, 'all'] as const,
   userCurrencies: [VUE_QUERY_GLOBAL_PREFIXES.currencies, 'user'] as const,
@@ -137,10 +140,15 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   exchangeRates: ['exchange-rates'] as const,
   accountGroups: [transactionChange, 'account-groups'] as const,
 
-  plansList: ['plans-list'] as const,
-  planDetails: ['plan-details'] as const,
-  planViews: [transactionChange, 'plan-views'] as const,
-  planAutoAssignPreview: [transactionChange, 'plan-auto-assign-preview'] as const,
+  budgetPlans,
+  budgetPlansList: [...budgetPlans, 'list'] as const,
+  // append the planId (and, for a period view, the periodId) when using
+  budgetPlan: [...budgetPlans, 'plan'] as const,
+  budgetPlanPeriods: [...budgetPlans, 'periods'] as const,
+  budgetPlanPeriodView: [...budgetPlans, 'period-view'] as const,
+  budgetPlanTrends: [...budgetPlans, 'trends'] as const,
+  budgetPlanScheduled: [...budgetPlans, 'scheduled'] as const,
+  budgetSuggestionContext: [...budgetPlans, 'suggestion-context'] as const,
 
   /**
    * Investments

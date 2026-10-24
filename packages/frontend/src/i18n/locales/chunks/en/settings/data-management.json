@@ -76,7 +76,9 @@
           "subscriptions": "Subscriptions & reminders",
           "subscriptionsDescription": "Recurring subscriptions and bill reminders",
           "investments": "Investments",
-          "investmentsDescription": "Portfolios, holdings, investment transactions, transfers"
+          "investmentsDescription": "Portfolios, holdings, investment transactions, transfers",
+          "budgets": "Trackers",
+          "budgetsDescription": "Custom trackers with linked categories and spending totals"
         },
         "notifications": {
           "success": "Export ready – your download should start in a moment.",

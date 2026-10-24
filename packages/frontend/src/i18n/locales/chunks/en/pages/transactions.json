@@ -68,7 +68,7 @@
       "menu": {
         "type": "Type",
         "tags": "Tags",
-        "budgets": "Budgets",
+        "budgets": "Trackers",
         "amount": "Amount range",
         "note": "Notes"
       },

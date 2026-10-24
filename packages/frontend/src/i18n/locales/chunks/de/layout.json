@@ -19,11 +19,12 @@
     "planned": {
       "planned": "Geplant",
       "subscriptions": "Wiederkehrende Zahlungen",
-      "budgets": "Budgets"
+      "budgets": "Tracker"
     },
     "venture": "Beteiligungen",
     "home": "Home",
-    "more": "More"
+    "more": "More",
+    "budget": "Budget"
   },
   "sidebar": {
     "collapse": "Seitenleiste einklappen",
@@ -272,7 +273,7 @@
             "description": "Füge Tags hinzu, um zusammengehörige Transaktionen zu gruppieren"
           },
           "create-budget": {
-            "title": "Budget einrichten",
+            "title": "Tracker einrichten",
             "description": "Erstelle Ausgabenlimits für Kategorien"
           },
           "create-subscription": {

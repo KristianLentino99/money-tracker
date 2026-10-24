@@ -10,7 +10,7 @@ export const EXPORT_SCHEMA_VERSION = 1;
 export const EXPORT_FORMATS = ['json', 'csv', 'xlsx'] as const;
 export type ExportFormat = (typeof EXPORT_FORMATS)[number];
 
-export const ALL_EXPORT_GROUPS = ['transactions', 'subscriptions', 'investments'] as const;
+export const ALL_EXPORT_GROUPS = ['transactions', 'subscriptions', 'investments', 'budgets'] as const;
 export type ExportGroup = (typeof ALL_EXPORT_GROUPS)[number];
 
 /**

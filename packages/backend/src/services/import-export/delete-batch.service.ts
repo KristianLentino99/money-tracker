@@ -7,7 +7,6 @@ import {
 import { t } from '@i18n/index';
 import { LockedError, ValidationError } from '@js/errors';
 import { logger } from '@js/utils/logger';
-import { captureException } from '@js/utils/sentry';
 import ImportBatchAccountEffects from '@models/import-batch-account-effects.model';
 import ImportBatches from '@models/import-batches.model';
 import { countTransactions, findTransactions, updateTransactions } from '@models/transactions-query';
@@ -121,9 +120,10 @@ const deleteImportBatchImpl = async ({
   // TODO: support undoing a batch whose account was later bank-linked by reconciling
   // against the provider sync instead of refusing outright.
   if (bankLinkedAccountIds.length > 0) {
-    captureException({
-      error: new Error('Attempted to undo an import batch touching a now bank-linked account'),
-      context: { userId, batchId, bankLinkedAccountIds },
+    logger.info('[import batch undo] Refused: batch touches a now bank-linked account', {
+      userId,
+      batchId,
+      bankLinkedAccountIds,
     });
     throw new ValidationError({
       message: t({ key: 'importExport.batchDeleteBankLinkedAccount' }),

@@ -92,7 +92,7 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
       } else if (event === 'landing_roadmap_clicked' && location) {
         trackAnalyticsEvent({
           event: 'landing_roadmap_clicked',
-          properties: { location: location as 'hero' | 'pricing' | 'community' },
+          properties: { location: location as 'hero' | 'community' },
         });
       } else if (event === 'landing_github_clicked' && location) {
         trackAnalyticsEvent({

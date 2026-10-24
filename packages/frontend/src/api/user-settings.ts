@@ -43,6 +43,8 @@ interface TransactionsTableSettings {
   extraFilters?: string[];
   /** Shades non-editable cells on every row instead of only the hovered one. */
   alwaysShowLockedCells?: boolean;
+  /** User-resized columns. Columns absent here keep their default width and flex to fill spare space. */
+  columnWidths?: { id: string; widthPx: number }[];
 }
 
 interface TransactionsListSettings {

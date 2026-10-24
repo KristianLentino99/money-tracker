@@ -93,6 +93,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/lib/ui/c
 import { useFormValidation } from '@/composable';
 import { ApiErrorResponseError, OAuthProviderNotConfiguredError, UnexpectedError } from '@/js/errors';
 import { email, minLength, required, sameAs } from '@/js/helpers/validators';
+import { PASSWORD_MIN_LENGTH } from '@bt/shared/const/auth';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useAuthStore } from '@/stores';
 import { API_ERROR_CODES, OAUTH_PROVIDER } from '@bt/shared/types';
@@ -139,11 +140,11 @@ const { isFormValid, getFieldErrorMessage } = useFormValidation(
       name: { required },
       password: {
         required,
-        passwordMinLength: minLength(6),
+        passwordMinLength: minLength(PASSWORD_MIN_LENGTH),
       },
       verifyPassword: {
         required,
-        passwordMinLength: minLength(6),
+        passwordMinLength: minLength(PASSWORD_MIN_LENGTH),
         sameAs: sameAs(computed(() => form.password)),
       },
     },
@@ -151,7 +152,7 @@ const { isFormValid, getFieldErrorMessage } = useFormValidation(
   undefined,
   {
     customValidationMessages: {
-      passwordMinLength: t('validation.minLength', { length: 6 }),
+      passwordMinLength: t('validation.minLength', { length: PASSWORD_MIN_LENGTH }),
       sameAs: t('validation.passwordsNoMatch'),
       email: t('validation.emailInvalid'),
     },

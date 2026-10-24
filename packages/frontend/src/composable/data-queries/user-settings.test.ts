@@ -11,6 +11,10 @@ vi.mock('@/api/user-settings', () => ({
   updateUserSettings: vi.fn(),
   patchUserSettings: vi.fn(),
 }));
+vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (key: string) => key }) }));
+vi.mock('@/components/notification-center', () => ({
+  useNotificationCenter: () => ({ addErrorNotification: vi.fn() }),
+}));
 
 const mountComposable = ({ queryClient }: { queryClient: QueryClient }) => {
   let result!: ReturnType<typeof useUserSettings>;

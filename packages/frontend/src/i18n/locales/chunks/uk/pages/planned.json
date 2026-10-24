@@ -357,6 +357,9 @@
         "overpayDescription": "This payment exceeds the remaining balance by {amount}. Mark it as paid anyway?",
         "overpayConfirmButton": "Mark as paid anyway"
       }
+    },
+    "budgets": {
+      "backToList": "Назад до трекерів"
     }
   }
 }

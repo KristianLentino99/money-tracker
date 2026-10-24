@@ -328,6 +328,7 @@
               ref="tableRef"
               :transactions="transactionsPages?.pages.flat() ?? []"
               :visible-columns="visibleColumns"
+              @resize-column="setColumnWidth"
               :sorting="sorting"
               :has-next-page="hasNextPage"
               :is-fetching-next-page="isFetchingNextPage"
@@ -399,7 +400,8 @@ const {
   matching,
 } = useTransactionsWithFilters({ sorting, withSummary: true });
 
-const { visibleColumns, configurableColumns, toggleColumn, reorderColumns, resetToDefaults } = useTableColumns();
+const { visibleColumns, configurableColumns, toggleColumn, reorderColumns, setColumnWidth, resetToDefaults } =
+  useTableColumns();
 
 // Mobile mode keys off the content container, not the viewport – the sidebar
 // eats ~300px, so viewport breakpoints would flip at the wrong widths.
