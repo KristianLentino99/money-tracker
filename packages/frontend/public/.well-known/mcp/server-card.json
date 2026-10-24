@@ -132,7 +132,7 @@
     },
     {
       "name": "create_tracker",
-      "description": "Create a new tracker with an optional spending limit, date range, linked categories, and smart tracking."
+      "description": "Create a new tracker with an optional spending limit, date range, category and tag auto-add rules, and smart tracking."
     },
     {
       "name": "create_tracker_line",
@@ -380,7 +380,7 @@
     },
     {
       "name": "get_trackers",
-      "description": "Retrieve active and historical trackers with their limits, categories, and lines."
+      "description": "Retrieve active and historical trackers with their limits, category and tag auto-add rules, and lines."
     },
     {
       "name": "get_transaction_automations",
@@ -632,7 +632,7 @@
     },
     {
       "name": "update_tracker",
-      "description": "Update an existing tracker's name, date range, spending limit, linked categories, or smart tracking settings."
+      "description": "Update an existing tracker's name, date range, spending limit, category and tag auto-add rules, or smart tracking settings."
     },
     {
       "name": "update_tracker_line",
