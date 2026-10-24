@@ -25,7 +25,9 @@
     "appVersion": "Версія застосунку {version}",
     "home": "Home",
     "more": "More",
-    "budget": "Бюджет"
+    "budget": "Бюджет",
+    "updateAvailable": "Доступне оновлення",
+    "updateToVersion": "Оновлення · {version}"
   },
   "sidebar": {
     "collapse": "Згорнути бічну панель",

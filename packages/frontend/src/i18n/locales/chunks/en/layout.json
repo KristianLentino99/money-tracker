@@ -25,7 +25,9 @@
     "venture": "Venture",
     "helpAndDocs": "Help & docs",
     "appVersion": "App version {version}",
-    "budget": "Budget"
+    "budget": "Budget",
+    "updateAvailable": "Update available",
+    "updateToVersion": "Update · {version}"
   },
   "mobileHubs": {
     "accounts": {
@@ -189,7 +191,7 @@
         "description": "Track cash, savings, or any account manually"
       },
       "connectBank": {
-        "title": "Connect your bank",
+        "title": "Connect Your Bank",
         "description": "Automatically sync transactions from your bank"
       },
       "divider": "or import existing data",
@@ -319,10 +321,6 @@
           "progressText": "{completed} of {total} complete",
           "categoryProgress": "{completed} of {total} complete"
         }
-      },
-      "connectBank": {
-        "title": "Connect Your Bank",
-        "description": "Automatically sync transactions from your bank"
       }
     }
   },
