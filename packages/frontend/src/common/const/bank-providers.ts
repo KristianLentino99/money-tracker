@@ -1,7 +1,7 @@
 import { BANK_PROVIDER_TYPE } from '@bt/shared/types';
 
-type PricingType = 'free' | 'paid';
-type DifficultyType = 'easy' | 'medium' | 'very-difficult';
+export type PricingType = 'free' | 'paid';
+export type DifficultyType = 'easy' | 'medium' | 'very-difficult';
 
 export interface ProviderRegion {
   code: 'ua' | 'eu' | 'gb' | 'us' | 'pl' | 'ca' | 'au' | 'nz';
@@ -98,6 +98,16 @@ export const REGION_FILTER_GROUPS: readonly RegionFilterGroup[] = [
   { key: 'ukraine', labelKey: 'pages.integrations.regions.ukraine', flagCode: 'ua', codes: ['ua'] },
   // Poland also matches 'eu': EU-wide providers (PSD2) cover Polish banks.
   { key: 'poland', labelKey: 'pages.integrations.regions.poland', flagCode: 'pl', codes: ['pl', 'eu'] },
+];
+
+export const REGION_FILTER_ALL = 'all';
+
+export const PROVIDER_DISPLAY_ORDER: readonly string[] = [
+  BANK_PROVIDER_TYPE.LUNCHFLOW,
+  BANK_PROVIDER_TYPE.SIMPLEFIN,
+  BANK_PROVIDER_TYPE.MONOBANK,
+  BANK_PROVIDER_TYPE.ENABLE_BANKING,
+  BANK_PROVIDER_TYPE.WALUTOMAT,
 ];
 
 export const providerMatchesRegionFilter = ({

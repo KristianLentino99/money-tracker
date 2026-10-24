@@ -154,7 +154,7 @@
           "appIdCode": "app_id",
           "appIdExample": "Esempio:",
           "privateKey": "{strong} Apri il tuo file {code} salvato con un editor di testo (TextEdit su macOS o Blocco note su Windows) e copia l'intero contenuto (incluse le righe BEGIN e END)",
-          "privateKeyStrong": "Private Key:",
+          "privateKeyStrong": "Private key:",
           "privateKeyCode": "private.pem"
         },
         "securityNote": {
@@ -229,11 +229,11 @@
           "step3": "Incolla il token nel campo."
         },
         "brokerageNotice": {
-          "trigger": "Only bank accounts are supported – brokerage accounts are not",
-          "title": "What SimpleFIN can import",
-          "supported": "Bank accounts – checking, savings, credit cards – are fully supported. Balances and transactions sync automatically.",
-          "unsupported": "Brokerage and retirement accounts (stocks, ETFs, crypto, 401k, IRA) are not supported. SimpleFIN itself doesn't truly support them either – it doesn't say which account is a brokerage one, and holdings come in an unofficial format that can change at any time.",
-          "tryAnyway": "You can still try to connect them – they'll be imported as regular accounts with whatever balance and cash transactions SimpleFIN provides, but your positions won't show up. No promises it works correctly."
+          "trigger": "Sono supportati solo i conti bancari, non i conti di investimento",
+          "title": "Cosa può importare SimpleFIN",
+          "supported": "I conti bancari, come conti correnti, conti di risparmio e carte di credito, sono pienamente supportati. Saldi e transazioni si sincronizzano automaticamente.",
+          "unsupported": "I conti di investimento e previdenziali (azioni, ETF, criptovalute, 401k, IRA) non sono supportati. Neppure SimpleFIN li supporta pienamente: non indica quali conti sono di investimento e fornisce le posizioni in un formato non ufficiale che può cambiare in qualsiasi momento.",
+          "tryAnyway": "Puoi comunque provare a collegarli: verranno importati come conti normali con il saldo e le transazioni di liquidità forniti da SimpleFIN, ma le posizioni non saranno visibili. Il corretto funzionamento non è garantito."
         },
         "connectButton": "Connetti",
         "connectingButton": "Connessione in corso…",
@@ -245,13 +245,6 @@
         "errors": {
           "connectFailed": "Impossibile connettersi a SimpleFIN. Controlla il tuo token di configurazione e riprova.",
           "importFailed": "Impossibile importare i conti. Riprova."
-        },
-        "brokerageNotice": {
-          "trigger": "Sono supportati solo i conti bancari, non i conti di investimento",
-          "title": "Cosa può importare SimpleFIN",
-          "supported": "I conti bancari, come conti correnti, conti di risparmio e carte di credito, sono pienamente supportati. Saldi e transazioni si sincronizzano automaticamente.",
-          "unsupported": "I conti di investimento e previdenziali (azioni, ETF, criptovalute, 401k, IRA) non sono supportati. Neppure SimpleFIN li supporta pienamente: non indica quali conti sono di investimento e fornisce le posizioni in un formato non ufficiale che può cambiare in qualsiasi momento.",
-          "tryAnyway": "Puoi comunque provare a collegarli: verranno importati come conti normali con il saldo e le transazioni di liquidità forniti da SimpleFIN, ma le posizioni non saranno visibili. Il corretto funzionamento non è garantito."
         }
       },
       "walutomat": {

@@ -147,7 +147,7 @@
         "loadingButton": "Memuat...",
         "createButton": "Buat",
         "editButton": "Sunting",
-        "duplicateButton": "Duplikat",
+        "duplicateButton": "Duplicate",
         "createMore": {
           "label": "Create more",
           "createdToast": "Transaction created"
@@ -180,7 +180,7 @@
           "maxLength": "Must not exceed {max} characters",
           "httpUrl": "Enter a valid http(s) URL"
         },
-        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",
@@ -246,11 +246,6 @@
             "openInNewTab": "Open in new tab",
             "download": "Unduh"
           }
-        },
-        "duplicateButton": "Duplicate",
-        "createMore": {
-          "label": "Create more",
-          "createdToast": "Transaction created"
         }
       },
       "investmentContribution": {
@@ -821,6 +816,7 @@
       "analyzing": "Reading the invoice and searching your transactions…",
       "attaching": "Attaching the invoice to the transaction…",
       "privacyNote": "The file goes to the AI provider for reading only. Nothing is saved until you link it to a transaction.",
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options.",
       "direction": {
         "paid": "I paid this",
         "gotPaid": "I got paid",

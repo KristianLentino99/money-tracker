@@ -45,7 +45,7 @@
         "descriptionSelfHost": "Store Enable Banking transactions before the bank books them. They're marked as pending, never change the account balance, and often lack merchant details until booked. Other providers aren't affected: SimpleFIN and LunchFlow always import booked transactions only, and Monobank imports every transaction as a regular one."
       },
       "quickStart": {
-        "label": "Quick Start guide",
+        "label": "Quick start guide",
         "description": "Show the onboarding checklist on the dashboard. Turn it off to hide the guide; turn it back on to bring it back at any time."
       },
       "savingsCategories": {

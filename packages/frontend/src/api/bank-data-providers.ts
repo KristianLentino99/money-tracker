@@ -118,6 +118,18 @@ export const getConnectionDetails = async (connectionId: string): Promise<BankCo
   return response.connection;
 };
 
+export const connectProvider = async (
+  providerType: BANK_PROVIDER_TYPE,
+  credentials: Record<string, unknown>,
+  providerName?: string,
+): Promise<{ connectionId: string; authUrl?: string; message: string }> => {
+  const response = await api.post(`/bank-data-providers/${providerType}/connect`, {
+    credentials,
+    providerName,
+  });
+  return response;
+};
+
 export const disconnectProvider = async ({
   connectionId,
   removeAssociatedAccounts = false,
@@ -223,6 +235,53 @@ export const loadTransactionsForPeriod = async (
     to,
   });
   return response;
+};
+
+export interface ASPSP {
+  auth_methods: Array<{
+    approach: string;
+    credentials: Array<{
+      description?: string;
+      name: string;
+      required: boolean;
+      template?: string;
+      title?: string;
+    }>;
+    hidden_method: boolean;
+    name: string;
+    psu_type: 'personal' | 'business';
+  }>;
+  beta: boolean;
+  bic: string;
+  country: string;
+  logo: string;
+  maximum_consent_validity?: number;
+  name: string;
+  payments?: Array<{
+    allowed_auth_methods: string[];
+    currencies: string[];
+    payment_type: string;
+    psu_type: 'personal' | 'business';
+    [key: string]: unknown;
+  }>;
+  psu_types: Array<'personal' | 'business'>;
+  required_psu_headers: string[];
+}
+
+export const getEnableBankingCountries = async (appId: string, privateKey: string): Promise<string[]> => {
+  const response: { countries: string[] } = await api.post('/bank-data-providers/enablebanking/countries', {
+    appId,
+    privateKey,
+  });
+  return response.countries;
+};
+
+export const getEnableBankingBanks = async (appId: string, privateKey: string, country: string): Promise<ASPSP[]> => {
+  const response: { banks: ASPSP[] } = await api.post(`/bank-data-providers/enablebanking/banks?country=${country}`, {
+    appId,
+    privateKey,
+  });
+  return response.banks;
 };
 
 export const completeEnableBankingOAuth = async (

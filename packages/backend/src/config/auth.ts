@@ -10,6 +10,7 @@ import { t } from '@i18n/index';
 import { logger } from '@js/utils/logger';
 import { identifyUser, trackSignup } from '@js/utils/posthog';
 import { captureException } from '@js/utils/sentry';
+import { CLIENT_IP_HEADER } from '@middlewares/client-ip-header';
 import { redisClient } from '@root/redis-client';
 import { appName, fromEmail, isEmailEnabled } from '@services/email';
 import { sendEmail } from '@services/email/send-email';
@@ -312,6 +313,9 @@ export const auth = betterAuth({
 
   // Advanced options
   advanced: {
+    // better-auth's `x-forwarded-for` reader rejects multi-hop chains, and its `trustedProxies` can't see
+    // the socket peer, so it would believe a forged header. Read the address Express resolved instead.
+    ipAddress: { ipAddressHeaders: [CLIENT_IP_HEADER] },
     // Cookie settings for session. The prefix is overridable because cookies are
     // keyed by host, not port: parallel git worktrees all share `localhost`, so a
     // shared prefix means signing into one worktree overwrites another's session

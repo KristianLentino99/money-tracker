@@ -127,7 +127,12 @@
           "errorsOverflow": "…e altre {count}",
           "rowPrefix": "Riga {rowIndex}:",
           "viewTransactions": "Visualizza transazioni",
-          "importAnother": "Importa un altro file"
+          "importAnother": "Importa un altro file",
+          "errors": {
+            "rowsSuppressed": "{count} more row failed to import from this row onward. Only the first {listed} errors are listed. | {count} more rows failed to import from this row onward. Only the first {listed} errors are listed.",
+            "accountBalanceDesync": "An account balance could not be updated after the import. Check it and correct it manually.",
+            "rowImportFailed": "This row could not be imported."
+          }
         },
         "leaseExpired": {
           "title": "Il file caricato non è più disponibile",

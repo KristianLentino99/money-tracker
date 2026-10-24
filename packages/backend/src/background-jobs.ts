@@ -2,6 +2,7 @@ import { logger } from '@js/utils/logger';
 import { shutdownPostHog } from '@js/utils/posthog';
 import { accountSyncWorker } from '@services/bank-data-providers/sync/account-sync-queue';
 
+import { aiUsageMonthEndCron } from './crons/ai-usage-month-end';
 import { attachmentsOrphanSweepCron } from './crons/attachments-orphan-sweep';
 import { balanceRevalueSweepCron } from './crons/balance-revalue-sweep';
 import { bankAccountsSyncCron } from './crons/bank-accounts-sync';
@@ -40,6 +41,7 @@ const prodOnlyCrons = [
   attachmentsOrphanSweepCron,
   bankAccountsSyncCron,
   trackerSmartScanCron,
+  aiUsageMonthEndCron,
 ];
 
 export function initializeBackgroundJobs() {

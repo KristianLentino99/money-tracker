@@ -5,7 +5,8 @@
       "failedToFetchSelfHost": "Impossibile raggiungere il server. Il backend potrebbe essere ancora in avvio (circa 30 secondi dopo l'avvio), oppure la variabile d'ambiente ALLOWED_ORIGINS potrebbe non includere questo URL.",
       "unexpectedError": "Errore imprevisto.",
       "sessionExpired": "La sessione è scaduta. Accedi di nuovo.",
-      "payloadTooLarge": "La richiesta è troppo grande. Riprova importando meno elementi alla volta."
+      "payloadTooLarge": "La richiesta è troppo grande. Riprova importando meno elementi alla volta.",
+      "tooManyRequests": "Too many attempts. Please wait a moment and try again."
     },
     "notFound": {
       "title": "Questa pagina è stata spostata",
@@ -13,6 +14,15 @@
       "attemptedLabel": "Hai provato a visitare: ",
       "goBack": "Torna indietro",
       "goHome": "Torna alla home"
+    },
+    "auth": {
+      "reauthenticationRequired": "For your security, sign in again to make this change.",
+      "passwordTooShort": "La password è troppo corta.",
+      "passwordTooLong": "La password è troppo lunga.",
+      "providerNotConfigured": "This sign-in provider isn't configured on this server.",
+      "accountAlreadyLinked": "This account is already linked to another user.",
+      "cannotUnlinkLastAccount": "You can't remove your only sign-in method.",
+      "passkeyAlreadyRegistered": "This passkey is already registered."
     }
   }
 }

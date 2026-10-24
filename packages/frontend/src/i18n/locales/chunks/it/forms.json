@@ -381,7 +381,8 @@
       "searchPlaceholder": "Search budgets",
       "noResults": "No budgets found",
       "unknownBudget": "Unknown budget",
-      "loadError": "Couldn't load budgets. Please try again."
+      "loadError": "Couldn't load budgets. Please try again.",
+      "blankOption": "Not in any tracker"
     }
   }
 }

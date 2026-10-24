@@ -134,6 +134,10 @@
       "receiptParsing": {
         "name": "Invoice matching",
         "description": "Reads an uploaded invoice or receipt and finds the transaction it belongs to."
+      },
+      "trackerMatching": {
+        "name": "Tracker matching",
+        "description": "Scans new transactions and suggests the ones that belong to a smart tracker."
       }
     },
     "transactions": {
@@ -156,7 +160,8 @@
         "selectRow": "Select transaction",
         "unselectableReasons": {
           "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
-        }
+        },
+        "matchedByAi": "Matched by AI"
       }
     },
     "outOfWallet": "Fuori portafoglio",
@@ -215,7 +220,9 @@
     "logo": {
       "tabs": {
         "brand": "Marchio",
-        "letters": "Lettere"
+        "letters": "Lettere",
+        "icon": "Icon",
+        "custom": "Image"
       },
       "searchPlaceholder": "Nome del marchio o dominio",
       "searchHint": "Digita il nome di un marchio o un dominio come amazon.com",
@@ -236,7 +243,13 @@
       "customColorAriaLabel": "Scegli un colore personalizzato",
       "applyLetters": "Applica",
       "lettersSelectedLabel": "Lettere “{letters}”",
-      "brandNotConfigured": "Brand logos are not configured on this instance. Ask the admin to set VITE_LOGO_DEV_TOKEN, or use letters instead."
+      "brandNotConfigured": "Brand logos are not configured on this instance. Ask the admin to set VITE_LOGO_DEV_TOKEN, or use letters instead.",
+      "lettersHint": "1–2 letters or an emoji",
+      "chooseImage": "Choose image",
+      "replaceImage": "Replace image",
+      "imageHint": "Cropped to a square and resized to 200×200 on your device.",
+      "imageTooLarge": "The image is still over 50 KB after resizing. Try a simpler picture.",
+      "imageUnreadable": "That file couldn't be read as an image."
     },
     "sharing": {
       "emailNotSent": "Invio email non configurato — condividi manualmente il link di invito"
@@ -264,7 +277,11 @@
         "fat": "Fat FIRE"
       }
     },
-    "cancel": "Annulla"
+    "cancel": "Annulla",
+    "iconPicker": {
+      "searchPlaceholder": "Cerca icona...",
+      "clear": "Cancella icona"
+    }
   },
   "accountGroups": {
     "create": {
@@ -308,6 +325,13 @@
     },
     "share": {
       "sendFailedHint": "Apri il pannello di condivisione per inviare di nuovo."
+    },
+    "trackerAiMatches": {
+      "title": "{name}: {summary}",
+      "added": "{count} transaction added | {count} transactions added",
+      "toReview": "{count} transaction to review | {count} transactions to review",
+      "toReviewShort": "{count} to review",
+      "both": "{added}, {toReview}"
     }
   },
   "currencyNames": {
@@ -466,6 +490,7 @@
   },
   "billing": {
     "seePlans": "See plans",
+    "trialStartFailed": "Couldn't start the free trial. Try again.",
     "updatePaymentMethod": "Update your payment method",
     "planRequired": {
       "essential": "Included in the Essential plan",
@@ -477,6 +502,39 @@
       "readOnly": "Your trial has ended. You can view and export your data; subscribe to keep editing. {link}",
       "subscriptionEnded": "Your subscription has ended. {link} to keep editing your data.",
       "pastDue": "Your last payment failed. {link} to keep your plan."
+    }
+  },
+  "aiUsage": {
+    "title": "Included AI usage",
+    "used": "used",
+    "percentUsed": "{percent}% used",
+    "resetsOn": "Resets on {date}",
+    "connectOwnModel": "Connect your own model",
+    "gotIt": "Got it",
+    "badge": {
+      "used": "{percent}% AI used",
+      "reached": "AI limit reached"
+    },
+    "dialog": {
+      "description": "Statement parsing, categorization, receipts and budget suggestions share this allowance.",
+      "status": {
+        "plusWarning": "You've used most of this month's included AI. When it runs out, AI features pause until {date}.",
+        "plusReached": "You've used this month's included AI. AI features are paused until {date}.",
+        "trialWarning": "You've used most of the AI included in your plan this month. When it runs out, AI features pause.",
+        "trialReached": "You've used the AI included in your plan this month. Subscribe to Plus or connect your own model to keep using AI features."
+      }
+    },
+    "options": {
+      "connectDescription": "Use your own Anthropic, OpenAI, Gemini or local model. It's never counted toward this limit.",
+      "subscribeTitle": "Subscribe to Plus",
+      "subscribeDescription": "Get more included AI every month.",
+      "waitTitle": "Wait for the reset",
+      "waitDescription": "Included AI comes back on {date}."
+    },
+    "meter": {
+      "ok": "Resets on {date}. Your own connected models are never counted.",
+      "warning": "When it runs out, AI features pause until {date} unless you connect your own model.",
+      "reached": "Used up until {date}. AI features are paused."
     }
   }
 }

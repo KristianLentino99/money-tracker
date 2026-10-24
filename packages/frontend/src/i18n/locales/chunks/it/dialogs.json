@@ -169,7 +169,7 @@
           "maxLength": "Must not exceed {max} characters",
           "httpUrl": "Enter a valid http(s) URL"
         },
-        "outOfWalletDocsLink": "What is Out of Wallet?",
+        "outOfWalletDocsLink": "What is out of wallet?",
         "externalUrlLabel": "External URL",
         "externalUrlPlaceholder": "Link to the order, booking or receipt page",
         "externalReferenceLabel": "External reference",
@@ -837,7 +837,8 @@
       "trial": {
         "left": "Resta 1 tentativo gratuito su {limit} | Restano {count} tentativi gratuiti su {limit}",
         "spent": "Hai usato tutti i tentativi gratuiti. Passa a Plus per continuare ad allegare fatture con l'IA."
-      }
+      },
+      "aiPausedHint": "Invoice reading is paused. Open the AI badge above to see your options."
     },
     "shareBudgetDialog": {
       "title": "Share budget",
@@ -859,8 +860,8 @@
     "loanPayment": {
       "title": "Loan payment",
       "description": "Record or edit a payment against this loan.",
-      "createTitle": "Record Payment",
-      "editTitle": "Edit Loan Payment",
+      "createTitle": "Record payment",
+      "editTitle": "Edit loan payment",
       "payingTo": "Paying to",
       "fromAccountLabel": "From account",
       "fromAccountPlaceholder": "Select account",

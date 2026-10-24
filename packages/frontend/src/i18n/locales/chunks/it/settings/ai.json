@@ -329,13 +329,15 @@
           "categorization": "Un compito breve e ripetitivo. Un modello piccolo lo gestisce bene e mantiene bassi i costi.",
           "statementParsing": "Legge l'intero estratto conto e restituisce ogni riga: serve un modello che mantenga la precisione anche su testi lunghi.",
           "investmentTransactionsParsing": "Trasforma le esportazioni del broker in operazioni di acquisto e vendita. Per esportazioni lunghe serve un modello capace di produrre risposte lunghe.",
-          "receiptParsing": "Il modello analizza direttamente il file della fattura, quindi deve saper leggere immagini e PDF."
+          "receiptParsing": "Il modello analizza direttamente il file della fattura, quindi deve saper leggere immagini e PDF.",
+          "trackerMatching": "A short, repetitive job that runs every day. A small model handles it well and keeps the cost down."
         },
         "picks": {
           "categorization": "Gemini Flash Lite · Claude Haiku",
           "statementParsing": "Gemini Flash · Claude Sonnet · GPT Terra",
           "investmentTransactionsParsing": "Gemini Flash · Claude Sonnet",
-          "receiptParsing": "Gemini Flash · Claude Sonnet"
+          "receiptParsing": "Gemini Flash · Claude Sonnet",
+          "trackerMatching": "Gemini Flash Lite · Claude Haiku"
         },
         "verdict": {
           "fit": "Adatto",
