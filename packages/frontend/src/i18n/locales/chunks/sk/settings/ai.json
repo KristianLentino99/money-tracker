@@ -106,7 +106,7 @@
         },
         "verdict": {
           "fit": "Dobre vyhovuje",
-          "gaps": "{count} nedostatok | {count} nedostatkov",
+          "gaps": "{count} nedostatok | {count} nedostatky | {count} nedostatkov",
           "unknown": "Neoverené"
         },
         "warning": {

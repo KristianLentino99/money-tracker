@@ -1,0 +1,104 @@
+{
+  "pages": {
+    "budgets": {
+      "transactionsList": {
+        "selectionModeWarning": "Režim výberu — vyberte transakcie na odpojenie",
+        "selectAll": "Vybrať všetko",
+        "selected": "Vybraných: {count}",
+        "unlink": "Odpojiť",
+        "cancel": "Zrušiť",
+        "unlinkSelected": "Odpojiť vybrané",
+        "noMatchingTransactions": "Žiadne zodpovedajúce transakcie",
+        "noTransactionsLinked": "Žiadne prepojené transakcie",
+        "filterAdjustmentHint": "Skúste upraviť filtre a zobrazí sa vám viac transakcií.",
+        "addTransactionsHint": "Pridajte transakcie do tohto rozpočtu a začnite sledovať svoje výdavky.",
+        "resetFilters": "Vynulovať filtre",
+        "addTransactions": "Pridať transakcie",
+        "add": "Pridať",
+        "loadingMore": "Načítavanie ďalších..."
+      }
+    },
+    "budgetDetails": {
+      "notSet": "Nenastavené",
+      "saving": "Ukladanie...",
+      "saveChanges": "Uložiť zmeny",
+      "loading": "Načítavanie...",
+      "uncategorized": "Nezaradené",
+      "stats": {
+        "income": "Príjmy",
+        "expenses": "Výdavky",
+        "netBalance": "Čistý zostatok"
+      },
+      "utilization": {
+        "title": "Čerpanie rozpočtu",
+        "summary": "{spent} z limitu {limit}",
+        "na": "Nedostupné"
+      },
+      "noTransactionsYet": "Zatiaľ žiadne transakcie",
+      "transactions": "Transakcie",
+      "transactionsLinked": "S týmto rozpočtom je prepojená {count} transakcia | S týmto rozpočtom sú prepojené {count} transakcie | S týmto rozpočtom je prepojených {count} transakcií",
+      "tabs": {
+        "statistics": "Štatistiky",
+        "transactions": "Transakcie",
+        "sharing": "Zdieľanie"
+      },
+      "statistics": {
+        "tabs": {
+          "categories": "Kategórie",
+          "timeline": "Časová os"
+        },
+        "errorTitle": "Štatistiky sa nepodarilo načítať",
+        "errorDescription": "Pri načítavaní údajov sa niečo pokazilo. Skúste to znova neskôr, prosím.",
+        "noDataTitle": "Žiadne údaje o výdavkoch",
+        "noDataDescription": "Pre tento rozpočet zatiaľ nie sú dostupné žiadne údaje o výdavkoch.",
+        "noCategoryData": "Žiadne údaje o výdavkoch podľa kategórií.",
+        "noTimelineData": "Žiadne údaje pre časovú os.",
+        "total": "Spolu",
+        "income": "Príjmy",
+        "expenses": "Výdavky",
+        "incomeLabel": "Príjmy:",
+        "expensesLabel": "Výdavky:"
+      },
+      "sharing": {
+        "title": "Zdieľanie",
+        "description": "Spravujte, kto môže tento rozpočet vidieť a prispievať doň.",
+        "inviteAnother": "Pozvite niekoho",
+        "membersHeading": "Členovia",
+        "pendingHeading": "Čakajúce pozvánky",
+        "loadError": "Členov sa nepodarilo načítať.",
+        "permissions": {
+          "read": "Len zobrazenie",
+          "write": "Priraďovať vlastné transakcie",
+          "manage": "Spravovať"
+        },
+        "member": {
+          "you": "vy",
+          "roleOwner": "Vlastník",
+          "roleRecipient": "Člen",
+          "ownerHint": "Plná kontrola nad týmto rozpočtom",
+          "updateSuccess": "Oprávnenie aktualizované.",
+          "updateError": "Oprávnenie sa nepodarilo aktualizovať.",
+          "revoke": "Odobrať prístup",
+          "revokeConfirm": "Odobrať",
+          "revokeTitle": "Odobrať prístup?",
+          "revokeDescription": "{user} stratí prístup k rozpočtu {budget}.",
+          "revokeSuccess": "Prístup odobratý.",
+          "revokeError": "Prístup sa nepodarilo odobrať."
+        },
+        "pending": {
+          "empty": "Žiadne čakajúce pozvánky.",
+          "resend": "Odoslať znova",
+          "resendSuccess": "Pozvánka bola opätovne odoslaná.",
+          "resendError": "Pozvánku sa nepodarilo odoslať znova.",
+          "resendDeliveryFailed": "Odoslané znova, email sa však nepodarilo doručiť.",
+          "cancel": "Zrušiť",
+          "cancelConfirm": "Zrušiť pozvánku",
+          "cancelTitle": "Zrušiť pozvánku?",
+          "cancelDescription": "Pozvánka pre {email} bude zrušená.",
+          "cancelSuccess": "Pozvánka zrušená.",
+          "cancelError": "Pozvánku sa nepodarilo zrušiť."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "budgets": {
+    "title": "Ngân sách",
+    "description": "Theo dõi chi tiêu và giám sát các sự kiện tài chính.",
+    "notFound": "Không tìm thấy ngân sách",
+    "notFoundDescription": "Không tìm thấy ngân sách này. Có thể ngân sách đã bị xóa hoặc bạn không có quyền truy cập.",
+    "backToList": "Quay lại danh sách ngân sách",
+    "newBudget": "Ngân sách mới",
+    "createBudget": "Tạo ngân sách",
+    "creation": {
+      "success": "Đã tạo ngân sách",
+      "error": "Đã xảy ra lỗi ngoài dự kiến!",
+      "nameLabel": "Tên ngân sách",
+      "namePlaceholder": "Nhập tên",
+      "typeLabel": "Loại ngân sách",
+      "typeManual": "Thủ công",
+      "typeManualDescription": "Tự thêm giao dịch vào ngân sách này.",
+      "typeCategory": "Theo danh mục",
+      "typeCategoryDescription": "Tự động theo dõi chi tiêu theo danh mục",
+      "categoriesLabel": "Danh mục cần theo dõi",
+      "categoriesRequired": "Chọn ít nhất một danh mục",
+      "fromDateLabel": "Ngày bắt đầu",
+      "toDateLabel": "Ngày kết thúc",
+      "autoIncludeLabel": "Tự động đưa giao dịch vào ngân sách",
+      "limitLabel": "Hạn mức ngân sách",
+      "limitPlaceholder": "Nhập hạn mức",
+      "submitButton": "Thêm ngân sách"
+    },
+    "list": {
+      "tabCategory": "Ngân sách theo danh mục",
+      "tabManual": "Ngân sách thủ công",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "deleteSuccess": "Đã xóa ngân sách thành công!",
+      "deleteError": "Đã xảy ra lỗi ngoài dự kiến!",
+      "updateSuccess": "Đã cập nhật ngân sách thành công!",
+      "updateError": "Không thể cập nhật ngân sách",
+      "unlinkTransactionsSuccess": "Đã gỡ liên kết giao dịch thành công!",
+      "deleteDialog": {
+        "title": "Bạn có chắc muốn xóa ngân sách này?",
+        "description": "Khi nhấn \"Chấp nhận\", tất cả giao dịch liên quan sẽ được gỡ liên kết khỏi ngân sách nhưng vẫn giữ nguyên trong hệ thống."
+      },
+      "limitLabel": "Hạn mức: {amount}",
+      "transactionsCount": "{count} giao dịch",
+      "categoriesCount": "{count} danh mục",
+      "noTransactions": "Chưa có giao dịch nào",
+      "noTimePeriod": "Không giới hạn thời gian",
+      "autoTracked": "Tự động theo dõi",
+      "status": {
+        "ended": "Đã kết thúc",
+        "lastDay": "Ngày cuối cùng",
+        "oneDayLeft": "Còn 1 ngày",
+        "daysLeft": "Còn {count} ngày",
+        "startsToday": "Bắt đầu hôm nay",
+        "startsTomorrow": "Bắt đầu ngày mai",
+        "startsInDays": "Bắt đầu sau {count} ngày"
+      },
+      "income": "Thu nhập",
+      "expenses": "Chi tiêu",
+      "net": "Thu chi ròng",
+      "used": "Đã sử dụng",
+      "archive": "Lưu trữ",
+      "unarchive": "Bỏ lưu trữ",
+      "archivedLabel": "Đã lưu trữ",
+      "archiveError": "Không thể cập nhật trạng thái lưu trữ",
+      "showArchived": "Hiển thị ngân sách đã lưu trữ",
+      "hideArchived": "Ẩn ngân sách đã lưu trữ",
+      "emptyState": {
+        "title": "Chưa có ngân sách nào",
+        "description": "Tạo ngân sách để bắt đầu theo dõi chi tiêu hoặc giám sát các sự kiện cụ thể."
+      }
+    },
+    "settings": {
+      "nameLabel": "Tên ngân sách",
+      "namePlaceholder": "Nhập tên ngân sách",
+      "limitLabel": "Hạn mức ngân sách",
+      "limitPlaceholder": "Nhập hạn mức (không bắt buộc)",
+      "startDateLabel": "Ngày bắt đầu",
+      "endDateLabel": "Ngày kết thúc",
+      "notSet": "Chưa đặt"
+    },
+    "addTransactionsDialog": {
+      "title": "Thêm giao dịch vào ngân sách",
+      "addSelected": "Thêm giao dịch đã chọn",
+      "clearSelection": "Bỏ chọn"
+    },
+    "categoryBudget": {
+      "trackedCategories": "Danh mục đang được theo dõi",
+      "categoriesCount": "Đang theo dõi {count} danh mục",
+      "autoTrackedInfo": "Giao dịch được tự động theo dõi theo danh mục.",
+      "transactionsTitle": "Giao dịch",
+      "transactionsCount": "{count} giao dịch",
+      "noTransactions": "Chưa có giao dịch nào",
+      "noTransactionsDescription": "Các giao dịch thuộc danh mục đang theo dõi sẽ tự động xuất hiện tại đây.",
+      "transactionsLoadError": "Không thể tải giao dịch.",
+      "categoryBreakdown": "Chi tiết theo danh mục",
+      "edit": "Chỉnh sửa",
+      "editTitle": "Chỉnh sửa ngân sách",
+      "showMore": "Xem thêm",
+      "showLess": "Thu gọn",
+      "settings": {
+        "categoriesLabel": "Danh mục đang được theo dõi"
+      }
+    },
+    "manualBudget": {
+      "edit": "Chỉnh sửa",
+      "editTitle": "Chỉnh sửa ngân sách"
+    },
+    "share": {
+      "sharedByBadge": "Được chia sẻ bởi {handle}"
+    }
+  }
+}

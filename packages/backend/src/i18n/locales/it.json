@@ -117,7 +117,8 @@
         "message_other": "{{count}} transazioni sono in sospeso da oltre una settimana. Verificale con la banca per mantenere il saldo corretto."
       },
       "maintenanceConflict": "Le transazioni selezionate appartengono a interventi di manutenzione diversi."
-    }
+    },
+    "bulkDeleteLimitExceeded": "You can delete up to 500 transactions at once. Narrow the selection and try again."
   },
   "tags": {
     "tagNotFound": "Etichetta non trovata.",

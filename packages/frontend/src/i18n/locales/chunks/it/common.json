@@ -289,7 +289,8 @@
   "validation": {
     "minLength": "La lunghezza minima è {length}.",
     "emailInvalid": "Inserisci un indirizzo email valido.",
-    "passwordsNoMatch": "Le password non corrispondono"
+    "passwordsNoMatch": "Le password non corrispondono",
+    "required": "Field is required"
   },
   "notifications": {
     "title": "Notifiche",

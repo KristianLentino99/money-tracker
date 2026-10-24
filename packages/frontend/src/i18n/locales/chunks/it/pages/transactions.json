@@ -128,7 +128,8 @@
         "expense": "Expense",
         "net": "Net",
         "transfers": "Transfers"
-      }
+      },
+      "matchingCount": "Total: {count}"
     },
     "bulkLinkSubscription": {
       "button": "Collega a un pagamento ricorrente",

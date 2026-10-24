@@ -17,6 +17,7 @@ import betterAuthExtensionsRoutes from './routes/better-auth-extensions.route';
 import billingRoutes from './routes/billing.route';
 import brandLogosRoutes from './routes/brand-logos.route';
 import categoriesRoutes from './routes/categories.route';
+import clientLogsRoutes from './routes/client-logs.route';
 import modelsCurrenciesRoutes from './routes/currencies.route';
 import demoRoutes from './routes/demo.route';
 import exchangeRatesRoutes from './routes/exchange-rates';
@@ -208,6 +209,7 @@ export function setupRoutes(app: Express) {
   app.use(`${API_PREFIX}/import`, batchesRoutes);
   app.use(`${API_PREFIX}/import`, aiMappingRoutes);
   app.use(`${API_PREFIX}/resource-leases`, resourceLeasesRoutes);
+  app.use(`${API_PREFIX}/client-logs`, clientLogsRoutes);
   app.use(`${API_PREFIX}/sse`, sseRoutes);
   app.use(`${API_PREFIX}/webhooks`, webhooksRoutes);
   app.use(`${API_PREFIX}/github`, githubRoutes);

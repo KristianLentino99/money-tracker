@@ -44,7 +44,7 @@
           "showMarkersTooltip": "Farbige Markierungen im Diagramm ein-/ausschalten, die deutliche Saldoänderungen hervorheben.",
           "percentThreshold": "Min. Änderung %",
           "percentThresholdTooltip": "Mindestprozentsatz der Saldoänderung zwischen zwei aufeinanderfolgenden Tagen für eine Markierung. Entweder dieser oder der absolute Schwellenwert muss überschritten werden. Niedrige Werte zeigen mehr Markierungen an.",
-          "absoluteThreshold": "Min. Änderung $",
+          "absoluteThreshold": "Min. Änderung €",
           "absoluteThresholdTooltip": "Mindeständerung des absoluten Saldos (in deiner Basiswährung), damit ein Ausschlag vorliegt. Entweder dieser Wert oder der prozentuale Schwellwert muss überschritten werden.",
           "maxMarkers": "Max. Markierungen",
           "maxMarkersTooltip": "Maximale Anzahl der angezeigten Markierungen im Diagramm. Gibt es mehr Ausschläge als dieses Limit, werden nur die bedeutendsten angezeigt.",
@@ -122,7 +122,13 @@
       "categoryTracker": {
         "title": "Kategorien-Beobachtungsliste",
         "addCategory": "Kategorie hinzufügen",
-        "selectCategories": "Kategorien auswählen"
+        "selectCategories": "Kategorien auswählen",
+        "sort": {
+          "title": "Sortieren nach",
+          "custom": "Benutzerdefinierte Reihenfolge",
+          "spendDesc": "Höchste Ausgaben zuerst",
+          "spendAsc": "Niedrigste Ausgaben zuerst"
+        }
       },
       "cashFlow": {
         "title": "Cashflow",
@@ -133,7 +139,10 @@
         "expenses": "Ausgaben",
         "saved": "Gespart",
         "previousPeriodsTrend": "Trend vorheriger Zeiträume",
-        "viewDetails": "Details anzeigen"
+        "viewDetails": "Details anzeigen",
+        "savingsRateLine": "Sparquoten-Linie anzeigen",
+        "savingsRate": "Sparquote",
+        "noIncome": "kein Einkommen"
       },
       "netWorth": {
         "title": "Nettovermögen",
@@ -175,6 +184,39 @@
         "upcoming": "Anstehend · {count}",
         "loadFailed": "Geplante Transaktionen konnten nicht geladen werden"
       },
+      "taxes": {
+        "title": "Steuerquote",
+        "description": "Ausgaben in deinen Steuerkategorien als Anteil am Einkommen, gemittelt über den in den Widget-Einstellungen gewählten Zeitraum. Die Balken zeigen die letzten 12 Monate.",
+        "ofIncome": "vom Einkommen",
+        "vsTrailingRate": "{delta} Prozentpunkte ggü. 12-Monats-Satz {rate}",
+        "average": "Ø {amount}",
+        "amount": "Steuern",
+        "shareOfIncome": "Anteil an Einnahmen",
+        "shareOfTaxes": "Steueranteil",
+        "other": "Sonstiges",
+        "moreCategories": "{count} weitere",
+        "viewDetails": "Cashflow anzeigen",
+        "loadFailed": "Steuerdaten konnten nicht geladen werden.",
+        "noCategories": {
+          "title": "Noch keine Steuerkategorien",
+          "description": "Wähle aus, welche Kategorien als Steuern zählen, um deine Steuerquote zu sehen.",
+          "action": "Kategorien auswählen"
+        },
+        "config": {
+          "months": {
+            "label": "Durchschnittszeitraum",
+            "saveError": "Der Durchschnittszeitraum konnte nicht gespeichert werden. Versuche es erneut.",
+            "m3": "3 Mon.",
+            "m6": "6 Mon.",
+            "m12": "12 Mon."
+          }
+        },
+        "lastMonths": {
+          "m3": "Letzte 3 Monate",
+          "m6": "Letzte 6 Monate",
+          "m12": "Letzte 12 Monate"
+        }
+      },
       "emptyState": "Keine Daten im ausgewählten Zeitintervall vorhanden.",
       "registry": {
         "balanceTrend": {
@@ -199,7 +241,7 @@
         },
         "cashFlow": {
           "name": "Cashflow",
-          "description": "Einkommen vs. Ausgaben mit Sparquote"
+          "description": "Einkommen gegenüber Ausgaben mit Sparquote"
         },
         "netWorth": {
           "name": "Nettovermögen",
@@ -218,41 +260,8 @@
           "description": "Wie nah du der finanziellen Unabhängigkeit bist"
         },
         "taxes": {
-          "name": "Average Tax Rate",
-          "description": "Share of income paid in taxes, with a 12-month trend"
-        }
-      },
-      "taxes": {
-        "title": "Average Tax Rate",
-        "description": "Spending in your tax categories as a share of income, averaged over the period chosen in the widget settings. Bars show the last 12 months.",
-        "ofIncome": "of income",
-        "vsTrailingRate": "{delta} pp vs 12-month rate {rate}",
-        "average": "avg {amount}",
-        "amount": "Taxes",
-        "shareOfIncome": "Share of income",
-        "shareOfTaxes": "Share of taxes",
-        "other": "Other",
-        "moreCategories": "{count} more",
-        "viewDetails": "View cash flow",
-        "loadFailed": "Couldn't load tax data.",
-        "noCategories": {
-          "title": "No tax categories yet",
-          "description": "Choose which categories count as taxes to see your tax rate.",
-          "action": "Choose categories"
-        },
-        "config": {
-          "months": {
-            "label": "Averaging period",
-            "saveError": "Could not save the averaging period. Try again.",
-            "m3": "3 mo",
-            "m6": "6 mo",
-            "m12": "12 mo"
-          }
-        },
-        "lastMonths": {
-          "m3": "Last 3 months",
-          "m6": "Last 6 months",
-          "m12": "Last 12 months"
+          "name": "Steuerquote",
+          "description": "Anteil des Einkommens, der für Steuern aufgewendet wird, mit 12-Monats-Trend"
         }
       }
     },
@@ -302,7 +311,10 @@
         "tagsStyleTitle": "Tags",
         "tagsStyleNames": "Namen",
         "tagsStyleBars": "Balken",
-        "tagsStyleSaveError": "Tag-Stil konnte nicht gespeichert werden. Bitte versuche es erneut."
+        "tagsStyleSaveError": "Tag-Stil konnte nicht gespeichert werden. Bitte versuche es erneut.",
+        "showAccountTitle": "Konto",
+        "showAccountDescription": "Kontologo bei jeder Transaktion anzeigen",
+        "showAccountSaveError": "Die Kontoeinstellung konnte nicht gespeichert werden. Bitte versuche es erneut."
       },
       "overdueBadge": "Überfällig",
       "scheduledBadge": "Geplant",

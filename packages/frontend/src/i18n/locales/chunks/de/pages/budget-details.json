@@ -1,0 +1,104 @@
+{
+  "pages": {
+    "budgets": {
+      "transactionsList": {
+        "selectionModeWarning": "Auswahlmodus – wähle Transaktionen zum Aufheben der Verknüpfung",
+        "selectAll": "Alles auswählen",
+        "selected": "{count} ausgewählt",
+        "unlink": "Verknüpfung aufheben",
+        "cancel": "Abbrechen",
+        "unlinkSelected": "Ausgewählte Verknüpfung aufheben",
+        "noMatchingTransactions": "Keine passenden Transaktionen",
+        "noTransactionsLinked": "Keine Transaktionen verknüpft",
+        "filterAdjustmentHint": "Versuche, deine Filter anzupassen, um mehr Transaktionen zu sehen.",
+        "addTransactionsHint": "Füge diesem Budget Transaktionen hinzu, um deine Ausgaben zu verfolgen.",
+        "resetFilters": "Filter zurücksetzen",
+        "addTransactions": "Transaktionen hinzufügen",
+        "add": "Hinzufügen",
+        "loadingMore": "Mehr laden..."
+      }
+    },
+    "budgetDetails": {
+      "notSet": "Nicht festgelegt",
+      "saving": "Speichern...",
+      "saveChanges": "Speichern",
+      "loading": "Laden...",
+      "uncategorized": "Unkategorisiert",
+      "stats": {
+        "income": "Einnahmen",
+        "expenses": "Ausgaben",
+        "netBalance": "Nettosaldo"
+      },
+      "utilization": {
+        "title": "Budgetauslastung",
+        "summary": "{spent} von {limit} Limit",
+        "na": "N/A"
+      },
+      "noTransactionsYet": "Noch keine Transaktionen",
+      "transactions": "Transaktionen",
+      "transactionsLinked": "{count} Transaktion mit diesem Budget verknüpft | {count} Transaktionen mit diesem Budget verknüpft",
+      "tabs": {
+        "statistics": "Statistiken",
+        "transactions": "Transaktionen",
+        "sharing": "Freigabe"
+      },
+      "statistics": {
+        "tabs": {
+          "categories": "Kategorien",
+          "timeline": "Verlauf"
+        },
+        "errorTitle": "Statistiken konnten nicht geladen werden",
+        "errorDescription": "Beim Laden der Daten ist etwas schiefgelaufen. Bitte versuche es später erneut.",
+        "noDataTitle": "Keine Ausgabendaten",
+        "noDataDescription": "Für dieses Budget sind noch keine Ausgabendaten verfügbar.",
+        "noCategoryData": "Keine Kategoriendaten für Ausgaben.",
+        "noTimelineData": "Keine Verlaufsdaten.",
+        "total": "Gesamt",
+        "income": "Einnahmen",
+        "expenses": "Ausgaben",
+        "incomeLabel": "Einnahmen:",
+        "expensesLabel": "Ausgaben:"
+      },
+      "sharing": {
+        "title": "Freigabe",
+        "description": "Verwalte, wer dieses Budget sehen und dazu beitragen kann.",
+        "inviteAnother": "Jemanden einladen",
+        "membersHeading": "Mitglieder",
+        "pendingHeading": "Ausstehende Einladungen",
+        "loadError": "Mitglieder konnten nicht geladen werden.",
+        "permissions": {
+          "read": "Nur anzeigen",
+          "write": "Eigene Transaktionen zuweisen",
+          "manage": "Verwalten"
+        },
+        "member": {
+          "you": "Du",
+          "roleOwner": "Eigentümer",
+          "roleRecipient": "Mitglied",
+          "ownerHint": "Volle Kontrolle über dieses Budget",
+          "updateSuccess": "Berechtigung aktualisiert.",
+          "updateError": "Berechtigung konnte nicht aktualisiert werden.",
+          "revoke": "Zugriff entziehen",
+          "revokeConfirm": "Entziehen",
+          "revokeTitle": "Zugriff entziehen?",
+          "revokeDescription": "{user} verliert den Zugriff auf {budget}.",
+          "revokeSuccess": "Zugriff entzogen.",
+          "revokeError": "Zugriff konnte nicht entzogen werden."
+        },
+        "pending": {
+          "empty": "Keine ausstehenden Einladungen.",
+          "resend": "Erneut senden",
+          "resendSuccess": "Einladung erneut gesendet.",
+          "resendError": "Einladung konnte nicht erneut gesendet werden.",
+          "resendDeliveryFailed": "Erneut gesendet, aber die E-Mail konnte nicht zugestellt werden.",
+          "cancel": "Abbrechen",
+          "cancelConfirm": "Einladung stornieren",
+          "cancelTitle": "Einladung stornieren?",
+          "cancelDescription": "Die Einladung an {email} wird storniert.",
+          "cancelSuccess": "Einladung storniert.",
+          "cancelError": "Einladung konnte nicht storniert werden."
+        }
+      }
+    }
+  }
+}

@@ -122,7 +122,13 @@
       "categoryTracker": {
         "title": "Categorie monitorate",
         "addCategory": "Aggiungi categoria",
-        "selectCategories": "Seleziona categorie"
+        "selectCategories": "Seleziona categorie",
+        "sort": {
+          "title": "Sort by",
+          "custom": "Custom order",
+          "spendDesc": "Highest spend first",
+          "spendAsc": "Lowest spend first"
+        }
       },
       "cashFlow": {
         "title": "Flusso di cassa",
@@ -133,7 +139,10 @@
         "saved": "Risparmiato",
         "previousPeriodsTrend": "Andamento dei periodi precedenti",
         "viewDetails": "Visualizza dettagli",
-        "notAvailable": "N/D"
+        "notAvailable": "N/D",
+        "savingsRateLine": "Show savings rate line",
+        "savingsRate": "Savings rate",
+        "noIncome": "no income"
       },
       "netWorth": {
         "title": "Patrimonio netto",
@@ -311,7 +320,10 @@
         "tagsStyleTitle": "Etichette",
         "tagsStyleNames": "Names",
         "tagsStyleBars": "Bars",
-        "tagsStyleSaveError": "Couldn't save the tag style. Please try again."
+        "tagsStyleSaveError": "Couldn't save the tag style. Please try again.",
+        "showAccountTitle": "Conto",
+        "showAccountDescription": "Show the account logo on each transaction",
+        "showAccountSaveError": "Couldn't save the account setting. Please try again."
       },
       "overdueBadge": "Scaduto",
       "scheduledBadge": "Programmato",
