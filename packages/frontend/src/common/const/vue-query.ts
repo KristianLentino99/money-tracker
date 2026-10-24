@@ -153,6 +153,9 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   exchangeRates: ['exchange-rates'] as const,
   accountGroups: [transactionChange, 'account-groups'] as const,
 
+  budgetsList: ['budgets-list'] as const,
+  budgetsListItem: ['budgets-list-item'] as const,
+
   budgetPlans,
   budgetPlansList: [...budgetPlans, 'list'] as const,
   // append the planId (and, for a period view, the periodId) when using
@@ -162,6 +165,14 @@ export const VUE_QUERY_CACHE_KEYS = Object.freeze({
   budgetPlanTrends: [...budgetPlans, 'trends'] as const,
   budgetPlanScheduled: [...budgetPlans, 'scheduled'] as const,
   budgetSuggestionContext: [...budgetPlans, 'suggestion-context'] as const,
+
+  budgetTransactionList: [transactionChange, 'budget-transaction-list'] as const,
+  budgetAddingTransactionList: [transactionChange, 'budget-adding-transaction-list'] as const,
+  budgetStats: [transactionChange, 'budget-stats'] as const,
+  budgetSpendingStats: [transactionChange, 'budget-spending-stats'] as const,
+  budgetCategoryTransactions: [transactionChange, 'budget-category-transactions'] as const,
+  // append the budgetId when using
+  budgetSuggestions: [transactionChange, 'budget-suggestions'] as const,
 
   /**
    * Investments

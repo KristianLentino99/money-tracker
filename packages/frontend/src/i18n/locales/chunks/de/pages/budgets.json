@@ -1,0 +1,113 @@
+{
+  "budgets": {
+    "title": "Tracker",
+    "description": "Verfolge Ausgaben und überwache Finanzereignisse",
+    "notFound": "Tracker nicht gefunden",
+    "notFoundDescription": "Wir konnten diesen Tracker nicht finden. Er wurde möglicherweise gelöscht oder du hast keinen Zugriff darauf.",
+    "backToList": "Zurück zu Tracker",
+    "newBudget": "Neuer Tracker",
+    "createBudget": "Tracker erstellen",
+    "creation": {
+      "success": "Tracker erstellt",
+      "error": "Unerwarteter Fehler!",
+      "nameLabel": "Tracker-Name",
+      "namePlaceholder": "Name eingeben",
+      "typeLabel": "Tracker-Typ",
+      "typeManual": "Manuell",
+      "typeManualDescription": "Transaktionen manuell zu diesem Tracker hinzufügen",
+      "typeCategory": "Kategoriebasiert",
+      "typeCategoryDescription": "Ausgaben automatisch nach Kategorien verfolgen",
+      "categoriesLabel": "Zu verfolgende Kategorien",
+      "categoriesRequired": "Wähle mindestens eine Kategorie aus",
+      "fromDateLabel": "Startdatum",
+      "toDateLabel": "Enddatum",
+      "autoIncludeLabel": "Transaktionen automatisch einschließen",
+      "limitLabel": "Tracker-Limit",
+      "limitPlaceholder": "Limit eingeben",
+      "submitButton": "Tracker hinzufügen"
+    },
+    "list": {
+      "tabCategory": "Kategorie-Tracker",
+      "tabManual": "Manuelle Tracker",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleteSuccess": "Tracker erfolgreich gelöscht!",
+      "deleteError": "Unerwarteter Fehler!",
+      "updateSuccess": "Tracker erfolgreich aktualisiert!",
+      "updateError": "Tracker konnte nicht aktualisiert werden",
+      "unlinkTransactionsSuccess": "Verknüpfung der Transaktionen erfolgreich aufgehoben!",
+      "deleteDialog": {
+        "title": "Möchtest du diesen Tracker löschen?",
+        "description": "Wenn du auf \"Akzeptieren\" klickst, werden alle verknüpften Transaktionen vom Tracker getrennt, bleiben aber im System erhalten."
+      },
+      "limitLabel": "Limit: {amount}",
+      "transactionsCount": "{count} Transaktionen",
+      "categoriesCount": "{count} Kategorien",
+      "noTransactions": "Noch keine Transaktionen",
+      "noTimePeriod": "Kein Zeitraum",
+      "autoTracked": "Automatisch verfolgt",
+      "status": {
+        "ended": "Beendet",
+        "lastDay": "Letzter Tag",
+        "oneDayLeft": "Noch 1 Tag",
+        "daysLeft": "Noch {count} Tage",
+        "startsToday": "Startet heute",
+        "startsTomorrow": "Startet morgen",
+        "startsInDays": "Startet in {count} Tagen"
+      },
+      "income": "Einnahmen",
+      "expenses": "Ausgaben",
+      "net": "Netto",
+      "used": "Genutzt",
+      "archive": "Archivieren",
+      "unarchive": "Wiederherstellen",
+      "archivedLabel": "Archiviert",
+      "archiveError": "Archivstatus konnte nicht aktualisiert werden",
+      "showArchived": "Archivierte anzeigen",
+      "hideArchived": "Archivierte ausblenden",
+      "emptyState": {
+        "title": "Noch keine Tracker",
+        "description": "Erstelle einen Tracker, um deine Ausgaben zu verfolgen oder bestimmte Ereignisse zu überwachen."
+      }
+    },
+    "settings": {
+      "nameLabel": "Tracker-Name",
+      "namePlaceholder": "Tracker-Name eingeben",
+      "limitLabel": "Tracker-Limit",
+      "limitPlaceholder": "Limitbetrag eingeben (optional)",
+      "startDateLabel": "Startdatum",
+      "endDateLabel": "Enddatum",
+      "notSet": "Nicht festgelegt"
+    },
+    "addTransactionsDialog": {
+      "title": "Transaktionen zum Tracker hinzufügen",
+      "addSelected": "Ausgewählte hinzufügen",
+      "clearSelection": "Auswahl aufheben"
+    },
+    "categoryBudget": {
+      "trackedCategories": "Verfolgte Kategorien",
+      "categoriesCount": "{count} Kategorien verfolgt",
+      "autoTrackedInfo": "Transaktionen werden automatisch basierend auf Kategorien verfolgt",
+      "transactionsTitle": "Transaktionen",
+      "transactionsCount": "{count} Transaktionen",
+      "noTransactions": "Noch keine Transaktionen",
+      "noTransactionsDescription": "Transaktionen, die zu deinen verfolgten Kategorien passen, werden hier automatisch angezeigt.",
+      "transactionsLoadError": "Transaktionen konnten nicht geladen werden",
+      "categoryBreakdown": "Kategorie-Aufschlüsselung",
+      "edit": "Bearbeiten",
+      "editTitle": "Tracker bearbeiten",
+      "showMore": "Mehr anzeigen",
+      "showLess": "Weniger anzeigen",
+      "settings": {
+        "categoriesLabel": "Verfolgte Kategorien"
+      }
+    },
+    "manualBudget": {
+      "edit": "Bearbeiten",
+      "editTitle": "Tracker bearbeiten"
+    },
+    "share": {
+      "sharedByBadge": "Geteilt von {handle}"
+    }
+  }
+}

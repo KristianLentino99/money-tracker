@@ -5,12 +5,17 @@ import {
   FINANCIAL_DATA_GUIDE_DESCRIPTION,
   FINANCIAL_DATA_GUIDE_NAME,
 } from './prompts/financial-data-guide';
+import { registerAcceptBudgetSuggestions } from './tools/accept-budget-suggestions';
+import { registerAddTransactionsToBudget } from './tools/add-transactions-to-budget';
 import { registerAddTransactionsToGroup } from './tools/add-transactions-to-group';
 import { registerAdjustAccountBalance } from './tools/adjust-account-balance';
 import { registerArchiveAccount } from './tools/archive-account';
+import { registerArchiveBudget } from './tools/archive-budget';
 import { registerAssignTagsToTransaction } from './tools/assign-tags-to-transaction';
 import { registerBulkUpdateTransactions } from './tools/bulk-update-transactions';
 import { registerCreateAttachmentUploadUrl } from './tools/create-attachment-upload-url';
+import { registerCreateBudget } from './tools/create-budget';
+import { registerCreateBudgetLine } from './tools/create-budget-line';
 import { registerCreateCategory } from './tools/create-category';
 import { registerCreateHolding } from './tools/create-holding';
 import { registerCreateInvestmentTransaction } from './tools/create-investment-transaction';
@@ -22,6 +27,8 @@ import { registerCreateTag } from './tools/create-tag';
 import { registerCreateTransaction } from './tools/create-transaction';
 import { registerCreateTransactionAutomation } from './tools/create-transaction-automation';
 import { registerCreateTransactionGroup } from './tools/create-transaction-group';
+import { registerDeleteBudget } from './tools/delete-budget';
+import { registerDeleteBudgetLine } from './tools/delete-budget-line';
 import { registerDeleteCategory } from './tools/delete-category';
 import { registerDeleteInvestmentTransaction } from './tools/delete-investment-transaction';
 import { registerDeletePayee } from './tools/delete-payee';
@@ -36,6 +43,8 @@ import { registerDetectSubscriptionCandidates } from './tools/detect-subscriptio
 import { registerDismissSubscriptionCandidate } from './tools/dismiss-subscription-candidate';
 import { registerGetAccounts } from './tools/get-accounts';
 import { registerGetBalanceHistory } from './tools/get-balance-history';
+import { registerGetBudgetSpendingStats } from './tools/get-budget-spending-stats';
+import { registerGetBudgets } from './tools/get-budgets';
 import { registerGetCashFlow } from './tools/get-cash-flow';
 import { registerGetCategories } from './tools/get-categories';
 import { registerGetExpensesForPeriod } from './tools/get-expenses-for-period';
@@ -60,6 +69,7 @@ import { registerLinkRefund } from './tools/link-refund';
 import { registerLinkTransactionToPortfolio } from './tools/link-transaction-to-portfolio';
 import { registerLinkTransactionsToSubscription } from './tools/link-transactions-to-subscription';
 import { registerLinkTransfer } from './tools/link-transfer';
+import { registerListBudgetSuggestions } from './tools/list-budget-suggestions';
 import { registerListPortfolioTransfers } from './tools/list-portfolio-transfers';
 import { registerListSubscriptionCandidates } from './tools/list-subscription-candidates';
 import {
@@ -76,7 +86,9 @@ import {
 import { registerManualPortfolioTools } from './tools/manual-portfolio-tools';
 import { registerMergePayees } from './tools/merge-payees';
 import { registerPreviewTransactionAutomation } from './tools/preview-transaction-automation';
+import { registerRejectBudgetSuggestions } from './tools/reject-budget-suggestions';
 import { registerRemoveTagsFromTransaction } from './tools/remove-tags-from-transaction';
+import { registerRemoveTransactionsFromBudget } from './tools/remove-transactions-from-budget';
 import { registerRemoveTransactionsFromGroup } from './tools/remove-transactions-from-group';
 import { registerReorderTransactionAutomations } from './tools/reorder-transaction-automations';
 import { registerSearchSecurities } from './tools/search-securities';
@@ -100,6 +112,8 @@ import { registerUnlinkRefund } from './tools/unlink-refund';
 import { registerUnlinkTransactionFromPortfolio } from './tools/unlink-transaction-from-portfolio';
 import { registerUnlinkTransactionsFromSubscription } from './tools/unlink-transactions-from-subscription';
 import { registerUnlinkTransfer } from './tools/unlink-transfer';
+import { registerUpdateBudget } from './tools/update-budget';
+import { registerUpdateBudgetLine } from './tools/update-budget-line';
 import { registerUpdateCategory } from './tools/update-category';
 import { registerUpdateInvestmentTransaction } from './tools/update-investment-transaction';
 import { registerUpdatePayee } from './tools/update-payee';
@@ -202,6 +216,22 @@ export function createMcpServer(): McpServer {
   registerUpdatePayee(server);
   registerDeletePayee(server);
   registerMergePayees(server);
+
+  // Budgets (Trackers) + lines + suggestions
+  registerGetBudgets(server);
+  registerCreateBudget(server);
+  registerUpdateBudget(server);
+  registerDeleteBudget(server);
+  registerArchiveBudget(server);
+  registerAddTransactionsToBudget(server);
+  registerRemoveTransactionsFromBudget(server);
+  registerGetBudgetSpendingStats(server);
+  registerCreateBudgetLine(server);
+  registerUpdateBudgetLine(server);
+  registerDeleteBudgetLine(server);
+  registerListBudgetSuggestions(server);
+  registerAcceptBudgetSuggestions(server);
+  registerRejectBudgetSuggestions(server);
 
   // Analytics
   registerGetSpendingByCategories(server);

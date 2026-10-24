@@ -65,6 +65,8 @@ interface SubscriptionBase extends Pick<
   | 'logoSource'
   | 'logoInitials'
   | 'logoColor'
+  | 'logoIcon'
+  | 'logoImageId'
   | 'createdAt'
   | 'updatedAt'
 > {

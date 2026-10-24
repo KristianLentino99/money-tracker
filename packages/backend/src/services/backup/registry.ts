@@ -29,6 +29,7 @@ export type BackupParentScope =
   | 'transactions'
   | 'transactionGroups'
   | 'transactionTemplates'
+  | 'budgets'
   | 'subscriptions'
   | 'ventureEvents'
   | 'subscriptionPeriods'
@@ -36,7 +37,8 @@ export type BackupParentScope =
   | 'vehicleMaintenanceVisits'
   | 'importBatches'
   | 'budgetPlans'
-  | 'budgetLines';
+  | 'budgetLines'
+  | 'trackerLines';
 
 /**
  * How a table's rows are selected for the current user.
@@ -321,6 +323,13 @@ const TABLE_DEFS = [
     restoreMode: 'insert',
   },
   {
+    fileName: 'budgets',
+    model: models.Budgets,
+    tier: 3,
+    scope: { strategy: 'userColumn', column: 'userId' },
+    restoreMode: 'insert',
+  },
+  {
     fileName: 'budget-plans',
     model: models.BudgetPlans,
     tier: 3,
@@ -445,6 +454,13 @@ const TABLE_DEFS = [
     scope: { strategy: 'viaParent', fk: 'planId', parent: 'budgetPlans' },
     restoreMode: 'insert',
   },
+  {
+    fileName: 'tracker-lines',
+    model: models.TrackerLines,
+    tier: 4,
+    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
+    restoreMode: 'insert',
+  },
 
   // tier 5
   {
@@ -466,6 +482,20 @@ const TABLE_DEFS = [
     model: models.TransactionGroupItems,
     tier: 5,
     scope: { strategy: 'viaParent', fk: 'groupId', parent: 'transactionGroups' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'budget-transactions',
+    model: models.BudgetTransactions,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'budget-categories',
+    model: models.BudgetCategories,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
     restoreMode: 'insert',
   },
   {
@@ -536,6 +566,20 @@ const TABLE_DEFS = [
     model: models.BudgetLines,
     tier: 5,
     scope: { strategy: 'viaParent', fk: 'planId', parent: 'budgetPlans' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'tracker-line-categories',
+    model: models.TrackerLineCategories,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'lineId', parent: 'trackerLines' },
+    restoreMode: 'insert',
+  },
+  {
+    fileName: 'tracker-suggestions',
+    model: models.TrackerSuggestions,
+    tier: 5,
+    scope: { strategy: 'viaParent', fk: 'budgetId', parent: 'budgets' },
     restoreMode: 'insert',
   },
 

@@ -56,6 +56,20 @@ page.
 | `search_transactions`                             | Filter transactions by date, category, tag, amount, etc.                                                                                |
 | `get_categories`                                  | List spending/income categories                                                                                                         |
 | `get_tags`                                        | List transaction tags                                                                                                                   |
+| `get_budgets`                                     | List active and historical trackers with limits, categories, lines                                                                      |
+| `create_budget`                                   | Create a tracker (limit, date range, categories, smart tracking) (`finance:write`)                                                      |
+| `update_budget`                                   | Update a tracker's name, dates, limit, categories, smart tracking (`finance:write`)                                                     |
+| `delete_budget`                                   | Permanently delete a tracker and its transaction links (`finance:delete`)                                                               |
+| `archive_budget`                                  | Archive or restore a tracker (`finance:write`)                                                                                          |
+| `add_transactions_to_budget`                      | Manually link transactions to a manual-type tracker (`finance:write`)                                                                   |
+| `remove_transactions_from_budget`                 | Unlink transactions from a tracker without deleting them (`finance:write`)                                                              |
+| `get_budget_spending_stats`                       | Spending by category, expense/income time-series, per-line spent for a tracker                                                          |
+| `create_budget_line`                              | Add a line (category set + optional limit) to a tracker (`finance:write`)                                                               |
+| `update_budget_line`                              | Update a tracker line's name, categories, limit, or position (`finance:write`)                                                          |
+| `delete_budget_line`                              | Permanently delete a tracker line (`finance:delete`)                                                                                    |
+| `list_budget_suggestions`                         | Smart-tracking suggestions (score, AI reason), AI-matched transactions, scan status of an owned tracker                                 |
+| `accept_budget_suggestions`                       | Accept pending suggestions, linking their transactions (`finance:write`)                                                                |
+| `reject_budget_suggestions`                       | Reject suggestions; also unlinks AI-linked or accepted ones (`finance:write`)                                                           |
 | `get_spending_by_categories`                      | Aggregate spending by category over a range                                                                                             |
 | `get_cash_flow`                                   | Income vs expenses over a range                                                                                                         |
 | `get_balance_history`                             | Time-series of account balances                                                                                                         |
@@ -224,6 +238,14 @@ multi-currency data.
   saved rule in the app. The first rule that applies an action wins. Test conditions with `preview_transaction_automation` before
   saving a rule, and pass the full current id set to
   `reorder_transaction_automations`.
+- Tracker lines split a tracker's spending into named category sets, each with
+  an optional limit. A transaction lands in at most one line: the first by
+  `position` whose categories (expanded to children) contain it. Spending that
+  matches no line is reported as `otherSpent` by `get_budget_spending_stats`.
+- Smart tracking (`aiEnabled`) is owner-only and works on manual trackers with
+  an `aiDescription` and a `startDate`. The AI links transactions it is sure of
+  (score >= 0.85) and suggests weaker matches (>= 0.5) as pending in
+  `list_budget_suggestions`. Rejected transactions are not suggested again.
 - Portfolio queries are gated by `portfolioId`. Call `get_portfolios` first
   to discover ids before calling `get_portfolio_summary`,
   `get_portfolio_holdings`, or `get_portfolio_balances`.

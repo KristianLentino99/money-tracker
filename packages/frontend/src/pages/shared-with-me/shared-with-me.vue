@@ -22,8 +22,6 @@ const router = useRouter();
 const ICON_BY_RESOURCE_TYPE: Record<ResourceType, typeof LandmarkIcon> = {
   [RESOURCE_TYPES.account]: LandmarkIcon,
   [RESOURCE_TYPES.household]: HomeIcon,
-  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk —
-  // reuse the wallet icon as a generic placeholder until then.
   [RESOURCE_TYPES.budget]: WalletIcon,
 };
 
@@ -83,8 +81,12 @@ const leaveMutation = useMutation({
   onSuccess: () => {
     addSuccessNotification(t('pages.sharedWithMe.leaveSuccess'));
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.sharedWithMe });
-    // The recipient's account list may have changed after leaving a share.
+    // The recipient's resource lists also drop this row. Invalidating both is a no-op for
+    // the bucket the row didn't live in, so we don't need to branch on `resourceType`.
     queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.allAccounts });
+    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetsList });
+    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetsListItem });
+    queryClient.invalidateQueries({ queryKey: VUE_QUERY_CACHE_KEYS.budgetStats });
     leaveOpen.value = false;
     leaveTarget.value = null;
   },
@@ -112,8 +114,9 @@ const routeForRow = (row: SharedWithMeRow) => {
     // offers a Leave action inline, so the link is purely an entry to the manage UI.
     return { name: ROUTES_NAMES.settingsHousehold };
   }
-  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no
-  // route exists yet, so budget rows fall through to the generic non-linked `div`.
+  if (row.resourceType === RESOURCE_TYPES.budget) {
+    return { name: ROUTES_NAMES.plannedBudgetDetails, params: { id: row.resourceId } };
+  }
   return null;
 };
 

@@ -16,3 +16,4 @@ export * from './currency.serializer';
 export * from './venture-deals.serializer';
 export * from './venture-events.serializer';
 export * from './venture-platforms.serializer';
+export * from './budgets.serializer';

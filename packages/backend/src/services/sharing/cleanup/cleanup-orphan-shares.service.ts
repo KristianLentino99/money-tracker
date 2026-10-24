@@ -39,8 +39,7 @@ const ORPHAN_SWEEP_DEFINITIONS: ReadonlyArray<{ resourceType: string; foreignTab
   { resourceType: RESOURCE_TYPES.account, foreignTable: 'Accounts' },
   // Household rows store `resourceId = ownerUserId::text` by convention.
   { resourceType: RESOURCE_TYPES.household, foreignTable: 'Users' },
-  // Budget sharing lands with the Budget/Tracker feature in a later merge chunk — no
-  // model/table yet, so there's nothing to sweep against. No entry here until then.
+  { resourceType: RESOURCE_TYPES.budget, foreignTable: 'Budgets' },
 ];
 
 const sweepOrphans = async ({

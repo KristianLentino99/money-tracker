@@ -36,10 +36,14 @@ COPY packages/shared ./packages/shared
 COPY packages/frontend ./packages/frontend
 COPY packages/landing ./packages/landing
 
+# vue-tsc + vite exceed Node's default heap on hosts with less than ~16 GB RAM
+# (the default scales with system memory), so the heap is set explicitly.
+ARG NODE_BUILD_HEAP_MB=6144
+
 # Build frontend SPA
 WORKDIR /app/packages/frontend
 # Allow constrained self-hosting builders to raise V8's heap only for this
-# build step. Leaving the arg empty preserves Node's default elsewhere.
+# build step. Leaving the arg empty preserves the $NODE_BUILD_HEAP_MB default.
 ARG FRONTEND_BUILD_NODE_OPTIONS=
 RUN --mount=type=secret,id=sentry_auth_token,required=false \
     set -eu; \
@@ -55,12 +59,12 @@ RUN --mount=type=secret,id=sentry_auth_token,required=false \
         printf '\n'; \
       fi; \
     } > /app/.env.production; \
-    NODE_OPTIONS="$FRONTEND_BUILD_NODE_OPTIONS" npm run build; \
+    NODE_OPTIONS="${FRONTEND_BUILD_NODE_OPTIONS:---max-old-space-size=$NODE_BUILD_HEAP_MB}" npm run build; \
     rm -f /app/.env.production
 
 # Build Astro landing
 WORKDIR /app/packages/landing
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=$NODE_BUILD_HEAP_MB" npm run build
 
 # 🚀 Stage 2️⃣: Production
 FROM nginx:1.27-alpine AS production-stage

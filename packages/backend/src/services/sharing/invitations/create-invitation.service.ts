@@ -13,6 +13,7 @@ import {
 import { ConflictError, NotFoundError, ValidationError } from '@js/errors';
 import { logger } from '@js/utils/logger';
 import Accounts from '@models/accounts.model';
+import Budgets from '@models/budget.model';
 import ShareInvitations from '@models/share-invitations.model';
 import { getBaseCurrency } from '@models/users-currencies.model';
 import Users from '@models/users.model';
@@ -77,10 +78,26 @@ const resolveOwnedResource = async ({
     };
   }
   if (resourceType === RESOURCE_TYPES.budget) {
-    // Budget sharing lands with the Budget/Tracker feature in a later merge chunk —
-    // no model yet, so there is nothing to resolve. Surface the same 404 a missing
-    // resource would get once the model exists.
-    throw new NotFoundError({ message: 'Budget not found' });
+    const budget = await Budgets.findOne({ where: { id: resourceId } });
+    if (!budget) {
+      throw new NotFoundError({ message: 'Tracker not found' });
+    }
+    if (budget.userId !== ownerUserId) {
+      // Don't leak existence — anyone other than the owner sees a 404.
+      throw new NotFoundError({ message: 'Tracker not found' });
+    }
+    // Budgets are denominated in the owner's base currency (limitAmount + spending
+    // stats), not a per-budget currency. Recipient base currency is locked against
+    // this at accept-time.
+    const ownerBaseCurrency = await getBaseCurrency({ userId: ownerUserId });
+    if (!ownerBaseCurrency) {
+      throw new ValidationError({ message: 'Set your base currency before sharing a budget.' });
+    }
+    return {
+      ownerUserId: budget.userId,
+      ownerCurrencyCode: ownerBaseCurrency.currencyCode,
+      resourceName: budget.name,
+    };
   }
   if (resourceType === RESOURCE_TYPES.household) {
     // A household is identified by its owner — the inviter can only invite people to

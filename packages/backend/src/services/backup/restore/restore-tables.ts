@@ -3,20 +3,15 @@ import { DEACTIVATION_REASON } from '@bt/shared/types';
 import Currencies from '@models/currencies.model';
 import MerchantCategoryCodes from '@models/merchant-category-codes.model';
 import { encryptCredentials } from '@services/bank-data-providers/utils/credential-encryption';
+import { copyLogoImageIfPresent } from '@services/logo-images/logo-images.service';
 import { Op, type Transaction } from 'sequelize';
-import { v7 as uuidv7 } from 'uuid';
+import { validate as isUuid, v7 as uuidv7 } from 'uuid';
 
 import { BACKUP_TABLES, type BackupTableDef } from '../registry';
 import type { ArchiveAnalysis, TableColumnPlan } from './analyze-archive';
 import { buildInsertRecord, runBulkInsert } from './bulk-insert';
 import type { ParsedArchive } from './load-archive';
-import {
-  type GuardedFk,
-  buildGuardedReferenceMap,
-  foreignReferenceDroppedMessage,
-  foreignReferenceNulledMessage,
-  guardRowReferences,
-} from './owned-reference-guard';
+import { type GuardedFk, buildGuardedReferenceMap, guardRowReferences } from './owned-reference-guard';
 import { remapEmbeddedReferences } from './remap-embedded-references';
 import { legacyMileageToMeters } from './vehicle-mileage';
 
@@ -316,6 +311,13 @@ async function insertTable({
     }
     Object.assign(overrides, guard.overrides);
 
+    // A logo blob has one owner row, which deletes it on edit or delete, so every
+    // restored row gets its own copy. Rollback orphans are left to the orphan sweep.
+    if (hasColumn({ plan, field: 'logoImageId' }) && row.logoImageId != null) {
+      const id = String(row.logoImageId);
+      overrides.logoImageId = isUuid(id) ? await copyLogoImageIfPresent({ id }) : null;
+    }
+
     // Keep the backup id when free, else mint a fresh one; record the mapping so
     // this table's FK referrers and the self-ref second pass resolve to it.
     let finalId: string | undefined;
@@ -338,7 +340,6 @@ async function insertTable({
     ctx.warnings.push({
       code: 'mcc_code_missing',
       table: def.fileName,
-      message: `Dropped ${droppedMccCount} user MCC rule(s) whose merchant category code doesn't exist on this instance.`,
       count: droppedMccCount,
     });
   }
@@ -346,7 +347,6 @@ async function insertTable({
     ctx.warnings.push({
       code: 'currency_missing',
       table: def.fileName,
-      message: `Skipped ${droppedCurrencyCount} currency row(s) whose currency isn't available on this instance.`,
       count: droppedCurrencyCount,
     });
   }
@@ -354,25 +354,14 @@ async function insertTable({
     ctx.warnings.push({
       code: 'invalid_row_dropped',
       table: def.fileName,
-      message: `Dropped ${droppedInvalidCount} "${def.fileName}" row(s) that failed validation.`,
       count: droppedInvalidCount,
     });
   }
   for (const [column, count] of fkDroppedByColumn) {
-    ctx.warnings.push({
-      code: 'foreign_reference_dropped',
-      table: def.fileName,
-      message: foreignReferenceDroppedMessage({ table: def.fileName, column, count }),
-      count,
-    });
+    ctx.warnings.push({ code: 'foreign_reference_dropped', table: def.fileName, column, count });
   }
   for (const [column, count] of fkNulledByColumn) {
-    ctx.warnings.push({
-      code: 'foreign_reference_nulled',
-      table: def.fileName,
-      message: foreignReferenceNulledMessage({ table: def.fileName, column, count }),
-      count,
-    });
+    ctx.warnings.push({ code: 'foreign_reference_nulled', table: def.fileName, column, count });
   }
 
   const inserted = await runBulkInsert({ model: def.model, records, transaction: ctx.transaction });
@@ -402,7 +391,7 @@ async function insertTable({
       ctx.warnings.push({
         code: 'foreign_reference_nulled',
         table: def.fileName,
-        message: foreignReferenceNulledMessage({ table: def.fileName, column: selfRefColumn, count: selfRefNulled }),
+        column: selfRefColumn,
         count: selfRefNulled,
       });
     }
@@ -475,7 +464,6 @@ export async function insertRestoreTables({
         warnings.push({
           code: 'shares_skipped',
           table: def.fileName,
-          message: `Skipped ${count} "${def.fileName}" row(s): shared resources reference counterpart users that don't exist on this instance.`,
           count,
         });
       }

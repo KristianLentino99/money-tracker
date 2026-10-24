@@ -58,6 +58,7 @@ const inputSchema = {
     .optional()
     .describe('Split the transaction across multiple categories'),
   tagIds: z.array(recordId()).optional().describe('Tag IDs to assign to this transaction'),
+  payeeId: recordId().optional().describe('Payee ID to assign'),
   isForecastOnly: z
     .boolean()
     .optional()
@@ -107,6 +108,7 @@ export function registerCreateTransaction(server: McpServer) {
           transferNature: args.transferNature,
           splits: args.splits,
           tagIds: args.tagIds,
+          payeeId: args.payeeId,
           isForecastOnly: args.isForecastOnly,
           originalAmount: args.originalAmount,
           originalCurrencyCode: args.originalCurrencyCode,

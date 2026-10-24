@@ -215,11 +215,12 @@ describe('Investment transactions CSV import — E2E', () => {
       expect(result.holdings).toHaveLength(1);
       expect(result.holdings[0]!.transactions).toHaveLength(1);
 
-      const skipWarning = result.warnings.find((w) => w.startsWith('3 of 4 CSV row(s) were skipped'));
-      expect(skipWarning).toBeDefined();
-      expect(skipWarning).toContain('Unmapped side value "Swap"');
-      expect(skipWarning).toContain('Unparseable date "not-a-date"');
-      expect(skipWarning).toContain('Missing symbol');
+      const invalidSummary = result.warnings.find((w) => w.code === 'CSV_ROWS_INVALID');
+      expect(invalidSummary).toMatchObject({ code: 'CSV_ROWS_INVALID', params: { count: 3, total: 4 } });
+      const detailCodes = result.warnings.map((w) => w.code);
+      expect(detailCodes).toEqual(
+        expect.arrayContaining(['CSV_ROW_UNMAPPED_SIDE', 'CSV_ROW_INVALID_DATE', 'CSV_ROW_MISSING_SYMBOL']),
+      );
     });
 
     it('preserves a dividend row alongside trades without trying to dedup against trade history', async () => {
@@ -290,8 +291,8 @@ describe('Investment transactions CSV import — E2E', () => {
 
       expect(result.holdings).toHaveLength(1);
       expect(result.holdings[0]!.transactions.map((t) => t.side)).toEqual(['buy', 'sell']);
-      // Critical: no "N of M CSV rows were skipped" warning — skip is deliberate.
-      expect(result.warnings.find((w) => w.includes('CSV row(s) were skipped'))).toBeUndefined();
+      // Critical: no CSV_ROWS_INVALID warning — these rows were deliberately skipped, not invalid.
+      expect(result.warnings.find((w) => w.code === 'CSV_ROWS_INVALID')).toBeUndefined();
     });
 
     it('splits compound tickers like SOL-USD into ticker + quote currency', async () => {

@@ -7,6 +7,7 @@ import BudgetLineGoals from '@models/budget-line-goals.model';
 import BudgetLineGroups from '@models/budget-line-groups.model';
 import BudgetLines from '@models/budget-lines.model';
 import BudgetPlans from '@models/budget-plans.model';
+import Budgets from '@models/budget.model';
 import Categories from '@models/categories.model';
 import { connection } from '@models/index';
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
@@ -39,6 +40,7 @@ describe('User data wipe (POST /user/wipe-data)', () => {
       }),
       raw: true,
     });
+    const budget = await helpers.createCustomBudget({ name: 'Wipe budget', limitAmount: 500, raw: true });
     // Soft-deleted on purpose: a paranoid row must be hard-deleted by the wipe too.
     const budgetPlan = await helpers.createBudgetPlan({ raw: true });
     const planId = budgetPlan.plan.id;
@@ -110,6 +112,7 @@ describe('User data wipe (POST /user/wipe-data)', () => {
     expect(await BudgetLines.findAll({ where: { planId } })).toHaveLength(0);
     expect(await BudgetLineGoals.findAll({ where: { lineId: planLine.id } })).toHaveLength(0);
     expect(await TransactionTemplateTags.findAll({ where: { templateId: template.id } })).toHaveLength(0);
+    expect(await Budgets.findAll({ where: { id: budget.id } })).toHaveLength(0);
 
     // Custom category is gone but defaults are reseeded. The user gets a fresh-start state,
     // not an empty-state — opening the app after a wipe shouldn't force them to recreate

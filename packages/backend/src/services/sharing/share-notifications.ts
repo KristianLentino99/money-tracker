@@ -249,6 +249,41 @@ export const notifyShareOwnerAccountDeleted = async ({
 };
 
 /**
+ * Sent to a recipient when an owner deletes a shared budget. Mirrors
+ * `notifyShareOwnerAccountDeleted` — distinct from `shareRevoked` because the resource
+ * itself is gone, so any deep-link will 404 and there's nothing to re-share.
+ */
+export const notifyShareOwnerBudgetDeleted = async ({
+  recipientUserId,
+  owner,
+  shareId,
+  resource,
+  permission,
+}: {
+  recipientUserId: number;
+  owner: Users | null;
+  shareId: RecordId;
+  resource: { type: ResourceType; id: string; name: string };
+  permission: SharePermission;
+}) => {
+  const payload: ShareLifecycleNotificationPayload = {
+    shareId,
+    resourceType: resource.type,
+    resourceId: resource.id,
+    resourceName: resource.name,
+    permission,
+    counterpartUser: snapshotUser(owner),
+  };
+
+  return createNotification({
+    userId: recipientUserId,
+    type: NOTIFICATION_TYPES.shareOwnerBudgetDeleted,
+    title: `The shared budget "${resource.name}" was deleted`,
+    payload,
+  });
+};
+
+/**
  * Sent to the owner when the inline Resend send for an invitation email rejected or errored
  * after the DB row was already committed. The invitation row itself stays in `pending` so
  * the owner can resend from the UI; this notification is the durable surface for the
@@ -673,6 +708,10 @@ const notifyHouseholdInvitationSendFailed = async ({
  * helper from here instead of inlining `resourceType === household ? ... : ...` ternaries
  * at every send site, which was the pattern across 7+ services. Each entry's halves
  * are signature-compatible by construction (matching parameter shapes per event).
+ *
+ * Budgets reuse the per-resource (account-style) notifiers — the copy template
+ * `${owner.username} shared "${resource.name}" with you` is resource-agnostic, so a
+ * dedicated set wouldn't add anything.
  */
 export const LIFECYCLE_NOTIFIERS = {
   invitationReceived: {

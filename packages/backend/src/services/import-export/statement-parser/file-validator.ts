@@ -3,6 +3,7 @@
  * Supports PDF, CSV, TXT and, when allowed, JPEG/PNG/WebP images
  */
 import type { AttachmentMimeType, StatementFileType } from '@bt/shared/types';
+import { t } from '@i18n/index';
 import { logger } from '@js/utils';
 import { detectMimeType } from '@services/attachments/attachments.service';
 import { TextDecoder } from 'node:util';
@@ -180,7 +181,7 @@ export function validateFileBuffer({
       valid: false,
       error: {
         code: 'FILE_TOO_LARGE',
-        message: `File exceeds maximum size of ${MAX_FILE_SIZE_BYTES / 1024 / 1024}MB`,
+        message: t({ key: 'statementParser.fileTooLarge', variables: { maxMb: MAX_FILE_SIZE_BYTES / 1024 / 1024 } }),
       },
     };
   }
@@ -193,7 +194,7 @@ export function validateFileBuffer({
       valid: false,
       error: {
         code: 'INVALID_FILE',
-        message: 'File is too small to be valid',
+        message: t({ key: 'statementParser.fileTooSmall' }),
       },
     };
   }
@@ -262,9 +263,9 @@ export function validateFileBuffer({
     valid: false,
     error: {
       code: 'UNSUPPORTED_TYPE',
-      message: allowImages
-        ? 'Unsupported file type. Please upload a PDF, CSV, TXT, JPG, PNG or WebP file.'
-        : 'Unsupported file type. Please upload a PDF, CSV, or TXT file.',
+      message: t({
+        key: allowImages ? 'statementParser.unsupportedFileTypeWithImages' : 'statementParser.unsupportedFileType',
+      }),
     },
   };
 }

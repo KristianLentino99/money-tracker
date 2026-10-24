@@ -10,7 +10,10 @@ import { type InjectionKey, computed, inject, provide } from 'vue';
 type AutomationRefVisual = { name: string } & (
   | {
       type: 'account';
-      account: Pick<AccountModel, 'name' | 'logoDomain' | 'logoInitials' | 'logoColor' | 'accountCategory'>;
+      account: Pick<
+        AccountModel,
+        'name' | 'logoDomain' | 'logoInitials' | 'logoColor' | 'logoIcon' | 'logoImageId' | 'accountCategory'
+      >;
     }
   | { type: 'payee'; payee: PayeeLookupItem }
   | { type: 'category'; categoryId: RecordId }

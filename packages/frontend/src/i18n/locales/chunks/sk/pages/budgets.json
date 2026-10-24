@@ -1,0 +1,113 @@
+{
+  "budgets": {
+    "title": "Sledovače",
+    "description": "Sledujte výdavky a finančné udalosti",
+    "notFound": "Sledovač sa nenašiel",
+    "notFoundDescription": "Tento sledovač sa nepodarilo nájsť. Mohol byť zmazaný, alebo k nemu nemáte prístup.",
+    "backToList": "Späť na Sledovače",
+    "newBudget": "Nový sledovač",
+    "createBudget": "Vytvoriť sledovač",
+    "creation": {
+      "success": "Sledovač vytvorený",
+      "error": "Neočakávaná chyba!",
+      "nameLabel": "Názov sledovača",
+      "namePlaceholder": "Zadajte názov",
+      "typeLabel": "Typ sledovača",
+      "typeManual": "Manuálny",
+      "typeManualDescription": "Pridávajte transakcie do tohto sledovača ručne",
+      "typeCategory": "Podľa kategórií",
+      "typeCategoryDescription": "Automatické sledovanie výdavkov podľa kategórií",
+      "categoriesLabel": "Sledované kategórie",
+      "categoriesRequired": "Vyberte aspoň jednu kategóriu",
+      "fromDateLabel": "Od dátumu",
+      "toDateLabel": "Do dátumu",
+      "autoIncludeLabel": "Automaticky zahrnúť transakcie",
+      "limitLabel": "Limit sledovača",
+      "limitPlaceholder": "Zadajte limit",
+      "submitButton": "Pridať sledovač"
+    },
+    "list": {
+      "tabCategory": "Sledovače podľa kategórií",
+      "tabManual": "Manuálne sledovače",
+      "edit": "Upraviť",
+      "delete": "Zmazať",
+      "deleteSuccess": "Sledovač bol úspešne zmazaný!",
+      "deleteError": "Neočakávaná chyba!",
+      "updateSuccess": "Sledovač bol úspešne aktualizovaný!",
+      "updateError": "Sledovač sa nepodarilo aktualizovať",
+      "unlinkTransactionsSuccess": "Transakcie boli úspešne odpojené!",
+      "deleteDialog": {
+        "title": "Naozaj chcete zmazať tento sledovač?",
+        "description": "Kliknutím na „Potvrdiť\" sa všetky priradené transakcie od sledovača odpoja, no v systéme zostanú zachované."
+      },
+      "limitLabel": "Limit: {amount}",
+      "transactionsCount": "Transakcie: {count}",
+      "categoriesCount": "Kategórie: {count}",
+      "noTransactions": "Zatiaľ žiadne transakcie",
+      "noTimePeriod": "Bez časového obdobia",
+      "autoTracked": "Automaticky sledované",
+      "status": {
+        "ended": "Ukončené",
+        "lastDay": "Posledný deň",
+        "oneDayLeft": "Zostáva 1 deň",
+        "daysLeft": "Zostáva {count} dní",
+        "startsToday": "Začína dnes",
+        "startsTomorrow": "Začína zajtra",
+        "startsInDays": "Začína o {count} dní"
+      },
+      "income": "Príjmy",
+      "expenses": "Výdavky",
+      "net": "Čistý zostatok",
+      "used": "Vyčerpané",
+      "archive": "Archivovať",
+      "unarchive": "Obnoviť z archívu",
+      "archivedLabel": "Archivované",
+      "archiveError": "Stav archivácie sa nepodarilo aktualizovať",
+      "showArchived": "Zobraziť archivované",
+      "hideArchived": "Skryť archivované",
+      "emptyState": {
+        "title": "Zatiaľ žiadne sledovače",
+        "description": "Vytvorte sledovač a začnite sledovať svoje výdavky alebo konkrétne udalosti."
+      }
+    },
+    "settings": {
+      "nameLabel": "Názov sledovača",
+      "namePlaceholder": "Zadajte názov sledovača",
+      "limitLabel": "Limit sledovača",
+      "limitPlaceholder": "Zadajte sumu limitu (voliteľné)",
+      "startDateLabel": "Dátum začiatku",
+      "endDateLabel": "Dátum konca",
+      "notSet": "Nenastavené"
+    },
+    "addTransactionsDialog": {
+      "title": "Pridať transakcie do sledovača",
+      "addSelected": "Pridať vybrané",
+      "clearSelection": "Zrušiť výber"
+    },
+    "categoryBudget": {
+      "trackedCategories": "Sledované kategórie",
+      "categoriesCount": "Sledované kategórie: {count}",
+      "autoTrackedInfo": "Transakcie sa sledujú automaticky na základe kategórií",
+      "transactionsTitle": "Transakcie",
+      "transactionsCount": "Transakcie: {count}",
+      "noTransactions": "Zatiaľ žiadne transakcie",
+      "noTransactionsDescription": "Transakcie zodpovedajúce sledovaným kategóriám sa tu zobrazia automaticky.",
+      "transactionsLoadError": "Transakcie sa nepodarilo načítať",
+      "categoryBreakdown": "Rozdelenie podľa kategórií",
+      "edit": "Upraviť",
+      "editTitle": "Upraviť sledovač",
+      "showMore": "Zobraziť viac",
+      "showLess": "Zobraziť menej",
+      "settings": {
+        "categoriesLabel": "Sledované kategórie"
+      }
+    },
+    "manualBudget": {
+      "edit": "Upraviť",
+      "editTitle": "Upraviť sledovač"
+    },
+    "share": {
+      "sharedByBadge": "Zdieľané {handle}"
+    }
+  }
+}

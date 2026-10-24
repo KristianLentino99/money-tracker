@@ -37,6 +37,19 @@
             @blur="handleBlur"
           />
 
+          <!-- Opaque instead of padding the input, so Firefox's native icon stays under the trigger. -->
+          <Button
+            v-if="clearable && modelValue && !disabled"
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            class="bg-input-background text-muted-foreground hover:text-foreground absolute top-1/2 right-12 -translate-y-1/2"
+            :aria-label="$t('common.actions.clear')"
+            @click="emit('clear')"
+          >
+            <XIcon class="size-4" />
+          </Button>
+
           <!-- Keep this overlay opaque: it covers the native picker icon Firefox
                draws inside datetime-local inputs, which no CSS pseudo-element hides.
                Disabled on Safari mobile so taps fall through to the native picker. -->
@@ -69,7 +82,7 @@ import * as Popover from '@/components/lib/ui/popover';
 import { useSafariDetection } from '@/composable/detect-safari';
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
-import { CalendarClockIcon } from '@lucide/vue';
+import { CalendarClockIcon, XIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 
 defineOptions({ inheritAttrs: false });
@@ -89,6 +102,7 @@ const props = withDefaults(
       maxDate?: Date;
     };
     mode?: 'date' | 'dateTime';
+    clearable?: boolean;
   }>(),
   {
     label: undefined,
@@ -101,6 +115,7 @@ const props = withDefaults(
     allowEmpty: false,
     calendarOptions: undefined,
     mode: 'dateTime',
+    clearable: false,
   },
 );
 
@@ -135,8 +150,11 @@ const inputValue = ref(props.modelValue ? formatToInput(props.modelValue) : '');
 
 const emit = defineEmits<{
   (e: 'update:modelValue', payload: Date | null): void;
+  (e: 'clear'): void;
 }>();
-const localValue = ref<Date | undefined>(props.modelValue ?? undefined);
+const localValue = ref<Date | null | undefined>(
+  props.modelValue ?? (props.clearable ? null : props.allowEmpty ? undefined : new Date()),
+);
 const isPopoverOpen = ref(false);
 
 // Safari mobile uses the native picker; the calendar trigger is disabled there too.
@@ -180,11 +198,15 @@ const handleBlur = (event: FocusEvent) => {
   // If empty, keep it empty
 };
 
+const isCleared = () => props.clearable && !props.modelValue;
+
 watch(
   () => props.modelValue,
   (value) => {
     inputValue.value = value ? formatToInput(value) : '';
-    localValue.value = isValidDate(value) ? value : undefined;
+    if (isValidDate(value)) localValue.value = value;
+    else if (isCleared()) localValue.value = null;
+    else if (props.allowEmpty) localValue.value = undefined;
   },
 );
 
@@ -197,11 +219,12 @@ watch(localValue, (value, previousValue) => {
       isPopoverOpen.value = false;
       return;
     }
+    if (isCleared()) return;
     localValue.value = isValidDate(previousValue) ? previousValue : (props.modelValue ?? new Date());
     return;
   }
   // That restore re-enters this watcher; it is not a user pick.
-  if (!isValidDate(previousValue)) return;
+  if (!isValidDate(previousValue) && !isCleared()) return;
 
   emit('update:modelValue', value);
   isPopoverOpen.value = false;

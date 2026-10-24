@@ -43,6 +43,14 @@
   },
   "tools": [
     {
+      "name": "accept_budget_suggestions",
+      "description": "Accept pending smart-tracking suggestions, linking their transactions to the tracker."
+    },
+    {
+      "name": "add_transactions_to_budget",
+      "description": "Manually link transactions to a manual-type tracker."
+    },
+    {
       "name": "add_transactions_to_group",
       "description": "Add one or more transactions to an existing transaction group. Transfer pairs are auto-included. Returns the updated group with all its transactions. Requires finance:write scope."
     },
@@ -59,6 +67,10 @@
       "description": "Archive or unarchive a user account. Archiving removes the account from groups and unlinks subscriptions. Set archived=false to restore an archived account to active status."
     },
     {
+      "name": "archive_budget",
+      "description": "Archive or restore a tracker (sets status to archived or active)."
+    },
+    {
       "name": "assign_tags_to_transaction",
       "description": "Assign one or more tags to a transaction. Use when the user wants to label a transaction with existing tags. Already-assigned tags are silently skipped. Returns counts of added and skipped tags."
     },
@@ -69,6 +81,14 @@
     {
       "name": "create_attachment_upload_url",
       "description": "Get a short-lived upload URL for attaching receipt/invoice files (JPEG, PNG, WebP, PDF) to a transaction. File bytes cannot be sent through MCP: POST each file as the raw request body to the returned url with the returned headers, plus the header named by filenameHeader set to the URI-encoded original filename of that file (e.g. via curl --data-binary). The URL works for multiple files until it expires. Requires a client that can make HTTP requests with local files."
+    },
+    {
+      "name": "create_budget",
+      "description": "Create a new tracker with an optional spending limit, date range, linked categories, and smart tracking."
+    },
+    {
+      "name": "create_budget_line",
+      "description": "Add a line (named category set with an optional limit) to a tracker."
     },
     {
       "name": "create_category",
@@ -153,6 +173,14 @@
     {
       "name": "create_venture_platform",
       "description": "Create a venture investment platform (e.g. AngelList, a syndicate, a fund manager) so its default fees can be auto-applied when creating new deals. Fee fields are decimal fractions in [0,1] — e.g. pass 0.085 for 8.5%, NOT 8.5. Returns the created platform's id for use with create_venture_deal."
+    },
+    {
+      "name": "delete_budget",
+      "description": "Permanently delete a tracker and all its transaction links."
+    },
+    {
+      "name": "delete_budget_line",
+      "description": "Permanently delete a line from a tracker."
     },
     {
       "name": "delete_category",
@@ -245,6 +273,14 @@
     {
       "name": "get_balance_history",
       "description": "Get account balance over time. If accountId is provided, returns balance history for that specific account. Otherwise, returns combined balance across all accounts."
+    },
+    {
+      "name": "get_budget_spending_stats",
+      "description": "Spending breakdown by category, time-series of expense vs income, and per-line spent for a tracker."
+    },
+    {
+      "name": "get_budgets",
+      "description": "Retrieve active and historical trackers (called budgets in tool names) with their limits, categories, and lines."
     },
     {
       "name": "get_cash_flow",
@@ -415,6 +451,10 @@
       "description": "Link two existing transactions as a transfer pair. The two transactions must be in different accounts and have opposite types (one income, one expense). Provide baseTxId (the source/expense side) and oppositeTxId (the destination/income side)."
     },
     {
+      "name": "list_budget_suggestions",
+      "description": "Smart-tracking suggestions, AI-matched transactions, and scan status for a tracker the user owns."
+    },
+    {
       "name": "list_portfolio_transfers",
       "description": "Cash movement history of a portfolio: account↔portfolio transfers, direct deposits/withdrawals, linked bank transactions, grouped investment contributions with their purchases, and currency exchanges. Each entry names the source/destination portfolio or account. Sorted by date, newest first. Returns { transfers, totalCount }."
     },
@@ -455,8 +495,16 @@
       "description": "Dry-run a set of automation conditions against up to the last 1000 eligible existing transactions and return { matchedCount, scannedCount, matches } where matches is capped at 5 sample transactions. Nothing is modified. Use it to sanity-check conditions before create_transaction_automation or update_transaction_automation. Note that a live automation fires on its own only for newly synced or imported bank transactions that are not transfers and not planned; existing transactions change only when the user runs \"Apply to past transactions\" for a saved rule in the app."
     },
     {
+      "name": "reject_budget_suggestions",
+      "description": "Reject smart-tracking suggestions; AI-linked or accepted ones are also unlinked from the tracker."
+    },
+    {
       "name": "remove_tags_from_transaction",
       "description": "Remove a tag from one or more transactions. Use when the user wants to untag transactions. Returns the count of removed tag links."
+    },
+    {
+      "name": "remove_transactions_from_budget",
+      "description": "Unlink transactions from a tracker without deleting them."
     },
     {
       "name": "remove_transactions_from_group",
@@ -533,6 +581,14 @@
     {
       "name": "unlink_transfer",
       "description": "Unlink transfer transactions by their shared transferId (UUID string). Both transactions in the pair will become independent income/expense entries. Use search_transactions to find the transferId of a linked pair."
+    },
+    {
+      "name": "update_budget",
+      "description": "Update an existing tracker's name, date range, spending limit, linked categories, or smart tracking settings."
+    },
+    {
+      "name": "update_budget_line",
+      "description": "Update a tracker line's name, categories, limit, or position."
     },
     {
       "name": "update_category",
