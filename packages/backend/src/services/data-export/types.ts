@@ -145,7 +145,7 @@ export interface VehicleMaintenanceVisitRow {
   activitiesDetails: string;
 }
 
-export interface BudgetRow {
+export interface TrackerRow {
   name: string;
   status: string;
   periodStart: string;
@@ -277,7 +277,7 @@ export type ExportTable =
   | { name: 'vehicles'; rows: VehicleRow[] }
   | { name: 'vehicle_maintenance_plans'; rows: VehicleMaintenancePlanRow[] }
   | { name: 'vehicle_maintenance_visits'; rows: VehicleMaintenanceVisitRow[] }
-  | { name: 'budgets'; rows: BudgetRow[] }
+  | { name: 'trackers'; rows: TrackerRow[] }
   | { name: 'budget_lines'; rows: BudgetLineRow[] }
   | { name: 'budget_periods'; rows: BudgetPeriodRow[] }
   | { name: 'subscriptions'; rows: SubscriptionRow[] }

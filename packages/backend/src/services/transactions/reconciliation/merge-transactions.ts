@@ -3,6 +3,7 @@ import { t } from '@i18n/index';
 import { ValidationError } from '@js/errors';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import SubscriptionTransactions from '@models/subscription-transactions.model';
+import TrackerTransactions from '@models/tracker-transactions.model';
 import TransactionGroupItems from '@models/transaction-group-items.model';
 import VehicleMaintenanceTransactionLinks from '@models/vehicle-maintenance-transaction-links.model';
 import {
@@ -71,13 +72,20 @@ export const mergeTransactions = withTransaction(
     }
 
     const where = { transactionId: { [Op.in]: transactionIds } };
-    const [groupLinks, subscriptionLinks, periodLinks, maintenanceLinks] = await Promise.all([
+    const [trackerLinks, groupLinks, subscriptionLinks, periodLinks, maintenanceLinks] = await Promise.all([
+      TrackerTransactions.findAll({ where }),
       TransactionGroupItems.findAll({ where }),
       SubscriptionTransactions.findAll({ where: { ...where, status: SUBSCRIPTION_LINK_STATUS.active } }),
       SubscriptionPeriods.findAll({ where, attributes: ['id', 'transactionId'] }),
       VehicleMaintenanceTransactionLinks.findAll({ where }),
     ]);
 
+    const trackersToMove = planOrReject({
+      links: trackerLinks.map((l) => ({ transactionId: l.transactionId, target: l.trackerId })),
+      survivorId,
+      single: false,
+      key: 'transactions.reconciliation.budgetConflict',
+    });
     const groupsToMove = planOrReject({
       links: groupLinks.map((l) => ({ transactionId: l.transactionId, target: l.groupId })),
       survivorId,
@@ -103,6 +111,15 @@ export const mergeTransactions = withTransaction(
       key: 'transactions.reconciliation.maintenanceConflict',
     });
 
+    if (trackersToMove.length) {
+      await TrackerTransactions.bulkCreate(
+        trackersToMove.map((trackerId) => ({
+          trackerId,
+          transactionId: survivorId,
+          metadata: trackerLinks.find((l) => l.trackerId === trackerId)!.metadata,
+        })),
+      );
+    }
     if (groupsToMove.length) {
       await TransactionGroupItems.create({ groupId: groupsToMove[0]!, transactionId: survivorId });
     }

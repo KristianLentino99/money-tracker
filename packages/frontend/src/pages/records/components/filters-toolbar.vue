@@ -110,6 +110,15 @@
           />
         </div>
 
+        <div v-else-if="filterKey === 'trackers'" class="w-44">
+          <TrackerMultiSelectField
+            hide-clear-button
+            allow-blank
+            :tracker-ids="filters.trackerIds"
+            @update:tracker-ids="emitFilters({ ...filters, trackerIds: $event })"
+          />
+        </div>
+
         <div v-else-if="filterKey === 'amount'" class="w-64">
           <AmountRangeFilter
             compact
@@ -217,6 +226,7 @@ import NoteIncludesFilter from '@/components/records-filters/filters/note-includ
 import OperationPills from '@/components/records-filters/filters/operation-pills.vue';
 import AccountMultiSelectField from '@/components/fields/account-multi-select-field.vue';
 import PayeeMultiSelectField from '@/components/fields/payee-multi-select-field.vue';
+import TrackerMultiSelectField from '@/components/fields/tracker-multi-select-field.vue';
 import TagFilter from '@/components/records-filters/filters/tag-filter.vue';
 import TransactionTypeFilter from '@/components/records-filters/filters/transaction-type-filter.vue';
 import TransferNatureFilter from '@/components/records-filters/filters/transfer-nature-filter.vue';

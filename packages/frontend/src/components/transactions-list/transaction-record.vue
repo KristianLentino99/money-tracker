@@ -403,8 +403,8 @@ const externalLinkHref = computed(() =>
 const locationMapUrl = computed(() => (transaction.value.location ? buildMapUrl(transaction.value.location) : null));
 const accountFrom = computed(() => accountsRecord.value[transaction.value.accountId]);
 
-// Budget-scoped fetches enrich each tx with `addedBy = { id, username }` describing who
-// attached the row to the budget (recipient via metadata.addedByUserId, else the budget
+// Tracker-scoped fetches enrich each tx with `addedBy = { id, username }` describing who
+// attached the row to the tracker (recipient via metadata.addedByUserId, else the tracker
 // owner). The icon is only meaningful when the attacher is someone other than the
 // viewer — otherwise it reads "Added by yourself", which is noise.
 const addedByTooltip = computed(() => {

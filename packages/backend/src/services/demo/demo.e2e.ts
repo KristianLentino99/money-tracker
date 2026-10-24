@@ -2,6 +2,7 @@ import {
   ACCOUNT_CATEGORIES,
   API_ERROR_CODES,
   API_RESPONSE_STATUS,
+  TRACKER_TYPES,
   LOAN_TYPE,
   PAYMENT_TYPES,
   SUBSCRIPTION_PERIOD_STATUSES,
@@ -218,7 +219,7 @@ describe('Demo Mode', () => {
       }
     });
 
-    it('seeds accounts, transactions, budgets, categories, crypto holdings, vehicles, venture deals and loans', async () => {
+    it('seeds accounts, transactions, trackers, categories, crypto holdings, vehicles, venture deals and loans', async () => {
       const accountsRes = await makeRequest({
         method: 'get',
         url: '/accounts',
@@ -309,6 +310,15 @@ describe('Demo Mode', () => {
       // Should span at least 2 years
       const yearsDiff = (newestDate.getTime() - oldestDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
       expect(yearsDiff).toBeGreaterThanOrEqual(2);
+
+      const trackersRes = await makeRequest({
+        method: 'get',
+        url: '/trackers',
+        raw: true,
+      });
+
+      // Should have at least 3 trackers per spec
+      expect(trackersRes.length).toBeGreaterThanOrEqual(3);
 
       const categoriesRes = await makeRequest({
         method: 'get',
@@ -470,7 +480,7 @@ describe('Demo Mode', () => {
       return rows as DemoTransactionRow[];
     };
 
-    it('seeds payees, tags, transfers, splits, refunds, subscriptions, category budgets, groups, price series and automations', async () => {
+    it('seeds payees, tags, transfers, splits, refunds, subscriptions, category trackers, groups, price series and automations', async () => {
       const payees = await makeRequest({
         method: 'get',
         url: '/payees',
@@ -630,6 +640,42 @@ describe('Demo Mode', () => {
 
       for (const period of paidPeriods) {
         expect(period.transactionId).not.toBeNull();
+      }
+
+      const trackers = await makeRequest({
+        method: 'get',
+        url: '/trackers',
+        raw: true,
+      });
+
+      expect(trackers.length).toBeGreaterThanOrEqual(3);
+
+      for (const tracker of trackers as {
+        id: string;
+        type: string;
+        startDate: string | null;
+        endDate: string | null;
+        categories: unknown[];
+      }[]) {
+        // `category` is what writes the TrackerCategories rows the stats read; a
+        // `manual` tracker with no linked transactions would report zero spend.
+        expect(tracker.type).toBe(TRACKER_TYPES.category);
+        expect(tracker.startDate).not.toBeNull();
+        expect(tracker.endDate).not.toBeNull();
+        expect(tracker.categories.length).toBeGreaterThan(0);
+
+        const stats = await makeRequest({
+          method: 'get',
+          url: `/trackers/${tracker.id}/stats`,
+          raw: true,
+        });
+
+        expect(stats.summary.actualExpense).toBeGreaterThan(0);
+        expect(Number.isFinite(stats.summary.utilizationRate)).toBe(true);
+        expect(stats.summary.utilizationRate).toBeGreaterThan(0);
+        // Sanity band on the date window: a tracker without one totals all three
+        // years of history against a one-month limit and blows far past this.
+        expect(stats.summary.utilizationRate).toBeLessThan(400);
       }
 
       const plans = await makeRequest({ method: 'get', url: '/budget-plans', raw: true });

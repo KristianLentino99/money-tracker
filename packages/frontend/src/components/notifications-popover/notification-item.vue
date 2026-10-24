@@ -30,6 +30,7 @@ import {
   TagIcon,
   Trash2Icon,
   UserXIcon,
+  WalletIcon,
   XIcon,
 } from '@lucide/vue';
 import { useI18n } from 'vue-i18n';
@@ -74,6 +75,8 @@ const { formatDistanceToNow } = useDateLocale();
 
 const getIcon = (type: NotificationType) => {
   switch (type) {
+    case NOTIFICATION_TYPES.trackerAlert:
+      return WalletIcon;
     case NOTIFICATION_TYPES.system:
       return AlertTriangleIcon;
     case NOTIFICATION_TYPES.changelog:
@@ -122,6 +125,8 @@ const getIcon = (type: NotificationType) => {
 
 const getIconBg = (type: NotificationType) => {
   switch (type) {
+    case NOTIFICATION_TYPES.trackerAlert:
+      return 'bg-orange-500';
     case NOTIFICATION_TYPES.system:
       return 'bg-blue-500';
     case NOTIFICATION_TYPES.changelog:
@@ -175,7 +180,7 @@ const getTitle = (notification: NotificationStruct): string => {
       : t('notifications.newRelease');
   }
   if (notification.type === NOTIFICATION_TYPES.trackerAiMatches) {
-    const { budgetName, linkedCount, suggestedCount } = notification.payload as TrackerAiMatchesNotificationPayload;
+    const { trackerName, linkedCount, suggestedCount } = notification.payload as TrackerAiMatchesNotificationPayload;
     const added = t('notifications.trackerAiMatches.added', { count: linkedCount }, linkedCount);
     const toReview = t('notifications.trackerAiMatches.toReview', { count: suggestedCount }, suggestedCount);
     let summary = added;
@@ -186,7 +191,7 @@ const getTitle = (notification: NotificationStruct): string => {
         toReview: t('notifications.trackerAiMatches.toReviewShort', { count: suggestedCount }),
       });
     }
-    return t('notifications.trackerAiMatches.title', { name: budgetName, summary });
+    return t('notifications.trackerAiMatches.title', { name: trackerName, summary });
   }
   return notification.title || '';
 };

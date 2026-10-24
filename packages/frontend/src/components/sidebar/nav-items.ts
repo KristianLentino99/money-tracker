@@ -53,7 +53,7 @@ export const SIDEBAR_NAV_CHILDREN = {
   ],
   planned: [
     { routeName: ROUTES_NAMES.plannedSubscriptions, labelKey: 'navigation.planned.subscriptions', icon: RepeatIcon },
-    { routeName: ROUTES_NAMES.plannedBudgets, labelKey: 'navigation.planned.budgets', icon: TargetIcon },
+    { routeName: ROUTES_NAMES.plannedTrackers, labelKey: 'navigation.planned.budgets', icon: TargetIcon },
   ],
 } satisfies Record<string, SidebarNavChild[]>;
 

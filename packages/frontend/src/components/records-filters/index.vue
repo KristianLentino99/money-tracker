@@ -72,6 +72,13 @@
       :payee-ids="filters.payeeIds"
       @update:payee-ids="$emit('update:filters', { ...filters, payeeIds: $event })"
     />
+
+    <TrackerMultiSelectField
+      v-if="!hideTrackers"
+      allow-blank
+      :tracker-ids="filters.trackerIds"
+      @update:tracker-ids="$emit('update:filters', { ...filters, trackerIds: $event })"
+    />
   </div>
 
   <div :class="cn('sticky -bottom-px mt-4 flex gap-2', surface === 'card' ? 'bg-card' : 'bg-dialog')">
@@ -97,6 +104,7 @@ import UiButton from '@/components/lib/ui/button/Button.vue';
 import { cn } from '@/lib/utils';
 
 import AccountMultiSelectField from '@/components/fields/account-multi-select-field.vue';
+import TrackerMultiSelectField from '@/components/fields/tracker-multi-select-field.vue';
 import ComboboxCategories from '@/components/common/combobox-categories.vue';
 
 import { FiltersStruct } from './const';
@@ -118,6 +126,8 @@ withDefaults(
     isFiltersOutOfSync: boolean;
     /** Surface the sticky footer must blend with: the panel renders both in dialogs and inline on cards. */
     surface?: 'dialog' | 'card';
+    /** Hosts already scoped to one tracker (the tracker page) hide the tracker picker. */
+    hideTrackers?: boolean;
     hidePlanned?: boolean;
   }>(),
   { surface: 'dialog' },

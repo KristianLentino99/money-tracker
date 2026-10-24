@@ -1,5 +1,5 @@
 import { AI_FEATURE } from '@bt/shared/types';
-import { FileTextIcon, LineChartIcon, ListChecksIcon, ReceiptIcon, TagIcon } from '@lucide/vue';
+import { ArrowLeftRightIcon, FileTextIcon, LineChartIcon, ListChecksIcon, ReceiptIcon, TagIcon } from '@lucide/vue';
 import type { Component } from 'vue';
 
 export type AIModelTier = 'light' | 'balanced' | 'smart';
@@ -99,6 +99,21 @@ const AI_FEATURE_DISPLAY_INFO: Record<AI_FEATURE, AIFeatureDisplayInfo> = {
       needs: ['textOnly', 'runsOften', 'structuredAnswers'],
       whyKey: 'settings.ai.modelGuide.why.trackerMatching',
       picksKey: 'settings.ai.modelGuide.picks.trackerMatching',
+    },
+    howItWorksKeys: [],
+  },
+  [AI_FEATURE.transferMatching]: {
+    nameKey: 'common.aiFeatures.transferMatching.name',
+    descriptionKey: 'common.aiFeatures.transferMatching.description',
+    icon: ArrowLeftRightIcon,
+    // Two transactions per row in, a short verdict per pair out
+    tokensPerUnit: { input: 90, output: 25 },
+    unitLabelKey: 'settings.ai.modelSelector.modelInfo.per100Pairs',
+    modelGuide: {
+      tier: 'light',
+      needs: ['textOnly', 'structuredAnswers'],
+      whyKey: 'settings.ai.modelGuide.why.transferMatching',
+      picksKey: 'settings.ai.modelGuide.picks.transferMatching',
     },
     howItWorksKeys: [],
   },

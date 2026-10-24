@@ -1,7 +1,7 @@
 {
   "serverInfo": {
     "name": "MoneyMatter Finance Tracker",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "title": "MoneyMatter — Personal Finance MCP Server",
     "description": "OAuth-secured read/write access to financial data: accounts, transactions, loans and linked installments, vehicles and maintenance, subscriptions, automations, categories, tags, analytics, and investment portfolios including manual valuations and grouped purchases. Monetary inputs and outputs use decimal currency units; write and delete operations require their corresponding scopes.",
     "website": "https://moneymatter.app",
@@ -43,31 +43,27 @@
   },
   "tools": [
     {
-      "name": "accept_budget_suggestions",
+      "name": "accept_tracker_suggestions",
       "description": "Accept pending smart-tracking suggestions, linking their transactions to the tracker."
-    },
-    {
-      "name": "add_transactions_to_budget",
-      "description": "Manually link transactions to a manual-type tracker."
     },
     {
       "name": "add_transactions_to_group",
       "description": "Add one or more transactions to an existing transaction group. Transfer pairs are auto-included. Returns the updated group with all its transactions. Requires finance:write scope."
     },
     {
-      "name": "adjust_account_balance",
-      "description": "Set an account to a specific balance by creating an adjustment transaction for the difference. Returns the previous balance, new balance, and the generated transaction (null if the balance was already at the target)."
+      "name": "add_transactions_to_tracker",
+      "description": "Manually link transactions to a manual-type tracker."
     },
     {
-      "name": "append_loan_note",
-      "description": "Append a user note to the loan timeline. Requires finance:write scope."
+      "name": "adjust_account_balance",
+      "description": "Set an account to a specific balance by creating an adjustment transaction for the difference. Returns the previous balance, new balance, and the generated transaction (null if the balance was already at the target)."
     },
     {
       "name": "archive_account",
       "description": "Archive or unarchive a user account. Archiving removes the account from groups and unlinks subscriptions. Set archived=false to restore an archived account to active status."
     },
     {
-      "name": "archive_budget",
+      "name": "archive_tracker",
       "description": "Archive or restore a tracker (sets status to archived or active)."
     },
     {
@@ -76,19 +72,11 @@
     },
     {
       "name": "bulk_update_transactions",
-      "description": "Update multiple transactions at once. Provide transactionIds plus at least one of categoryId, tagIds, or note. Tags can be added to, removed from, or replaced on all specified transactions."
+      "description": "Update multiple transactions at once. Provide transactionIds plus at least one of categoryId, tagIds, note, or payeeId. Tags can be added to, removed from, or replaced on all specified transactions."
     },
     {
       "name": "create_attachment_upload_url",
       "description": "Get a short-lived upload URL for attaching receipt/invoice files (JPEG, PNG, WebP, PDF) to a transaction. File bytes cannot be sent through MCP: POST each file as the raw request body to the returned url with the returned headers, plus the header named by filenameHeader set to the URI-encoded original filename of that file (e.g. via curl --data-binary). The URL works for multiple files until it expires. Requires a client that can make HTTP requests with local files."
-    },
-    {
-      "name": "create_budget",
-      "description": "Create a new tracker with an optional spending limit, date range, linked categories, and smart tracking."
-    },
-    {
-      "name": "create_budget_line",
-      "description": "Add a line (named category set with an optional limit) to a tracker."
     },
     {
       "name": "create_category",
@@ -99,20 +87,8 @@
       "description": "Add a security as a zero-quantity holding in a portfolio before recording trades. Supply either an existing securityId or the full search_securities result to create/find the correct provider listing. Historical prices sync in the background."
     },
     {
-      "name": "create_investment_contribution",
-      "description": "Create one grouped investment contribution: source-account expense, portfolio cash movement, holdings and purchases together. Reuse full search_securities results to preserve provider identity. Amounts are decimal strings."
-    },
-    {
-      "name": "create_investment_contribution_from_transaction",
-      "description": "Attach grouped investment purchases to an existing expense transaction without duplicating the account movement. The transaction must not already be a transfer. Creates missing securities and holdings from full search results."
-    },
-    {
       "name": "create_investment_transaction",
-      "description": "Record a new investment transaction (buy, sell, dividend, fee, etc.) in a portfolio. The security must already exist in the portfolio as a holding — call search_securities to resolve a ticker to a securityId, then ensure a holding exists. quantity, price, and fees are decimal strings (e.g. \"10.5\", \"150.00\", \"0.00\")."
-    },
-    {
-      "name": "create_loan",
-      "description": "Create a loan account and its loan details. Monetary inputs are positive decimal values; the returned account balance follows the liability convention. Requires finance:write scope."
+      "description": "Record a new investment transaction (buy, sell, dividend, fee, etc.) in a portfolio (requires finance:write scope)."
     },
     {
       "name": "create_payee",
@@ -120,7 +96,7 @@
     },
     {
       "name": "create_portfolio",
-      "description": "Create a new investment portfolio for the user. Use when the user wants to track a new brokerage account, retirement fund, or savings vehicle. Returns the created portfolio with its id, which can then be used with create_investment_transaction and get_portfolio_holdings."
+      "description": "Create a new investment portfolio (requires finance:write scope)."
     },
     {
       "name": "create_portfolio_cash_transaction",
@@ -135,6 +111,14 @@
       "description": "Create a new tag that can be assigned to transactions. Use when the user wants to label or categorize transactions with a custom tag. Returns the created tag with its ID."
     },
     {
+      "name": "create_tracker",
+      "description": "Create a new tracker with an optional spending limit, date range, linked categories, and smart tracking."
+    },
+    {
+      "name": "create_tracker_line",
+      "description": "Add a line (named category set with an optional limit) to a tracker."
+    },
+    {
       "name": "create_transaction",
       "description": "Create a new transaction (income, expense, or transfer). Requires accountId, amount (decimal), transactionType, paymentType, and transferNature. For transfers, also provide destinationAccountId and destinationAmount. Use splits to categorize portions of the amount. Use originalAmount + originalCurrencyCode to record what the purchase cost in its invoice currency when that differs from the account currency."
     },
@@ -147,42 +131,6 @@
       "description": "Create a new transaction group that bundles related transactions together (e.g. a split bill). Requires at least 2 transactions. Transfer pairs are automatically included. Requires finance:write scope."
     },
     {
-      "name": "create_vehicle",
-      "description": "Create a vehicle and its linked asset account. purchasePrice uses decimal currency units."
-    },
-    {
-      "name": "create_vehicle_maintenance_activity",
-      "description": "Create a reusable maintenance activity."
-    },
-    {
-      "name": "create_vehicle_maintenance_plan",
-      "description": "Create a maintenance reminder using a due date or distance threshold."
-    },
-    {
-      "name": "create_vehicle_maintenance_visit",
-      "description": "Record a maintenance visit, renew plans and link existing expenses or create a quickExpense atomically."
-    },
-    {
-      "name": "create_venture_deal",
-      "description": "Create a venture deal (private/illiquid investment record). All monetary amounts are decimal strings in the deal's currency (e.g. \"16000\"). Fee percentages are decimal fractions in [0,1] — e.g. 0.085 for 8.5%, NOT 8.5. If platformId is provided, omitted fee fields are auto-filled from the platform's defaults. Optionally creates the initial_investment event in the same operation when `initialInvestment` is supplied. Only the SPV vehicle type is supported in v1."
-    },
-    {
-      "name": "create_venture_event",
-      "description": "Record an event on a venture deal. The deal must already have an initial_investment before any other event type can be created (initial_investment must come first). Event date cannot precede the initial_investment date.\n\nRules per type (the schema is flat but the service enforces these — invalid combinations return a clear ValidationError):\n  • initial_investment: grossAmount is auto-derived from the deal's principal + entryFee — do NOT pass it. cashFlowMode must be 'linked' or 'out_of_wallet'.\n  • capital_call, fee_payment, distribution: require grossAmount. cashFlowMode must be 'linked' or 'out_of_wallet'.\n  • exit: requires grossAmount AND navAfter. cashFlowMode must be 'linked' or 'out_of_wallet'.\n  • nav_update, writedown: require navAfter. cashFlowMode must be 'none'.\n\nFor cashFlowMode='linked', the sum of linked transactions' amounts must equal the event's lpNetAmount (derived from grossAmount minus auto-computed carry for distribution/exit). For cashFlowMode='out_of_wallet', no transactions are linked — the event amount is recorded but does NOT affect bank balances or cash-flow charts.\n\nCarry on distribution/exit is auto-computed (European waterfall by default). Pass `lpNetAmountOverride` / `gpCarryOverride` to override the computed values (e.g. when matching a GP's statement)."
-    },
-    {
-      "name": "create_venture_platform",
-      "description": "Create a venture investment platform (e.g. AngelList, a syndicate, a fund manager) so its default fees can be auto-applied when creating new deals. Fee fields are decimal fractions in [0,1] — e.g. pass 0.085 for 8.5%, NOT 8.5. Returns the created platform's id for use with create_venture_deal."
-    },
-    {
-      "name": "delete_budget",
-      "description": "Permanently delete a tracker and all its transaction links."
-    },
-    {
-      "name": "delete_budget_line",
-      "description": "Permanently delete a line from a tracker."
-    },
-    {
       "name": "delete_category",
       "description": "Permanently delete a category by ID. This is destructive — if the category has linked transactions you must supply replaceWithCategoryId to reassign them first, otherwise the call will fail. Cannot delete a parent category that still has subcategories. Only call when the user explicitly confirms deletion."
     },
@@ -191,20 +139,12 @@
       "description": "Permanently delete an investment transaction. The holding and portfolio cash balance are automatically recalculated after deletion. This action is irreversible — confirm with the user before calling. Obtain transactionId from get_investment_transactions."
     },
     {
-      "name": "delete_loan",
-      "description": "Permanently delete a loan account when it has no linked payment legs. Requires finance:delete scope."
-    },
-    {
       "name": "delete_payee",
       "description": "Delete a Payee. Linked transactions retain their categoryId but their payeeId is set to null. Use cautiously — this is irreversible. Requires finance:delete scope."
     },
     {
       "name": "delete_portfolio",
-      "description": "Permanently delete a portfolio and, if force is true, all its holdings, transactions, and cash balances. Without force, deletion is blocked when the portfolio has any data. This action is irreversible — confirm with the user before calling. Obtain portfolioId from get_portfolios."
-    },
-    {
-      "name": "delete_portfolio_transfer",
-      "description": "Delete a portfolio transfer and reverse its cash effect. Confirm with the user before deleting. Grouped purchases require deleteLinkedInvestmentTransactions=true; deleteLinkedTransaction=true also deletes the linked account row. Both flags default to false."
+      "description": "Permanently delete a portfolio and optionally all its data (requires finance:delete scope)."
     },
     {
       "name": "delete_split",
@@ -219,6 +159,14 @@
       "description": "Permanently delete a tag by ID. This is destructive — the tag will be removed and unlinked from all transactions. Only call when the user explicitly confirms deletion."
     },
     {
+      "name": "delete_tracker",
+      "description": "Permanently delete a tracker and all its transaction links."
+    },
+    {
+      "name": "delete_tracker_line",
+      "description": "Permanently delete a line from a tracker."
+    },
+    {
       "name": "delete_transaction",
       "description": "Permanently delete a transaction by ID. DESTRUCTIVE: this cannot be undone. For transfer transactions, both sides of the transfer are deleted."
     },
@@ -231,26 +179,6 @@
       "description": "Permanently delete a transaction group. The transactions themselves are NOT deleted — only the grouping is removed. This action cannot be undone. Requires finance:delete scope."
     },
     {
-      "name": "delete_vehicle",
-      "description": "Delete a vehicle and its asset account using existing ownership and linked-payment protections."
-    },
-    {
-      "name": "delete_vehicle_maintenance_visit",
-      "description": "Delete a maintenance visit. deleteGeneratedExpense explicitly controls deletion of its generated expense."
-    },
-    {
-      "name": "delete_venture_deal",
-      "description": "Delete a venture deal. Cascade-deletes its events and event-link rows. Bank transactions previously linked to the deal's events remain intact in the main transactions list with their original state restored. With force=true the deal row is hard-deleted; otherwise it is soft-deleted. Confirm with the user before calling."
-    },
-    {
-      "name": "delete_venture_event",
-      "description": "Delete a venture event. Linked bank transactions are unlinked first (their original state is restored). The initial_investment cannot be deleted while other events still exist on the deal — delete the other events first. Pass deleteLinkedTransactions=true to also remove the bank tx rows themselves (not just the link); only do this when the user explicitly asks. Confirm with the user before calling."
-    },
-    {
-      "name": "delete_venture_platform",
-      "description": "Delete a venture platform. Existing deals that reference it have their platformId cleared (deals are preserved). With force=true, hard-deletes the platform; otherwise it is soft-deleted. Confirm with the user before calling — operates against the user's records."
-    },
-    {
       "name": "detect_subscription_candidates",
       "description": "Scan the past 12 months of transactions to detect recurring payment patterns and generate subscription candidates. This operation can be slow on large transaction histories. Results are cached for 1 hour — subsequent calls within the cooldown return cached candidates. Check isFromCache in the response to know if the data is fresh. Requires finance:write scope (writes candidate records)."
     },
@@ -259,64 +187,28 @@
       "description": "Dismiss a pending subscription candidate so it no longer appears in the candidate list. The underlying transactions are unaffected. Only pending candidates can be dismissed. Requires finance:write scope."
     },
     {
-      "name": "execute_manual_portfolio_import",
-      "description": "Import reviewed manual portfolio transactions and end-of-day valuations. Pass the corrected records from extract_manual_portfolio_import plus explicit skipTempIds. Unresolved dates/amounts, currency mismatches and unacknowledged duplicates are rejected by the same service as the web app."
-    },
-    {
-      "name": "extract_manual_portfolio_import",
-      "description": "Preview manual-portfolio import candidates from deterministic CSV parsing or AI text/file extraction. Nothing is imported by this tool. Returns records, warnings, duplicate flags and currency mismatches for review before execute_manual_portfolio_import; AI requires an enabled AI connection."
-    },
-    {
       "name": "get_accounts",
-      "description": "List all user accounts with current balances. Returns account name, type, currency, current balance (in original and base currency), and credit limit."
+      "description": "List the user's financial accounts with balances, types, and currencies."
     },
     {
       "name": "get_balance_history",
-      "description": "Get account balance over time. If accountId is provided, returns balance history for that specific account. Otherwise, returns combined balance across all accounts."
-    },
-    {
-      "name": "get_budget_spending_stats",
-      "description": "Spending breakdown by category, time-series of expense vs income, and per-line spent for a tracker."
-    },
-    {
-      "name": "get_budgets",
-      "description": "Retrieve active and historical trackers (called budgets in tool names) with their limits, categories, and lines."
+      "description": "Time-series of account balances for a given range and granularity."
     },
     {
       "name": "get_cash_flow",
-      "description": "Get income, expenses, and net cash flow for a period with configurable granularity (monthly/biweekly/weekly). Returns period-by-period breakdown plus totals with savings rate."
+      "description": "Summarize income vs expenses over a specified date range."
     },
     {
       "name": "get_categories",
-      "description": "List all transaction categories. Returns category ID, name, color, icon, type (income/expense), and parent ID for hierarchical categories."
-    },
-    {
-      "name": "get_eligible_maintenance_transactions",
-      "description": "List expenses that can be linked to a vehicle maintenance visit."
+      "description": "List spending and income categories, including custom user-defined categories."
     },
     {
       "name": "get_expenses_for_period",
-      "description": "Get total expense amount for a date range. Returns a single total number. Use this for quick \"how much did I spend\" queries instead of summing transactions manually."
+      "description": "Summarize expenses for a given time period with breakdowns."
     },
     {
       "name": "get_investment_transactions",
-      "description": "Investment transaction history: buy, sell, dividend, transfer, tax, fee, cancel, other. Each transaction includes amount, quantity, price, fees, date, category, and the embedded security. Distinct from search_transactions, which covers regular (non-investment) spending. Default: 20 most recent across all portfolios."
-    },
-    {
-      "name": "get_loan",
-      "description": "Retrieve one loan by account ID with decimal loan details, balance projection, payment count, balance anchor, timeline events, and linked installment schedules."
-    },
-    {
-      "name": "get_loan_balance_history",
-      "description": "Get the loan outstanding balance timeline in the loan native currency as decimal amounts, including the anchor and subsequent payment dates."
-    },
-    {
-      "name": "get_loans",
-      "description": "List all loans with decimal balances, loan terms, payment counts, and payoff projections. Linked installment schedules are included for each loan."
-    },
-    {
-      "name": "get_manual_portfolio",
-      "description": "Get a manually tracked portfolio overview, transaction records, end-of-day valuations and timeline. Values are decimals in the portfolio display currency. Use record and valuation IDs with the manual management tools."
+      "description": "Investment transaction history (buy, sell, dividend, transfer, tax, fee) with security and portfolio details."
     },
     {
       "name": "get_payee",
@@ -328,35 +220,27 @@
     },
     {
       "name": "get_portfolio_balances",
-      "description": "Cash balances held in a portfolio, broken down per currency. Each entry includes totalCash and availableCash in the original currency plus their ref* equivalents converted to the user's base currency. Useful for answering 'how much cash do I have to invest'."
+      "description": "Cash balances held in a portfolio, broken down per currency (original and base-currency equivalents)."
     },
     {
       "name": "get_portfolio_holdings",
-      "description": "Positions held in a portfolio with dynamically calculated market value, cost basis, and realized/unrealized gain (value and percent). Each holding includes the embedded security (symbol, name, asset class, currency). Filter by securityId to look at a single position."
+      "description": "Positions held in a portfolio with market value, cost basis, and realized/unrealized gains. Includes embedded security details."
     },
     {
       "name": "get_portfolio_summary",
-      "description": "Portfolio-level aggregates for a single portfolio: total current market value, total cost basis, realized and unrealized gains (value and percent), cash balances, and total portfolio value (holdings + cash). All monetary values are decimals in the user's base currency."
+      "description": "Portfolio-level aggregates: total value, cost basis, realized and unrealized gains, and cash balances in the user's base currency."
     },
     {
       "name": "get_portfolios",
-      "description": "List the user's investment portfolios. Returns id, name, portfolio type (investment/retirement/savings/other), description, enabled state, displayCurrencyCode, isManualTracking, and creation date. Use the returned id with get_portfolio_summary, get_portfolio_holdings, get_portfolio_balances, and get_investment_transactions."
+      "description": "List the user's investment portfolios with type, enabled state, and metadata."
     },
     {
       "name": "get_spending_by_categories",
-      "description": "Get spending breakdown by category for a date range. Returns each category with its total amount. Great for understanding where money goes. Defaults to current month expenses."
+      "description": "Aggregate spending by category over a specified date range."
     },
     {
       "name": "get_subscription_by_id",
       "description": "Retrieve a single subscription by its ID including all linked transactions (with match source and date) and the computed next expected payment date."
-    },
-    {
-      "name": "get_subscription_pay_preview",
-      "description": "Preview the decimal amount and currency that paying a subscription period would book, including cross-currency conversion when an account is linked."
-    },
-    {
-      "name": "get_subscription_periods",
-      "description": "List generated periods for a subscription or installment, including due date, status, paid date, linked transaction, notes, and total count."
     },
     {
       "name": "get_subscriptions",
@@ -368,7 +252,15 @@
     },
     {
       "name": "get_tags",
-      "description": "List all user tags. Returns tag ID, name, color, and icon."
+      "description": "List transaction tags used to annotate spending."
+    },
+    {
+      "name": "get_tracker_spending_stats",
+      "description": "Spending breakdown by category, time-series of expense vs income, and per-line spent for a tracker."
+    },
+    {
+      "name": "get_trackers",
+      "description": "Retrieve active and historical trackers with their limits, categories, and lines."
     },
     {
       "name": "get_transaction_automations",
@@ -384,55 +276,27 @@
     },
     {
       "name": "get_user_profile",
-      "description": "Get the user's base currency, configured currencies with exchange rates, and basic profile info. Call this first to understand the user's currency context."
+      "description": "Retrieve the authenticated user's profile (name, email, default currency)."
     },
     {
-      "name": "get_vehicle",
-      "description": "Read a vehicle with depreciation, valuation and mileage."
+      "name": "create_investment_contribution",
+      "description": "Create one grouped investment contribution: source-account expense, portfolio cash movement, holdings and purchases together. Reuse full search_securities results to preserve provider identity. Amounts are decimal strings."
     },
     {
-      "name": "get_vehicle_maintenance",
-      "description": "Read all maintenance plans and visits for a vehicle, including linked expenses."
+      "name": "create_investment_contribution_from_transaction",
+      "description": "Attach grouped investment purchases to an existing expense transaction without duplicating the account movement. The transaction must not already be a transfer. Creates missing securities and holdings from full search results."
     },
     {
-      "name": "get_vehicle_maintenance_activities",
-      "description": "List the available maintenance activities and their archive status."
+      "name": "update_investment_contribution",
+      "description": "Replace the purchases in a grouped contribution while preserving its original account cash movement. Submit the complete desired purchase list; existing purchases are reversed and recreated with recalculation."
     },
     {
-      "name": "get_vehicle_maintenance_reminders",
-      "description": "List upcoming and overdue maintenance reminders using date and mileage thresholds."
+      "name": "delete_portfolio_transfer",
+      "description": "Delete a portfolio transfer and reverse its cash effect. Confirm with the user before deleting. Grouped purchases require deleteLinkedInvestmentTransactions=true; deleteLinkedTransaction=true also deletes the linked account row. Both flags default to false."
     },
     {
-      "name": "get_vehicles",
-      "description": "List vehicles with current estimated values, depreciation and mileage in the configured distance unit."
-    },
-    {
-      "name": "get_venture_deal",
-      "description": "Retrieve a single venture deal by id, including its platform and currency. Pass includeEvents=true to also embed the deal's event history (sorted asc). Obtain the dealId from list_venture_deals."
-    },
-    {
-      "name": "get_venture_deal_metrics",
-      "description": "Compute aggregated metrics for a venture deal: cost basis, current value (latest NAV), total distributions, absolute and percent P&L, TVPI (total value to paid-in), DPI (distributions to paid-in), and IRR. IRR returns null for degenerate cash flows (e.g. no inflows yet). Pass asOfDate (YYYY-MM-DD) to compute metrics as of a specific date."
-    },
-    {
-      "name": "get_venture_event",
-      "description": "Retrieve a single venture event by id, including its link rows (bank transactions linked to this event). Obtain the eventId from list_venture_events."
-    },
-    {
-      "name": "get_venture_platform",
-      "description": "Retrieve a single venture platform by id. Returns full record including default fee fractions (decimals in [0,1]). Obtain the platformId from list_venture_platforms."
-    },
-    {
-      "name": "import_manual_portfolio_json",
-      "description": "Import a versioned manual-portfolio JSON export into an existing manual portfolio. Currency must match. Exact duplicate transactions/valuations are skipped; a valuation on an existing date with a different value is rejected. Review the payload before calling."
-    },
-    {
-      "name": "link_installment_to_loan",
-      "description": "Link an expense installment subscription to an active loan account. The loan must still have an outstanding balance. Requires finance:write scope."
-    },
-    {
-      "name": "link_loan_payments",
-      "description": "Link existing expense transactions to a loan as payments. Pass confirmOverpay=true only after reviewing an overpayment error. Requires finance:write scope."
+      "name": "set_portfolio_transfer_adjustment",
+      "description": "Set whether an existing portfolio transfer is a balance adjustment or a contribution. This classification changes return/contribution reporting without changing the transfer amount, date or cash balance."
     },
     {
       "name": "link_refund",
@@ -451,10 +315,6 @@
       "description": "Link two existing transactions as a transfer pair. The two transactions must be in different accounts and have opposite types (one income, one expense). Provide baseTxId (the source/expense side) and oppositeTxId (the destination/income side)."
     },
     {
-      "name": "list_budget_suggestions",
-      "description": "Smart-tracking suggestions, AI-matched transactions, and scan status for a tracker the user owns."
-    },
-    {
       "name": "list_portfolio_transfers",
       "description": "Cash movement history of a portfolio: account↔portfolio transfers, direct deposits/withdrawals, linked bank transactions, grouped investment contributions with their purchases, and currency exchanges. Each entry names the source/destination portfolio or account. Sorted by date, newest first. Returns { transfers, totalCount }."
     },
@@ -463,16 +323,48 @@
       "description": "List auto-detected subscription candidates sorted by confidence score. Call detect_subscription_candidates first to generate fresh candidates. Use status filter to see only pending, accepted, or dismissed candidates."
     },
     {
-      "name": "list_venture_deals",
-      "description": "List the user's venture deals (private/illiquid investments through SPVs, syndicates, or direct vehicles). Returns each deal's id, name, status (outstanding | partial_exit | fully_exited | written_off), platform, currency, principal, entry fee, fee fractions, dates, and target company. Use the returned id with get_venture_deal, get_venture_deal_metrics, list_venture_events, and update_venture_deal."
+      "name": "list_tracker_suggestions",
+      "description": "Smart-tracking suggestions, AI-matched transactions, and scan status for a tracker the user owns."
     },
     {
-      "name": "list_venture_events",
-      "description": "List events for a venture deal in chronological order (oldest first). Each event has a type (initial_investment | capital_call | distribution | nav_update | exit | writedown | fee_payment), date, amounts, cashFlowMode, and embedded link rows (when the event is tied to bank transactions). Use the returned event ids with get_venture_event, update_venture_event, and delete_venture_event."
+      "name": "get_loans",
+      "description": "List all loans with decimal balances, loan terms, payment counts, and payoff projections. Linked installment schedules are included for each loan."
     },
     {
-      "name": "list_venture_platforms",
-      "description": "List the user's venture investment platforms (SPV syndicators, fund managers). Returns each platform's id, name, website, description, and default fee fractions (entry fee, management fee, carry, hurdle). Fee values are decimals in [0,1] — e.g. 0.085 means 8.5%. Use the returned id with get_venture_platform, create_venture_deal, and update_venture_platform."
+      "name": "get_loan",
+      "description": "Retrieve one loan by account ID with decimal loan details, balance projection, payment count, balance anchor, timeline events, and linked installment schedules."
+    },
+    {
+      "name": "get_loan_balance_history",
+      "description": "Get the loan outstanding balance timeline in the loan native currency as decimal amounts, including the anchor and subsequent payment dates."
+    },
+    {
+      "name": "create_loan",
+      "description": "Create a loan account and its loan details. Monetary inputs are positive decimal values; the returned account balance follows the liability convention. Requires finance:write scope."
+    },
+    {
+      "name": "update_loan",
+      "description": "Update loan metadata, payment terms, or the positive outstanding balance and anchor date. Only supplied fields change. Requires finance:write scope."
+    },
+    {
+      "name": "delete_loan",
+      "description": "Permanently delete a loan account when it has no linked payment legs. Requires finance:delete scope."
+    },
+    {
+      "name": "append_loan_note",
+      "description": "Append a user note to the loan timeline. Requires finance:write scope."
+    },
+    {
+      "name": "link_loan_payments",
+      "description": "Link existing expense transactions to a loan as payments. Pass confirmOverpay=true only after reviewing an overpayment error. Requires finance:write scope."
+    },
+    {
+      "name": "unlink_loan_payment",
+      "description": "Unlink one loan payment using either leg transaction ID. The source expense is restored and the loan-side leg is removed. Requires finance:write scope."
+    },
+    {
+      "name": "get_manual_portfolio",
+      "description": "Get a manually tracked portfolio overview, transaction records, end-of-day valuations and timeline. Values are decimals in the portfolio display currency. Use record and valuation IDs with the manual management tools."
     },
     {
       "name": "manage_manual_portfolio_transaction",
@@ -483,19 +375,27 @@
       "description": "Create/replace an end-of-day manual valuation, fully update a valuation by ID, or delete it. value is a non-negative decimal string in the portfolio currency. Creating at an existing date replaces that snapshot; moving an update to an occupied date also replaces that snapshot. Confirm deletion with the user."
     },
     {
-      "name": "merge_payees",
-      "description": "Merge a source Payee into a target Payee. Transactions and aliases move to the target; the target wins silently on defaultCategoryId conflict; the source is deleted. Use to dedupe near-duplicates like \"Amazon\" and \"AMZN MKT\". Requires finance:delete scope."
+      "name": "import_manual_portfolio_json",
+      "description": "Import a versioned manual-portfolio JSON export into an existing manual portfolio. Currency must match. Exact duplicate transactions/valuations are skipped; a valuation on an existing date with a different value is rejected. Review the payload before calling."
     },
     {
-      "name": "pay_subscription_period",
-      "description": "Mark a subscription period paid by linking an existing transaction or creating a new expense. Loan-linked installments require a real transaction and may require confirmOverpay=true. Requires finance:write scope."
+      "name": "extract_manual_portfolio_import",
+      "description": "Preview manual-portfolio import candidates from deterministic CSV parsing or AI text/file extraction. Nothing is imported by this tool. Returns records, warnings, duplicate flags and currency mismatches for review before execute_manual_portfolio_import; AI requires an enabled AI connection."
+    },
+    {
+      "name": "execute_manual_portfolio_import",
+      "description": "Import reviewed manual portfolio transactions and end-of-day valuations. Pass the corrected records from extract_manual_portfolio_import plus explicit skipTempIds. Unresolved dates/amounts, currency mismatches and unacknowledged duplicates are rejected by the same service as the web app."
+    },
+    {
+      "name": "merge_payees",
+      "description": "Merge a source Payee into a target Payee. Transactions and aliases move to the target; the target wins silently on defaultCategoryId conflict; the source is deleted. Use to dedupe near-duplicates like \"Amazon\" and \"AMZN MKT\". Requires finance:delete scope."
     },
     {
       "name": "preview_transaction_automation",
       "description": "Dry-run a set of automation conditions against up to the last 1000 eligible existing transactions and return { matchedCount, scannedCount, matches } where matches is capped at 5 sample transactions. Nothing is modified. Use it to sanity-check conditions before create_transaction_automation or update_transaction_automation. Note that a live automation fires on its own only for newly synced or imported bank transactions that are not transfers and not planned; existing transactions change only when the user runs \"Apply to past transactions\" for a saved rule in the app."
     },
     {
-      "name": "reject_budget_suggestions",
+      "name": "reject_tracker_suggestions",
       "description": "Reject smart-tracking suggestions; AI-linked or accepted ones are also unlinked from the tracker."
     },
     {
@@ -503,44 +403,64 @@
       "description": "Remove a tag from one or more transactions. Use when the user wants to untag transactions. Returns the count of removed tag links."
     },
     {
-      "name": "remove_transactions_from_budget",
-      "description": "Unlink transactions from a tracker without deleting them."
-    },
-    {
       "name": "remove_transactions_from_group",
       "description": "Remove transactions from a group. If removal would leave fewer than 2 transactions, pass force=true to dissolve the group entirely (transactions are kept). Requires finance:write scope."
+    },
+    {
+      "name": "remove_transactions_from_tracker",
+      "description": "Unlink transactions from a tracker without deleting them."
     },
     {
       "name": "reorder_transaction_automations",
       "description": "Reorder the transaction automation rules of the user. Rules are evaluated top to bottom on each newly synced or imported bank transaction and the first rule that applies an action wins, so ordering decides which rule takes precedence when several match. Returns the rules in their new order. Requires finance:write scope."
     },
     {
-      "name": "revert_subscription_period",
-      "description": "Reopen a paid or skipped subscription period. Auto-created payment transactions are removed; user-linked transactions are kept. Requires finance:write scope."
-    },
-    {
       "name": "search_securities",
-      "description": "Search for securities (stocks, ETFs, crypto, etc.) by ticker symbol or company name. Results preserve providerSymbol, providerName, priceSourceSymbol, currency and exchange identity. Pass one complete result to create_holding or grouped contribution tools; create_holding returns the persisted securityId for investment transactions. If portfolioId is provided, each result includes isInPortfolio to indicate whether the security is already tracked in that portfolio."
+      "description": "Search for securities by ticker or company name. Returns securityId needed for create_investment_transaction."
     },
     {
       "name": "search_transactions",
-      "description": "Search and filter transactions. Returns transaction amount (original + base currency), category, account, note, date, type, and tags. Use date filters to limit results. Default: last 30 days, 50 items."
-    },
-    {
-      "name": "set_portfolio_transfer_adjustment",
-      "description": "Set whether an existing portfolio transfer is a balance adjustment or a contribution. This classification changes return/contribution reporting without changing the transfer amount, date or cash balance."
-    },
-    {
-      "name": "skip_subscription_period",
-      "description": "Skip an upcoming subscription period without creating a transaction. Requires finance:write scope."
+      "description": "Search and filter transactions across accounts by date, category, tag, amount, or merchant."
     },
     {
       "name": "split_transaction",
       "description": "Split a transaction across multiple categories. Provide the transactionId and an array of splits whose amounts sum to the transaction total. Replaces any existing splits on the transaction."
     },
     {
+      "name": "get_subscription_periods",
+      "description": "List generated periods for a subscription or installment, including due date, status, paid date, linked transaction, notes, and total count."
+    },
+    {
+      "name": "get_subscription_pay_preview",
+      "description": "Preview the decimal amount and currency that paying a subscription period would book, including cross-currency conversion when an account is linked."
+    },
+    {
+      "name": "pay_subscription_period",
+      "description": "Mark a subscription period paid by linking an existing transaction or creating a new expense. Loan-linked installments require a real transaction and may require confirmOverpay=true. Requires finance:write scope."
+    },
+    {
+      "name": "skip_subscription_period",
+      "description": "Skip an upcoming subscription period without creating a transaction. Requires finance:write scope."
+    },
+    {
+      "name": "unlink_subscription_period_transaction",
+      "description": "Detach the transaction from a subscription period while keeping the transaction in the ledger. Requires finance:write scope."
+    },
+    {
+      "name": "revert_subscription_period",
+      "description": "Reopen a paid or skipped subscription period. Auto-created payment transactions are removed; user-linked transactions are kept. Requires finance:write scope."
+    },
+    {
       "name": "suggest_subscription_matches",
       "description": "Suggest up to 100 recent real transactions matching a subscription's matching rules and excluding already linked transactions."
+    },
+    {
+      "name": "link_installment_to_loan",
+      "description": "Link an expense installment subscription to an active loan account. The loan must still have an outstanding balance. Requires finance:write scope."
+    },
+    {
+      "name": "unlink_installment_from_loan",
+      "description": "Remove the loan association from an installment subscription. Requires finance:write scope."
     },
     {
       "name": "toggle_subscription_active",
@@ -555,20 +475,8 @@
       "description": "Withdraw cash from an investment portfolio into a regular account. Creates an income transaction on the account and decreases the portfolio cash balance. Use link_transaction_to_portfolio instead when the bank transaction already exists."
     },
     {
-      "name": "unlink_installment_from_loan",
-      "description": "Remove the loan association from an installment subscription. Requires finance:write scope."
-    },
-    {
-      "name": "unlink_loan_payment",
-      "description": "Unlink one loan payment using either leg transaction ID. The source expense is restored and the loan-side leg is removed. Requires finance:write scope."
-    },
-    {
       "name": "unlink_refund",
       "description": "Remove the refund link between two transactions. DESTRUCTIVE: both transactions will no longer be marked as refund-linked. Requires both originalTxId and refundTxId that were previously linked."
-    },
-    {
-      "name": "unlink_subscription_period_transaction",
-      "description": "Detach the transaction from a subscription period while keeping the transaction in the ledger. Requires finance:write scope."
     },
     {
       "name": "unlink_transaction_from_portfolio",
@@ -583,28 +491,12 @@
       "description": "Unlink transfer transactions by their shared transferId (UUID string). Both transactions in the pair will become independent income/expense entries. Use search_transactions to find the transferId of a linked pair."
     },
     {
-      "name": "update_budget",
-      "description": "Update an existing tracker's name, date range, spending limit, linked categories, or smart tracking settings."
-    },
-    {
-      "name": "update_budget_line",
-      "description": "Update a tracker line's name, categories, limit, or position."
-    },
-    {
       "name": "update_category",
       "description": "Update an existing category by ID. Use when the user wants to rename, recolor, or change the icon of a category. Returns the updated category records."
     },
     {
-      "name": "update_investment_contribution",
-      "description": "Replace the purchases in a grouped contribution while preserving its original account cash movement. Submit the complete desired purchase list; existing purchases are reversed and recreated with recalculation."
-    },
-    {
       "name": "update_investment_transaction",
-      "description": "Update an existing investment transaction — correct the date, quantity, price, fees, category, or label. Obtain the transactionId from get_investment_transactions. Only provided fields are changed; the holding recalculation runs automatically after every update."
-    },
-    {
-      "name": "update_loan",
-      "description": "Update loan metadata, payment terms, or the positive outstanding balance and anchor date. Only supplied fields change. Requires finance:write scope."
+      "description": "Update an existing investment transaction's category, date, quantity, price, or fees (requires finance:write scope)."
     },
     {
       "name": "update_payee",
@@ -612,7 +504,7 @@
     },
     {
       "name": "update_portfolio",
-      "description": "Update an existing portfolio's name, type, description, display currency, manual tracking or enabled state. Use when the user wants to rename, recategorize, or disable one of their portfolios. Obtain the portfolioId from get_portfolios first. Only the fields provided are changed."
+      "description": "Update portfolio name, type, description, or enabled state (requires finance:write scope)."
     },
     {
       "name": "update_subscription",
@@ -621,6 +513,14 @@
     {
       "name": "update_tag",
       "description": "Update an existing tag by ID. Use when the user wants to rename, recolor, or change the icon/description of a tag. Returns the updated tag."
+    },
+    {
+      "name": "update_tracker",
+      "description": "Update an existing tracker's name, date range, spending limit, linked categories, or smart tracking settings."
+    },
+    {
+      "name": "update_tracker_line",
+      "description": "Update a tracker line's name, categories, limit, or position."
     },
     {
       "name": "update_transaction",
@@ -635,32 +535,68 @@
       "description": "Update the name or note of an existing transaction group. To change group membership use add_transactions_to_group or remove_transactions_from_group. Requires finance:write scope."
     },
     {
+      "name": "get_vehicles",
+      "description": "List vehicles with current estimated values, depreciation and mileage in the configured distance unit."
+    },
+    {
+      "name": "get_vehicle",
+      "description": "Read a vehicle with depreciation, valuation and mileage."
+    },
+    {
+      "name": "create_vehicle",
+      "description": "Create a vehicle and its linked asset account. purchasePrice uses decimal currency units."
+    },
+    {
       "name": "update_vehicle",
       "description": "Update vehicle details, depreciation settings and current mileage."
+    },
+    {
+      "name": "delete_vehicle",
+      "description": "Delete a vehicle and its asset account using existing ownership and linked-payment protections."
+    },
+    {
+      "name": "get_vehicle_maintenance",
+      "description": "Read all maintenance plans and visits for a vehicle, including linked expenses."
+    },
+    {
+      "name": "get_vehicle_maintenance_activities",
+      "description": "List the available maintenance activities and their archive status."
+    },
+    {
+      "name": "create_vehicle_maintenance_activity",
+      "description": "Create a reusable maintenance activity."
     },
     {
       "name": "update_vehicle_maintenance_activity",
       "description": "Rename or archive a reusable maintenance activity."
     },
     {
+      "name": "get_vehicle_maintenance_reminders",
+      "description": "List upcoming and overdue maintenance reminders using date and mileage thresholds."
+    },
+    {
+      "name": "get_eligible_maintenance_transactions",
+      "description": "List expenses that can be linked to a vehicle maintenance visit."
+    },
+    {
+      "name": "create_vehicle_maintenance_plan",
+      "description": "Create a maintenance reminder using a due date or distance threshold."
+    },
+    {
       "name": "update_vehicle_maintenance_plan",
       "description": "Renew, change or archive a vehicle maintenance plan."
+    },
+    {
+      "name": "create_vehicle_maintenance_visit",
+      "description": "Record a maintenance visit, renew plans and link existing expenses or create a quickExpense atomically."
     },
     {
       "name": "update_vehicle_maintenance_visit",
       "description": "Update the date, mileage, notes or activities on a maintenance visit."
     },
     {
-      "name": "update_venture_deal",
-      "description": "Update a venture deal. Only provided fields change. Once any event exists on the deal, the terms (principal, entryFee, entryFeePct, carryPct, hurdlePct, investmentDate, currencyCode) are locked — changing them would silently stale the carry math. Delete the events first if the user needs to fix terms. Status can be overridden manually (auto-progression normally derives it from events). Fee percentages are decimal fractions in [0,1]."
-    },
-    {
-      "name": "update_venture_event",
-      "description": "Update a venture event. Only provided fields change. eventDate must stay on/after the initial_investment date (and moving an initial_investment past existing later events is rejected).\n\nOverride semantics for gpCarryAmount / lpNetAmount:\n  • Omit the field → no change.\n  • Pass a string value → set the manual override; flips the corresponding *Overridden flag to true.\n  • Pass null → currently treated the same as omitting (no semantic clear). To clear an existing override, use `resetOverrides: true` instead.\n\nThe event type cannot be changed — delete and recreate instead."
-    },
-    {
-      "name": "update_venture_platform",
-      "description": "Update an existing venture platform's name, website, description, or default fees. Only provided fields change. Updating default fees does NOT retroactively change fees on existing deals — those are snapshotted at deal creation. Fee fractions are decimals in [0,1]."
+      "name": "delete_vehicle_maintenance_visit",
+      "description": "Delete a maintenance visit. deleteGeneratedExpense explicitly controls deletion of its generated expense."
     }
   ],
   "prompts": [

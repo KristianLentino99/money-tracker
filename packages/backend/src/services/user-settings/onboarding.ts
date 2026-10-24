@@ -1,5 +1,6 @@
 import Accounts from '@models/accounts.model';
 import BankDataProviderConnections from '@models/bank-data-provider-connections.model';
+import Trackers from '@models/trackers.model';
 import { countTransactions } from '@models/transactions-query';
 import UserSettings, {
   DEFAULT_ONBOARDING_STATE,
@@ -107,29 +108,33 @@ export const detectCompletedTasks = withTransaction(async ({ userId }: { userId:
   const completedTasks: string[] = [];
 
   // Run all checks in parallel for efficiency
-  const [baseCurrency, accountCount, transactionCount, bankConnectionCount, userSettings] = await Promise.all([
-    // Check if base currency is set
-    UsersCurrencies.findOne({
-      where: { userId, isDefaultCurrency: true },
-      attributes: ['id'],
-    }),
+  const [baseCurrency, accountCount, transactionCount, trackerCount, bankConnectionCount, userSettings] =
+    await Promise.all([
+      // Check if base currency is set
+      UsersCurrencies.findOne({
+        where: { userId, isDefaultCurrency: true },
+        attributes: ['id'],
+      }),
 
-    // Check if user has created any accounts
-    Accounts.count({ where: { userId } }),
+      // Check if user has created any accounts
+      Accounts.count({ where: { userId } }),
 
-    // Check if user has added any transactions. The task is "you have used the
-    // records screen", which a plan satisfies as much as a real row does.
-    countTransactions({ planned: 'include', access: { creator: userId }, balanceAdjustments: 'include' }),
+      // Check if user has added any transactions. The task is "you have used the
+      // records screen", which a forecast-only row satisfies as much as a real row does.
+      countTransactions({ planned: 'include', access: { creator: userId }, balanceAdjustments: 'include' }),
 
-    // Check if user has connected any bank accounts
-    BankDataProviderConnections.count({ where: { userId } }),
+      // Check if user has created any trackers
+      Trackers.count({ where: { userId } }),
 
-    // Get user settings to check AI configuration
-    UserSettings.findOne({
-      where: { userId },
-      attributes: ['settings'],
-    }),
-  ]);
+      // Check if user has connected any bank accounts
+      BankDataProviderConnections.count({ where: { userId } }),
+
+      // Get user settings to check AI configuration
+      UserSettings.findOne({
+        where: { userId },
+        attributes: ['settings'],
+      }),
+    ]);
 
   // Map results to task IDs
   if (baseCurrency) {
@@ -142,6 +147,10 @@ export const detectCompletedTasks = withTransaction(async ({ userId }: { userId:
 
   if (transactionCount > 0) {
     completedTasks.push('add-transaction');
+  }
+
+  if (trackerCount > 0) {
+    completedTasks.push('create-tracker');
   }
 
   if (bankConnectionCount > 0) {

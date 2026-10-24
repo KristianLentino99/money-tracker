@@ -2,7 +2,7 @@ import { RecordId, TRACKER_SUGGESTION_STATUS } from '@bt/shared/types';
 import { IdColumn } from '@common/types/id-column';
 import { Table, Column, Model, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
 
-import Budgets from './budget.model';
+import Trackers from './trackers.model';
 import Transactions from './transactions.model';
 
 /** A smart tracking verdict on one transaction for one tracker. Rejected rows keep the AI from asking again. */
@@ -11,9 +11,9 @@ export default class TrackerSuggestions extends Model {
   @Column(IdColumn())
   declare id: RecordId;
 
-  @ForeignKey(() => Budgets)
+  @ForeignKey(() => Trackers)
   @Column({ type: DataType.UUID, allowNull: false })
-  budgetId!: RecordId;
+  trackerId!: RecordId;
 
   @ForeignKey(() => Transactions)
   @Column({ type: DataType.UUID, allowNull: false })
@@ -34,8 +34,8 @@ export default class TrackerSuggestions extends Model {
   @Column({ type: DataType.DATE, allowNull: true })
   resolvedAt!: Date | null;
 
-  @BelongsTo(() => Budgets, { foreignKey: 'budgetId', onDelete: 'CASCADE' })
-  budget?: Budgets;
+  @BelongsTo(() => Trackers, { foreignKey: 'trackerId', onDelete: 'CASCADE' })
+  tracker?: Trackers;
 
   @BelongsTo(() => Transactions, { foreignKey: 'transactionId', onDelete: 'CASCADE' })
   transaction?: Transactions;

@@ -501,8 +501,15 @@ describe('Data export (POST /user/data-export)', () => {
       );
     });
 
-    it('exports subscriptions, portfolios, and vehicles when their groups are enabled', async () => {
+    it('exports trackers, subscriptions, portfolios, and vehicles when their groups are enabled', async () => {
       const account = await helpers.createAccount({ raw: true });
+      const category = await helpers.addCustomCategory({ name: 'MultiCat', color: '#AABBCC', raw: true });
+      await helpers.createTracker({
+        name: 'Export tracker',
+        limitAmount: 100000,
+        categoryIds: [category.id],
+        raw: true,
+      });
       await helpers.createPortfolio({ payload: { name: 'Multi portfolio' }, raw: true });
 
       // Seed a subscription and vehicle so their transformers see real data –
@@ -531,6 +538,9 @@ describe('Data export (POST /user/data-export)', () => {
       const response = await helpers.exportData({ format: 'json' });
       const archive = helpers.parseExportArchive({ buffer: response.body });
       const json = archive.json as Record<string, unknown[]>;
+
+      expect(Array.isArray(json.trackers)).toBe(true);
+      expect((json.trackers as Array<Record<string, unknown>>).some((b) => b.name === 'Export tracker')).toBe(true);
 
       expect(Array.isArray(json.subscriptions)).toBe(true);
       expect((json.subscriptions as Array<Record<string, unknown>>).some((s) => s.name === 'Multi subscription')).toBe(
@@ -602,6 +612,29 @@ describe('Data export (POST /user/data-export)', () => {
       expect(unpinned!.Category).toBe('');
       expect(unpinned!.Payee).toBe('');
       expect(unpinned!.Tags).toBe('');
+    });
+
+    it('handles trackers with NULL limitAmount without crashing', async () => {
+      // Tracker.limitAmount is nullable; the transformer must guard the
+      // `.toNumber()` call so a tracker without a cap exports as an empty cell
+      // rather than 500'ing the whole request.
+      const category = await helpers.addCustomCategory({ name: 'NoLimitCat', color: '#AABBCC', raw: true });
+      await helpers.createTracker({
+        name: 'Open-ended tracker',
+        categoryIds: [category.id],
+        // limitAmount intentionally omitted – should be allowed by the trackers API.
+        raw: true,
+      });
+
+      const response = await helpers.exportData({ format: 'csv' });
+      expect(response.statusCode).toBe(200);
+      const archive = helpers.parseExportArchive({ buffer: response.body });
+      const trackersCsv = archive.files.get('trackers.csv');
+      expect(trackersCsv).toBeDefined();
+      const rows = helpers.parseExportCsv({ buffer: trackersCsv! });
+      const seeded = rows.find((r) => r.Name === 'Open-ended tracker');
+      expect(seeded).toBeDefined();
+      expect(seeded?.LimitAmount).toBe('');
     });
   });
 

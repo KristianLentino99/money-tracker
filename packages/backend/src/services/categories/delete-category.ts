@@ -1,8 +1,8 @@
 import { API_ERROR_CODES } from '@bt/shared/types';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { ConflictError, ValidationError } from '@js/errors';
-import BudgetCategories from '@models/budget-categories.model';
 import * as Categories from '@models/categories.model';
+import TrackerCategories from '@models/tracker-categories.model';
 import TrackerLineCategories from '@models/tracker-line-categories.model';
 import TrackerLines from '@models/tracker-lines.model';
 import TransactionTemplates from '@models/transaction-templates.model';
@@ -27,13 +27,13 @@ const repointTrackerCategoriesOnCategoryDelete = async ({
   categoryId: string;
   replacementCategoryId: string;
 }): Promise<void> => {
-  const holders = await BudgetCategories.findAll({
+  const holders = await TrackerCategories.findAll({
     where: { categoryId: replacementCategoryId },
-    attributes: ['budgetId'],
+    attributes: ['trackerId'],
   });
-  await BudgetCategories.update(
+  await TrackerCategories.update(
     { categoryId: replacementCategoryId },
-    { where: { categoryId, budgetId: { [Op.notIn]: holders.map((row) => row.budgetId) } } },
+    { where: { categoryId, trackerId: { [Op.notIn]: holders.map((row) => row.trackerId) } } },
   );
 };
 

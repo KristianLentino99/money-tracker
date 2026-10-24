@@ -16,7 +16,6 @@ import { backupRestoreQueue, backupRestoreWorker } from '@services/backup/restor
 import { closeAllMonobankQueueBundles } from '@services/bank-data-providers/monobank/transaction-sync-queue';
 import { accountSyncQueue, accountSyncWorker } from '@services/bank-data-providers/sync/account-sync-queue';
 import { logoResolutionQueue, logoResolutionWorker } from '@services/brand-logos';
-import { trackerScanQueue, trackerScanWorker } from '@services/budgets/smart-tracking/tracker-scan-queue';
 import { baseCurrencyChangeQueue, baseCurrencyChangeWorker } from '@services/currencies/base-currency-change-queue';
 import {
   budgetBakersWalletImportQueue,
@@ -35,6 +34,7 @@ import {
   subscriptionReminderEmailQueue,
   subscriptionReminderEmailWorker,
 } from '@services/subscriptions/reminder-email-queue';
+import { trackerScanQueue, trackerScanWorker } from '@services/trackers/smart-tracking/tracker-scan-queue';
 import { createAppUserWithUniqueUsername, seedUserDefaults } from '@services/user/create-user-with-defaults.service';
 import { STRIPE_TEST_WEBHOOK_SECRET, extractCookies, makeAuthRequest, makeRequest } from '@tests/helpers';
 import { startOfDay } from 'date-fns';

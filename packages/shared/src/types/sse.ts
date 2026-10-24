@@ -4,7 +4,6 @@
  * These types are used by both backend and frontend for real-time event communication.
  */
 import type { BackupRestoreSseProgress } from './backup';
-import type { TrackerScanStatusPayload } from './budgets';
 import type { BaseCurrencyChangeStatus } from './currencies';
 import type {
   BudgetBakersWalletImportProgress,
@@ -15,6 +14,7 @@ import type {
   StatementImportProgress,
   YnabImportProgress,
 } from './import-export';
+import type { TrackerScanStatusPayload } from './trackers';
 
 /**
  * SSE Event Types - event names sent via Server-Sent Events

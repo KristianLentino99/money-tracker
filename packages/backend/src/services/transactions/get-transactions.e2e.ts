@@ -139,6 +139,66 @@ describe('Retrieve transactions with filters', () => {
     };
   };
 
+  it('should retrieve transactions filtered by trackerIds correctly', async () => {
+    const account = await helpers.createAccount({ raw: true });
+    const categories = await helpers.getCategoriesList();
+    const firstCategoryId = categories[0]!.id;
+
+    const transactions = await Promise.all([
+      helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 100,
+          transactionType: TRANSACTION_TYPES.expense,
+          time: '2025-03-02T10:00:00Z',
+          categoryId: firstCategoryId,
+        }),
+        raw: true,
+      }),
+      helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 200,
+          transactionType: TRANSACTION_TYPES.expense,
+          time: '2025-03-03T10:00:00Z',
+          categoryId: firstCategoryId,
+        }),
+        raw: true,
+      }),
+      helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: account.id,
+          amount: 300,
+          transactionType: TRANSACTION_TYPES.expense,
+          time: '2025-04-01T10:00:00Z',
+          categoryId: firstCategoryId,
+        }),
+        raw: true,
+      }),
+    ]);
+
+    const tracker = await helpers.createTracker({
+      name: 'Test Tracker',
+      startDate: '2025-03-01T00:00:00Z',
+      endDate: '2025-03-04T23:59:59Z',
+      autoInclude: true,
+      limitAmount: 500,
+      raw: true,
+    });
+
+    const res = await helpers.getTransactions({
+      trackerIds: [tracker.id],
+      limit: 30,
+      raw: true,
+    });
+
+    expect(res.length).toBe(2);
+    const transactionIds = res.map((t) => t.id);
+    expect(transactionIds).toContain(transactions[0][0].id);
+    expect(transactionIds).toContain(transactions[1][0].id);
+    expect(transactionIds).not.toContain(transactions[2][0].id);
+  });
+
   it('filters by date bounds', async () => {
     await createMockTransactions();
 
@@ -436,9 +496,9 @@ describe('Retrieve transactions with filters', () => {
       expect(sortedIds(blankOrPayee)).toEqual(sortedIds([withPayee, withoutPayee]));
     });
 
-    it('budgetIds: blank matches rows in no tracker and ORs with real ids', async () => {
+    it('trackerIds: blank matches rows in no tracker and ORs with real ids', async () => {
       const account = await helpers.createAccount({ raw: true });
-      const [inBudget] = await helpers.createTransaction({
+      const [inTracker] = await helpers.createTransaction({
         payload: helpers.buildTransactionPayload({ accountId: account.id }),
         raw: true,
       });
@@ -446,18 +506,18 @@ describe('Retrieve transactions with filters', () => {
         payload: helpers.buildTransactionPayload({ accountId: account.id }),
         raw: true,
       });
-      const budget = await helpers.createCustomBudget({ name: 'Trip', raw: true });
-      await helpers.addTransactionToCustomBudget({
-        id: budget.id,
-        payload: { transactionIds: [inBudget.id] },
+      const tracker = await helpers.createTracker({ name: 'Trip', raw: true });
+      await helpers.addTransactionsToTracker({
+        id: tracker.id,
+        payload: { transactionIds: [inTracker.id] },
         raw: true,
       });
 
-      const blankOnly = await helpers.getTransactions({ budgetIds: [BLANK_FILTER_VALUE], raw: true });
+      const blankOnly = await helpers.getTransactions({ trackerIds: [BLANK_FILTER_VALUE], raw: true });
       expect(sortedIds(blankOnly)).toEqual([unassigned.id]);
 
-      const blankOrBudget = await helpers.getTransactions({ budgetIds: [BLANK_FILTER_VALUE, budget.id], raw: true });
-      expect(sortedIds(blankOrBudget)).toEqual(sortedIds([inBudget, unassigned]));
+      const blankOrTracker = await helpers.getTransactions({ trackerIds: [BLANK_FILTER_VALUE, tracker.id], raw: true });
+      expect(sortedIds(blankOrTracker)).toEqual(sortedIds([inTracker, unassigned]));
     });
 
     it('tagIds: blank matches untagged rows and ORs with real tag ids', async () => {
