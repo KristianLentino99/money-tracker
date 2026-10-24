@@ -31,7 +31,8 @@
     "parentGroupNotExist": "Non esiste alcun gruppo padre con questo ID.",
     "parentGroupDoesNotExist": "Il gruppo padre non esiste.",
     "accountNotFound": "Conto con questo ID non trovato.",
-    "accountGroupNotFound": "Gruppo di conti con questo ID non trovato."
+    "accountGroupNotFound": "Gruppo di conti con questo ID non trovato.",
+    "parentGroupCycle": "A group can't be placed inside itself or one of its own subgroups."
   },
   "transactions": {
     "notFound": "Transazione non trovata.",

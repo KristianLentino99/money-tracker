@@ -121,7 +121,9 @@
             "privacyUrl": "URL privacy:",
             "termsUrl": "URL termini:",
             "clickRegister": "Fai clic su \"Register\"",
-            "downloadKey": "Ti verrà proposto di scaricare un file. È la tua chiave RSA, che devi salvare da qualche parte poiché fa parte delle tue credenziali"
+            "downloadKey": "Ti verrà proposto di scaricare un file. È la tua chiave RSA, che devi salvare da qualche parte poiché fa parte delle tue credenziali",
+            "httpsRequired": "Enable Banking only accepts https redirect URLs. Serve this instance over HTTPS, set {envVar} to its public callback URL (e.g. {example}), recreate the backend container, and enter the same URL in this field. {link}",
+            "httpsRequiredLink": "How to set it up"
           }
         },
         "step2": {

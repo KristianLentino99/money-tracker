@@ -143,7 +143,8 @@
           "capabilities": "Capacità:",
           "estimatedCost": "Costo stimato:",
           "per100Transactions": "ogni 100 transazioni",
-          "unknown": "Sconosciuto"
+          "unknown": "Sconosciuto",
+          "per100Pairs": "per 100 pairs"
         },
         "rateLimitWarning": "Stai usando l'IA fornita dal server con limiti di frequenza del livello gratuito. La disponibilità della funzionalità dipende dalla richiesta degli altri utenti. Per un accesso affidabile, aggiungi la tua chiave API nella scheda Chiavi API.",
         "groupLabels": {
@@ -330,14 +331,16 @@
           "statementParsing": "Legge l'intero estratto conto e restituisce ogni riga: serve un modello che mantenga la precisione anche su testi lunghi.",
           "investmentTransactionsParsing": "Trasforma le esportazioni del broker in operazioni di acquisto e vendita. Per esportazioni lunghe serve un modello capace di produrre risposte lunghe.",
           "receiptParsing": "Il modello analizza direttamente il file della fattura, quindi deve saper leggere immagini e PDF.",
-          "trackerMatching": "A short, repetitive job that runs every day. A small model handles it well and keeps the cost down."
+          "trackerMatching": "A short, repetitive job that runs every day. A small model handles it well and keeps the cost down.",
+          "transferMatching": "Reads short pairs of transactions and answers with a one-word verdict, so a light, cheap model is enough."
         },
         "picks": {
           "categorization": "Gemini Flash Lite · Claude Haiku",
           "statementParsing": "Gemini Flash · Claude Sonnet · GPT Terra",
           "investmentTransactionsParsing": "Gemini Flash · Claude Sonnet",
           "receiptParsing": "Gemini Flash · Claude Sonnet",
-          "trackerMatching": "Gemini Flash Lite · Claude Haiku"
+          "trackerMatching": "Gemini Flash Lite · Claude Haiku",
+          "transferMatching": "Gemini Flash Lite · Claude Haiku"
         },
         "verdict": {
           "fit": "Adatto",

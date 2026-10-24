@@ -246,7 +246,8 @@
         "createMore": {
           "label": "Crea altre transazioni",
           "createdToast": "Transazione creata"
-        }
+        },
+        "addFieldsLabel": "Aggiungere"
       },
       "investmentContribution": {
         "title": "Acquisti di investimento",
@@ -612,7 +613,11 @@
         "title": "Crea gruppo",
         "nameLabel": "Nome gruppo",
         "namePlaceholder": "Investimenti",
-        "createButton": "Crea"
+        "createButton": "Crea",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {

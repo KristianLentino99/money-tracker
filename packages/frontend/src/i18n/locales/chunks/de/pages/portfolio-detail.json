@@ -27,8 +27,8 @@
       }
     },
     "cashBalances": {
-      "title": "Barbestände",
-      "emptyState": "Keine Barbestände",
+      "title": "Cash-Bestände",
+      "emptyState": "Keine Cash-Bestände",
       "tabs": {
         "balances": "Bestände",
         "cashTransactions": "Transaktionen",

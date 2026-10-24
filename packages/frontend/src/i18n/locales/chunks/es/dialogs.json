@@ -246,7 +246,8 @@
             "openInNewTab": "Abrir en una nueva pestaña",
             "download": "Descargar"
           }
-        }
+        },
+        "addFieldsLabel": "Añadir"
       },
       "investmentContribution": {
         "title": "Compras de inversión",
@@ -473,8 +474,6 @@
         "announceApplied": "{name} aplicada: {count} campo rellenado. El importe está vacío. | {name} aplicada: {count} campos rellenados. El importe está vacío.",
         "announceAppliedWithAmount": "{name} aplicada: {count} campo rellenado. Importe establecido en {amount}. | {name} aplicada: {count} campos rellenados. Importe establecido en {amount}.",
         "categoryDeletedHint": "La categoría de esta plantilla fue eliminada: seleccione una.",
-        "alsoSet": "La plantilla también estableció: {fields}",
-        "tagsCount": "{count} etiqueta | {count} etiquetas",
         "applyConfirmTitle": "¿Aplicar la plantilla?",
         "applyConfirmDescription": "Al aplicarla se reemplazarán sus divisiones y el vínculo de reembolso.",
         "toasts": {
@@ -611,7 +610,11 @@
         "title": "Crear grupo",
         "nameLabel": "Nombre del grupo",
         "namePlaceholder": "Inversiones",
-        "createButton": "Crear"
+        "createButton": "Crear",
+        "subgroupTitle": "New subgroup",
+        "insideLabel": "Inside",
+        "subgroupNamePlaceholder": "e.g. Savings",
+        "createSubgroupButton": "Create subgroup"
       }
     },
     "directCashTransaction": {
