@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import CurrencyChip from '@/components/common/currency-chip.vue';
 import { getExchangeRatePair } from '@/api/currencies';
 import { loadTransactionById } from '@/api/transactions';
 import { OUT_OF_WALLET_ACCOUNT_MOCK, VERBOSE_PAYMENT_TYPES, VUE_QUERY_CACHE_KEYS } from '@/common/const';
@@ -26,13 +27,15 @@ import { Checkbox } from '@/components/lib/ui/checkbox';
 import { Switch } from '@/components/lib/ui/switch';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/lib/ui/scroll-area';
+import { StatusBadge } from '@/components/lib/ui/status-badge';
 import { DesktopOnlyTooltip } from '@/components/lib/ui/tooltip';
 import { useNotificationCenter } from '@/components/notification-center';
 import { useExchangeRates } from '@/composable/data-queries/currencies';
+import { useAccountName } from '@/composable/use-account-name';
 import { useFormValidation } from '@/composable/form-validator';
 import { useCurrencyName, useFormatCurrency } from '@/composable/formatters';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
-import { formatUIAmount } from '@/js/helpers';
+import { formatUIAmount, toLocalCurrencyNumber } from '@/js/helpers';
 import { flattenCategories } from '@/pages/import-export/utils/flatten-categories';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useAccountsStore, useCategoriesStore, useCurrenciesStore, useTagsStore, useUserStore } from '@/stores';
@@ -57,6 +60,7 @@ import {
   CopyIcon,
   CornerDownLeftIcon,
   ExternalLinkIcon,
+  LayersIcon,
   LocateIcon,
   MapIcon,
   MapPinIcon,
@@ -84,6 +88,7 @@ import AmountWithCurrencyField from './components/amount-with-currency-field.vue
 import LabelPill from './components/label-pill.vue';
 import InvestmentContributionFields from './components/investment-contribution-fields.vue';
 import LocationPickerDialog from './components/location-picker-dialog.vue';
+import PaymentLegsField from './components/payment-legs-field.vue';
 import SplitDialog from './components/split-dialog.vue';
 import TypeSelector from './components/type-selector.vue';
 import TemplateFormDialog from './components/templates/template-form-dialog.vue';
@@ -113,6 +118,7 @@ import { useReverseGeocodedLabel } from './composables/use-reverse-geocoded-labe
 import { formToCreateMorePrefill } from './utils/form-to-create-more-prefill';
 import { formToDuplicatePrefill } from './utils/form-to-duplicate-prefill';
 import { canDuplicateTransaction } from './utils/can-duplicate-transaction';
+import { resolveAccountPaymentType } from './utils/resolve-account-payment-type';
 import { resolveFormLocation } from './utils/resolve-form-location';
 import { useTransactionTemplating } from './composables/use-transaction-templating';
 import { useAutoTagApply } from '@/composable/use-auto-tag-apply';
@@ -127,8 +133,15 @@ import {
   prepopulateForm,
   resolveInitialTransactionAccount,
 } from './helpers';
-import { FORM_TYPES, UI_FORM_STRUCT, type InvestmentContributionForm, type TransactionPrefill } from './types';
+import {
+  FORM_TYPES,
+  type FormPaymentLeg,
+  type InvestmentContributionForm,
+  type TransactionPrefill,
+  UI_FORM_STRUCT,
+} from './types';
 import { canSuggestOriginalAmount, resolveSuggestedOriginalAmount } from './utils/suggest-original-amount';
+import { hasPaymentParts, isPaymentLegIncomplete, sumMainWithCreatedLegs, sumPaymentRows } from './utils/payment-legs';
 
 defineOptions({
   name: 'record-form',
@@ -181,6 +194,7 @@ const isVentureLinkedView = computed(
 
 const route = useRoute();
 const { t } = useI18n();
+const getAccountName = useAccountName();
 watch(() => route.path, closeModal);
 
 const { currenciesMap, systemCurrencies } = storeToRefs(useCurrenciesStore());
@@ -248,6 +262,14 @@ const form = ref<UI_FORM_STRUCT>({
   originalCurrency: null,
   investmentContribution: null,
 });
+
+watch(
+  () => form.value.account,
+  (account) => {
+    if (!isFormCreation.value || form.value.paymentTypeUserTouched) return;
+    form.value.paymentType = resolveAccountPaymentType({ account, fallback: defaultPaymentType.value });
+  },
+);
 
 // PayeeField → category auto-fill (one-shot) + tag auto-apply.
 // The form is unaware whether the category was set by the user or by Payee
@@ -345,6 +367,31 @@ const linkedTransaction = ref<TransactionModel | null>(null);
 const isSplitDialogOpen = ref(false);
 
 const hasSplits = computed(() => form.value.splits && form.value.splits.length > 0);
+
+const isMultiAccount = computed(() => form.value.paymentLegs !== undefined);
+const isSavedMultiAccount = computed(() => hasPaymentParts({ transaction: transaction.value }));
+const hasLinkedPaymentLegs = computed(() => Boolean(form.value.paymentLegs?.some((leg) => leg.isLinked)));
+const showLegErrors = ref(false);
+const setPaymentLegs = (legs: FormPaymentLeg[]) => {
+  form.value.paymentLegs = legs.length ? legs : undefined;
+};
+const toggleMultiAccount = () => {
+  if (form.value.investmentContribution) return;
+  showLegErrors.value = false;
+  if (isMultiAccount.value) {
+    // A locked main's amount is never sent, so a merged total would show but not save.
+    if (isEditableAsManual.value) {
+      form.value.amount = sumMainWithCreatedLegs({
+        mainAmount: form.value.amount,
+        legs: form.value.paymentLegs ?? [],
+        mainCurrencyCode: form.value.account?.currencyCode,
+      });
+    }
+    form.value.paymentLegs = undefined;
+  } else {
+    form.value.paymentLegs = [{ account: null, amount: null }];
+  }
+};
 const splitsTotal = computed(() => {
   if (!form.value.splits) return 0;
   return form.value.splits.reduce((sum, split) => sum + (split.amount ?? 0), 0);
@@ -505,7 +552,13 @@ const isFormFieldsDisabled = computed(() => isLoading.value || !isInitialRefunds
 const currentTxType = computed(() => form.value.type);
 const isTransferTx = computed(() => currentTxType.value === FORM_TYPES.transfer);
 const isInvestmentContributionVisible = computed(
-  () => !isTransferTx.value && currentTxType.value === FORM_TYPES.expense && !form.value.isForecastOnly,
+  () =>
+    !isTransferTx.value &&
+    currentTxType.value === FORM_TYPES.expense &&
+    !form.value.isForecastOnly &&
+    !isMultiAccount.value &&
+    !isSavedMultiAccount.value &&
+    !transaction.value?.paymentParentId,
 );
 const recurringPaymentTransactionType = computed(() =>
   isTransferTx.value ? undefined : getTxTypeFromFormType(currentTxType.value),
@@ -707,6 +760,7 @@ const setInvestmentContributionEnabled = (enabled: boolean) => {
     form.value.investmentContribution = null;
     return;
   }
+  if (!isInvestmentContributionVisible.value) return;
   if (!form.value.categoryUserTouched) form.value.category = null;
   form.value.investmentContribution ??= createInvestmentContributionForm();
 };
@@ -1109,8 +1163,22 @@ const submit = ({ keepOpen = false }: { keepOpen?: boolean } = {}) => {
   touchField('form.externalReference');
 
   if (!isFormValid('form')) return;
-  if (form.value.investmentContribution && !isInvestmentContributionFormValid({ form: form.value })) {
+  if (
+    form.value.investmentContribution &&
+    !isInvestmentContributionFormValid({ form: form.value, transaction: transaction.value })
+  ) {
     addErrorNotification(t('dialogs.manageTransaction.investmentContribution.validationError'));
+    return;
+  }
+  if (
+    form.value.paymentLegs?.some((leg) =>
+      isPaymentLegIncomplete({
+        leg,
+        mainCurrencyCode: form.value.account?.currencyCode,
+      }),
+    )
+  ) {
+    showLegErrors.value = true;
     return;
   }
 
@@ -1147,6 +1215,37 @@ const canDelete = computed(() =>
   }),
 );
 
+const isMultiAccountPillDisabled = computed(
+  () =>
+    isFormFieldsDisabled.value ||
+    (!isMultiAccount.value &&
+      (Boolean(form.value.isForecastOnly) ||
+        Boolean(form.value.investmentContribution) ||
+        hasSplits.value ||
+        isRefundLinked.value ||
+        isAccountSharedWithCaller.value)),
+);
+const paymentLegsLabel = computed(() =>
+  currentTxType.value === FORM_TYPES.income
+    ? t('dialogs.manageTransaction.form.paymentLegs.receivedIntoLabel')
+    : t('dialogs.manageTransaction.form.paymentLegs.paidFromLabel'),
+);
+const paymentLegsHint = computed(() => {
+  if (!isEditableAsManual.value) return t('dialogs.manageTransaction.form.paymentLegs.syncedHint');
+  if (isSavedMultiAccount.value) return t('dialogs.manageTransaction.form.paymentLegs.editHint');
+  return undefined;
+});
+const deletedPaymentParts = computed(() =>
+  isSavedMultiAccount.value
+    ? transaction.value!.paymentParts!.map((part) => ({
+        ...part,
+        accountName: getAccountName({ accountId: part.accountId }),
+        signedAmount: transaction.value!.transactionType === TRANSACTION_TYPES.expense ? -part.amount : part.amount,
+      }))
+    : [],
+);
+const hasLinkedPaymentParts = computed(() => deletedPaymentParts.value.some((part) => part.isLinked));
+
 const deleteTransactionHandler = () => {
   if (!canDelete.value) return;
   deleteMutation.mutate({
@@ -1169,6 +1268,7 @@ const previouslyFocusedElement = ref(document.activeElement);
 const [DefineMoreOptions, ReuseMoreOptions] = createReusableTemplate();
 const [DefineDateField, ReuseDateField] = createReusableTemplate();
 const [DefinePaymentType, ReusePaymentType] = createReusableTemplate();
+const [DefineMultiAccountPill, ReuseMultiAccountPill] = createReusableTemplate();
 
 const { isEnabled: isOptionalFieldEnabled } = useOptionalFields();
 
@@ -1178,7 +1278,9 @@ const initialPrefill = props.prefill;
 const isAttachmentsAvailable = computed(() => !!transaction.value?.id || !form.value.toPortfolio);
 const isLocationFilled = computed(() => form.value.latitude != null || form.value.longitude != null);
 
-const isRefundAvailable = computed(() => !isTransferTx.value && !isAccountSharedWithCaller.value);
+const isRefundAvailable = computed(
+  () => !isTransferTx.value && !isAccountSharedWithCaller.value && !isMultiAccount.value,
+);
 const isRefundLinked = computed(() => !!(form.value.refundsTx || form.value.refundedByTxs?.length));
 const refundFieldRef = ref<InstanceType<typeof MarkAsRefundField> | null>(null);
 
@@ -1280,6 +1382,10 @@ const prepopulateIfReady = () => {
     });
     form.value.paymentType = defaultPaymentType.value;
     Object.assign(form.value, initialPrefill);
+    form.value.paymentType =
+      initialPrefill?.paymentType ??
+      resolveAccountPaymentType({ account: form.value.account, fallback: defaultPaymentType.value });
+    form.value.paymentTypeUserTouched = !!initialPrefill?.paymentType;
     // Keeps the payee auto-fill from replacing a prefilled category.
     form.value.categoryUserTouched = !!initialPrefill?.category;
     // A prefilled category arrives with the tag list its source already settled on.
@@ -1326,6 +1432,21 @@ watch([effectiveFormattedCategories, isCategoriesReady], ([categories, isReady])
 });
 
 const amountFieldRef = ref<InstanceType<typeof InputField> | null>(null);
+const paymentLegsFieldRef = ref<InstanceType<typeof PaymentLegsField> | null>(null);
+const editableAmountFieldRef = computed(() =>
+  isMultiAccount.value ? paymentLegsFieldRef.value : amountFieldRef.value,
+);
+
+const paymentTotalLabel = computed(() =>
+  toLocalCurrencyNumber(
+    sumPaymentRows({
+      mainAmount: form.value.amount,
+      legs: form.value.paymentLegs ?? [],
+      mainCurrencyCode: form.value.account?.currencyCode,
+    }),
+    { currency: currencyCode.value },
+  ),
+);
 const targetAmountFieldRef = ref<InstanceType<typeof InputField> | null>(null);
 const categoryFieldRef = ref<InstanceType<typeof CategorySelectField> | null>(null);
 
@@ -1343,8 +1464,8 @@ const templating = useTransactionTemplating({
   currencyCode,
   resetAutoTagTracking,
   focusAmountField: () => {
-    amountFieldRef.value?.focus();
-    amountFieldRef.value?.select();
+    editableAmountFieldRef.value?.focus();
+    editableAmountFieldRef.value?.select();
   },
   focusCategoryField: () => categoryFieldRef.value?.focus(),
   submit: () => submit(),
@@ -1411,7 +1532,7 @@ const onKeydown = (event: KeyboardEvent) => {
 };
 
 defineExpose({
-  focusAmount: () => (isAmountFieldDisabled.value ? targetAmountFieldRef.value : amountFieldRef.value)?.focus(),
+  focusAmount: () => (isAmountFieldDisabled.value ? targetAmountFieldRef.value : editableAmountFieldRef.value)?.focus(),
 });
 
 onUnmounted(() => {
@@ -1455,12 +1576,27 @@ onUnmounted(() => {
       <SelectField
         v-model="form.paymentType"
         :label="$t('dialogs.manageTransaction.form.paymentTypeLabel')"
+        @update:model-value="form.paymentTypeUserTouched = true"
         :disabled="isFormFieldsDisabled || !isEditableAsManual"
         :values="VERBOSE_PAYMENT_TYPES"
         :label-key="(item) => t(item.label)"
       />
     </FormRow>
   </DefinePaymentType>
+
+  <DefineMultiAccountPill>
+    <LabelPill
+      data-test="multi-account-toggle"
+      :active="isMultiAccount"
+      :aria-pressed="isMultiAccount"
+      :disabled="isMultiAccountPillDisabled"
+      :aria-label="$t('dialogs.manageTransaction.form.paymentLegs.severalAccountsPill')"
+      @click="toggleMultiAccount"
+    >
+      <LayersIcon class="size-3.5" />
+      {{ $t('dialogs.manageTransaction.form.paymentLegs.severalAccountsPill') }}
+    </LabelPill>
+  </DefineMultiAccountPill>
 
   <!-- Define reusable template for "More Options" section (payment type, note, refund) -->
   <DefineMoreOptions>
@@ -1664,13 +1800,13 @@ onUnmounted(() => {
           v-for="chip in addFieldChips"
           :key="chip.key"
           type="button"
-          variant="ghost"
+          variant="outline"
           size="sm"
-          class="text-muted-foreground hover:text-foreground h-8 gap-1.5 border border-dashed px-2.5 text-sm"
+          class="h-8 gap-1.5 rounded-full px-3 text-sm"
           :disabled="isFormFieldsDisabled"
           @click="chip.onClick"
         >
-          <component :is="chip.icon" class="size-3.5" />
+          <component :is="chip.icon" class="text-muted-foreground size-3.5" />
           {{ $t(chip.labelKey) }}
         </Button>
       </div>
@@ -1738,7 +1874,8 @@ onUnmounted(() => {
             :transaction="transaction"
             :account="transaction ? accountsRecord[transaction.accountId] : undefined"
             :disabled="isFormFieldsDisabled"
-            :is-transfer-disabled="Boolean(form.isForecastOnly)"
+            :is-transfer-disabled="Boolean(form.isForecastOnly) || isMultiAccount"
+            :is-type-locked="isSavedMultiAccount || hasLinkedPaymentLegs"
             class="mb-6"
             @change-tx-type="selectTransactionType"
           />
@@ -1747,6 +1884,23 @@ onUnmounted(() => {
             <div :class="isMobileView && 'grid grid-cols-2 gap-x-3'">
               <form-row>
                 <input-field
+                  v-if="isMultiAccount"
+                  trailing-icon-css-class="px-2"
+                  :model-value="paymentTotalLabel"
+                  :label="$t('dialogs.manageTransaction.form.amountLabel')"
+                  type="text"
+                  readonly
+                  class="[&_input]:bg-muted [&_input]:cursor-default"
+                  tabindex="-1"
+                  :disabled="isFormFieldsDisabled || isAmountFieldDisabled"
+                >
+                  <template #iconTrailing>
+                    <CurrencyChip v-if="currencyCode" :code="currencyCode" />
+                  </template>
+                </input-field>
+                <input-field
+                  v-else
+                  trailing-icon-css-class="px-2"
                   ref="amountFieldRef"
                   v-model="form.amount"
                   :label="$t('dialogs.manageTransaction.form.amountLabel')"
@@ -1759,7 +1913,7 @@ onUnmounted(() => {
                   @blur="onAmountBlur"
                 >
                   <template #iconTrailing>
-                    <span>{{ currencyCode }}</span>
+                    <CurrencyChip v-if="currencyCode" :code="currencyCode" />
                   </template>
                 </input-field>
               </form-row>
@@ -1770,7 +1924,36 @@ onUnmounted(() => {
               {{ $t('dialogs.loanPayment.overdrawWarning', { account: form.account?.name ?? '' }) }}
             </p>
 
+            <PaymentLegsField
+              v-if="isMultiAccount && !isTransferTx"
+              ref="paymentLegsFieldRef"
+              v-model:account="form.account"
+              v-model:amount="form.amount"
+              :legs="form.paymentLegs ?? []"
+              :label="paymentLegsLabel"
+              :main-accounts="nonTransferSourceAccounts"
+              :leg-accounts="txTargetableSourceAccountsActiveFirst"
+              :currency-code="currencyCode"
+              :transaction-type="
+                currentTxType === FORM_TYPES.income ? TRANSACTION_TYPES.income : TRANSACTION_TYPES.expense
+              "
+              :time="form.time"
+              :main-transaction-id="transaction?.id"
+              :disabled="isFormFieldsDisabled"
+              :is-main-locked="!isEditableAsManual"
+              :hint="paymentLegsHint"
+              :main-amount-error="amountErrorMessage"
+              :show-leg-errors="showLegErrors"
+              @update:legs="setPaymentLegs"
+              @main-amount-blur="onAmountBlur"
+            >
+              <template #label-right>
+                <ReuseMultiAccountPill />
+              </template>
+            </PaymentLegsField>
+
             <account-field
+              v-else
               v-model:account="form.account"
               v-model:to-account="form.toAccount"
               v-model:to-portfolio="form.toPortfolio"
@@ -1811,6 +1994,10 @@ onUnmounted(() => {
                 />
               </template>
 
+              <template v-if="!isTransferTx" #account-label-pill>
+                <ReuseMultiAccountPill />
+              </template>
+
               <template #account-hint>
                 <PlannedUnlockHint v-if="isFormCreation && form.isForecastOnly && hasConnectedAccountsToOffer">
                   {{ $t('dialogs.manageTransaction.form.plannedAccountsUnlockedHint') }}
@@ -1834,6 +2021,7 @@ onUnmounted(() => {
                 <template v-if="isTargetFieldVisible">
                   <form-row>
                     <input-field
+                      trailing-icon-css-class="px-2"
                       ref="targetAmountFieldRef"
                       v-model="form.targetAmount"
                       :disabled="isFormFieldsDisabled || isTargetAmountFieldDisabled"
@@ -1845,7 +2033,7 @@ onUnmounted(() => {
                       @blur="touchField('form.targetAmount')"
                     >
                       <template #iconTrailing>
-                        <span>{{ targetCurrency?.currency?.code }}</span>
+                        <CurrencyChip v-if="targetCurrency?.currency?.code" :code="targetCurrency.currency.code" />
                       </template>
                     </input-field>
                   </form-row>
@@ -1913,7 +2101,7 @@ onUnmounted(() => {
                       data-test="split-toggle"
                       variant="addon"
                       :active="hasSplits"
-                      :disabled="isFormFieldsDisabled"
+                      :disabled="isFormFieldsDisabled || isMultiAccount"
                       :aria-label="$t('dialogs.manageTransaction.form.splitPillLabel')"
                       @click="isSplitDialogOpen = true"
                     >
@@ -1922,6 +2110,10 @@ onUnmounted(() => {
                     </LabelPill>
                   </template>
                 </category-select-field>
+
+                <p v-if="isMultiAccount" class="text-muted-foreground mt-1 px-1 text-xs">
+                  {{ $t('dialogs.manageTransaction.form.paymentLegs.splitUnavailableHint') }}
+                </p>
 
                 <p v-if="templating.isCategoryDeleted.value" class="text-warning-text mt-1 px-1 text-xs">
                   {{ $t('dialogs.manageTransaction.templates.categoryDeletedHint') }}
@@ -2029,7 +2221,10 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <div v-if="!isMobileView" class="bg-muted border-border border-l px-6 py-6 dark:bg-black/20">
+        <div
+          v-if="!isMobileView"
+          class="bg-muted border-border border-l px-6 py-6 [--color-input-background:var(--card)] dark:bg-black/20 dark:[--color-input-background:var(--input-background)]"
+        >
           <ReuseMoreOptions />
         </div>
       </div>
@@ -2047,6 +2242,58 @@ onUnmounted(() => {
         {{ $t('dialogs.manageTransaction.form.deleteButton') }}
       </Button>
       <ResponsiveAlertDialog
+        v-if="deletedPaymentParts.length"
+        v-model:open="isDeleteConfirmOpen"
+        :confirm-label="
+          deletedPaymentParts.length === 2
+            ? $t('dialogs.manageTransaction.form.paymentLegs.deleteBoth')
+            : $t('dialogs.manageTransaction.form.paymentLegs.deleteAll')
+        "
+        confirm-variant="destructive"
+        :confirm-disabled="isFormFieldsDisabled"
+        @confirm="deleteTransactionHandler"
+      >
+        <template #title>{{ $t('dialogs.manageTransaction.form.paymentLegs.deleteTitle') }}</template>
+        <template #description>
+          {{
+            hasLinkedPaymentParts
+              ? $t('dialogs.manageTransaction.form.paymentLegs.deleteLinkedDescription')
+              : $t('dialogs.manageTransaction.form.paymentLegs.deleteDescription', {
+                  count: deletedPaymentParts.length,
+                })
+          }}
+        </template>
+        <ul class="border-border divide-border divide-y rounded-lg border text-sm">
+          <li
+            v-for="part in deletedPaymentParts"
+            :key="part.transactionId"
+            class="flex items-center justify-between gap-3 px-3 py-2"
+          >
+            <span class="flex min-w-0 items-center gap-2">
+              <span class="truncate">{{ part.accountName }}</span>
+              <StatusBadge v-if="hasLinkedPaymentParts" :variant="part.isLinked ? 'success' : 'destructive'">
+                {{
+                  part.isLinked
+                    ? $t('dialogs.manageTransaction.form.paymentLegs.partKept')
+                    : $t('dialogs.manageTransaction.form.paymentLegs.partDeleted')
+                }}
+              </StatusBadge>
+            </span>
+            <span class="text-amount tabular-nums">
+              {{
+                formatUIAmount(part.signedAmount, {
+                  currency: part.currencyCode,
+                })
+              }}
+            </span>
+          </li>
+        </ul>
+        <p class="text-muted-foreground mt-2 text-xs">
+          {{ $t('dialogs.manageTransaction.form.paymentLegs.deleteSinglePartHint') }}
+        </p>
+      </ResponsiveAlertDialog>
+      <ResponsiveAlertDialog
+        v-else
         v-model:open="isDeleteConfirmOpen"
         :confirm-label="$t('dialogs.manageTransaction.form.deleteButton')"
         confirm-variant="destructive"

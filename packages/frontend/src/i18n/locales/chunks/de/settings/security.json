@@ -18,7 +18,9 @@
           "accountName": "{provider}-Konto",
           "notConnected": "Nicht verbunden",
           "disconnect": "Trennen",
-          "connect": "Verbinden"
+          "connect": "Verbinden",
+          "disconnectConfirmDescription": "You won't be able to log in with this {provider} account anymore. You can reconnect it at any time.",
+          "disconnectConfirmTitle": "Disconnect {provider}?"
         },
         "password": {
           "title": "Passwort",
@@ -177,7 +179,9 @@
           "confirmFull": "Bitte gib {email} ein, um zu bestätigen",
           "placeholder": "Gib deine E-Mail-Adresse ein",
           "acceptButton": "Mein Konto löschen",
-          "acceptButtonLoading": "Wird gelöscht..."
+          "acceptButtonLoading": "Wird gelöscht...",
+          "appStoreWarning": "Das Löschen deines Kontos kündigt dein App-Store-Abo nicht und Apple wird dir weiterhin Kosten berechnen. Kündige es zuerst in deinen {link}.",
+          "appStoreWarningLink": "App-Store-Abonnements"
         },
         "notifications": {
           "success": "Dein Konto wurde erfolgreich gelöscht",
@@ -254,7 +258,6 @@
           },
           "warnings": {
             "sharesSkipped": "{count} \"{table}\"-Zeile übersprungen: Freigegebene Ressourcen verweisen auf Benutzer, die auf dieser Instanz nicht existieren. | {count} \"{table}\"-Zeilen übersprungen: Freigegebene Ressourcen verweisen auf Benutzer, die auf dieser Instanz nicht existieren.",
-            "mccCodeMissing": "{count} MCC-Regel verworfen, deren Händlerkategorie-Code auf dieser Instanz nicht existiert. | {count} MCC-Regeln verworfen, deren Händlerkategorie-Codes auf dieser Instanz nicht existieren.",
             "currencyMissing": "{count} Währung übersprungen, die auf dieser Instanz nicht verfügbar ist. | {count} Währungen übersprungen, die auf dieser Instanz nicht verfügbar sind.",
             "unknownTableIgnored": "Das Backup enthält eine unbekannte Tabelle \"{table}\"; sie wurde ignoriert.",
             "unknownColumnDropped": "Eine unbekannte Spalte in \"{table}\" wurde verworfen: {columns}. | Unbekannte Spalten in \"{table}\" wurden verworfen: {columns}.",

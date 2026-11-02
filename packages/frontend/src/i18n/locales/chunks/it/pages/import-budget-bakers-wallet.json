@@ -39,7 +39,7 @@
           "modeLinkExisting": "Collega a conto esistente",
           "currentBalanceLabel": "Saldo attuale (facoltativo)",
           "currentBalancePlaceholder": "ad es. 1234,56",
-          "currentBalanceHint": "Lascia vuoto per partire dalla somma delle transazioni importate.",
+          "currentBalanceHint": "Lascia vuoto per iniziare dalla somma delle transazioni importate.",
           "linkTargetLabel": "Conto esistente",
           "linkTargetPlaceholder": "Seleziona conto",
           "keepBalanceNote": "Il saldo attuale del conto esistente verrà mantenuto. La cronologia verrà inserita retroattivamente."

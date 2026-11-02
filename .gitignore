@@ -187,3 +187,6 @@ deploy/aws/lightsail/*.tfvars.json
 !deploy/aws/lightsail/production.auto.tfvars.json
 deploy/aws/lightsail/*.pem
 deploy/aws/lightsail/crash*.log
+
+# Cached pg_dump of the migrated e2e template DB (packages/backend/src/tests/setup-e2e-tests.sh)
+packages/backend/.e2e-template-cache/

@@ -8,8 +8,9 @@ set -eu
 IMAGE="$1"
 PORT="${PORT:-8089}"
 BASE="http://localhost:$PORT"
+MCP_ORIGIN="${MCP_BASE_URL:-https://finance.example.test}"
 
-cid=$(docker run -d -p "$PORT:80" "$IMAGE")
+cid=$(docker run -d -p "$PORT:80" -e IS_SELF_HOST=true -e MCP_BASE_URL="$MCP_ORIGIN" "$IMAGE")
 trap 'docker rm -f "$cid" >/dev/null' EXIT
 
 i=0
@@ -18,6 +19,40 @@ until curl -fs -o /dev/null "$BASE/version.json"; do
   [ "$i" -lt 30 ] || { echo "container did not start" >&2; docker logs "$cid" >&2; exit 1; }
   sleep 1
 done
+
+discovery_dir=$(mktemp -d)
+trap 'rm -rf "$discovery_dir"; docker rm -f "$cid" >/dev/null' EXIT
+curl -fsS "$BASE/.well-known/mcp/server-card.json" > "$discovery_dir/server-card.json"
+curl -fsS "$BASE/.well-known/agent-skills/index.json" > "$discovery_dir/skills-index.json"
+curl -fsS "$BASE/skills/connect-moneymatter/SKILL.md" > "$discovery_dir/SKILL.md"
+python3 - "$discovery_dir" "$MCP_ORIGIN" <<'PY'
+import hashlib
+import json
+import pathlib
+import sys
+
+directory = pathlib.Path(sys.argv[1])
+origin = sys.argv[2].rstrip('/')
+card = json.loads((directory / 'server-card.json').read_text())
+assert card['transport']['url'] == f'{origin}/mcp', card['transport']
+oauth = card['authentication']['oauth2']
+assert oauth['authorizationServer'] == f'{origin}/api/v1/auth', oauth
+assert oauth['metadata'] == f'{origin}/.well-known/oauth-authorization-server', oauth
+assert oauth['protectedResourceMetadata'] == f'{origin}/.well-known/oauth-protected-resource', oauth
+
+index = json.loads((directory / 'skills-index.json').read_text())
+skill = next(item for item in index['skills'] if item['name'] == 'connect-moneymatter')
+assert skill['url'] == f'{origin}/skills/connect-moneymatter/SKILL.md', skill
+markdown = (directory / 'SKILL.md').read_bytes()
+assert skill['sha256'] == hashlib.sha256(markdown).hexdigest(), 'Skill content hash mismatch'
+text = markdown.decode()
+for endpoint in ('/mcp', '/.well-known/mcp/server-card.json', '/.well-known/oauth-authorization-server', '/.well-known/oauth-protected-resource'):
+    assert f'{origin}{endpoint}' in text, f'Missing deployment endpoint: {endpoint}'
+assert 'https://mcp.moneymatter.app/mcp' not in text, 'Skill directs the agent to the hosted MCP server'
+assert f'{origin}/sign-up' in text, 'Skill must register the user on this deployment'
+assert 'https://moneymatter.app/sign-up' not in text, 'Skill directs registration to the hosted site'
+print('ok   MCP discovery advertises this deployment and a matching skill digest')
+PY
 
 locs() { curl -fsS "$BASE$1" | grep -o '<loc>[^<]*</loc>' | sed -e 's/<[^>]*>//g'; }
 path_of() { printf '%s' "$1" | sed -e 's|^https\{0,1\}://[^/]*||'; }

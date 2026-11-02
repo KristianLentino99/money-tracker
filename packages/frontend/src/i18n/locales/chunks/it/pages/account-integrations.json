@@ -4,7 +4,7 @@
       "addDialog": {
         "titleSelect": "Aggiungi integrazione",
         "titleConnect": "Collega {provider}",
-        "selectProviderHint": "Dove hai il conto bancario? Scegli una regione per vedere cosa funziona lì.",
+        "selectProviderHint": "In quale paese si trova la banca? Scegliere una regione per vedere le soluzioni disponibili.",
         "betaBadge": "Beta"
       },
       "providers": {
@@ -27,28 +27,32 @@
         "walutomat": {
           "name": "Walutomat",
           "description": "Piattaforma polacca di cambio valuta con 23 valute"
+        },
+        "akahu": {
+          "name": "Akahu",
+          "description": "Sync transactions from New Zealand banks for free via an Akahu personal app"
         }
       },
       "monobank": {
         "apiTokenLabel": "Token API",
         "connectionNameLabel": "Nome connessione (facoltativo)",
-        "tokenPlaceholder": "Inserisci il tuo token API Monobank",
+        "tokenPlaceholder": "Inserire il token API di Monobank",
         "accountNamePlaceholder": "es. Conto personale",
         "help": {
-          "trigger": "Dove trovo un token API?",
-          "title": "Ottieni il tuo token API Monobank",
-          "step1": "Visita {link} e segui le istruzioni per generare un token personale.",
-          "step2": "Conserva il token in modo sicuro e incollalo nel campo.",
+          "trigger": "Come ottenere un token API?",
+          "title": "Ottenere il token API di Monobank",
+          "step1": "Visitare {link} e seguire le istruzioni per generare un token personale.",
+          "step2": "Copiare il token e incollarlo nel campo.",
           "note": "Non preoccuparti — il token API è strettamente in sola lettura."
         },
         "backButton": "Indietro",
         "connectingButton": "Connessione in corso...",
         "connectButton": "Connetti",
         "loadingAccounts": "Caricamento conti...",
-        "selectAccountsHint": "Seleziona i conti che vuoi sincronizzare con MoneyMatter",
+        "selectAccountsHint": "Selezionare i conti da sincronizzare con MoneyMatter",
         "syncingButton": "Sincronizzazione...",
-        "syncButton": "Sincronizza {count} conto/i",
-        "syncSuccess": "{count} conto/i sincronizzato/i con successo",
+        "syncButton": "Conti sincronizzati: {count}",
+        "syncSuccess": "Conti collegati: {count}. Le transazioni vengono sincronizzate in background.",
         "errors": {
           "connectFailed": "Impossibile connettersi al provider",
           "syncFailed": "Impossibile sincronizzare i conti"
@@ -57,28 +61,28 @@
       "enableBankingConnector": {
         "beta": {
           "title": "Funzione beta - orientata agli sviluppatori",
-          "description": "Questa integrazione richiede conoscenze tecniche per la configurazione. Dovrai registrare una tua applicazione Enable Banking e fornire le credenziali API. Il processo di configurazione e l'API potrebbero cambiare negli aggiornamenti futuri."
+          "description": "Questa integrazione richiede conoscenze tecniche per la configurazione. Sarà necessario registrare un'applicazione Enable Banking e fornire le credenziali API. La procedura di configurazione e le API potrebbero cambiare con aggiornamenti futuri."
         },
         "credentials": {
           "appIdLabel": "ID applicazione",
-          "appIdHint": "Ottienilo dal portale Enable Banking dopo aver caricato il tuo certificato",
+          "appIdHint": "Da ottenere dal portale Enable Banking dopo aver caricato il certificato",
           "privateKeyLabel": "Chiave privata",
-          "privateKeyHint": "La tua chiave privata RSA in formato PEM (memorizzata in modo cifrato)",
+          "privateKeyHint": "Chiave privata RSA codificata in PEM (salvata in forma cifrata)",
           "bicLabel": "BIC:"
         },
         "steps": {
           "loadingCountries": "Caricamento paesi...",
-          "selectCountryHint": "Seleziona il paese della tua banca",
+          "selectCountryHint": "Selezionare il paese della banca",
           "countryLabel": "Paese",
           "loadingBanks": "Caricamento banche...",
-          "selectBankHint": "Seleziona la tua banca in {country}",
+          "selectBankHint": "Selezionare la banca in {country}",
           "bankLabel": "Banca",
           "connectingToBank": "Connessione a {bank} in corso...",
-          "authDescription": "Fai clic sul pulsante qui sotto per autorizzare l'accesso al tuo conto {bank}.",
+          "authDescription": "Premere il pulsante qui sotto per autorizzare l'accesso al conto {bank}.",
           "authWarning": "Sarai reindirizzato al sito web di {bank} per accedere e approvare la connessione.",
           "authorizeButton": "Autorizza con {bank}",
           "loadingAccounts": "Caricamento conti...",
-          "selectAccountsHint": "Seleziona i conti che vuoi sincronizzare con MoneyMatter"
+          "selectAccountsHint": "Selezionare i conti da sincronizzare con MoneyMatter"
         },
         "buttons": {
           "back": "Indietro",
@@ -92,7 +96,7 @@
           "loadAccountsFailed": "Impossibile caricare i conti",
           "syncFailed": "Impossibile sincronizzare i conti"
         },
-        "syncSuccess": "{count} conto/i sincronizzato/i con successo"
+        "syncSuccess": "Conti collegati: {count}. Le transazioni vengono sincronizzate in background."
       },
       "instructionsDialog": {
         "title": "Come ottenere le credenziali Enable Banking",
@@ -144,7 +148,7 @@
             "finishAuth": "Una volta completato il flusso di autenticazione, sarai reindirizzato di nuovo a EnableBanking",
             "waitAccounts": "Attendi finché i conti selezionati non vengono mostrati nella scheda dell'applicazione, nel campo \"Linked accounts\""
           },
-          "warningNotLinked": "Può succedere che alcuni conti selezionati non risultino collegati. Si tratta di un problema lato banca che non puoi risolvere da solo. Puoi solo attendere alcune ore/giorni finché il problema non viene risolto. Se il problema persiste, l'unica soluzione è segnalarlo a EnableBanking.",
+          "warningNotLinked": "Può capitare che alcuni conti selezionati non risultino collegati. Si tratta di un problema lato banca, non risolvibile dall'utente: occorre attendere qualche ora o qualche giorno. Se il problema persiste, l'unica soluzione è segnalarlo a EnableBanking.",
           "infoAddMore": "Nel caso in futuro tu voglia collegare altri conti, dovrai ripetere il flusso di collegamento conti. {strong} che quando aggiungi conti NUOVI devi comunque selezionare anche quelli VECCHI – in pratica devi selezionare TUTTI i conti che vuoi restino collegati.",
           "infoAddMoreStrong": "Tieni presente"
         },
@@ -199,7 +203,7 @@
         "accountsPreviewHint": "Trovato/i {count} conto/i. Tutti i conti verranno importati.",
         "importingButton": "Importazione...",
         "importButton": "Importa {count} conto/i",
-        "importSuccess": "{count} conto/i importato/i con successo",
+        "importSuccess": "Conti collegati: {count}. Le transazioni vengono sincronizzate in background.",
         "skipButton": "Salta",
         "skipTooltip": "Salta l'importazione per collegare solo conti specifici in seguito, oppure per ricollegare conti esistenti dalle loro impostazioni.",
         "errors": {
@@ -267,7 +271,7 @@
         "selectAll": "Seleziona tutto",
         "importButton": "Importa {count} portafoglio/i",
         "importingButton": "Importazione...",
-        "importSuccess": "{count} portafoglio/i Walutomat importato/i con successo",
+        "importSuccess": "Conti collegati: {count}. Le transazioni vengono sincronizzate in background.",
         "errors": {
           "connectFailed": "Impossibile connettersi a Walutomat. Controlla le tue credenziali.",
           "importFailed": "Impossibile importare i portafogli."
@@ -446,10 +450,40 @@
       },
       "tooltips": {
         "monobank": "Richiede la copia manuale di un token API dall'app mobile Monobank",
-        "enableBanking": "Poiché un'integrazione fluida richiederebbe il pagamento di diverse migliaia di $ al mese, è possibile connettersi solo creando un proprio account sviluppatore EnableBanking, configurando un'applicazione di \"test\" con una connessione reale alle proprie banche, memorizzando certificati e chiavi e caricandoli qui. Richiede conoscenze tecniche moderate",
+        "enableBanking": "Poiché un'integrazione diretta costerebbe diverse migliaia di dollari al mese, l'unico modo per collegarsi è creare un proprio account sviluppatore EnableBanking e configurare un'applicazione \"test\" con una connessione reale alle proprie banche, salvando certificati e chiavi e caricandoli qui. Richiede discrete competenze tecniche.",
         "lunchflow": "Collega semplicemente le tue banche sul lato LunchFlow, poi crea e incolla la tua chiave API LunchFlow",
         "simplefin": "SimpleFIN Bridge è un servizio a pagamento. Crei un account bridge, colleghi la tua banca e incolli un token di configurazione — nessuna configurazione da sviluppatore richiesta.",
-        "walutomat": "Richiede la generazione di una coppia di chiavi RSA e il caricamento della chiave pubblica nella dashboard Walutomat"
+        "walutomat": "Richiede la generazione di una coppia di chiavi RSA e il caricamento della chiave pubblica nella dashboard Walutomat",
+        "akahu": "Free for your own accounts: create an Akahu personal app at my.akahu.nz, connect your NZ banks there, then paste the two tokens"
+      },
+      "akahu": {
+        "userTokenLabel": "User Access Token",
+        "userTokenPlaceholder": "Enter your Akahu User Access Token",
+        "userTokenHint": "Shown on your personal app page at my.akahu.nz",
+        "appTokenLabel": "App ID Token",
+        "appTokenPlaceholder": "Enter your Akahu App ID Token",
+        "appTokenHint": "Also shown on the same page",
+        "help": {
+          "trigger": "Where do I find my Akahu tokens?",
+          "title": "Get your Akahu personal app tokens",
+          "step1": "Open your {link} while signed in to Akahu.",
+          "step2": "Create a personal app (or open an existing one) — connect your bank accounts in Akahu first.",
+          "step3": "Copy the User Access Token and the App ID Token and paste both into the fields above."
+        },
+        "backButton": "Indietro",
+        "connectingButton": "Connessione...",
+        "connectButton": "Connetti",
+        "loadingAccounts": "Caricamento conti...",
+        "accountsPreviewHint": "Found {count} account(s). All accounts will be imported.",
+        "importingButton": "Importing...",
+        "importButton": "Import {count} account(s)",
+        "importSuccess": "Conti collegati: {count}. Le transazioni vengono sincronizzate in background.",
+        "skipButton": "Skip",
+        "skipTooltip": "Skip importing to connect only specific accounts later, or to relink existing accounts from their settings.",
+        "errors": {
+          "connectFailed": "Failed to connect to Akahu",
+          "importFailed": "Failed to import accounts"
+        }
       }
     },
     "connectionName": {

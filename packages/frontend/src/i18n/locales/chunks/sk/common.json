@@ -103,7 +103,8 @@
       "debitCard": "Debetná karta",
       "mobilePayment": "Mobilná platba",
       "voucher": "Poukaz",
-      "webPayment": "Platba cez web"
+      "webPayment": "Platba cez web",
+      "none": "Žiadne"
     },
     "vehicleClasses": {
       "sedan": "Sedan",
@@ -144,7 +145,7 @@
       },
       "transferMatching": {
         "name": "Priraďovanie prevodov",
-        "description": "Checks transfer scan results and keeps the pairs that look like real transfers"
+        "description": "Skontroluje výsledky vyhľadávania prevodov a zachová dvojice, ktoré vyzerajú ako skutočné prevody"
       }
     },
     "transactions": {
@@ -160,6 +161,7 @@
       },
       "record": {
         "addedByTooltip": "Túto transakciu priradil k sledovaču používateľ {handle}",
+        "addedByRule": "Pridané pravidlami sledovača",
         "matchedByAi": "Priradené pomocou AI",
         "externalLinkTooltip": "Otvoriť externý odkaz",
         "locationTooltip": "Otvoriť polohu na mape",
@@ -168,6 +170,13 @@
         "selectRow": "Vybrať transakciu",
         "unselectableReasons": {
           "sharedAccount": "Nedá sa vybrať: táto transakcia je na účte zdieľanom s vami a upravovať ju môže len jeho vlastník."
+        },
+        "payment": {
+          "paidFrom": "Zaplatené z {count} účtov",
+          "receivedInto": "Prijaté na {count} účtov",
+          "partOf": "Súčasť platby {total}",
+          "thisAccount": "(tento účet)",
+          "loadError": "Túto transakciu sa nepodarilo otvoriť. Skúste to znova."
         }
       }
     },
@@ -244,6 +253,10 @@
       "dialogTitle": "Zmeniť logo",
       "resetToAuto": "Vrátiť na automatické",
       "remove": "Odstrániť logo",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo odstránené",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Písmená (1-2)",
       "lettersPlaceholder": "AB",
       "colorLabel": "Farba",
@@ -282,9 +295,22 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "o {duration} skôr",
+        "behind": "o {duration} neskôr",
+        "onPace": "Na dobrej ceste",
+        "backInReach": "Znova dosiahnuteľný",
+        "offTrack": "Na zlej ceste"
       }
     },
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "pasteImage": {
+      "button": "Vložte obrázok",
+      "shortcutHint": "alebo stlačte {shortcut}",
+      "noImage": "V schránke sa nenašiel žiadny obrázok.",
+      "readFailed": "Schránku sa nepodarilo prečítať. Povoľte prístup k schránke, alebo vložte obsah klávesovou skratkou."
+    }
   },
   "accountGroups": {
     "create": {
@@ -303,8 +329,8 @@
       "error": "Účet sa nepodarilo pridať do skupiny"
     },
     "linkMany": {
-      "success": "Accounts added to the group",
-      "error": "Failed to add accounts to the group"
+      "success": "Účty boli pridané do skupiny",
+      "error": "Účty sa nepodarilo pridať do skupiny"
     },
     "unlink": {
       "success": "Účet bol odstránený zo skupiny",
@@ -339,6 +365,13 @@
     },
     "share": {
       "sendFailedHint": "Ak chcete odoslať znova, otvorte panel zdieľania."
+    },
+    "goalReached": {
+      "title": "Cieľ dosiahnutý: {name}",
+      "message": "Usporili ste {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -532,6 +565,12 @@
       "removeTransactionDescriptionNormal": "Naozaj chcete odstrániť túto transakciu zo skupiny?",
       "removeButtonText": "Odstrániť",
       "removeAndDeleteButtonText": "Odstrániť a zmazať skupinu",
+      "removeFromGroup": "Odstrániť zo skupiny",
+      "saveError": "Skupinu sa nepodarilo uložiť",
+      "removeError": "Transakciu sa nepodarilo odstrániť zo skupiny",
+      "manageTransactions": "Spravovať",
+      "showMoreNote": "Zobraziť viac",
+      "showLessNote": "Zobraziť menej",
       "summary": {
         "transactions": "Transakcie",
         "net": "Čistý zostatok",

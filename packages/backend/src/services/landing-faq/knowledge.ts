@@ -50,9 +50,10 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 
 - Bank sync is part of Plus (also in the trial and on self-hosted). Essential does not include it.
 - Providers by region: Monobank (Ukraine). LunchFlow (US, Canada, EU, UK, Australia, New Zealand
-  and more countries worldwide). SimpleFIN (US, Canada). Walutomat (Poland).
+  and more countries worldwide). SimpleFIN (US, Canada). Walutomat (Poland). Akahu (New Zealand).
 - LunchFlow and SimpleFIN are separate paid services: you open an account with them and pay them
-  directly, on top of Plus. Monobank and Walutomat cost nothing extra.
+  directly, on top of Plus. Monobank, Walutomat and Akahu (your own accounts, via a personal app)
+  cost nothing extra.
 - Banks in the EU, the UK and any other country not named above connect through LunchFlow. To
   see whether a country or one specific bank is covered, search LunchFlow's coverage list:
   https://www.lunchflow.app/coverage
@@ -62,7 +63,8 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 - Sync runs automatically while you use the app, at most once every 12 hours, and you can start a
   sync by hand anytime. Balances update with every sync.
 - History on first connect: 12 months with Walutomat, about 6 months with SimpleFIN, 31 days with
-  Monobank (Monobank's own limit), and whatever LunchFlow has already collected for LunchFlow.
+  Monobank (Monobank's own limit), up to about 2 years with Akahu (its 730-day limit), and
+  whatever LunchFlow has already collected for LunchFlow.
 - A broken connection is flagged and you reconnect it.
 - You can connect several banks, providers and countries at once, and several accounts per bank.
 - Bank-synced transactions: category, note, tags, payee and splits are editable; amount, date,
@@ -175,6 +177,9 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 - Cash flow (income against expenses by month), money flow (income sources to categories), pivot
   tables by category, payee or tag per week, month, quarter or year, net worth and balance history.
 - The dashboard is a grid of widgets you add, remove and rearrange.
+- Pay cycle: set the day your pay cycle starts on (1st to 28th) in Settings > General. The
+  dashboard and the Cash Flow report (its monthly bars and money flow chart) then run from that
+  day, for example the 25th to the 24th. Other reports still use calendar months.
 - Not supported: a free-form custom report builder.
 
 ## Family sharing
@@ -332,6 +337,7 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 - Support: support@moneymatter.app
 - Bugs: https://github.com/letehaha/moneymatter/issues
 - Feature requests, voting and roadmap: https://moneymatter.featurebase.app/dashboard/roadmap
+- Community, questions and discussion: https://www.reddit.com/r/moneymatterapp/ (subreddit r/moneymatterapp)
 - There is no Discord, Telegram or Slack community.
 - Tech stack: TypeScript, Node.js with Express, PostgreSQL, Redis, Vue 3. Contributions are
   welcome on GitHub; a CLA is signed on the first pull request.

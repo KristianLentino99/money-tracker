@@ -175,6 +175,10 @@
         "editAccountCategory": "Изменить категорию",
         "accountCategoryUpdateSuccess": "Категория счёта обновлена",
         "accountCategoryUpdateError": "Не удалось обновить категорию счёта",
+        "defaultPaymentType": "Default payment type:",
+        "editDefaultPaymentType": "Edit default payment type",
+        "defaultPaymentTypeUpdateSuccess": "Default payment type updated",
+        "defaultPaymentTypeUpdateError": "Failed to update default payment type",
         "currency": "Валюта:",
         "main": "(основной)",
         "exchangeRate": "Обменный курс:",
@@ -241,6 +245,7 @@
       },
       "rightPanel": {
         "transactions": "Транзакции",
+        "viewAll": "Показать всё",
         "analyticsSoon": "Аналитика (скоро)"
       },
       "integrations": {

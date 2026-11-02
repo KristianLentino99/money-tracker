@@ -12,17 +12,8 @@
       "error": "Unexpected error!",
       "nameLabel": "Tracker name",
       "namePlaceholder": "Enter the name",
-      "typeLabel": "Tracker type",
-      "typeManual": "Manual",
-      "typeManualDescription": "Manually add transactions to this tracker",
-      "typeCategory": "Category-based",
-      "typeCategoryDescription": "Auto-track spending by categories",
-      "categoriesLabel": "Categories to track",
-      "categoriesRequired": "Select at least one category",
       "fromDateLabel": "From date",
       "toDateLabel": "To date",
-      "autoIncludeLabel": "Auto include transactions",
-      "limitLabel": "Tracker limit",
       "limitPlaceholder": "Enter the limit",
       "submitButton": "Add tracker"
     },
@@ -46,7 +37,6 @@
       "categoriesCount": "{count} categories",
       "noTransactions": "Non ci sono ancora transazioni",
       "noTimePeriod": "No time period",
-      "autoTracked": "Auto-tracked",
       "status": {
         "ended": "Ended",
         "lastDay": "Last day",
@@ -73,8 +63,6 @@
       "searchPlaceholder": "Cerca monitoraggi",
       "filters": {
         "all": "Tutti",
-        "manual": "Manuali",
-        "category": "Per categoria",
         "archived": "Archiviati",
         "autoAdd": "Aggiunta automatica attiva",
         "handPicked": "Scelti manualmente"
@@ -113,46 +101,28 @@
       },
       "archivePrompt": {
         "title": "Archive \"{name}\"?",
-        "endedDaysAgo": "{count} giorni fa | {count} giorni fa",
-        "endedMonthsAgo": "{count} mesi fa | {count} mesi fa",
+        "endedDaysAgo": "{count} giorno fa | {count} giorni fa",
+        "endedMonthsAgo": "{count} mese fa | {count} mesi fa",
         "description": "It ended {ago}. Archived trackers move to the Archived group and keep their transactions and statistics. You can unarchive any time.",
         "dontAsk": "Don't ask for this tracker",
         "notNow": "Not now",
         "dismissError": "Failed to update tracker",
         "dismissSuccess": "Got it. We won't suggest archiving this tracker again."
-      }
+      },
+      "earned": "Earned"
     },
     "settings": {
       "nameLabel": "Tracker name",
       "namePlaceholder": "Enter tracker name",
-      "limitLabel": "Tracker limit",
       "limitPlaceholder": "Enter limit amount (optional)",
       "startDateLabel": "Start date",
       "endDateLabel": "End date",
       "notSet": "Non impostato"
     },
     "addTransactionsDialog": {
-      "title": "Aggiungere Transazioni al Budget",
+      "title": "Aggiungi transazioni al budget",
       "addSelected": "Add selected",
       "clearSelection": "Pulisci la selezione"
-    },
-    "categoryBudget": {
-      "trackedCategories": "Tracked categories",
-      "categoriesCount": "{count} categories tracked",
-      "autoTrackedInfo": "Transactions are automatically tracked based on categories",
-      "transactionsTitle": "Transactions",
-      "transactionsCount": "{count} transactions",
-      "noTransactions": "Non ci sono ancora transazioni",
-      "noTransactionsDescription": "Transactions matching your tracked categories will appear here automatically.",
-      "transactionsLoadError": "Failed to load transactions",
-      "categoryBreakdown": "Category breakdown",
-      "edit": "Edit",
-      "editTitle": "Edit tracker",
-      "showMore": "Show more",
-      "showLess": "Show less",
-      "settings": {
-        "categoriesLabel": "Tracked categories"
-      }
     },
     "manualBudget": {
       "edit": "Edit",
@@ -164,11 +134,16 @@
     "details": {
       "statsLoadError": "Couldn't load this tracker's totals.",
       "transactionsCount": "{count} transaction | {count} transactions",
+      "tagsCount": "{count} tag | {count} tags",
       "strip": {
         "limit": "Limit",
         "spent": "Spent",
         "left": "Left",
         "overBy": "Over by",
+        "earned": "Earned",
+        "toGo": "To go",
+        "headroom": "Headroom",
+        "aboveTargetBy": "Above target by",
         "income": "Income",
         "expenses": "Expenses",
         "net": "Net",
@@ -178,7 +153,7 @@
       "tabs": {
         "limits": "Limits"
       },
-      "tracks": "Tracks",
+      "autoAdds": "Auto-adds",
       "membersLabel": "Members: {count}",
       "actions": {
         "share": "Share",
@@ -197,8 +172,7 @@
       },
       "edit": {
         "limitHint": "Clear it to track without a limit.",
-        "datesHint": "Changing the dates does not add or remove transactions already linked.",
-        "categoriesHint": "Removing a category also removes it from any line."
+        "datesHint": "Changing the dates does not add or remove transactions already linked."
       }
     },
     "lines": {
@@ -247,10 +221,9 @@
         "categoriesLabel": "Categorie",
         "categoriesPlaceholder": "Pick categories",
         "categoriesRequired": "Pick at least one category",
-        "categoryTrackerHint": "This tracker only counts its own categories, so pick from those.",
         "limitLabel": "Limit (optional)",
         "limitPlaceholder": "No limit",
-        "limitHint": "Leave empty to group spending without a limit."
+        "limitHint": "Lasciare vuoto per non impostare un limite."
       },
       "notifications": {
         "limitsRemoved": "Limits removed",
@@ -286,6 +259,7 @@
           "threeMonths": "3 months",
           "sixMonths": "6 months"
         },
+        "costNote": "The first scan checks every transaction from the look-back window to the end date. Large ranges can use up your monthly AI allowance, or cost you directly if you use your own key.",
         "usesIncluded": "Uses the included AI. Counts toward your monthly AI allowance.",
         "usesOwnModel": "Uses your own model · {model}"
       },
@@ -334,7 +308,7 @@
           "likely": "Likely",
           "possible": "Possible"
         },
-        "add": "Aggiungere",
+        "add": "Aggiungi",
         "skip": "Skip",
         "addAria": "Add {name} to {tracker}",
         "skipAria": "Skip {name}",
@@ -346,6 +320,65 @@
         "acceptError": "Couldn't add the suggested transactions. Try again.",
         "rejectError": "Couldn't skip the suggested transactions. Try again.",
         "restoreError": "Couldn't undo the skip. Try again."
+      }
+    },
+    "limitKind": {
+      "label": "Limit type",
+      "whatToChoose": "What to choose?",
+      "guideTitle": "Which limit fits?",
+      "goalNote": "Saving up for something? {goalLink} instead: goals track what you've saved, trackers track what flows in or out.",
+      "goalLink": "Create a goal",
+      "kinds": {
+        "spending": {
+          "label": "Spending",
+          "hint": "Spend at most this much. Warns when spending runs ahead of time passing.",
+          "guide": "For a thing or an event: a trip, a renovation, a year of groceries. Warns when you spend faster than time passes.",
+          "amountLabel": "Limit"
+        },
+        "income_target": {
+          "label": "Income target",
+          "hint": "Earn at least this much. Green while you're on pace, and going over is a win.",
+          "guide": "For money you want to bring in: yearly salary, freelance revenue, rental income. Green while on pace; going over is a win.",
+          "amountLabel": "Target amount"
+        },
+        "income_cap": {
+          "label": "Income cap",
+          "hint": "Stay under this income, e.g. a tax or benefits threshold. Warns as you get close.",
+          "guide": "For income you must stay under: a small-business tax threshold, a benefits or student-aid income limit. Warns as you get close.",
+          "amountLabel": "Cap"
+        }
+      }
+    },
+    "rules": {
+      "heading": "Auto-add",
+      "switchLabel": "Add matching transactions automatically",
+      "switchHintOn": "Your transactions in the date range with any of these categories or tags get added.",
+      "switchHintOff": "Only transactions you add by hand count.",
+      "switchHintTurnedOff": "Turning this off keeps every transaction already added.",
+      "categoriesLabel": "Categorie",
+      "categoriesPlaceholder": "Select categories",
+      "tagsLabel": "Etichette",
+      "tagsPlaceholder": "Select tags",
+      "needsCategoryOrTag": "Pick at least one category or tag",
+      "cleanupLabel": "Remove transactions that stop matching",
+      "cleanupHint": "Checked every 6 hours. Transactions you added by hand are never removed.",
+      "checkedAt": "Checked {when}",
+      "unlinked": "Removed {count} transaction. It won't be added again automatically. | Removed {count} transactions. They won't be added again automatically.",
+      "confirm": {
+        "title": "Save new matching rules?",
+        "description": "Once saved, all your transactions are checked against the new rules and matching ones are added.",
+        "descriptionWithCleanup": "Once saved, all your transactions are checked against the new rules. Matching ones are added, and ones the rules added that no longer match are removed. Transactions you added by hand stay.",
+        "saveAndCheck": "Save and check"
+      },
+      "rejected": {
+        "title": "Not added again",
+        "description": "You removed these or rejected them as AI suggestions, so they're skipped. Allow one and it's added back if it still matches.",
+        "summary": "{count} transaction won't be added again | {count} transactions won't be added again",
+        "review": "Revisiona",
+        "aiBadge": "AI suggestion",
+        "allowAgain": "Allow again",
+        "allowed": "Allowed again",
+        "allowError": "Couldn't allow the transaction again"
       }
     }
   }

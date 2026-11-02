@@ -16,9 +16,13 @@ const inputSchema = {
     .optional()
     .describe('true: only forecast rows; false: actual rows; omitted: actual plus own forecasts'),
   excludeBalanceAdjustments: z.boolean().optional().describe('Exclude balance adjustment entries'),
+  allTime: z
+    .boolean()
+    .optional()
+    .describe('Search all history without implicit date defaults. Explicit startDate/endDate still apply.'),
   startDate: z.string().optional().describe('Start date (ISO 8601). Default: 30 days ago'),
   endDate: z.string().optional().describe('End date (ISO 8601). Default: today'),
-  accountIds: z.array(recordId()).optional().describe('Filter by account IDs'),
+  accountIds: z.array(recordId()).optional().describe('Filter by account IDs. Omit to search all accessible accounts.'),
   categoryIds: z.array(recordId()).optional().describe('Filter by category IDs'),
   tagIds: z.array(recordId()).optional().describe('Filter by tag IDs'),
   transactionType: z
@@ -28,8 +32,13 @@ const inputSchema = {
   amountMin: z.number().optional().describe('Minimum amount (decimal, in original currency)'),
   amountMax: z.number().optional().describe('Maximum amount (decimal, in original currency)'),
   search: z.string().optional().describe('Search in transaction notes'),
-  limit: z.number().optional().describe('Max results (default: 50, max: 500)'),
-  offset: z.number().optional().describe('Pagination offset (default: 0)'),
+  limit: z.number().int().positive().optional().describe('Max results per page (default: 50, capped at 500)'),
+  offset: z
+    .number()
+    .int()
+    .nonnegative()
+    .optional()
+    .describe('Pagination offset (default: 0). Follow nextOffset until hasMore is false.'),
   order: z.enum(['asc', 'desc']).optional().describe('Sort order by date (default: desc)'),
   excludeTransfers: z.boolean().optional().describe('Exclude transfer transactions'),
   excludeRefunds: z.boolean().optional().describe('Exclude refund transactions'),
@@ -40,7 +49,7 @@ export function registerSearchTransactions(server: McpServer) {
     'search_transactions',
     {
       description:
-        'Search and filter transactions. Returns transaction amount (original + base currency), category, account, note, date, type, and tags. Use date filters to limit results. Default: last 30 days, 50 items.',
+        'Search regular ledger transactions across all accessible accounts, including individual multi-account payment legs. Returns amounts (original + base currency), category, account, note, date, type, and tags. Default: last 30 days, 50 items per page. Set allTime=true for all history; explicit dates still apply. Follow nextOffset while hasMore=true to retrieve every matching transaction. Investment trades use get_investment_transactions.',
       inputSchema,
     },
     async (args, extra) => {
@@ -50,14 +59,16 @@ export function registerSearchTransactions(server: McpServer) {
       const now = new Date();
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       const limit = Math.min(args.limit ?? 50, 500);
+      const offset = args.offset ?? 0;
 
-      const startDate = args.startDate ?? thirtyDaysAgo.toISOString();
-      const endDate = args.endDate ?? now.toISOString();
+      const startDate = args.startDate ?? (args.allTime ? undefined : thirtyDaysAgo.toISOString());
+      const endDate = args.endDate ?? (args.allTime ? undefined : now.toISOString());
 
       const filterParams = {
         userId,
         isForecastOnly: args.isForecastOnly,
         excludeBalanceAdjustments: args.excludeBalanceAdjustments,
+        collapsePayments: false,
         startDate,
         endDate,
         accountIds: args.accountIds,
@@ -67,8 +78,8 @@ export function registerSearchTransactions(server: McpServer) {
         amountGte: args.amountMin !== undefined ? Money.fromDecimal(args.amountMin) : undefined,
         amountLte: args.amountMax !== undefined ? Money.fromDecimal(args.amountMax) : undefined,
         noteSearch: args.search ? [args.search] : undefined,
-        limit,
-        from: args.offset ?? 0,
+        limit: limit + 1,
+        from: offset,
         order: args.order === 'asc' ? SORT_DIRECTIONS.asc : SORT_DIRECTIONS.desc,
         excludeTransfer: args.excludeTransfers,
         excludeRefunds: args.excludeRefunds,
@@ -77,14 +88,17 @@ export function registerSearchTransactions(server: McpServer) {
 
       const transactions = await getTransactions(filterParams);
 
-      const serialized = slimTransactionsForMcp(serializeTransactions(transactions));
+      const hasMore = transactions.length > limit;
+      const serialized = slimTransactionsForMcp(serializeTransactions(transactions.slice(0, limit)));
 
       return jsonContent({
         data: {
           transactions: serialized,
           count: serialized.length,
           limit,
-          offset: args.offset ?? 0,
+          offset,
+          hasMore,
+          nextOffset: hasMore ? offset + serialized.length : null,
         },
       });
     },

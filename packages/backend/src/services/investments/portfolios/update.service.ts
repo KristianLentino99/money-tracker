@@ -1,3 +1,4 @@
+import type { NonImageLogoPayload } from '@bt/shared/types';
 import { PORTFOLIO_TYPE } from '@bt/shared/types/investments';
 import { findOrThrowNotFound } from '@common/utils/find-or-throw-not-found';
 import { t } from '@i18n/index';
@@ -9,10 +10,11 @@ import ManualPortfolioValuations from '@models/investments/manual-portfolio-valu
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
 import * as UsersCurrencies from '@models/users-currencies.model';
+import { applyManualLogoPatch } from '@services/brand-logos';
 import { withTransaction } from '@services/common/with-transaction';
 import { Op } from 'sequelize';
 
-interface UpdatePortfolioParams {
+interface UpdatePortfolioParams extends NonImageLogoPayload {
   userId: number;
   portfolioId: string;
   name?: string;
@@ -32,6 +34,10 @@ const updatePortfolioImpl = async ({
   displayCurrencyCode,
   isEnabled,
   isManualTracking,
+  logoDomain,
+  logoInitials,
+  logoColor,
+  logoIcon,
 }: UpdatePortfolioParams) => {
   // Find the portfolio and verify ownership
   const portfolio = await findOrThrowNotFound({
@@ -92,7 +98,12 @@ const updatePortfolioImpl = async ({
   if (isEnabled !== undefined) updateData.isEnabled = isEnabled;
   if (isManualTracking !== undefined) updateData.isManualTracking = isManualTracking;
 
-  await portfolio.update(updateData);
+  const logoPatch = applyManualLogoPatch({
+    patch: { logoDomain, logoInitials, logoColor, logoIcon },
+    stored: portfolio,
+  });
+
+  await portfolio.update({ ...updateData, ...logoPatch });
 
   return portfolio.reload();
 };

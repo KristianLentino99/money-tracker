@@ -3,7 +3,7 @@
     "categories": {
       "title": "Categorie",
       "addButton": "Aggiungi categoria",
-      "empty": "Nessuna categoria ancora. Crea la tua prima categoria per iniziare.",
+      "empty": "Ancora nessuna categoria. Creare la prima categoria per iniziare.",
       "delete": {
         "title": "Eliminare la categoria?",
         "description": "Questo eliminerà definitivamente \"{name}\". Questa azione non può essere annullata.",
@@ -21,18 +21,18 @@
         "saveSuccess": "Modifiche salvate.",
         "staleMovesRemoved": "Rimossa {n} operazione in coda non più applicabile | Rimosse {n} operazioni in coda non più applicabili"
       },
-      "description": "Organizza le tue transazioni in categorie principali e sottocategorie. Selezionando Organizza puoi gestire le tue categorie trascinandole.",
+      "description": "Organizzare le transazioni in categorie principali e sottocategorie. Selezionando Organizza è possibile gestire le categorie trascinandole.",
       "organizeButton": "Organizza",
       "categoriesCount": "{n} categoria | {n} categorie",
-      "organizeHint": "Trascina qui la categoria per renderla principale, oppure trascinala sotto un'altra per renderla sotto categoria.",
+      "organizeHint": "Trascinare qui la categoria per renderla principale, oppure sotto un'altra per renderla sottocategoria",
       "dropToTopLevel": "Trascina qui per rendere «{name}» una categoria principale",
       "movesQueued": "{n} spostamento in coda | {n} spostamenti in coda",
       "unqueueMove": "Rimuovi questo spostamento",
       "topLevel": "Categoria principale",
       "saveChanges": "Salva",
       "parentField": {
-        "label": "Sottocategoria",
-        "placeholder": "Seleziona una categoria principale",
+        "label": "Categoria",
+        "placeholder": "Selezionare una categoria principale",
         "hiddenHint": "Le categorie che non possono essere usate come principali sono nascoste dalla lista."
       },
       "moveDialog": {

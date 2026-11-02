@@ -4,12 +4,14 @@ import type {
   CategoryMappingPreset,
   CategoryOrder,
   FireSettings,
+  FireSettingsSnapshot,
   PAYMENT_TYPES,
   TransactionOptionalField,
   SidebarSectionsConfig,
   SavedPivotView,
   SavedTransactionView,
   CurrencyDisplayPreference,
+  UnrealizedLossAlertsSettings,
 } from '@bt/shared/types';
 
 export interface DashboardWidgetConfig {
@@ -81,12 +83,6 @@ export interface UiSettings {
   investmentTransactionsTable?: InvestmentTransactionsTableSettings;
 }
 
-export interface SubscriptionsSettings {
-  /** Seeds the auto-record toggle on the create-subscription form; the form
-   *  still lets the user override it per subscription. */
-  defaultAutoRecord?: boolean;
-}
-
 export interface UserSettingsSchema {
   locale?: SupportedLocale;
   distanceUnit?: 'km' | 'mi';
@@ -124,8 +120,10 @@ export interface UserSettingsSchema {
   payeePromotionThreshold?: 1 | 2 | 3;
   /** Show the header Support button. Defaults to visible when unset. */
   showSupportButton?: boolean;
+  /** Day of month (1-28) a pay period starts on. Calendar month when unset. */
+  payday?: number;
+  unrealizedLossAlerts?: UnrealizedLossAlertsSettings;
   ui?: UiSettings;
-  subscriptions?: SubscriptionsSettings;
   savedPivotViews?: SavedPivotView[];
   savedTransactionViews?: SavedTransactionView[];
   /**
@@ -160,6 +158,8 @@ export interface UserSettingsSchema {
   categoryOrder?: CategoryOrder;
   currencyDisplay?: CurrencyDisplayPreference;
   fire?: FireSettings;
+  /** Server-written monthly FIRE settings snapshots, read by the pace comparison. */
+  fireHistory?: FireSettingsSnapshot[];
 }
 
 export const getUserSettings = async (): Promise<UserSettingsSchema> => {

@@ -62,7 +62,7 @@ export interface BackupGlobalRowDef {
 
 /**
  * How a table's rows are handled on restore. The export path ignores all of
- * these except `stripSecret`/`enrichMccCode`/`single`; the restore path reads them.
+ * these except `stripSecret`/`single`; the restore path reads them.
  * - `insert`: bulkInsert the rows verbatim.
  * - `updateUser`: UPDATE the target Users row with `fields` only.
  * - `zodSettings`: upsert through `ZodSettingsSchema.parse`, never raw JSONB.
@@ -83,12 +83,12 @@ export interface BackupTableDef<Name extends string = BackupFileName> {
   fields?: readonly string[];
   /** Soft-delete model — dumped with `paranoid: false` so trash travels too. */
   paranoid?: boolean;
-  /** Self-referential parent column needing the two-pass restore. */
-  selfRefColumn?: string;
+  /** Self-referential parent columns needing the two-pass restore. */
+  selfRefColumns?: readonly string[];
+  /** Per self-ref column: values written to a row whose parent did not restore. */
+  selfRefOrphanValues?: Record<string, Record<string, unknown>>;
   /** Encrypted blob to blank before writing (undecryptable on another instance). */
   stripSecret?: 'bankCredentials' | 'aiKeys';
-  /** Attach the MCC's natural `code` so restore can remap the integer `mccId`. */
-  enrichMccCode?: boolean;
   /** Drop a row on restore whose `currencyCode` isn't seeded on the target instance. */
   requireSeededCurrency?: boolean;
   /** Global preset rows are resolved by natural key and are never duplicated. */
@@ -137,7 +137,7 @@ const TABLE_DEFS = [
     tier: 2,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
-    selfRefColumn: 'parentId',
+    selfRefColumns: ['parentId'],
   },
   {
     fileName: 'tags',
@@ -196,7 +196,7 @@ const TABLE_DEFS = [
     tier: 2,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
-    selfRefColumn: 'parentGroupId',
+    selfRefColumns: ['parentGroupId'],
   },
   {
     fileName: 'transaction-automations',
@@ -255,14 +255,6 @@ const TABLE_DEFS = [
     tier: 3,
     scope: { strategy: 'viaParent', fk: 'categoryId', parent: 'categories' },
     restoreMode: 'insert',
-  },
-  {
-    fileName: 'user-merchant-category-codes',
-    model: models.UserMerchantCategoryCodes,
-    tier: 3,
-    scope: { strategy: 'userColumn', column: 'userId' },
-    restoreMode: 'insert',
-    enrichMccCode: true,
   },
   {
     fileName: 'user-exchange-rates',
@@ -355,7 +347,8 @@ const TABLE_DEFS = [
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
     paranoid: true,
-    selfRefColumn: 'mergedIntoId',
+    selfRefColumns: ['mergedIntoId', 'paymentParentId'],
+    selfRefOrphanValues: { paymentParentId: { paymentAmount: null, paymentLinkSnapshot: null } },
   },
   {
     fileName: 'vehicle-maintenance-plans',
@@ -685,10 +678,6 @@ export const BACKUP_EXCLUDED: readonly BackupExcludedDef[] = [
     model: models.ExchangeRates,
     reason: 'Global; self-heals via startup backfill (1999→today) plus the daily rate cron.',
   },
-  {
-    model: models.MerchantCategoryCodes,
-    reason: 'Global seed; user rows carry the natural code for remap on restore.',
-  },
   { model: models.BrandLogos, reason: 'Global logo cache, re-resolved by domain string.' },
   { model: models.SecurityCurrencyCache, reason: 'Global symbol→currency cache, re-resolved on demand.' },
   {
@@ -699,11 +688,11 @@ export const BACKUP_EXCLUDED: readonly BackupExcludedDef[] = [
   {
     model: models.BillingSubscriptions,
     reason:
-      'Mirror of Stripe, keyed to a Stripe customer — Stripe re-sends it by webhook, restoring it would bind another account.',
+      'Mirror of Stripe and the App Store, keyed to a provider customer — the provider re-sends it, restoring it would bind another account.',
   },
   {
     model: models.BillingWebhookEvents,
-    reason: 'Webhook dedupe markers for a Stripe account, meaningless outside it.',
+    reason: 'Webhook dedupe markers for the Stripe and App Store accounts, meaningless outside them.',
   },
   { model: models.SignupLedger, reason: 'Global signup/trial ledger keyed by email hash, not per-user data.' },
   {

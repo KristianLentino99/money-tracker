@@ -13,13 +13,17 @@
     "automations": "Automatisations",
     "accountDetails": "Détails du compte",
     "helpAndDocs": "Aide et documentation",
+    "community": "Community",
     "logout": "Se déconnecter",
     "appVersion": "Version de l'application {version}",
+    "updateAvailable": "Mise à jour disponible",
+    "updateToVersion": "Mettre à jour · {version}",
     "settings": "Paramètres",
     "planned": {
       "planned": "Prévisionnel",
       "subscriptions": "Paiements récurrents",
-      "budgets": "Suivis"
+      "budgets": "Suivis",
+      "goals": "Objectifs"
     },
     "venture": "Projets",
     "budget": "Budget"
@@ -115,6 +119,10 @@
       "thanks": "Merci, nous lisons chaque message.",
       "unavailable": "L'envoi est indisponible pour le moment. Utilisez plutôt le tableau ci-dessous.",
       "or": "ou",
+      "reddit": {
+        "title": "Ask the community on Reddit",
+        "description": "Get help from other users, share how you set things up, and follow updates."
+      },
       "board": {
         "title": "Publier sur le tableau public",
         "description": "Votez pour les idées des autres membres, découvrez ce qui est déjà prévu et recevez une réponse pour la vôtre."
@@ -172,7 +180,7 @@
     "step1Full": "Pour gagner du temps, essayez d'abord de reconnecter l'ensemble de la connexion bancaire. Vous trouverez un bouton {reconnect} dans la section {connectionValidity} de chaque page de connexion :",
     "reconnectButton": "Reconnecter",
     "connectionValiditySection": "Validité de la connexion",
-    "connectionLabel": "Connexion n° {id}",
+    "connectionLabel": "Connexion #{id}",
     "step2Full": "Si certains comptes apparaissent encore ci-dessous après la reconnexion, accédez à chaque compte pour manuellement le {unlink} puis le {link} à nouveau.",
     "unlinkAction": "Dissocier",
     "linkAction": "Associer"

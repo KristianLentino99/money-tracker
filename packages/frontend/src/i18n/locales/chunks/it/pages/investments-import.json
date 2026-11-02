@@ -88,7 +88,7 @@
       "selectColumn": "Seleziona colonna…",
       "notMapped": "Non associata",
       "pickCategory": "Scegli categoria…",
-      "cashMovementsNote": "I depositi e i prelievi in contanti non sono ancora supportati. Scegli 'Salta queste righe' per quei valori del tipo per escluderli dall'importazione.",
+      "cashMovementsNote": "Depositi e Prelievi non sono ancora supportati. Selezione 'Salta queste righe' per i rispettivi valori per lasciarli fuori dall'importazione.",
       "extractButton": "Continua alla revisione",
       "extracting": "Estrazione in corso…",
       "fields": {

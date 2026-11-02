@@ -126,7 +126,13 @@
         "net": "Netto",
         "transfers": "Umbuchungen"
       },
-      "selectAllShort": "Alle"
+      "selectAllShort": "Alle",
+      "tagModeAddHint": "Keeps current tags and adds these.",
+      "tagModeAddShort": "Add",
+      "tagModeRemoveHint": "Removes only these tags. Other tags stay.",
+      "tagModeRemoveShort": "Remove",
+      "tagModeReplaceHint": "Removes all current tags, then adds these.",
+      "tagModeReplaceShort": "Replace"
     },
     "transactionGroups": {
       "bulkActions": {
@@ -161,7 +167,26 @@
         "noGroupsMessage": "Noch keine Transaktionsgruppen.",
         "emptyStateHint": "Wähle Transaktionen auf der Transaktionsseite aus und klicke auf \"Gruppe erstellen\", um zu starten.",
         "transactionCountLabel": "Transaktionen",
-        "deleteError": "Gruppe konnte nicht gelöscht werden. Bitte versuche es erneut."
+        "deleteError": "Gruppe konnte nicht gelöscht werden. Bitte versuche es erneut.",
+        "loadError": "Transaktionsgruppen konnten nicht geladen werden",
+        "description": "Bündele zusammengehörige Transaktionen, wie eine Reise oder eine Umbuchungskette, und sieh sie dir gemeinsam an.",
+        "noMatchTitle": "Keine Gruppen entsprechen deiner Suche",
+        "moreActions": "Weitere Aktionen für {name}",
+        "columns": {
+          "name": "Name",
+          "transactions": "Transaktionen",
+          "date": "Datum",
+          "net": "Netto"
+        },
+        "sort": {
+          "label": "Gruppen sortieren",
+          "dateDesc": "Neueste zuerst",
+          "dateAsc": "Älteste zuerst",
+          "nameAsc": "Name A–Z",
+          "nameDesc": "Name Z–A",
+          "amountDesc": "Netto: hoch zu niedrig",
+          "amountAsc": "Netto: niedrig zu hoch"
+        }
       },
       "errors": {
         "nameRequired": "Gruppenname ist erforderlich",
@@ -216,7 +241,6 @@
       "categorizationSourceValues": {
         "manual": "Manuell",
         "ai": "KI",
-        "mcc_rule": "MCC-Regel",
         "user_rule": "Benutzerregel",
         "subscription_rule": "Abo-Regel",
         "payee_rule": "Zahlungsempfänger-Regel"

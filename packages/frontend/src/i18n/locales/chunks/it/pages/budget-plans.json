@@ -1,8 +1,8 @@
 {
   "budgetPlans": {
-    "title": "Budget",
+    "title": "Tracker",
     "loadError": "Couldn't load your budget.",
-    "defaultName": "Budget",
+    "defaultName": "Tracker",
     "settings": {
       "title": "Impostazioni budget",
       "description": "Changes save and apply immediately.",
@@ -129,7 +129,8 @@
         "months": "Months"
       },
       "customEveryError": "Enter a whole number from 1 to {max}.",
-      "recommended": "Consigliato"
+      "recommended": "Consigliato",
+      "startsOnOutOfRange": "Pick a date from {from} to today."
     },
     "suggest": {
       "title": "Definisci le voci del budget",
@@ -235,7 +236,6 @@
       "activity": "Attività",
       "available": "Disponibile",
       "overrideBadge": "override",
-      "carriesDeficit": "carries deficit",
       "lineActions": "Azioni della voce",
       "editLine": "Edit line",
       "archiveLine": "Archive line",
@@ -268,7 +268,12 @@
       "spentAmount": "spent {amount}",
       "percentUsed": "{percent}% used",
       "overBy": "Over by {amount}",
-      "notFunded": "Non finanziata"
+      "notFunded": "Non finanziata",
+      "carryBadge": {
+        "floor": "carries surplus",
+        "signed": "carries surplus & deficit",
+        "none": "starts fresh"
+      }
     },
     "archivedLines": {
       "trigger": "Archived {count}",
@@ -473,7 +478,7 @@
         "by_date": "By date",
         "open_ended": "Open-ended"
       },
-      "behaviorLabel": "How it works",
+      "behaviorLabel": "Come funziona",
       "behavior": {
         "budget_another": "Budget another",
         "refill_up_to": "Refill up to",

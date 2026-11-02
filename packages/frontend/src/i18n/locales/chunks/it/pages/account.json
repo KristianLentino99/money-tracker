@@ -181,7 +181,11 @@
         "initialBalanceUpdateError": "Failed to update initial balance",
         "editAccountCategory": "Edit category",
         "accountCategoryUpdateSuccess": "Account category updated",
-        "accountCategoryUpdateError": "Failed to update account category"
+        "accountCategoryUpdateError": "Failed to update account category",
+        "defaultPaymentType": "Default payment type:",
+        "editDefaultPaymentType": "Edit default payment type",
+        "defaultPaymentTypeUpdateSuccess": "Default payment type updated",
+        "defaultPaymentTypeUpdateError": "Failed to update default payment type"
       },
       "group": {
         "label": "Conto gruppo",
@@ -231,7 +235,8 @@
       },
       "rightPanel": {
         "transactions": "Transazioni",
-        "analyticsSoon": "Analisi (presto)"
+        "analyticsSoon": "Analisi (presto)",
+        "viewAll": "Visualizza tutto"
       },
       "integrations": {
         "connectedVia": "Connesso tramite",
@@ -249,8 +254,8 @@
         "pendingHeading": "Inviti in sospeso",
         "loadError": "Impossibile caricare i dettagli di condivisione.",
         "permissions": {
-          "read": "Leggi",
-          "write": "scrivi",
+          "read": "Lettura",
+          "write": "Scrittura",
           "manage": "Gestisci"
         },
         "writeScope": {
@@ -275,13 +280,13 @@
           "empty": "Nessun invito in sospeso.",
           "resend": "invia di nuovo",
           "cancel": "Annulla invito",
-          "cancelTitle": "Annulla invito?",
+          "cancelTitle": "Annullare l'invito?",
           "cancelDescription": "L'invito inviato a {email} verrà revocato.",
           "cancelConfirm": "Annulla invito",
           "resendSuccess": "Invito reinviato.",
           "resendDeliveryFailed": "Invito aggiornato ma non è stato possibile consegnare l'email.",
           "resendError": "Impossibile reinviare l'invito.",
-          "cancelSuccess": "Invito annullato.",
+          "cancelSuccess": "Invito annullato",
           "cancelError": "Impossibile annullare l'invito."
         }
       },

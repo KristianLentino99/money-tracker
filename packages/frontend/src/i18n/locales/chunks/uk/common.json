@@ -103,7 +103,8 @@
       "debitCard": "Дебетова картка",
       "mobilePayment": "Мобільний платіж",
       "voucher": "Ваучер",
-      "webPayment": "Інтернет-платіж"
+      "webPayment": "Інтернет-платіж",
+      "none": "Немає"
     },
     "vehicleClasses": {
       "sedan": "Седан",
@@ -169,6 +170,13 @@
         "selectRow": "Вибрати транзакцію",
         "unselectableReasons": {
           "sharedAccount": "Неможливо вибрати: ця транзакція належить до рахунку, яким поділились з вами, і лише його власник може її редагувати."
+        },
+        "payment": {
+          "paidFrom": "Оплачено з рахунків: {count}",
+          "receivedInto": "Зараховано на рахунки: {count}",
+          "partOf": "Частина платежу на {total}",
+          "thisAccount": "(цей рахунок)",
+          "loadError": "Не вдалося відкрити цю транзакцію. Спробуйте ще раз."
         }
       }
     },
@@ -245,6 +253,10 @@
       "dialogTitle": "Змінити логотип",
       "resetToAuto": "Скинути на автоматичний",
       "remove": "Видалити логотип",
+      "pickerDescription": "Виберіть логотип бренду або використайте літери.",
+      "updatedToast": "Логотип оновлено",
+      "resetToast": "Логотип видалено",
+      "updateError": "Не вдалося оновити логотип. Спробуйте ще раз.",
       "lettersLabel": "Літери (1–2)",
       "lettersPlaceholder": "АБ",
       "colorLabel": "Колір",
@@ -283,9 +295,22 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "Випереджаєте на {duration}",
+        "behind": "Відстаєте на {duration}",
+        "onPace": "За графіком",
+        "backInReach": "Знову досяжно",
+        "offTrack": "Поза графіком"
       }
     },
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "pasteImage": {
+      "button": "Вставити зображення",
+      "shortcutHint": "або натисніть {shortcut}",
+      "noImage": "У буфері обміну не знайдено зображення.",
+      "readFailed": "Не вдалося прочитати буфер обміну. Дозвольте доступ до буфера обміну або вставте зображення комбінацією клавіш."
+    }
   },
   "accountGroups": {
     "create": {
@@ -344,6 +369,9 @@
     "goalReached": {
       "title": "Ціль досягнуто: {name}",
       "message": "Ви накопичили {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} актив перетнув поріг вашого сповіщення про збиток | {count} активи перетнули поріг вашого сповіщення про збиток | {count} активів перетнули поріг вашого сповіщення про збиток"
     }
   },
   "currencyNames": {
@@ -538,6 +566,12 @@
       "removeTransactionDescriptionNormal": "Ви впевнені, що хочете видалити цю транзакцію з групи?",
       "removeButtonText": "Видалити",
       "removeAndDeleteButtonText": "Видалити й видалити групу",
+      "removeFromGroup": "Видалити з групи",
+      "saveError": "Не вдалося зберегти групу",
+      "removeError": "Не вдалося видалити транзакцію з групи",
+      "manageTransactions": "Керувати",
+      "showMoreNote": "Показати більше",
+      "showLessNote": "Показати менше",
       "summary": {
         "transactions": "Транзакції",
         "net": "Сальдо",

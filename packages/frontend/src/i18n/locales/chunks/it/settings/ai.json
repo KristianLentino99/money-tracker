@@ -1,8 +1,8 @@
 {
   "settings": {
     "ai": {
-      "title": "Impostazioni AI",
-      "description": "Configura funzionalità basate sull'IA come la categorizzazione automatica delle transazioni",
+      "title": "Impostazione IA",
+      "description": "Scegliere quale modello IA alimenta ciascuna funzionalità, aggiungere modelli personalizzati e connettere applicazioni come Claude e ChatGPT.",
       "tabs": {
         "features": "Funzionalità IA",
         "apiKeys": "Chiavi API",
@@ -11,7 +11,7 @@
         "invalidEndpointsTooltip": "Uno o più endpoint personalizzati non funzionano più",
         "models": "Modelli IA",
         "connectedApps": "Connettori (MCP)",
-        "invalidConnectionsTooltip": "Uno dei tuoi modelli IA richiede attenzione"
+        "invalidConnectionsTooltip": "Uno dei modelli IA richiede attenzione"
       },
       "apiKeyManager": {
         "title": "Chiavi API",
@@ -86,13 +86,13 @@
         }
       },
       "credentialStatus": {
-        "validated": "Convalidata {timeAgo}",
-        "failed": "Non riuscita {timeAgo}",
+        "validated": "Validato {timeAgo}",
+        "failed": "Respinto {timeAgo}",
         "invalidBadge": "Non valida"
       },
       "features": {
         "title": "Funzionalità IA",
-        "description": "Configura quale modello usare per ogni funzionalità basata sull'IA",
+        "description": "Configurare quale modello usare per ogni funzionalità basata sull'IA",
         "loading": "Caricamento funzionalità...",
         "howItWorks": "Come funziona",
         "loadError": "Impossibile caricare le funzionalità IA."
@@ -105,9 +105,9 @@
         "howItWorks": {
           "title": "Come funziona",
           "points": {
-            "autoSync": "Quando sincronizzi le transazioni dalla tua banca, le transazioni non categorizzate vengono inviate automaticamente all'IA per la categorizzazione.",
-            "analysis": "L'IA analizza le descrizioni delle transazioni e i nomi degli esercenti per suggerire categorie appropriate dal tuo elenco di categorie esistenti.",
-            "override": "Puoi sempre modificare manualmente le categorie suggerite dall'IA."
+            "autoSync": "Quando le transazioni vengono sincronizzate dalla banca, quelle non classificate vengono inviate automaticamente all'IA per la classificazione.",
+            "analysis": "L'IA analizza la descrizione delle transazioni e i nomi degli esercenti per suggerire categorie appropriate da quelle esistenti.",
+            "override": "È sempre possibile modificare manualmente le categorie suggerite dall'IA."
           }
         },
         "loading": "Caricamento modelli..."
@@ -120,20 +120,20 @@
         "howItWorks": {
           "title": "Come funziona",
           "points": {
-            "upload": "Carica un estratto conto bancario (PDF, CSV o TXT) e l'IA estrarrà automaticamente tutte le transazioni.",
-            "analysis": "L'IA analizza la struttura del documento per identificare date, descrizioni, importi e tipi di transazione.",
-            "review": "Puoi rivedere e correggere i dati estratti prima di importarli nel tuo account.",
-            "cost": "Il costo viene stimato prima dell'elaborazione, ma riflette solo un valore approssimativo."
+            "upload": "Caricare un estratto conto (PDF, CSV o TXT), la foto di una ricevuta o uno screenshot di un'app bancaria: l'IA estrarrà automaticamente tutte le transazioni.",
+            "analysis": "L'IA analizza la struttura del documento per identificare date, descrizioni, importi e tipo di transazione.",
+            "review": "È possibile rivedere e correggere tutti i dati estratti prima di importarli nel conto.",
+            "cost": "Il costo della lavorazione è una stima approssimativa."
           }
         },
         "loading": "Caricamento modelli..."
       },
       "modelSelector": {
         "badges": {
-          "yourKey": "La tua chiave",
-          "yourKeyTooltip": "Questa funzionalità usa la tua chiave API personale. Hai il pieno controllo su utilizzo e costi, senza limiti di frequenza imposti dal nostro server.",
+          "yourKey": "Chiave personale",
+          "yourKeyTooltip": "Funziona con uno dei modelli di intelligenza artificiale configurati, che si occupa anche della fatturazione. MoneyMatter non limita l'utilizzo.",
           "server": "Server",
-          "serverTooltip": "Questa funzionalità usa la chiave API condivisa del nostro server. È gratuita, ma potrebbe avere limiti di frequenza durante i periodi di alta richiesta. Aggiungi la tua chiave API per un accesso illimitato."
+          "serverTooltip": "Funziona con MoneyMatter AI, incluso nel piano. Si applicano limiti di utilizzo."
         },
         "modelLabel": "Modello",
         "resetButton": "Ripristina predefinito",
@@ -142,9 +142,9 @@
           "context": "Contesto:",
           "capabilities": "Capacità:",
           "estimatedCost": "Costo stimato:",
-          "per100Transactions": "ogni 100 transazioni",
+          "per100Transactions": "per 100 transazioni",
           "unknown": "Sconosciuto",
-          "per100Pairs": "per 100 pairs"
+          "per100Pairs": "per 100 coppie"
         },
         "rateLimitWarning": "Stai usando l'IA fornita dal server con limiti di frequenza del livello gratuito. La disponibilità della funzionalità dipende dalla richiesta degli altri utenti. Per un accesso affidabile, aggiungi la tua chiave API nella scheda Chiavi API.",
         "groupLabels": {
@@ -172,9 +172,9 @@
           "agents": "Agenti"
         },
         "notifications": {
-          "updateSuccess": "Modello aggiornato correttamente",
+          "updateSuccess": "Modello aggiornato con successo",
           "updateFailed": "Impossibile aggiornare il modello",
-          "resetSuccess": "Ripristinato il modello predefinito",
+          "resetSuccess": "Ripristina il modello predefinito",
           "resetFailed": "Impossibile ripristinare il modello"
         },
         "addKeyHint": "Aggiungi la tua chiave API per scegliere tra tutti i modelli disponibili.",
@@ -188,19 +188,19 @@
           "missingModelName": "Questo endpoint non ha un nome modello configurato — inseriscine uno prima",
           "endpointsLoadError": "Non è stato possibile caricare i tuoi endpoint, quindi il nome del modello non può essere modificato ora."
         },
-        "placeholder": "Scegli un modello",
+        "placeholder": "Scegliere un modello",
         "automaticOption": "Automatico",
         "automaticOptionWithTarget": "Automatico · {target}",
-        "serverOption": "IA MoneyMatter · inclusa",
+        "serverOption": "MoneyMatter AI · incluso",
         "connectionOption": "{name} · {model}",
         "connectionOptionNeedsAttention": "{name} · {model} (richiede attenzione)",
         "sharedPoolNote": "Con il tuo piano attuale, il modello incluso usa risorse condivise: quando la domanda è elevata possono essere applicati dei limiti. {link} per evitarli.",
         "sharedPoolNoteLink": "Passa a Plus",
         "empty": {
-          "title": "Nessun modello IA configurato",
-          "description": "Aggiungi un tuo modello IA per usare questa funzionalità."
+          "title": "Ancora nessun modello IA",
+          "description": "Aggiungere un modello IA per usare questa funzionalità."
         },
-        "allConnectionsDown": "Tutti i tuoi modelli IA richiedono attenzione, quindi questa funzionalità è sospesa. Correggi un modello in {link}.",
+        "allConnectionsDown": "Tutti i tuoi modelli ia hanno bisogno di attenzione, quindi questa funzione è in pausa. Correggi in {link}.",
         "allConnectionsDownLink": "Modelli IA"
       },
       "customEndpoint": {
@@ -308,8 +308,8 @@
         "serverModelHint": "Le istruzioni personalizzate si applicano solo quando la categorizzazione usa uno dei tuoi modelli IA. Scegline uno qui sopra."
       },
       "modelGuide": {
-        "trigger": "Quale modello scegliere?",
-        "tierHeading": "Basta un modello {tier}",
+        "trigger": "Quale modello è adatto?",
+        "tierHeading": "Il modello {tier} è sufficiente",
         "tiers": {
           "light": "Chiaro",
           "balanced": "equilibrato",
@@ -328,8 +328,8 @@
         },
         "why": {
           "categorization": "Un compito breve e ripetitivo. Un modello piccolo lo gestisce bene e mantiene bassi i costi.",
-          "statementParsing": "Legge l'intero estratto conto e restituisce ogni riga: serve un modello che mantenga la precisione anche su testi lunghi.",
-          "investmentTransactionsParsing": "Trasforma le esportazioni del broker in operazioni di acquisto e vendita. Per esportazioni lunghe serve un modello capace di produrre risposte lunghe.",
+          "statementParsing": "Legge l'intera dichiarazione e ne trascrive ogni riga, quindi ha bisogno di un modello adatto per elaborare lunghi testi.",
+          "investmentTransactionsParsing": "Trasforma le esportazioni dei broker in righe di acquisto e vendita. Esportazioni prolungate hanno bisogno di un modello che può sostenerle.",
           "receiptParsing": "Il modello analizza direttamente il file della fattura, quindi deve saper leggere immagini e PDF.",
           "trackerMatching": "A short, repetitive job that runs every day. A small model handles it well and keeps the cost down.",
           "transferMatching": "Reads short pairs of transactions and answers with a one-word verdict, so a light, cheap model is enough."
@@ -370,8 +370,8 @@
           },
           "longAnswers": {
             "label": "Risposte lunghe",
-            "ok": "Genera risposte fino a {tokens} token.",
-            "fail": "Genera risposte fino a {tokens} token, quindi i file lunghi vengono troncati."
+            "ok": "Utilizzati {tokens} token.",
+            "fail": "Utilizzati {tokens} token, i file complessi non sono stati elaborati."
           },
           "structuredAnswers": {
             "label": "Risposte strutturate",
@@ -455,8 +455,8 @@
           "apiKeyLabel": "Chiave API",
           "apiKeyPlaceholder": "Incolla la tua chiave API",
           "apiKeyGetHint": "Ottieni una chiave su {link}.",
-          "apiKeyOptionalHint": "Facoltativa. Lascia vuoto se il server non richiede una chiave.",
-          "apiKeySavedHint": "Lascia vuoto per mantenere la chiave salvata.",
+          "apiKeyOptionalHint": "Opzionale. Lasciare vuoto se il tuo server non necessità di una chiave API.",
+          "apiKeySavedHint": "Lasciare vuoto per mantenere l'attuale Chiave API.",
           "apiKeyBorrowedHint": "Usa la chiave di \"{name}\". Inserisci una nuova chiave per usarne una diversa.",
           "removeApiKeyButton": "Rimuovi chiave API",
           "modelLabel": "Modello",

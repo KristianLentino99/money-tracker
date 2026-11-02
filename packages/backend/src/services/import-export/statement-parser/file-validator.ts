@@ -105,8 +105,7 @@ function isValidTextContent({ buffer }: { buffer: Buffer }): boolean {
     }
   }
 
-  // If >90% printable, treat as text
-  return printableCount / sample.length > 0.9;
+  return sample.length > 0 && printableCount / sample.length > 0.99;
 }
 
 /**

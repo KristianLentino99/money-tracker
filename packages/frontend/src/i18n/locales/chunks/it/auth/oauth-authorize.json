@@ -1,43 +1,43 @@
 {
   "oauth": {
     "authorize": {
-      "title": "{name} vuole accedere ai tuoi dati di MoneyMatter",
+      "title": "{name} richiede l'accesso ai dati MoneyMatter",
       "description": "Questa app richiede le seguenti autorizzazioni:",
       "approve": "Approva",
       "deny": "Nega",
-      "footer": "Puoi revocare l'accesso in qualsiasi momento da Impostazioni > Integrazioni IA.",
+      "footer": "L'accesso può essere revocato in qualsiasi momento da Impostazioni > Integrazioni IA.",
       "error": "Impossibile elaborare la richiesta. Riprova.",
-      "unexpected_response": "Risposta imprevista dal server. Riprova.",
+      "unexpected_response": "Risposta inattesa dal server. Riprovare.",
       "always_granted": "Sempre concesso",
       "optional": "Facoltativo",
-      "delete_warning": "Concedi l'accesso solo alle app di cui ti fidi completamente",
+      "delete_warning": "Concedere l'accesso solo ad applicazioni affidabili",
       "unknown_app": "Un'applicazione",
       "redirect_notice": "After approval you will be redirected to {host}. Only continue if you recognize this address."
     },
     "scopes": {
       "finance_read": {
-        "label": "Visualizza i tuoi dati finanziari",
-        "desc": "Leggi conti, transazioni, categorie, etichette, portafogli e statistiche sulle spese."
+        "label": "Visualizzare i dati finanziari",
+        "desc": "Lettura di conti, transazioni, budget, categorie, etichette, portafogli e statistiche di spesa."
       },
       "finance_write": {
-        "label": "Crea e modifica i tuoi dati finanziari",
-        "desc": "Aggiungi e aggiorna transazioni, abbonamenti, posizioni di investimento e altri dati."
+        "label": "Creare e modificare i dati finanziari",
+        "desc": "Aggiunta e aggiornamento di transazioni, budget, abbonamenti, investimenti e altro."
       },
       "finance_delete": {
-        "label": "Elimina i tuoi dati finanziari",
-        "desc": "Rimuovi definitivamente transazioni, conti e altri dati."
+        "label": "Eliminare i dati finanziari",
+        "desc": "Rimozione definitiva di transazioni, conti, budget e altri dati."
       },
       "profile_read": {
-        "label": "Visualizza il tuo profilo",
-        "desc": "Visualizza il tuo nome, la tua email e la valuta predefinita."
+        "label": "Visualizzare il profilo",
+        "desc": "Visualizzazione di nome, email e valuta predefinita."
       },
       "offline_access": {
-        "label": "Resta connesso in background",
-        "desc": "Mantieni attivo l'accesso senza doverlo richiedere a ogni sessione."
+        "label": "Mantenere la connessione in background",
+        "desc": "Accesso mantenuto attivo senza richiedere l'autorizzazione a ogni sessione."
       },
       "unknown": {
         "label": "Autorizzazione aggiuntiva",
-        "desc": "L'app ha richiesto un'autorizzazione non riconosciuta da MoneyMatter."
+        "desc": "L'app ha richiesto un'autorizzazione sconosciuta a MoneyMatter."
       }
     }
   }

@@ -1,5 +1,5 @@
 import { uploadTransactionAttachment } from '@/api/attachments';
-import type { CurrencyModel } from '@bt/shared/types';
+import type { CurrencyModel, TransactionModel } from '@bt/shared/types';
 import { ASSET_CLASS, SECURITY_PROVIDER } from '@bt/shared/types/investments';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -101,6 +101,43 @@ describe('investment contribution submission helpers', () => {
     });
 
     expect(isInvestmentContributionFormValid({ form })).toBe(false);
+  });
+
+  it('rejects contribution mode when a multi-account payment is being entered', () => {
+    const form = validForm({
+      searchResult,
+      quantity: '1',
+      price: '100',
+      fees: '0',
+      date: new Date('2026-09-10T00:00:00.000Z'),
+      settlementCurrency: null,
+      settlementAmount: '',
+      settlementFees: '0',
+    });
+    expect(isInvestmentContributionFormValid({ form })).toBe(true);
+    form.paymentLegs = [{ account: null, amount: 25 }];
+
+    expect(isInvestmentContributionFormValid({ form })).toBe(false);
+  });
+
+  it('rejects contribution conversion for a saved multi-account payment even when its form legs are removed', () => {
+    const form = validForm({
+      searchResult,
+      quantity: '1',
+      price: '100',
+      fees: '0',
+      date: new Date('2026-09-10T00:00:00.000Z'),
+      settlementCurrency: null,
+      settlementAmount: '',
+      settlementFees: '0',
+    });
+    expect(isInvestmentContributionFormValid({ form })).toBe(true);
+    const transaction = {
+      id: 'main-id',
+      paymentParts: [{ transactionId: 'main-id' }, { transactionId: 'leg-id' }],
+    } as TransactionModel;
+
+    expect(isInvestmentContributionFormValid({ form, transaction })).toBe(false);
   });
 });
 

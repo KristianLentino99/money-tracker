@@ -1,3 +1,4 @@
+import akahu from './akahu';
 import bankDataProviders from './bank-data-providers';
 import enablebanking from './enablebanking';
 import lunchflow from './lunchflow';
@@ -5,7 +6,7 @@ import monobank from './monobank';
 import walutomat from './walutomat';
 
 export * from './common';
-export { bankDataProviders, enablebanking, lunchflow, monobank, walutomat };
+export { akahu, bankDataProviders, enablebanking, lunchflow, monobank, walutomat };
 export * from './account';
 export * from './refunds';
 export * from './transfers';
@@ -52,5 +53,6 @@ export * from './ai-categorization';
 export * from './billing';
 export * from './attachments';
 export * from './invoice-matching';
+export * from './background-jobs';
 export * from './landing-faq';
 export * from './reconciliation';

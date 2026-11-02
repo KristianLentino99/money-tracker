@@ -2,16 +2,16 @@
   "errors": {
     "api": {
       "failedToFetch": "Impossibile recuperare i dati dal server.",
-      "failedToFetchSelfHost": "Impossibile raggiungere il server. Il backend potrebbe essere ancora in avvio (circa 30 secondi dopo l'avvio), oppure la variabile d'ambiente ALLOWED_ORIGINS potrebbe non includere questo URL.",
+      "failedToFetchSelfHost": "Impossibile raggiungere il server. Il backend potrebbe essere ancora in avvio (fino a circa 30 s dopo l'avvio), oppure la variabile d'ambiente ALLOWED_ORIGINS non include questo URL.",
       "unexpectedError": "Errore imprevisto.",
-      "sessionExpired": "La sessione è scaduta. Accedi di nuovo.",
-      "payloadTooLarge": "La richiesta è troppo grande. Riprova importando meno elementi alla volta.",
+      "sessionExpired": "La sessione è scaduta. Accedere di nuovo.",
+      "payloadTooLarge": "La richiesta è troppo grande. Provare a importare meno valori alla volta.",
       "tooManyRequests": "Too many attempts. Please wait a moment and try again."
     },
     "notFound": {
       "title": "Questa pagina è stata spostata",
-      "description": "Non è stato possibile trovare ciò che stavi cercando. Il collegamento potrebbe essere danneggiato oppure la pagina potrebbe essere stata spostata.",
-      "attemptedLabel": "Hai provato a visitare: ",
+      "description": "Impossibile trovare la pagina richiesta. Il link potrebbe essere errato o la pagina potrebbe essere stata spostata.",
+      "attemptedLabel": "Pagina richiesta: ",
       "goBack": "Torna indietro",
       "goHome": "Torna alla home"
     },

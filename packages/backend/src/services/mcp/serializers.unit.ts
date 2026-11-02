@@ -29,6 +29,7 @@ const fullAccount: AccountApiResponse = {
   refCreditLimit: 0,
   type: 'system',
   accountCategory: 'general',
+  defaultPaymentType: null,
   currencyCode: 'USD',
   userId: 42,
   externalId: 'ext-abc',
@@ -77,6 +78,7 @@ const fullTransaction: TransactionApiResponse = {
   payeeId: null,
   payeeLocked: false,
   categorizationMeta: null,
+  paymentParentId: null,
   createdAt: new Date('2026-01-01T10:00:00.000Z'),
   updatedAt: new Date('2026-01-02T10:00:00.000Z'),
   tags: [{ id: 'tag-1', name: 'food', color: '#fff', icon: 'cup' }],
@@ -94,6 +96,7 @@ describe('MCP serializers', () => {
           'creditLimit',
           'currencyCode',
           'currentBalance',
+          'defaultPaymentType',
           'excludeFromStats',
           'id',
           'name',
@@ -180,6 +183,32 @@ describe('MCP serializers', () => {
       expect(slim).not.toHaveProperty('tags');
       expect(slim).not.toHaveProperty('splits');
       expect(slim).not.toHaveProperty('transactionGroups');
+      expect(slim).not.toHaveProperty('paymentParts');
+      expect(slim).not.toHaveProperty('paymentTotal');
+    });
+
+    it('keeps the parts and total of a multi-account payment', () => {
+      const paymentParts = [
+        {
+          transactionId: 'tx-1' as RecordId,
+          accountId: 'acc-1' as RecordId,
+          amount: 10,
+          currencyCode: 'USD',
+          paymentAmount: 10,
+          isLinked: false,
+        },
+        {
+          transactionId: 'tx-2' as RecordId,
+          accountId: 'acc-2' as RecordId,
+          amount: 9,
+          currencyCode: 'EUR',
+          paymentAmount: 10.5,
+          isLinked: true,
+        },
+      ];
+      const slim = slimTransactionsForMcp([{ ...fullTransaction, paymentParts, paymentTotal: 20.5 }])[0]!;
+      expect(slim.paymentParts).toEqual(paymentParts);
+      expect(slim.paymentTotal).toBe(20.5);
     });
   });
 
@@ -270,6 +299,7 @@ describe('MCP serializers', () => {
       etaMonths: 20,
       neededMonthly: 1000,
       daysLeft: 240,
+      monthsLeft: 8,
       input: {
         today: '2026-10-20',
         months: [],
@@ -349,7 +379,7 @@ describe('MCP serializers', () => {
 
     it.each([
       { overrides: { status: 'paused' }, expected: 'paused' },
-      { overrides: { achievedAt: '2026-10-01T00:00:00.000Z' }, expected: 'reached' },
+      { overrides: { achievedAt: new Date().toISOString() }, expected: 'reached' },
     ])('reports the displayed status: $expected', ({ overrides, expected }) => {
       const [slim] = slimGoalsForMcp({ goals: [{ ...goal, ...overrides } as GoalModel], accountNames: new Map() });
 

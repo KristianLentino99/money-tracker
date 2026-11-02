@@ -3,10 +3,10 @@
     "investmentTransaction": {
       "typeLabel": "Tipo di transazione",
       "types": {
-        "buy": "Acquisto",
+        "buy": "Acquista",
         "sell": "Vendita",
         "dividend": "Dividendo",
-        "fee": "Commissione",
+        "fee": "Costo",
         "tax": "Imposta"
       },
       "securityLabel": "Titolo",
@@ -143,7 +143,8 @@
         "success": "Conto creato correttamente.",
         "error": "Errore imprevisto."
       },
-      "initialBalanceHelpLink": "What should I enter?"
+      "initialBalanceHelpLink": "What should I enter?",
+      "defaultPaymentTypeLabel": "Default payment type"
     },
     "directCashTransaction": {
       "methodTypes": {
@@ -157,7 +158,7 @@
       "fromAccountLabel": "Dal conto",
       "toAccountLabel": "Al conto",
       "accountPlaceholder": "Seleziona un conto",
-      "orSeparator": "Oppure",
+      "orSeparator": "oppure",
       "linkExistingTransaction": "Collega una transazione esistente",
       "linkedTransactionLabel": "Transazione collegata",
       "amountLabel": "Importo",
@@ -302,7 +303,8 @@
         "interestRateRange": "Il tasso d'interesse deve essere compreso tra 0 e 99,9999.",
         "termRange": "La durata deve essere compresa tra 1 e 1200 mesi.",
         "paymentDayRange": "Il giorno del pagamento deve essere compreso tra 1 e 31.",
-        "asOfInFuture": "La data non può essere nel futuro"
+        "asOfInFuture": "La data non può essere nel futuro",
+        "startDateInFuture": "Start date can't be in the future"
       },
       "balanceExceedsPrincipalWarning": "Il saldo residuo è maggiore del capitale originario: controlla nuovamente gli importi."
     }

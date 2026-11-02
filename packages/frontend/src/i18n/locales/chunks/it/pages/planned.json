@@ -113,7 +113,7 @@
         "dueDateLabel": "Data del piano di pagamento",
         "dueDateDescription": "Se impostata, questo abbonamento ottiene un piano di pagamento che puoi contrassegnare come pagato a ogni ciclo di fatturazione.",
         "maxOccurrencesLabel": "Numero di rate",
-        "maxOccurrencesPlaceholder": "Lascia vuoto per indefinito",
+        "maxOccurrencesPlaceholder": "Lasciare vuoto per non impostare un limite",
         "remindBeforeLabel": "Ricordami prima della scadenza",
         "remindBeforeHelper": "I promemoria vengono mostrati nell'app. Attiva l'email qui sotto per riceverli anche via email. Scegline fino a 3.",
         "notifyEmailLabel": "Avvisami anche via email",

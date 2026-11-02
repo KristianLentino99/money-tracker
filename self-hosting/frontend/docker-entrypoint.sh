@@ -51,6 +51,15 @@ case "$API_HTTP" in
     ;;
 esac
 
+case "$MCP_BASE_URL" in
+  "" ) : ;;
+  http://* | https://* ) : ;;
+  * )
+    echo "ERROR: MCP_BASE_URL must be empty or start with http:// or https://" >&2
+    exit 1
+    ;;
+esac
+
 case "$PWA_ENABLED" in
   true | false ) : ;;
   * )
@@ -338,6 +347,41 @@ location = /.well-known/oauth-protected-resource/mcp {
   add_header X-Content-Type-Options "nosniff" always;
 }
 EOF
+fi
+
+# Self-hosted discovery must direct agents to this installation. The public
+# source files retain the hosted defaults; only this container's served copies change.
+if [ "$IS_SELF_HOST" = "true" ] && [ -n "$MCP_BASE_URL" ]; then
+  mcp_origin="${MCP_BASE_URL%/}"
+  server_card="/app/.well-known/mcp/server-card.json"
+  skills_index="/app/.well-known/agent-skills/index.json"
+  connection_skill="/app/skills/connect-moneymatter/SKILL.md"
+
+  jq --arg origin "$mcp_origin" '
+    .transport.url = ($origin + "/mcp") |
+    .authentication.oauth2.authorizationServer = ($origin + "/api/v1/auth") |
+    .authentication.oauth2.metadata = ($origin + "/.well-known/oauth-authorization-server") |
+    .authentication.oauth2.protectedResourceMetadata = ($origin + "/.well-known/oauth-protected-resource")
+  ' "$server_card" > "$server_card.tmp"
+  mv "$server_card.tmp" "$server_card"
+
+  jq -R -s -j --arg origin "$mcp_origin" '
+    gsub("https://mcp\\.moneymatter\\.app"; $origin) |
+    gsub("https://api\\.moneymatter\\.app"; $origin) |
+    gsub("https://moneymatter\\.app/\\.well-known/"; $origin + "/.well-known/") |
+    gsub("https://moneymatter\\.app/sign-up"; $origin + "/sign-up")
+  ' "$connection_skill" > "$connection_skill.tmp"
+  mv "$connection_skill.tmp" "$connection_skill"
+
+  skill_digest="$(sha256sum "$connection_skill" | cut -d ' ' -f 1)"
+  jq --arg origin "$mcp_origin" --arg digest "$skill_digest" '
+    .skills |= map(
+      if .name == "connect-moneymatter" then
+        .url = ($origin + "/skills/connect-moneymatter/SKILL.md") | .sha256 = $digest
+      else . end
+    )
+  ' "$skills_index" > "$skills_index.tmp"
+  mv "$skills_index.tmp" "$skills_index"
 fi
 
 exec "$@"

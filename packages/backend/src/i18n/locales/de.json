@@ -1,6 +1,6 @@
 {
   "common": {
-    "processAlreadyLocked": "Der Sync-Prozess für „{{lockKey}}“ ist bereits gesperrt.",
+    "processAlreadyLocked": "Der Sync-Prozess für \"{{lockKey}}\" ist bereits gesperrt.",
     "serviceTemporarilyUnavailable": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.",
     "jobInterruptedByServerUpdate": "Ein Server-Update hat dies unterbrochen, bevor es abgeschlossen werden konnte. Es wurde nichts geändert."
   },
@@ -91,6 +91,15 @@
     "plannedUnflipOnConnectedAccount": "Dieser Plan befindet sich auf einem mit der Bank verbundenen Konto und wird daher automatisch von deiner Bank bestätigt. Lösche ihn, wenn er nicht mehr erwartet wird.",
     "plannedCannotConfirmPayment": "Eine geplante Transaktion kann eine Zahlung nicht bestätigen. Warte, bis sie bestätigt wird, und verknüpfe sie dann.",
     "plannedCannotBeRefundLinked": "Eine geplante Transaktion kann nicht Teil einer Rückerstattungsverknüpfung sein.",
+    "paymentLegsNotAllowed": "Nur reguläre Einnahmen oder Ausgaben auf deinem eigenen Konto können auf mehrere Konten aufgeteilt werden. Umbuchungen, Rückerstattungen, geplante sowie kategorienübergreifende Transaktionen sind nicht möglich.",
+    "inPaymentNotAllowed": "Diese Transaktion ist Teil einer Zahlung von mehreren Konten. Entferne sie zuerst aus der Zahlung.",
+    "paymentLegInvalidAccount": "Jeder neue Teil muss sich auf einem deiner anderen manuellen Konten befinden.",
+    "paymentLegDuplicateAccount": "Jeder neue Teil muss sich auf einem anderen Konto befinden.",
+    "paymentLegEditThroughMain": "Dies ist Teil einer Zahlung von mehreren Konten. Bearbeite stattdessen die Haupttransaktion.",
+    "paymentAmountRequired": "Gib den Betrag in der Währung der Haupttransaktion für jeden Teil in einer anderen Währung ein.",
+    "paymentLinkNotAllowed": "Diese Transaktion kann nicht mit der Zahlung verknüpft werden. Es können nur eigene Einnahmen oder Ausgaben desselben Typs verknüpft werden – keine Umbuchung, Rückerstattung, Aufteilung, ausstehende Transaktion oder Teil einer anderen Zahlung.",
+    "paymentLinkedAmountFixed": "Der Betrag einer verknüpften Transaktion kann nicht geändert werden.",
+    "paymentLinkedTypeMismatch": "Verknüpfte Transaktionen müssen denselben Typ haben wie die Zahlung. Hebe die Verknüpfung zuerst auf.",
     "splits": {
       "splitsOnTransfer": "Umbuchungstransaktionen können keine Aufteilungen hinzugefügt werden",
       "splitLimitExceeded": "Maximal {{max}} Aufteilungen pro Transaktion erlaubt",
@@ -135,14 +144,11 @@
     "onlyOwnerCanDuplicate": "Nur der Eigentümer kann diesen Tracker duplizieren",
     "someTransactionIdsInvalid": "Einige Transaktions-IDs sind ungültig",
     "transactionsAddedSuccessfully": "Transaktionen erfolgreich hinzugefügt",
-    "cannotManuallyLinkToCategoryBudget": "Transaktionen können nicht manuell mit kategoriebasierten Trackern verknüpft werden. Transaktionen werden automatisch nach Kategorie nachverfolgt.",
     "someCategoryIdsInvalid": "Einige Kategorie-IDs sind ungültig oder existieren nicht",
-    "notCategoryBudget": "Dieser Endpunkt ist nur für kategoriebasierte Tracker verfügbar",
-    "lineCategoryOutsideTracker": "Eine Tracker-Zeile kann nur Kategorien verwenden, die von ihrem Tracker erfasst werden",
     "startDateAfterEndDate": "Das Startdatum muss am oder vor dem Enddatum liegen",
+    "rulesNeedCategoryOrTag": "Wähle mindestens eine Kategorie oder ein Tag aus, um Transaktionen automatisch hinzuzufügen.",
     "smartTracking": {
       "ownerOnly": "Nur der Eigentümer des Trackers kann Smart-Tracking ändern.",
-      "manualOnly": "Smart-Tracking funktioniert nur für manuelle Tracker.",
       "descriptionRequired": "Beschreibe, wofür dieser Tracker gedacht ist, um Smart-Tracking zu aktivieren.",
       "startDateRequired": "Lege ein Startdatum fest, um Smart-Tracking zu aktivieren.",
       "scanRunning": "Der Abgleich läuft für diesen Tracker. Versuche es erneut, wenn er abgeschlossen ist.",
@@ -255,6 +261,10 @@
       "tokenLimitExceededSuggestion": "Teile den Upload in kleinere Dateien auf oder verwende ein Modell mit einem größeren Kontextfenster.",
       "extractFailed": "Transaktionen für Geldanlagen konnten nicht aus dieser Datei extrahiert werden. Bitte versuche es erneut.",
       "csvColumnNotFound": "Spalte \"{{column}}\" wurde in den CSV-Kopfzeilen nicht gefunden."
+    },
+    "unrealizedLossAlert": {
+      "title_one": "{{count}} holding crossed your loss alert",
+      "title_other": "{{count}} holdings crossed your loss alert"
     }
   },
   "landingFaq": {
@@ -360,6 +370,14 @@
       "invalidApiKey": "Ungültiger LunchFlow API-Schlüssel. Bitte überprüfe deine Zugangsdaten.",
       "accountNoExternalId": "Konto hat keine externe ID für die LunchFlow-Synchronisierung.",
       "accountNotFound": "LunchFlow-Konto nicht gefunden."
+    },
+    "akahu": {
+      "invalidCredentialsFormat": "Ungültiges Format der Akahu-Anmeldedaten. Ein User Access Token und ein App ID Token sind erforderlich.",
+      "invalidTokens": "Ungültige Akahu-Token. Überprüfe den User Access Token und den App ID Token auf deiner Akahu-App-Seite.",
+      "accountNoExternalId": "Konto hat keine externe ID für die Akahu-Synchronisierung.",
+      "accountNotFound": "Akahu-Konto nicht gefunden.",
+      "rateLimited": "Akahu limitiert derzeit die Anfragen. Bitte versuche es in Kürze noch einmal.",
+      "missingCurrency": "Akahu hat für dieses Konto keine Währung zurückgegeben."
     },
     "simplefin": {
       "invalidCredentialsFormat": "Ungültiges Format der SimpleFIN-Zugangsdaten.",
@@ -545,9 +563,7 @@
     "currencyCodeNotExist": "Währung mit dem übergebenen Code existiert nicht.",
     "currencyNotExist": "Währung mit dem Code \"{{currencyCode}}\" existiert nicht.",
     "cannotDeleteDefaultCurrency": "Standardwährung darf nicht gelöscht werden. Entferne zuerst den Standard-Status.",
-    "cannotDeleteCurrencyWithAccounts": "Währungen, die mit Konten verknüpft sind, dürfen nicht gelöscht werden. Lösche zuerst die Konten. Kontonamen: \"{{accountNames}}\".",
-    "cannotDeleteCurrencyWithInvestments": "Währung \"{{currencyCode}}\" darf nicht gelöscht werden, solange sie von Investment-Positionen verwendet wird. Lösche zuerst diese Positionen.",
-    "defaultCurrencyNotPresent": "Währung kann nicht gelöscht werden. Standardwährung ist im System nicht vorhanden"
+    "currencyInUse": "{{currencyCode}} kann nicht gelöscht werden, da sie noch verwendet wird."
   },
   "ai": {
     "connectionNotFound": "KI-Modell nicht gefunden.",
@@ -853,5 +869,20 @@
   },
   "dataExport": {
     "tooManyRows": "Der Export würde {{rowCount, number}} Zeilen enthalten, was das Limit von {{limit, number}} überschreitet."
+  },
+  "goals": {
+    "goalNotFound": "Ziel nicht gefunden.",
+    "accountNotFound": "Eines der ausgewählten Konten wurde nicht gefunden.",
+    "accountNotEligible": "{{accountName}} kann nicht für ein Ziel angerechnet werden. Wähle ein Bargeld-, Giro-, Spar-, Investment- oder Krypto-Konto aus.",
+    "shareCapacityExceeded": "{{accountName}} hat {{free}}% frei: Du hast {{requested}}% angefragt, und andere Ziele nutzen bereits {{usedByOtherGoals}}%.",
+    "fixedAmountsBelowTarget": "Festbeträge ergeben in der Summe {{total}} {{currencyCode}}, weniger als das Ziel von {{target}} {{currencyCode}}. Erhöhe einen Betrag oder berücksichtige ein Konto prozentual.",
+    "currencyRateUnavailable": "{{currencyCode}} kann derzeit nicht in deine Basiswährung umgerechnet werden. Wähle eine andere Währung oder versuche es später erneut.",
+    "reachedNotification": {
+      "title": "Ziel erreicht: {{name}}",
+      "message": "Du hast {{amount}} {{currencyCode}} gespart."
+    }
+  },
+  "backgroundJobs": {
+    "notFound": "Diese Aufgabe läuft nicht mehr – der Server wurde möglicherweise neu gestartet. Bitte versuche es erneut."
   }
 }

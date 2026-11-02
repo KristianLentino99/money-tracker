@@ -38,8 +38,10 @@ Works with Claude, ChatGPT, OpenClaw, and any MCP-compatible client. Access can 
 ## Links
 
 - [Homepage](https://moneymatter.app/): Landing page with feature overview and sign-up
+- [Features](https://moneymatter.app/features): One page per feature, with what it does and its limits
 - [Documentation](https://docs.moneymatter.app/llms.txt): User guides on accounts, transactions, budgeting, goals, transfers, refunds, stats, imports and bank connections
 - [GitHub Repository](https://github.com/letehaha/moneymatter): Source code, Docker setup guide, and issue tracker
+- [Reddit Community](https://www.reddit.com/r/moneymatterapp/): Questions, help from other users, and project updates
 - [Privacy Policy](https://moneymatter.app/privacy-policy): Data handling and privacy practices
 - [Terms of Use](https://moneymatter.app/terms-of-use): Terms of service
 

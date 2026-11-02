@@ -106,6 +106,7 @@
       "goToAccounts": "Перейти до рахунків",
       "cadenceLabel": "Оновлюється",
       "startsOnLabel": "Починається",
+      "startsOnOutOfRange": "Виберіть дату від {from} до сьогодні.",
       "accountsLabel": "Рахунки",
       "accountsPlaceholder": "Виберіть рахунки",
       "rolloverLabel": "Перенесення",
@@ -235,7 +236,11 @@
       "activity": "Рух коштів",
       "available": "Доступно",
       "overrideBadge": "перевизначено",
-      "carriesDeficit": "переносить перевитрату",
+      "carryBadge": {
+        "floor": "переносить залишок",
+        "signed": "переносить залишок і перевитрату",
+        "none": "починає з нуля"
+      },
       "lineActions": "Дії зі статтею",
       "editLine": "Редагувати статтю",
       "archiveLine": "Архівувати статтю",

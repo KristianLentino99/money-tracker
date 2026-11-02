@@ -13,7 +13,7 @@
         "loading": "Chargement..."
       },
       "errors": {
-        "unableToLoadCurrencies": "Impossible de charger la liste des devises. Réessayez plus tard.",
+        "unableToLoadCurrencies": "Impossible de charger la liste des devises. Réessayez plus tard",
         "unableToSetCurrency": "Erreur inattendue. Impossible de définir la devise principale. Veuillez réessayer plus tard ou contacter l'assistance."
       }
     },
@@ -41,7 +41,10 @@
           "link": "Échec de l'association du compte. Veuillez réessayer."
         },
         "unauthorizedClient": "Cette application n'est pas autorisée à utiliser cette méthode d'authentification",
-        "temporarilyUnavailable": "Le service d'authentification est temporairement indisponible. Veuillez réessayer plus tard."
+        "temporarilyUnavailable": "Le service d'authentification est temporairement indisponible. Veuillez réessayer plus tard.",
+        "emailDoesNotMatch": "The email on this provider account doesn't match your account email. Use a provider account with the same email.",
+        "emailNotVerified": "Check your email to verify your address, then sign in again.",
+        "unableToLinkAccount": "We couldn't link this account because this server doesn't treat the provider's email as verified. Contact your administrator."
       }
     }
   }

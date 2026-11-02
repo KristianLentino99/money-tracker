@@ -19,7 +19,7 @@
             "selectCustom": "Seleziona {action}",
             "enterName": "Per \"Name\" inserisci {value}",
             "pasteUrl": "Per \"Remote MCP server URL\" incolla {value}",
-            "finish": "Lascia vuote le impostazioni avanzate e fai clic su {action}",
+            "finish": "Lasciare le impostazioni avanzate vuote e clicca su {action}",
             "authorize": "Verrai reindirizzato a MoneyMatter per autorizzare l'accesso"
           }
         },

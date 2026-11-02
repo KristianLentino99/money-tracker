@@ -18,7 +18,9 @@
           "accountName": "Account {provider}",
           "notConnected": "Non connesso",
           "disconnect": "Disconnetti",
-          "connect": "Connetti"
+          "connect": "Connetti",
+          "disconnectConfirmDescription": "You won't be able to log in with this {provider} account anymore. You can reconnect it at any time.",
+          "disconnectConfirmTitle": "Disconnect {provider}?"
         },
         "password": {
           "title": "Password",
@@ -178,7 +180,9 @@
           "confirmFull": "Digita {email} per confermare",
           "placeholder": "Inserisci la tua email",
           "acceptButton": "Elimina il mio account",
-          "acceptButtonLoading": "Eliminazione in corso..."
+          "acceptButtonLoading": "Eliminazione in corso...",
+          "appStoreWarning": "Deleting your account doesn't cancel your App Store subscription, and Apple will keep charging you. Cancel it in your {link} first.",
+          "appStoreWarningLink": "App Store subscriptions"
         },
         "notifications": {
           "success": "Il tuo account è stato eliminato correttamente",
@@ -196,7 +200,7 @@
           "downloadBlocked": "Il backup è stato creato, ma il tuo browser ha bloccato il download. Controlla le impostazioni di download e riprova.",
           "limitations": {
             "trigger": "Ha delle limitazioni",
-            "title": "Cosa non include un backup",
+            "title": "Che cosa non include un backup",
             "intro": "Il tuo backup include tutti i tuoi dati. Per motivi di sicurezza, alcuni elementi cifrati non possono essere trasferiti e vanno riconfigurati dopo il ripristino:",
             "items": {
               "bankConnectionsTerm": "Connessioni bancarie",
@@ -273,7 +277,6 @@
           },
           "warnings": {
             "sharesSkipped": "Skipped {count} \"{table}\" row: shared resources reference users that don't exist on this instance. | Skipped {count} \"{table}\" rows: shared resources reference users that don't exist on this instance.",
-            "mccCodeMissing": "Dropped {count} MCC rule whose merchant category code doesn't exist on this instance. | Dropped {count} MCC rules whose merchant category codes don't exist on this instance.",
             "currencyMissing": "Skipped {count} currency that isn't available on this instance. | Skipped {count} currencies that aren't available on this instance.",
             "unknownTableIgnored": "The backup contains an unknown table \"{table}\"; it was ignored.",
             "unknownColumnDropped": "Dropped an unknown column on \"{table}\": {columns}. | Dropped unknown columns on \"{table}\": {columns}.",

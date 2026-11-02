@@ -8,12 +8,12 @@
       "filters": {
         "all": "Tutti",
         "behind": "In ritardo",
-        "archived": "Archived"
+        "archived": "Archiviati"
       },
       "sections": {
         "active": "Active",
         "ended": "Ended",
-        "archived": "Archived",
+        "archived": "Archiviati",
         "show": "show",
         "hide": "hide"
       },
@@ -54,7 +54,7 @@
       "insufficientHistory": "Not enough history",
       "noAccounts": "No accounts",
       "paused": "Paused",
-      "archived": "Archived",
+      "archived": "Archiviati",
       "noRate": "No exchange rate"
     },
     "actions": {
@@ -63,7 +63,7 @@
       "resume": "Resume",
       "archive": "Archive",
       "unarchive": "Unarchive",
-      "delete": "Delete"
+      "delete": "Elimina"
     },
     "deleteDialog": {
       "title": "Delete this goal?",
@@ -99,7 +99,7 @@
       },
       "tabs": {
         "progress": "Progress",
-        "accounts": "Accounts",
+        "accounts": "Conti",
         "whatIf": "What if"
       },
       "strip": {
@@ -116,8 +116,8 @@
         "overdue": "overdue"
       },
       "accounts": {
-        "label": "Accounts",
-        "count": "{count} account | {count} accounts",
+        "label": "Conti",
+        "count": "{count} conto | {count} conti",
         "showAll": "Show all {count} accounts",
         "countedToward": "Counted toward {name}",
         "shareOf": "{share}% of {amount}",
@@ -133,12 +133,12 @@
         "fixedHere": "Fixed {amount} from this account",
         "emptyDescription": "Link accounts in Edit goal to track progress.",
         "columns": {
-          "account": "Account",
+          "account": "Conto",
           "share": "Share",
           "balance": "Balance",
           "counted": "Counted"
         },
-        "archived": "Archived",
+        "archived": "Archiviati",
         "percentOfSaved": "{percent}% of saved",
         "total": "Total · {count} account | Total · {count} accounts",
         "ofBalance": "of {amount}",
@@ -164,7 +164,7 @@
           "leftDueInDays": "{amount} left, due in {count} day | {amount} left, due in {count} days",
           "leftOverdue": "{amount} left, overdue"
         },
-        "timeline": "Timeline",
+        "timeline": "Cronologia",
         "noHistory": "No history yet",
         "insufficient": {
           "title": "Not enough history for a pace yet",
@@ -199,8 +199,8 @@
       "currencyPlaceholder": "Select a currency",
       "targetDateLabel": "Target date",
       "targetDateHint": "Optional. Set a date to see if you're on pace. Without one, we'll estimate when you'll reach it.",
-      "accountsLabel": "Accounts",
-      "noAccounts": "No accounts yet",
+      "accountsLabel": "Conti",
+      "noAccounts": "Nessun conto",
       "countsNow": "Counts {amount} now",
       "manageAccounts": "Manage accounts",
       "addAccounts": "Add accounts",
@@ -244,7 +244,7 @@
       },
       "searchPlaceholder": "Search accounts",
       "holder": "{share}% in {name}",
-      "archived": "Archived",
+      "archived": "Archiviati",
       "fixedOnly": "Fully used: {holders} · fixed amount only",
       "free": "{free}% free",
       "wholeAccount": "Whole account · counts {amount}",

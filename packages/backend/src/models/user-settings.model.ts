@@ -9,10 +9,13 @@ import {
   type CategoryMappingPreset,
   type Equals,
   type Expect,
+  FIRE_HISTORY_BASELINE_MONTH,
+  FIRE_HISTORY_MAX_ENTRIES,
   FIRE_LIMITS,
   FIRE_MAX_EXCLUDED_CATEGORIES,
   FIRE_TARGET_TYPES,
   type FireSettings,
+  type FireSettingsSnapshot,
   MAX_AI_CONNECTIONS,
   MAX_CATEGORY_MAPPING_PRESETS,
   MAX_SAVED_TRANSACTION_VIEWS,
@@ -32,6 +35,8 @@ import {
   TRANSACTION_DATE_PRESETS,
   TRANSACTION_OPTIONAL_FIELDS,
   TRANSACTION_SORT_FIELD,
+  UNREALIZED_LOSS_ALERT_LIMITS,
+  type UnrealizedLossAlertsSettings,
 } from '@bt/shared/types';
 import { dateRange, withDateOrder } from '@common/lib/zod/custom-types';
 import { IdColumn } from '@common/types/id-column';
@@ -222,12 +227,6 @@ const ZodUiSettingsSchema = z.object({
   investmentTransactionsTable: ZodInvestmentTransactionsTableSettingsSchema.optional(),
 });
 
-// Subscription-related defaults. `defaultAutoRecord` only seeds the auto-record toggle on
-// the create-subscription form; the user can still override it per subscription.
-const ZodSubscriptionsSettingsSchema = z.object({
-  defaultAutoRecord: z.boolean().optional(),
-});
-
 // A category mapping remembered from a finished import, keyed by a fingerprint of the source
 // layout. Untrusted client input, so the per-value union is validated in full.
 const ZodCategoryMappingPresetSchema = z.object({
@@ -303,6 +302,8 @@ const ZodCategoryOrderKeySchema = z
 const fireRange = ({ key }: { key: keyof typeof FIRE_LIMITS }) =>
   z.number().min(FIRE_LIMITS[key].min).max(FIRE_LIMITS[key].max);
 
+const FIRE_MONTH_REGEX = /^\d{4}-(0[1-9]|1[0-2])$/;
+
 // No `.default()` anywhere: the PATCH deep merge would write defaults over stored values.
 const ZodFireSettingsSchema = z.object({
   annualSpendingOverride: z.number().min(0).nullable().optional(),
@@ -321,6 +322,30 @@ const ZodFireSettingsSchema = z.object({
   birthYear: fireRange({ key: 'birthYear' }).int().nullable().optional(),
   coastTargetAge: fireRange({ key: 'coastTargetAge' }).int().optional(),
   targetType: z.enum(FIRE_TARGET_TYPES).optional(),
+  paceAnchor: z.string().regex(FIRE_MONTH_REGEX).nullable().optional(),
+});
+
+const ZodFireSettingsSnapshotSchema = z.object({
+  month: z.string().refine((month) => month === FIRE_HISTORY_BASELINE_MONTH || FIRE_MONTH_REGEX.test(month)),
+  fire: ZodFireSettingsSchema,
+});
+
+// Day of month a pay period starts on; 1 (calendar month) when unset. Capped at 28 so every month has it.
+const ZodPaydaySchema = z.number().int().min(1).max(28);
+
+// Opt-in. Unset thresholds fall back to `UNREALIZED_LOSS_ALERT_DEFAULTS`; no `.default()` so the PATCH merge keeps stored values.
+const ZodUnrealizedLossAlertsSchema = z.object({
+  enabled: z.boolean().optional(),
+  percentThreshold: z
+    .number()
+    .min(UNREALIZED_LOSS_ALERT_LIMITS.percentThreshold.min)
+    .max(UNREALIZED_LOSS_ALERT_LIMITS.percentThreshold.max)
+    .optional(),
+  amountThreshold: z
+    .number()
+    .min(UNREALIZED_LOSS_ALERT_LIMITS.amountThreshold.min)
+    .max(UNREALIZED_LOSS_ALERT_LIMITS.amountThreshold.max)
+    .optional(),
 });
 
 export const ZodSettingsSchema = z.object({
@@ -334,7 +359,6 @@ export const ZodSettingsSchema = z.object({
   sidebarSections: ZodSidebarSectionsSchema.optional(),
   sidebarNav: ZodSidebarNavSchema.optional(),
   ui: ZodUiSettingsSchema.optional(),
-  subscriptions: ZodSubscriptionsSettingsSchema.optional(),
   import: ZodImportSettingsSchema.optional(),
   accounts: ZodAccountsSettingsSchema.optional(),
   savedPivotViews: z.array(ZodSavedPivotViewSchema).optional(),
@@ -378,6 +402,10 @@ export const ZodSettingsSchema = z.object({
   categoryOrder: z.record(ZodCategoryOrderKeySchema, z.array(z.uuid())).optional(),
   currencyDisplay: z.enum(CURRENCY_DISPLAY_PREFERENCES).optional(),
   fire: ZodFireSettingsSchema.optional(),
+  // Server-owned, oldest first: written by the PATCH that changes `fire`.
+  fireHistory: z.array(ZodFireSettingsSnapshotSchema).max(FIRE_HISTORY_MAX_ENTRIES).optional(),
+  payday: ZodPaydaySchema.optional(),
+  unrealizedLossAlerts: ZodUnrealizedLossAlertsSchema.optional(),
 });
 
 // Stored settings predate the distance preference. Keep the persisted TypeScript contract
@@ -462,11 +490,6 @@ export const ZodSettingsPatchSchema = z.object({
         .optional(),
     })
     .optional(),
-  subscriptions: z
-    .object({
-      defaultAutoRecord: z.boolean().optional(),
-    })
-    .optional(),
   import: z
     .object({
       recalculateAccountBalance: z.boolean().optional(),
@@ -492,6 +515,8 @@ export const ZodSettingsPatchSchema = z.object({
   categoryOrder: z.record(ZodCategoryOrderKeySchema, z.array(z.uuid()).optional()).optional(),
   currencyDisplay: z.enum(CURRENCY_DISPLAY_PREFERENCES).optional(),
   fire: ZodFireSettingsSchema.optional(),
+  payday: ZodPaydaySchema.optional(),
+  unrealizedLossAlerts: ZodUnrealizedLossAlertsSchema.optional(),
 });
 
 export type SettingsPatchSchema = z.infer<typeof ZodSettingsPatchSchema>;
@@ -505,7 +530,7 @@ type DeepPartial<T> = {
       : T[K];
 };
 
-type PatchableSettings = Omit<SettingsSchema, 'onboarding' | 'ai'> & {
+type PatchableSettings = Omit<SettingsSchema, 'onboarding' | 'ai' | 'fireHistory'> & {
   ai?: Omit<NonNullable<SettingsSchema['ai']>, 'connections' | 'featureConfigs'>;
 };
 
@@ -518,7 +543,17 @@ type PatchableSettings = Omit<SettingsSchema, 'onboarding' | 'ai'> & {
 export type SettingsPatchSchemaIsInSync = Expect<Equals<SettingsPatchSchema, DeepPartial<PatchableSettings>>>;
 
 /** @public exported only so the assertion isn't flagged as unused. */
+export type UnrealizedLossAlertsSchemaIsInSync = Expect<
+  Equals<z.infer<typeof ZodUnrealizedLossAlertsSchema>, UnrealizedLossAlertsSettings>
+>;
+
+/** @public exported only so the assertion isn't flagged as unused. */
 export type FireSettingsSchemaIsInSync = Expect<Equals<z.infer<typeof ZodFireSettingsSchema>, FireSettings>>;
+
+/** @public exported only so the assertion isn't flagged as unused. */
+export type FireSettingsSnapshotSchemaIsInSync = Expect<
+  Equals<z.infer<typeof ZodFireSettingsSnapshotSchema>, FireSettingsSnapshot>
+>;
 
 /**
  * Compile-time drift guard: the persisted saved-pivot-view schema must infer exactly the shared

@@ -124,7 +124,7 @@
         "categoryLabel": "Categoria",
         "targetAmountLabel": "Importo obiettivo",
         "targetAmountPlaceholder": "Importo obiettivo",
-        "plannedLabel": "Pianificato",
+        "plannedLabel": "Transazioni pianificate",
         "plannedUnavailableNotification": "Le transazioni pianificate non sono disponibili qui, quindi l'opzione è stata disattivata.",
         "plannedTooltip": "Registra una transazione futura. Il tuo saldo resta invariato finché non viene confermata.",
         "plannedConnectedAccountTooltip": "Solo le transazioni pianificate possono trovarsi su un conto collegato a una banca. Disattivando questa opzione si azzerano il conto e la data.",
@@ -247,7 +247,56 @@
           "label": "Crea altre transazioni",
           "createdToast": "Transazione creata"
         },
-        "addFieldsLabel": "Aggiungere"
+        "addFieldsLabel": "Aggiungi",
+        "paymentLegs": {
+          "severalAccountsPill": "Several accounts",
+          "paidFromLabel": "Paid from",
+          "receivedIntoLabel": "Received into",
+          "addAccount": "Add account",
+          "removeRow": "Remove account",
+          "syncedLock": "Synced from your bank – this amount can't be changed",
+          "editHint": "Removing an account deletes only its part. With one account left, this becomes a regular transaction.",
+          "syncedHint": "Only accounts you manage by hand can be added here.",
+          "splitUnavailableHint": "Splitting by category isn't available when paying from several accounts.",
+          "deleteTitle": "Delete this transaction?",
+          "deleteDescription": "It's split across {count} accounts. All parts will be deleted and their balances updated.",
+          "deleteSinglePartHint": "To remove just one part, use × next to it in the edit form.",
+          "deleteBoth": "Delete both",
+          "deleteAll": "Delete all parts",
+          "linkExisting": "Link existing",
+          "linkedChangesTitle": "Changes on save",
+          "linkedChangesTakes": "Takes this transaction's category, payee, note and tags.",
+          "linkedChangesKeeps": "Its account, amount and date stay the same.",
+          "linkedChangesUnlink": "Unlinking restores its original details.",
+          "unlink": "Scollega",
+          "convertedAmountLabel": "Amount in {currency}",
+          "rateInfo": "Exchange rate details",
+          "rateFromAmounts": "Rate from your amounts",
+          "marketRate": "Market rate",
+          "rateValue": "1 {from} = {rate} {to}",
+          "convertedHint": "Prefilled from the market rate. Change the {currency} amount to match what you actually paid.",
+          "noMarketRate": "No market rate for {currency} – enter the amount manually.",
+          "deleteLinkedDescription": "Parts you added here are deleted. Parts you linked are only unlinked and stay as their own transactions.",
+          "partDeleted": "Eliminato",
+          "partKept": "Kept",
+          "linkPicker": {
+            "title": "Collegare transazioni esistenti",
+            "windowHint": "Within {days} days of {date}",
+            "loadError": "Couldn't load transactions",
+            "emptyTitle": "No transactions to link",
+            "emptyDescription": "There are no transactions of this type to link yet.",
+            "emptyFilteredDescription": "No transactions match these filters.",
+            "limitReached": "Selection limit reached",
+            "inOtherPayment": "Already part of another payment",
+            "hasSplits": "Split by category",
+            "refundLinked": "Linked to a refund",
+            "pending": "Not booked by the bank yet",
+            "transfer": "Transfers can't be linked",
+            "planned": "Planned transactions can't be linked",
+            "differentType": "Different type from this transaction",
+            "submit": "Link {count} transaction | Link {count} transactions"
+          }
+        }
       },
       "investmentContribution": {
         "title": "Acquisti di investimento",
@@ -392,7 +441,7 @@
           "title": "Esempi:",
           "customerPayment": "Rimborsare un pagamento a un cliente: crea un'uscita e collegala all'entrata originale.",
           "vendorRefund": "Ricevere un rimborso da un fornitore: crea un'entrata e collegala all'uscita originale.",
-          "noOriginalTx": "Registrare un rimborso senza una transazione originale: a volte potresti dover registrare un rimborso per una transazione che non è nel tuo sistema. Ad esempio, se stai registrando un rimborso per un pagamento in contanti che non era stato registrato inizialmente, puoi comunque creare una voce di rimborso. Questo aiuta a mantenere registrazioni accurate anche quando la transazione originale non è tracciata digitalmente."
+          "noOriginalTx": "Registrazione di un rimborso senza transazione originale: a volte può essere necessario registrare un rimborso per una transazione non presente nel sistema. Ad esempio, per il rimborso di un pagamento in contanti mai registrato è comunque possibile creare una voce di rimborso. In questo modo i dati restano accurati anche quando la transazione originale non è tracciata digitalmente."
         }
       },
       "transferRecordsList": {
@@ -436,7 +485,7 @@
         "deletePurchaseTitle": "Eliminare l'acquisto collegato?",
         "deletePurchaseDescription": "Questa operazione rimuove l'acquisto di investimento selezionato, ma mantiene l'uscita dal conto e il contributo al portafoglio.",
         "confirmDeletePurchase": "Elimina acquisto",
-        "unlinkWarningNoCash": "This transfer never changed {portfolio}'s cash balance, so unlinking leaves the balance untouched.",
+        "unlinkWarningNoCash": "Questo trasferimento non ha mai cambiato il saldo di {portfolio}, quindi lo scollegamento non varia il saldo.",
         "noCashBadge": "No cash impact"
       },
       "ventureLinked": {
@@ -680,7 +729,7 @@
       "expiresLabel": "Scade",
       "permissions": {
         "read": "Sola lettura",
-        "write": "Lettura e scrittura",
+        "write": "Lettura + Scrittura",
         "manage": "Gestisci"
       },
       "unknownOwner": "Un utente MoneyMatter",
@@ -697,7 +746,7 @@
       "backInvite": {
         "prompt": "Vuoi condividere anche il tuo nucleo familiare con {owner}? Potrà vedere e agire sui tuoi conti.",
         "permissionLabel": "La sua autorizzazione",
-        "writeScopeLabel": "Ambito di scrittura",
+        "writeScopeLabel": "Ambito",
         "permissions": {
           "read": "Sola lettura",
           "write": "Scrittura"
@@ -763,7 +812,7 @@
       "previewUnavailable": "Couldn't check for payments already recorded in this period. Review the details before recording a new one."
     },
     "attachInvoice": {
-      "title": "Allega fattura",
+      "title": "Allega ricevuta/fattura",
       "description": "Trascina una fattura o uno scontrino. Leggiamo il totale, la data e il venditore, poi troviamo la transazione corrispondente.",
       "resultsTitle": "Scegli la transazione",
       "resultsDescription": "Nessuna transazione corrisponde alla fattura. | {count} transazione potrebbe corrispondere alla fattura. | {count} transazioni potrebbero corrispondere alla fattura.",
@@ -856,7 +905,7 @@
         "write": "Attach own transactions",
         "manage": "Gestisci"
       },
-      "cancel": "Cancella",
+      "cancel": "Annulla",
       "send": "Send invitation",
       "success": "Invitation sent.",
       "error": "Couldn't send invitation.",

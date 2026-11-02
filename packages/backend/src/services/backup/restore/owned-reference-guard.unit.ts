@@ -6,9 +6,9 @@ import { buildGuardedReferenceMap } from './owned-reference-guard';
 /**
  * The user-owned foreign-key columns every restore must validate, transcribed
  * from the live DB's information_schema (user-owned targets only — userId /
- * ownerUserId / currencyCode / securityId / mccId are intentionally excluded).
+ * ownerUserId / currencyCode / securityId are intentionally excluded).
  * Includes the self-ref parents (categories.parentId, account-groups
- * .parentGroupId, transactions.mergedIntoId). This is the source of truth: the derived map must match it
+ * .parentGroupId, transactions.mergedIntoId / paymentParentId). This is the source of truth: the derived map must match it
  * exactly, so a future FK to a user-owned table that the guard misses fails here.
  */
 const EXPECTED_GUARDED_COLUMNS: Record<string, string[]> = {
@@ -56,9 +56,8 @@ const EXPECTED_GUARDED_COLUMNS: Record<string, string[]> = {
   'transaction-tags': ['tagId', 'transactionId'],
   'transaction-template-tags': ['tagId', 'templateId'],
   'transaction-templates': ['accountId', 'categoryId', 'payeeId'],
-  transactions: ['accountId', 'categoryId', 'mergedIntoId', 'payeeId'],
+  transactions: ['accountId', 'categoryId', 'mergedIntoId', 'payeeId', 'paymentParentId'],
   'transfer-suggestion-dismissals': ['expenseTransactionId', 'incomeTransactionId'],
-  'user-merchant-category-codes': ['categoryId'],
   'vehicle-maintenance-plans': ['activityId', 'vehicleId'],
   'vehicle-maintenance-transaction-links': ['transactionId', 'visitId'],
   'vehicle-maintenance-visit-activities': ['activityId', 'planId', 'visitId'],

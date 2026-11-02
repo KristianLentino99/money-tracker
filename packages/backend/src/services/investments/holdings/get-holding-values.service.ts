@@ -166,12 +166,10 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
     const userCurrency = await UsersCurrencies.getCurrency({ userId, isDefaultCurrency: true });
     baseCurrencyCode = userCurrency?.currency.code;
 
-    // Display currency applies only while it stays connected to the user; otherwise holdings carry no display fields.
     const portfolio = await Portfolios.findByPk(portfolioId);
-    if (portfolio?.displayCurrencyCode) {
-      const connected = await UsersCurrencies.getCurrency({ userId, currencyCode: portfolio.displayCurrencyCode });
-      if (connected) displayCurrencyCode = portfolio.displayCurrencyCode;
-    }
+    // Never write here (e.g. addUserCurrencies): its per-user advisory lock, held by a caller's
+    // transaction that then awaits a deduplicated call blocked on that lock, deadlocks both requests.
+    displayCurrencyCode = portfolio?.displayCurrencyCode ?? undefined;
   }
 
   // A failed base-rate lookup is cached as null so those holdings report refMarketValue 0.
@@ -314,8 +312,7 @@ const getHoldingValuesImpl = async ({ portfolioId, date, userId }: GetHoldingVal
 // Do not call `withTransaction` here because it's fundamentally not compatible
 // with `withDeduplication`. Also on 99.99% `withTransaction` will already be
 // defined on the level above, since this service is not really callable alone
-// It also doesn't really update anything in the DB, so even if it will be called without
-// `withTransaction` and something fails, we don't really need to undo anything, since there's nothing to undo
+// It is read-only, so a run without `withTransaction` leaves nothing to undo.
 
 export const getHoldingValues = withDeduplication(getHoldingValuesImpl, {
   keyGenerator: ({ portfolioId, date, userId }) =>

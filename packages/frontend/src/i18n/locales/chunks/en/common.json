@@ -104,7 +104,8 @@
       "debitCard": "Debit card",
       "mobilePayment": "Mobile payment",
       "voucher": "Voucher",
-      "webPayment": "Web payment"
+      "webPayment": "Web payment",
+      "none": "None"
     },
     "vehicleClasses": {
       "sedan": "Sedan",
@@ -170,6 +171,13 @@
         "selectRow": "Select transaction",
         "unselectableReasons": {
           "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
+        },
+        "payment": {
+          "paidFrom": "Paid from {count} accounts",
+          "receivedInto": "Received into {count} accounts",
+          "partOf": "Part of a {total} payment",
+          "thisAccount": "(this account)",
+          "loadError": "Couldn't open this transaction. Try again."
         }
       }
     },
@@ -246,6 +254,10 @@
       "dialogTitle": "Change logo",
       "resetToAuto": "Reset to automatic",
       "remove": "Remove logo",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo removed",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Letters (1–2)",
       "lettersPlaceholder": "AB",
       "colorLabel": "Color",
@@ -284,7 +296,20 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} ahead",
+        "behind": "{duration} behind",
+        "onPace": "On pace",
+        "backInReach": "Back within reach",
+        "offTrack": "Off track"
       }
+    },
+    "pasteImage": {
+      "button": "Paste image",
+      "shortcutHint": "or press {shortcut}",
+      "noImage": "No image found in the clipboard.",
+      "readFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut."
     }
   },
   "accountGroups": {
@@ -344,6 +369,9 @@
     "goalReached": {
       "title": "Goal reached: {name}",
       "message": "You've saved {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -537,6 +565,12 @@
       "removeTransactionDescriptionNormal": "Are you sure you want to remove this transaction from the group?",
       "removeButtonText": "Remove",
       "removeAndDeleteButtonText": "Remove & delete group",
+      "removeFromGroup": "Remove from group",
+      "saveError": "Couldn't save the group",
+      "removeError": "Couldn't remove the transaction from the group",
+      "manageTransactions": "Manage",
+      "showMoreNote": "Show more",
+      "showLessNote": "Show less",
       "summary": {
         "transactions": "Transactions",
         "net": "Net",

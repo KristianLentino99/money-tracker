@@ -23,6 +23,7 @@ import type { UI_FORM_STRUCT } from '../types';
 import {
   applyOptimisticTransactionUpdate,
   buildOptimisticTransaction,
+  hasPaymentParts,
   prepareTxCreationParams,
   prepareTxUpdationParams,
   rollbackOptimisticUpdate,
@@ -71,7 +72,13 @@ export const buildInvestmentContributionPayload = ({ form }: { form: UI_FORM_STR
   };
 };
 
-export const isInvestmentContributionFormValid = ({ form }: { form: UI_FORM_STRUCT }) => {
+export const isInvestmentContributionFormValid = ({
+  form,
+  transaction,
+}: {
+  form: UI_FORM_STRUCT;
+  transaction?: TransactionModel;
+}) => {
   const contribution = form.investmentContribution;
   if (
     !contribution ||
@@ -83,7 +90,14 @@ export const isInvestmentContributionFormValid = ({ form }: { form: UI_FORM_STRU
   ) {
     return false;
   }
-  if (form.splits?.length) return false;
+  if (
+    form.splits?.length ||
+    form.paymentLegs !== undefined ||
+    hasPaymentParts({ transaction }) ||
+    transaction?.paymentParentId
+  ) {
+    return false;
+  }
 
   return contribution.purchases.every((purchase) => {
     const quantity = Number(purchase.quantity);
@@ -169,6 +183,9 @@ export function useSubmitTransaction({
       } = params;
 
       if (form.investmentContribution) {
+        if (!isInvestmentContributionFormValid({ form, transaction })) {
+          throw new Error(i18n.global.t('dialogs.manageTransaction.investmentContribution.validationError'));
+        }
         const payload = buildInvestmentContributionPayload({ form });
         if (!payload || !form.investmentContribution.portfolio || !form.category) {
           throw new Error(i18n.global.t('dialogs.manageTransaction.investmentContribution.validationError'));
@@ -269,6 +286,8 @@ export function useSubmitTransaction({
       ) {
         return undefined;
       }
+      // The optimistic row can't rebuild paymentParts/paymentTotal, so these wait for the refetch.
+      if (hasPaymentParts({ transaction }) || form.paymentLegs?.length) return undefined;
 
       // Cancel any outgoing refetches to prevent overwriting optimistic update
       await queryClient.cancelQueries({ queryKey: [VUE_QUERY_GLOBAL_PREFIXES.transactionChange] });

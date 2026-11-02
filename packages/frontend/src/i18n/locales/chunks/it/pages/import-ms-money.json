@@ -19,7 +19,7 @@
           "maxSize": "File .mny, fino a 50 MB",
           "passwordLabel": "Password del file (facoltativa)",
           "passwordPlaceholder": "Inserisci la password del file",
-          "passwordHint": "Lascia vuoto a meno che tu non abbia impostato una password in Microsoft Money.",
+          "passwordHint": "Lasciare vuoto a meno che non sia impostata una password in Microsoft Money.",
           "parsing": "Lettura del file…",
           "continue": "Continua",
           "errors": {

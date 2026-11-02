@@ -41,7 +41,10 @@
           "link": "Prepojenie účtu zlyhalo. Skúste to znovu, prosím."
         },
         "unauthorizedClient": "Táto aplikácia nemá oprávnenie používať túto metódu overovania",
-        "temporarilyUnavailable": "Autentifikačná služba je dočasne nedostupná. Skúste to neskôr, prosím."
+        "temporarilyUnavailable": "Autentifikačná služba je dočasne nedostupná. Skúste to neskôr, prosím.",
+        "emailDoesNotMatch": "The email on this provider account doesn't match your account email. Use a provider account with the same email.",
+        "emailNotVerified": "Check your email to verify your address, then sign in again.",
+        "unableToLinkAccount": "We couldn't link this account because this server doesn't treat the provider's email as verified. Contact your administrator."
       }
     }
   }

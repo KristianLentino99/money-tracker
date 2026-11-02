@@ -263,7 +263,7 @@
           "empty": "Nessun conto trovato nel CSV",
           "currentBalanceLabel": "Saldo attuale",
           "currentBalancePlaceholder": "0,00",
-          "currentBalanceHint": "Il saldo attualmente detenuto da questo conto: l'importazione imposterà il conto esattamente su questo valore. Lascia vuoto per usare la somma delle transazioni importate.",
+          "currentBalanceHint": "Il saldo che questo conto detiene in questo momento — l'importazione imposterà il conto esattamente a questo valore. Lascia vuoto per usare la somma delle transazioni importate.",
           "skippedNote": "{count} account(s) will be skipped. Their transactions will not be imported."
         },
         "categories": {

@@ -58,8 +58,8 @@
       "settingsSaveFailed": "Couldn't save your settings. Please try again."
     },
     "notifications": {
-      "subscriptionCurrencyNotConnected": "Il riepilogo degli abbonamenti non può convertire {currencies} nella tua valuta principale. Collega la valuta in Impostazioni → valute.",
-      "backgroundJobFailed": "Un processo in background non è riuscito mentre eri assente: {error}",
+      "subscriptionCurrencyNotConnected": "Il riepilogo abbonamenti non può convertire {currencies} nella valuta di base. Collegare la valuta in Impostazioni → Valute.",
+      "backgroundJobFailed": "Un processo in background non è riuscito durante l'assenza: {error}",
       "inviteLinkCopied": "Link d'invito copiato negli appunti"
     },
     "labels": {
@@ -71,10 +71,10 @@
     },
     "placeholders": {
       "email": "tuo{'@'}email.com",
-      "password": "La tua password"
+      "password": "Password"
     },
     "dialogs": {
-      "createAccount": "Crea conto",
+      "createAccount": "Crea un profilo",
       "createVehicle": "Aggiungi veicolo",
       "editVehicle": "Modifica veicolo"
     },
@@ -100,12 +100,13 @@
       "debitCard": "Carta di debito",
       "mobilePayment": "Pagamento mobile",
       "voucher": "Voucher",
-      "webPayment": "Pagamento web"
+      "webPayment": "Pagamento web",
+      "none": "None"
     },
     "vehicleClasses": {
       "sedan": "Berlina",
       "suv": "SUV",
-      "truck": "Furgone",
+      "truck": "Pick-up",
       "luxury": "Lusso",
       "ev": "Veicolo elettrico",
       "motorcycle": "Motocicletta",
@@ -124,8 +125,8 @@
         "description": "Categorizza automaticamente le transazioni in base alla descrizione e all'esercente"
       },
       "statementParsing": {
-        "name": "Analizzatore di estratti conto",
-        "description": "Estrai transazioni dagli estratti conto bancari (PDF, CSV, TXT) usando l’IA"
+        "name": "Lettura estratti conto",
+        "description": "Estrae le transazioni dagli estratti conto bancari (PDF, CSV, TXT) tramite l'IA"
       },
       "investmentTransactionsParsing": {
         "name": "Importazione transazioni di investimento",
@@ -165,7 +166,15 @@
         "unselectableReasons": {
           "sharedAccount": "Can't be selected: this transaction is on an account shared with you, and only its owner can edit it."
         },
-        "matchedByAi": "Matched by AI"
+        "matchedByAi": "Matched by AI",
+        "addedByRule": "Added by the tracker's rules",
+        "payment": {
+          "paidFrom": "Paid from {count} accounts",
+          "receivedInto": "Received into {count} accounts",
+          "partOf": "Part of a {total} payment",
+          "thisAccount": "(this account)",
+          "loadError": "Couldn't open this transaction. Try again."
+        }
       }
     },
     "outOfWallet": "Fuori portafoglio",
@@ -253,10 +262,14 @@
       "replaceImage": "Replace image",
       "imageHint": "Cropped to a square and resized to 200×200 on your device.",
       "imageTooLarge": "The image is still over 50 KB after resizing. Try a simpler picture.",
-      "imageUnreadable": "That file couldn't be read as an image."
+      "imageUnreadable": "That file couldn't be read as an image.",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo removed",
+      "updateError": "Couldn't update the logo. Try again."
     },
     "sharing": {
-      "emailNotSent": "Invio email non configurato — condividi manualmente il link di invito"
+      "emailNotSent": "Invio email non configurato: condividere manualmente il link di invito"
     },
     "importBatchDeleteOverlay": {
       "title": "Deleting imported transactions",
@@ -279,12 +292,25 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} ahead",
+        "behind": "{duration} behind",
+        "onPace": "On pace",
+        "backInReach": "Back within reach",
+        "offTrack": "Off track"
       }
     },
     "cancel": "Annulla",
     "iconPicker": {
-      "searchPlaceholder": "Cerca icona...",
-      "clear": "Cancella icona"
+      "searchPlaceholder": "Cercare un'icona...",
+      "clear": "Rimuovi icona"
+    },
+    "pasteImage": {
+      "button": "Paste image",
+      "shortcutHint": "or press {shortcut}",
+      "noImage": "No image found in the clipboard.",
+      "readFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut."
     }
   },
   "accountGroups": {
@@ -340,6 +366,13 @@
       "toReview": "{count} transaction to review | {count} transactions to review",
       "toReviewShort": "{count} to review",
       "both": "{added}, {toReview}"
+    },
+    "goalReached": {
+      "title": "Goal reached: {name}",
+      "message": "You've saved {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -481,7 +514,7 @@
       "deleteGroupTitle": "Elimina gruppo",
       "deleteGroupDescription": "Sei sicuro di voler eliminare \"{groupName}\"? Le transazioni non verranno eliminate.",
       "removeTransactionTitle": "Rimuovi transazione dal gruppo",
-      "removeTransactionDescription": "Questo lascerà meno di 2 transazioni nel gruppo, quindi il gruppo verrà eliminato. Continuare?",
+      "removeTransactionDescription": "Questo lascerà meno di due transazioni nel gruppo, quindi il gruppo verrà eliminato. Continuare?",
       "removeTransactionDescriptionNormal": "Sei sicuro di voler rimuovere questa transazione dal gruppo?",
       "removeButtonText": "Rimuovi",
       "removeAndDeleteButtonText": "Rimuovi ed elimina gruppo",
@@ -490,7 +523,13 @@
         "net": "Netto",
         "moneyIn": "Entrate",
         "moneyOut": "Uscite"
-      }
+      },
+      "removeFromGroup": "Remove from group",
+      "saveError": "Couldn't save the group",
+      "removeError": "Couldn't remove the transaction from the group",
+      "manageTransactions": "Gestisci",
+      "showMoreNote": "Show more",
+      "showLessNote": "Show less"
     },
     "transactionGroupRecord": {
       "transactionCountLabel": "Transazioni"

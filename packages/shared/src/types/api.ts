@@ -30,6 +30,7 @@ export enum API_ERROR_CODES {
   // currencies-related
   currencyProviderUnavailable = 'CURRENCY_PROVIDER_UNAVAILABLE',
   currencyNotConnected = 'CURRENCY_NOT_CONNECTED',
+  currencyInUse = 'CURRENCY_IN_USE',
 
   // investments-related
   cryptoProviderNotConfigured = 'CRYPTO_PROVIDER_NOT_CONFIGURED',
@@ -39,6 +40,9 @@ export enum API_ERROR_CODES {
   baseCurrencyLockedByShares = 'BASE_CURRENCY_LOCKED_BY_SHARES',
   baseCurrencyLockedByHousehold = 'BASE_CURRENCY_LOCKED_BY_HOUSEHOLD',
   baseCurrencyLockedByBudgetPlan = 'BASE_CURRENCY_LOCKED_BY_BUDGET_PLAN',
+
+  // billing
+  subscriptionOwnedByAnotherAccount = 'SUBSCRIPTION_OWNED_BY_ANOTHER_ACCOUNT',
 
   // wipe-data
   wipeDataSharingAcknowledgementRequired = 'WIPE_DATA_SHARING_ACK_REQUIRED',
@@ -81,6 +85,31 @@ export type BaseCurrencyBlocker = { type: 'household' | 'share' | 'budget_plan';
  * UsersCurrencies row for, so the client can point the user at connecting them.
  */
 export type CurrencyNotConnectedDetails = { currencyCodes: string[] };
+
+/**
+ * One record that still references a currency the user tries to disconnect.
+ * `trashed` is set only for soft-deletable records and portfolio-scoped ones.
+ */
+export type CurrencyInUseBlocker = {
+  type:
+    | 'account'
+    | 'portfolio'
+    | 'holding'
+    | 'portfolioCash'
+    | 'portfolioTransfer'
+    | 'investmentTransaction'
+    | 'subscription'
+    | 'transactionTemplate'
+    | 'budget'
+    | 'goal'
+    | 'ventureDeal';
+  id: string;
+  name: string;
+  trashed?: boolean;
+};
+
+/** `details` payload of errors with code `currencyInUse`. */
+export type CurrencyInUseDetails = { blockers: CurrencyInUseBlocker[] };
 
 /**
  * `details` payload of a ValidationError with code

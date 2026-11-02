@@ -121,6 +121,12 @@
       "tagModeAdd": "Add to existing tags",
       "tagModeReplace": "Replace all tags",
       "tagModeRemove": "Remove these tags",
+      "tagModeAddShort": "Add",
+      "tagModeReplaceShort": "Replace",
+      "tagModeRemoveShort": "Remove",
+      "tagModeAddHint": "Keeps current tags and adds these.",
+      "tagModeReplaceHint": "Removes all current tags, then adds these.",
+      "tagModeRemoveHint": "Removes only these tags. Other tags stay.",
       "totals": {
         "income": "Income",
         "expense": "Expense",
@@ -172,7 +178,26 @@
         "noGroupsMessage": "No transaction groups yet.",
         "emptyStateHint": "Select transactions on the Transactions page and click \"Create Group\" to get started.",
         "transactionCountLabel": "transactions",
-        "deleteError": "Failed to delete the group. Please try again."
+        "deleteError": "Failed to delete the group. Please try again.",
+        "loadError": "Couldn't load transaction groups",
+        "description": "Bundle related transactions, like a trip or a transfer chain, and see them together.",
+        "noMatchTitle": "No groups match your search",
+        "moreActions": "More actions for {name}",
+        "columns": {
+          "name": "Name",
+          "transactions": "Transactions",
+          "date": "Date",
+          "net": "Net"
+        },
+        "sort": {
+          "label": "Sort groups",
+          "dateDesc": "Newest first",
+          "dateAsc": "Oldest first",
+          "nameAsc": "Name A–Z",
+          "nameDesc": "Name Z–A",
+          "amountDesc": "Net: high to low",
+          "amountAsc": "Net: low to high"
+        }
       },
       "errors": {
         "nameRequired": "Group name is required",
@@ -227,7 +252,6 @@
       "categorizationSourceValues": {
         "manual": "Manual",
         "ai": "AI",
-        "mcc_rule": "MCC rule",
         "user_rule": "User rule",
         "subscription_rule": "Subscription rule",
         "payee_rule": "Payee rule"

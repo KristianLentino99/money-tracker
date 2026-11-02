@@ -2,7 +2,7 @@
   "serverInfo": {
     "name": "MoneyMatter Finance Tracker",
     "version": "2.0.0",
-    "title": "MoneyMatter — Personal Finance MCP Server",
+    "title": "MoneyMatter \u2014 Personal Finance MCP Server",
     "description": "OAuth-secured personal finance MCP: accounts, transactions, envelope budgets, trackers, goals, subscriptions, automations, categories, tags, analytics, and investment portfolios. Includes loans, linked installments, vehicles and maintenance, and manual portfolio tracking. Monetary inputs and outputs use decimal currency units; write and delete operations require their corresponding scopes.",
     "website": "https://moneymatter.app",
     "documentation": "https://moneymatter.app/llms-full.txt",
@@ -76,7 +76,7 @@
     },
     {
       "name": "bulk_update_transactions",
-      "description": "Update multiple transactions at once — set category, payee, note, or add/replace/remove tags. Requires finance:write scope."
+      "description": "Update multiple transactions at once \u2014 set category, payee, note, or add/replace/remove tags. Requires finance:write scope."
     },
     {
       "name": "create_attachment_upload_url",
@@ -124,7 +124,7 @@
     },
     {
       "name": "create_subscription",
-      "description": "Create a new subscription, recurring bill, or installment plan — an expense by default, or a recurring income (e.g. salary) via transactionType. Requires finance:write scope."
+      "description": "Create a new subscription, recurring bill, or installment plan \u2014 an expense by default, or a recurring income (e.g. salary) via transactionType. Requires finance:write scope."
     },
     {
       "name": "create_tag",
@@ -536,7 +536,7 @@
     },
     {
       "name": "search_transactions",
-      "description": "Search and filter transactions across accounts by date, category, tag, amount, or merchant."
+      "description": "Search regular ledger transactions across all accessible accounts. Set allTime=true for full history and follow nextOffset while hasMore=true. Multi-account payment legs remain separate; investment trades use get_investment_transactions."
     },
     {
       "name": "set_portfolio_transfer_adjustment",

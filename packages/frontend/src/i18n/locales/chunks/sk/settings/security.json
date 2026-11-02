@@ -18,7 +18,9 @@
           "accountName": "Účet {provider}",
           "notConnected": "Nepripojené",
           "disconnect": "Odpojiť",
-          "connect": "Pripojiť"
+          "connect": "Pripojiť",
+          "disconnectConfirmDescription": "You won't be able to log in with this {provider} account anymore. You can reconnect it at any time.",
+          "disconnectConfirmTitle": "Disconnect {provider}?"
         },
         "password": {
           "title": "Heslo",
@@ -138,7 +140,7 @@
           "list": {
             "accounts": "Účty a zostatky",
             "transactions": "Transakcie, vrátenia platby a prevody",
-            "budgets": "Rozpočty, sledovače, štítky a kategórie",
+            "budgets": "Rozpočty, sledovače, značky a kategórie",
             "portfolios": "Investície, portfóliá a pozície",
             "settings": "Používateľských nastavení, kľúčov AI a stavu úvodného nastavenia",
             "baseCurrency": "Základnej meny a výmenných kurzov"
@@ -177,7 +179,9 @@
           "confirmFull": "Na potvrdenie zadajte {email}, prosím",
           "placeholder": "Zadajte svoj email",
           "acceptButton": "Zmazať môj účet",
-          "acceptButtonLoading": "Mazanie…..."
+          "acceptButtonLoading": "Mazanie…...",
+          "appStoreWarning": "Odstránenie účtu nezruší vaše predplatné v App Store a Apple vás bude ďalej účtovať. Najprv ho zrušte v {link}.",
+          "appStoreWarningLink": "Predplatné v App Store"
         },
         "notifications": {
           "success": "Váš účet bol úspešne zmazaný",
@@ -203,7 +207,7 @@
               "aiKeysTerm": "API kľúče AI",
               "aiKeys": "{term} — uložené šifrovane, preto ich po obnove zadáte znova."
             },
-            "included": "Všetko ostatné — účty, transakcie, kategórie, rozpočty, sledovače, investície, pôžičky, štítky, protistrany a predplatné — je zahrnuté."
+            "included": "Všetko ostatné — účty, transakcie, kategórie, rozpočty, sledovače, investície, pôžičky, značky, protistrany a predplatné — je zahrnuté."
           }
         },
         "restore": {
@@ -254,7 +258,6 @@
           },
           "warnings": {
             "sharesSkipped": "Vynechaný {count} riadok z „{table}“: zdieľané zdroje odkazujú na používateľov, ktorí na tejto inštancii neexistujú. | Vynechané {count} riadky z „{table}“: zdieľané zdroje odkazujú na používateľov, ktorí na tejto inštancii neexistujú. | Vynechaných {count} riadkov z „{table}“: zdieľané zdroje odkazujú na používateľov, ktorí na tejto inštancii neexistujú.",
-            "mccCodeMissing": "Zahodené {count} pravidlo MCC, ktorého kód kategórie obchodníka na tejto inštancii neexistuje. | Zahodené {count} pravidlá MCC, ktorých kódy kategórie obchodníka na tejto inštancii neexistujú. | Zahodených {count} pravidiel MCC, ktorých kódy kategórie obchodníka na tejto inštancii neexistujú.",
             "currencyMissing": "Vynechaná {count} mena, ktorá na tejto inštancii nie je k dispozícii. | Vynechané {count} meny, ktoré na tejto inštancii nie sú k dispozícii. | Vynechaných {count} mien, ktoré na tejto inštancii nie sú k dispozícii.",
             "unknownTableIgnored": "Záloha obsahuje neznámu tabuľku „{table}“; bola ignorovaná.",
             "unknownColumnDropped": "Zahodený neznámy stĺpec v „{table}“: {columns}. | Zahodené neznáme stĺpce v „{table}“: {columns}.",

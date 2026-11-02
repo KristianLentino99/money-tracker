@@ -103,7 +103,8 @@
       "debitCard": "Debitkarte",
       "mobilePayment": "Mobiles Bezahlen",
       "voucher": "Gutschein",
-      "webPayment": "Web-Zahlung"
+      "webPayment": "Web-Zahlung",
+      "none": "Keine"
     },
     "vehicleClasses": {
       "sedan": "Limousine",
@@ -160,6 +161,7 @@
       },
       "record": {
         "addedByTooltip": "Diese Transaktion wurde dem Tracker von {handle} hinzugefügt",
+        "addedByRule": "Durch die Regeln des Trackers hinzugefügt",
         "matchedByAi": "Durch KI zugeordnet",
         "externalLinkTooltip": "Externen Link öffnen",
         "locationTooltip": "Standort auf Karte öffnen",
@@ -168,6 +170,13 @@
         "selectRow": "Transaktion auswählen",
         "unselectableReasons": {
           "sharedAccount": "Kann nicht ausgewählt werden: Diese Transaktion befindet sich auf einem mit dir geteilten Konto, und nur dessen Eigentümer kann sie bearbeiten."
+        },
+        "payment": {
+          "paidFrom": "Von {count} Konten bezahlt",
+          "receivedInto": "Auf {count} Konten eingegangen",
+          "partOf": "Teil einer {total}-Zahlung",
+          "thisAccount": "(dieses Konto)",
+          "loadError": "Diese Transaktion konnte nicht geöffnet werden. Versuche es noch einmal."
         }
       }
     },
@@ -244,6 +253,10 @@
       "dialogTitle": "Logo ändern",
       "resetToAuto": "Auf automatisch zurücksetzen",
       "remove": "Logo entfernen",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo entfernt",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Buchstaben (1–2)",
       "lettersPlaceholder": "AB",
       "colorLabel": "Farbe",
@@ -282,9 +295,22 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} voraus",
+        "behind": "{duration} im Rückstand",
+        "onPace": "Im Tempo",
+        "backInReach": "Wieder in Reichweite",
+        "offTrack": "Vom Kurs abgekommen"
       }
     },
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "pasteImage": {
+      "button": "Bild einfügen",
+      "shortcutHint": "oder drücke {shortcut}",
+      "noImage": "Kein Bild in der Zwischenablage gefunden.",
+      "readFailed": "Die Zwischenablage konnte nicht gelesen werden. Erlaube den Zugriff auf die Zwischenablage oder füge es mit der Tastenkombination ein."
+    }
   },
   "accountGroups": {
     "create": {
@@ -339,6 +365,13 @@
     },
     "share": {
       "sendFailedHint": "Öffne das Freigabe-Panel, um erneut zu senden."
+    },
+    "goalReached": {
+      "title": "Ziel erreicht: {name}",
+      "message": "Du hast {amount} gespart."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -532,6 +565,12 @@
       "removeTransactionDescriptionNormal": "Bist du sicher, dass du diese Transaktion aus der Gruppe entfernen möchtest?",
       "removeButtonText": "Entfernen",
       "removeAndDeleteButtonText": "Entfernen & Gruppe löschen",
+      "removeFromGroup": "Aus Gruppe entfernen",
+      "saveError": "Gruppe konnte nicht gespeichert werden",
+      "removeError": "Transaktion konnte nicht aus der Gruppe entfernt werden",
+      "manageTransactions": "Verwalten",
+      "showMoreNote": "Mehr anzeigen",
+      "showLessNote": "Weniger anzeigen",
       "summary": {
         "transactions": "Transaktionen",
         "net": "Netto",

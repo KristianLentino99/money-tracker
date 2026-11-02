@@ -181,7 +181,7 @@
         "noAccounts": "Nessun conto con limiti di credito"
       },
       "plannedOverview": {
-        "title": "Pianificato",
+        "title": "Transazioni pianificate",
         "projectedTotal": "Saldo previsto",
         "pendingCount": "{count} voce pianificata | {count} voci pianificate",
         "through": "fino a {date}",
@@ -236,7 +236,7 @@
           "description": "Quota delle entrate destinata alle imposte, con andamento su 12 mesi"
         },
         "budget": {
-          "name": "Budget",
+          "name": "Tracker",
           "description": "What is left in the current budget period, line by line"
         },
         "trackers": {
@@ -254,6 +254,25 @@
         "spendingPace": {
           "name": "Spending pace",
           "description": "Month-to-date spending with a forecast for the rest of the month, compared with last month or your 3-month average."
+        },
+        "goals": {
+          "name": "Goals",
+          "description": "Progress toward your savings goals",
+          "savedOfTarget": "{saved} of {target}",
+          "empty": {
+            "title": "No active goals",
+            "description": "Set a goal and see how close you are.",
+            "action": "Create a goal"
+          },
+          "locked": {
+            "title": "Goals are locked",
+            "description": "Save toward what matters and see if you're on pace. Available on paid plans.",
+            "action": "Learn more"
+          },
+          "settings": {
+            "showReached": "Show reached goals"
+          },
+          "reachedSection": "Reached"
         }
       },
       "taxes": {
@@ -329,7 +348,7 @@
         "netWorth": "Net worth",
         "owesShare": "You owe {percent} of what you own",
         "noDebt": "No debt",
-        "assets": "Beni",
+        "assets": "Asset",
         "liabilities": "Passività",
         "loadFailed": "Couldn't load your assets and liabilities",
         "buckets": {
@@ -373,7 +392,8 @@
         },
         "hints": {
           "noHistory": "The comparison appears after your first full month.",
-          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far."
+          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far.",
+          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them."
         },
         "loadFailed": "Couldn't load your spending.",
         "settings": {
@@ -420,13 +440,6 @@
       "loadFailed": "Couldn't load recurring payments"
     },
     "latestRecords": {
-      "config": {
-        "includeScheduled": {
-          "label": "Includi pagamenti programmati",
-          "on": "Attivo",
-          "off": "Disattivo"
-        }
-      },
       "settings": {
         "excludeTitle": "Escludi transazioni",
         "excludeTransfersDescription": "Nascondi i trasferimenti tra i tuoi stessi conti",
@@ -442,7 +455,10 @@
         "tagsStyleSaveError": "Couldn't save the tag style. Please try again.",
         "showAccountTitle": "Conto",
         "showAccountDescription": "Show the account logo on each transaction",
-        "showAccountSaveError": "Couldn't save the account setting. Please try again."
+        "showAccountSaveError": "Couldn't save the account setting. Please try again.",
+        "scheduledTitle": "Pagamenti programmati",
+        "excludeScheduledDescription": "Hide upcoming and overdue subscription payments from the list",
+        "scheduledSaveError": "Failed to update scheduled payments setting"
       },
       "overdueBadge": "Scaduto",
       "scheduledBadge": "Programmato",
@@ -496,7 +512,8 @@
         "title": "Pianifica il tuo percorso FIRE",
         "description": "Funzionalità Plus",
         "action": "Sblocca"
-      }
+      },
+      "paceVs": "vs {month}"
     }
   },
   "pages": {

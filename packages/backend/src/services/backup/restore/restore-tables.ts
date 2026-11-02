@@ -1,7 +1,6 @@
 import type { BackupRestoreWarning } from '@bt/shared/types';
 import { DEACTIVATION_REASON } from '@bt/shared/types';
 import Currencies from '@models/currencies.model';
-import MerchantCategoryCodes from '@models/merchant-category-codes.model';
 import { encryptCredentials } from '@services/bank-data-providers/utils/credential-encryption';
 import { copyLogoImageIfPresent } from '@services/logo-images/logo-images.service';
 import { Op, type Transaction } from 'sequelize';
@@ -23,8 +22,6 @@ type TableProgressCallback = (params: { tier: number; table: string; insertedRow
 interface InsertContext {
   targetUserId: number;
   securitiesRemap: Map<string, string>;
-  /** Target MCC id keyed by natural code (compared as strings). */
-  mccByCode: Map<string, number>;
   /** Currency codes that exist on the target instance. */
   currencyCodes: Set<string>;
   /** Guarded FK columns per backup file name, derived from model metadata. */
@@ -126,12 +123,7 @@ export async function purgeUserOwnedRestoreTables({
   }
 }
 
-/**
- * Rewrite one row's remappable columns and decide whether it survives. Returns
- * the overrides to layer onto the insert record, or `null` to drop the row —
- * `null` means only "MCC code missing on this target". The caller tallies the
- * drops into one aggregated warning rather than one per row.
- */
+/** Rewrite one row's remappable columns into overrides layered onto the insert record. */
 function buildRowOverrides({
   def,
   plan,
@@ -142,7 +134,7 @@ function buildRowOverrides({
   plan: TableColumnPlan;
   row: Row;
   ctx: InsertContext;
-}): Row | null {
+}): Row {
   const overrides: Row = {};
 
   // userId / ownerUserId → the logged-in target user (constant substitution).
@@ -154,16 +146,6 @@ function buildRowOverrides({
   if (hasColumn({ plan, field: 'securityId' }) && typeof row.securityId === 'string') {
     const resolved = ctx.securitiesRemap.get(row.securityId);
     if (resolved) overrides.securityId = resolved;
-  }
-
-  // mccId → target id via the natural code carried on the row. Codes are stored
-  // as Postgres strings, so compare as strings. A code absent on the target
-  // means the row can't be linked — drop it (the caller aggregates the warning).
-  if (def.enrichMccCode && row.mccId != null) {
-    const code = row.mccCode != null ? String(row.mccCode) : null;
-    const targetMccId = code != null ? ctx.mccByCode.get(code) : undefined;
-    if (targetMccId === undefined) return null;
-    overrides.mccId = targetMccId;
   }
 
   // Bank credentials never travel: re-encrypt an empty stub on THIS instance and
@@ -213,7 +195,7 @@ async function insertTable({
 }): Promise<number> {
   if (rows.length === 0) return 0;
 
-  const selfRefColumn = def.selfRefColumn;
+  const selfRefColumns = def.selfRefColumns ?? [];
   const targetTable = String(def.model.getTableName());
   let ownMap = ctx.insertedIds.get(targetTable);
   if (!ownMap) {
@@ -260,15 +242,14 @@ async function insertTable({
     }
   }
 
-  // The self-ref column is validated in the second pass, not here — exclude it.
-  const guardedFks = (ctx.guardedFkMap.get(def.fileName) ?? []).filter((fk) => fk.attrName !== selfRefColumn);
+  // Self-ref columns are validated in the second pass, not here — exclude them.
+  const guardedFks = (ctx.guardedFkMap.get(def.fileName) ?? []).filter((fk) => !selfRefColumns.includes(fk.attrName));
 
-  const secondPass: Array<{ finalId: string; oldParent: unknown }> = [];
+  const secondPass: Array<{ column: string; finalId: string; oldParent: unknown }> = [];
   const records: Row[] = [];
 
   // Tally dropped rows so each reason becomes one aggregated warning (with a total
   // count) instead of one warning per dropped row.
-  let droppedMccCount = 0;
   let droppedCurrencyCount = 0;
   let droppedInvalidCount = 0;
   const fkDroppedByColumn = new Map<string, number>();
@@ -278,10 +259,6 @@ async function insertTable({
     if (row.id != null && reusedGlobalIds.has(String(row.id))) continue;
 
     const overrides = buildRowOverrides({ def, plan, row, ctx });
-    if (overrides === null) {
-      droppedMccCount += 1;
-      continue;
-    }
 
     // Skip a row whose currency isn't seeded on the target (users-currencies).
     if (def.requireSeededCurrency && !ctx.currencyCodes.has(String(row.currencyCode))) {
@@ -328,21 +305,15 @@ async function insertTable({
       overrides.id = finalId;
     }
 
-    if (selfRefColumn && row[selfRefColumn] != null && finalId != null) {
-      secondPass.push({ finalId, oldParent: row[selfRefColumn] });
-      overrides[selfRefColumn] = null;
+    for (const column of selfRefColumns) {
+      if (row[column] == null || finalId == null) continue;
+      secondPass.push({ column, finalId, oldParent: row[column] });
+      overrides[column] = null;
     }
 
     records.push(buildInsertRecord({ row, plan, overrides }));
   }
 
-  if (droppedMccCount > 0) {
-    ctx.warnings.push({
-      code: 'mcc_code_missing',
-      table: def.fileName,
-      count: droppedMccCount,
-    });
-  }
   if (droppedCurrencyCount > 0) {
     ctx.warnings.push({
       code: 'currency_missing',
@@ -366,15 +337,16 @@ async function insertTable({
 
   const inserted = await runBulkInsert({ model: def.model, records, transaction: ctx.transaction });
 
-  if (selfRefColumn && secondPass.length) {
+  for (const selfRefColumn of selfRefColumns) {
     // Repoint each child at its parent's final id; a parent outside this table's
     // own remapped ids (forged, or dropped upstream) stays null.
     const byParent = new Map<string, string[]>();
-    let selfRefNulled = 0;
-    for (const { finalId, oldParent } of secondPass) {
+    const orphanIds: string[] = [];
+    for (const { column, finalId, oldParent } of secondPass) {
+      if (column !== selfRefColumn) continue;
       const mappedParent = ownMap.get(String(oldParent));
       if (mappedParent === undefined) {
-        selfRefNulled += 1;
+        orphanIds.push(finalId);
         continue;
       }
       const bucket = byParent.get(mappedParent);
@@ -387,12 +359,20 @@ async function insertTable({
         { where: { id: ids }, transaction: ctx.transaction, paranoid: false },
       );
     }
-    if (selfRefNulled > 0) {
+    if (orphanIds.length) {
+      const orphanValues = def.selfRefOrphanValues?.[selfRefColumn];
+      if (orphanValues) {
+        await def.model.update(orphanValues, {
+          where: { id: orphanIds },
+          transaction: ctx.transaction,
+          paranoid: false,
+        });
+      }
       ctx.warnings.push({
         code: 'foreign_reference_nulled',
         table: def.fileName,
         column: selfRefColumn,
-        count: selfRefNulled,
+        count: orphanIds.length,
       });
     }
   }
@@ -429,24 +409,14 @@ export async function insertRestoreTables({
   const insertedByTable: Record<string, number> = {};
   const insertedIds = new Map<string, Map<string, string>>();
 
-  const needsMcc = BACKUP_TABLES.some((d) => d.enrichMccCode && (archive.data.get(d.fileName)?.length ?? 0) > 0);
   const needsCurrency = (archive.data.get('users-currencies')?.length ?? 0) > 0;
-
-  const [mccRows, currencyRows] = await Promise.all([
-    needsMcc
-      ? (MerchantCategoryCodes.findAll({ attributes: ['id', 'code'], raw: true }) as unknown as Promise<
-          Array<{ id: number; code: string | number }>
-        >)
-      : Promise.resolve<Array<{ id: number; code: string | number }>>([]),
-    needsCurrency
-      ? (Currencies.findAll({ attributes: ['code'], raw: true }) as unknown as Promise<Array<{ code: string }>>)
-      : Promise.resolve<Array<{ code: string }>>([]),
-  ]);
+  const currencyRows = needsCurrency
+    ? ((await Currencies.findAll({ attributes: ['code'], raw: true })) as unknown as Array<{ code: string }>)
+    : [];
 
   const ctx: InsertContext = {
     targetUserId,
     securitiesRemap,
-    mccByCode: new Map(mccRows.map((r) => [String(r.code), r.id])),
     currencyCodes: new Set(currencyRows.map((r) => r.code)),
     guardedFkMap: buildGuardedReferenceMap(),
     insertedIds,

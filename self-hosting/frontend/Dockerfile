@@ -69,6 +69,8 @@ RUN NODE_OPTIONS="--max-old-space-size=$NODE_BUILD_HEAP_MB" npm run build
 # 🚀 Stage 2️⃣: Production
 FROM nginx:1.27-alpine AS production-stage
 
+LABEL org.opencontainers.image.source="https://github.com/letehaha/moneymatter"
+
 # The Sentry release is the only baked runtime fallback: it must match the
 # source maps CI uploaded while building this exact image, so it ships inside
 # the image instead of being supplied per deployment. Everything else the
@@ -76,8 +78,8 @@ FROM nginx:1.27-alpine AS production-stage
 ARG VITE_SENTRY_RELEASE=
 ENV DEFAULT_SENTRY_RELEASE=$VITE_SENTRY_RELEASE
 
-# envsubst (gettext) renders CSP placeholders into nginx.conf at container start.
-RUN apk add --no-cache gettext
+# envsubst renders CSP placeholders; jq renders deployment-specific MCP discovery JSON.
+RUN apk add --no-cache gettext jq
 
 # Create app directories with proper permissions
 RUN mkdir -p /app /landing /etc/nginx/includes /etc/nginx/templates \

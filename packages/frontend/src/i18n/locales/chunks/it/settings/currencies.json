@@ -52,6 +52,24 @@
         "successfullyDeleted": "Eliminata correttamente.",
         "errors": {
           "deleteFailed": "Errore imprevisto. La valuta non è stata eliminata."
+        },
+        "foreignAmountsWarning": "Foreign amounts recorded in this currency will be removed from your transactions. Amounts in the account currency stay unchanged.",
+        "inUse": {
+          "title": "This currency is still in use. Remove or change these first:",
+          "trashed": "(in trash)",
+          "types": {
+            "account": "Conti",
+            "portfolio": "Portfolio display currency",
+            "holding": "Holdings",
+            "portfolioCash": "Portfolio cash",
+            "portfolioTransfer": "Portfolio transfers",
+            "investmentTransaction": "Investment transactions",
+            "subscription": "Recurring payments",
+            "transactionTemplate": "Transaction templates",
+            "budget": "Budgets",
+            "goal": "Goals",
+            "ventureDeal": "Venture deals"
+          }
         }
       },
       "setBase": {
@@ -63,7 +81,7 @@
           "title": "Cambiare la valuta di base?",
           "warningTitle": "Attenzione:",
           "warningText": "Cambiare la valuta di base dovrebbe essere una decisione ben ponderata. Idealmente, questa azione andrebbe eseguita una sola volta, anche se non ci sono restrizioni effettive.",
-          "descriptionText": "Ogni volta che cambi la valuta di base, tutte le transazioni verranno ricalcolate usando i tassi di cambio storici. A causa dell'aritmetica in virgola mobile e delle normali variazioni tra i tassi della valuta di base e di quella di conversione, ricalcoli ripetuti potrebbero introdurre piccole discrepanze negli importi di riferimento nel tempo. Gli importi di riferimento vengono usati per visualizzare le statistiche e per impostare i limiti del tuo budget.",
+          "descriptionText": "Ogni volta che si cambia la valuta di base, tutte le transazioni vengono ricalcolate usando i tassi di cambio storici. A causa dell'aritmetica in virgola mobile e delle normali differenze tra i tassi della valuta di base e quelli della valuta di quotazione, ricalcoli ripetuti possono introdurre nel tempo piccole discrepanze negli importi di riferimento. Gli importi di riferimento servono a mostrare le statistiche e a impostare i limiti del budget.",
           "roundingTitle": "Come viene calcolato esattamente l'arrotondamento?",
           "roundingIntro": "Le conversioni di valuta usano l'arrotondamento bancario (standard IEEE 754), noto anche come \"arrotondamento al pari più vicino\". Questo minimizza gli errori di arrotondamento cumulativi su molti calcoli.",
           "roundingHow": "Come funziona:",
@@ -80,7 +98,7 @@
         "successMessage": "Valuta di base modificata correttamente.",
         "errors": {
           "changeFailed": "Errore imprevisto. Impossibile cambiare la valuta di base.",
-          "lockedHousehold": "Fai parte di {count} nucleo familiare attivo. Esci prima da Impostazioni → Nucleo familiare. | Fai parte di {count} nuclei familiari attivi. Esci prima da Impostazioni → Nucleo familiare.",
+          "lockedHousehold": "Sei parte di {count} nucleo famigliare attivo. Abbandonalo da Impostazioni → Nucleo Familiare. | Sei parte di {count} nucleo famigliare attivi. Abbandonali da Impostazioni → Nucleo Familiare.",
           "lockedShares": "Hai {count} condivisione di conto attiva. Revocala prima dal conto. | Hai {count} condivisioni di conto attive. Revocale prima da ciascun conto.",
           "lockedBudgetPlan": "An active budget plan is blocking the change. Delete it first. | {count} active budget plans are blocking the change. Delete them first."
         }

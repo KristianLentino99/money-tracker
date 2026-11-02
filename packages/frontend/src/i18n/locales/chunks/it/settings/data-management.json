@@ -92,7 +92,7 @@
         "backupOrExportHint": "Not sure whether you need Export or Backup?",
         "accounts": {
           "label": "Conti",
-          "helper": "Export only the selected accounts with their transactions and balance history. Leave empty to export all accounts.",
+          "helper": "Esporta solo gli account selezionati con le loro transazioni e la cronologia. Lasciare vuoto per esportare tutti i conti.",
           "placeholder": "Tutti i conti"
         }
       },

@@ -7,6 +7,8 @@
       </CardHeader>
 
       <CardContent class="mt-6 flex flex-col gap-6">
+        <PaydayRow />
+        <Separator />
         <CreditLimitRow />
         <Separator />
         <BankSyncRows />
@@ -22,6 +24,8 @@
         <Separator />
 
         <TransactionRows />
+        <Separator />
+        <UnrealizedLossAlertRows />
       </CardContent>
     </Card>
   </div>
@@ -36,6 +40,8 @@ import BankSyncRows from './rows/bank-sync-rows.vue';
 import CategoryRows from './rows/category-rows.vue';
 import CreditLimitRow from './rows/credit-limit-row.vue';
 import DistanceUnitRow from './rows/distance-unit-row.vue';
+import PaydayRow from './rows/payday-row.vue';
 import QuickStartRow from './rows/quick-start-row.vue';
 import TransactionRows from './rows/transaction-rows.vue';
+import UnrealizedLossAlertRows from './rows/unrealized-loss-alert-rows.vue';
 </script>

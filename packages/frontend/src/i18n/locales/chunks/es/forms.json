@@ -138,6 +138,7 @@
       "accountCategoryPlaceholder": "Seleccionar categoría de cuenta",
       "creditLimitLabel": "Límite de crédito",
       "creditLimitPlaceholder": "Límite de crédito",
+      "defaultPaymentTypeLabel": "Tipo de pago por defecto",
       "submitButton": "Crear",
       "submitButtonLoading": "Creando...",
       "notifications": {
@@ -302,7 +303,8 @@
         "interestRateRange": "El tipo de interés debe estar entre 0 y 99,9999.",
         "termRange": "El plazo debe estar entre 1 y 1200 meses.",
         "paymentDayRange": "El día del mes debe estar entre 1 y 31.",
-        "asOfInFuture": "La fecha no puede ser futura"
+        "asOfInFuture": "La fecha no puede ser futura",
+        "startDateInFuture": "La fecha de inicio no puede ser una fecha futura"
       },
       "balanceExceedsPrincipalWarning": "El saldo pendiente es mayor que el principal original: compruebe estos importes."
     }

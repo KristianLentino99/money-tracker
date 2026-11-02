@@ -9,6 +9,7 @@ import { dissolveUndersizedGroups } from '@models/transaction-groups.model';
 import { findTransactions, updateTransactions } from '@models/transactions-query';
 import type Transactions from '@models/transactions.model';
 import VehicleMaintenanceTransactionLinks from '@models/vehicle-maintenance-transaction-links.model';
+import { assertNotInPayment, unlinkPaymentLegs } from '@services/transactions/payment-legs';
 import { Op } from 'sequelize';
 
 export const rejectIfAny = ({ rows, key }: { rows: Transactions[]; key: string }) => {
@@ -69,7 +70,9 @@ export const detachLinks = async ({ transactionIds }: { transactionIds: RecordId
 };
 
 // Hooks stay off: provider balances are bank-authoritative, so hiding a row moves no balance.
-export const softDeleteTransactions = ({
+// A linked row leaves its payment first. Main rows holding other rows and the rows a payment
+// created are rejected: hiding one with hooks off would strand the rest of its payment.
+export const softDeleteTransactions = async ({
   userId,
   transactionIds,
   mergedIntoId,
@@ -77,11 +80,15 @@ export const softDeleteTransactions = ({
   userId: number;
   transactionIds: RecordId[];
   mergedIntoId: RecordId | null;
-}) =>
-  updateTransactions({
+}) => {
+  await unlinkPaymentLegs({ where: { id: { [Op.in]: transactionIds } } });
+  await assertNotInPayment({ transactionIds });
+
+  return updateTransactions({
     values: { deletedAt: new Date(), mergedIntoId },
     where: { id: { [Op.in]: transactionIds } },
     planned: 'exclude',
     access: { creator: userId },
     balanceAdjustments: 'include',
   });
+};

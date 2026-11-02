@@ -247,7 +247,56 @@
             "download": "Descargar"
           }
         },
-        "addFieldsLabel": "Añadir"
+        "addFieldsLabel": "Añadir",
+        "paymentLegs": {
+          "severalAccountsPill": "Varias cuentas",
+          "paidFromLabel": "Pagado desde",
+          "receivedIntoLabel": "Recibido en",
+          "addAccount": "Añadir cuenta",
+          "removeRow": "Eliminar cuenta",
+          "syncedLock": "Sincronizado desde tu banco - esta cantidad no se puede cambiar",
+          "editHint": "Quitar una cuenta elimina sólo su parte. Con una cuenta restante, esto se convierte en una transacción regular.",
+          "syncedHint": "Sólo las cuentas que administras a mano pueden ser añadidas aquí.",
+          "splitUnavailableHint": "Dividir por categoría no está disponible cuando se paga desde varias cuentas.",
+          "deleteTitle": "¿Eliminar esta transacción?",
+          "deleteDescription": "Está dividido en {count} cuentas. Todas las partes se eliminarán y sus balances se actualizarán.",
+          "deleteSinglePartHint": "Para eliminar sólo una parte, utilice × al lado de ella en el formulario de edición.",
+          "deleteBoth": "Eliminar ambos",
+          "deleteAll": "Eliminar todas las partes",
+          "linkExisting": "Vincular a existente",
+          "linkedChangesTitle": "Cambios al guardar",
+          "linkedChangesTakes": "Toma la categoría de esta transacción, beneficiaria, nota y etiquetas.",
+          "linkedChangesKeeps": "Su cuenta, cantidad y fecha permanecen iguales.",
+          "linkedChangesUnlink": "Desvincular restaura sus detalles originales.",
+          "unlink": "Desvincular",
+          "convertedAmountLabel": "Cantidades en {currency}",
+          "rateInfo": "Detalles del tipo de cambio",
+          "rateFromAmounts": "Tarifa de tus cantidades",
+          "marketRate": "Tarifa de mercado",
+          "rateValue": "1 {from} = {rate} {to}",
+          "convertedHint": "Rellenado desde la tasa de mercado. Cambia la cantidad {currency} para que coincida con lo que pagaste realmente.",
+          "noMarketRate": "Ningún tipo de cambio de mercado para {currency} – ingrese la cantidad manualmente.",
+          "deleteLinkedDescription": "Las partes que has añadido aquí se eliminan. Las partes que has enlazado solo están desvinculadas y permanecen como sus propias transacciones.",
+          "partDeleted": "Eliminado",
+          "partKept": "Guardado",
+          "linkPicker": {
+            "title": "Vincular transacciones existentes",
+            "windowHint": "Dentro de {days} días de {date}",
+            "loadError": "No se han podido cargar las transacciones",
+            "emptyTitle": "No hay transacciones vinculadas",
+            "emptyDescription": "Todavía no hay transacciones de este tipo para enlazar.",
+            "emptyFilteredDescription": "Ninguna transacción coincide con estos filtros.",
+            "limitReached": "Límite de selección alcanzado",
+            "inOtherPayment": "Ya forma parte de otro pago",
+            "hasSplits": "Dividir por categoría",
+            "refundLinked": "Vincular un reembolso",
+            "pending": "Aún no reservado por el banco",
+            "transfer": "Las transferencias no se pueden vincular",
+            "planned": "Las transacciones planeadas no pueden ser fusionadas o eliminadas",
+            "differentType": "Tipo diferente de esta transacción",
+            "submit": "Importar {count} transacción | Importar {count} transacciones"
+          }
+        }
       },
       "investmentContribution": {
         "title": "Compras de inversión",
@@ -611,10 +660,10 @@
         "nameLabel": "Nombre del grupo",
         "namePlaceholder": "Inversiones",
         "createButton": "Crear",
-        "subgroupTitle": "New subgroup",
-        "insideLabel": "Inside",
-        "subgroupNamePlaceholder": "e.g. Savings",
-        "createSubgroupButton": "Create subgroup"
+        "subgroupTitle": "Nuevo subgrupo",
+        "insideLabel": "Dentro",
+        "subgroupNamePlaceholder": "ej. Ahorros",
+        "createSubgroupButton": "Crear subgrupo"
       }
     },
     "directCashTransaction": {

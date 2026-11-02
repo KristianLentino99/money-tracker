@@ -126,7 +126,13 @@
         "expense": "Pengeluaran",
         "net": "Bersih",
         "transfers": "Transfer"
-      }
+      },
+      "tagModeAddHint": "Keeps current tags and adds these.",
+      "tagModeAddShort": "Add",
+      "tagModeRemoveHint": "Removes only these tags. Other tags stay.",
+      "tagModeRemoveShort": "Remove",
+      "tagModeReplaceHint": "Removes all current tags, then adds these.",
+      "tagModeReplaceShort": "Replace"
     },
     "bulkLinkSubscription": {
       "button": "Hubungkan ke pembayaran berulang",
@@ -172,7 +178,26 @@
         "noGroupsMessage": "Belum ada grup transaksi.",
         "emptyStateHint": "Pilih transaksi di halaman Transaksi dan klik \"Buat Grup\" untuk memulai.",
         "transactionCountLabel": "transaksi",
-        "deleteError": "Gagal menghapus grup. Silakan coba lagi."
+        "deleteError": "Gagal menghapus grup. Silakan coba lagi.",
+        "loadError": "Couldn't load transaction groups",
+        "description": "Bundle related transactions, like a trip or a transfer chain, and see them together.",
+        "noMatchTitle": "No groups match your search",
+        "moreActions": "More actions for {name}",
+        "columns": {
+          "name": "Nama",
+          "transactions": "Transaksi",
+          "date": "Tanggal",
+          "net": "Bersih"
+        },
+        "sort": {
+          "label": "Sort groups",
+          "dateDesc": "Newest first",
+          "dateAsc": "Oldest first",
+          "nameAsc": "Name A–Z",
+          "nameDesc": "Name Z–A",
+          "amountDesc": "Net: high to low",
+          "amountAsc": "Net: low to high"
+        }
       },
       "errors": {
         "nameRequired": "Nama grup wajib diisi",
@@ -227,7 +252,6 @@
       "categorizationSourceValues": {
         "manual": "Manual",
         "ai": "AI",
-        "mcc_rule": "Aturan MCC",
         "user_rule": "Aturan pengguna",
         "subscription_rule": "Aturan langganan",
         "payee_rule": "Aturan penerima"

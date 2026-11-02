@@ -45,7 +45,8 @@
         "last12Months": "Ultimi 12 mesi",
         "thisYear": "Quest'anno",
         "previousYear": "Anno precedente",
-        "allTime": "Sempre"
+        "allTime": "Sempre",
+        "currentPayPeriod": "Current pay period"
       },
       "subtitle": "Income against expenses over time, and where the money went.",
       "composition": {
@@ -343,7 +344,10 @@
         "range": "Rendimento ±2 punti",
         "today": "Oggi",
         "typeTarget": "{type} · {amount}",
-        "typeLabel": "{type} · {date}"
+        "typeLabel": "{type} · {date}",
+        "forecast": "{month} forecast",
+        "forecastLabel": "{month} forecast · {date}",
+        "actualSince": "Actual since {month}"
       },
       "milestones": {
         "reached": "Raggiunto",
@@ -370,6 +374,45 @@
         "daysLeft": "Prova del pianificatore FIRE · resta {n} giorno | Prova del pianificatore FIRE · restano {n} giorni",
         "ended": "La prova di 14 giorni del pianificatore FIRE è terminata. Passa a Plus per continuare a pianificare il tuo percorso FIRE.",
         "startFailed": "Impossibile avviare la prova del pianificatore FIRE. Ricarica la pagina per riprovare."
+      },
+      "pace": {
+        "row": "{status} vs {anchor}",
+        "noHistory": "Not enough history before {month}",
+        "loadFailed": "Couldn't load the comparison",
+        "compareWith": "Compare with {month}",
+        "picker": {
+          "title": "Compare with",
+          "rollingLabel": "{month} · 1 year ago",
+          "rolling": "1 year ago",
+          "rollingHint": "Rolling · currently {month}",
+          "specific": "Specific month",
+          "specificHint": "Stays fixed",
+          "prevYear": "Previous year",
+          "nextYear": "Next year",
+          "earliest": "Earliest is {month}. FIRE needs 3 months of tracked spending before it."
+        },
+        "details": {
+          "title": "Pace since {month}",
+          "moved": "Your FIRE date moved from {from} to {to}.",
+          "withinBand": "Your FIRE date is within {tolerance} of the {month} forecast ({date}).",
+          "backInReach": "On {month}'s numbers FIRE was out of reach. Now it's {date}.",
+          "offTrack": "The {month} forecast was {date}. On today's numbers FIRE is out of reach.",
+          "metric": "Metric",
+          "today": "Today",
+          "change": "Change",
+          "fireDate": "FIRE date",
+          "saved": "Saved by now",
+          "spending": "Spending",
+          "saving": "Saving",
+          "expected": "{amount} expected",
+          "sooner": "{duration} sooner",
+          "later": "{duration} later",
+          "sameMonth": "Same month",
+          "outOfReach": "Out of reach",
+          "band": "On pace means within {tolerance} (2% of the time left to FIRE).",
+          "recorded": "Balance, cash flow and assumptions as of {date} are recomputed live from your data.",
+          "notRecorded": "Balance and cash flow as of {date} are recomputed live from your data. Your assumptions from then weren't recorded, so today's are used."
+        }
       }
     }
   },
@@ -442,7 +485,8 @@
       "collapseAll": "Comprimi tutto",
       "expandAll": "Espandi tutto",
       "expandRow": "Espandi",
-      "collapseRow": "Comprimi"
+      "collapseRow": "Comprimi",
+      "net": "Net"
     },
     "states": {
       "emptyTitle": "Nessun dato per questa selezione",
@@ -594,7 +638,7 @@
       "noLiabilities": "Non hai avuto passività nel periodo selezionato."
     },
     "chart": {
-      "assets": "Attivi",
+      "assets": "Asset",
       "liabilities": "Passività",
       "netWorth": "Patrimonio netto",
       "averageLiabilities": "Passività medie",

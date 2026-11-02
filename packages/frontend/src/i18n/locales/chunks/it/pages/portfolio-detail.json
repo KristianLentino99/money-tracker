@@ -186,7 +186,7 @@
         "description": "Aggiungi una nuova transazione al tuo portafoglio."
       },
       "tryAgainLater": "Riprova più tardi",
-      "emptyDescription": "Aggiungi la tua prima transazione per iniziare a monitorare i tuoi investimenti",
+      "emptyDescription": "Aggiungere la prima operazione per iniziare a monitorare gli investimenti",
       "addFirstHolding": "Aggiungi prima posizione",
       "importTransactions": "Oppure importa da un file",
       "stalePrice": "Last available price. Market value and gains may be outdated."

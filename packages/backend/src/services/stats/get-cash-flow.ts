@@ -38,6 +38,8 @@ interface GetCashFlowParams extends StatsScopeFilters {
   excludedCategoryIds?: RecordId[];
   /** Drops pending planned rows, leaving only money that actually moved. */
   excludePlanned?: boolean;
+  /** Starts `monthly` buckets on the user's payday instead of the 1st. */
+  alignToPayday?: boolean;
 }
 
 type CategoryInfo = AccessibleCategoryInfo;
@@ -121,8 +123,10 @@ export const getCashFlow = withTransaction(
     categoryIds,
     excludedCategoryIds,
     excludePlanned,
+    alignToPayday,
   }: GetCashFlowParams): Promise<GetCashFlowResponse> => {
-    const buckets = generatePeriodBuckets({ from, to, granularity });
+    const { savingsCategoryIds, payday } = await getUserSettings({ userId });
+    const buckets = generatePeriodBuckets({ from, to, granularity, payday: alignToPayday ? payday : 1 });
 
     if (granularity === 'daily' && buckets.length > MAX_DAILY_BUCKETS) {
       throw new ValidationError({
@@ -209,7 +213,6 @@ export const getCashFlow = withTransaction(
 
     // Categories the user counts as savings drop out of the report the same way an explicitly
     // excluded one does: money moved there is saved rather than spent, so it must not lower netFlow.
-    const { savingsCategoryIds } = await getUserSettings({ userId });
     const hiddenCategoryIds = [...(excludedCategoryIds ?? []), ...(savingsCategoryIds ?? [])];
 
     // Hiding a parent hides everything under it, including subcategories created after the caller

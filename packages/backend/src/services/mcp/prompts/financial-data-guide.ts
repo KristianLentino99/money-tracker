@@ -25,7 +25,10 @@ export const FINANCIAL_DATA_GUIDE_CONTENT = `You are connected to MoneyMatter, a
 
 **Best Practices:**
 - Always check the user's base currency first via get_user_profile
-- Use search_transactions with date filters rather than requesting all data
+- search_transactions searches all accessible accounts when accountIds is omitted, including each account's individual multi-account payment leg. Investment trades use get_investment_transactions separately
+- search_transactions defaults to the last 30 days and 50 rows per page. To retrieve all regular ledger history, set allTime=true and omit accountIds. Explicit startDate/endDate still apply with allTime
+- Follow search_transactions.nextOffset while hasMore=true, preserving the same filters and order. count is the current page length, not a total. Never claim the complete history was reviewed after reading only one page
+- To discover every account, call get_accounts with includeExcludedFromStats=true. Exclusion from statistics does not remove an account's transactions from search_transactions
 - For spending analysis, prefer get_spending_by_categories or get_cash_flow over manually summing transactions
 - Tracker limits and spending are always in the user's base currency
 - Goal amounts (target, plannedMonthly, progress) are in the goal's own currencyCode, not the base currency`;

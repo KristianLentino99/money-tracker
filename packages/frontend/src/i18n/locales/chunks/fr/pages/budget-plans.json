@@ -106,6 +106,7 @@
       "goToAccounts": "Accéder aux comptes",
       "cadenceLabel": "Fréquence",
       "startsOnLabel": "Débute le",
+      "startsOnOutOfRange": "Pick a date from {from} to today.",
       "accountsLabel": "Comptes",
       "accountsPlaceholder": "Sélectionner des comptes",
       "rolloverLabel": "Report",
@@ -205,7 +206,7 @@
     "cadence": {
       "monthly": "Mensuel",
       "semiMonthly": "Bimensuel",
-      "biweekly": "Toutes les 2 semaines",
+      "biweekly": "Toutes les deux semaines",
       "weekly": "Hebdomadaire",
       "everyNDays": "Tous les {n} jours",
       "everyNMonths": "Tous les {n} mois",
@@ -235,7 +236,11 @@
       "activity": "Activité",
       "available": "Disponible",
       "overrideBadge": "ajusté",
-      "carriesDeficit": "reporte le déficit",
+      "carryBadge": {
+        "floor": "carries surplus",
+        "signed": "carries surplus & deficit",
+        "none": "starts fresh"
+      },
       "lineActions": "Actions de la ligne",
       "editLine": "Modifier la ligne",
       "archiveLine": "Archiver la ligne",
@@ -468,7 +473,7 @@
       "frequencyLabel": "Fréquence",
       "frequency": {
         "weekly": "Hebdomadaire",
-        "biweekly": "Toutes les 2 semaines",
+        "biweekly": "Toutes les deux semaines",
         "yearly": "Annuelle",
         "by_date": "Par date",
         "open_ended": "Sans date limite"

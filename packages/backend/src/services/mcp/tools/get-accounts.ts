@@ -17,7 +17,7 @@ export function registerGetAccounts(server: McpServer) {
     'get_accounts',
     {
       description:
-        'List all user accounts with current balances. Returns account name, type, currency, current balance (in original and base currency), and credit limit.',
+        'List accessible accounts with current balances. Accounts excluded from statistics are hidden by default; set includeExcludedFromStats=true to discover every account. Returns account name, type, currency, current balance (in original and base currency), and credit limit. search_transactions can read transactions across all accessible accounts independently of this listing filter.',
       inputSchema,
     },
     async (args, extra) => {

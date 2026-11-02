@@ -103,7 +103,8 @@
       "debitCard": "Дебетовая карта",
       "mobilePayment": "Мобильный платёж",
       "voucher": "Ваучер",
-      "webPayment": "Онлайн-платёж"
+      "webPayment": "Онлайн-платёж",
+      "none": "Нет"
     },
     "vehicleClasses": {
       "sedan": "Седан",
@@ -160,6 +161,7 @@
       },
       "record": {
         "addedByTooltip": "Эта транзакция была прикреплена к бюджету пользователем {handle}",
+        "addedByRule": "Added by the tracker's rules",
         "matchedByAi": "Сопоставлено AI",
         "externalLinkTooltip": "Открыть внешнюю ссылку",
         "locationTooltip": "Открыть местоположение на карте",
@@ -168,6 +170,13 @@
         "selectRow": "Выберите транзакцию",
         "unselectableReasons": {
           "sharedAccount": "Нельзя выбрать: эта транзакция находится на счёте, доступ к которому вам предоставлен, и редактировать её может только владелец счёта."
+        },
+        "payment": {
+          "paidFrom": "Paid from {count} accounts",
+          "receivedInto": "Received into {count} accounts",
+          "partOf": "Part of a {total} payment",
+          "thisAccount": "(this account)",
+          "loadError": "Couldn't open this transaction. Try again."
         }
       }
     },
@@ -244,6 +253,10 @@
       "dialogTitle": "Изменить логотип",
       "resetToAuto": "Вернуть автоматический выбор",
       "remove": "Удалить логотип",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Логотип удалён",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Буквы (1–2)",
       "lettersPlaceholder": "АБ",
       "colorLabel": "Цвет",
@@ -282,9 +295,22 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} ahead",
+        "behind": "{duration} behind",
+        "onPace": "On pace",
+        "backInReach": "Back within reach",
+        "offTrack": "Off track"
       }
     },
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "pasteImage": {
+      "button": "Paste image",
+      "shortcutHint": "or press {shortcut}",
+      "noImage": "No image found in the clipboard.",
+      "readFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut."
+    }
   },
   "accountGroups": {
     "create": {
@@ -339,6 +365,13 @@
     },
     "share": {
       "sendFailedHint": "Откройте панель общего доступа, чтобы отправить повторно."
+    },
+    "goalReached": {
+      "title": "Goal reached: {name}",
+      "message": "You've saved {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -532,6 +565,12 @@
       "removeTransactionDescriptionNormal": "Вы уверены, что хотите удалить эту транзакцию из группы?",
       "removeButtonText": "Удалить",
       "removeAndDeleteButtonText": "Удалить и удалить группу",
+      "removeFromGroup": "Удалить из группы",
+      "saveError": "Couldn't save the group",
+      "removeError": "Couldn't remove the transaction from the group",
+      "manageTransactions": "Управление",
+      "showMoreNote": "Show more",
+      "showLessNote": "Показать меньше",
       "summary": {
         "transactions": "Транзакции",
         "net": "Итог",

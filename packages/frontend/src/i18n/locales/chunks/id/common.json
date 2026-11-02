@@ -103,7 +103,8 @@
       "debitCard": "Kartu Debit",
       "mobilePayment": "Pembayaran Seluler",
       "voucher": "Voucher",
-      "webPayment": "Pembayaran Web"
+      "webPayment": "Pembayaran Web",
+      "none": "Tidak ada"
     },
     "vehicleClasses": {
       "sedan": "Sedan",
@@ -168,7 +169,15 @@
           "sharedAccount": "Tidak dapat dipilih: transaksi ini berada di akun yang dibagikan dengan Anda, dan hanya pemiliknya yang dapat mengeditnya."
         },
         "addedByTooltip": "This transaction was attached to the budget by {handle}",
-        "matchedByAi": "Dicocokkan oleh AI"
+        "matchedByAi": "Dicocokkan oleh AI",
+        "addedByRule": "Added by the tracker's rules",
+        "payment": {
+          "paidFrom": "Paid from {count} accounts",
+          "receivedInto": "Received into {count} accounts",
+          "partOf": "Part of a {total} payment",
+          "thisAccount": "(this account)",
+          "loadError": "Couldn't open this transaction. Try again."
+        }
       }
     },
     "outOfWallet": "Di Luar Dompet",
@@ -244,6 +253,10 @@
       "dialogTitle": "Ganti logo",
       "resetToAuto": "Kembalikan ke otomatis",
       "remove": "Hapus logo",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo dihapus",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Huruf (1–2)",
       "lettersPlaceholder": "AB",
       "colorLabel": "Warna",
@@ -278,12 +291,25 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} ahead",
+        "behind": "{duration} behind",
+        "onPace": "On pace",
+        "backInReach": "Back within reach",
+        "offTrack": "Off track"
       }
     },
     "cancel": "Cancel",
     "iconPicker": {
       "searchPlaceholder": "Cari ikon...",
       "clear": "Hapus ikon"
+    },
+    "pasteImage": {
+      "button": "Paste image",
+      "shortcutHint": "or press {shortcut}",
+      "noImage": "No image found in the clipboard.",
+      "readFailed": "Couldn't read the clipboard. Allow clipboard access or paste with the keyboard shortcut."
     }
   },
   "accountGroups": {
@@ -339,6 +365,13 @@
     },
     "share": {
       "sendFailedHint": "Buka panel berbagi untuk mengirim ulang."
+    },
+    "goalReached": {
+      "title": "Goal reached: {name}",
+      "message": "You've saved {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -483,6 +516,12 @@
       "removeTransactionDescriptionNormal": "Apakah Anda yakin ingin mengeluarkan transaksi ini dari grup?",
       "removeButtonText": "Keluarkan",
       "removeAndDeleteButtonText": "Keluarkan & Hapus Grup",
+      "removeFromGroup": "Hapus dari grup",
+      "saveError": "Couldn't save the group",
+      "removeError": "Couldn't remove the transaction from the group",
+      "manageTransactions": "Kelola",
+      "showMoreNote": "Show more",
+      "showLessNote": "Tampilkan lebih sedikit",
       "summary": {
         "transactions": "Transaksi",
         "net": "Bersih",

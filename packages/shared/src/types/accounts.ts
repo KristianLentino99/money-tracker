@@ -1,6 +1,7 @@
 import type { EntityLogoFields, EntityLogoPayload } from './entity-logo';
 import type { RecordId } from './record-id';
 import type { ResourceShareInfo } from './sharing';
+import type { PAYMENT_TYPES } from './transactions';
 
 export enum ACCOUNT_TYPES {
   system = 'system',
@@ -9,6 +10,7 @@ export enum ACCOUNT_TYPES {
   lunchflow = 'lunchflow', // lunchflow provider connection
   walutomat = 'walutomat', // walutomat provider connection
   simplefin = 'simplefin', // SimpleFIN Bridge provider connection
+  akahu = 'akahu', // Akahu (NZ open banking) provider connection
 }
 
 /**
@@ -20,6 +22,7 @@ export enum BANK_PROVIDER_TYPE {
   LUNCHFLOW = 'lunchflow',
   WALUTOMAT = 'walutomat',
   SIMPLEFIN = 'simplefin',
+  AKAHU = 'akahu',
 }
 
 /**
@@ -127,6 +130,7 @@ export interface AccountModel extends EntityLogoFields {
   creditLimit: number;
   refCreditLimit: number;
   accountCategory: ACCOUNT_CATEGORIES;
+  defaultPaymentType: PAYMENT_TYPES | null;
   currencyCode: string;
   userId: number;
   externalId?: RecordId;
@@ -161,6 +165,7 @@ export interface AccountApiResponse extends EntityLogoFields {
   refCreditLimit: number;
   type: string;
   accountCategory: string;
+  defaultPaymentType: PAYMENT_TYPES | null;
   currencyCode: string;
   userId: number;
   externalId: string | null;
@@ -219,6 +224,7 @@ type NullableBodyPayload = {
 
 export interface CreateAccountBody extends NullableBodyPayload, EntityLogoPayload {
   accountCategory: AccountModel['accountCategory'];
+  defaultPaymentType?: AccountModel['defaultPaymentType'];
   currencyCode: AccountModel['currencyCode'];
   name: AccountModel['name'];
   initialBalance: AccountModel['initialBalance'];
@@ -228,6 +234,7 @@ export interface CreateAccountBody extends NullableBodyPayload, EntityLogoPayloa
 
 export interface UpdateAccountBody extends NullableBodyPayload, EntityLogoPayload {
   accountCategory?: AccountModel['accountCategory'];
+  defaultPaymentType?: AccountModel['defaultPaymentType'];
   name?: AccountModel['name'];
   currentBalance?: AccountModel['currentBalance'];
   initialBalance?: AccountModel['initialBalance'];

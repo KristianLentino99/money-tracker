@@ -123,7 +123,7 @@
         "title": "Lista de seguimiento de categorías",
         "addCategory": "Añadir categoría",
         "selectCategories": "Seleccionar categorías",
-        "showTrend": "Show 6-month trend",
+        "showTrend": "Mostrar tendencia de 6 meses",
         "sort": {
           "title": "Ordenar por",
           "custom": "Orden personalizado",
@@ -152,7 +152,7 @@
         "start": "Inicio",
         "end": "Fin",
         "growth": "Crecimiento",
-        "changeInPeriod": "Change in {period}",
+        "changeInPeriod": "Cambiar en {period}",
         "previousPeriodsTrend": "Tendencia de períodos anteriores",
         "excludedTooltip": "Excluido del patrimonio neto: {components}",
         "viewHistory": "Ver historial",
@@ -240,7 +240,8 @@
         },
         "hints": {
           "noHistory": "La comparación aparece después de tu primer mes completo.",
-          "fewMonths": "Promedio del mes completo de {n} que tienes hasta ahora. | Promedio de los {n} meses completos que tengas hasta ahora."
+          "fewMonths": "Promedio del mes completo de {n} que tienes hasta ahora. | Promedio de los {n} meses completos que tengas hasta ahora.",
+          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them."
         },
         "loadFailed": "No se pudo cargar tu gasto.",
         "settings": {
@@ -304,7 +305,7 @@
         "empty": "Aún no hay presupuestos",
         "create": "Configurar un presupuesto",
         "sort": {
-          "overspent": "Most overspent first"
+          "overspent": "Más excesivo primero"
         }
       },
       "trackers": {
@@ -312,7 +313,7 @@
         "inOut": "{ingresos} entran, {gastos} salen",
         "net": "Neto",
         "noLimit": "Sin límite",
-        "empty": "Aún no hay presupuestos",
+        "empty": "Aún no hay rastreadores",
         "ended": "Finalizado",
         "create": "Crear un seguimiento"
       },
@@ -379,8 +380,27 @@
           "description": "Lo que queda en el actual período presupuestario, línea por línea"
         },
         "trackers": {
-          "name": "Presupuestos",
+          "name": "Rastreadores",
           "description": "Cada rastreador activo con cuánto de su límite está usado y su neto"
+        },
+        "goals": {
+          "name": "Objetivos",
+          "description": "Avance hacia sus objetivos de ahorro",
+          "savedOfTarget": "{saved} de {target}",
+          "empty": {
+            "title": "No hay objetivos activos",
+            "description": "Establecer un objetivo y ver lo cerca que estás.",
+            "action": "Crear objetivo"
+          },
+          "locked": {
+            "title": "Los objetivos están bloqueados",
+            "description": "Ahorre en lo que importa y vea si está en el ritmo. Disponible en planes de pago.",
+            "action": "Saber más"
+          },
+          "settings": {
+            "showReached": "Mostrar objetivos alcanzados"
+          },
+          "reachedSection": "Alcanzado"
         }
       }
     },
@@ -408,16 +428,9 @@
         "goingOut": "{amount} saliendo",
         "today": "Hoy"
       },
-      "loadFailed": "No se pudo cargar los pagos recurrientes"
+      "loadFailed": "No se pudo cargar los pagos recurrentes"
     },
     "latestRecords": {
-      "config": {
-        "includeScheduled": {
-          "label": "Incluir pagos programados",
-          "on": "Activado",
-          "off": "Desactivado"
-        }
-      },
       "settings": {
         "excludeTitle": "Excluir transacciones",
         "excludeTransfersDescription": "Ocultar transferencias entre sus propias cuentas",
@@ -426,6 +439,9 @@
         "excludeBalanceAdjustmentsDescription": "Ocultar transacciones de ajuste de saldo",
         "plannedTitle": "Transacciones planificadas",
         "excludePlannedDescription": "Ocultar de la lista las transacciones planificadas pendientes",
+        "scheduledTitle": "Pagos programados",
+        "excludeScheduledDescription": "Ocultar pagos de suscripción próximos y vencidos de la lista",
+        "scheduledSaveError": "No se pudo actualizar la configuración de los pagos programados",
         "nothingExcluded": "Nada excluido",
         "tagsStyleTitle": "Etiquetas",
         "tagsStyleNames": "Nombres",
@@ -487,7 +503,8 @@
         "title": "Planifica tu camino a FIRE",
         "description": "Característica Plus",
         "action": "Desbloquear"
-      }
+      },
+      "paceVs": "vs. {month}"
     }
   },
   "pages": {

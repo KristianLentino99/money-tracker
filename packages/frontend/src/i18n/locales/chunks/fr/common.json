@@ -103,7 +103,8 @@
       "debitCard": "Carte de débit",
       "mobilePayment": "Paiement mobile",
       "voucher": "Bon d'achat",
-      "webPayment": "Paiement en ligne"
+      "webPayment": "Paiement en ligne",
+      "none": "Aucune"
     },
     "vehicleClasses": {
       "sedan": "Berline",
@@ -160,6 +161,7 @@
       },
       "record": {
         "addedByTooltip": "Cette opération a été associée au suivi par {handle}",
+        "addedByRule": "Ajoutée par les règles de suivi",
         "matchedByAi": "Associé par l'IA",
         "externalLinkTooltip": "Ouvrir le lien externe",
         "locationTooltip": "Afficher le lieu sur la carte",
@@ -168,6 +170,13 @@
         "selectRow": "Sélectionner l'opération",
         "unselectableReasons": {
           "sharedAccount": "Sélection impossible : cette opération figure sur un compte partagé avec vous, seul son propriétaire peut la modifier."
+        },
+        "payment": {
+          "paidFrom": "Paid from {count} accounts",
+          "receivedInto": "Received into {count} accounts",
+          "partOf": "Part of a {total} payment",
+          "thisAccount": "(this account)",
+          "loadError": "Couldn't open this transaction. Try again."
         }
       }
     },
@@ -244,6 +253,10 @@
       "dialogTitle": "Changer de logo",
       "resetToAuto": "Rétablir en automatique",
       "remove": "Supprimer le logo",
+      "pickerDescription": "Pick a brand logo or use letters instead.",
+      "updatedToast": "Logo updated",
+      "resetToast": "Logo supprimé",
+      "updateError": "Couldn't update the logo. Try again.",
       "lettersLabel": "Lettres (1–2)",
       "lettersPlaceholder": "AB",
       "colorLabel": "Couleur",
@@ -282,7 +295,20 @@
         "lean": "Lean FIRE",
         "regular": "FIRE",
         "fat": "Fat FIRE"
+      },
+      "pace": {
+        "ahead": "{duration} ahead",
+        "behind": "{duration} behind",
+        "onPace": "On pace",
+        "backInReach": "Back within reach",
+        "offTrack": "Off track"
       }
+    },
+    "pasteImage": {
+      "button": "Coller l'image",
+      "shortcutHint": "ou appuyez sur {shortcut}",
+      "noImage": "Aucune image trouvée dans le presse-papiers.",
+      "readFailed": "Impossible de lire le presse-papiers. Autorisez l'accès au presse-papiers ou collez à l'aide du raccourci clavier."
     }
   },
   "accountGroups": {
@@ -338,6 +364,13 @@
     },
     "share": {
       "sendFailedHint": "Ouvrez le panneau de partage pour renvoyer."
+    },
+    "goalReached": {
+      "title": "Objectif atteint : {name}",
+      "message": "Vous avez épargné {amount}."
+    },
+    "unrealizedLossAlert": {
+      "title": "{count} holding crossed your loss alert | {count} holdings crossed your loss alert"
     }
   },
   "currencyNames": {
@@ -531,6 +564,12 @@
       "removeTransactionDescriptionNormal": "Voulez-vous vraiment retirer cette opération du groupe ?",
       "removeButtonText": "Retirer",
       "removeAndDeleteButtonText": "Retirer et supprimer le groupe",
+      "removeFromGroup": "Retirer du groupe",
+      "saveError": "Couldn't save the group",
+      "removeError": "Couldn't remove the transaction from the group",
+      "manageTransactions": "Gérer",
+      "showMoreNote": "Show more",
+      "showLessNote": "Voir moins",
       "summary": {
         "transactions": "Opérations",
         "net": "Net",

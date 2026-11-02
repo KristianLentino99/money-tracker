@@ -207,6 +207,20 @@ page.
 | `update_venture_event`                            | Update a venture event. Manual gpCarry/lpNet values set override flags; resetOverrides=true re-runs auto-compute. Requires finance:write scope.                                                                                                                                                                       |
 | `update_venture_platform`                         | Update a venture platform's name, website, description, or default fees. Does not change fees on existing deals. Requires finance:write scope.                                                                                                                                                                        |
 
+## Complete transaction history
+
+Call `get_accounts` with `includeExcludedFromStats: true` to discover every account,
+including those excluded from statistics. To retrieve the complete regular ledger,
+call `search_transactions` with `allTime: true` and omit `accountIds`; this includes
+all accessible accounts. Explicit `startDate` and `endDate` still apply with `allTime`.
+The default search covers only the last 30 days and returns 50 rows per page (maximum 500).
+
+While `hasMore` is true, call again using `offset: nextOffset` with the same filters
+and order. `count` is the current page length, not the total number of matches.
+Never report that the full history was checked after reading only the first page.
+Rows belonging to one multi-account payment remain separate ledger entries in MCP
+searches. Read investment trades separately through `get_investment_transactions`.
+
 ## Data conventions
 
 - Vehicle distance follows the configured user unit (km or mi); values returned by maintenance tools include distanceUnit.
@@ -227,6 +241,10 @@ page.
   `search_transactions` returns regular (spending) transactions; investment
   activity (buy/sell/dividend/fee) lives in `get_investment_transactions` and
   does not appear in `search_transactions`.
+- A multi-account payment is one income or expense paid from up to 5 accounts.
+  `search_transactions` returns each account's own ledger entry; sum each row's
+  `refAmount` once for a cross-account total in the base currency.
+  Set the parts with `paymentLegs` on `create_transaction` / `update_transaction`.
 - Transaction automations are rules evaluated top to bottom by `position` on
   new transactions on bank-connected accounts or imported rows — never on
   transfers, planned ones, or transactions on manual (non-bank) accounts. Existing

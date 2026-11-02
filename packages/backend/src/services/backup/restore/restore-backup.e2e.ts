@@ -6,6 +6,7 @@ import {
   BANK_PROVIDER_TYPE,
   CATEGORY_ORDER_ROOT_KEY,
   DEACTIVATION_REASON,
+  FIRE_HISTORY_BASELINE_MONTH,
   ImportSource,
   PLANS,
   RESOURCE_TYPES,
@@ -27,6 +28,7 @@ import { PNG_1X1_BYTES, PNG_1X1_DATA_URL } from '@tests/fixtures/logo-images';
 import * as helpers from '@tests/helpers';
 import { VALID_ANTHROPIC_API_KEY } from '@tests/mocks/anthropic/mock-api';
 import { VALID_MONOBANK_TOKEN } from '@tests/mocks/monobank/mock-api';
+import { format } from 'date-fns';
 import { randomUUID } from 'node:crypto';
 
 type Row = Record<string, unknown>;
@@ -875,6 +877,76 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       expect(sourceCurrencyCodesAfter).toEqual(sourceCurrencyCodes);
     });
 
+    it('relinks a multi-account payment to its reminted main row', async () => {
+      const card = await helpers.createAccount({ raw: true });
+      const voucher = await helpers.createAccount({ raw: true });
+      const ownCategory = await helpers.addCustomCategory({ name: 'Snapshot category', color: '#00ff00', raw: true });
+      const ownPayee = await helpers.createPayee({ payload: { name: 'Snapshot payee' }, raw: true });
+      const ownTag = await helpers.createTag({ payload: { name: 'snapshot-tag', color: '#000000' }, raw: true });
+      const [standalone] = await helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: voucher.id,
+          amount: 20,
+          categoryId: ownCategory.id,
+          payeeId: ownPayee.id,
+          tagIds: [ownTag.id],
+        }),
+        raw: true,
+      });
+      const [main] = await helpers.createTransaction({
+        payload: helpers.buildTransactionPayload({
+          accountId: card.id,
+          amount: 70,
+          paymentLegs: [{ accountId: voucher.id, amount: 30 }, { transactionId: standalone!.id }],
+        }),
+        raw: true,
+      });
+
+      const { base64 } = await exportArchive();
+      const target = await helpers.provisionSecondUserWithBaseCurrency();
+      await helpers.asUser({
+        cookies: target.cookies,
+        fn: async () => {
+          const restore = await helpers.withSelfHost(() => helpers.restoreBackup({ fileContent: base64 }));
+          expect(restore.statusCode).toBe(200);
+          expect((await helpers.waitForRestore({ jobId: restore.jobId! })).status).toBe('completed');
+
+          const restoredMain = (await helpers.getTransactions({ raw: true })).find((tx) => tx.paymentParts);
+          expect(restoredMain!.id).not.toBe(main!.id);
+          expect(restoredMain!.paymentTotal).toBe(120);
+          expect(restoredMain!.paymentParts!.filter((part) => part.isLinked)).toHaveLength(1);
+
+          const linkedId = restoredMain!.paymentParts!.find((part) => part.isLinked)!.transactionId;
+          const createdId = restoredMain!.paymentParts!.find(
+            (part) => part.transactionId !== restoredMain!.id && !part.isLinked,
+          )!.transactionId;
+          const linked = await helpers.getTransactionById({ id: linkedId, raw: true });
+          expect(linked!.paymentParentId).toBe(restoredMain!.id);
+
+          await helpers.updateTransaction({
+            id: restoredMain!.id,
+            payload: { paymentLegs: [{ transactionId: createdId }] },
+            raw: true,
+          });
+
+          const [categories, payees, tags] = await Promise.all([
+            helpers.getCategoriesList(),
+            helpers.listPayees({ raw: true }),
+            helpers.getTags({ raw: true }),
+          ]);
+          const unlinked = (await helpers.getTransactions({ includeTags: true, raw: true }))!.find(
+            (tx) => tx.id === linkedId,
+          )!;
+          expect(unlinked).toMatchObject({
+            paymentParentId: null,
+            categoryId: categories.find((category) => category.name === 'Snapshot category')!.id,
+            payeeId: payees.find((payee) => payee.name === 'Snapshot payee')!.id,
+          });
+          expect(unlinked.tags!.map((tag) => tag.id)).toEqual([tags.find((tag) => tag.name === 'snapshot-tag')!.id]);
+        },
+      });
+    });
+
     it('remaps the FIRE settings and saved transaction view filters to the reminted ids', async () => {
       const category = await helpers.addCustomCategory({ name: 'Rent', color: '#445566', raw: true });
       const portfolio = await helpers.createPortfolio({ payload: { name: 'FIRE PF' }, raw: true });
@@ -941,9 +1013,8 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
           expect(targetPayee!.id).not.toBe(payee.id);
           expect(targetTracker!.id).not.toBe(tracker.id);
 
-          const { fire, incomeCategoryIds, categoryOrder, savedTransactionViews } = await helpers.getUserSettings({
-            raw: true,
-          });
+          const { fire, fireHistory, incomeCategoryIds, categoryOrder, savedTransactionViews } =
+            await helpers.getUserSettings({ raw: true });
           expect(categoryOrder).toStrictEqual({
             [CATEGORY_ORDER_ROOT_KEY]: [targetCategory!.id],
             [targetCategory!.id]: [targetCategory!.id],
@@ -951,6 +1022,16 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
           expect(incomeCategoryIds).toEqual([targetCategories.find((c) => c.key === 'income')!.id]);
           expect(fire?.spendingExcludedCategoryIds).toEqual([targetCategory!.id]);
           expect(fire?.returnIndicatorId).toBe(`portfolio:${targetPortfolio!.id}`);
+          expect(fireHistory).toStrictEqual([
+            { month: FIRE_HISTORY_BASELINE_MONTH, fire: {} },
+            {
+              month: format(new Date(), 'yyyy-MM'),
+              fire: {
+                spendingExcludedCategoryIds: [targetCategory!.id],
+                returnIndicatorId: `portfolio:${targetPortfolio!.id}`,
+              },
+            },
+          ]);
           expect(savedTransactionViews).toHaveLength(1);
           expect(savedTransactionViews![0]!.filters).toEqual({
             accountIds: [targetAccount!.id],
@@ -2308,6 +2389,32 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
       const fetched = await helpers.getUserSettings({ raw: true });
       expect(fetched.locale).toBe('uk');
       expect(fetched.fire).toBeUndefined();
+    });
+
+    it('drops only an invalid fire history with a fire_settings_reset warning and keeps a valid fire', async () => {
+      await helpers.updateUserSettings({ settings: { locale: 'uk' } });
+      await helpers.patchUserSettings({ patch: { fire: { withdrawalRatePct: 3.5 } } });
+      const { buffer } = await exportArchive();
+      const { files } = helpers.parseBackupArchive({ buffer });
+
+      const settingsRows = readArchiveJson({ files, path: 'data/user-settings.json' }) as Row[];
+      (settingsRows[0]!.settings as Row).fireHistory = [{ month: '2025-13', fire: { withdrawalRatePct: 4 } }];
+      writeArchiveJson({ files, path: 'data/user-settings.json', value: settingsRows });
+      const base64 = await helpers.repackBackup({ files });
+
+      const restore = await helpers.restoreBackup({ fileContent: base64 });
+      expect(restore.statusCode).toBe(200);
+      const status = await helpers.waitForRestore({ jobId: restore.jobId! });
+
+      expect(status.status).toBe('completed');
+      const codes = status.summary?.warnings.map((w) => w.code);
+      expect(codes).toContain('fire_settings_reset');
+      expect(codes).not.toContain('settings_reset');
+
+      const fetched = await helpers.getUserSettings({ raw: true });
+      expect(fetched.locale).toBe('uk');
+      expect(fetched.fire).toMatchObject({ withdrawalRatePct: 3.5 });
+      expect(fetched.fireHistory).toBeUndefined();
     });
 
     it('drops FIRE ids that point at nothing restored and falls back to the default return indicator', async () => {

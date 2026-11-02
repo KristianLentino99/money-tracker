@@ -1,4 +1,5 @@
 import { api } from '@/api/_api';
+import type { EntityLogoFields, NonImageLogoPayload } from '@bt/shared/types';
 import {
   PORTFOLIO_TYPE,
   PortfolioBalanceModel,
@@ -48,7 +49,8 @@ export const getPortfolio = async ({ portfolioId }: { portfolioId: string }): Pr
 
 type UpdatePortfolioParams = {
   portfolioId: string;
-} & Partial<Omit<CreatePortfolioRequest, 'portfolioType'> & { portfolioType: PORTFOLIO_TYPE }>;
+} & Partial<Omit<CreatePortfolioRequest, 'portfolioType'> & { portfolioType: PORTFOLIO_TYPE }> &
+  NonImageLogoPayload;
 
 export const updatePortfolio = async ({ portfolioId, ...params }: UpdatePortfolioParams): Promise<PortfolioModel> => {
   const result = await api.put(`/investments/portfolios/${portfolioId}`, params);
@@ -317,7 +319,7 @@ interface TransactionPortfolioInvestment {
   } | null;
 }
 
-export interface TransactionPortfolioLinkResponse {
+export interface TransactionPortfolioLinkResponse extends EntityLogoFields {
   transferId: string;
   portfolioId: string;
   portfolioName: string;
@@ -357,8 +359,10 @@ export const getPortfolioSummaries = async (): Promise<PortfolioSummaryModel[]> 
   return result;
 };
 
-export const getPortfoliosAnnualizedReturns = async (): Promise<PortfolioAnnualizedReturnModel[]> => {
-  const result = await api.get('/investments/portfolios/annualized-returns');
+export const getPortfoliosAnnualizedReturns = async ({ asOf }: { asOf?: string } = {}): Promise<
+  PortfolioAnnualizedReturnModel[]
+> => {
+  const result = await api.get('/investments/portfolios/annualized-returns', asOf ? { asOf } : undefined);
   return result;
 };
 

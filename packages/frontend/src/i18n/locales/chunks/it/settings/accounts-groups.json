@@ -37,7 +37,7 @@
         "emptyBankLinked": "I conti di questa connessione sono organizzati in altri gruppi — spostarli non influisce sulla sincronizzazione.",
         "unlinkTooltip": "Rimuovi dal gruppo",
         "removeConfirmTitle": "Rimuovere \"{name}\" da questo gruppo?",
-        "removeConfirmDescription": "Il conto non viene eliminato — lascia solo questo gruppo.",
+        "removeConfirmDescription": "L'account non è stato cancellato — lascia solo questo gruppo.",
         "removeConfirmAction": "Rimuovi"
       },
       "delete": {

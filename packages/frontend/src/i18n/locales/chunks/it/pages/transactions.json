@@ -35,7 +35,7 @@
         "label": "Trasferimenti"
       },
       "plannedFilter": {
-        "label": "Pianificato"
+        "label": "Transazioni pianificate"
       },
       "filterOperation": {
         "all": "tutti",
@@ -130,7 +130,13 @@
         "transfers": "Transfers"
       },
       "matchingCount": "Total: {count}",
-      "selectAllShort": "All"
+      "selectAllShort": "All",
+      "tagModeAddHint": "Keeps current tags and adds these.",
+      "tagModeAddShort": "Add",
+      "tagModeRemoveHint": "Removes only these tags. Other tags stay.",
+      "tagModeRemoveShort": "Remove",
+      "tagModeReplaceHint": "Removes all current tags, then adds these.",
+      "tagModeReplaceShort": "Replace"
     },
     "bulkLinkSubscription": {
       "button": "Collega a un pagamento ricorrente",
@@ -176,7 +182,26 @@
         "noGroupsMessage": "Ancora nessun gruppo di transazioni.",
         "emptyStateHint": "Seleziona delle transazioni nella pagina Transazioni e fai clic su \"Crea gruppo\" per iniziare.",
         "transactionCountLabel": "Transazioni",
-        "deleteError": "Failed to delete the group. Please try again."
+        "deleteError": "Failed to delete the group. Please try again.",
+        "loadError": "Couldn't load transaction groups",
+        "description": "Bundle related transactions, like a trip or a transfer chain, and see them together.",
+        "noMatchTitle": "No groups match your search",
+        "moreActions": "More actions for {name}",
+        "columns": {
+          "name": "Name",
+          "transactions": "Transactions",
+          "date": "Date",
+          "net": "Net"
+        },
+        "sort": {
+          "label": "Sort groups",
+          "dateDesc": "Newest first",
+          "dateAsc": "Oldest first",
+          "nameAsc": "Name A–Z",
+          "nameDesc": "Name Z–A",
+          "amountDesc": "Net: high to low",
+          "amountAsc": "Net: low to high"
+        }
       },
       "errors": {
         "nameRequired": "Il nome del gruppo è obbligatorio",
@@ -187,7 +212,7 @@
       }
     },
     "planned": {
-      "label": "Pianificato",
+      "label": "Transazioni pianificate",
       "confirmedLabel": "Confermata",
       "plannedTooltip": "Transazione pianificata",
       "expiredTooltip": "Prevista {days} giorni fa, nessuna transazione bancaria corrispondente",
@@ -226,7 +251,6 @@
       "categorizationSourceValues": {
         "manual": "Manuale",
         "ai": "AI",
-        "mcc_rule": "MCC rule",
         "user_rule": "Regola utente",
         "subscription_rule": "Regola abbonamento",
         "payee_rule": "Regola beneficiario"

@@ -4,6 +4,7 @@ import {
   type CreateTransactionBody,
   type LinkTransactionsBody,
   PAYMENT_TYPES,
+  type PaymentLegInput,
   type RecordId,
   TRANSACTION_TRANSFER_NATURE,
   TRANSACTION_TYPES,
@@ -124,7 +125,13 @@ interface UpdateTransactionBasePayload {
   id: RecordId;
   payload?: Omit<
     Partial<ReturnType<typeof buildTransactionPayload>>,
-    'splits' | 'originalAmount' | 'originalCurrencyCode' | 'externalUrl' | 'externalReference' | 'location'
+    | 'splits'
+    | 'originalAmount'
+    | 'originalCurrencyCode'
+    | 'externalUrl'
+    | 'externalReference'
+    | 'location'
+    | 'paymentLegs'
   > & {
     externalUrl?: string | null;
     externalReference?: string | null;
@@ -137,6 +144,7 @@ interface UpdateTransactionBasePayload {
     splits?: SplitInput[] | null;
     originalAmount?: number | null;
     originalCurrencyCode?: string | null;
+    paymentLegs?: PaymentLegInput[] | null;
   };
 }
 
