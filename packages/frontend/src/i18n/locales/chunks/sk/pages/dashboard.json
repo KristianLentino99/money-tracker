@@ -83,9 +83,7 @@
         "title": "Štruktúra výdavkov",
         "today": "Dnes",
         "vsPreviousPeriod": "vs. predchádzajúce obdobie",
-        "viewButton": "Zobraziť",
-        "allExpenses": "All expenses",
-        "loadFailed": "Couldn't load the category breakdown."
+        "viewButton": "Zobraziť"
       },
       "latestTransactions": {
         "title": "Posledné transakcie",
@@ -135,7 +133,7 @@
         "title": "Peňažný tok",
         "description": "Zobrazuje čisté úspory: príjmy mínus výdavky za vybrané obdobie, vrátane trendu predchádzajúcich období",
         "vsPrevious": "vs. predchádzajúce obdobie",
-        "notAvailable": "N/A",
+        "notAvailable": "Nedostupné",
         "income": "Príjmy",
         "expenses": "Výdavky",
         "saved": "Ušetrené",
@@ -240,8 +238,8 @@
         },
         "hints": {
           "noHistory": "Porovnanie sa zobrazí po vašom prvom celom mesiaci.",
-          "fewMonths": "Priemer za {n} celý mesiac, ktorý zatiaľ máte. | Priemer za {n} celé mesiace, ktoré zatiaľ máte. | Priemer za {n} celých mesiacov, ktoré zatiaľ máte.",
-          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them."
+          "plannedFailed": "Plánované transakcie sa nepodarilo načítať. Predpoveď ich nemusí zahŕňať.",
+          "fewMonths": "Priemer za {n} celý mesiac, ktorý zatiaľ máte. | Priemer za {n} celé mesiace, ktoré zatiaľ máte. | Priemer za {n} celých mesiacov, ktoré zatiaľ máte."
         },
         "loadFailed": "Vaše výdavky sa nepodarilo načítať.",
         "settings": {
@@ -505,40 +503,6 @@
         "action": "Odomknúť"
       },
       "paceVs": "oproti {month}"
-    }
-  },
-  "pages": {
-    "dashboard": {
-      "vehicleMaintenance": {
-        "title": "Vehicle maintenance",
-        "description": "Keep track of upcoming maintenance for your vehicles.",
-        "count": "{count} reminders",
-        "unknownVehicle": "Unknown vehicle",
-        "status": {
-          "upcoming": "Upcoming",
-          "overdue": "Overdue"
-        },
-        "activity": {
-          "inspection": "Vehicle inspection",
-          "scheduled-service": "Scheduled service",
-          "oil-change": "Oil change",
-          "tires": "Tire rotation",
-          "brakes": "Brake service",
-          "battery": "Battery",
-          "other": "Other"
-        },
-        "dueDate": "Due {date}",
-        "dueDistance": "Due at {distance}",
-        "odometerLabel": "Current mileage ({unit})",
-        "odometerPlaceholder": "Enter current mileage",
-        "updateOdometer": "Update odometer",
-        "showLess": "Show less",
-        "showMore": "Show {count} more",
-        "notifications": {
-          "odometerUpdated": "Odometer updated",
-          "odometerUpdateError": "Could not update the odometer."
-        }
-      }
     }
   }
 }

@@ -2,17 +2,17 @@
   "oauth": {
     "authorize": {
       "title": "{name} richiede l'accesso ai dati MoneyMatter",
-      "description": "Questa app richiede le seguenti autorizzazioni:",
+      "redirect_notice": "Dopo l'approvazione si verrà reindirizzati a {host}. Continuare solo se si riconosce questo indirizzo.",
+      "description": "Questa app sta richiedendo i seguenti permessi:",
       "approve": "Approva",
       "deny": "Nega",
       "footer": "L'accesso può essere revocato in qualsiasi momento da Impostazioni > Integrazioni IA.",
-      "error": "Impossibile elaborare la richiesta. Riprova.",
+      "error": "Impossibile elaborare la richiesta. Riprovare.",
       "unexpected_response": "Risposta inattesa dal server. Riprovare.",
       "always_granted": "Sempre concesso",
-      "optional": "Facoltativo",
+      "optional": "Opzionale",
       "delete_warning": "Concedere l'accesso solo ad applicazioni affidabili",
-      "unknown_app": "Un'applicazione",
-      "redirect_notice": "After approval you will be redirected to {host}. Only continue if you recognize this address."
+      "unknown_app": "Un'applicazione"
     },
     "scopes": {
       "finance_read": {
@@ -36,7 +36,7 @@
         "desc": "Accesso mantenuto attivo senza richiedere l'autorizzazione a ogni sessione."
       },
       "unknown": {
-        "label": "Autorizzazione aggiuntiva",
+        "label": "Permessi aggiuntivi",
         "desc": "L'app ha richiesto un'autorizzazione sconosciuta a MoneyMatter."
       }
     }

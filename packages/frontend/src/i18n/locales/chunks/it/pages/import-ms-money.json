@@ -3,55 +3,55 @@
     "importExport": {
       "msMoneyImport": {
         "pageTitle": "Importa da Microsoft Money",
-        "pageDescription": "Trasferisci i tuoi conti, categorie e transazioni da un file .mny di Microsoft Money.",
+        "pageDescription": "Trasferire conti, categorie e transazioni da un file .mny di Microsoft Money.",
         "stepper": {
           "steps": {
-            "upload": "Carica",
-            "resolve": "Mappa dati",
-            "review": "Revisione",
-            "execute": "Importa",
+            "upload": "Caricamento",
+            "resolve": "Mappatura dati",
+            "review": "Revisiona",
+            "execute": "Importazione",
             "done": "Fatto"
           }
         },
         "fileUpload": {
-          "stepTitle": "Carica il tuo file Money",
-          "description": "Seleziona il file .mny salvato sul tuo computer da Microsoft Money.",
+          "stepTitle": "Carica il file di Money",
+          "description": "Scegliere il file .mny salvato da Microsoft Money sul computer.",
           "maxSize": "File .mny, fino a 50 MB",
           "passwordLabel": "Password del file (facoltativa)",
-          "passwordPlaceholder": "Inserisci la password del file",
+          "passwordPlaceholder": "Inserire la password del file",
           "passwordHint": "Lasciare vuoto a meno che non sia impostata una password in Microsoft Money.",
           "parsing": "Lettura del file…",
           "continue": "Continua",
           "errors": {
             "invalidFormatNamed": "\"{name}\" non è un file .mny.",
-            "passwordUnsupportedChars": "Questa password contiene caratteri che non possiamo inviare. Prova una password senza emoji o lettere non latine."
+            "passwordUnsupportedChars": "Questa password contiene caratteri che non possono essere inviati. Provare una password senza emoji o lettere non latine."
           }
         },
         "errors": {
-          "uploadUnavailable": "Il file caricato non è più disponibile. Carica di nuovo il tuo file Money."
+          "uploadUnavailable": "Il file caricato non è più disponibile. Caricare di nuovo il file di Money."
         },
         "resolve": {
-          "prepareFailed": "Impossibile preparare la mappatura di conti e categorie. Ricarica la pagina e riprova.",
+          "prepareFailed": "Impossibile preparare la mappatura di conti e categorie. Ricaricare la pagina e riprovare.",
           "accounts": {
             "sectionTitle": "Conti",
             "currentBalanceLabel": "Saldo attuale",
             "currentBalancePlaceholder": "Lascia vuoto per usare il totale importato",
             "willCreateHint": "Verrà creato in {currency}.",
-            "skippedNote": "{count} conto/i verranno saltati. Le loro transazioni, e gli eventuali trasferimenti da o verso di essi, non verranno importati.",
-            "currencyNotInFile": "Not in file"
+            "currencyNotInFile": "Non presente nel file",
+            "skippedNote": "{count} conti verranno saltati. Le relative transazioni, e i trasferimenti da o verso di essi, non verranno importati."
           },
           "categories": {
             "sectionTitle": "Categorie"
           },
           "quickActions": {
-            "mapExactMatches": "Abbina corrispondenze esatte",
-            "createNewForUnmatched": "Crea nuovo per i non abbinati",
+            "mapExactMatches": "Mappa corrispondenze esatte",
+            "createNewForUnmatched": "Crea nuovi per i non abbinati",
             "reset": "Reimposta",
             "tooltips": {
-              "mapExactMatchesAccounts": "Collega ogni conto il cui nome corrisponde esattamente a uno che hai già.",
-              "mapExactMatchesCategories": "Collega ogni categoria il cui nome corrisponde esattamente a una che hai già.",
-              "createNewForUnmatched": "Imposta ogni riga non ancora decisa su \"crea nuovo\".",
-              "reset": "Cancella tutte le scelte e riesegue l'abbinamento."
+              "mapExactMatchesAccounts": "Collega ogni conto il cui nome corrisponde esattamente a uno già esistente.",
+              "mapExactMatchesCategories": "Collega ogni categoria il cui nome corrisponde esattamente a una già esistente.",
+              "createNewForUnmatched": "Imposta su \"crea nuovo\" ogni riga non ancora decisa.",
+              "reset": "Cancella tutte le scelte ed esegue di nuovo l'abbinamento."
             }
           },
           "footer": {
@@ -62,31 +62,30 @@
         "review": {
           "transactions": "Transazioni",
           "transfersDetected": "Trasferimenti",
-          "outOfWallet": "Fuori portafoglio",
+          "outOfWallet": "Fuori dai conti",
           "duplicatesSkipped": "Duplicati saltati",
-          "willImport": "Verranno importate",
+          "willImport": "Da importare",
           "dateRange": "Intervallo di date: {from} — {to}",
           "warningsTitle": "Alcuni elementi sono stati esclusi",
           "warningsHint": "Queste righe non fanno parte dell'importazione.",
           "warnings": {
-            "accountTypeUnsupported": "{count} conto/i saltati",
-            "orphanRowSkipped": "{count} transazione/i saltate",
-            "transferCounterpartNotImported": "{count} lato/i di trasferimento importati come fuori portafoglio",
-            "rowLimitReached": "{count} transazione/i oltre il limite sono state scartate",
-            "accountCurrencyDefaulted": "{count} conto/i non avevano una valuta nel file, quindi è stato assunto USD: controlla la valuta nel passaggio dei conti prima di continuare",
-            "rowMissingDate": "{count} transazione/i senza data leggibile sono state saltate",
-            "accountNameMissing": "{count} conto/i senza nome",
-            "accountNameDuplicated": "{count} conto/i condividevano lo stesso nome",
-            "rowAmountUnreadable": "{count} transazione/i con importo non leggibile sono state saltate",
-            "fileSchemaUnexpected": "{count} problema/i imprevisto/i nella struttura del file",
-            "accountCurrencyMissing": "{count} account(s) had no currency in the file, so your base currency was used — change it on the accounts step if that is wrong"
+            "accountTypeUnsupported": "{count} conti saltati",
+            "orphanRowSkipped": "{count} transazioni saltate",
+            "transferCounterpartNotImported": "{count} lati di trasferimento importati come fuori dai conti",
+            "rowLimitReached": "{count} transazioni oltre il limite sono state scartate",
+            "accountCurrencyMissing": "{count} conti non avevano una valuta nel file, quindi è stata usata la valuta di base: modificarla nel passaggio dei conti se errata",
+            "rowMissingDate": "{count} transazioni senza data leggibile sono state saltate",
+            "accountNameMissing": "{count} conti erano senza nome",
+            "accountNameDuplicated": "{count} conti avevano lo stesso nome",
+            "rowAmountUnreadable": "{count} transazioni senza importo leggibile sono state saltate",
+            "fileSchemaUnexpected": "Trovati {count} problemi imprevisti nella struttura del file"
           },
           "includeVoided": {
-            "label": "Importa {count} transazione/i annullata/e",
-            "hint": "Microsoft Money mantiene le voci annullate nel registro ma non le applica mai al saldo, quindi vengono importate a zero e contrassegnate come \"Annullata\", conservandone data, beneficiario, categoria, memo e numero assegno."
+            "label": "Importa {count} transazioni annullate",
+            "hint": "Microsoft Money conserva le voci annullate nel registro ma non le applica mai al saldo, quindi vengono importate a zero con l'etichetta \"Void\", mantenendo data, beneficiario, categoria, memo e numero di assegno."
           },
-          "duplicatesTitle": "{count} possibile/i duplicato/i",
-          "duplicatesHint": "Queste sembrano già transazioni che hai. Deseleziona una per importarla comunque.",
+          "duplicatesTitle": "{count} possibili duplicati",
+          "duplicatesHint": "Queste sembrano transazioni già presenti. Selezionare una riga per importarla comunque; i duplicati non selezionati vengono saltati.",
           "back": "Indietro",
           "importing": "Avvio dell'importazione…",
           "importButton": "Importa {count} transazioni"
@@ -97,49 +96,49 @@
           "failed": "Importazione non riuscita.",
           "partialImportNote": "Alcune transazioni potrebbero essere già state importate.",
           "statusQueued": "In coda",
-          "statusRunning": "Importazione in corso",
-          "statusCompleted": "Completata",
+          "statusRunning": "Importazione",
+          "statusCompleted": "Completato",
           "statusFailed": "Non riuscita"
         },
         "done": {
           "successTitle": "Importazione terminata",
-          "successDescription": "Tutto ciò che era nel tuo file Money è ora nel tuo conto.",
-          "partialTitle": "Importazione completata con {count} problema/i",
-          "partialDescription": "La maggior parte delle righe è stata importata. L'elenco qui sotto mostra cosa non lo è stato.",
+          "successDescription": "Tutto il contenuto del file di Money è ora nel profilo.",
+          "partialTitle": "Importazione con {count} problemi",
+          "partialDescription": "La maggior parte delle righe è stata importata. L'elenco qui sotto mostra quelle non riuscite.",
           "emptyTitle": "Nulla di nuovo da importare",
-          "emptyDescription": "Ogni riga è stata saltata oppure era già presente nel tuo registro, quindi non è stata creata alcuna transazione.",
+          "emptyDescription": "Ogni riga è stata saltata o era già nel registro, quindi non è stata creata alcuna transazione.",
           "allFailedTitle": "Non è stato importato nulla",
-          "allFailedDescription": "Non è stato possibile creare alcuna transazione. Consulta gli errori qui sotto.",
+          "allFailedDescription": "Non è stato possibile creare alcuna transazione. Vedere gli errori qui sotto.",
           "accountsCreated": "Conti creati",
           "accountsLinked": "Conti collegati",
-          "accountsSkipped": "Conti saltati",
+          "accountsSkipped": "Conti omessi",
           "categoriesCreated": "Categorie create",
           "payeesCreated": "Beneficiari creati",
           "transactionsImported": "Transazioni importate",
           "transfersImported": "Trasferimenti importati",
-          "outOfWalletImported": "Trasferimenti fuori portafoglio",
+          "outOfWalletImported": "Trasferimenti fuori dai conti",
           "duplicatesSkipped": "Duplicati saltati",
           "voidedImported": "Annullate importate",
-          "mergedIntoPlanned": "Unite a transazioni pianificate",
+          "mergedIntoPlanned": "Unite alle pianificate",
           "balanceWarningTitle": "Alcuni saldi potrebbero non essere corretti",
-          "balanceWarningBody": "Non è stato possibile impostare il saldo finale su ogni conto. Controllali e correggili se necessario.",
-          "errorsTitle": "{count} riga/righe non è stato possibile importarle",
+          "balanceWarningBody": "Impossibile impostare il saldo finale su tutti i conti. Controllarli e rettificarli se necessario.",
+          "errorsTitle": "Impossibile importare {count} righe",
           "errorsOverflow": "…e altre {count}",
           "rowPrefix": "Riga {rowIndex}:",
-          "viewTransactions": "Visualizza transazioni",
-          "importAnother": "Importa un altro file",
           "errors": {
-            "rowsSuppressed": "{count} more row failed to import from this row onward. Only the first {listed} errors are listed. | {count} more rows failed to import from this row onward. Only the first {listed} errors are listed.",
-            "accountBalanceDesync": "An account balance could not be updated after the import. Check it and correct it manually.",
-            "rowImportFailed": "This row could not be imported."
-          }
+            "rowsSuppressed": "Importazione non riuscita per {count} altra riga da questa in poi. Sono elencati solo i primi {listed} errori. | Importazione non riuscita per altre {count} righe da questa in poi. Sono elencati solo i primi {listed} errori.",
+            "accountBalanceDesync": "Il saldo di un conto non è stato aggiornato dopo l'importazione. Controllarlo e correggerlo manualmente.",
+            "rowImportFailed": "Impossibile importare questa riga."
+          },
+          "viewTransactions": "Visualizza transazioni",
+          "importAnother": "Importa un altro file"
         },
         "leaseExpired": {
           "title": "Il file caricato non è più disponibile",
-          "description": "La copia elaborata del tuo file Money è stata rilasciata dopo un periodo di inattività. Non è stato possibile conservare le tue scelte di mappatura, quindi l'importazione deve ripartire dal passaggio di caricamento.",
+          "description": "La copia analizzata del file di Money è stata rilasciata dopo un periodo di inattività. Non è stato possibile conservare le scelte di mappatura, quindi l'importazione deve ripartire dal caricamento.",
           "action": "Ricomincia"
         },
-        "leaseResourceLabel": "Il file caricato"
+        "leaseResourceLabel": "File caricato"
       }
     }
   }

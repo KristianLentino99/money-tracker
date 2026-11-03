@@ -2,7 +2,7 @@
   "settings": {
     "security": {
       "title": "Impostazioni di sicurezza",
-      "description": "Gestisci i tuoi metodi di accesso, le sessioni attive e la password",
+      "description": "Gestire i metodi di accesso, le sessioni attive e la password",
       "tabs": {
         "loginMethods": "Metodi di accesso",
         "activeSessions": "Sessioni attive",
@@ -12,15 +12,15 @@
       },
       "loginMethods": {
         "title": "Metodi di accesso",
-        "description": "Gestisci come accedi al tuo account",
+        "description": "Gestire le modalità di accesso al profilo",
         "oauth": {
           "connectedAs": "Connesso come {email}",
-          "accountName": "Account {provider}",
+          "accountName": "Profilo {provider}",
           "notConnected": "Non connesso",
           "disconnect": "Disconnetti",
-          "connect": "Connetti",
+          "disconnectConfirmTitle": "Disconnect {provider}?",
           "disconnectConfirmDescription": "You won't be able to log in with this {provider} account anymore. You can reconnect it at any time.",
-          "disconnectConfirmTitle": "Disconnect {provider}?"
+          "connect": "Connetti"
         },
         "password": {
           "title": "Password",
@@ -32,58 +32,57 @@
         "passkeys": {
           "title": "Passkey",
           "noPasskeys": "Nessuna passkey registrata",
-          "passkeyCount": "{count} passkey registrata | {count} passkey registrate",
-          "addButton": "Aggiungi passkey",
+          "passkeyCount": "{count} passkey registrate",
+          "addButton": "Aggiungi Passkey",
           "passkeyName": "Passkey",
-          "added": "Aggiunta {date}",
-          "rename": "Rename",
-          "renamePlaceholder": "Enter passkey name",
-          "deleteConfirmTitle": "Remove passkey?",
-          "deleteConfirmDescription": "\"{name}\" will no longer be able to sign in to your account. This cannot be undone."
+          "added": "Aggiunta il {date}",
+          "rename": "Rinomina",
+          "renamePlaceholder": "Inserire il nome della passkey",
+          "deleteConfirmTitle": "Rimuovere la passkey?",
+          "deleteConfirmDescription": "\"{name}\" non potrà più essere usata per accedere al profilo. L'operazione non può essere annullata."
         },
-        "warningOneMethod": "Aggiungi un altro metodo di accesso prima di disconnettere il tuo account OAuth.",
+        "warningOneMethod": "Aggiungere un altro metodo di accesso prima di disconnettere il profilo OAuth.",
         "notifications": {
-          "oauthConnectFailed": "Impossibile connettere l'account {provider}",
-          "oauthDisconnectSuccess": "Account {provider} disconnesso",
-          "oauthDisconnectFailed": "Impossibile disconnettere l'account {provider}",
-          "passkeyAddSuccess": "Passkey aggiunta correttamente",
-          "passkeyAddFailed": "Impossibile aggiungere la passkey. Assicurati che il tuo dispositivo supporti le passkey.",
+          "oauthConnectFailed": "Connessione del profilo {provider} non riuscita",
+          "oauthDisconnectSuccess": "Profilo {provider} disconnesso",
+          "oauthDisconnectFailed": "Disconnessione del profilo {provider} non riuscita",
+          "passkeyAddSuccess": "Passkey aggiunta con successo",
+          "passkeyAddFailed": "Aggiunta della passkey non riuscita. Verificare che il dispositivo supporti le passkey.",
           "passkeyRemoveSuccess": "Passkey rimossa",
-          "passkeyRemoveFailed": "Impossibile rimuovere la passkey",
-          "passkeyRenameFailed": "Failed to rename passkey"
+          "passkeyRemoveFailed": "Rimozione della passkey non riuscita",
+          "passkeyRenameFailed": "Rinomina della passkey non riuscita"
         }
       },
       "activeSessions": {
         "title": "Sessioni attive",
-        "description": "Gestisci i dispositivi su cui hai effettuato l'accesso",
+        "description": "Gestire i dispositivi su cui è attivo l'accesso",
         "currentBadge": "Attuale",
         "unknownLocation": "Posizione sconosciuta",
         "lastActive": "Ultima attività: {date}",
         "noSessions": "Nessuna sessione attiva trovata",
-        "revokeAllButton": "Disconnetti tutte le altre sessioni",
+        "loadError": "Impossibile caricare le sessioni attive.",
+        "revokeAllButton": "Esci da tutte le altre sessioni",
         "deviceTypes": {
           "unknownDevice": "Dispositivo sconosciuto",
           "unknownBrowser": "Browser sconosciuto"
         },
         "timeAgo": {
-          "justNow": "Proprio ora",
+          "justNow": "Adesso",
           "minutesAgo": "{count} minuto fa | {count} minuti fa",
           "hoursAgo": "{count} ora fa | {count} ore fa",
           "daysAgo": "{count} giorno fa | {count} giorni fa"
         },
         "notifications": {
-          "loadFailed": "Impossibile caricare le sessioni",
           "revokeSuccess": "Sessione revocata",
-          "revokeFailed": "Impossibile revocare la sessione",
+          "revokeFailed": "Revoca della sessione non riuscita",
           "revokeAllSuccess": "Tutte le altre sessioni sono state disconnesse",
-          "revokeAllFailed": "Impossibile revocare le sessioni"
-        },
-        "loadError": "We couldn't load your active sessions."
+          "revokeAllFailed": "Revoca delle sessioni non riuscita"
+        }
       },
       "passwordSection": {
         "title": "Password",
-        "descriptionChange": "Cambia la tua password",
-        "descriptionSet": "Configura una password per il tuo account",
+        "descriptionChange": "Modificare la password",
+        "descriptionSet": "Impostare una password per il profilo",
         "labels": {
           "currentPassword": "Password attuale",
           "newPassword": "Nuova password",
@@ -91,9 +90,9 @@
           "confirmPassword": "Conferma password"
         },
         "placeholders": {
-          "currentPassword": "Inserisci la password attuale",
-          "newPassword": "Inserisci la nuova password",
-          "confirmPassword": "Conferma la nuova password"
+          "currentPassword": "Inserire la password attuale",
+          "newPassword": "Inserire la nuova password",
+          "confirmPassword": "Confermare la nuova password"
         },
         "buttons": {
           "change": "Cambia password",
@@ -109,137 +108,137 @@
         "requirements": {
           "title": "Requisiti della password",
           "minLength": "Minimo 8 caratteri",
-          "mixedCase": "Si consiglia un mix di lettere maiuscole e minuscole",
-          "specialChars": "Includi numeri e caratteri speciali per una maggiore sicurezza"
+          "mixedCase": "Consigliato un mix di lettere maiuscole e minuscole",
+          "specialChars": "Includere numeri e caratteri speciali per una maggiore sicurezza"
         },
         "validation": {
           "minLength": "La password deve contenere almeno 8 caratteri",
           "passwordsNoMatch": "Le password non corrispondono"
         },
         "notifications": {
-          "changeSuccess": "Password modificata correttamente",
-          "changeFailed": "Impossibile modificare la password",
-          "setSuccess": "Password impostata correttamente",
-          "setFailed": "Impossibile impostare la password",
+          "changeSuccess": "Password cambiata con successo",
+          "changeFailed": "Cambio della password non riuscito",
+          "setSuccess": "Password impostata con successo",
+          "setFailed": "Impostazione della password non riuscita",
           "unexpectedError": "Si è verificato un errore imprevisto",
-          "updateFailed": "Impossibile aggiornare la password"
+          "updateFailed": "Aggiornamento della password non riuscito"
         },
         "errors": {
-          "incorrectCurrentPassword": "Current password is incorrect.",
-          "passwordAlreadySet": "Your account already has a password. Use the form to change it."
+          "incorrectCurrentPassword": "La password attuale non è corretta.",
+          "passwordAlreadySet": "Il profilo ha già una password. Usare il modulo per modificarla."
         }
       },
       "dangerZone": "Zona pericolosa",
       "wipeData": {
         "title": "Cancella tutti i dati",
-        "warningFull": "{strong} Questa azione rimuove tutto ciò che si trova nel tuo spazio di lavoro. Il tuo accesso resterà attivo, così potrai ricominciare da capo.",
+        "warningFull": "{strong} Questa azione rimuove tutto lo spazio di lavoro. L'accesso resta attivo per poter ricominciare da capo.",
         "warningStrong": "Attenzione:",
         "button": "Cancella dati",
         "dialog": {
-          "title": "Cancellare tutti i tuoi dati?",
-          "description": "Questo eliminerà definitivamente tutto ciò che si trova nel tuo spazio di lavoro, incluso:",
+          "title": "Cancellare tutti i dati?",
+          "description": "Tutto il contenuto dello spazio di lavoro verrà eliminato definitivamente, tra cui:",
           "list": {
             "accounts": "Conti e saldi",
             "transactions": "Transazioni, rimborsi e trasferimenti",
+            "budgets": "Budget, tracker, etichette e categorie",
             "portfolios": "Investimenti, portafogli e posizioni",
             "settings": "Impostazioni utente, chiavi IA e stato dell'onboarding",
-            "baseCurrency": "Valuta di base e tassi di cambio",
-            "budgets": "Budgets, tags, and categories"
+            "baseCurrency": "Valuta di base e tassi di cambio"
           },
-          "kept": "Il tuo accesso e il tuo profilo rimarranno. Ricomincerai dal flusso di onboarding.",
-          "typeConfirm": "Per confermare, digita {phrase} qui sotto:",
+          "kept": "Accesso e profilo restano. Si ripartirà dalla procedura di onboarding.",
+          "typeConfirm": "Per confermare, digitare {phrase} qui sotto:",
           "confirmLabel": "Cancella dati",
           "confirmLoading": "Cancellazione…"
         },
         "sharingDialog": {
-          "title": "Stai condividendo dati con altri utenti",
-          "warning": "Gli altri perderanno l'accesso immediatamente",
-          "description": "Cancellando i tuoi dati revocherai l'accesso alle seguenti risorse condivise:",
-          "householdsCount": "E {count} membro del nucleo familiare perderà l'accesso. | E {count} membri del nucleo familiare perderanno l'accesso.",
+          "title": "Alcuni dati sono condivisi con altri utenti",
+          "warning": "Gli altri perderanno subito l'accesso",
+          "description": "La cancellazione dei dati revoca l'accesso alle seguenti risorse condivise:",
+          "householdsCount": "Inoltre {count} membro del Nucleo Familiare perderà l'accesso. | Inoltre {count} membri del Nucleo Familiare perderanno l'accesso.",
           "confirmLabel": "Cancella comunque"
         },
         "notifications": {
           "success": "Tutti i dati sono stati cancellati. Si riparte da zero.",
-          "failed": "Impossibile cancellare i dati. Riprova."
+          "failed": "Impossibile cancellare i dati. Riprovare."
         }
       },
       "deleteAccount": {
-        "title": "Elimina il tuo account",
-        "warningFull": "Una volta eliminato il tuo account, non si può tornare indietro. {strong} Sii certo della tua scelta.",
-        "warningStrong": "Tutti i tuoi dati saranno cancellati definitivamente.",
-        "button": "Elimina il mio account",
+        "title": "Elimina il profilo",
+        "warningFull": "Una volta eliminato il profilo, non è possibile tornare indietro. {strong} Procedere solo se assolutamente certi.",
+        "warningStrong": "Tutti i dati verranno cancellati definitivamente.",
+        "button": "Elimina il mio profilo",
         "dialog": {
-          "title": "Sei assolutamente sicuro?",
-          "description": "Questa azione non può essere annullata. Questo eliminerà definitivamente il tuo account e rimuoverà tutti i tuoi dati, inclusi:",
+          "title": "Procedere davvero?",
+          "description": "Questa azione non può essere annullata. Il profilo verrà eliminato definitivamente e tutti i dati rimossi, tra cui:",
           "dataList": {
             "accounts": "Tutti i conti e le transazioni",
-            "categories": "Tutte le categorie",
+            "categories": "Tutte le categorie, i budget e i tracker",
             "portfolios": "Tutti i portafogli di investimento",
-            "settings": "Tutte le impostazioni e preferenze"
+            "settings": "Tutte le impostazioni e le preferenze"
           },
-          "confirmFull": "Digita {email} per confermare",
-          "placeholder": "Inserisci la tua email",
-          "acceptButton": "Elimina il mio account",
-          "acceptButtonLoading": "Eliminazione in corso...",
-          "appStoreWarning": "Deleting your account doesn't cancel your App Store subscription, and Apple will keep charging you. Cancel it in your {link} first.",
-          "appStoreWarningLink": "App Store subscriptions"
+          "confirmFull": "Digitare {email} per confermare",
+          "placeholder": "Inserire l'email",
+          "acceptButton": "Elimina il mio profilo",
+          "acceptButtonLoading": "Eliminazione...",
+          "appStoreWarning": "L'eliminazione del profilo non annulla l'abbonamento all'App Store e Apple continuerà ad addebitarlo. Annullarlo prima in {link}.",
+          "appStoreWarningLink": "Abbonamenti App Store"
         },
         "notifications": {
-          "success": "Il tuo account è stato eliminato correttamente",
-          "failed": "Si è verificato un errore durante l'eliminazione del tuo account"
+          "success": "Il profilo è stato eliminato con successo",
+          "failed": "Si è verificato un errore durante l'eliminazione del profilo"
         }
       },
       "backup": {
         "download": {
           "title": "Scarica backup",
-          "description": "Salva una copia completa e ripristinabile di tutti i tuoi dati come file zip.",
+          "description": "Salvare una copia completa e ripristinabile di tutti i dati come file zip.",
           "button": "Scarica",
-          "loading": "Preparazione in corso...",
+          "loading": "Preparazione...",
           "success": "Backup scaricato",
-          "failed": "Impossibile creare il backup. Riprova.",
-          "downloadBlocked": "Il backup è stato creato, ma il tuo browser ha bloccato il download. Controlla le impostazioni di download e riprova.",
+          "failed": "Impossibile creare il backup. Riprovare.",
+          "downloadBlocked": "Il backup è stato creato ma il browser ha bloccato il download. Controllare le impostazioni di download e riprovare.",
           "limitations": {
             "trigger": "Ha delle limitazioni",
             "title": "Che cosa non include un backup",
-            "intro": "Il tuo backup include tutti i tuoi dati. Per motivi di sicurezza, alcuni elementi cifrati non possono essere trasferiti e vanno riconfigurati dopo il ripristino:",
+            "intro": "Il backup include tutti i dati. Per sicurezza, alcuni elementi crittografati non possono essere inclusi e vanno riconfigurati dopo il ripristino:",
             "items": {
               "bankConnectionsTerm": "Connessioni bancarie",
-              "bankConnections": "{term} — i token di accesso sono cifrati e legati a questo server, quindi dovrai riconnettere ogni banca dopo il ripristino.",
+              "bankConnections": "{term}: i token di accesso sono crittografati e legati a questo server, quindi ogni banca andrà ricollegata dopo il ripristino.",
               "aiKeysTerm": "Chiavi API IA",
-              "aiKeys": "{term} — memorizzate cifrate, quindi dovrai reinserirle dopo il ripristino."
+              "aiKeys": "{term}: memorizzate crittografate, quindi andranno reinserite dopo il ripristino."
             },
-            "included": "Tutto il resto — conti, transazioni, categorie, investimenti, prestiti, tag, beneficiari e abbonamenti — è incluso."
+            "included": "Tutto il resto (conti, transazioni, categorie, budget, tracker, investimenti, prestiti, etichette, beneficiari e abbonamenti) è incluso."
           }
         },
         "restore": {
           "title": "Ripristina da backup",
-          "description": "Sostituisce tutti i dati attuali con il contenuto di un file zip di backup.",
+          "description": "Sostituire tutti i dati attuali con il contenuto di un file zip di backup.",
           "button": "Seleziona file di backup",
           "reading": "Lettura del file...",
           "failedGeneric": "Ripristino del backup non riuscito",
-          "invalidFileType": "Scegli un file di backup .zip.",
-          "fileTooLarge": "Il backup è troppo grande per essere ripristinato (max {max}).",
-          "readFailed": "Impossibile leggere quel file. Riprova.",
+          "invalidFileType": "Scegliere un file di backup .zip.",
+          "fileTooLarge": "Questo backup è troppo grande per essere ripristinato (max {max}).",
+          "readFailed": "Impossibile leggere il file. Riprovare.",
           "confirm": {
-            "title": "Ripristinare da backup?",
-            "warning": "Questo sostituirà TUTTI i tuoi dati attuali",
-            "description": "Tutto ciò che si trova attualmente nel tuo account verrà eliminato definitivamente e sostituito con il contenuto di questo backup. Questa azione non può essere annullata.",
+            "title": "Ripristinare dal backup?",
+            "warning": "Questa operazione sostituisce TUTTI i dati attuali",
+            "description": "Tutto il contenuto attuale del profilo verrà eliminato definitivamente e sostituito con il contenuto di questo backup. L'operazione non può essere annullata.",
             "selectedFile": "File selezionato: {name}",
             "confirmLabel": "Ripristina",
-            "reconnectTitle": "Dopo il ripristino, riconfigura quanto segue",
-            "reconnectBankConnections": "Riconnetti le tue connessioni bancarie",
-            "reconnectAiKeys": "Reinserisci le tue chiavi API IA (se ne usi)"
+            "reconnectTitle": "Dopo il ripristino, configurare di nuovo questi elementi",
+            "reconnectBankConnections": "Ricollegare le connessioni bancarie",
+            "reconnectAiKeys": "Reinserire le chiavi API IA (se usate)"
           },
           "acknowledge": {
             "title": "Le risorse condivise perderanno l'accesso",
-            "description": "Possiedi risorse a cui altre persone hanno attualmente accesso. Il ripristino rimuoverà tale accesso.",
-            "householdsCount": "{count} nucleo familiare condiviso | {count} nuclei familiari condivisi",
-            "checkbox": "Capisco che queste risorse condivise perderanno l'accesso.",
+            "description": "Alcune risorse di proprietà sono attualmente accessibili ad altre persone. Il ripristino rimuoverà tale accesso.",
+            "householdsCount": "{count} Nucleo Familiare condiviso | {count} Nuclei Familiari condivisi",
+            "checkbox": "Sono consapevole che queste risorse condivise perderanno l'accesso.",
             "confirmLabel": "Ripristina comunque"
           },
           "progress": {
-            "title": "Ripristino dei tuoi dati in corso",
-            "description": "Potrebbe richiedere un po' di tempo. Tieni aperta questa finestra.",
+            "title": "Ripristino dei dati",
+            "description": "L'operazione può richiedere un po' di tempo. Tenere aperta questa finestra.",
             "inserted": "{count} record ripristinati",
             "phases": {
               "validating": "Convalida del backup...",
@@ -251,46 +250,46 @@
           },
           "summary": {
             "title": "Ripristino completato",
-            "description": "I tuoi dati sono stati ripristinati dal backup.",
+            "description": "I dati sono stati ripristinati dal backup.",
             "recordsHeading": "Record ripristinati",
             "warningsHeading": "Avvisi",
-            "noRecords": "Nessun record è stato ripristinato.",
+            "noRecords": "Nessun record ripristinato.",
             "doneButton": "Fatto"
+          },
+          "warnings": {
+            "sharesSkipped": "Saltata {count} riga di \"{table}\": le risorse condivise fanno riferimento a utenti inesistenti su questa istanza. | Saltate {count} righe di \"{table}\": le risorse condivise fanno riferimento a utenti inesistenti su questa istanza.",
+            "currencyMissing": "Saltata {count} valuta non disponibile su questa istanza. | Saltate {count} valute non disponibili su questa istanza.",
+            "unknownTableIgnored": "Il backup contiene una tabella sconosciuta \"{table}\", che è stata ignorata.",
+            "unknownColumnDropped": "Rimossa una colonna sconosciuta da \"{table}\": {columns}. | Rimosse colonne sconosciute da \"{table}\": {columns}.",
+            "tableMissingTreatedEmpty": "Il backup non contiene alcun file per \"{table}\", che è stata considerata vuota.",
+            "settingsReset": "Le impostazioni salvate non corrispondevano al formato attuale e sono state riportate ai valori predefiniti.",
+            "fireSettingsReset": "Le impostazioni FIRE salvate non corrispondevano al formato attuale e sono state riportate ai valori predefiniti.",
+            "noSettings": "Il backup non conteneva impostazioni salvate; sono stati applicati i valori predefiniti.",
+            "foreignReferenceDropped": "Rimossa {count} riga da \"{table}\" il cui \"{column}\" faceva riferimento a dati esterni a questo backup. | Rimosse {count} righe da \"{table}\" il cui \"{column}\" faceva riferimento a dati esterni a questo backup.",
+            "invalidRowDropped": "Rimossa {count} riga di \"{table}\" che non ha superato la convalida. | Rimosse {count} righe di \"{table}\" che non hanno superato la convalida.",
+            "foreignReferenceNulled": "Svuotato \"{column}\" in {count} riga di \"{table}\" che faceva riferimento a dati esterni a questo backup. | Svuotato \"{column}\" in {count} righe di \"{table}\" che facevano riferimento a dati esterni a questo backup.",
+            "unknown": "Alcuni dati del backup sono stati saltati o modificati durante il ripristino."
           },
           "failed": {
             "title": "Ripristino non riuscito",
-            "genericError": "Si è verificato un errore durante il ripristino del tuo backup.",
-            "unconfirmed": "Impossibile confermare lo stato del ripristino. Ricarica la pagina e controlla i tuoi dati.",
+            "genericError": "Si è verificato un problema durante il ripristino del backup.",
+            "unconfirmed": "Impossibile confermare lo stato del ripristino. Ricaricare la pagina e controllare i dati.",
             "closeButton": "Chiudi",
-            "technicalDetails": "Technical details"
+            "technicalDetails": "Dettagli tecnici"
           },
           "overlay": {
-            "title": "Ripristino dei tuoi dati in corso",
-            "description": "Tieni aperta questa scheda. Stiamo sostituendo i tuoi dati con quelli del backup — potrebbe richiedere un momento.",
-            "preparing": "Preparazione in corso…",
-            "finishing": "Completamento in corso",
-            "takingLong": "L'operazione sta richiedendo più tempo del previsto. I tuoi dati sono ancora in fase di ripristino — tieni aperta questa scheda.",
-            "unreachableTitle": "Impossibile raggiungere il server",
-            "unreachableDescription": "Abbiamo perso il contatto mentre il ripristino era in corso. Potrebbe comunque essere in fase di completamento. Puoi chiudere questo messaggio e ricaricare la pagina per verificare.",
+            "title": "Ripristino dei dati",
+            "description": "Tenere aperta questa scheda. I dati vengono sostituiti con il backup: potrebbe volerci un momento.",
+            "preparing": "Preparazione…",
+            "finishing": "Completamento",
+            "takingLong": "L'operazione sta richiedendo più tempo del solito. Il ripristino dei dati è ancora in corso: tenere aperta questa scheda.",
+            "unreachableTitle": "Impossibile contattare il server",
+            "unreachableDescription": "Il contatto si è interrotto durante il ripristino, che potrebbe essere ancora in fase di completamento. È possibile chiudere questo messaggio e ricaricare la pagina per verificare.",
             "failedTitle": "Ripristino non riuscito",
             "dismiss": "Chiudi"
-          },
-          "warnings": {
-            "sharesSkipped": "Skipped {count} \"{table}\" row: shared resources reference users that don't exist on this instance. | Skipped {count} \"{table}\" rows: shared resources reference users that don't exist on this instance.",
-            "currencyMissing": "Skipped {count} currency that isn't available on this instance. | Skipped {count} currencies that aren't available on this instance.",
-            "unknownTableIgnored": "The backup contains an unknown table \"{table}\"; it was ignored.",
-            "unknownColumnDropped": "Dropped an unknown column on \"{table}\": {columns}. | Dropped unknown columns on \"{table}\": {columns}.",
-            "tableMissingTreatedEmpty": "The backup has no file for \"{table}\"; it was treated as empty.",
-            "settingsReset": "Saved settings did not match the current format and were reset to defaults.",
-            "fireSettingsReset": "Saved FIRE settings did not match the current format and were reset to defaults.",
-            "noSettings": "The backup had no saved settings; defaults were applied.",
-            "foreignReferenceDropped": "Dropped {count} row from \"{table}\" whose \"{column}\" referenced data outside this backup. | Dropped {count} rows from \"{table}\" whose \"{column}\" referenced data outside this backup.",
-            "invalidRowDropped": "Dropped {count} \"{table}\" row that failed validation. | Dropped {count} \"{table}\" rows that failed validation.",
-            "foreignReferenceNulled": "Cleared \"{column}\" on {count} row in \"{table}\" that referenced data outside this backup. | Cleared \"{column}\" on {count} rows in \"{table}\" that referenced data outside this backup.",
-            "unknown": "Some data in the backup was skipped or adjusted during the restore."
           }
         },
-        "attachmentsNotIncluded": "Gli allegati delle transazioni, come scontrini, fatture e altri file, non sono inclusi nei backup e non vengono ripristinati."
+        "attachmentsNotIncluded": "Gli allegati delle transazioni (ricevute, fatture e altri file) non sono inclusi nei backup e non vengono ripristinati."
       }
     }
   }

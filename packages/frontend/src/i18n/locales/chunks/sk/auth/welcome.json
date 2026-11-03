@@ -42,9 +42,9 @@
         },
         "unauthorizedClient": "Táto aplikácia nemá oprávnenie používať túto metódu overovania",
         "temporarilyUnavailable": "Autentifikačná služba je dočasne nedostupná. Skúste to neskôr, prosím.",
-        "emailDoesNotMatch": "The email on this provider account doesn't match your account email. Use a provider account with the same email.",
-        "emailNotVerified": "Check your email to verify your address, then sign in again.",
-        "unableToLinkAccount": "We couldn't link this account because this server doesn't treat the provider's email as verified. Contact your administrator."
+        "unableToLinkAccount": "Tento účet sa nepodarilo prepojiť, pretože tento server nepovažuje email poskytovateľa za overený. Kontaktujte svojho správcu.",
+        "emailDoesNotMatch": "Email na tomto účte poskytovateľa sa nezhoduje s emailom vášho účtu. Použite účet poskytovateľa s rovnakým emailom.",
+        "emailNotVerified": "Skontrolujte svoju emailovú schránku a overte svoju adresu, potom sa prihláste znova."
       }
     }
   }

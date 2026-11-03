@@ -1,134 +1,51 @@
 {
   "settings": {
     "ai": {
-      "title": "Impostazione IA",
+      "title": "Impostazioni IA",
       "description": "Scegliere quale modello IA alimenta ciascuna funzionalità, aggiungere modelli personalizzati e connettere applicazioni come Claude e ChatGPT.",
       "tabs": {
         "features": "Funzionalità IA",
-        "apiKeys": "Chiavi API",
-        "invalidKeysTooltip": "Una o più chiavi API non sono valide",
-        "customEndpoints": "Endpoint personalizzati",
-        "invalidEndpointsTooltip": "Uno o più endpoint personalizzati non funzionano più",
         "models": "Modelli IA",
         "connectedApps": "Connettori (MCP)",
         "invalidConnectionsTooltip": "Uno dei modelli IA richiede attenzione"
       },
-      "apiKeyManager": {
-        "title": "Chiavi API",
-        "description": "Aggiungi le tue chiavi API per usare provider specifici",
-        "badges": {
-          "default": "Predefinito"
-        },
-        "buttons": {
-          "setDefault": "Imposta come predefinito"
-        },
-        "invalidKeyHelp": "Aggiungi una nuova chiave qui sotto per sostituire questa, oppure rimuovila se non ti serve più.",
-        "modelValue": "Modello: {model}",
-        "deleteDialog": {
-          "title": "Rimuovere la chiave API?",
-          "description": "Sei sicuro di voler rimuovere la chiave API di {provider}?",
-          "descriptionMultiple": "Le funzionalità IA che attualmente usano {provider} passeranno a un altro provider disponibile.",
-          "cancel": "Annulla",
-          "remove": "Rimuovi"
-        },
-        "allConfigured": "Tutti i provider sono configurati",
-        "form": {
-          "titleAdd": "Aggiungi chiave API",
-          "titleAddAnother": "Aggiungi un altro provider",
-          "providerLabel": "Provider",
-          "apiKeyLabel": "Chiave API",
-          "modelLabel": "ID modello OpenRouter",
-          "modelPlaceholder": "deepseek/deepseek-v4-flash",
-          "modelDescription": "Inserisci l'identificativo esatto del modello da",
-          "modelListLink": "elenco modelli di OpenRouter",
-          "buttonSaving": "Convalida in corso...",
-          "buttonSave": "Salva chiave"
-        },
-        "providers": {
-          "anthropic": {
-            "label": "Anthropic (Claude)",
-            "placeholder": "sk-ant-...",
-            "description": "Ottieni la tua chiave API da"
-          },
-          "openai": {
-            "label": "OpenAI (GPT)",
-            "placeholder": "sk-...",
-            "description": "Ottieni la tua chiave API da"
-          },
-          "google": {
-            "label": "Google (Gemini)",
-            "placeholder": "AIza...",
-            "description": "Ottieni la tua chiave API da"
-          },
-          "groq": {
-            "label": "Groq (Llama, GPT-OSS)",
-            "placeholder": "gsk_...",
-            "description": "Ottieni la tua chiave API da"
-          },
-          "openrouter": {
-            "label": "OpenRouter",
-            "placeholder": "sk-or-v1-...",
-            "description": "Ottieni la tua chiave API da"
-          },
-          "deepseek": {
-            "label": "DeepSeek",
-            "placeholder": "sk-...",
-            "description": "Ottieni la tua chiave API da"
-          }
-        },
-        "notifications": {
-          "saveSuccess": "Chiave API salvata e convalidata correttamente",
-          "saveFailed": "La chiave API non funziona. Verifica che la chiave sia corretta, che abbia credito sufficiente e i permessi necessari.",
-          "setDefaultSuccess": "{provider} impostato come predefinito",
-          "setDefaultFailed": "Impossibile impostare il provider predefinito",
-          "removeSuccess": "Chiave API di {provider} rimossa",
-          "removeFailed": "Impossibile rimuovere la chiave API"
-        }
-      },
       "credentialStatus": {
         "validated": "Validato {timeAgo}",
         "failed": "Respinto {timeAgo}",
-        "invalidBadge": "Non valida"
+        "invalidBadge": "Non valido"
       },
       "features": {
         "title": "Funzionalità IA",
         "description": "Configurare quale modello usare per ogni funzionalità basata sull'IA",
-        "loading": "Caricamento funzionalità...",
         "howItWorks": "Come funziona",
         "loadError": "Impossibile caricare le funzionalità IA."
       },
       "categorization": {
-        "modelHint": {
-          "trigger": "Quale modello dovrei scegliere?",
-          "text": "Per la categorizzazione delle transazioni, sono consigliati modelli economici come Gemma 4, Gemini 3.5 Flash Lite o Claude Haiku 4.5. La categorizzazione è un compito semplice che non richiede modelli di ragionamento costosi. Usare modelli più economici ti permette di elaborare più transazioni a un costo inferiore."
-        },
         "howItWorks": {
-          "title": "Come funziona",
           "points": {
             "autoSync": "Quando le transazioni vengono sincronizzate dalla banca, quelle non classificate vengono inviate automaticamente all'IA per la classificazione.",
             "analysis": "L'IA analizza la descrizione delle transazioni e i nomi degli esercenti per suggerire categorie appropriate da quelle esistenti.",
             "override": "È sempre possibile modificare manualmente le categorie suggerite dall'IA."
           }
-        },
-        "loading": "Caricamento modelli..."
+        }
       },
       "statementParsing": {
-        "modelHint": {
-          "trigger": "Quale modello dovrei scegliere?",
-          "text": "Per l'analisi degli estratti conto, sono consigliati modelli di fascia media come Gemini 3.6 Flash, Claude Sonnet 5 o GPT-5.6 Terra. L'analisi degli estratti conto richiede di comprendere strutture di documenti complesse ed estrarre dati accurati, il che beneficia di modelli più capaci. Tuttavia, modelli più economici come Gemini 3.5 Flash Lite o Claude Haiku 4.5 possono funzionare bene anche per estratti conto più semplici."
-        },
         "howItWorks": {
-          "title": "Come funziona",
           "points": {
             "upload": "Caricare un estratto conto (PDF, CSV o TXT), la foto di una ricevuta o uno screenshot di un'app bancaria: l'IA estrarrà automaticamente tutte le transazioni.",
             "analysis": "L'IA analizza la struttura del documento per identificare date, descrizioni, importi e tipo di transazione.",
             "review": "È possibile rivedere e correggere tutti i dati estratti prima di importarli nel conto.",
             "cost": "Il costo della lavorazione è una stima approssimativa."
           }
-        },
-        "loading": "Caricamento modelli..."
+        }
       },
       "modelSelector": {
+        "placeholder": "Scegliere un modello",
+        "automaticOption": "Automatico",
+        "automaticOptionWithTarget": "Automatico · {target}",
+        "serverOption": "MoneyMatter AI · incluso",
+        "connectionOption": "{name} · {model}",
+        "connectionOptionNeedsAttention": "{name} · {model} (richiede attenzione)",
         "badges": {
           "yourKey": "Chiave personale",
           "yourKeyTooltip": "Funziona con uno dei modelli di intelligenza artificiale configurati, che si occupa anche della fatturazione. MoneyMatter non limita l'utilizzo.",
@@ -136,40 +53,10 @@
           "serverTooltip": "Funziona con MoneyMatter AI, incluso nel piano. Si applicano limiti di utilizzo."
         },
         "modelLabel": "Modello",
-        "resetButton": "Ripristina predefinito",
-        "noApiKey": "(Nessuna chiave API)",
         "modelInfo": {
-          "context": "Contesto:",
-          "capabilities": "Capacità:",
           "estimatedCost": "Costo stimato:",
           "per100Transactions": "per 100 transazioni",
-          "unknown": "Sconosciuto",
           "per100Pairs": "per 100 coppie"
-        },
-        "rateLimitWarning": "Stai usando l'IA fornita dal server con limiti di frequenza del livello gratuito. La disponibilità della funzionalità dipende dalla richiesta degli altri utenti. Per un accesso affidabile, aggiungi la tua chiave API nella scheda Chiavi API.",
-        "groupLabels": {
-          "recommended": "⭐ Consigliato",
-          "openai": "OpenAI",
-          "anthropic": "Anthropic",
-          "google": "Google",
-          "groq": "Groq",
-          "openrouter": "OpenRouter",
-          "deepseek": "DeepSeek"
-        },
-        "costLabels": {
-          "free": "Gratuito",
-          "low": "Costo basso",
-          "medium": "Costo medio",
-          "high": "Costo alto",
-          "unknown": "Costo sconosciuto"
-        },
-        "capabilities": {
-          "textGeneration": "Testo",
-          "structuredOutput": "Strutturato",
-          "functionCalling": "Funzioni",
-          "vision": "Visione",
-          "fastInference": "Veloce",
-          "agents": "Agenti"
         },
         "notifications": {
           "updateSuccess": "Modello aggiornato con successo",
@@ -177,162 +64,39 @@
           "resetSuccess": "Ripristina il modello predefinito",
           "resetFailed": "Impossibile ripristinare il modello"
         },
-        "addKeyHint": "Aggiungi la tua chiave API per scegliere tra tutti i modelli disponibili.",
-        "addKeyHintLink": "Aggiungi chiave API →",
-        "customModel": {
-          "nameLabel": "Nome modello",
-          "applyButton": "Applica",
-          "hint": "Inviato così com'è a {baseUrl}.",
-          "endpointOption": "{endpoint} — {model}",
-          "unknownEndpoint": "Endpoint personalizzato",
-          "missingModelName": "Questo endpoint non ha un nome modello configurato — inseriscine uno prima",
-          "endpointsLoadError": "Non è stato possibile caricare i tuoi endpoint, quindi il nome del modello non può essere modificato ora."
-        },
-        "placeholder": "Scegliere un modello",
-        "automaticOption": "Automatico",
-        "automaticOptionWithTarget": "Automatico · {target}",
-        "serverOption": "MoneyMatter AI · incluso",
-        "connectionOption": "{name} · {model}",
-        "connectionOptionNeedsAttention": "{name} · {model} (richiede attenzione)",
-        "sharedPoolNote": "Con il tuo piano attuale, il modello incluso usa risorse condivise: quando la domanda è elevata possono essere applicati dei limiti. {link} per evitarli.",
-        "sharedPoolNoteLink": "Passa a Plus",
         "empty": {
           "title": "Ancora nessun modello IA",
           "description": "Aggiungere un modello IA per usare questa funzionalità."
         },
-        "allConnectionsDown": "Tutti i tuoi modelli ia hanno bisogno di attenzione, quindi questa funzione è in pausa. Correggi in {link}.",
+        "allConnectionsDown": "Tutti i modelli IA richiedono attenzione, quindi questa funzionalità è in pausa. Correggerne uno in {link}.",
         "allConnectionsDownLink": "Modelli IA"
-      },
-      "customEndpoint": {
-        "title": "Endpoint personalizzati",
-        "description": "Collega i tuoi server compatibili con OpenAI e usa i loro modelli per qualsiasi funzionalità IA.",
-        "loading": "Caricamento endpoint…",
-        "addButton": "Aggiungi endpoint",
-        "empty": {
-          "title": "Nessun endpoint personalizzato",
-          "description": "Collega un server compatibile con OpenAI — un'istanza locale di Ollama, LM Studio, o un gateway ospitato — per usare i suoi modelli in qualsiasi funzionalità IA."
-        },
-        "loadError": {
-          "title": "Impossibile caricare i tuoi endpoint",
-          "description": "I tuoi endpoint salvati sono ancora lì — semplicemente non siamo riusciti a recuperarli ora. Controlla la connessione e riprova.",
-          "retry": "Riprova"
-        },
-        "status": {
-          "model": "Modello: {model}"
-        },
-        "actions": {
-          "menuAriaLabel": "Azioni endpoint",
-          "reconnect": "Riconnetti"
-        },
-        "form": {
-          "titleAdd": "Aggiungi endpoint",
-          "titleEdit": "Modifica endpoint",
-          "nameLabel": "Nome",
-          "namePlaceholder": "Ollama di casa",
-          "baseUrlLabel": "URL di base",
-          "baseUrlPlaceholder": "http://localhost:11434/v1",
-          "modelLabel": "Nome modello",
-          "modelPlaceholder": "llama3.2",
-          "apiKeyLabel": "Chiave API (facoltativa)",
-          "apiKeyPlaceholder": "Inserisci la chiave API",
-          "apiKeySavedHint": "È salvata una chiave. Lascia vuoto per mantenerla.",
-          "apiKeyOptionalHint": "Lascia vuoto se il tuo endpoint non richiede autenticazione.",
-          "removeApiKeyButton": "Rimuovi chiave salvata",
-          "saveButton": "Salva",
-          "testButton": "Testa connessione",
-          "removeButton": "Rimuovi"
-        },
-        "compatibilityHint": "L'endpoint deve essere compatibile con OpenAI. Funziona con Ollama, vLLM, OpenRouter, LM Studio e qualsiasi proxy /v1.",
-        "test": {
-          "success": "Connessione riuscita.",
-          "failed": "Impossibile raggiungere l'endpoint."
-        },
-        "notifications": {
-          "saveSuccess": "Endpoint personalizzato salvato",
-          "saveFailed": "Impossibile salvare l'endpoint personalizzato",
-          "removeSuccess": "Endpoint personalizzato rimosso",
-          "removeFailed": "Impossibile rimuovere l'endpoint personalizzato",
-          "removeKeySuccess": "Chiave salvata rimossa",
-          "removeKeyFailed": "Impossibile rimuovere la chiave salvata",
-          "removeKeyInvalid": "Chiave API rimossa, ma la convalida dell'endpoint senza di essa non è riuscita: {reason}",
-          "editedEndpointGone": "Questo endpoint è stato rimosso, quindi l'editor è stato chiuso."
-        },
-        "removeDialog": {
-          "title": "Rimuovere l'endpoint personalizzato?",
-          "descriptionNamed": "\"{name}\" verrà rimosso. Qualsiasi funzionalità che lo usa passerà a un altro modello disponibile. Questa azione non può essere annullata.",
-          "confirm": "Rimuovi"
-        },
-        "removeKeyDialog": {
-          "title": "Rimuovere la chiave salvata?",
-          "description": "L'endpoint viene ritestato senza una chiave. Se richiede autenticazione, la modifica viene rifiutata.",
-          "confirm": "Rimuovi chiave"
-        },
-        "setupHelp": {
-          "trigger": "Dove li trovo?",
-          "rule": "L'URL di base è tutto ciò che precede {path}, esclusa questa parte. Per quasi ogni provider significa che termina con {suffix}.",
-          "ruleCheck": "Verifica rapida: aprendo {url} dovresti ottenere un elenco JSON di modelli.",
-          "apiKeyEmpty": "Lascia vuoto.",
-          "lmStudio": {
-            "startServer": "Avvia prima il server locale (scheda Developer → Start Server).",
-            "baseUrl": "L'indirizzo mostrato da LM Studio, più {suffix}. Ad esempio {example}.",
-            "model": "L'identificativo API del modello. È mostrato nella scheda Developer, oppure elencato su {url}."
-          },
-          "ollama": {
-            "model": "Il tag esatto da {command}, ad esempio {example}."
-          },
-          "openRouter": {
-            "model": "L'id completo del modello dalla loro pagina modelli, ad esempio {example}.",
-            "apiKeyRequired": "Obbligatoria."
-          },
-          "other": {
-            "tabLabel": "Altro",
-            "title": "{name} o qualsiasi altro server compatibile con OpenAI",
-            "baseUrl": "L'indirizzo del server, più {suffix}.",
-            "model": "Qualunque cosa {request} restituisca come {field}.",
-            "apiKey": "Solo se il server è stato configurato per richiederne una."
-          },
-          "localNetworkOnly": "Un server in esecuzione sul tuo computer ({ip} o {hostname}) funziona solo quando questa app è eseguita sulla tua macchina o sulla tua rete. La versione ospitata non può raggiungerlo, perché gli indirizzi privati sono bloccati lì.",
-          "dockerHost": "Se esegui questa app in Docker sulla stessa macchina del server del modello, usa {dockerHost} invece di {ip}."
-        }
-      },
-      "customInstructions": {
-        "title": "Istruzioni personalizzate",
-        "description": "Fornisci contesto per aiutare l'IA a categorizzare le tue transazioni. Queste istruzioni vengono incluse durante la categorizzazione delle transazioni nella sincronizzazione bancaria e nell'importazione manuale.",
-        "placeholder": "es. le transazioni di \"Starbucks\" dovrebbero essere \"Caffè\". Le mie entrate da lavoro autonomo provengono da \"Acme Corp\".",
-        "requiresOwnCredentials": "Aggiungi la tua chiave API o un endpoint personalizzato per usare le istruzioni personalizzate.",
-        "credentialsCheckFailed": "Non siamo riusciti a verificare se hai le tue credenziali IA. Riprova per sbloccare le istruzioni personalizzate.",
-        "retryCredentialsCheck": "Riprova",
-        "save": "Salva",
-        "saved": "Salvato!",
-        "saveFailed": "Impossibile salvare le istruzioni personalizzate. Riprova.",
-        "serverModelHint": "Le istruzioni personalizzate si applicano solo quando la categorizzazione usa uno dei tuoi modelli IA. Scegline uno qui sopra."
       },
       "modelGuide": {
         "trigger": "Quale modello è adatto?",
         "tierHeading": "Il modello {tier} è sufficiente",
         "tiers": {
-          "light": "Chiaro",
-          "balanced": "equilibrato",
-          "smart": "avanzato"
+          "light": "Leggero",
+          "balanced": "Bilanciato",
+          "smart": "Avanzato"
         },
         "needsLabel": "Requisiti",
-        "picksLabel": "Modelli consigliati",
-        "yourModel": "Il tuo modello",
-        "source": "Dettagli del modello da models.dev",
+        "picksLabel": "Scelte consigliate",
+        "yourModel": "Il modello in uso",
+        "source": "Dettagli dei modelli da models.dev",
         "needs": {
           "textOnly": "Solo testo",
-          "runsOften": "Si esegue a ogni sincronizzazione",
+          "runsOften": "Eseguito a ogni sincronizzazione",
           "longAnswers": "Risposte lunghe",
           "readsFiles": "Legge immagini e PDF",
           "structuredAnswers": "Risposte strutturate"
         },
         "why": {
-          "categorization": "Un compito breve e ripetitivo. Un modello piccolo lo gestisce bene e mantiene bassi i costi.",
-          "statementParsing": "Legge l'intera dichiarazione e ne trascrive ogni riga, quindi ha bisogno di un modello adatto per elaborare lunghi testi.",
-          "investmentTransactionsParsing": "Trasforma le esportazioni dei broker in righe di acquisto e vendita. Esportazioni prolungate hanno bisogno di un modello che può sostenerle.",
-          "receiptParsing": "Il modello analizza direttamente il file della fattura, quindi deve saper leggere immagini e PDF.",
-          "trackerMatching": "A short, repetitive job that runs every day. A small model handles it well and keeps the cost down.",
-          "transferMatching": "Reads short pairs of transactions and answers with a one-word verdict, so a light, cheap model is enough."
+          "categorization": "Un'attività breve e ripetitiva. Un modello piccolo la gestisce bene e contiene i costi.",
+          "statementParsing": "Legge l'intero estratto conto e ne trascrive ogni riga, quindi richiede un modello che resti preciso su testi lunghi.",
+          "investmentTransactionsParsing": "Trasforma le esportazioni del broker in righe di acquisto e vendita. Le esportazioni lunghe richiedono un modello in grado di scrivere risposte lunghe.",
+          "receiptParsing": "Il modello esamina direttamente il file della fattura, quindi deve saper leggere immagini e PDF.",
+          "trackerMatching": "Un'attività breve e ripetitiva eseguita ogni giorno. Un modello piccolo la gestisce bene e contiene i costi.",
+          "transferMatching": "Legge brevi coppie di transazioni e risponde con un verdetto di una parola, quindi basta un modello leggero ed economico."
         },
         "picks": {
           "categorization": "Gemini Flash Lite · Claude Haiku",
@@ -344,62 +108,62 @@
         },
         "verdict": {
           "fit": "Adatto",
-          "gaps": "{count} requisito mancante | {count} requisiti mancanti",
+          "gaps": "{count} lacuna | {count} lacune",
           "unknown": "Non verificato"
         },
         "warning": {
-          "readsFiles": "Non legge i file",
-          "readsText": "Non legge il testo",
-          "readsImages": "Non legge le immagini",
-          "readsPdfs": "Non legge i PDF",
+          "readsFiles": "Non legge file",
+          "readsText": "Non legge testo",
+          "readsImages": "Non legge immagini",
+          "readsPdfs": "Non legge PDF",
           "longAnswers": "Solo risposte brevi",
           "structuredAnswers": "Nessuna risposta strutturata"
         },
         "checks": {
           "readsText": {
-            "label": "Legge il testo",
+            "label": "Legge testo",
             "fail": "Questo modello non accetta testo."
           },
           "readsImages": {
-            "label": "Legge le immagini",
-            "fail": "I file immagine non sono supportati."
+            "label": "Legge immagini",
+            "fail": "I file immagine non funzioneranno."
           },
           "readsPdfs": {
-            "label": "Legge i PDF",
-            "fail": "I file PDF non sono supportati."
+            "label": "Legge PDF",
+            "fail": "I file PDF non funzioneranno."
           },
           "longAnswers": {
             "label": "Risposte lunghe",
-            "ok": "Utilizzati {tokens} token.",
-            "fail": "Utilizzati {tokens} token, i file complessi non sono stati elaborati."
+            "ok": "Scrive fino a {tokens} token.",
+            "fail": "Scrive fino a {tokens} token, quindi i file lunghi vengono troncati."
           },
           "structuredAnswers": {
             "label": "Risposte strutturate",
-            "fail": "Le risposte potrebbero avere un formato che l'app non riesce a leggere."
+            "fail": "Le risposte potrebbero arrivare in un formato che l'app non riesce a leggere."
           }
         },
         "unknown": {
           "title": "Impossibile verificare questo modello",
-          "detail": "Al momento models.dev non ha dettagli su questo modello, quindi non possiamo verificarlo. Assicurati che soddisfi i requisiti indicati sopra."
+          "detail": "Al momento models.dev non ha dettagli su questo modello, quindi non è possibile verificarlo. Assicurarsi che soddisfi i requisiti indicati sopra."
         }
       },
       "connections": {
         "title": "Modelli IA",
-        "description": "Collega OpenAI, Claude, Gemini, OpenRouter o un modello locale. Ogni voce corrisponde a un modello che puoi scegliere per qualsiasi funzionalità.",
+        "description": "Connettere OpenAI, Claude, Gemini, OpenRouter o un modello locale. Ogni voce è un modello selezionabile per qualsiasi funzionalità.",
         "tip": {
           "ariaLabel": "Informazioni sui modelli IA",
-          "text": "Puoi aggiungere più modelli dello stesso provider. Assegna nomi che ne descrivano le capacità, come 'Claude avanzato' e 'Claude veloce', poi scegli quello adatto a ogni funzionalità."
+          "text": "È possibile aggiungere lo stesso fornitore più volte con modelli diversi. Assegnare nomi in base alle capacità, come 'Claude avanzato' e 'Claude veloce', quindi scegliere quello giusto per ogni funzionalità."
         },
         "addButton": "Aggiungi modello",
-        "capReached": "Hai raggiunto il limite di {max} modelli IA. Rimuovine uno per aggiungerne un altro.",
-        "duplicateName": "Copia di {name}",
+        "capReached": "È stato raggiunto il limite di {max} modelli IA. Rimuoverne uno per aggiungerne un altro.",
+        "duplicateName": "{name} copia",
         "empty": {
-          "title": "Nessun modello IA configurato",
-          "description": "Aggiungi un modello con la tua chiave API oppure collega un modello locale, come Ollama o LM Studio."
+          "title": "Ancora nessun modello IA",
+          "description": "Aggiungere un modello con la propria chiave API o connetterne uno locale come Ollama o LM Studio."
         },
         "loadError": {
           "title": "Impossibile caricare i modelli IA",
-          "description": "I modelli salvati sono ancora disponibili. Controlla la connessione e riprova."
+          "description": "I modelli salvati sono ancora presenti. Verificare la connessione e riprovare."
         },
         "badges": {
           "default": "Predefinito",
@@ -414,12 +178,12 @@
           "setDefault": "Imposta come predefinito",
           "remove": "Rimuovi",
           "reconnect": "Riconnetti",
-          "enterKey": "Inserisci la chiave API"
+          "enterKey": "Inserisci chiave API"
         },
         "removeDialog": {
           "title": "Rimuovere questo modello IA?",
-          "description": "\"{name}\" e la sua chiave API salvata verranno rimossi.",
-          "pinnedFeatures": "Queste funzionalità passeranno alla selezione automatica: {features}.",
+          "description": "«{name}» e la relativa chiave API salvata verranno rimossi.",
+          "pinnedFeatures": "Queste funzionalità passeranno alla modalità automatica: {features}.",
           "confirm": "Rimuovi"
         },
         "removeKeyDialog": {
@@ -428,7 +192,7 @@
           "confirm": "Rimuovi chiave"
         },
         "test": {
-          "success": "Connessione riuscita. Il modello ha risposto.",
+          "success": "Connesso. Il modello ha risposto.",
           "failed": "Impossibile raggiungere il modello."
         },
         "notifications": {
@@ -436,37 +200,37 @@
           "saveFailed": "Impossibile salvare il modello IA",
           "removeSuccess": "Modello IA rimosso",
           "removeFailed": "Impossibile rimuovere il modello IA",
-          "setDefaultSuccess": "\"{name}\" è ora il tuo modello predefinito",
+          "setDefaultSuccess": "«{name}» è ora il modello predefinito",
           "setDefaultFailed": "Impossibile cambiare il modello predefinito",
           "removeKeySuccess": "Chiave API rimossa",
           "removeKeyFailed": "Impossibile rimuovere la chiave API",
           "removeKeyInvalid": "Chiave API rimossa, ma il modello ha smesso di rispondere: {reason}",
-          "editedConnectionGone": "Questo modello IA è stato rimosso da un'altra sessione, quindi il modulo è stato chiuso."
+          "editedConnectionGone": "Questo modello IA è stato rimosso altrove, quindi il modulo è stato chiuso."
         },
         "form": {
-          "titleAdd": "Aggiungi modello IA",
-          "titleEdit": "Modifica modello IA",
-          "titleDuplicate": "Duplica modello IA",
-          "providerLabel": "Provider",
-          "providerPlaceholder": "Seleziona un provider",
+          "titleAdd": "Aggiungere modello IA",
+          "titleEdit": "Modificare modello IA",
+          "titleDuplicate": "Duplicare modello IA",
+          "providerLabel": "Fornitore",
+          "providerPlaceholder": "Selezionare un fornitore",
           "nameLabel": "Nome",
           "baseUrlLabel": "URL di base",
           "baseUrlPlaceholder": "https://example.com/v1",
           "apiKeyLabel": "Chiave API",
-          "apiKeyPlaceholder": "Incolla la tua chiave API",
-          "apiKeyGetHint": "Ottieni una chiave su {link}.",
-          "apiKeyOptionalHint": "Opzionale. Lasciare vuoto se il tuo server non necessità di una chiave API.",
-          "apiKeySavedHint": "Lasciare vuoto per mantenere l'attuale Chiave API.",
-          "apiKeyBorrowedHint": "Usa la chiave di \"{name}\". Inserisci una nuova chiave per usarne una diversa.",
+          "apiKeyPlaceholder": "Incollare la chiave API",
+          "apiKeyGetHint": "Ottenere una chiave su {link}.",
+          "apiKeyOptionalHint": "Facoltativa. Lasciare vuoto se il server non richiede una chiave.",
+          "apiKeySavedHint": "Lasciare vuoto per mantenere la chiave salvata.",
+          "apiKeyBorrowedHint": "Usa la chiave di «{name}». Digitare una nuova chiave per usarne una diversa.",
           "removeApiKeyButton": "Rimuovi chiave API",
           "modelLabel": "Modello",
-          "modelPlaceholder": "Inserisci o scegli un modello",
-          "modelListEmpty": "Nessun modello disponibile da scegliere. Inserisci il nome del modello usato dal server.",
-          "modelListNoMatch": "Nessun modello nell'elenco corrisponde. Puoi comunque usare il nome inserito.",
-          "testButton": "Verifica connessione",
+          "modelPlaceholder": "Digitare o scegliere un modello",
+          "modelListEmpty": "Nessun modello da scegliere. Digitare il nome del modello usato dal server.",
+          "modelListNoMatch": "Nessun modello in elenco corrisponde. È comunque possibile usare il nome digitato.",
+          "testButton": "Prova connessione",
           "saveButton": "Salva modifiche",
-          "localNetworkOnly": "MoneyMatter non può raggiungere un server sul tuo computer, come {hostname} o {ip}. Rendilo accessibile con un tunnel, ad esempio ngrok o Cloudflare Tunnel, e incolla qui l'URL del tunnel.",
-          "dockerHost": "Se esegui l'app in Docker sullo stesso computer del server del modello, usa {dockerHost} al posto di {ip}."
+          "localNetworkOnly": "MoneyMatter non può raggiungere un server sul computer locale, come {hostname} o {ip}. Esporlo tramite un tunnel come ngrok o Cloudflare Tunnel, quindi incollare qui l'URL del tunnel.",
+          "dockerHost": "Se l'app viene eseguita in Docker sulla stessa macchina del server del modello, usare {dockerHost} invece di {ip}."
         },
         "presets": {
           "openai": {
@@ -498,6 +262,18 @@
             "namePlaceholder": "es. Il mio server"
           }
         }
+      },
+      "customInstructions": {
+        "title": "Istruzioni personalizzate",
+        "description": "Fornire un contesto per aiutare l'IA a classificare le transazioni. Queste istruzioni vengono incluse nella classificazione delle transazioni durante la sincronizzazione bancaria e l'importazione manuale.",
+        "placeholder": "es. Le transazioni di 'Starbucks' vanno in 'Caffè'. Le entrate da libera professione provengono da 'Acme Corp'.",
+        "serverModelHint": "Le istruzioni personalizzate si applicano solo quando la classificazione è gestita da uno dei propri modelli IA. Sceglierne uno sopra.",
+        "requiresOwnCredentials": "Aggiungere un proprio modello IA per usare le istruzioni personalizzate.",
+        "credentialsCheckFailed": "Impossibile verificare i modelli IA, quindi le istruzioni personalizzate non sono al momento disponibili.",
+        "retryCredentialsCheck": "Riprova",
+        "save": "Salva",
+        "saved": "Salvato!",
+        "saveFailed": "Impossibile salvare le istruzioni personalizzate. Riprovare."
       }
     }
   }

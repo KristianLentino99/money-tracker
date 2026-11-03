@@ -3,11 +3,11 @@
     "currencies": {
       "page": {
         "title": "Valute",
-        "description": "Gestisci le valute che monitori e i tassi di cambio usati nei tuoi conti."
+        "description": "Gestire le valute monitorate e i tassi di cambio usati nei conti."
       },
       "addNew": {
-        "loading": "Caricamento...",
-        "selectCurrency": "Seleziona valuta",
+        "loading": "Caricamento in corso...",
+        "selectCurrency": "Selezionare la valuta",
         "addButton": "Aggiungi",
         "sectionLabel": "Aggiungi una valuta",
         "successfullyAdded": "Valuta aggiunta",
@@ -17,7 +17,7 @@
       },
       "howItWorks": {
         "trigger": "Come funziona?",
-        "body": "La tua valuta di base è quella in cui viene convertito ogni saldo per i totali e i report. Ogni valuta aggiunta si aggiorna automaticamente in base ai tassi di mercato in tempo reale, oppure puoi impostare un tasso personalizzato per sovrascriverlo."
+        "body": "La valuta di base è quella in cui vengono convertiti tutti i saldi per totali e report. Ogni valuta aggiunta si aggiorna automaticamente con i tassi di mercato in tempo reale, oppure è possibile impostare un tasso personalizzato."
       },
       "row": {
         "baseBadge": "Base",
@@ -27,17 +27,17 @@
         "accountsCount": "{count} conto | {count} conti"
       },
       "empty": {
-        "title": "Nessun'altra valuta ancora",
-        "description": "Aggiungi una valuta qui sopra per monitorare saldi e tassi di cambio insieme alla tua valuta di base."
+        "title": "Ancora nessun'altra valuta",
+        "description": "Aggiungere una valuta qui sopra per monitorare saldi e tassi di cambio accanto alla valuta di base."
       },
       "exchangeRate": {
-        "disableLiveUpdate": "Disattiva l'aggiornamento in tempo reale per poter impostare un tasso di cambio personalizzato.",
-        "liveUpdateInfo": "Quando abilitato, il tasso personalizzato viene ignorato.",
+        "disableLiveUpdate": "Disattivare l'aggiornamento in tempo reale per impostare un tasso di cambio personalizzato.",
+        "liveUpdateInfo": "Se attivo, il tasso personalizzato viene ignorato.",
         "liveUpdateLabel": "Aggiornamento in tempo reale",
         "ratePlaceholder": "0.00",
         "saveButton": "Salva",
-        "successfullyUpdated": "Aggiornato correttamente.",
-        "balancesNotRefreshed": "{count} saldo di conto non è ancora stato aggiornato con il nuovo tasso — si aggiornerà automaticamente non appena il tasso sarà disponibile. | {count} saldi di conto non sono ancora stati aggiornati con il nuovo tasso — si aggiorneranno automaticamente non appena il tasso sarà disponibile.",
+        "successfullyUpdated": "Aggiornato con successo.",
+        "balancesNotRefreshed": "Non è stato ancora possibile aggiornare il saldo di {count} conti con il nuovo tasso: verrà aggiornato automaticamente quando sarà disponibile un tasso.",
         "errors": {
           "unexpectedError": "Errore imprevisto",
           "updateFailed": "Errore imprevisto. La valuta non è stata aggiornata."
@@ -45,62 +45,62 @@
       },
       "delete": {
         "confirmTitle": "Eliminare la valuta?",
-        "description": "Una valuta può essere eliminata/disconnessa solo se non ci sono conti e/o transazioni ad essa associati.",
+        "description": "Una valuta può essere eliminata/scollegata solo se non ha conti e/o transazioni associati.",
         "button": "Elimina valuta",
         "buttonShort": "Elimina",
-        "disabledTooltip": "Non puoi eliminare questa valuta perché è ancora collegata a uno o più conti.",
-        "successfullyDeleted": "Eliminata correttamente.",
-        "errors": {
-          "deleteFailed": "Errore imprevisto. La valuta non è stata eliminata."
-        },
-        "foreignAmountsWarning": "Foreign amounts recorded in this currency will be removed from your transactions. Amounts in the account currency stay unchanged.",
+        "disabledTooltip": "Impossibile eliminare questa valuta perché è ancora collegata a uno o più conti.",
+        "successfullyDeleted": "Eliminata con successo.",
+        "foreignAmountsWarning": "Gli importi esteri registrati in questa valuta verranno rimossi dalle transazioni. Gli importi nella valuta del conto restano invariati.",
         "inUse": {
-          "title": "This currency is still in use. Remove or change these first:",
-          "trashed": "(in trash)",
+          "title": "Questa valuta è ancora in uso. Rimuovere o modificare prima questi elementi:",
+          "trashed": "(nel cestino)",
           "types": {
             "account": "Conti",
-            "portfolio": "Portfolio display currency",
-            "holding": "Holdings",
-            "portfolioCash": "Portfolio cash",
-            "portfolioTransfer": "Portfolio transfers",
-            "investmentTransaction": "Investment transactions",
-            "subscription": "Recurring payments",
-            "transactionTemplate": "Transaction templates",
-            "budget": "Budgets",
-            "goal": "Goals",
-            "ventureDeal": "Venture deals"
+            "portfolio": "Valuta di visualizzazione del portafoglio",
+            "holding": "Posizioni",
+            "portfolioCash": "Liquidità del portafoglio",
+            "portfolioTransfer": "Trasferimenti del portafoglio",
+            "investmentTransaction": "Transazioni di investimento",
+            "subscription": "Pagamenti ricorrenti",
+            "transactionTemplate": "Modelli di transazione",
+            "budget": "Budget",
+            "goal": "Obiettivi",
+            "ventureDeal": "Operazioni di venture capital"
           }
+        },
+        "errors": {
+          "deleteFailed": "Errore imprevisto. La valuta non è stata eliminata."
         }
       },
       "setBase": {
         "button": "Imposta come valuta di base",
         "buttonShort": "Imposta come base",
         "processing": "Elaborazione...",
-        "tooltip": "Contrassegna come valuta di base. Tutte le statistiche e le informazioni della dashboard verranno visualizzate in questa valuta.\n\nLe transazioni verranno ricalcolate in base al tasso di cambio alla data in cui la transazione è stata registrata.",
+        "tooltip": "Imposta come valuta di base. Tutte le statistiche e le informazioni della dashboard verranno mostrate in questa valuta.\n\nLe transazioni verranno ricalcolate con il tasso di cambio alla data in cui sono state registrate.",
         "dialog": {
           "title": "Cambiare la valuta di base?",
           "warningTitle": "Attenzione:",
-          "warningText": "Cambiare la valuta di base dovrebbe essere una decisione ben ponderata. Idealmente, questa azione andrebbe eseguita una sola volta, anche se non ci sono restrizioni effettive.",
+          "warningText": "Il cambio della valuta di base dovrebbe essere una decisione molto ponderata. Idealmente, questa azione andrebbe eseguita una sola volta, anche se non ci sono restrizioni effettive.",
           "descriptionText": "Ogni volta che si cambia la valuta di base, tutte le transazioni vengono ricalcolate usando i tassi di cambio storici. A causa dell'aritmetica in virgola mobile e delle normali differenze tra i tassi della valuta di base e quelli della valuta di quotazione, ricalcoli ripetuti possono introdurre nel tempo piccole discrepanze negli importi di riferimento. Gli importi di riferimento servono a mostrare le statistiche e a impostare i limiti del budget.",
           "roundingTitle": "Come viene calcolato esattamente l'arrotondamento?",
-          "roundingIntro": "Le conversioni di valuta usano l'arrotondamento bancario (standard IEEE 754), noto anche come \"arrotondamento al pari più vicino\". Questo minimizza gli errori di arrotondamento cumulativi su molti calcoli.",
+          "roundingIntro": "Le conversioni di valuta usano l'arrotondamento bancario (standard IEEE 754), noto anche come \"arrotondamento al pari\". Questo riduce al minimo gli errori di arrotondamento cumulativi su molti calcoli.",
           "roundingHow": "Come funziona:",
-          "roundingRule1": "Quando un valore è esattamente a metà (es. 0.5), viene arrotondato al numero pari più vicino",
+          "roundingRule1": "Quando un valore è esattamente a metà (es. 0,5), viene arrotondato al numero pari più vicino",
           "roundingRule2": "Esempio: 0.5 → 0, 1.5 → 2, 2.5 → 2, 3.5 → 4",
-          "roundingStandard": "Questo metodo è consigliato dagli standard contabili IFRS/GAAP ed è usato dai principali sistemi finanziari per evitare distorsioni sistematiche nelle conversioni valutarie.",
-          "untouchedWarning": "L'importo originale delle transazioni rimarrà sempre invariato!",
-          "processingTimeInfo": "Potrebbe richiedere del tempo se la tua valuta non è molto diffusa.",
-          "restrictionWarning": "Non potrai creare nuovi conti, transazioni o qualsiasi cosa relativa a \"importi\" mentre il processo è in corso.",
-          "confirmation": "Sei sicuro di voler procedere?",
+          "roundingStandard": "Questo metodo è raccomandato dagli standard contabili IFRS/GAAP ed è usato dai principali sistemi finanziari per evitare distorsioni sistematiche nelle conversioni di valuta.",
+          "untouchedWarning": "L'importo originale delle transazioni resterà sempre invariato!",
+          "processingTimeInfo": "L'operazione potrebbe richiedere del tempo se la valuta non è molto diffusa.",
+          "restrictionWarning": "Durante il processo non sarà possibile creare nuovi conti, transazioni o qualsiasi elemento legato agli importi.",
+          "confirmation": "Procedere davvero?",
           "changeButton": "Cambia valuta di base",
           "cancelButton": "Annulla"
         },
-        "successMessage": "Valuta di base modificata correttamente.",
+        "successMessage": "Valuta di base cambiata con successo.",
         "errors": {
-          "changeFailed": "Errore imprevisto. Impossibile cambiare la valuta di base.",
+          "changeFailed": "Errore imprevisto. Cambio della valuta di base non riuscito.",
           "lockedHousehold": "Sei parte di {count} nucleo famigliare attivo. Abbandonalo da Impostazioni → Nucleo Familiare. | Sei parte di {count} nucleo famigliare attivi. Abbandonali da Impostazioni → Nucleo Familiare.",
-          "lockedShares": "Hai {count} condivisione di conto attiva. Revocala prima dal conto. | Hai {count} condivisioni di conto attive. Revocale prima da ciascun conto.",
-          "lockedBudgetPlan": "An active budget plan is blocking the change. Delete it first. | {count} active budget plans are blocking the change. Delete them first."
+          "lockedShares": "C'è {count} condivisione di conto attiva. Revocarla prima dal conto. | Ci sono {count} condivisioni di conto attive. Revocarle prima da ciascun conto.",
+          "lockedBudgetPlan": "Un piano di budget attivo impedisce la modifica. Eliminarlo prima. | {count} piani di budget attivi impediscono la modifica. Eliminarli prima."
         }
       }
     }

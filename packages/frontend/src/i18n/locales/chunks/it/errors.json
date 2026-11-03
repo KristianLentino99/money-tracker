@@ -3,26 +3,26 @@
     "api": {
       "failedToFetch": "Impossibile recuperare i dati dal server.",
       "failedToFetchSelfHost": "Impossibile raggiungere il server. Il backend potrebbe essere ancora in avvio (fino a circa 30 s dopo l'avvio), oppure la variabile d'ambiente ALLOWED_ORIGINS non include questo URL.",
-      "unexpectedError": "Errore imprevisto.",
+      "unexpectedError": "Errore inatteso.",
       "sessionExpired": "La sessione è scaduta. Accedere di nuovo.",
       "payloadTooLarge": "La richiesta è troppo grande. Provare a importare meno valori alla volta.",
-      "tooManyRequests": "Too many attempts. Please wait a moment and try again."
+      "tooManyRequests": "Troppi tentativi. Attendere qualche istante e riprovare."
+    },
+    "auth": {
+      "reauthenticationRequired": "Per sicurezza, accedere di nuovo per applicare questa modifica.",
+      "passwordTooShort": "La password è troppo corta.",
+      "passwordTooLong": "La password è troppo lunga.",
+      "providerNotConfigured": "Questo metodo di accesso non è configurato su questo server.",
+      "accountAlreadyLinked": "Questo profilo è già collegato a un altro utente.",
+      "cannotUnlinkLastAccount": "Impossibile rimuovere l'unico metodo di accesso.",
+      "passkeyAlreadyRegistered": "Questa passkey è già registrata."
     },
     "notFound": {
-      "title": "Questa pagina è stata spostata",
+      "title": "Questa pagina non è disponibile",
       "description": "Impossibile trovare la pagina richiesta. Il link potrebbe essere errato o la pagina potrebbe essere stata spostata.",
       "attemptedLabel": "Pagina richiesta: ",
       "goBack": "Torna indietro",
-      "goHome": "Torna alla home"
-    },
-    "auth": {
-      "reauthenticationRequired": "For your security, sign in again to make this change.",
-      "passwordTooShort": "La password è troppo corta.",
-      "passwordTooLong": "La password è troppo lunga.",
-      "providerNotConfigured": "This sign-in provider isn't configured on this server.",
-      "accountAlreadyLinked": "This account is already linked to another user.",
-      "cannotUnlinkLastAccount": "You can't remove your only sign-in method.",
-      "passkeyAlreadyRegistered": "This passkey is already registered."
+      "goHome": "Torna all’inizio"
     }
   }
 }

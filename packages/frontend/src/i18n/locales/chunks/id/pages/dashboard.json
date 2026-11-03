@@ -83,9 +83,7 @@
         "title": "Struktur Pengeluaran",
         "today": "Hari ini",
         "vsPreviousPeriod": "vs periode sebelumnya",
-        "viewButton": "Lihat",
-        "allExpenses": "All expenses",
-        "loadFailed": "Couldn't load the category breakdown."
+        "viewButton": "Lihat"
       },
       "latestTransactions": {
         "title": "Transaksi Terbaru",
@@ -240,8 +238,8 @@
         },
         "hints": {
           "noHistory": "The comparison appears after your first full month.",
-          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far.",
-          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them."
+          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them.",
+          "fewMonths": "Average of the {n} full month you have so far. | Average of the {n} full months you have so far."
         },
         "loadFailed": "Couldn't load your spending.",
         "settings": {
@@ -505,40 +503,6 @@
         "action": "Unlock"
       },
       "paceVs": "vs {month}"
-    }
-  },
-  "pages": {
-    "dashboard": {
-      "vehicleMaintenance": {
-        "title": "Perawatan kendaraan",
-        "description": "Catat perawatan kendaraan yang akan datang.",
-        "count": "{count} pengingat",
-        "unknownVehicle": "Kendaraan tidak dikenal",
-        "status": {
-          "upcoming": "Segera",
-          "overdue": "Terlambat"
-        },
-        "activity": {
-          "inspection": "Pemeriksaan kendaraan",
-          "scheduled-service": "Servis terjadwal",
-          "oil-change": "Ganti oli",
-          "tires": "Rotasi ban",
-          "brakes": "Servis rem",
-          "battery": "Aki",
-          "other": "Lainnya"
-        },
-        "dueDate": "Jatuh tempo {date}",
-        "dueDistance": "Jatuh tempo pada {distance}",
-        "odometerLabel": "Jarak tempuh saat ini ({unit})",
-        "odometerPlaceholder": "Masukkan jarak tempuh saat ini",
-        "updateOdometer": "Perbarui jarak tempuh",
-        "showLess": "Tampilkan lebih sedikit",
-        "showMore": "Tampilkan {count} lainnya",
-        "notifications": {
-          "odometerUpdated": "Jarak tempuh diperbarui",
-          "odometerUpdateError": "Gagal memperbarui jarak tempuh."
-        }
-      }
     }
   }
 }

@@ -13,8 +13,8 @@
         "alwaysVisibleTooltip": "Questa sezione è sempre visibile."
       },
       "sidebarNav": {
-        "title": "Navigazione nella barra laterale",
-        "description": "Scegli quali pagine mostrare sotto Conti nella barra laterale."
+        "title": "Navigazione della barra laterale",
+        "description": "Scegliere quali pagine compaiono sotto Conti nella barra laterale."
       },
       "header": {
         "title": "Intestazione",

@@ -1,8 +1,8 @@
 {
   "investments": {
     "title": "Investimenti",
-    "createButton": "Crea portafoglio",
-    "loadError": "Impossibile caricare i portafogli",
+    "createButton": "Creare un portafoglio",
+    "loadError": "Caricamento dei portafogli non riuscito",
     "tryAgain": "Riprova",
     "menu": {
       "view": "Visualizza",
@@ -14,13 +14,13 @@
       "costBasis": "Costo di carico"
     },
     "empty": {
-      "title": "Nessun portafoglio ancora",
-      "description": "Crea il tuo primo portafoglio di investimento per iniziare a monitorare posizioni, transazioni e performance.",
-      "createFirstButton": "Crea il tuo primo portafoglio"
+      "title": "Ancora nessun portafoglio",
+      "description": "Creare il primo portafoglio di investimento per iniziare a monitorare posizioni, transazioni e rendimento.",
+      "createFirstButton": "Crea il primo portafoglio"
     },
     "trash": {
       "title": "Cestino",
-      "retentionHint": "Gli elementi qui vengono eliminati definitivamente dopo {days} giorni",
+      "retentionHint": "Gli elementi qui presenti vengono eliminati definitivamente dopo {days} giorni",
       "loadError": "Impossibile caricare i portafogli nel cestino.",
       "deletedAgo": "Eliminato {time}",
       "restoreButton": "Ripristina",
@@ -32,9 +32,9 @@
       "tryAgain": "Riprova",
       "notifications": {
         "restored": "Portafoglio ripristinato",
-        "restoreError": "Impossibile ripristinare il portafoglio",
+        "restoreError": "Ripristino del portafoglio non riuscito",
         "purged": "Portafoglio eliminato definitivamente",
-        "purgeError": "Impossibile eliminare il portafoglio"
+        "purgeError": "Eliminazione del portafoglio non riuscita"
       }
     }
   }

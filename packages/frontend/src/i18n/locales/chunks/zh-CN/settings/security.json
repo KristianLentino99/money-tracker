@@ -18,9 +18,9 @@
           "accountName": "{provider} Account",
           "notConnected": "Not connected",
           "disconnect": "Disconnect",
-          "connect": "Connect",
+          "disconnectConfirmTitle": "Disconnect {provider}?",
           "disconnectConfirmDescription": "You won't be able to log in with this {provider} account anymore. You can reconnect it at any time.",
-          "disconnectConfirmTitle": "Disconnect {provider}?"
+          "connect": "Connect"
         },
         "password": {
           "title": "Password",

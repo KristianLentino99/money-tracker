@@ -83,9 +83,7 @@
         "title": "Estructura de gastos",
         "today": "Hoy",
         "vsPreviousPeriod": "vs período anterior",
-        "viewButton": "Ver",
-        "allExpenses": "All expenses",
-        "loadFailed": "Couldn't load the category breakdown."
+        "viewButton": "Ver"
       },
       "latestTransactions": {
         "title": "Últimas transacciones",
@@ -135,7 +133,7 @@
         "title": "Flujo de caja",
         "description": "Muestra su ahorro neto: ingresos menos gastos para el período seleccionado, con una tendencia de períodos anteriores",
         "vsPrevious": "vs anterior",
-        "notAvailable": "N/A",
+        "notAvailable": "N/D",
         "income": "Ingresos",
         "expenses": "Gastos",
         "saved": "Ahorrado",
@@ -240,8 +238,8 @@
         },
         "hints": {
           "noHistory": "La comparación aparece después de tu primer mes completo.",
-          "fewMonths": "Promedio del mes completo de {n} que tienes hasta ahora. | Promedio de los {n} meses completos que tengas hasta ahora.",
-          "plannedFailed": "Couldn't load planned transactions. The forecast may not include them."
+          "plannedFailed": "No se han podido cargar las transacciones planificadas. El pronóstico no puede incluirlas.",
+          "fewMonths": "Promedio del mes completo de {n} que tienes hasta ahora. | Promedio de los {n} meses completos que tengas hasta ahora."
         },
         "loadFailed": "No se pudo cargar tu gasto.",
         "settings": {
@@ -505,40 +503,6 @@
         "action": "Desbloquear"
       },
       "paceVs": "vs. {month}"
-    }
-  },
-  "pages": {
-    "dashboard": {
-      "vehicleMaintenance": {
-        "title": "Mantenimiento del vehículo",
-        "description": "Lleva un registro del próximo mantenimiento de tus vehículos.",
-        "count": "{count} recordatorios",
-        "unknownVehicle": "Vehículo desconocido",
-        "status": {
-          "upcoming": "Próximo",
-          "overdue": "Atrasado"
-        },
-        "activity": {
-          "inspection": "Inspección del vehículo",
-          "scheduled-service": "Servicio programado",
-          "oil-change": "Cambio de aceite",
-          "tires": "Rotación de neumáticos",
-          "brakes": "Servicio de frenos",
-          "battery": "Batería",
-          "other": "Otro"
-        },
-        "dueDate": "Vence el {date}",
-        "dueDistance": "Vence a los {distance}",
-        "odometerLabel": "Kilometraje actual ({unit})",
-        "odometerPlaceholder": "Introduce el kilometraje actual",
-        "updateOdometer": "Actualizar kilometraje",
-        "showLess": "Mostrar menos",
-        "showMore": "Mostrar {count} más",
-        "notifications": {
-          "odometerUpdated": "Kilometraje actualizado",
-          "odometerUpdateError": "No se pudo actualizar el kilometraje."
-        }
-      }
     }
   }
 }

@@ -1,24 +1,23 @@
 {
   "portfolioDetail": {
-    "loading": "Caricamento...",
+    "loading": "Caricamento in corso...",
     "loadingDetails": "Caricamento dei dettagli del portafoglio...",
-    "loadError": "Impossibile caricare i dettagli del portafoglio.",
+    "loadError": "Caricamento dei dettagli del portafoglio non riuscito.",
     "tryAgain": "Riprova",
     "notFoundTitle": "Portafoglio non trovato",
-    "notFoundDescription": "Non siamo riusciti a trovare questo portafoglio. Potrebbe essere stato eliminato o potresti non avervi accesso.",
+    "notFoundDescription": "Impossibile trovare questo portafoglio. Potrebbe essere stato eliminato oppure non si dispone dell'accesso.",
     "backToInvestments": "Torna agli investimenti",
     "subtitle": "Panoramica del portafoglio",
     "actions": {
       "transfer": "Trasferisci",
       "edit": "Modifica",
       "delete": "Elimina",
-      "exchangeCurrency": "Cambia valuta",
-      "shareJson": "Condividi JSON"
+      "exchangeCurrency": "Cambio valuta"
     },
     "balance": {
       "totalValue": "Valore totale",
       "baseCurrencyEquivalent": "≈ {value} in {code}",
-      "loadError": "Impossibile caricare il riepilogo del portafoglio.",
+      "loadError": "Caricamento del riepilogo del portafoglio non riuscito.",
       "metrics": {
         "costBasis": "Costo di carico",
         "unrealized": "Non realizzato",
@@ -26,116 +25,39 @@
         "totalReturn": "Rendimento totale"
       }
     },
-    "manual": {
-      "derivedValue": "Valore attuale (derivato)",
-      "noValuation": "Aggiungi una valutazione di fine giornata per calcolare valore e rendimento.",
-      "lastReported": "Ultimo valore riportato",
-      "activitySince": "Attività netta dal report",
-      "gain": "Guadagno",
-      "contributions": "Contributi",
-      "reportedEstimated": "Riportato / stimato",
-      "stale": "Il valore riportato potrebbe non essere aggiornato",
-      "addTransaction": "Aggiungi transazione manuale",
-      "addValuation": "Aggiungi valutazione",
-      "transactionDescription": "Registra un contributo, una commissione, una tassa o un altro movimento del fondo.",
-      "valuationDescription": "Inserisci il valore dichiarato dal fondo per la data selezionata.",
-      "editingTransaction": "Modifica transazione",
-      "editingValuation": "Modifica valutazione",
-      "date": "Data",
-      "category": "Categoria",
-      "amount": "Importo",
-      "value": "Valore riportato",
-      "note": "Nota (opzionale)",
-      "source": "Fonte (opzionale)",
-      "save": "Salva",
-      "saveTransaction": "Salva transazione",
-      "saveValuation": "Salva valutazione",
-      "saveChanges": "Salva modifiche",
-      "saving": "Salvataggio…",
-      "transactionSaved": "Transazione salvata.",
-      "valuationSaved": "Valutazione salvata.",
-      "edit": "Modifica",
-      "delete": "Elimina",
-      "timeline": "Cronologia",
-      "valuation": "Valutazione",
-      "valueVsCapital": "Valore rispetto al capitale investito",
-      "reportedLegend": "Valore riportato",
-      "capitalLegend": "Capitale investito",
-      "jsonTitle": "Condividi portafoglio come JSON",
-      "jsonDescription": "Copia transazioni manuali e valutazioni del portafoglio, poi incolla il JSON nello stesso pannello di un altro account. I trasferimenti collegati vengono esportati come record autonomi.",
-      "copyJson": "Copia JSON",
-      "pasteJson": "Incolla JSON",
-      "jsonFieldLabel": "JSON del portafoglio",
-      "jsonPlaceholder": "Incolla qui un export JSON del portafoglio",
-      "importJson": "Importa JSON",
-      "jsonMergeDescription": "I record già presenti vengono ignorati; nulla viene eliminato o sovrascritto.",
-      "jsonCopied": "JSON del portafoglio copiato negli appunti.",
-      "jsonCopyError": "Impossibile copiare il JSON. Seleziona il testo e copialo manualmente.",
-      "jsonPasteError": "Impossibile leggere gli appunti. Incolla manualmente il JSON nel campo.",
-      "jsonInvalid": "Il contenuto incollato non è un JSON valido.",
-      "jsonImportSuccess": "Importati {imported} record; ignorati {skipped} record già presenti.",
-      "import": "Importa registrazioni manuali",
-      "importDescription": "Incolla del testo o carica un estratto conto in PDF, CSV o TXT. Rivedi le registrazioni estratte prima di importare.",
-      "paste": "Incolla testo",
-      "file": "Carica file",
-      "aiExtraction": "Estrai con IA",
-      "localCsv": "Analizza CSV localmente",
-      "review": "Rivedi le registrazioni estratte",
-      "kindTransaction": "Transazione",
-      "kindValuation": "Valutazione",
-      "skip": "Salta",
-      "currency": "Valuta",
-      "confidence": "Affidabilità",
-      "sourceContext": "Contesto della fonte",
-      "possibleDuplicate": "Possibile duplicato",
-      "currencyMismatch": "La valuta non corrisponde a questo portafoglio. Modificala in {currency} oppure salta la registrazione.",
-      "missingFields": "Completa i campi evidenziati prima di importare.",
-      "executeImport": "Importa registrazioni riviste",
-      "discardImport": "Scarta revisione",
-      "importContentDiscarded": "Il contenuto originale incollato/caricato viene scartato dopo l'estrazione.",
-      "importSuccess": "Importate {imported} registrazione/i; saltate {skipped}.",
-      "categories": {
-        "contribution": "Contributo",
-        "withdrawal": "Prelievo",
-        "fee": "Commissione",
-        "tax": "Tassa",
-        "other_income": "Altri redditi",
-        "distribution": "Distribuzione"
-      }
-    },
     "cashBalances": {
-      "title": "Saldi in contanti",
-      "emptyState": "Nessun saldo in contanti",
+      "title": "Saldi di liquidità",
+      "emptyState": "Nessun saldo di liquidità",
       "tabs": {
         "balances": "Saldi",
         "cashTransactions": "Transazioni",
         "buysSells": "Acquisti e vendite"
       },
       "cashTransactions": {
-        "addButton": "Aggiungi transazione in contanti",
-        "emptyState": "Nessuna transazione in contanti ancora",
-        "deposit": "Deposito",
+        "addButton": "Aggiungi transazione di liquidità",
+        "emptyState": "Ancora nessuna transazione di liquidità",
+        "deposit": "Versamento",
         "withdrawal": "Prelievo",
         "transferIn": "Trasferimento in entrata",
         "transferOut": "Trasferimento in uscita",
         "exchange": "Cambio valuta",
-        "deleteConfirm": "Eliminare questa transazione in contanti?",
-        "linkedTransactionNote": "Questo trasferimento ha una transazione di conto collegata. Cosa vuoi farne?",
-        "keepLinkedTransaction": "Mantieni la transazione di conto. I dettagli originali della transazione verranno ripristinati.",
-        "deleteLinkedTransaction": "Elimina anche la transazione di conto collegata",
+        "deleteConfirm": "Eliminare questa transazione di liquidità?",
+        "linkedTransactionNote": "Questo trasferimento ha una transazione del conto collegata. Cosa farne?",
+        "keepLinkedTransaction": "Mantieni la transazione del conto. Verranno ripristinati i dettagli originali della transazione.",
+        "deleteLinkedTransaction": "Elimina anche la transazione del conto collegata",
         "adjustmentBadge": "Rettifica",
-        "markedAsAdjustment": "Contrassegnata come correzione di saldo",
-        "markedAsContribution": "Contrassegnata come contributo reale",
-        "adjustmentError": "Impossibile aggiornare questo trasferimento",
-        "rowActions": "Azioni sulla transazione",
-        "emptyStateDescription": "I depositi, i prelievi e i trasferimenti per questo portafoglio appariranno qui.",
+        "noCashBadge": "Nessun impatto sulla liquidità",
+        "markedAsAdjustment": "Segnata come correzione del saldo",
+        "markedAsContribution": "Segnata come versamento effettivo",
+        "adjustmentError": "Aggiornamento del trasferimento non riuscito",
+        "rowActions": "Azioni della transazione",
+        "emptyStateDescription": "Versamenti, prelievi e trasferimenti di questo portafoglio compariranno qui.",
         "edit": "Modifica",
         "editDialog": {
-          "title": "Modifica transazione in contanti",
-          "description": "Cambia come questa transazione viene trattata nei report.",
+          "title": "Modifica transazione di liquidità",
+          "description": "Modificare il modo in cui questa transazione viene trattata nei report.",
           "save": "Salva modifiche"
-        },
-        "noCashBadge": "No cash impact"
+        }
       },
       "buysSells": {
         "emptyState": "Nessuna transazione di acquisto/vendita",
@@ -152,44 +74,44 @@
     },
     "holdingsTable": {
       "loadError": "Impossibile caricare le posizioni",
-      "empty": "Nessuna posizione ancora",
+      "empty": "Ancora nessuna posizione",
       "noFilterResults": "Nessuna posizione corrispondente",
-      "noFilterResultsDescription": "Nessuna posizione corrisponde alla ricerca. Prova un simbolo o un nome diverso.",
+      "noFilterResultsDescription": "Nessuna posizione corrisponde alla ricerca. Provare un simbolo o un nome diverso.",
       "clearFilterButton": "Cancella ricerca",
       "headers": {
         "symbol": "Simbolo",
         "name": "Nome",
         "shares": "Quote",
         "price": "Prezzo",
-        "avgCostPerShare": "Costo medio/quota",
+        "avgCostPerShare": "PMC/quota",
         "totalCost": "Costo totale",
         "marketValue": "Valore di mercato",
-        "unrealizedGain": "Guadagno non realizzato",
-        "realizedGain": "Guadagno realizzato"
+        "unrealizedGain": "Plusvalenza non realizzata",
+        "realizedGain": "Plusvalenza realizzata"
       },
       "transactions": {
         "loading": "Caricamento transazioni…",
         "empty": "Nessuna transazione trovata.",
-        "addFirstButton": "Aggiungi prima transazione"
+        "addFirstButton": "Aggiungi la prima transazione"
       },
       "closedPositions": "Posizioni chiuse ({count})",
+      "stalePrice": "Ultimo prezzo disponibile. Valore di mercato e plusvalenze potrebbero non essere aggiornati.",
       "deleteHolding": {
         "ariaLabel": "Elimina posizione",
         "title": "Elimina posizione",
-        "description": "Questo eliminerà definitivamente la posizione {symbol} e tutte le sue transazioni. L'operazione non può essere annullata.",
+        "description": "La posizione {symbol} e tutte le sue transazioni verranno eliminate definitivamente. Questa azione non può essere annullata.",
         "confirmLabel": "Elimina posizione",
         "success": "Posizione eliminata.",
-        "error": "Impossibile eliminare la posizione."
+        "error": "Eliminazione della posizione non riuscita."
       },
       "addTransactionDialog": {
         "title": "Aggiungi transazione",
-        "description": "Aggiungi una nuova transazione al tuo portafoglio."
+        "description": "Aggiungere una nuova transazione al portafoglio."
       },
-      "tryAgainLater": "Riprova più tardi",
+      "tryAgainLater": "Riprovare più tardi",
       "emptyDescription": "Aggiungere la prima operazione per iniziare a monitorare gli investimenti",
-      "addFirstHolding": "Aggiungi prima posizione",
-      "importTransactions": "Oppure importa da un file",
-      "stalePrice": "Last available price. Market value and gains may be outdated."
+      "addFirstHolding": "Aggiungi la prima posizione",
+      "importTransactions": "Oppure importa da un file"
     },
     "transactionsList": {
       "title": "Transazioni",
@@ -206,8 +128,8 @@
         "refAmount": "Importo base",
         "refFees": "Commissioni base",
         "settlementAmount": "Contanti",
-        "settlementCurrency": "Valuta contanti",
-        "settlementFees": "Commissioni contanti",
+        "settlementCurrency": "Valuta liquidità",
+        "settlementFees": "Commissioni liquidità",
         "settlementRate": "Tasso di cambio",
         "createdAt": "Aggiunta il"
       },
@@ -216,15 +138,15 @@
         "sell": "Vendita",
         "dividend": "Dividendo",
         "transfer": "Trasferimento",
-        "tax": "Tassa",
+        "tax": "Imposta",
         "fee": "Commissione",
         "cancel": "Annulla",
         "other": "Altro"
       },
       "headerTooltips": {
         "amount": "Totale della transazione nella valuta di negoziazione del titolo.",
-        "refAmount": "Totale della transazione convertito nella tua valuta base.",
-        "settlementAmount": "Contanti effettivamente pagati o ricevuti sul tuo conto, nella loro valuta di regolamento."
+        "refAmount": "Totale della transazione convertito nella valuta di base.",
+        "settlementAmount": "Liquidità effettivamente pagata o ricevuta sul conto, nella valuta di regolamento."
       },
       "deleteTransaction": {
         "tooltip": "Elimina transazione"
