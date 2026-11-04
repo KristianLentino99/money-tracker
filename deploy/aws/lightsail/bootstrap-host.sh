@@ -22,6 +22,20 @@ cat > /etc/docker/daemon.json <<'JSON'
 JSON
 systemctl enable --now docker
 
+# Image defaults that do nothing on this Docker host hold ~90 MB of the 1 GB
+# plan's RAM and push the application into swap. The SSM agent has no instance
+# role on Lightsail and only retries failed registrations; the root disk is a
+# single NVMe volume, so multipath is unused; there is no modem, removable
+# media, or firmware to update. Masking keeps package upgrades from restarting
+# them.
+systemctl disable --now snap.amazon-ssm-agent.amazon-ssm-agent.service || true
+systemctl disable --now snapd.service snapd.socket snapd.seeded.service \
+  multipathd.service multipathd.socket ModemManager.service udisks2.service \
+  fwupd-refresh.timer || true
+systemctl stop fwupd.service || true
+systemctl mask snapd.service snapd.socket multipathd.service multipathd.socket \
+  ModemManager.service udisks2.service fwupd.service
+
 fallocate -l 2G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile

@@ -1,0 +1,10 @@
+# Production-only overrides for the 1 GB Lightsail host, merged after the
+# self-hosting compose files by scripts/deploy.sh.
+services:
+  backend:
+    # The shared image runs Node with --enable-source-maps. With the bundled
+    # backend that keeps ~15 MB of parsed maps resident from startup and ~80 MB
+    # once the first stack trace decodes them, which this host pays for in swap.
+    # The bundle is not minified, so traces keep function names; they point at
+    # dist/ lines instead of src/ ones.
+    command: ['node', 'dist/app.js']

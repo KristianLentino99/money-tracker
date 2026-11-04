@@ -203,7 +203,23 @@ COMPOSE=(
   -f docker-compose.yml
   -f docker-compose.build.yml
   -f docker-compose.traefik.yml
+  -f ../deploy/aws/lightsail/production-compose.yml
 )
+
+# Keep the serving release and the newest previous one for a manual rollback.
+# Each older finance-<sha> tag pins a multi-GB backend image on the bundled
+# disk, and `docker image prune` only removes untagged images.
+prune_old_releases() {
+  local current repository
+  for current in "$BACKEND_IMAGE" "$FRONTEND_IMAGE"; do
+    repository="${current%%:*}"
+    sudo docker images --format '{{.Repository}}:{{.Tag}}' "$repository" |
+      grep -E ':finance-[0-9a-f]+$' |
+      grep -vxF "$current" |
+      tail -n +2 |
+      xargs -r sudo docker rmi >/dev/null || true
+  done
+}
 
 show_backend_diagnostics() {
   echo "Backend did not become healthy; showing service status and logs." >&2
@@ -239,6 +255,7 @@ frontend_id="$("${COMPOSE[@]}" ps -q frontend)"
 for _ in {1..30}; do
   if [[ -n "$frontend_id" ]] &&
     [[ "$(sudo docker inspect --format '{{.State.Status}}' "$frontend_id" 2>/dev/null)" == 'running' ]]; then
+    prune_old_releases
     sudo docker image prune --force >/dev/null
     echo "Deployment complete: $TARGET_SHA"
     exit 0
