@@ -816,7 +816,14 @@ describe('Investment holdings', () => {
       });
 
       it("stores FMP's last traded price on its session day, not the prior session's close", async () => {
-        mockYahoo({ search: () => ({ quotes: [] }), quotes: {}, chart: sessionBarChart });
+        mockYahoo({
+          // The search fallback reaches FMP when the primary provider fails.
+          search: () => {
+            throw new Error('Yahoo search unavailable');
+          },
+          quotes: {},
+          chart: sessionBarChart,
+        });
         jest.mocked(FmpClient).mockImplementation(
           () =>
             ({

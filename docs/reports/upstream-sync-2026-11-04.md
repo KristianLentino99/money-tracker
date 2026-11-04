@@ -36,6 +36,8 @@
 - Frontend unit: 302 file e 3.961 test passati; un file e 33 test saltati.
 - Traduzioni: 893 file JSON validi; placeholder delle 613 chiavi ripristinate coerenti con l’inglese.
 - Revisione: nessuna regressione applicativa confermata; adattato l’accesso HTTP nei nuovi E2E investimenti.
+- E2E principale: 24 suite e 414 test passati, un caso todo; coperti esportazione, investimenti, piani budget, veicoli e contributi.
+- Immagine self-hosted frontend: smoke HTTP passato, con 35 controlli positivi e discovery MCP/digest coerenti con `https://finance.kristianlentino.it`.
 - Preflight produzione: checkout pulito a `a60e70f97`, backend/database/Redis sani, 24 GB disco liberi.
 
-Il rilascio resta subordinato alla conclusione degli E2E e alla conferma esplicita del push richiesta dalle regole del progetto.
+La procedura di rilascio richiede E2E completati e conferma esplicita del push, secondo le regole del progetto.
