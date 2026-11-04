@@ -125,6 +125,15 @@
         "placeholder": "Selezionare un tipo di pagamento",
         "successNotification": "Tipo di pagamento predefinito aggiornato",
         "errorNotification": "Impossibile aggiornare il tipo di pagamento predefinito"
+      },
+      "distanceUnit": {
+        "label": "Unità di distanza",
+        "description": "Scegli l'unità usata per il chilometraggio del veicolo e le distanze di manutenzione.",
+        "placeholder": "Seleziona un'unità di distanza",
+        "kilometers": "Chilometri",
+        "miles": "Miglia",
+        "successNotification": "Unità di distanza aggiornata",
+        "errorNotification": "Impossibile aggiornare l'unità di distanza"
       }
     }
   }

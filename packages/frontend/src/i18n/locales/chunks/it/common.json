@@ -309,7 +309,8 @@
       "shortcutHint": "o premere {shortcut}",
       "noImage": "Nessuna immagine trovata negli appunti.",
       "readFailed": "Impossibile leggere gli appunti. Consentire l'accesso agli appunti o incollare con la scorciatoia da tastiera."
-    }
+    },
+    "cancel": "Annulla"
   },
   "accountGroups": {
     "create": {

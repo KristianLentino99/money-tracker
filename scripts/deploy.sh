@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Deploy the exact tip of origin/dev to finance.kristianlentino.it.
 #
-# The production Lightsail instance deliberately uses the inexpensive 2 GB
-# plan. Building the frontend there can exhaust memory, so this script builds
+# The production Lightsail instance deliberately uses the inexpensive 1 GB
+# plan with 2 GB swap. Building the frontend there can exhaust memory, so this script builds
 # linux/amd64 images locally and streams them directly to the server. No image
 # registry, CI runner or AWS service is added (and therefore no extra cost).
 set -Eeuo pipefail

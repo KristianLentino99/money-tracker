@@ -83,7 +83,9 @@
         "title": "Estrutura de despesas",
         "today": "Hoje",
         "vsPreviousPeriod": "vs. período anterior",
-        "viewButton": "Ver"
+        "viewButton": "Ver",
+        "allExpenses": "All expenses",
+        "loadFailed": "Couldn't load the category breakdown."
       },
       "latestTransactions": {
         "title": "Últimas transações",
@@ -503,6 +505,40 @@
         "action": "Desbloquear"
       },
       "paceVs": "vs {month}"
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "vehicleMaintenance": {
+        "activity": {
+          "battery": "Battery",
+          "brakes": "Brake service",
+          "inspection": "Vehicle inspection",
+          "oil-change": "Oil change",
+          "other": "Other",
+          "scheduled-service": "Scheduled service",
+          "tires": "Tire rotation"
+        },
+        "count": "{count} reminders",
+        "description": "Keep track of upcoming maintenance for your vehicles.",
+        "dueDate": "Due {date}",
+        "dueDistance": "Due at {distance}",
+        "notifications": {
+          "odometerUpdateError": "Could not update the odometer.",
+          "odometerUpdated": "Odometer updated"
+        },
+        "odometerLabel": "Current mileage ({unit})",
+        "odometerPlaceholder": "Enter current mileage",
+        "showLess": "Show less",
+        "showMore": "Show {count} more",
+        "status": {
+          "overdue": "Overdue",
+          "upcoming": "Upcoming"
+        },
+        "title": "Vehicle maintenance",
+        "unknownVehicle": "Unknown vehicle",
+        "updateOdometer": "Update odometer"
+      }
     }
   }
 }

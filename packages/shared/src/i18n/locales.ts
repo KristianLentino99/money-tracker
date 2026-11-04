@@ -28,6 +28,7 @@ export const COMMUNITY_LOCALES: ReadonlySet<SupportedLocale> = new Set([
   SUPPORTED_LOCALES.GERMAN,
   SUPPORTED_LOCALES.FRENCH,
   SUPPORTED_LOCALES.BRAZILIAN_PORTUGUESE,
+  SUPPORTED_LOCALES.ITALIAN,
 ]);
 
 export const LOCALE_NAMES: Record<SupportedLocale, { native: string; english: string }> = {

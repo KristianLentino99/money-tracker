@@ -53,7 +53,9 @@
         "descriptionLabel": "Descrizione (facoltativa)",
         "descriptionPlaceholder": "Una breve descrizione di questo portafoglio...",
         "submitButton": "Crea portafoglio",
-        "submitButtonLoading": "Creazione..."
+        "submitButtonLoading": "Creazione...",
+        "manualTrackingLabel": "Monitora il valore manualmente",
+        "manualTrackingDescription": "Usa i valori dichiarati per data invece delle posizioni e dei prezzi di mercato. La valuta di visualizzazione viene bloccata dopo la prima registrazione."
       },
       "notifications": {
         "success": "Portafoglio creato.",
@@ -292,7 +294,9 @@
             "differentType": "Tipo diverso da questa transazione",
             "submit": "Collega {count} transazione | Collega {count} transazioni"
           }
-        }
+        },
+        "recurringPaymentLabel": "Pagamento ricorrente (facoltativo)",
+        "recurringPaymentPlaceholder": "Seleziona un pagamento ricorrente"
       },
       "refundRecordsList": {
         "filtersDialogTitle": "Selezionare i filtri",
@@ -439,7 +443,19 @@
         "noCashBadge": "Nessun impatto sulla liquidità",
         "unlinkDescription": "Verranno ripristinati i dettagli originali della transazione.",
         "cancelButton": "Annulla",
-        "confirmUnlink": "Conferma scollegamento"
+        "confirmUnlink": "Conferma scollegamento",
+        "purchasesTitle": "Acquisti di investimento collegati",
+        "editPurchasesButton": "Modifica acquisti",
+        "cancelEdit": "Annulla",
+        "saveEdit": "Salva acquisti",
+        "deleteContributionButton": "Elimina contributo",
+        "deleteContributionTitle": "Eliminare il contributo di investimento collegato?",
+        "deleteContributionDescription": "Questa operazione elimina l'uscita dal conto, il trasferimento al portafoglio e tutti gli acquisti di investimento collegati. L'azione non può essere annullata.",
+        "confirmDeleteContribution": "Elimina contributo",
+        "deletePurchaseButton": "Elimina acquisto",
+        "deletePurchaseTitle": "Eliminare l'acquisto collegato?",
+        "deletePurchaseDescription": "Questa operazione rimuove l'acquisto di investimento selezionato, ma mantiene l'uscita dal conto e il contributo al portafoglio.",
+        "confirmDeletePurchase": "Elimina acquisto"
       },
       "ventureLinked": {
         "title": "Transazione collegata a venture capital",
@@ -506,6 +522,36 @@
           "update": "Impossibile aggiornare il modello. Riprovare.",
           "delete": "Impossibile eliminare il modello. Riprovare."
         }
+      },
+      "investmentContribution": {
+        "title": "Acquisti di investimento",
+        "hint": "Registra uno o più titoli acquistati con questa uscita. L'importo non utilizzato resta nella liquidità del portafoglio.",
+        "toggleLabel": "Registra acquisti di investimento collegati",
+        "toggleHint": "L'uscita finanzierà il portafoglio selezionato e raggrupperà gli acquisti qui sotto.",
+        "portfolioLabel": "Portafoglio",
+        "portfolioPlaceholder": "Seleziona un portafoglio",
+        "purchaseNumber": "Acquisto {number}",
+        "removePurchase": "Rimuovi acquisto",
+        "securityPlaceholder": "Seleziona un titolo",
+        "securitySearchPlaceholder": "Cerca titoli",
+        "securitySearchHint": "Digita un simbolo o un nome per cercare.",
+        "securityNoResults": "Nessun titolo trovato.",
+        "quantityLabel": "Quantità",
+        "priceLabel": "Prezzo unitario",
+        "feesLabel": "Commissioni",
+        "dateLabel": "Data di acquisto",
+        "rowTotal": "Totale acquisto",
+        "useSettlement": "Valuta della liquidità diversa",
+        "settlementCurrencyLabel": "Valuta della liquidità",
+        "settlementAmountLabel": "Liquidità pagata",
+        "settlementFeesLabel": "Commissioni sulla liquidità",
+        "noteLabel": "Nota sull'acquisto",
+        "notePlaceholder": "Nota facoltativa",
+        "changeSecurity": "Cambia titolo",
+        "addPurchase": "Aggiungi un altro acquisto",
+        "totalLabel": "Totale acquisti",
+        "residualLabel": "Cash remaining",
+        "validationError": "Seleziona un portafoglio e completa ogni acquisto prima di salvare."
       }
     },
     "portfolioTransfer": {
@@ -545,7 +591,16 @@
         "success": "Posizione aggiunta.",
         "error": "Impossibile aggiungere la posizione."
       },
-      "cryptoProviderNotConfigured": "La ricerca di criptovalute non è disponibile. Impostare COINGECKO_API_KEY nell'ambiente per attivarla."
+      "cryptoProviderNotConfigured": "La ricerca di criptovalute non è disponibile. Impostare COINGECKO_API_KEY nell'ambiente per attivarla.",
+      "providers": {
+        "heading": "Provider",
+        "yahoo": "Yahoo Finance",
+        "fmp": "Financial Modeling Prep",
+        "polygon": "Polygon",
+        "alphavantage": "Alpha Vantage",
+        "kraken": "Kraken",
+        "coingecko": "CoinGecko"
+      }
     },
     "deleteInvestmentTransaction": {
       "title": "Eliminare la transazione",
@@ -616,7 +671,8 @@
       "description": "Aggiungere un deposito o un prelievo al portafoglio"
     },
     "pickTransaction": {
-      "title": "Selezionare la transazione"
+      "title": "Selezionare la transazione",
+      "empty": "Nessuna transazione corrisponde a questi filtri."
     },
     "attachInvoice": {
       "title": "Allega ricevuta/fattura",

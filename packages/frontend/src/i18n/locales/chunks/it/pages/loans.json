@@ -31,7 +31,13 @@
       "createTitle": "Aggiungi un prestito",
       "createDescription": "Monitorare un mutuo, un prestito auto, un prestito studentesco o qualsiasi altra passività. Tutto può essere modificato in seguito.",
       "editTitle": "Modifica prestito",
-      "editDescription": "Aggiornare le condizioni del prestito. Le modifiche a tasso, durata o rata pianificata vengono registrate nella cronologia degli eventi."
+      "editDescription": "Aggiornare le condizioni del prestito. Le modifiche a tasso, durata o rata pianificata vengono registrate nella cronologia degli eventi.",
+      "termRecalcConfirm": {
+        "title": "Ricalcolare il saldo residuo?",
+        "description": "Con la nuova durata di {term} mesi, il saldo residuo stimato è {balance} e la data di fine prestito è {endDate}. Applicare questo ricalcolo?",
+        "applyButton": "Usa saldo stimato",
+        "keepButton": "Mantieni saldo attuale"
+      }
     },
     "settings": {
       "title": "Impostazioni",
@@ -133,7 +139,8 @@
         "accountNumber": "Numero di conto",
         "balanceAnchor": "Saldo al",
         "balanceAnchorTooltip": "Il saldo residuo è fissato a questa data. I pagamenti con data precedente vengono conservati come storico ma non modificano l'avanzamento Pagato.",
-        "actualDuration": "Durata effettiva"
+        "actualDuration": "Durata effettiva",
+        "endDate": "Data di fine"
       },
       "paidOff": {
         "bannerTitle": "{name}: estinto completamente",
@@ -216,6 +223,24 @@
           "actual": "Saldo effettivo",
           "schedule": "Piano originale"
         }
+      },
+      "installments": {
+        "title": "Rate del prestito",
+        "description": "I pagamenti futuri di queste rate contribuiranno a estinguere questo prestito.",
+        "linkAction": "Collega rata",
+        "emptyTitle": "Nessuna rata collegata",
+        "emptyDescription": "Collega una rata per fare in modo che ogni pagamento futuro riduca questo prestito.",
+        "progress": "{progress} pagamenti",
+        "paused": "In pausa",
+        "linkSuccess": "Rata collegata al prestito.",
+        "linkError": "Impossibile collegare la rata.",
+        "dialogTitle": "Collega rate",
+        "dialogDescription": "Scegli una o più rate di spesa. Il collegamento riguarda solo i pagamenti futuri.",
+        "searchLabel": "Cerca rate",
+        "searchPlaceholder": "Cerca per nome",
+        "loading": "Caricamento rate...",
+        "noResults": "Nessuna rata idonea trovata.",
+        "confirmLink": "Collega {count} rate"
       }
     }
   }

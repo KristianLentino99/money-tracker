@@ -26,7 +26,9 @@
       "goals": "Obiettivi"
     },
     "venture": "Investimenti",
-    "budget": "Tracker"
+    "budget": "Tracker",
+    "home": "Home",
+    "more": "Altro"
   },
   "sidebar": {
     "collapse": "Nascondi barra laterale",
@@ -341,5 +343,16 @@
         }
       }
     }
+  },
+  "mobileHubs": {
+    "accounts": {
+      "title": "Conti",
+      "description": "Gestisci conti, prestiti, investimenti e beni delle attività."
+    },
+    "more": {
+      "title": "Altro",
+      "description": "Esplora analisi, strumenti di pianificazione, importazioni e impostazioni."
+    },
+    "addTransaction": "Aggiungi transazione"
   }
 }

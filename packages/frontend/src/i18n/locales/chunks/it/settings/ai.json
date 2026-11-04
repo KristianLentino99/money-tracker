@@ -56,7 +56,8 @@
         "modelInfo": {
           "estimatedCost": "Costo stimato:",
           "per100Transactions": "per 100 transazioni",
-          "per100Pairs": "per 100 coppie"
+          "per100Pairs": "per 100 coppie",
+          "unknown": "Sconosciuto"
         },
         "notifications": {
           "updateSuccess": "Modello aggiornato con successo",
@@ -69,7 +70,13 @@
           "description": "Aggiungere un modello IA per usare questa funzionalità."
         },
         "allConnectionsDown": "Tutti i modelli IA richiedono attenzione, quindi questa funzionalità è in pausa. Correggerne uno in {link}.",
-        "allConnectionsDownLink": "Modelli IA"
+        "allConnectionsDownLink": "Modelli IA",
+        "groupLabels": {
+          "groq": "Groq",
+          "deepseek": "DeepSeek"
+        },
+        "sharedPoolNote": "Con il tuo piano attuale, il modello incluso usa risorse condivise: quando la domanda è elevata possono essere applicati dei limiti. {link} per evitarli.",
+        "sharedPoolNoteLink": "Passa a Plus"
       },
       "modelGuide": {
         "trigger": "Quale modello è adatto?",

@@ -152,12 +152,14 @@
           "note": "Nota",
           "amount": "Importo",
           "transactionType": "Tipo di transazione",
-          "account": "Conto"
+          "account": "Conto",
+          "payee": "Beneficiario"
         },
         "transactionTypeOptions": {
           "income": "Entrata",
           "expense": "Spesa"
-        }
+        },
+        "payeePlaceholder": "Seleziona un beneficiario"
       },
       "createSuccess": "Pagamento ricorrente creato con successo",
       "createError": "Creazione del pagamento ricorrente non riuscita",
@@ -351,6 +353,12 @@
           "notesEmpty": "Nessuna",
           "tagsMore": "+{count} altre"
         }
+      },
+      "linkTransaction": "Collega transazione",
+      "markPaid": {
+        "overpayTitle": "Il pagamento supera il saldo",
+        "overpayDescription": "Questo pagamento supera il saldo residuo di {amount}. Segnarlo comunque come pagato?",
+        "overpayConfirmButton": "Segna comunque come pagato"
       }
     }
   }

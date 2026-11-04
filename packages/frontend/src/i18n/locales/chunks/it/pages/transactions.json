@@ -79,7 +79,8 @@
         "toPortfolio": "Verso un portafoglio",
         "toVenture": "Verso venture capital",
         "selectedCount": "{n} selezionati"
-      }
+      },
+      "uncategorized": "Senza categoria"
     },
     "list": {
       "noMoreData": "Nessun'altra transazione",
@@ -296,6 +297,17 @@
       "deleteTitle": "Eliminare la vista “{name}”?",
       "deleteDescription": "Le transazioni non vengono modificate. L'operazione non può essere annullata.",
       "filtersCount": "{count} filtro | {count} filtri"
+    },
+    "bulkLinkSubscription": {
+      "button": "Collega a un pagamento ricorrente",
+      "title": "Collega le transazioni a un pagamento ricorrente",
+      "description": "Collega le transazioni selezionate a un unico pagamento ricorrente. Non puoi collegare insieme transazioni di entrata e di uscita.",
+      "selectLabel": "Pagamento ricorrente",
+      "selectPlaceholder": "Seleziona un pagamento ricorrente",
+      "mixedTypes": "Non puoi collegare insieme transazioni di entrata e di uscita. Seleziona transazioni dello stesso tipo.",
+      "confirmButton": "Collega transazioni",
+      "successMessage": "Transazioni selezionate collegate al pagamento ricorrente",
+      "errorMessage": "Impossibile collegare le transazioni al pagamento ricorrente"
     }
   },
   "records": {

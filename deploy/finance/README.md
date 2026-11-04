@@ -1,8 +1,8 @@
 # Finance deployment
 
 `finance.kristianlentino.it` runs on the existing Lightsail instance
-`money-tracker-finance-prod` in `eu-central-1`. The instance is intentionally
-the inexpensive 2 GB plan; database backups are **not** scheduled.
+`money-tracker-finance-prod-1gb` in `eu-central-1`. The instance is intentionally
+the inexpensive 1 GB plan with 2 GB swap; database backups are **not** scheduled.
 
 Deploy a revision already pushed to `origin/dev` with:
 

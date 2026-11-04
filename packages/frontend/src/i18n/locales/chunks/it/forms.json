@@ -72,7 +72,9 @@
       "notifications": {
         "success": "Portafoglio aggiornato.",
         "error": "Impossibile aggiornare il portafoglio. Riprovare."
-      }
+      },
+      "manualTrackingLabel": "Monitora il valore manualmente",
+      "manualTrackingDescription": "Utilizza la valuta di visualizzazione del portafoglio per i valori dichiarati. Questa scelta viene bloccata dopo la presenza di una cronologia."
     },
     "portfolioTransfer": {
       "transferTypeLabel": "Tipo di trasferimento",
