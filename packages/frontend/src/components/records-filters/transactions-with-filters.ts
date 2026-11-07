@@ -151,9 +151,6 @@ export const useTransactionsWithFilters = ({
       offset,
       sortBy: sorting?.value.sortBy,
       order: sorting?.value.order,
-      includeSplits: true,
-      includeTags: true,
-      includeGroups: true,
     });
   };
 

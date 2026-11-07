@@ -95,8 +95,7 @@
       "exceedTotal": "L'importo totale delle suddivisioni ({{total}}) supera l'importo della transazione ({{transactionAmount}})",
       "invalidData": "Dati della suddivisione non validi",
       "splitNotFound": "Suddivisione non trovata",
-      "cannotDeleteWithRefunds": "Impossibile eliminare una suddivisione collegata a dei rimborsi",
-      "cannotReduceBelowRefunded": "Questa suddivisione ha rimborsi per un totale di {{refundsText}}. Non è possibile ridurla al di sotto dell'importo rimborsato. Per ridurla ulteriormente, scollegare prima i rimborsi."
+      "cannotDeleteWithRefunds": "Impossibile eliminare una suddivisione collegata a dei rimborsi"
     },
     "reconciliation": {
       "systemNotAllowed": "Solo le transazioni collegate alla banca possono essere unite o rimosse.",
@@ -128,7 +127,17 @@
     "paymentAmountRequired": "Inserire l'importo nella valuta della transazione principale per ogni parte in una valuta diversa.",
     "paymentLinkNotAllowed": "Questa transazione non può essere collegata al pagamento. Possono essere collegate solo entrate o uscite proprie dello stesso tipo, non trasferimenti, rimborsi, suddivisioni, transazioni in sospeso o parti di un altro pagamento.",
     "paymentLinkedAmountFixed": "L'importo di una transazione collegata non può essere modificato.",
-    "paymentLinkedTypeMismatch": "Le transazioni collegate devono avere lo stesso tipo del pagamento. Scollegarle prima."
+    "paymentLinkedTypeMismatch": "Le transazioni collegate devono avere lo stesso tipo del pagamento. Scollegarle prima.",
+    "refunds": {
+      "wholeLinkWithPartials": "A whole-refund link cannot be combined with partial links",
+      "externalLinkWithOthers": "A refund for a purchase outside the app cannot be combined with other refund links",
+      "externalLinkWithAmount": "A refund of a transaction outside the app cannot have a partial amount; it always covers the whole refund.",
+      "totalExceedsRefund": "Total refund link amounts cannot be greater than the refund transaction amount",
+      "totalExceedsSplit": "Total refund amount cannot be greater than the split amount",
+      "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
+      "refundOfRefund": "Cannot refund a \"refund\" transaction",
+      "duplicateLink": "This refund is already linked to that transaction"
+    }
   },
   "tags": {
     "tagNotFound": "Etichetta non trovata",
@@ -189,6 +198,7 @@
     "cannotDeleteHoldingWithActivePosition": "Impossibile eliminare una posizione ancora aperta. Vendere o trasferire prima tutte le quote.",
     "transactionAlreadyTransfer": "La transazione è già contrassegnata come trasferimento e non può essere collegata a un portafoglio.",
     "transactionAlreadyLinkedToPortfolio": "La transazione è già collegata a un trasferimento di portafoglio.",
+    "linkedTransactionMustBelongToDestinationAccount": "La transazione collegata deve appartenere al conto di destinazione.",
     "transactionAlreadyLinkedToVenture": "La transazione è già collegata a un'operazione di venture capital",
     "portfolioTransferNotFound": "Trasferimento di portafoglio non trovato",
     "exchangeCurrenciesMustDiffer": "Le valute del cambio devono essere diverse",
@@ -688,7 +698,8 @@
         "transferNoInflow": "Il trasferimento verso \"{{account}}\" non ha una riga di entrata corrispondente; verrà importato come uscita normale.",
         "transferNoOutflow": "Il trasferimento da \"{{account}}\" non ha una riga di uscita corrispondente; verrà importato come entrata normale.",
         "currencyUndetected": "Impossibile rilevare la valuta del conto \"{{account}}\"; sceglierne una nell'anteprima."
-      }
+      },
+      "importAlreadyInProgress": "A YNAB import is already running. Wait for it to finish before starting another one."
     },
     "budgetBakersWallet": {
       "parse": {

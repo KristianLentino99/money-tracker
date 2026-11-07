@@ -73,6 +73,12 @@ const portfolioToAccountTransferImpl = async ({
       });
     }
 
+    if (existingTx.accountId !== accountId) {
+      throw new ValidationError({
+        message: t({ key: 'investments.linkedTransactionMustBelongToDestinationAccount' }),
+      });
+    }
+
     const existingLink = await PortfolioTransfers.findOne({
       where: { transactionId: existingTransactionId },
     });

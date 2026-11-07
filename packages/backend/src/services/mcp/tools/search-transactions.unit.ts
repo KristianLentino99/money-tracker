@@ -1,44 +1,39 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { getPayeeNames } from '@services/payees/get-payee-names';
 import { getTransactions } from '@services/transactions/get-transactions';
-import { z } from 'zod';
+import { captureTools, makeExtra, parseToolResult } from '@tests/helpers/mcp-tools';
 
-import { registerSearchTransactions } from './search-transactions';
+import { searchTransactionsTool } from './search-transactions';
 
 jest.mock('@services/transactions/get-transactions', () => ({ getTransactions: jest.fn() }));
-jest.mock('@js/utils/posthog', () => ({ trackMcpToolUsed: jest.fn() }));
+jest.mock('@services/payees/get-payee-names', () => ({ getPayeeNames: jest.fn() }));
+jest.mock('@js/utils/posthog', () => ({
+  ...jest.requireActual<object>('@js/utils/posthog'),
+  trackMcpToolUsed: jest.fn(),
+}));
 jest.mock('@root/serializers/transactions.serializer', () => ({ serializeTransactions: (rows: unknown) => rows }));
-jest.mock('@services/mcp/serializers', () => ({ slimTransactionsForMcp: (rows: unknown) => rows }));
-jest.mock('./helpers', () => ({
-  getUserId: () => 42,
-  jsonContent: ({ data }: { data: unknown }) => ({ content: [{ type: 'text', text: JSON.stringify(data) }] }),
+jest.mock('@services/mcp/serializers', () => ({
+  slimTransactionsForMcp: ({ transactions }: { transactions: unknown }) => transactions,
 }));
 
-type SearchResult = {
-  content: Array<{
-    text: string;
-  }>;
-};
-type Handler = (args: Record<string, unknown>, extra: object) => Promise<SearchResult>;
+const tool = captureTools({ register: searchTransactionsTool })[0]!;
+const schema = tool.config.inputSchema!;
 
-let handler: Handler;
-let schema: z.ZodObject<z.ZodRawShape>;
-
-const searchTransactions = async ({ args = {} }: { args?: Record<string, unknown> } = {}) => {
-  const result = await handler(schema.parse(args), {});
-  return JSON.parse(result.content[0]!.text);
-};
+const searchTransactions = async ({ args = {} }: { args?: Record<string, unknown> } = {}) =>
+  parseToolResult({ result: await tool.handler(args, makeExtra()) }) as {
+    transactions: unknown[];
+    count: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
+    nextOffset: number | null;
+  };
 
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers().setSystemTime(new Date('2026-11-02T12:00:00.000Z'));
   jest.mocked(getTransactions).mockResolvedValue([]);
-  registerSearchTransactions({
-    registerTool: (_name: string, config: { inputSchema: z.ZodRawShape }, toolHandler: Handler) => {
-      schema = z.object(config.inputSchema);
-      handler = toolHandler;
-    },
-  } as unknown as McpServer);
+  jest.mocked(getPayeeNames).mockResolvedValue(new Map());
 });
 
 afterEach(() => {

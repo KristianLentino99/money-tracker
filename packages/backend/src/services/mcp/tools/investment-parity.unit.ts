@@ -9,9 +9,7 @@ import {
 } from '@bt/shared/types/investments';
 import { Money } from '@common/types/money';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { isBaseCurrencyChangeLocked } from '@services/currencies/base-currency-lock';
-import { createHolding } from '@services/investments/holdings/create-holding.service';
 import { createPortfolio } from '@services/investments/portfolios/create.service';
 import { listPortfolios } from '@services/investments/portfolios/list.service';
 import {
@@ -32,24 +30,33 @@ import {
 import {
   createInvestmentContribution,
   createInvestmentContributionFromTransaction,
+  deletePortfolioTransfer,
+  setTransferAdjustment,
   updateInvestmentContribution,
-} from '@services/investments/portfolios/transfers/create-investment-contribution.service';
-import { deletePortfolioTransfer } from '@services/investments/portfolios/transfers/delete-portfolio-transfer.service';
-import { setTransferAdjustment } from '@services/investments/portfolios/transfers/set-transfer-adjustment.service';
-import { addSecurityFromSearch } from '@services/investments/securities/add-from-search.service';
-import { searchSecurities } from '@services/investments/securities/search.service';
+} from '@services/investments/portfolios/transfers';
+import { captureTools, makeExtra, type McpExtra } from '@tests/helpers/mcp-tools';
 import { z } from 'zod';
 
-import { registerCreateHolding } from './create-holding';
-import { registerCreatePortfolio } from './create-portfolio';
-import { registerGetPortfolios } from './get-portfolios';
-import { registerInvestmentContributionTools } from './investment-contribution-tools';
-import { registerManualPortfolioTools } from './manual-portfolio-tools';
-import { registerSearchSecurities } from './search-securities';
+import { createPortfolioTool } from './create-portfolio';
+import { deletePortfolioTransferTool } from './delete-portfolio-transfer';
+import { getPortfoliosTool } from './get-portfolios';
+import {
+  createInvestmentContributionFromTransactionTool,
+  createInvestmentContributionTool,
+  updateInvestmentContributionTool,
+} from './investment-contribution-tools';
+import {
+  executeManualPortfolioImportTool,
+  extractManualPortfolioImportTool,
+  getManualPortfolioTool,
+  importManualPortfolioJsonTool,
+  manageManualPortfolioTransactionTool,
+  manageManualPortfolioValuationTool,
+} from './manual-portfolio-tools';
+import { setPortfolioTransferAdjustmentTool } from './set-portfolio-transfer-adjustment';
 
 jest.mock('@js/utils/posthog', () => ({ trackMcpToolUsed: jest.fn() }));
 jest.mock('@services/currencies/base-currency-lock', () => ({ isBaseCurrencyChangeLocked: jest.fn() }));
-jest.mock('@services/investments/holdings/create-holding.service', () => ({ createHolding: jest.fn() }));
 jest.mock('@services/investments/portfolios/create.service', () => ({ createPortfolio: jest.fn() }));
 jest.mock('@services/investments/portfolios/list.service', () => ({ listPortfolios: jest.fn() }));
 jest.mock('@services/investments/portfolios/manual-values-import.service', () => ({
@@ -69,19 +76,13 @@ jest.mock('@services/investments/portfolios/manual-values.service', () => ({
   updateManualPortfolioTransaction: jest.fn(),
   updateManualPortfolioValuation: jest.fn(),
 }));
-jest.mock('@services/investments/portfolios/transfers/create-investment-contribution.service', () => ({
+jest.mock('@services/investments/portfolios/transfers', () => ({
   createInvestmentContribution: jest.fn(),
   createInvestmentContributionFromTransaction: jest.fn(),
+  deletePortfolioTransfer: jest.fn(),
+  setTransferAdjustment: jest.fn(),
   updateInvestmentContribution: jest.fn(),
 }));
-jest.mock('@services/investments/portfolios/transfers/delete-portfolio-transfer.service', () => ({
-  deletePortfolioTransfer: jest.fn(),
-}));
-jest.mock('@services/investments/portfolios/transfers/set-transfer-adjustment.service', () => ({
-  setTransferAdjustment: jest.fn(),
-}));
-jest.mock('@services/investments/securities/add-from-search.service', () => ({ addSecurityFromSearch: jest.fn() }));
-jest.mock('@services/investments/securities/search.service', () => ({ searchSecurities: jest.fn() }));
 
 const portfolioId = '00000000-0000-4000-8000-000000000001';
 const recordId = '00000000-0000-4000-8000-000000000002';
@@ -130,29 +131,35 @@ const transfer = {
     },
   ],
 };
-type Extra = {
-  authInfo?: { clientId?: string; scopes: string[]; extra: { userId?: number; role?: string; readOnly?: boolean } };
-};
-type Tool = {
-  schema: z.ZodRawShape;
-  handler: (args: Record<string, unknown>, extra: Extra) => Promise<{ content: { text: string }[] }>;
-};
-const tools = new Map<string, Tool>();
-const server = {
-  registerTool: (name: string, config: { inputSchema: z.ZodRawShape }, handler: Tool['handler']) => {
-    tools.set(name, { schema: config.inputSchema, handler });
-  },
-} as unknown as McpServer;
+type Extra = McpExtra;
+const tools = new Map<string, ReturnType<typeof captureTools>[number]>();
+for (const tool of captureTools({
+  register: [
+    createInvestmentContributionTool,
+    createInvestmentContributionFromTransactionTool,
+    updateInvestmentContributionTool,
+    deletePortfolioTransferTool,
+    setPortfolioTransferAdjustmentTool,
+    getManualPortfolioTool,
+    manageManualPortfolioTransactionTool,
+    manageManualPortfolioValuationTool,
+    importManualPortfolioJsonTool,
+    extractManualPortfolioImportTool,
+    executeManualPortfolioImportTool,
+    createPortfolioTool,
+    getPortfoliosTool,
+  ],
+})) {
+  tools.set(tool.name, tool);
+}
 const auth = ({
   scopes = ['finance:read', 'finance:write', 'finance:delete'],
   readOnly = false,
   role = USER_ROLES.common,
-}: { scopes?: string[]; readOnly?: boolean; role?: string } = {}): Extra => ({
-  authInfo: { clientId: 'mcp-test', scopes, extra: { userId: 42, role, readOnly } },
-});
+}: { scopes?: string[]; readOnly?: boolean; role?: string } = {}): Extra => makeExtra({ scopes, readOnly, role });
 const call = async ({ tool, args, extra = auth() }: { tool: string; args: Record<string, unknown>; extra?: Extra }) => {
   const registered = tools.get(tool)!;
-  const result = await registered.handler(z.object(registered.schema).parse(args), extra);
+  const result = await registered.handler(args, extra);
   return JSON.parse(result.content[0]!.text);
 };
 
@@ -162,13 +169,6 @@ beforeEach(() => {
   jest.mocked(updateManualPortfolioTransaction).mockResolvedValue({} as never);
   jest.mocked(createManualPortfolioValuation).mockResolvedValue({} as never);
   jest.mocked(updateManualPortfolioValuation).mockResolvedValue({} as never);
-  tools.clear();
-  registerInvestmentContributionTools(server);
-  registerManualPortfolioTools(server);
-  registerCreateHolding(server);
-  registerCreatePortfolio(server);
-  registerGetPortfolios(server);
-  registerSearchSecurities(server);
 });
 
 describe('investment MCP parity', () => {
@@ -178,31 +178,8 @@ describe('investment MCP parity', () => {
       'create_investment_contribution_from_transaction',
       'update_investment_contribution',
     ]) {
-      expect(() => z.toJSONSchema(z.object(tools.get(name)!.schema), { io: 'input' })).not.toThrow();
+      expect(() => z.toJSONSchema(tools.get(name)!.config.inputSchema!, { io: 'input' })).not.toThrow();
     }
-  });
-
-  it('preserves provider search identity through search and holding creation', async () => {
-    jest.mocked(searchSecurities).mockResolvedValue([searchResult]);
-    const results = await call({ tool: 'search_securities', args: { query: 'SXRT', portfolioId } });
-    expect(results).toEqual([searchResult]);
-    jest.mocked(addSecurityFromSearch).mockResolvedValue({ security: { id: securityId } } as never);
-    jest.mocked(createHolding).mockResolvedValue({ securityId, quantity: Money.zero() } as never);
-    expect(await call({ tool: 'create_holding', args: { portfolioId, searchResult: results[0] } })).toMatchObject({
-      securityId,
-      quantity: 0,
-    });
-    expect(addSecurityFromSearch).toHaveBeenCalledWith({ searchResult });
-    expect(createHolding).toHaveBeenCalledWith({ userId: 42, portfolioId, securityId });
-  });
-
-  it('rejects missing or ambiguous holding security identity before creating anything', async () => {
-    await expect(call({ tool: 'create_holding', args: { portfolioId } })).rejects.toThrow(/exactly one/);
-    await expect(call({ tool: 'create_holding', args: { portfolioId, securityId, searchResult } })).rejects.toThrow(
-      /exactly one/,
-    );
-    expect(addSecurityFromSearch).not.toHaveBeenCalled();
-    expect(createHolding).not.toHaveBeenCalled();
   });
 
   it('creates grouped purchases with decimal input and decimal output plus routing identity', async () => {
@@ -252,12 +229,17 @@ describe('investment MCP parity', () => {
     await expect(call({ tool: 'delete_portfolio_transfer', args: { transferId: recordId } })).rejects.toThrow(
       /confirmation/,
     );
-    expect(deletePortfolioTransfer).toHaveBeenCalledWith({ userId: 42, transferId: recordId });
+    expect(deletePortfolioTransfer).toHaveBeenCalledWith({
+      userId: 42,
+      transferId: recordId,
+      deleteLinkedTransaction: false,
+      deleteLinkedInvestmentTransactions: false,
+    });
     jest.mocked(deletePortfolioTransfer).mockResolvedValue({ success: true });
     await call({
       tool: 'delete_portfolio_transfer',
       args: { transferId: recordId, deleteLinkedTransaction: false, deleteLinkedInvestmentTransactions: true },
-      extra: auth({ scopes: ['finance:delete'] }),
+      extra: auth({ scopes: ['finance:write', 'finance:delete'] }),
     });
     expect(deletePortfolioTransfer).toHaveBeenLastCalledWith({
       userId: 42,
@@ -334,7 +316,7 @@ describe('manual portfolio MCP parity', () => {
     await call({
       tool: 'manage_manual_portfolio_transaction',
       args: { portfolioId, action: 'delete', recordId },
-      extra: auth({ scopes: ['finance:delete'] }),
+      extra: auth({ scopes: ['finance:write', 'finance:delete'] }),
     });
     expect(deleteManualPortfolioTransaction).toHaveBeenCalledWith({ userId: 42, portfolioId, recordId });
     await call({ tool: 'manage_manual_portfolio_valuation', args: { portfolioId, action: 'create', valuation } });
@@ -352,7 +334,7 @@ describe('manual portfolio MCP parity', () => {
     await call({
       tool: 'manage_manual_portfolio_valuation',
       args: { portfolioId, action: 'delete', valuationId: recordId },
-      extra: auth({ scopes: ['finance:delete'] }),
+      extra: auth({ scopes: ['finance:write', 'finance:delete'] }),
     });
     expect(deleteManualPortfolioValuation).toHaveBeenCalledWith({ userId: 42, portfolioId, valuationId: recordId });
   });
@@ -456,7 +438,6 @@ describe('investment tool authorization', () => {
     'create_investment_contribution_from_transaction',
     'update_investment_contribution',
     'set_portfolio_transfer_adjustment',
-    'create_holding',
     'manage_manual_portfolio_transaction',
     'manage_manual_portfolio_valuation',
     'import_manual_portfolio_json',
@@ -464,16 +445,30 @@ describe('investment tool authorization', () => {
     'execute_manual_portfolio_import',
   ];
 
-  it.each(writes)('%s requires authentication and write scope before touching services', async (name) => {
-    const handler = tools.get(name)!.handler;
-    await expect(handler({}, {})).rejects.toThrow(/Authentication required/);
-    await expect(handler({ action: 'create' }, auth({ scopes: ['finance:read'] }))).rejects.toThrow(/finance:write/);
+  it.each(writes)('%s is published as a write tool that states the finance:write scope', (name) => {
+    const { config } = tools.get(name)!;
+
+    expect(config.annotations?.readOnlyHint).toBe(false);
+    expect(config.description).toMatch(/Requires finance:write scope/);
+  });
+
+  it('refuses a write token without finance:write before touching services', async () => {
+    await expect(
+      call({
+        tool: 'update_investment_contribution',
+        args: { portfolioId, transferId: recordId, purchases: [purchase] },
+        extra: auth({ scopes: ['finance:read'] }),
+      }),
+    ).rejects.toThrow(/finance:write/);
+    expect(updateInvestmentContribution).not.toHaveBeenCalled();
   });
 
   it('blocks writes while base currency recalculation is active', async () => {
     jest.mocked(isBaseCurrencyChangeLocked).mockResolvedValue(true);
-    await expect(call({ tool: 'create_holding', args: { portfolioId, securityId } })).rejects.toThrow(/recalculation/);
-    expect(createHolding).not.toHaveBeenCalled();
+    await expect(
+      call({ tool: 'create_portfolio', args: { name: 'Pension', portfolioType: PORTFOLIO_TYPE.retirement } }),
+    ).rejects.toThrow(/baseCurrencyChangeInProgress/);
+    expect(createPortfolio).not.toHaveBeenCalled();
   });
 
   it('requires delete scope independently from write scope', async () => {

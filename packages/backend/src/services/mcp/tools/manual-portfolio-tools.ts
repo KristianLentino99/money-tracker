@@ -4,8 +4,6 @@ import {
   MANUAL_PORTFOLIO_TRANSACTION_CATEGORY,
 } from '@bt/shared/types/investments';
 import { currencyCode, dateString, decimalString, recordId } from '@common/lib/zod/custom-types';
-import { trackMcpToolUsed } from '@js/utils/posthog';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   executeManualImport,
   extractManualAi,
@@ -24,7 +22,8 @@ import {
 } from '@services/investments/portfolios/manual-values.service';
 import { z } from 'zod';
 
-import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
+import { defineTool } from '../define-tool';
+import { requireScope } from './helpers';
 
 const note = z.string().max(2000).nullable().optional();
 const source = z.string().max(64).nullable().optional();
@@ -120,149 +119,117 @@ const executeInputSchema = {
     ),
 };
 
-export function registerManualPortfolioTools(server: McpServer) {
-  server.registerTool(
-    'get_manual_portfolio',
-    {
-      description:
-        'Get a manually tracked portfolio overview, transaction records, end-of-day valuations and timeline. Values are decimals in the portfolio display currency. Use record and valuation IDs with the manual management tools.',
-      inputSchema: portfolioSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      trackMcpToolUsed({ userId, tool: 'get_manual_portfolio', clientId: extra.authInfo?.clientId });
-      return jsonContent({ data: await getManualPortfolioOverview({ userId, ...args }) });
-    },
-  );
+export const getManualPortfolioTool = defineTool({
+  name: 'get_manual_portfolio',
+  toolset: 'investments',
+  access: 'read',
+  description:
+    'Get a manually tracked portfolio overview, transaction records, end-of-day valuations and timeline. Values are decimals in the portfolio display currency. Use record and valuation IDs with the manual management tools.',
+  input: portfolioSchema,
+  run: ({ userId, args }) => getManualPortfolioOverview({ userId, ...args }),
+});
 
-  server.registerTool(
-    'manage_manual_portfolio_transaction',
-    {
-      description:
-        'Create, fully update or delete a manual portfolio cash-flow record: contribution, withdrawal, fee, tax, distribution or other income. Amounts are positive decimal strings; category supplies direction. Updates require recordId plus complete transaction body; confirm deletion with the user.',
-      inputSchema: transactionInputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({
-        extra,
+export const manageManualPortfolioTransactionTool = defineTool({
+  name: 'manage_manual_portfolio_transaction',
+  toolset: 'investments',
+  access: 'write',
+  conditionalDelete: 'when action is delete',
+  description:
+    'Create, fully update or delete a manual portfolio cash-flow record: contribution, withdrawal, fee, tax, distribution or other income. Amounts are positive decimal strings; category supplies direction. Updates require recordId plus complete transaction body; confirm deletion with the user.',
+  input: transactionInputSchema,
+  run: async ({ userId, args, extra }) => {
+    const { portfolioId } = args;
+    if (args.action === 'delete') {
+      requireScope({ extra, scope: 'finance:delete' });
+      await deleteManualPortfolioTransaction({
         userId,
-        scope: args.action === 'delete' ? 'finance:delete' : 'finance:write',
+        portfolioId,
+        recordId: portfolioSchema.portfolioId.parse(args.recordId),
       });
-      trackMcpToolUsed({ userId, tool: 'manage_manual_portfolio_transaction', clientId: extra.authInfo?.clientId });
-      const { portfolioId } = args;
-      if (args.action === 'delete') {
-        await deleteManualPortfolioTransaction({
+      return { success: true };
+    }
+    const transaction = transactionSchema.parse(args.transaction);
+
+    return args.action === 'create'
+      ? createManualPortfolioTransaction({ userId, portfolioId, ...transaction })
+      : updateManualPortfolioTransaction({
           userId,
           portfolioId,
           recordId: portfolioSchema.portfolioId.parse(args.recordId),
+          ...transaction,
         });
-        return jsonContent({ data: { success: true } });
-      }
-      const transaction = transactionSchema.parse(args.transaction);
-      const data =
-        args.action === 'create'
-          ? await createManualPortfolioTransaction({ userId, portfolioId, ...transaction })
-          : await updateManualPortfolioTransaction({
-              userId,
-              portfolioId,
-              recordId: portfolioSchema.portfolioId.parse(args.recordId),
-              ...transaction,
-            });
-      return jsonContent({ data });
-    },
-  );
+  },
+});
 
-  server.registerTool(
-    'manage_manual_portfolio_valuation',
-    {
-      description:
-        'Create/replace an end-of-day manual valuation, fully update a valuation by ID, or delete it. value is a non-negative decimal string in the portfolio currency. Creating at an existing date replaces that snapshot; moving an update to an occupied date also replaces that snapshot. Confirm deletion with the user.',
-      inputSchema: valuationInputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({
-        extra,
+export const manageManualPortfolioValuationTool = defineTool({
+  name: 'manage_manual_portfolio_valuation',
+  toolset: 'investments',
+  access: 'write',
+  conditionalDelete: 'when action is delete',
+  description:
+    'Create/replace an end-of-day manual valuation, fully update a valuation by ID, or delete it. value is a non-negative decimal string in the portfolio currency. Creating at an existing date replaces that snapshot; moving an update to an occupied date also replaces that snapshot. Confirm deletion with the user.',
+  input: valuationInputSchema,
+  run: async ({ userId, args, extra }) => {
+    const { portfolioId } = args;
+    if (args.action === 'delete') {
+      requireScope({ extra, scope: 'finance:delete' });
+      await deleteManualPortfolioValuation({
         userId,
-        scope: args.action === 'delete' ? 'finance:delete' : 'finance:write',
+        portfolioId,
+        valuationId: portfolioSchema.portfolioId.parse(args.valuationId),
       });
-      trackMcpToolUsed({ userId, tool: 'manage_manual_portfolio_valuation', clientId: extra.authInfo?.clientId });
-      const { portfolioId } = args;
-      if (args.action === 'delete') {
-        await deleteManualPortfolioValuation({
+      return { success: true };
+    }
+    const valuation = valuationSchema.parse(args.valuation);
+
+    return args.action === 'create'
+      ? createManualPortfolioValuation({ userId, portfolioId, ...valuation })
+      : updateManualPortfolioValuation({
           userId,
           portfolioId,
           valuationId: portfolioSchema.portfolioId.parse(args.valuationId),
+          ...valuation,
         });
-        return jsonContent({ data: { success: true } });
-      }
-      const valuation = valuationSchema.parse(args.valuation);
-      const data =
-        args.action === 'create'
-          ? await createManualPortfolioValuation({ userId, portfolioId, ...valuation })
-          : await updateManualPortfolioValuation({
-              userId,
-              portfolioId,
-              valuationId: portfolioSchema.portfolioId.parse(args.valuationId),
-              ...valuation,
-            });
-      return jsonContent({ data });
-    },
-  );
+  },
+});
 
-  server.registerTool(
-    'import_manual_portfolio_json',
-    {
-      description:
-        'Import a versioned manual-portfolio JSON export into an existing manual portfolio. Currency must match. Exact duplicate transactions/valuations are skipped; a valuation on an existing date with a different value is rejected. Review the payload before calling.',
-      inputSchema: jsonInputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
-      trackMcpToolUsed({ userId, tool: 'import_manual_portfolio_json', clientId: extra.authInfo?.clientId });
-      return jsonContent({ data: await importManualPortfolioJson({ userId, ...args }) });
-    },
-  );
+export const importManualPortfolioJsonTool = defineTool({
+  name: 'import_manual_portfolio_json',
+  toolset: 'investments',
+  access: 'write',
+  description:
+    'Import a versioned manual-portfolio JSON export into an existing manual portfolio. Currency must match. Exact duplicate transactions/valuations are skipped; a valuation on an existing date with a different value is rejected. Review the payload before calling.',
+  input: jsonInputSchema,
+  run: ({ userId, args }) => importManualPortfolioJson({ userId, ...args }),
+});
 
-  server.registerTool(
-    'extract_manual_portfolio_import',
-    {
-      description:
-        'Preview manual-portfolio import candidates from deterministic CSV parsing or AI text/file extraction. Nothing is imported by this tool. Returns records, warnings, duplicate flags and currency mismatches for review before execute_manual_portfolio_import; AI requires an enabled AI connection.',
-      inputSchema: extractInputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
-      trackMcpToolUsed({ userId, tool: 'extract_manual_portfolio_import', clientId: extra.authInfo?.clientId });
-      const parsed = extractionSourceSchema.parse(args);
-      const data =
-        parsed.source === 'csv'
-          ? await extractManualCsv({ userId, portfolioId: args.portfolioId, csv: parsed.csv })
-          : await extractManualAi({
-              userId,
-              portfolioId: args.portfolioId,
-              text: parsed.text,
-              fileBase64: parsed.fileBase64,
-            });
-      return jsonContent({ data });
-    },
-  );
+export const extractManualPortfolioImportTool = defineTool({
+  name: 'extract_manual_portfolio_import',
+  toolset: 'investments',
+  access: 'write',
+  description:
+    'Preview manual-portfolio import candidates from deterministic CSV parsing or AI text/file extraction. Nothing is imported by this tool. Returns records, warnings, duplicate flags and currency mismatches for review before execute_manual_portfolio_import; AI requires an enabled AI connection.',
+  input: extractInputSchema,
+  run: ({ userId, args }) => {
+    const parsed = extractionSourceSchema.parse(args);
 
-  server.registerTool(
-    'execute_manual_portfolio_import',
-    {
-      description:
-        'Import reviewed manual portfolio transactions and end-of-day valuations. Pass the corrected records from extract_manual_portfolio_import plus explicit skipTempIds. Unresolved dates/amounts, currency mismatches and unacknowledged duplicates are rejected by the same service as the web app.',
-      inputSchema: executeInputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
-      trackMcpToolUsed({ userId, tool: 'execute_manual_portfolio_import', clientId: extra.authInfo?.clientId });
-      return jsonContent({ data: await executeManualImport({ userId, ...args }) });
-    },
-  );
-}
+    return parsed.source === 'csv'
+      ? extractManualCsv({ userId, portfolioId: args.portfolioId, csv: parsed.csv })
+      : extractManualAi({
+          userId,
+          portfolioId: args.portfolioId,
+          text: parsed.text,
+          fileBase64: parsed.fileBase64,
+        });
+  },
+});
+
+export const executeManualPortfolioImportTool = defineTool({
+  name: 'execute_manual_portfolio_import',
+  toolset: 'investments',
+  access: 'write',
+  description:
+    'Import reviewed manual portfolio transactions and end-of-day valuations. Pass the corrected records from extract_manual_portfolio_import plus explicit skipTempIds. Unresolved dates/amounts, currency mismatches and unacknowledged duplicates are rejected by the same service as the web app.',
+  input: executeInputSchema,
+  run: ({ userId, args }) => executeManualImport({ userId, ...args }),
+});

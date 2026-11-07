@@ -1,58 +1,35 @@
-import { PORTFOLIO_TYPE } from '@bt/shared/types/investments';
-import { currencyCode, recordId } from '@common/lib/zod/custom-types';
-import { trackMcpToolUsed } from '@js/utils/posthog';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { recordId } from '@common/lib/zod/custom-types';
+import { updatePortfolioBodySchema, updatePortfolioBodyShape } from '@controllers/investments/portfolios/schemas';
 import { updatePortfolio } from '@services/investments/portfolios/update.service';
-import { z } from 'zod';
 
-import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
+import { defineTool } from '../define-tool';
 
-const inputSchema = {
-  portfolioId: recordId().describe('Portfolio ID (from get_portfolios)'),
-  name: z.string().optional().describe('New portfolio name'),
-  portfolioType: z
-    .enum([PORTFOLIO_TYPE.investment, PORTFOLIO_TYPE.retirement, PORTFOLIO_TYPE.savings, PORTFOLIO_TYPE.other])
-    .optional()
-    .describe('New portfolio type: investment, retirement, savings, or other'),
-  description: z.string().nullable().optional().describe('New description (pass null to clear)'),
-  displayCurrencyCode: currencyCode()
-    .nullable()
-    .optional()
-    .describe('Connected display/valuation currency; null follows the user base currency for ordinary portfolios'),
-  isManualTracking: z
-    .boolean()
-    .optional()
-    .describe(
+export const updatePortfolioTool = defineTool({
+  name: 'update_portfolio',
+  toolset: 'investments',
+  access: 'write',
+  description:
+    "Update an existing portfolio's name, type, description, display currency, manual tracking or enabled state. Use when the user wants to rename, recategorize, or disable one of their portfolios. Obtain the portfolioId from get_portfolios first. Only the fields provided are changed.",
+  input: {
+    portfolioId: recordId().describe('Portfolio ID (from get_portfolios)'),
+    name: updatePortfolioBodyShape.name.describe('New portfolio name (must be unique for this user), 1-255 characters'),
+    portfolioType: updatePortfolioBodyShape.portfolioType.describe(
+      'New portfolio type: investment, retirement, savings, or other',
+    ),
+    description: updatePortfolioBodyShape.description.describe('New description (pass null to clear)'),
+    isEnabled: updatePortfolioBodyShape.isEnabled.describe('Enable or disable the portfolio'),
+    displayCurrencyCode: updatePortfolioBodyShape.displayCurrencyCode.describe(
+      'Connected display/valuation currency (ISO code, one of the user currencies); null follows the user base currency for ordinary portfolios, omit = keep',
+    ),
+    isManualTracking: updatePortfolioBodyShape.isManualTracking.describe(
       'Track manual cash flows and end-of-day valuations; requires displayCurrencyCode and cannot change after portfolio history exists',
     ),
-  isEnabled: z.boolean().optional().describe('Enable or disable the portfolio'),
-};
+  },
+  run: ({ userId, args }) => {
+    // The either-or rule (at least one field) spans fields, so it runs on the REST body schema.
+    const { portfolioId, ...fields } = args;
+    const body = updatePortfolioBodySchema.parse(fields);
 
-export function registerUpdatePortfolio(server: McpServer) {
-  server.registerTool(
-    'update_portfolio',
-    {
-      description:
-        "Update an existing portfolio's name, type, description, display currency, manual tracking or enabled state. Use when the user wants to rename, recategorize, or disable one of their portfolios. Obtain the portfolioId from get_portfolios first. Only the fields provided are changed.",
-      inputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
-      trackMcpToolUsed({ userId, tool: 'update_portfolio', clientId: extra.authInfo?.clientId });
-
-      const portfolio = await updatePortfolio({
-        userId,
-        portfolioId: args.portfolioId,
-        name: args.name,
-        portfolioType: args.portfolioType as PORTFOLIO_TYPE | undefined,
-        description: args.description,
-        isEnabled: args.isEnabled,
-        displayCurrencyCode: args.displayCurrencyCode,
-        isManualTracking: args.isManualTracking,
-      });
-
-      return jsonContent({ data: portfolio });
-    },
-  );
-}
+    return updatePortfolio({ userId, portfolioId, ...body });
+  },
+});

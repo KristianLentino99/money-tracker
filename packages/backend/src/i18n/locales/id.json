@@ -104,8 +104,7 @@
       "exceedTotal": "Total jumlah split ({{total}}) melebihi jumlah transaksi ({{transactionAmount}})",
       "invalidData": "Data split tidak valid",
       "splitNotFound": "Split tidak ditemukan",
-      "cannotDeleteWithRefunds": "Tidak dapat menghapus split yang memiliki refund yang menargetkannya",
-      "cannotReduceBelowRefunded": "Split ini memiliki refund sebesar {{refundsText}}. Anda tidak dapat menguranginya di bawah jumlah yang sudah direfund. Untuk mengurangi lebih lanjut, lepaskan tautan refund terlebih dahulu."
+      "cannotDeleteWithRefunds": "Tidak dapat menghapus split yang memiliki refund yang menargetkannya"
     },
     "reconciliation": {
       "systemNotAllowed": "Only bank-connected transactions can be merged or removed.",
@@ -136,7 +135,17 @@
     "paymentAmountRequired": "Enter the amount in the main transaction's currency for every part in a different currency.",
     "paymentLinkNotAllowed": "This transaction can't be linked to the payment. Only your own income or expense of the same type can be linked – not a transfer, refund, split, pending transaction or part of another payment.",
     "paymentLinkedAmountFixed": "The amount of a linked transaction can't be changed.",
-    "paymentLinkedTypeMismatch": "Linked transactions must have the same type as the payment. Unlink them first."
+    "paymentLinkedTypeMismatch": "Linked transactions must have the same type as the payment. Unlink them first.",
+    "refunds": {
+      "wholeLinkWithPartials": "A whole-refund link cannot be combined with partial links",
+      "externalLinkWithOthers": "A refund for a purchase outside the app cannot be combined with other refund links",
+      "externalLinkWithAmount": "A refund of a transaction outside the app cannot have a partial amount; it always covers the whole refund.",
+      "totalExceedsRefund": "Total refund link amounts cannot be greater than the refund transaction amount",
+      "totalExceedsSplit": "Total refund amount cannot be greater than the split amount",
+      "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
+      "refundOfRefund": "Cannot refund a \"refund\" transaction",
+      "duplicateLink": "This refund is already linked to that transaction"
+    }
   },
   "tags": {
     "tagNotFound": "Tag tidak ditemukan",
@@ -420,7 +429,8 @@
         "transferNoInflow": "Transfer to \"{{account}}\" has no matching inflow row; will import as a regular expense.",
         "transferNoOutflow": "Transfer from \"{{account}}\" has no matching outflow row; will import as a regular income.",
         "currencyUndetected": "Could not detect currency for account \"{{account}}\"; please pick one in the preview."
-      }
+      },
+      "importAlreadyInProgress": "A YNAB import is already running. Wait for it to finish before starting another one."
     },
     "budgetBakersWallet": {
       "parse": {

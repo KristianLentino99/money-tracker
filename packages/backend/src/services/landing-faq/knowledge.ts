@@ -1,3 +1,8 @@
+import { COMMUNITY_LOCALES, LOCALE_NAMES, SUPPORTED_LOCALES, type SupportedLocale } from '@bt/shared/i18n/locales';
+
+const languageList = (locales: SupportedLocale[]) =>
+  new Intl.ListFormat('en', { type: 'conjunction' }).format(locales.map((l) => LOCALE_NAMES[l].english));
+
 /**
  * Everything the landing FAQ assistant may state as fact. The model is told to answer from
  * this text alone, so a claim missing here is a claim it refuses to make. Keep it in step
@@ -189,9 +194,11 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 
 ## Apps, languages, sign-in
 
-- Web app only today. An iOS app is under development, with no release date yet. No Android or
-  desktop app. The web app can be added to a phone home screen as a PWA, but there is no offline mode.
-- Languages: English, Ukrainian, Spanish, Indonesian, Russian. Spanish, Indonesian and Russian
+- Web app, plus an iPhone app in public beta on TestFlight: anyone can join at
+  https://testflight.apple.com/join/tm5q4V5H. It is not on the App Store yet, with no release date.
+  No Android or desktop app. The web app can be added to a phone home screen as a PWA, but has no
+  offline mode.
+- Languages: ${languageList(Object.values(SUPPORTED_LOCALES))}. ${languageList([...COMMUNITY_LOCALES])}
   are community translations. Dark mode is supported.
 - Sign in with email and password, Google, GitHub or passkeys. You can see and log out active
   sessions.
@@ -233,8 +240,9 @@ developer, in the open. Source: https://github.com/letehaha/moneymatter
 ## Self-hosting
 
 - Same app as the cloud, free, every feature unlocked, no plans or trial. Deployed with Docker
-  Compose. Runs on a $5 VPS. 2 GB RAM minimum. Published images are amd64; ARM hosts such as a
-  Raspberry Pi build from source.
+  Compose. Runs on a $5 VPS. 2 GB RAM minimum. Published images are amd64 and arm64, so ARM
+  hosts such as an ARM VPS or a Raspberry Pi on a 64-bit OS run them directly, no build from
+  source needed.
 - Stack: Postgres, Redis and a bundled exchange-rate service. Docker Compose is the only
   supported setup: no Kubernetes, Helm or Unraid templates, no install without Docker.
 - No domain or HTTPS needed for a local or LAN trial. For public access there are recipes for

@@ -9,6 +9,7 @@ import Users from '@models/users.model';
 import { getAccessibleAccountIdsForUser } from '@services/sharing/auth/get-accessible-account-ids.service';
 import { getAccessibleTrackerIdsForUser } from '@services/sharing/auth/get-accessible-tracker-ids.service';
 import { attachPaymentParts } from '@services/transactions/payment-legs';
+import { attachRefundedAmounts } from '@services/tx-refunds/attach-refunded-amounts';
 import { Op } from 'sequelize';
 
 type FindWithFiltersParams = Parameters<typeof Transactions.findWithFilters>[0];
@@ -21,7 +22,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * translates the endpoint's `isForecastOnly` / `excludeBalanceAdjustments` query params. */
 type GetTransactionsParams = Omit<
   FindWithFiltersParams,
-  'isRaw' | 'access' | 'planned' | 'completeness' | 'balanceAdjustments'
+  'access' | 'planned' | 'completeness' | 'balanceAdjustments' | 'fullShape'
 > & {
   userId: number;
   from?: number;
@@ -31,6 +32,7 @@ type GetTransactionsParams = Omit<
   excludeBalanceAdjustments?: boolean;
   /** Whether to combine multi-account payment rows in the returned list. */
   collapsePayments?: boolean;
+  includeRefundedAmount?: boolean;
 };
 
 /** Internal snapshot of the user who attached a tx to a shared tracker. `null` for
@@ -74,7 +76,11 @@ export const getTransactions = async (params: GetTransactionsParams) => {
     limit,
     isForecastOnly,
     excludeBalanceAdjustments,
+    // Without an account filter the list shows one row per payment; an account view needs
+    // each account's own row of a multi-account payment.
     collapsePayments = !accountIds?.length,
+    includeRefundedAmount,
+    isRaw = false,
     ...rest
   } = params;
 
@@ -114,9 +120,6 @@ export const getTransactions = async (params: GetTransactionsParams) => {
     scopedAccountIds = accessibleAccounts;
   }
 
-  // Nested includes must use model instances; raw mode flattens their arrays.
-  const isRaw = !rest.includeSplits && !rest.includeTags && !rest.includeGroups;
-
   // `isForecastOnly: true` means "only the plans I authored": creator scope is what reproduces
   // that, on top of the account/tracker ids resolved above.
   const rows = await Transactions.findWithFilters({
@@ -134,6 +137,7 @@ export const getTransactions = async (params: GetTransactionsParams) => {
     // to hide them, so it opts out of the boundary's exclude-by-default.
     balanceAdjustments: excludeBalanceAdjustments ? 'exclude' : 'include',
     excludePaymentLegsWithMainIn: collapsePayments ? accessibleAccounts : undefined,
+    fullShape: !isRaw,
     isRaw,
   });
   const transactions = await attachPaymentParts({
@@ -141,6 +145,7 @@ export const getTransactions = async (params: GetTransactionsParams) => {
     collapsed: collapsePayments,
     accessibleAccountIds: accessibleAccounts,
   });
+  if (includeRefundedAmount) await attachRefundedAmounts({ transactions });
 
   if (!transactions.length || !trackerGrantsVisibility) return transactions;
 

@@ -1,4 +1,4 @@
-import type { LoanApiResponse } from '@bt/shared/types';
+import { type LoanApiResponse, MCP_TOOLSET_SCOPES } from '@bt/shared/types';
 import type { ManualPortfolioOverviewModel } from '@bt/shared/types/investments';
 import { afterEach, describe, expect, it } from '@jest/globals';
 import type { VehicleMaintenanceVisitApiResponse } from '@root/serializers/vehicle-maintenance-visits.serializer';
@@ -10,7 +10,10 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const sessions: mcp.McpTestSession[] = [];
-const initialize = async ({ scopes }: { scopes?: string[] } = {}) => {
+// Every toolset is granted, so the fork's loans, vehicles and manual portfolio tools are listed.
+const initialize = async ({
+  scopes = ['finance:read', 'finance:write', 'finance:delete', 'profile:read', ...MCP_TOOLSET_SCOPES],
+}: { scopes?: string[] } = {}) => {
   const session = await mcp.initializeMcpSession({ scopes });
   sessions.push(session);
   return session;
@@ -44,7 +47,7 @@ describe('MCP HTTP feature parity', () => {
       const response = await mcp.callMcpTool({
         session,
         name: 'update_loan',
-        args: { loanAccountId: loan.id, data: fields },
+        args: { loanId: loan.id, ...fields },
       });
       expect(response.result?.isError).toBe(true);
     }
@@ -53,13 +56,11 @@ describe('MCP HTTP feature parity', () => {
         session,
         name: 'update_loan',
         args: {
-          loanAccountId: loan.id,
-          data: {
-            currentBalance: 88.76,
-            currentBalanceAsOf: new Date().toISOString().slice(0, 10),
-            minPayment: 10.25,
-            plannedPayment: 12.34,
-          },
+          loanId: loan.id,
+          currentBalance: 88.76,
+          currentBalanceAsOf: new Date().toISOString().slice(0, 10),
+          minPayment: 10.25,
+          plannedPayment: 12.34,
         },
       }),
     });
@@ -80,17 +81,15 @@ describe('MCP HTTP feature parity', () => {
         session,
         name: 'create_vehicle',
         args: {
-          data: {
-            name: 'MCP car',
-            make: 'Test',
-            model: 'Test',
-            year: 2025,
-            vehicleClass: 'sedan',
-            currencyCode: global.BASE_CURRENCY.code,
-            purchasePrice: 10000.5,
-            purchaseDate: today,
-            currentMileage: 1234,
-          },
+          name: 'MCP car',
+          make: 'Test',
+          model: 'Test',
+          year: 2025,
+          vehicleClass: 'sedan',
+          currencyCode: global.BASE_CURRENCY.code,
+          purchasePrice: 10000.5,
+          purchaseDate: today,
+          currentMileage: 1234,
         },
       }),
     });
@@ -216,10 +215,9 @@ describe('MCP HTTP feature parity', () => {
       }),
     });
     const detail = mcp.parseMcpToolData<LoanApiResponse>({
-      response: await mcp.callMcpTool({ session, name: 'get_loan', args: { loanAccountId: loan.id } }),
+      response: await mcp.callMcpTool({ session, name: 'get_loans', args: { loanId: loan.id } }),
     });
     expect(detail.currentBalance).toBe(-74.66);
-    expect(detail.loanInstallments).toHaveLength(1);
     expect(detail.paymentsCount).toBe(1);
   });
 

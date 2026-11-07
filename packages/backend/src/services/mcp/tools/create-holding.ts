@@ -1,58 +1,31 @@
-import { SUPPORTED_ASSET_CLASSES } from '@bt/shared/types/investments';
 import { recordId } from '@common/lib/zod/custom-types';
-import { securitySearchResultSchema } from '@controllers/investments/portfolios/investment-contribution-schemas';
-import { trackMcpToolUsed } from '@js/utils/posthog';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { createHolding } from '@services/investments/holdings/create-holding.service';
-import { addSecurityFromSearch } from '@services/investments/securities/add-from-search.service';
-import { z } from 'zod';
+import { createHoldingBodySchema, SecuritySearchResultSchema } from '@controllers/investments/holdings/schemas';
+import { createHoldingFromInput } from '@services/investments/holdings/create-holding-from-input.service';
 
-import { assertMcpMutationAllowed, getUserId, jsonContent } from './helpers';
+import { defineTool } from '../define-tool';
+import { presentHolding } from './holding-output';
 
-const inputSchema = {
-  portfolioId: recordId().describe('Portfolio ID from get_portfolios'),
-  securityId: recordId()
-    .optional()
-    .describe('Existing security ID; provide exactly one of securityId and searchResult'),
-  searchResult: securitySearchResultSchema
-    .optional()
-    .describe(
-      'Full result returned by search_securities, including providerName, providerSymbol, priceSourceSymbol and exchange/currency identity',
+export const createHoldingTool = defineTool({
+  name: 'create_holding',
+  toolset: 'investments',
+  access: 'write',
+  description:
+    'Add a security to a portfolio, so investment transactions can be recorded against it. Pass exactly one of securityId (a security the app already knows) and searchResult (one result of search_securities, unchanged: the security is created from it first). Returns the holding with its securityId: use that securityId in create_investment_transaction. A security already in the portfolio is refused. Historical prices load in the background.',
+  input: {
+    portfolioId: recordId().describe('Portfolio ID (from get_portfolios)'),
+    securityId: recordId()
+      .optional()
+      .describe('ID of a security the app already knows (from get_portfolio_holdings). Set this or searchResult'),
+    searchResult: SecuritySearchResultSchema.optional().describe(
+      'One result of search_securities, passed as it came back. Set this or securityId',
     ),
-};
+  },
+  run: async ({ userId, args }) => {
+    // The REST body rule: a portfolio plus exactly one of a security id and a search result.
+    const { portfolioId, securityId, searchResult } = createHoldingBodySchema.parse(args);
 
-const identitySchema = z
-  .object(inputSchema)
-  .refine(
-    (args) => Boolean(args.securityId) !== Boolean(args.searchResult),
-    'Provide exactly one of securityId and searchResult.',
-  )
-  .refine(
-    (args) => !args.searchResult || SUPPORTED_ASSET_CLASSES.includes(args.searchResult.assetClass),
-    'The selected asset class is not supported.',
-  );
+    const holding = await createHoldingFromInput({ userId, portfolioId, securityId, searchResult });
 
-export function registerCreateHolding(server: McpServer) {
-  server.registerTool(
-    'create_holding',
-    {
-      description:
-        'Add a security as a zero-quantity holding in a portfolio before recording trades. Supply either an existing securityId or the full search_securities result to create/find the correct provider listing. Historical prices sync in the background.',
-      inputSchema,
-    },
-    async (args, extra) => {
-      const userId = getUserId({ extra });
-      await assertMcpMutationAllowed({ extra, userId });
-      trackMcpToolUsed({ userId, tool: 'create_holding', clientId: extra.authInfo?.clientId });
-      const identity = identitySchema.parse(args);
-      let securityId = identity.securityId;
-      if (identity.searchResult) {
-        const { security } = await addSecurityFromSearch({ searchResult: identity.searchResult });
-        securityId = security.id;
-      }
-      return jsonContent({
-        data: await createHolding({ userId, portfolioId: args.portfolioId, securityId: securityId! }),
-      });
-    },
-  );
-}
+    return presentHolding({ holding });
+  },
+});

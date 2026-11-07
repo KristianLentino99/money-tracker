@@ -3,6 +3,7 @@ import { DEACTIVATION_REASON } from '@bt/shared/types';
 import Currencies from '@models/currencies.model';
 import { encryptCredentials } from '@services/bank-data-providers/utils/credential-encryption';
 import { copyLogoImageIfPresent } from '@services/logo-images/logo-images.service';
+import { syncRefundLinkedFlags } from '@services/tx-refunds/sync-refund-linked-flags';
 import { Op, type Transaction } from 'sequelize';
 import { validate as isUuid, v7 as uuidv7 } from 'uuid';
 
@@ -255,6 +256,15 @@ async function insertTable({
   const fkDroppedByColumn = new Map<string, number>();
   const fkNulledByColumn = new Map<string, number>();
 
+  const linksPerRefundTx = new Map<string, number>();
+  if (def.fileName === 'refund-transactions') {
+    for (const row of rows) {
+      const refundTxId = String(row.refundTxId);
+      linksPerRefundTx.set(refundTxId, (linksPerRefundTx.get(refundTxId) ?? 0) + 1);
+    }
+  }
+  const refundTxIdsWithDroppedLinks = new Set<string>();
+
   for (const row of rows) {
     if (row.id != null && reusedGlobalIds.has(String(row.id))) continue;
 
@@ -282,6 +292,15 @@ async function insertTable({
       const column = guard.droppedColumn;
       fkDroppedByColumn.set(column, (fkDroppedByColumn.get(column) ?? 0) + 1);
       continue;
+    }
+    // A null-original (external) link must be its refund's only link, and covers the whole refund.
+    if (def.fileName === 'refund-transactions' && guard.nulledColumns.includes('originalTxId')) {
+      if ((linksPerRefundTx.get(String(row.refundTxId)) ?? 0) > 1) {
+        fkDroppedByColumn.set('originalTxId', (fkDroppedByColumn.get('originalTxId') ?? 0) + 1);
+        refundTxIdsWithDroppedLinks.add(String(guard.overrides.refundTxId));
+        continue;
+      }
+      if (hasColumn({ plan, field: 'amount' })) guard.overrides.amount = null;
     }
     for (const column of guard.nulledColumns) {
       fkNulledByColumn.set(column, (fkNulledByColumn.get(column) ?? 0) + 1);
@@ -336,6 +355,14 @@ async function insertTable({
   }
 
   const inserted = await runBulkInsert({ model: def.model, records, transaction: ctx.transaction });
+
+  // Trashed rows are restored too, and restored rows keep their backup timestamps.
+  await syncRefundLinkedFlags({
+    transactionIds: [...refundTxIdsWithDroppedLinks],
+    transaction: ctx.transaction,
+    paranoid: false,
+    silent: true,
+  });
 
   for (const selfRefColumn of selfRefColumns) {
     // Repoint each child at its parent's final id; a parent outside this table's
