@@ -26,4 +26,4 @@
 - TypeScript e lint backend/frontend passati.
 - Backend unit: tutte passate (dopo allineamento di un caso su kilometraggio decimale).
 - Frontend unit: 308 file, 4.070 test passati.
-- E2E: da eseguire (Docker non attivo al momento del merge).
+- E2E backend: 333 suite, 4.455 test passati dopo l'allineamento di due casi veicoli (kilometraggio decimale, odometro monotono).

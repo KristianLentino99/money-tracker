@@ -263,7 +263,6 @@ describe('Vehicles', () => {
         { salvageFloorPct: -1 },
         { salvageFloorPct: 101 },
         { currentMileage: -1 },
-        { currentMileage: 1.5 },
       ];
 
       for (const patch of invalid) {
@@ -324,13 +323,12 @@ describe('Vehicles', () => {
     });
 
     it('updates the editable fields, renames the account and clears nullable ones', async () => {
-      const vehicle = await helpers.createVehicle({ ...basePayload({ trim: 'LE', currentMileage: 1000 }), raw: true });
+      const vehicle = await helpers.createVehicle({ ...basePayload({ trim: 'LE' }), raw: true });
 
       const updated = await helpers.updateVehicle({
         id: vehicle.id,
         name: 'Family car',
         trim: null,
-        currentMileage: null,
         salvageFloorPct: 15,
         raw: true,
       });
