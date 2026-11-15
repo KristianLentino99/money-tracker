@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "Não é possível alterar a categoria de uma conta de empréstimo.",
     "dedicatedFlowCategoryNotAllowed": "Contas de empréstimo e de veículo precisam ser criadas pelos endpoints próprios, não pelo endpoint genérico de contas.",
     "initialBalanceOnlySystem": "O saldo inicial só pode ser alterado em contas manuais",
-    "initialAndCurrentBalanceTogether": "Não é possível alterar o saldo inicial e o saldo atual na mesma solicitação"
+    "initialAndCurrentBalanceTogether": "Não é possível alterar o saldo inicial e o saldo atual na mesma solicitação",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Ajuste de saldo",
@@ -145,6 +146,13 @@
         "message_other": "Transações pendentes há mais de uma semana: {{count}}. Confira com seu banco para manter seu saldo correto."
       },
       "maintenanceConflict": "The selected transactions belong to different maintenance visits."
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "budgets": {
@@ -274,7 +282,8 @@
     "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
     "contributionPurchaseRequired": "At least one investment purchase is required.",
     "contributionSecurityRequired": "Each investment purchase must include a security.",
-    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions."
+    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
+    "linkedTransactionMustBelongToDestinationAccount": "The linked transaction must belong to the destination account."
   },
   "landingFaq": {
     "unavailable": "O assistente está indisponível no momento. Tente de novo mais tarde ou mande um e-mail para support@moneymatter.app."
@@ -767,6 +776,11 @@
         "requiresAccountField": "O registro automático precisa de uma conta em que lançar a transação.",
         "requiresAmountField": "O registro automático precisa de expectedAmount e expectedCurrencyCode.",
         "excludesMatchingField": "O registro automático e as regras de correspondência não podem ser usados juntos."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },

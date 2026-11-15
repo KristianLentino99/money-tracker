@@ -85,7 +85,15 @@
         "vsPreviousPeriod": "vs. período anterior",
         "viewButton": "Ver",
         "allExpenses": "All expenses",
-        "loadFailed": "Couldn't load the category breakdown."
+        "loadFailed": "Couldn't load the category breakdown.",
+        "incomeTitle": "Income structure",
+        "back": "Back",
+        "openInAnalytics": "Open in Analytics",
+        "metric": {
+          "expenses": "Expenses",
+          "income": "Income"
+        },
+        "seeTransactions": "See transactions"
       },
       "latestTransactions": {
         "title": "Últimas transações",
@@ -401,6 +409,32 @@
             "showReached": "Mostrar metas alcançadas"
           },
           "reachedSection": "Alcançadas"
+        },
+        "tagAnalysis": {
+          "name": "Tag analysis",
+          "description": "See how your spending splits across chosen tags, like needs, wants and savings"
+        }
+      },
+      "tagAnalysis": {
+        "title": "Tag analysis",
+        "noTagsTitle": "No tags selected",
+        "noTagsDescription": "Pick the tags to compare in the widget settings.",
+        "ofIncome": "of income",
+        "remaining": "Unallocated",
+        "targetTooltip": "Target: {value}%",
+        "settings": {
+          "tagsLabel": "Tags",
+          "tagsPlaceholder": "Select tags",
+          "targetsLabel": "Targets, %",
+          "targetsNoneSet": "None set",
+          "targetsSetCount": "{set} of {total} set",
+          "targetsEmpty": "Add tags first to set their targets",
+          "targetPlaceholder": "None",
+          "percentBaseLabel": "Percent of",
+          "percentBaseTags": "Selected tags",
+          "percentBaseIncome": "Income",
+          "includeTransfersLabel": "Include transfers",
+          "includeTransfersDescription": "Count transfers to your own accounts and portfolios as spending"
         }
       }
     },

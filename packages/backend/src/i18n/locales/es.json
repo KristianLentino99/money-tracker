@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "La categoría de una cuenta de préstamo no se puede cambiar.",
     "dedicatedFlowCategoryNotAllowed": "Las cuentas de préstamos y vehículos deben crearse a través de sus puntos finales dedicados, no a través del punto final genérico de cuentas.",
     "initialBalanceOnlySystem": "El saldo inicial solo puede ser cambiado para cuentas manuales",
-    "initialAndCurrentBalanceTogether": "El saldo inicial y el saldo actual no pueden ser cambiados en la misma solicitud"
+    "initialAndCurrentBalanceTogether": "El saldo inicial y el saldo actual no pueden ser cambiados en la misma solicitud",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Ajuste de saldo",
@@ -145,6 +146,13 @@
       "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
       "refundOfRefund": "Cannot refund a \"refund\" transaction",
       "duplicateLink": "This refund is already linked to that transaction"
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "tags": {
@@ -224,7 +232,8 @@
     "unrealizedLossAlert": {
       "title_one": "La retención {{count}} cruzó tu alerta de pérdida",
       "title_other": "Las existencias de {{count}} cruzaron tu alerta de pérdida"
-    }
+    },
+    "linkedTransactionMustBelongToDestinationAccount": "The linked transaction must belong to the destination account."
   },
   "landingFaq": {
     "unavailable": "El asistente no está disponible en este momento. Por favor, inténtalo de nuevo más tarde o envía un correo electrónico a support@moneymatter.app."
@@ -255,7 +264,7 @@
     "providerTypeMismatch": "La conexión {{connectionId}} es para el proveedor {{actualType}}, no {{expectedType}}",
     "providerAlreadyRegistered": "El proveedor {{providerType}} ya está registrado. No se pueden registrar proveedores duplicados.",
     "providerNotRegistered": "El proveedor {{providerType}} no está registrado. Proveedores disponibles: {{available}}",
-    "unexpected": "Error inesperado."
+    "unexpected": "Unexpected error."
   },
   "validation": {
     "dateInvalid": "\"date\" es una fecha no válida."
@@ -444,7 +453,7 @@
       },
       "warnings": {
         "noAccount": "La fila no tiene cuenta; se omitió.",
-        "unparseableDate": "No se pudo analizar la fecha \"{{value}}\"; fila omitida.",
+        "unparseableDate": "Could not parse date \"{{value}}\"; row skipped.",
         "unparseableAmount": "No se pudo interpretar el flujo de entrada \"{{value}}\"; fila omitida.",
         "unparseableRefAmount": "No se pudo interpretar el flujo de entrada \"{{value}}\"; fila omitida.",
         "unknownType": "Tipo desconocido \"{{value}}\"; fila omitida.",
@@ -679,6 +688,11 @@
         "requiresAccountField": "El registro automático requiere una cuenta para registrar la transacción.",
         "requiresAmountField": "El registro automático requiere expectedAmount y expectedCurrencyCode.",
         "excludesMatchingField": "El registro automático y las reglas de coincidencia son mutuamente excluyentes."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },
@@ -745,7 +759,7 @@
     "notAnInvoice": "Este documento no parece una factura o un recibo.",
     "incompleteInvoice": "No se pudo leer un proveedor, el importe total y la fecha de esta factura.",
     "pdfWithoutText": "Conexiones personalizadas de IA no pueden recibir archivos PDF directamente, y éste no puede abrirse para convertirlo (por ejemplo, está protegido por contraseña). Conviértelo a una imagen (PNG o JPEG), como una captura de pantalla de la factura y súbela en su lugar.",
-    "noFileUploaded": "No se subió ningún archivo."
+    "noFileUploaded": "No file was uploaded."
   },
   "budgets": {
     "budgetNotFound": "Presupuesto no encontrado",
@@ -792,7 +806,7 @@
     "openEndedGoalCannotSnooze": "Un objetivo abierto no puede ser pospuesto.",
     "zeroSumNeedsPool": "Mantener el valor de «Listo para asignar» en 0 requiere un plan financiado a partir de un fondo común.",
     "suggestedGroups": {
-      "bills": "Facturas",
+      "bills": "Bills",
       "everyday": "Todos los días",
       "life": "Vida"
     }
@@ -844,9 +858,9 @@
   "auth": {
     "errors": {
       "passwordAlreadySet": "Tu cuenta ya tiene una contraseña.",
-      "passwordTooShort": "La contraseña es demasiado corta.",
-      "passwordTooLong": "La contraseña es demasiado larga.",
-      "reauthenticationRequired": "Por su seguridad, inicie sesión de nuevo para hacer este cambio.",
+      "passwordTooShort": "Password is too short.",
+      "passwordTooLong": "Password is too long.",
+      "reauthenticationRequired": "For your security, sign in again to make this change.",
       "signupsDisabled": "Los registros están deshabilitados por el administrador de esta instancia."
     }
   },
@@ -883,7 +897,7 @@
   },
   "goals": {
     "goalNotFound": "Objetivo no encontrado.",
-    "accountNotFound": "No se encontró una de las cuentas seleccionadas.",
+    "accountNotFound": "One of the selected accounts was not found.",
     "accountNotEligible": "{{accountName}} no puede contar para alcanzar un objetivo. Elige un efectivo, corriente, ahorros, inversión o cuenta criptomoneda.",
     "shareCapacityExceeded": "{{accountName}} tiene {{free}}% gratis: has solicitado {{requested}}% y otros objetivos ya usan {{usedByOtherGoals}}%.",
     "fixedAmountsBelowTarget": "Las cantidades fijas suman hasta {{total}} {{currencyCode}}, por debajo del objetivo {{target}} {{currencyCode}} . Aumenta una cantidad o cuente una cuenta por ciento.",

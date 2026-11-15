@@ -12,6 +12,7 @@ import {
   TRANSACTION_TRANSFER_NATURE,
   TRANSACTION_TYPES,
   TransactionCreatorSnapshot,
+  TransactionDeletionReason,
   TransactionLocation,
   TransactionModel,
 } from '@bt/shared/types';
@@ -36,6 +37,11 @@ import TransactionGroups, { dissolveUndersizedGroups } from '@models/transaction
 import TransactionSplits from '@models/transaction-splits.model';
 import TransactionTags from '@models/transaction-tags.model';
 import { hasBalanceRelevantChange } from '@models/transactions-balance-relevance';
+import {
+  liveOrExternalTransactionSql,
+  liveTransactionExistsSql,
+  trashedWhere,
+} from '@models/transactions-query/deletion-where';
 import {
   BalanceAdjustmentsPolicy,
   CompletenessPolicy,
@@ -113,7 +119,7 @@ export const prepareTXInclude = ({
 };
 
 // Top-level only: the literal hardcodes the "transactionGroups" alias. transactionCount is the
-// group's full membership size, not the members in the current fetch window.
+// group's live membership size (trashed members excluded), not the members in the current fetch window.
 const groupsInclude = (): Includeable => ({
   model: TransactionGroups,
   through: { attributes: [] },
@@ -125,6 +131,7 @@ const groupsInclude = (): Includeable => ({
         SELECT COUNT(*)::int
         FROM "TransactionGroupItems"
         WHERE "TransactionGroupItems"."groupId" = "transactionGroups"."id"
+          AND ${liveTransactionExistsSql({ idColumnSql: '"TransactionGroupItems"."transactionId"' })}
       )`),
       'transactionCount',
     ],
@@ -185,22 +192,39 @@ export interface TransactionsAttributes {
   originalCurrencyCode: string | null;
   refundLinked: boolean;
   isForecastOnly: boolean;
+  /** Set by the user to keep this row out of the reports: one-off movements such as a property sale. */
+  excludeFromStats: boolean;
   categorizationMeta: CategorizationMeta | null;
   payeeId: string | null;
   payeeLocked: boolean;
   paymentParentId: string | null;
   paymentAmount: Money | null;
   paymentLinkSnapshot: PaymentLinkSnapshot | null;
+  deletionReason: TransactionDeletionReason | null;
   createdAt: Date;
   updatedAt: Date;
 }
 
-/** The fields an existing row takes from the main row when linked into a payment (plus its tags). */
-export const PAYMENT_LINK_FIELDS = ['categoryId', 'payeeId', 'payeeLocked', 'note', 'categorizationMeta'] as const;
+/**
+ * The fields an existing row takes from the main row when linked into a payment (plus its tags).
+ * `excludeFromStats` covers the whole payment, so every leg follows the main row.
+ */
+export const PAYMENT_LINK_FIELDS = [
+  'categoryId',
+  'payeeId',
+  'payeeLocked',
+  'note',
+  'categorizationMeta',
+  'excludeFromStats',
+] as const;
 
 export type PaymentLinkFields = Pick<TransactionsAttributes, (typeof PAYMENT_LINK_FIELDS)[number]>;
 
-export type PaymentLinkSnapshot = PaymentLinkFields & { tagIds: string[] };
+/** `excludeFromStats` is absent on snapshots stored before the column existed. */
+export type PaymentLinkSnapshot = Omit<PaymentLinkFields, 'excludeFromStats'> & {
+  excludeFromStats?: boolean;
+  tagIds: string[];
+};
 
 @Table({
   timestamps: true,
@@ -378,6 +402,13 @@ export default class Transactions extends Model {
   })
   declare isForecastOnly: boolean;
 
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  declare excludeFromStats: boolean;
+
   // Metadata about how this transaction was categorized (manual, ai, user_rule, subscription_rule, payee_rule)
   @Column({
     type: DataType.JSONB,
@@ -417,6 +448,10 @@ export default class Transactions extends Model {
   // A linked row's own values from before the link, restored on unlink. Null on rows the payment created.
   @Column({ allowNull: true, type: DataType.JSONB })
   paymentLinkSnapshot!: PaymentLinkSnapshot | null;
+
+  // Required whenever `deletedAt` is set (DB CHECK): 'trash' for user deletes, 'reconciliation' for rows it hid.
+  @Column({ allowNull: true, type: DataType.STRING(20) })
+  deletionReason!: TransactionDeletionReason | null;
 
   // Managed by Sequelize (timestamps: true)
   declare createdAt: Date;
@@ -708,13 +743,23 @@ export default class Transactions extends Model {
     }
   }
 
+  /**
+   * Re-applies the balance effect of a trashed row once its `deletedAt` is cleared,
+   * the same way creating it did.
+   */
+  static async applyRestoredBalance(instance: Transactions) {
+    await Transactions.updateAccountBalanceAfterCreate(instance);
+    await Transactions.reconcileVehicleAnchorOnDelete(instance);
+  }
+
   @BeforeDestroy
   static async updateAccountBalanceBeforeDestroy(instance: Transactions) {
     const { accountType, accountId, amount, transactionType } = instance;
 
-    // Planned rows never moved a balance, so there is nothing to take back. Group
-    // bookkeeping below still has to run so groups keep auto-dissolving.
-    if (!instance.isForecastOnly) {
+    // Planned rows never moved a balance, so there is nothing to take back. A row that is
+    // already soft-deleted had its balance taken back then. Group bookkeeping below still
+    // has to run so groups keep auto-dissolving.
+    if (!instance.isForecastOnly && !instance.deletedAt) {
       if (accountType === ACCOUNT_TYPES.system) {
         await updateAccountBalanceForChangedTx({
           accountId,
@@ -899,7 +944,8 @@ function noLinksOrLinkedToSql({
   otherColumn: 'originalTxId' | 'refundTxId';
   keepLinksWith?: string;
 }) {
-  const links = `SELECT 1 FROM "RefundTransactions" rt WHERE rt."${column}" = "Transactions"."id"`;
+  const links = `SELECT 1 FROM "RefundTransactions" rt WHERE rt."${column}" = "Transactions"."id"
+    AND ${liveOrExternalTransactionSql({ idColumnSql: `rt."${otherColumn}"` })}`;
   const noLinks = `NOT EXISTS (${links})`;
   if (!keepLinksWith) return noLinks;
   if (!UUID_PATTERN.test(keepLinksWith)) {
@@ -977,6 +1023,7 @@ export const findWithFilters = async ({
   uncategorizedOnly,
   payeeIds,
   noteSearch,
+  search,
   attributes,
   categorizationSource,
   categorizedAt,
@@ -1052,6 +1099,8 @@ export const findWithFilters = async ({
   uncategorizedOnly?: boolean;
   payeeIds?: string[];
   noteSearch?: string[]; // array of keywords
+  /** Free-text search over note, payee name and tag names. Words are AND-ed, each matched case-insensitively. */
+  search?: string;
   attributes?: (keyof Transactions)[];
   categorizationSource?: CATEGORIZATION_SOURCE;
   /** Exact `categorizationMeta.categorizedAt` stamp, which identifies one categorization run. */
@@ -1322,6 +1371,28 @@ export const findWithFilters = async ({
     }
   }
 
+  // Free-text search: every word must match the note, the payee name or one of the tag names.
+  // Correlated subqueries keep rows unique (a join on tags would duplicate them).
+  // Each word adds two subplans; past ~6 words Postgres JIT-compiles the plan and a search takes seconds.
+  const searchWords = [...new Set((search ?? '').split(/\s+/).filter(Boolean))].slice(0, 6);
+  // Scoping the subqueries by owner lets them use the userId indexes instead of scanning every user's rows.
+  const ownerScope = ({ alias }: { alias: string }) =>
+    access === 'pre-scoped' ? '' : ` AND ${alias}."userId" = ${Number(access.creator)}`;
+  for (const word of searchWords) {
+    const pattern = Transactions.sequelize!.escape(`%${word.replace(/[\\%_]/g, '\\$&')}%`);
+    pushAndCondition(
+      literal(`(
+        "Transactions"."note" ILIKE ${pattern}
+        OR EXISTS (SELECT 1 FROM "Payees" sp WHERE sp."id" = "Transactions"."payeeId" AND sp."name" ILIKE ${pattern}${ownerScope({ alias: 'sp' })})
+        OR EXISTS (
+          SELECT 1 FROM "TransactionTags" stt
+          JOIN "Tags" st ON st."id" = stt."tagId"
+          WHERE stt."transactionId" = "Transactions"."id" AND st."name" ILIKE ${pattern}${ownerScope({ alias: 'st' })}
+        )
+      )`),
+    );
+  }
+
   // Add note search condition if provided
   if (noteSearch && noteSearch.length > 0) {
     whereClause.note = {
@@ -1472,6 +1543,7 @@ type CreateTxOptionalParams = Partial<
     | 'payeeId'
     | 'payeeLocked'
     | 'isForecastOnly'
+    | 'excludeFromStats'
     | 'originalAmount'
     | 'originalCurrencyCode'
     | 'paymentParentId'
@@ -1515,6 +1587,7 @@ export interface UpdateTransactionByIdParams {
   payeeId?: string | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  excludeFromStats?: boolean;
   originalAmount?: Money | null;
   originalCurrencyCode?: string | null;
   externalData?: TransactionsAttributes['externalData'];
@@ -1572,7 +1645,19 @@ export const updateTransactions = (
   });
 };
 
-export const deleteTransactionById = async ({ id, userId }: { id: string; userId: number }) => {
+/**
+ * `trash` soft-deletes the row into Trash; the destroy then runs without `force`, so the
+ * destroy hooks still take the balance back.
+ */
+export const deleteTransactionById = async ({
+  id,
+  userId,
+  trash = false,
+}: {
+  id: string;
+  userId: number;
+  trash?: boolean;
+}) => {
   const tx = await getTransactionById({ id, userId });
 
   if (!tx) return true;
@@ -1585,10 +1670,14 @@ export const deleteTransactionById = async ({ id, userId }: { id: string; userId
     });
   }
 
+  if (trash) {
+    await Transactions.update({ ...trashedWhere }, { where: { id, userId }, hooks: false });
+  }
+
   return Transactions.destroy({
     where: { id, userId },
     // So that BeforeDestroy will be triggered
     individualHooks: true,
-    force: true,
+    force: !trash,
   });
 };

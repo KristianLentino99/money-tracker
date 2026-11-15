@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "La categoria di un conto prestito non può essere modificata.",
     "dedicatedFlowCategoryNotAllowed": "I conti prestito e veicolo devono essere creati tramite i rispettivi endpoint dedicati, non tramite l'endpoint generico dei conti.",
     "initialBalanceOnlySystem": "Il saldo iniziale può essere modificato solo per i conti a gestione manuale",
-    "initialAndCurrentBalanceTogether": "Saldo iniziale e saldo corrente non possono essere modificati nella stessa richiesta"
+    "initialAndCurrentBalanceTogether": "Saldo iniziale e saldo corrente non possono essere modificati nella stessa richiesta",
+    "deleteBlockedByTrashedLoanPayments": "Questo conto ha pagamenti del prestito nel Cestino. Eliminarli definitivamente dal Cestino prima di eliminare il conto."
   },
   "balanceAdjustment": {
     "defaultNote": "Correzione del saldo",
@@ -47,7 +48,7 @@
     "idCannotBeChanged": "L'ID non può essere modificato",
     "editReadonlyFields": "Tentativo di modificare campi in sola lettura del conto esterno",
     "changeTypeNotAllowed": "Non è consentito modificare \"transactionType\" di un conto non di sistema.",
-    "bothRefundFieldsNotAllowed": "Non è possibile utilizzare contemporaneamente i campi \"refundedByTxIds\" e \"refundsTxId\". Sceglierne solo uno.",
+    "bothRefundFieldsNotAllowed": "Non è possibile usare contemporaneamente \"refundedByTxIds\" e \"refundsTargets\". Sceglierne uno.",
     "refundExceedsOriginal": "L'importo totale del rimborso non può essere maggiore dell'importo della transazione originale.",
     "oppositeTransactionNotFound": "Impossibile trovare la transazione complementare per effettuare un aggiornamento",
     "transactionIdNotExist": "La transazione con l'ID indicato non esiste.",
@@ -129,14 +130,21 @@
     "paymentLinkedAmountFixed": "L'importo di una transazione collegata non può essere modificato.",
     "paymentLinkedTypeMismatch": "Le transazioni collegate devono avere lo stesso tipo del pagamento. Scollegarle prima.",
     "refunds": {
-      "wholeLinkWithPartials": "A whole-refund link cannot be combined with partial links",
-      "externalLinkWithOthers": "A refund for a purchase outside the app cannot be combined with other refund links",
-      "externalLinkWithAmount": "A refund of a transaction outside the app cannot have a partial amount; it always covers the whole refund.",
-      "totalExceedsRefund": "Total refund link amounts cannot be greater than the refund transaction amount",
-      "totalExceedsSplit": "Total refund amount cannot be greater than the split amount",
-      "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
-      "refundOfRefund": "Cannot refund a \"refund\" transaction",
-      "duplicateLink": "This refund is already linked to that transaction"
+      "wholeLinkWithPartials": "Un collegamento di rimborso totale non può essere combinato con collegamenti parziali",
+      "externalLinkWithOthers": "Un rimborso per un acquisto esterno all'app non può essere combinato con altri collegamenti di rimborso",
+      "externalLinkWithAmount": "Un rimborso di una transazione esterna all'app non può avere un importo parziale: copre sempre l'intero rimborso.",
+      "totalExceedsRefund": "Il totale degli importi dei collegamenti di rimborso non può superare l'importo della transazione di rimborso",
+      "totalExceedsSplit": "L'importo totale del rimborso non può superare l'importo della suddivisione",
+      "totalExceedsOriginal": "L'importo totale del rimborso non può superare l'importo della transazione originale",
+      "refundOfRefund": "Impossibile rimborsare una transazione di \"rimborso\"",
+      "duplicateLink": "Questo rimborso è già collegato a quella transazione"
+    },
+    "trash": {
+      "paymentNotTrashable": "Rimuoverla dal pagamento prima di eliminarla.",
+      "portfolioNotTrashable": "Scollegarla dal portafoglio prima di eliminarla.",
+      "ventureNotTrashable": "Scollegarla dal venture capital prima di eliminarla.",
+      "accountTypeChanged": "Impossibile ripristinare questa transazione perché il tipo di conto è cambiato.",
+      "loanPaymentLegMissing": "Impossibile ripristinare questo pagamento del prestito perché l'altro lato è stato eliminato."
     }
   },
   "tags": {
@@ -592,6 +600,11 @@
         "requiresAccountField": "La registrazione automatica richiede un conto su cui registrare la transazione.",
         "requiresAmountField": "La registrazione automatica richiede expectedAmount ed expectedCurrencyCode.",
         "excludesMatchingField": "La registrazione automatica e le regole di abbinamento si escludono a vicenda."
+      },
+      "customInterval": {
+        "required": "Una frequenza personalizzata richiede un'unità e un numero di intervalli.",
+        "presetConflict": "L'unità e il numero di intervalli possono essere impostati solo con la frequenza personalizzata.",
+        "countOutOfRange": "Il numero di intervalli deve essere compreso tra {{min}} e {{max}} per questa unità."
       }
     }
   },
@@ -699,7 +712,7 @@
         "transferNoOutflow": "Il trasferimento da \"{{account}}\" non ha una riga di uscita corrispondente; verrà importato come entrata normale.",
         "currencyUndetected": "Impossibile rilevare la valuta del conto \"{{account}}\"; sceglierne una nell'anteprima."
       },
-      "importAlreadyInProgress": "A YNAB import is already running. Wait for it to finish before starting another one."
+      "importAlreadyInProgress": "È già in corso un'importazione da YNAB. Attenderne il termine prima di avviarne un'altra."
     },
     "budgetBakersWallet": {
       "parse": {

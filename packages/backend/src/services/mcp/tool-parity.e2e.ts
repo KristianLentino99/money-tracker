@@ -28,7 +28,7 @@ describe('MCP HTTP feature parity', () => {
   it('creates a loan with decimal liability balances and rejects invalid update combinations', async () => {
     const session = await initialize();
     const loan = mcp.parseMcpToolData<LoanApiResponse>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_loan',
         args: {
@@ -44,7 +44,7 @@ describe('MCP HTTP feature parity', () => {
     });
     expect(loan.currentBalance).toBe(-100.25);
     for (const fields of [{}, { currentBalanceAsOf: new Date().toISOString().slice(0, 10) }]) {
-      const response = await mcp.callMcpTool({
+      const response = await mcp.callMcpSessionTool({
         session,
         name: 'update_loan',
         args: { loanId: loan.id, ...fields },
@@ -52,7 +52,7 @@ describe('MCP HTTP feature parity', () => {
       expect(response.result?.isError).toBe(true);
     }
     const updated = mcp.parseMcpToolData<LoanApiResponse>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'update_loan',
         args: {
@@ -77,7 +77,7 @@ describe('MCP HTTP feature parity', () => {
     const account = await helpers.createAccount({ raw: true });
     const today = new Date().toISOString().slice(0, 10);
     const vehicle = mcp.parseMcpToolData<VehicleApiResponse>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_vehicle',
         args: {
@@ -96,7 +96,7 @@ describe('MCP HTTP feature parity', () => {
     expect(vehicle.purchasePrice).toBe(10000.5);
     expect(vehicle.currentMileage).toBe(1234);
     const visit = mcp.parseMcpToolData<VehicleMaintenanceVisitApiResponse>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_vehicle_maintenance_visit',
         args: {
@@ -118,7 +118,11 @@ describe('MCP HTTP feature parity', () => {
     expect(visit.totalCost).toBe(45.67);
     expect(visit.generatedTransactionIds).toHaveLength(1);
     const maintenance = mcp.parseMcpToolData<{ visits: VehicleMaintenanceVisitApiResponse[] }>({
-      response: await mcp.callMcpTool({ session, name: 'get_vehicle_maintenance', args: { vehicleId: vehicle.id } }),
+      response: await mcp.callMcpSessionTool({
+        session,
+        name: 'get_vehicle_maintenance',
+        args: { vehicleId: vehicle.id },
+      }),
     });
     expect(maintenance.visits[0]?.totalCost).toBe(45.67);
   });
@@ -127,7 +131,7 @@ describe('MCP HTTP feature parity', () => {
     const session = await initialize();
     const today = new Date().toISOString().slice(0, 10);
     const portfolio = mcp.parseMcpToolData<{ id: string }>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_portfolio',
         args: {
@@ -146,11 +150,15 @@ describe('MCP HTTP feature parity', () => {
       ['manage_manual_portfolio_valuation', { action: 'create', valuation: { value: '27.45', date: today } }],
     ] as const) {
       mcp.parseMcpToolData({
-        response: await mcp.callMcpTool({ session, name, args: { portfolioId: portfolio.id, ...args } }),
+        response: await mcp.callMcpSessionTool({ session, name, args: { portfolioId: portfolio.id, ...args } }),
       });
     }
     const overview = mcp.parseMcpToolData<ManualPortfolioOverviewModel>({
-      response: await mcp.callMcpTool({ session, name: 'get_manual_portfolio', args: { portfolioId: portfolio.id } }),
+      response: await mcp.callMcpSessionTool({
+        session,
+        name: 'get_manual_portfolio',
+        args: { portfolioId: portfolio.id },
+      }),
     });
     expect(overview.currentValue).toBe('27.45');
     expect(overview.totals.contribution).toBe('25.34');
@@ -169,7 +177,7 @@ describe('MCP HTTP feature parity', () => {
     const account = await helpers.createAccount({ raw: true });
     const dueDate = format(addMonths(new Date(), 1), 'yyyy-MM-dd');
     const subscription = mcp.parseMcpToolData<{ id: string }>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_subscription',
         args: {
@@ -187,14 +195,14 @@ describe('MCP HTTP feature parity', () => {
       }),
     });
     mcp.parseMcpToolData({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'link_installment_to_loan',
         args: { subscriptionId: subscription.id, loanAccountId: loan.id },
       }),
     });
     const periods = mcp.parseMcpToolData<{ periods: Array<{ id: string; status: string }> }>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'get_subscription_periods',
         args: { subscriptionId: subscription.id },
@@ -203,7 +211,7 @@ describe('MCP HTTP feature parity', () => {
     const period = periods.periods.find((item) => item.status === 'upcoming');
     expect(period).toBeDefined();
     mcp.parseMcpToolData({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'pay_subscription_period',
         args: {
@@ -215,7 +223,7 @@ describe('MCP HTTP feature parity', () => {
       }),
     });
     const detail = mcp.parseMcpToolData<LoanApiResponse>({
-      response: await mcp.callMcpTool({ session, name: 'get_loans', args: { loanId: loan.id } }),
+      response: await mcp.callMcpSessionTool({ session, name: 'get_loans', args: { loanId: loan.id } }),
     });
     expect(detail.currentBalance).toBe(-74.66);
     expect(detail.paymentsCount).toBe(1);
@@ -229,7 +237,7 @@ describe('MCP HTTP feature parity', () => {
       { symbol: 'MCPTEST', name: 'MCP test fixture', currencyCode: global.BASE_CURRENCY.code },
     ]);
     mcp.parseMcpToolData({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_holding',
         args: { portfolioId: portfolio.id, securityId: security!.id },
@@ -241,7 +249,7 @@ describe('MCP HTTP feature parity', () => {
       transactionId: string;
       investmentTransactions: unknown[];
     }>({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'create_investment_contribution',
         args: {
@@ -264,14 +272,14 @@ describe('MCP HTTP feature parity', () => {
     });
     expect(Number(transfer.amount)).toBe(50.34);
     expect(transfer.investmentTransactions).toHaveLength(1);
-    const denied = await mcp.callMcpTool({
+    const denied = await mcp.callMcpSessionTool({
       session,
       name: 'delete_portfolio_transfer',
       args: { transferId: transfer.id },
     });
     expect(denied.result?.isError).toBe(true);
     mcp.parseMcpToolData({
-      response: await mcp.callMcpTool({
+      response: await mcp.callMcpSessionTool({
         session,
         name: 'delete_portfolio_transfer',
         args: { transferId: transfer.id, deleteLinkedInvestmentTransactions: true },
@@ -316,7 +324,7 @@ describe('MCP HTTP feature parity', () => {
   it('returns empty state for the fork domain collections', async () => {
     const session = await initialize();
     for (const name of ['get_loans', 'get_vehicles', 'get_vehicle_maintenance_reminders']) {
-      const response = await mcp.callMcpTool({ session, name });
+      const response = await mcp.callMcpSessionTool({ session, name });
       expect(mcp.parseMcpToolData<unknown>({ response })).toEqual([]);
     }
   });

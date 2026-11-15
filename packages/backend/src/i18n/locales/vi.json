@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "A loan account's category can't be changed.",
     "dedicatedFlowCategoryNotAllowed": "Loan and vehicle accounts must be created through their dedicated endpoints, not the generic accounts endpoint.",
     "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
-    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Balance adjustment",
@@ -145,6 +146,13 @@
         "message_other": "{{count}} transactions have been pending for over a week. Check them with your bank so your balance stays accurate."
       },
       "maintenanceConflict": "Các giao dịch đã chọn thuộc các lần bảo dưỡng khác nhau."
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "budgets": {
@@ -235,7 +243,7 @@
     }
   },
   "investments": {
-    "portfolioNotFound": "Không tìm thấy danh mục đầu tư",
+    "portfolioNotFound": "Portfolio not found",
     "portfolioIdRequired": "Portfolio ID is required.",
     "holdingNotFound": "Holding not found",
     "holdingNotFoundAddSecurity": "Holding not found. Please add the security to the portfolio first.",
@@ -274,7 +282,8 @@
     "unrealizedLossAlert": {
       "title_one": "{{count}} holding crossed your loss alert",
       "title_other": "{{count}} holdings crossed your loss alert"
-    }
+    },
+    "linkedTransactionMustBelongToDestinationAccount": "The linked transaction must belong to the destination account."
   },
   "landingFaq": {
     "unavailable": "The assistant is unavailable right now. Please try again later or email support@moneymatter.app."
@@ -617,9 +626,9 @@
       "life": "Life & Entertainment",
       "communication": "Communication, PC",
       "financial-expenses": "Financial expenses",
-      "investments": "Đầu tư",
+      "investments": "Investments",
       "income": "Income",
-      "other": "Khác"
+      "other": "Other"
     },
     "subcategories": {
       "food": {
@@ -728,6 +737,11 @@
         "requiresAccountField": "Auto-record requires an account to book the transaction against.",
         "requiresAmountField": "Auto-record requires expectedAmount and expectedCurrencyCode.",
         "excludesMatchingField": "Auto-record and matching rules are mutually exclusive."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },
@@ -843,8 +857,8 @@
   "auth": {
     "errors": {
       "passwordAlreadySet": "Your account already has a password.",
-      "passwordTooShort": "Mật khẩu quá ngắn.",
-      "passwordTooLong": "Mật khẩu quá dài.",
+      "passwordTooShort": "Password is too short.",
+      "passwordTooLong": "Password is too long.",
       "reauthenticationRequired": "For your security, sign in again to make this change.",
       "signupsDisabled": "Signups are disabled by the administrator."
     }

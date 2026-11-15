@@ -10,6 +10,7 @@
     "allTransactions": "All transactions",
     "transactions": "Transactions",
     "transactionGroups": "Groups",
+    "trash": "Trash",
     "analytics": "Analytics",
     "optimizations": "Optimizations",
     "automations": "Automations",
@@ -44,6 +45,7 @@
   "sidebar": {
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar",
+    "resize": "Resize sidebar",
     "settings": {
       "title": "Settings",
       "sections": {

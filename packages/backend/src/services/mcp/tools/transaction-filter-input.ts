@@ -29,12 +29,12 @@ const idOrBlank = z.union([recordId(), z.literal(BLANK_FILTER_VALUE)]);
 export const transactionFilterInput = {
   from: z.string().optional().describe('Start of the date range (ISO 8601 datetime in UTC, e.g. 2026-10-01T00:00:00Z)'),
   to: z.string().optional().describe('End of the date range (ISO 8601 datetime in UTC). Must not precede from'),
-  transactionType: z.nativeEnum(TRANSACTION_TYPES).optional().describe('Only income, expense or transfer rows'),
+  transactionType: z.enum(TRANSACTION_TYPES).optional().describe('Only income, expense or transfer rows'),
   transferNatures: z
-    .array(z.nativeEnum(TRANSACTION_TRANSFER_NATURE))
+    .array(z.enum(TRANSACTION_TRANSFER_NATURE))
     .optional()
     .describe('Exact set of transfer natures to include. Replaces transferFilter and excludeTransfer when set'),
-  accountType: z.nativeEnum(ACCOUNT_TYPES).optional().describe('Only rows on accounts of this type'),
+  accountType: z.enum(ACCOUNT_TYPES).optional().describe('Only rows on accounts of this type'),
   accountIds: z.array(recordId()).optional().describe('Only rows on these account IDs'),
   excludeAccountIds: z.array(recordId()).optional().describe('Leave out rows on these account IDs'),
   trackerIds: z.array(recordId()).optional().describe('Only rows linked to these tracker IDs'),
@@ -54,6 +54,11 @@ export const transactionFilterInput = {
   amountGte: z.number().optional().describe('Minimum amount (positive decimal, in the original currency)'),
   amountLte: z.number().optional().describe('Maximum amount (positive decimal, in the original currency)'),
   noteSearch: z.string().optional().describe('Search the note: comma-separated terms'),
+  search: z
+    .string()
+    .max(200)
+    .optional()
+    .describe('Free text matched against note, payee name and tag names; every word must match'),
   isForecastOnly: z
     .boolean()
     .optional()
@@ -81,11 +86,11 @@ export const transactionFilterInput = {
     .describe('End of that local day (ISO 8601 datetime); pairs with refundPivotFrom'),
   excludeBalanceAdjustments: z.boolean().optional().describe('Leave out balance adjustments'),
   transferFilter: z
-    .nativeEnum(FILTER_OPERATION)
+    .enum(FILTER_OPERATION)
     .optional()
     .describe('Transfers: include, exclude or only. Superseded by transferNatures'),
-  refundFilter: z.nativeEnum(FILTER_OPERATION).optional().describe('Refunds: include, exclude or only'),
-  categorizationSource: z.nativeEnum(CATEGORIZATION_SOURCE).optional().describe('How the category was assigned'),
+  refundFilter: z.enum(FILTER_OPERATION).optional().describe('Refunds: include, exclude or only'),
+  categorizationSource: z.enum(CATEGORIZATION_SOURCE).optional().describe('How the category was assigned'),
   categorizedAt: z.string().optional().describe('Only rows categorized at this ISO 8601 datetime'),
   batchId: recordId().optional().describe('Only rows from this import batch'),
 };
@@ -99,7 +104,7 @@ export function parseTransactionFilters({ filters }: { filters: unknown }) {
  * Whether a filter set narrows the selection at all, judged on the filters the REST schema
  * parsed (what `parseBulkTarget` returns), not on the arguments as sent: a value counts only
  * when it restricts the WHERE clause the service builds. So an empty or all-separator
- * `noteSearch` (the schema turns it into no terms), an empty list, an exclude flag that is off,
+ * `noteSearch` (the schema turns it into no terms), a blank `search`, an empty list, an exclude flag that is off,
  * the `all` operation (including one that overrides a legacy `excludeTransfer`/`excludeRefunds`
  * flag), a lone `keepRefundsForTxId` and the refund pivot bounds (they only decide which
  * refund-linked rows stay linkable) all select everything. REST lets a bulk action run with such
@@ -138,6 +143,7 @@ export function hasNarrowingFilter({ filters }: { filters: ReturnType<typeof par
     filters.categorizationSource,
     filters.categorizedAt,
     filters.batchId,
+    filters.search,
   ].some((value) => value !== undefined && value !== null);
 
   // A flag counts only when switched on. `false` on an exclude flag changes nothing, and `false` on

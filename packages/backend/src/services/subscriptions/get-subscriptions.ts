@@ -11,7 +11,7 @@ import SubscriptionPeriods from '@models/subscription-periods.model';
 import SubscriptionTransactions from '@models/subscription-transactions.model';
 import Subscriptions from '@models/subscriptions.model';
 import { transactionsInclude } from '@models/transactions-query';
-import type { TransactionsAttributes } from '@models/transactions.model';
+import Transactions, { type TransactionsAttributes } from '@models/transactions.model';
 import { applyCachedLogos, enqueueLogoResolution } from '@services/brand-logos';
 import { col, fn, literal, Op } from 'sequelize';
 
@@ -44,6 +44,8 @@ interface SubscriptionBase extends Pick<
   | 'type'
   | 'expectedCurrencyCode'
   | 'frequency'
+  | 'intervalUnit'
+  | 'intervalCount'
   | 'startDate'
   | 'dueDate'
   | 'endDate'
@@ -138,6 +140,7 @@ interface SubscriptionPeriodItem {
   paidAt: Date | null;
   transactionId: string | null;
   transactionAutoCreated: boolean;
+  transactionInTrash: boolean;
   notes: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -286,6 +289,8 @@ export const getSubscriptions = async ({
       nextDueDate: resolveNextExpectedDate({
         startDate: item.startDate,
         frequency: item.frequency,
+        intervalUnit: item.intervalUnit,
+        intervalCount: item.intervalCount,
         transactions: latestTxTime ? [{ time: latestTxTime }] : [],
         isActive: item.isActive,
         endDate: item.endDate,
@@ -325,6 +330,7 @@ export const getSubscriptionById = async ({
         {
           model: SubscriptionPeriods,
           as: 'periods',
+          include: [{ model: Transactions, as: 'transaction', attributes: ['id', 'deletedAt'], paranoid: false }],
         },
       ],
       order: [[{ model: SubscriptionPeriods, as: 'periods' }, 'dueDate', 'ASC']],
@@ -342,7 +348,9 @@ export const getSubscriptionById = async ({
         SubscriptionTransactions: Pick<SubscriptionTransactions, 'matchSource' | 'matchedAt' | 'status'>;
       }
     >;
-    periods?: SubscriptionPeriodItem[];
+    periods?: (Omit<SubscriptionPeriodItem, 'transactionInTrash'> & {
+      transaction?: Pick<Transactions, 'deletedAt'> | null;
+    })[];
   };
 
   const transactions: SubscriptionLinkedTransaction[] = (raw.transactions ?? []).map((tx) => ({
@@ -354,13 +362,18 @@ export const getSubscriptionById = async ({
     cashbackAmount: tx.cashbackAmount.toNumber(),
   }));
 
-  const periods = raw.periods ?? [];
+  const periods: SubscriptionPeriodItem[] = (raw.periods ?? []).map(({ transaction, ...period }) => ({
+    ...period,
+    transactionInTrash: Boolean(transaction?.deletedAt),
+  }));
   // `periods` arrive ordered by dueDate ASC, so the first open one is the earliest.
   const openPeriod = periods.find((p) => OPEN_STATUSES.some((status) => status === p.status));
 
   const nextExpectedDate = resolveNextExpectedDate({
     startDate: raw.startDate,
     frequency: raw.frequency,
+    intervalUnit: raw.intervalUnit,
+    intervalCount: raw.intervalCount,
     transactions: transactions.filter((tx) => !tx.isForecastOnly),
     isActive: raw.isActive,
     endDate: raw.endDate,

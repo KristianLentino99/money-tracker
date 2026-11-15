@@ -170,14 +170,14 @@
         "closeButton": "Zavrieť",
         "deleteButton": "Zmazať",
         "deleteAriaLabel": "Zmazať transakciu",
-        "deleteConfirmTitle": "Zmazať túto transakciu?",
-        "deleteConfirmDescription": "Túto akciu nie je možné vrátiť späť. Odstránia sa aj všetky rozdelenia a prepojenia na vrátenia platby priradené k nej.",
+        "deleteConfirmTitle": "Presunúť do koša?",
+        "deleteConfirmDescription": "V koši zostane 30 dní, dovtedy ju môžete obnoviť.",
         "createAriaLabel": "Vytvoriť transakciu",
         "editAriaLabel": "Upraviť transakciu",
         "loadingButton": "Načítavanie...",
         "createButton": "Vytvoriť",
         "editButton": "Upraviť",
-        "duplicateButton": "Duplicate",
+        "duplicateButton": "Duplikovať",
         "createMore": {
           "label": "Create more",
           "createdToast": "Transaction created"
@@ -296,7 +296,8 @@
             "differentType": "Iný typ než táto transakcia",
             "submit": "Prepojiť {count} transakciu | Prepojiť {count} transakcie | Prepojiť {count} transakcií"
           }
-        }
+        },
+        "deleteBlockedByPayment": "Najprv ju odstráňte z platby, aby ju bolo možné odstrániť"
       },
       "refundRecordsList": {
         "filtersDialogTitle": "Vyberte filtre",
@@ -924,7 +925,7 @@
       "preAnchorWarning": "Táto platba je datovaná pred referenčným dátumom zostatku pôžičky ({date}), preto sa uloží len ako história a nezníži nesplatený zostatok.",
       "overpayError": "Platba prevyšuje zostávajúci zostatok pôžičky ({max}).",
       "deleteConfirmTitle": "Zmazať túto platbu?",
-      "deleteConfirmDescription": "Odstránia sa obe strany prevodu a zostatok pôžičky sa obnoví. Túto akciu nie je možné vrátiť späť.",
+      "deleteConfirmDescription": "Obe strany prevodu sa presunú do koša a zostatok úveru sa obnoví. Zostanú tam 30 dní, dovtedy ich môžete obnoviť.",
       "preAnchorHint": "Tento dátum je pred snímkou zostatku pôžičky, preto táto platba nezmení nesplatený zostatok — je už zahrnutá v počiatočnom zostatku.",
       "unlinkButton": "Odpojiť",
       "unlinkConfirmTitle": "Odpojiť túto platbu?",

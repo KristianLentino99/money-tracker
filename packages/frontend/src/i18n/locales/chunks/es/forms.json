@@ -138,7 +138,7 @@
       "accountCategoryPlaceholder": "Seleccionar categoría de cuenta",
       "creditLimitLabel": "Límite de crédito",
       "creditLimitPlaceholder": "Límite de crédito",
-      "defaultPaymentTypeLabel": "Tipo de pago por defecto",
+      "defaultPaymentTypeLabel": "Default payment type",
       "submitButton": "Crear",
       "submitButtonLoading": "Creando...",
       "notifications": {
@@ -327,7 +327,7 @@
       "searchPlaceholder": "Buscar..."
     },
     "currencySelect": {
-      "yourCurrencies": "Sus monedas",
+      "yourCurrencies": "Your currencies",
       "otherCurrencies": "Otras monedas"
     },
     "comboboxAccounts": {

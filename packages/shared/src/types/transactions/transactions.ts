@@ -1,6 +1,7 @@
 import type { ACCOUNT_TYPES } from '../accounts';
 import type { EmbeddedCategoryModel } from '../categories';
 import type { CategorizationMeta } from '../categorization';
+import type { ImportSource } from '../import-export/core';
 import { RecordId } from '../record-id';
 import type { TagModel } from '../tags';
 
@@ -131,6 +132,8 @@ export interface TransactionModel {
   /** Present on the list endpoint only; absent on create/update responses. */
   hasAttachments?: boolean;
   isForecastOnly: boolean;
+  /** Keeps the row out of the reports without removing it from the ledger. */
+  excludeFromStats: boolean;
   /** Serializer-derived: set when a bank transaction merged into this row while it was planned. */
   plannedMerge?: { mergedAt: string } | null;
   /** Serializer-derived: the bank has not booked this row yet. */
@@ -290,8 +293,12 @@ export interface CreateTransactionBody {
   /** True when the caller wants future syncs to leave this row's Payee link alone. */
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  /** Keeps the row out of the reports without removing it from the ledger. */
+  excludeFromStats?: boolean;
   /** Run the user's automations on a manual-account row; off by default. For API integrations. */
   applyAutomations?: boolean;
+  /** Files the row under the day's import batch of this source; ignored for a planned row. */
+  importSource?: ImportSource.messageImport;
   originalAmount?: number;
   /** Any ISO 4217 code; it does not have to be connected to the user. */
   originalCurrencyCode?: string;
@@ -331,6 +338,8 @@ export interface UpdateTransactionBody {
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  /** Keeps the row out of the reports without removing it from the ledger. */
+  excludeFromStats?: boolean;
   /** Send both fields as `null` to clear the pair. */
   originalAmount?: number | null;
   originalCurrencyCode?: string | null;
@@ -360,6 +369,8 @@ export type BulkDeleteTransactionsBody = BulkTarget;
 export interface BulkDeleteTransactionsResponse {
   deletedCount: number;
   deletedIds: string[];
+  /** Selected rows that cannot go to Trash (payment, portfolio or venture links) and were left untouched. */
+  skippedIds: string[];
 }
 
 // Refund Recommendations

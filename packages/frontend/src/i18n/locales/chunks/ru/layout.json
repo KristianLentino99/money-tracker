@@ -8,6 +8,7 @@
     "allTransactions": "Все транзакции",
     "transactions": "Транзакции",
     "transactionGroups": "Группы",
+    "trash": "Trash",
     "analytics": "Аналитика",
     "optimizations": "Оптимизации",
     "automations": "Автоматизации",
@@ -16,7 +17,7 @@
     "community": "Community",
     "logout": "Выйти",
     "appVersion": "App version {version}",
-    "updateAvailable": "Доступно обновление",
+    "updateAvailable": "Update available",
     "updateToVersion": "Update · {version}",
     "settings": "Настройки",
     "planned": {

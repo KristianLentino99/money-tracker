@@ -44,6 +44,7 @@ export const buildOptimisticTransaction = ({
     location: location === undefined ? rawTransaction.location : location,
     paymentType: form.paymentType!.value,
     isForecastOnly: resolveFormIsPlanned({ form }),
+    excludeFromStats: Boolean(form.excludeFromStats),
     updatedAt: new Date(),
   };
 

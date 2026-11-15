@@ -196,15 +196,49 @@ export async function createTestMcpBearerToken({ scopes }: { scopes: string[] })
 export function requestMcp({
   method = 'post',
   token,
+  sessionId,
   body,
 }: {
   method?: 'post' | 'get' | 'delete';
   token?: string;
+  sessionId?: string;
   body?: object;
 }) {
-  const req = request(app)[method]('/mcp');
+  // The Accept header a Streamable HTTP client sends; the transport answers 406 without it.
+  const req = request(app)[method]('/mcp').set('Accept', 'application/json, text/event-stream');
   if (token) req.set('Authorization', `Bearer ${token}`);
+  if (sessionId) req.set('mcp-session-id', sessionId);
   return req.send(body);
+}
+
+/** The JSON-RPC message of an `/mcp` answer: the transport streams it as one SSE `data:` line. */
+export function readMcpMessage({ res }: { res: request.Response }): {
+  id?: number;
+  result?: Record<string, unknown>;
+  error?: { code: number; message: string };
+} {
+  const dataLine = res.text.split('\n').find((line) => line.startsWith('data: '));
+  if (!dataLine) throw new Error(`No SSE data line in the MCP answer (status ${res.status}): ${res.text}`);
+  return JSON.parse(dataLine.slice('data: '.length));
+}
+
+/** Calls one tool over `/mcp` the way a stateless client does: no `initialize`, no session id unless given. */
+export function callMcpTool({
+  token,
+  name,
+  args = {},
+  sessionId,
+}: {
+  token: string;
+  name: string;
+  args?: Record<string, unknown>;
+  sessionId?: string;
+}) {
+  return requestMcp({
+    token,
+    sessionId,
+    body: { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: args } },
+  });
 }
 
 /**
@@ -323,10 +357,10 @@ export async function initializeMcpSession({
         clientInfo: { name: 'money-tracker-e2e', version: '1.0.0' },
       },
     });
-  if (response.status !== 200 || !response.headers['mcp-session-id']) {
+  if (response.status !== 200) {
     throw new Error(`MCP initialization failed (${response.status}): ${response.text}`);
   }
-  const session = { token, sessionId: String(response.headers['mcp-session-id']) };
+  const session = { token, sessionId: String(response.headers['mcp-session-id'] ?? '') };
   await request(app)
     .post('/mcp')
     .set('Authorization', `Bearer ${token}`)
@@ -346,7 +380,7 @@ export async function listMcpTools({ session }: { session: McpTestSession }) {
   return decodeMcpResponse<{ tools: Array<{ name: string; inputSchema: Record<string, unknown> }> }>({ response });
 }
 
-export async function callMcpTool({
+export async function callMcpSessionTool({
   session,
   name,
   args = {},

@@ -34,6 +34,10 @@ import {
   type BulkTransferScanBody,
   type BulkTransferScanResponse,
   type DismissTransferSuggestionBody,
+  type GetTrashResponse,
+  type TrashActionBody,
+  type RestoreTrashResponse,
+  type DeleteTrashResponse,
 } from '@bt/shared/types';
 
 const formatTransactionPayload = <T extends CreateTransactionBody | UpdateTransactionBody>(transaction: T): T => {
@@ -104,6 +108,8 @@ export const loadTransactions = async ({
   to?: string;
   amountLte?: number;
   amountGte?: number;
+  /** Free text matched against note, payee name and tag names. Words are AND-ed. */
+  search?: string;
   /** Case-insensitive substring match on the note field. Comma-separated terms are OR-ed. */
   noteSearch?: string;
   /** Adds `refundedAmount` (same-currency refunds) to each row and its splits. */
@@ -198,6 +204,14 @@ export const bulkDeleteTransactions = async (
 ): Promise<BulkDeleteTransactionsResponse> => {
   return api.post('/transactions/bulk-delete', payload);
 };
+
+export const loadTrash = async (): Promise<GetTrashResponse> => api.get('/transactions/trash');
+
+export const restoreTrash = async (payload: TrashActionBody): Promise<RestoreTrashResponse> =>
+  api.post('/transactions/trash/restore', payload);
+
+export const deleteTrash = async (payload: TrashActionBody): Promise<DeleteTrashResponse> =>
+  api.post('/transactions/trash/delete', payload);
 
 export const reconciliationRemove = async (
   payload: ReconciliationRemoveBody,

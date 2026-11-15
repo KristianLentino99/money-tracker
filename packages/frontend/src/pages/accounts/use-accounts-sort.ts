@@ -6,18 +6,33 @@ import type { AccountModel } from '@bt/shared/types';
 import { useLocalStorage } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 
-import { type AccountsListItem, type AccountsSortKey, accountBaseValue, sortItems, sortMixed } from './accounts-sort';
+import {
+  type AccountsListItem,
+  type AccountsSortDirection,
+  type AccountsSortKey,
+  accountBaseValue,
+  defaultSortDirection,
+  sortItems,
+  sortMixed,
+} from './accounts-sort';
 
 // Module-scoped so every part of the Accounts page shares one persisted sort choice,
 // mirroring `use-accounts-page-groups.ts`'s module-scoped open-state key. Default = `auto`.
 const sortKey = useLocalStorage<AccountsSortKey>('accounts-page:sort-key', 'auto');
+const sortDirection = useLocalStorage<AccountsSortDirection>(
+  'accounts-page:sort-direction',
+  defaultSortDirection({ sortKey: sortKey.value }),
+);
 
 export function useAccountsSort() {
   const { baseCurrency } = storeToRefs(useCurrenciesStore());
   const { data: userSettings } = useUserSettings();
 
+  // Switching to a different key resets to that key's default direction.
   const setSortKey = (key: AccountsSortKey): void => {
+    if (key === sortKey.value) return;
     sortKey.value = key;
+    sortDirection.value = defaultSortDirection({ sortKey: key });
   };
 
   // Read reactive store values lazily: these wrappers run inside consumer `computed()`s, and
@@ -30,6 +45,7 @@ export function useAccountsSort() {
     sortItems({
       items: accounts,
       sortKey: sortKey.value,
+      direction: sortDirection.value,
       getName: (account) => account.name,
       getValue: (account) => accountBaseValue({ account, includeCreditLimit: includeCreditLimit() }),
     });
@@ -38,6 +54,7 @@ export function useAccountsSort() {
     sortItems({
       items: vehicles,
       sortKey: sortKey.value,
+      direction: sortDirection.value,
       getName: (vehicle) => vehicle.account?.name ?? `${vehicle.make} ${vehicle.model}`,
       getValue: (vehicle) =>
         vehicle.account ? accountBaseValue({ account: vehicle.account, includeCreditLimit: includeCreditLimit() }) : 0,
@@ -48,6 +65,7 @@ export function useAccountsSort() {
       groups,
       accounts,
       sortKey: sortKey.value,
+      direction: sortDirection.value,
       baseCurrencyCode: baseCurrencyCode(),
       includeCreditLimit: includeCreditLimit(),
     });
@@ -57,6 +75,7 @@ export function useAccountsSort() {
       groups: group.childGroups,
       accounts: group.accounts,
       sortKey: sortKey.value,
+      direction: sortDirection.value,
       baseCurrencyCode: baseCurrencyCode(),
       includeCreditLimit: includeCreditLimit(),
     });
@@ -64,6 +83,7 @@ export function useAccountsSort() {
   return {
     sortKey,
     setSortKey,
+    sortDirection,
     sortLeafAccounts,
     sortVehicles,
     sortManual,

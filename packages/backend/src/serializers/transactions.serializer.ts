@@ -8,6 +8,7 @@
 import { PAYMENT_TYPES, TRANSACTION_TRANSFER_NATURE, TRANSACTION_TYPES } from '@bt/shared/types';
 import type {
   CategorizationMeta,
+  ImportSource,
   PaymentLegInput,
   RecordId,
   TransactionLocation,
@@ -74,6 +75,7 @@ export interface TransactionApiResponse {
   /** Present on list reads only. */
   hasAttachments?: boolean;
   isForecastOnly: boolean;
+  excludeFromStats: boolean;
   /** Set when a bank transaction merged into this row while it was planned. */
   plannedMerge: { mergedAt: string } | null;
   /** Bank reported the row as PDNG/HOLD and has not booked it yet. */
@@ -151,7 +153,9 @@ interface CreateTransactionRequest {
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  excludeFromStats?: boolean;
   applyAutomations?: boolean;
+  importSource?: ImportSource.messageImport;
   originalAmount?: number; // decimal from API
   originalCurrencyCode?: string;
   paymentLegs?: PaymentLegInput[];
@@ -191,7 +195,9 @@ interface CreateTransactionInternal {
   payeeId?: RecordId | null;
   payeeLocked?: boolean;
   isForecastOnly?: boolean;
+  excludeFromStats?: boolean;
   applyAutomations?: boolean;
+  importSource?: ImportSource.messageImport;
   originalAmount?: Money;
   originalCurrencyCode?: string;
   paymentLegs?: PaymentLegParam[];
@@ -281,6 +287,7 @@ export function serializeTransaction(
     refundLinked: tx.refundLinked,
     ...(tx.refundedAmount && { refundedAmount: centsToApiDecimal(tx.refundedAmount) }),
     isForecastOnly: tx.isForecastOnly ?? false,
+    excludeFromStats: tx.excludeFromStats ?? false,
     plannedMerge: extractPlannedMerge({ externalData: tx.externalData }),
     isPending: isPreBookingStatus({ status: getRawTransactionStatus({ externalData: tx.externalData }) }),
     payeeId: tx.payeeId ?? null,
@@ -403,7 +410,9 @@ export function deserializeCreateTransaction(req: CreateTransactionRequest, user
     payeeId: req.payeeId,
     payeeLocked: req.payeeLocked,
     isForecastOnly: req.isForecastOnly,
+    excludeFromStats: req.excludeFromStats,
     applyAutomations: req.applyAutomations,
+    importSource: req.importSource,
     originalAmount: req.originalAmount !== undefined ? Money.fromDecimal(req.originalAmount) : undefined,
     originalCurrencyCode: req.originalCurrencyCode,
     paymentLegs: req.paymentLegs && deserializePaymentLegs({ legs: req.paymentLegs }),

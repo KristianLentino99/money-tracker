@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "Kategóriu účtu pôžičky nemožno zmeniť.",
     "dedicatedFlowCategoryNotAllowed": "Účty pôžičiek a vozidiel sa musia vytvárať cez svoje vyhradené rozhrania, nie cez všeobecné rozhranie účtov.",
     "initialBalanceOnlySystem": "Počiatočný zostatok možno zmeniť len pri manuálnych účtoch",
-    "initialAndCurrentBalanceTogether": "Počiatočný zostatok a aktuálny zostatok nemožno zmeniť v rámci jednej požiadavky"
+    "initialAndCurrentBalanceTogether": "Počiatočný zostatok a aktuálny zostatok nemožno zmeniť v rámci jednej požiadavky",
+    "deleteBlockedByTrashedLoanPayments": "Tento účet má splátky úveru v koši. Pred odstránením účtu ich natrvalo odstráňte z koša."
   },
   "balanceAdjustment": {
     "defaultNote": "Úprava zostatku",
@@ -145,6 +146,13 @@
         "message_other": "{{count}} transakcií čaká už viac než týždeň. Overte ich v banke, aby bol váš zostatok presný."
       },
       "maintenanceConflict": "Vybrané transakcie patria k rôznym servisným návštevám."
+    },
+    "trash": {
+      "paymentNotTrashable": "Najprv ju odstráňte z platby, aby ju bolo možné odstrániť.",
+      "portfolioNotTrashable": "Najprv ju odpojte od portfólia, aby ju bolo možné odstrániť.",
+      "ventureNotTrashable": "Najprv ju odpojte od venture, aby ju bolo možné odstrániť.",
+      "accountTypeChanged": "Túto transakciu nemožno obnoviť, pretože sa zmenil typ jej účtu.",
+      "loanPaymentLegMissing": "Túto splátku úveru nemožno obnoviť, pretože jej druhá strana bola odstránená."
     }
   },
   "budgets": {
@@ -274,7 +282,8 @@
     "unrealizedLossAlert": {
       "title_one": "{{count}} pozícia prekročila vaše upozornenie na stratu",
       "title_other": "{{count}} pozícií prekročilo vaše upozornenie na stratu"
-    }
+    },
+    "linkedTransactionMustBelongToDestinationAccount": "Prepojená transakcia musí patriť do cieľového účtu."
   },
   "landingFaq": {
     "unavailable": "Asistent je momentálne nedostupný. Skúste to znova neskôr, alebo napíšte na support@moneymatter.app."
@@ -459,7 +468,7 @@
     "aiRateLimited": "Dosiahnutý limit požiadaviek poskytovateľa AI. Skúste to znova o pár minút, prosím.",
     "aiExtractionFailed": "Vyťaženie pomocou AI zlyhalo. Skúste to znova, prosím.",
     "ynab": {
-      "importAlreadyInProgress": "A YNAB import is already running. Wait for it to finish before starting another one.",
+      "importAlreadyInProgress": "Import z YANB už prebieha. Pred spustením ďalšieho počkajte, kým sa dokončí.",
       "parse": {
         "fileEmpty": "Súbor YNAB Register.csv je prázdny.",
         "unparseable": "Súbor YNAB Register.csv sa nepodarilo spracovať ako súbor CSV.",
@@ -728,6 +737,11 @@
         "requiresAccountField": "Automatické zaznamenávanie vyžaduje účet, na ktorý sa transakcia zaúčtuje.",
         "requiresAmountField": "Automatické zaznamenávanie vyžaduje expectedAmount a expectedCurrencyCode.",
         "excludesMatchingField": "Automatické zaznamenávanie a priraďovacie pravidlá sa navzájom vylučujú."
+      },
+      "customInterval": {
+        "required": "Vlastná frekvencia vyžaduje jednotku a počet intervalu.",
+        "presetConflict": "Jednotku a počet intervalu možno nastaviť len pri vlastnej frekvencii.",
+        "countOutOfRange": "Počet intervalov musí byť pre túto jednotku v rozsahu {{min}} až {{max}}."
       }
     }
   },

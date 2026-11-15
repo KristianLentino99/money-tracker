@@ -3,12 +3,16 @@ import {
   REMIND_BEFORE_PRESETS,
   RemindBeforePreset,
   SUBSCRIPTION_FREQUENCIES,
+  SUBSCRIPTION_INTERVAL_LIMITS,
+  SUBSCRIPTION_INTERVAL_UNITS,
   SUBSCRIPTION_TYPES,
+  type SubscriptionRecurrence,
   TRANSACTION_TYPES,
 } from '@bt/shared/types';
 import { currencyCode, dateBound, recordId, withDateOrder } from '@common/lib/zod/custom-types';
 import { logoFieldsShape, refineLogoFields } from '@controllers/common/logo-fields.schema';
 import { t } from '@i18n/index';
+import { findRecurrenceProblem } from '@services/subscriptions/helpers';
 import { z } from 'zod';
 
 const matchingRuleSchema = z.discriminatedUnion('field', [
@@ -20,7 +24,7 @@ const matchingRuleSchema = z.discriminatedUnion('field', [
   z.object({
     field: z.literal('amount'),
     operator: z.literal('between'),
-    value: z.object({ min: z.number().nonnegative().finite(), max: z.number().nonnegative().finite() }),
+    value: z.object({ min: z.number().nonnegative(), max: z.number().nonnegative() }),
     currencyCode: currencyCode().optional(),
   }),
   z.object({
@@ -83,6 +87,42 @@ export const markPeriodPaidBodySchema = z
     path: ['transactionId'],
   });
 
+/** The step of a `custom` frequency: every `intervalCount` `intervalUnit`s. */
+const recurrenceStepShape = {
+  intervalUnit: z
+    .enum(Object.values(SUBSCRIPTION_INTERVAL_UNITS) as [SUBSCRIPTION_INTERVAL_UNITS, ...SUBSCRIPTION_INTERVAL_UNITS[]])
+    .nullable()
+    .optional(),
+  intervalCount: z.number().int().min(SUBSCRIPTION_INTERVAL_LIMITS.min).nullable().optional(),
+};
+
+/**
+ * Payload-level recurrence rules. A create states the whole schedule, so every rule
+ * applies. An update may send part of it (only the count, say), so a missing step on
+ * `custom` is left to the service, which checks the merged state.
+ */
+const refineRecurrence = ({
+  data,
+  ctx,
+  partial,
+}: {
+  data: Partial<SubscriptionRecurrence>;
+  ctx: z.RefinementCtx;
+  partial: boolean;
+}) => {
+  const problem = findRecurrenceProblem({
+    frequency: partial && data.frequency === SUBSCRIPTION_FREQUENCIES.custom ? undefined : data.frequency,
+    intervalUnit: data.intervalUnit,
+    intervalCount: data.intervalCount,
+  });
+  if (!problem) return;
+  ctx.addIssue({
+    code: 'custom',
+    message: t({ key: problem.key, variables: problem.variables }),
+    path: [problem.field],
+  });
+};
+
 const remindBeforePresetValues = Object.values(REMIND_BEFORE_PRESETS) as [RemindBeforePreset, ...RemindBeforePreset[]];
 
 export const createSubscriptionBodyShape = {
@@ -101,6 +141,7 @@ export const createSubscriptionBodyShape = {
   frequency: z.enum(
     Object.values(SUBSCRIPTION_FREQUENCIES) as [SUBSCRIPTION_FREQUENCIES, ...SUBSCRIPTION_FREQUENCIES[]],
   ),
+  ...recurrenceStepShape,
   startDate: dateBound(),
   endDate: dateBound().nullable().optional(),
   accountId: recordId().nullable().optional(),
@@ -122,13 +163,14 @@ export const createSubscriptionBodyShape = {
 export const createSubscriptionBodySchema = withDateOrder(
   z.object(createSubscriptionBodyShape).superRefine((data, ctx) => {
     refineLogoFields({ data, ctx });
+    refineRecurrence({ data, ctx, partial: false });
 
     const hasAmount = data.expectedAmount != null;
     const hasCurrency = data.expectedCurrencyCode != null;
 
     if (hasAmount !== hasCurrency) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Both expectedAmount and expectedCurrencyCode must be provided together.',
         path: [hasAmount ? 'expectedCurrencyCode' : 'expectedAmount'],
       });
@@ -136,7 +178,7 @@ export const createSubscriptionBodySchema = withDateOrder(
 
     if (data.type === SUBSCRIPTION_TYPES.subscription && !hasAmount) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Subscriptions require expectedAmount and expectedCurrencyCode.',
         path: ['expectedAmount'],
       });
@@ -147,14 +189,14 @@ export const createSubscriptionBodySchema = withDateOrder(
     if (data.type === SUBSCRIPTION_TYPES.installment) {
       if (data.maxOccurrences == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Installments require maxOccurrences (the number of payments).',
           path: ['maxOccurrences'],
         });
       }
       if (data.dueDate == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Installments require a payment schedule date (dueDate).',
           path: ['dueDate'],
         });
@@ -167,21 +209,21 @@ export const createSubscriptionBodySchema = withDateOrder(
     if (data.autoRecord) {
       if (data.accountId == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.requiresAccountField' }),
           path: ['accountId'],
         });
       }
       if (data.expectedAmount == null || data.expectedCurrencyCode == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.requiresAmountField' }),
           path: ['expectedAmount'],
         });
       }
       if (data.matchingRules && data.matchingRules.rules.length > 0) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.excludesMatchingField' }),
           path: ['matchingRules'],
         });
@@ -200,6 +242,7 @@ export const updateSubscriptionBodyShape = {
   frequency: z
     .enum(Object.values(SUBSCRIPTION_FREQUENCIES) as [SUBSCRIPTION_FREQUENCIES, ...SUBSCRIPTION_FREQUENCIES[]])
     .optional(),
+  ...recurrenceStepShape,
   startDate: dateBound().optional(),
   endDate: dateBound().nullable().optional(),
   accountId: recordId().nullable().optional(),
@@ -222,6 +265,7 @@ export const updateSubscriptionBodyShape = {
 export const updateSubscriptionBodySchema = withDateOrder(
   z.object(updateSubscriptionBodyShape).superRefine((data, ctx) => {
     refineLogoFields({ data, ctx });
+    refineRecurrence({ data, ctx, partial: true });
 
     // When both are explicitly provided in the same update, they must be consistent
     const hasAmount = data.expectedAmount !== undefined ? data.expectedAmount != null : undefined;
@@ -229,7 +273,7 @@ export const updateSubscriptionBodySchema = withDateOrder(
 
     if (hasAmount !== undefined && hasCurrency !== undefined && hasAmount !== hasCurrency) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Both expectedAmount and expectedCurrencyCode must be provided together.',
         path: [hasAmount ? 'expectedCurrencyCode' : 'expectedAmount'],
       });
@@ -242,14 +286,14 @@ export const updateSubscriptionBodySchema = withDateOrder(
     if (data.type === SUBSCRIPTION_TYPES.installment) {
       if (data.maxOccurrences == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Installments require maxOccurrences (the number of payments).',
           path: ['maxOccurrences'],
         });
       }
       if (data.dueDate == null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: 'Installments require a payment schedule date (dueDate).',
           path: ['dueDate'],
         });
@@ -263,21 +307,21 @@ export const updateSubscriptionBodySchema = withDateOrder(
     if (data.autoRecord === true) {
       if (data.accountId === null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.requiresAccountField' }),
           path: ['accountId'],
         });
       }
       if (data.expectedAmount === null || data.expectedCurrencyCode === null) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.requiresAmountField' }),
           path: ['expectedAmount'],
         });
       }
       if (data.matchingRules && data.matchingRules.rules.length > 0) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: t({ key: 'subscriptions.validation.autoRecord.excludesMatchingField' }),
           path: ['matchingRules'],
         });

@@ -514,18 +514,18 @@ describe('bulk_delete_transactions', () => {
 
   beforeEach(() => {
     resolveTargets.mockResolvedValue([ID_1, ID_2]);
-    bulkDeleteService.mockResolvedValue({ deletedCount: 2, deletedIds: [ID_1, ID_2] });
+    bulkDeleteService.mockResolvedValue({ deletedCount: 2, deletedIds: [ID_1, ID_2], skippedIds: [] });
   });
 
   it('deletes explicit ids', async () => {
     resolveTargets.mockResolvedValue([ID_1]);
-    bulkDeleteService.mockResolvedValue({ deletedCount: 1, deletedIds: [ID_1] });
+    bulkDeleteService.mockResolvedValue({ deletedCount: 1, deletedIds: [ID_1], skippedIds: [] });
 
     const data = await call({ tool, args: { transactionIds: [ID_1] }, extra: DELETE });
 
     expect(resolveTargets).toHaveBeenCalledWith({ userId: 42, transactionIds: [ID_1], selection: undefined });
     expect(bulkDeleteService).toHaveBeenCalledWith({ userId: 42, transactionIds: [ID_1] });
-    expect(data).toEqual({ deletedCount: 1, deletedIds: [ID_1] });
+    expect(data).toEqual({ deletedCount: 1, deletedIds: [ID_1], skippedIds: [] });
   });
 
   it('deletes what the filters match, less the excluded ids, with the filters mapped for the service', async () => {
@@ -572,6 +572,7 @@ describe('bulk_delete_transactions', () => {
     { label: 'an empty note search', filters: { noteSearch: '' } },
     { label: 'a note search of only separators', filters: { noteSearch: ',' } },
     { label: 'a note search of only whitespace', filters: { noteSearch: '  ,  ' } },
+    { label: 'a blank search', filters: { search: '   ' } },
     { label: 'a lone keepRefundsForTxId', filters: { keepRefundsForTxId: ID_1 } },
     {
       label: 'keepRefundsForTxId with excludeRefundTxs off',
@@ -600,6 +601,7 @@ describe('bulk_delete_transactions', () => {
     { label: 'a date bound', filters: { from: '2026-10-01T00:00:00.000Z' } },
     { label: 'an account', filters: { accountIds: [ACCOUNT_ID] } },
     { label: 'a note search', filters: { noteSearch: 'coffee' } },
+    { label: 'a search', filters: { search: 'coffee' } },
     { label: 'a transaction type', filters: { transactionType: TRANSACTION_TYPES.expense } },
     { label: 'a switched-on flag', filters: { excludeTransfer: true } },
     { label: 'the only-refunds operation', filters: { refundFilter: 'only' } },

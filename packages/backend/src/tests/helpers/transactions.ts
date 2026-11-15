@@ -319,6 +319,7 @@ export function bulkUpdateTransactions<R extends boolean | undefined = undefined
 interface BulkDeleteResult {
   deletedCount: number;
   deletedIds: string[];
+  skippedIds: string[];
 }
 
 export function bulkDeleteTransactions<R extends boolean | undefined = undefined>({

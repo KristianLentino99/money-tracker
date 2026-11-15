@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "Die Kategorie eines Kreditkontos kann nicht geändert werden.",
     "dedicatedFlowCategoryNotAllowed": "Kredit- und Fahrzeugkonten müssen über ihre eigenen Endpunkte erstellt werden und nicht über den Endpunkt der allgemeinen Konten.",
     "initialBalanceOnlySystem": "Der Startsaldo kann nur für manuelle Konten geändert werden",
-    "initialAndCurrentBalanceTogether": "Startsaldo und aktueller Saldo können nicht in derselben Anfrage geändert werden"
+    "initialAndCurrentBalanceTogether": "Startsaldo und aktueller Saldo können nicht in derselben Anfrage geändert werden",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Kontostandsanpassung",
@@ -56,7 +57,7 @@
     "idCannotBeChanged": "ID kann nicht geändert werden",
     "editReadonlyFields": "Versuch, schreibgeschützte Felder des externen Kontos zu bearbeiten",
     "changeTypeNotAllowed": "Es ist nicht erlaubt, den „transactionType“ eines Nicht-System-Kontos zu ändern",
-    "bothRefundFieldsNotAllowed": "Du kannst nicht gleichzeitig „refundedByTxIds“ und „refundsTxId“ verwenden. Bitte wähle eines von beiden.",
+    "bothRefundFieldsNotAllowed": "Du kannst nicht gleichzeitig \"refundedByTxIds\" und \"refundsTargets\" verwenden. Bitte entscheide dich für eines von beiden.",
     "oppositeTransactionNotFound": "Gegenbuchung zum Aktualisieren wurde nicht gefunden",
     "transactionIdNotExist": "Transaktion mit der angegebenen ID existiert nicht!",
     "notAuthorizedToEdit": "Du bist nicht berechtigt, diese Transaktion zu bearbeiten.",
@@ -101,14 +102,14 @@
     "paymentLinkedAmountFixed": "Der Betrag einer verknüpften Transaktion kann nicht geändert werden.",
     "paymentLinkedTypeMismatch": "Verknüpfte Transaktionen müssen denselben Typ haben wie die Zahlung. Hebe die Verknüpfung zuerst auf.",
     "refunds": {
-      "wholeLinkWithPartials": "A whole-refund link cannot be combined with partial links",
-      "externalLinkWithOthers": "A refund for a purchase outside the app cannot be combined with other refund links",
-      "externalLinkWithAmount": "A refund of a transaction outside the app cannot have a partial amount; it always covers the whole refund.",
-      "totalExceedsRefund": "Total refund link amounts cannot be greater than the refund transaction amount",
-      "totalExceedsSplit": "Total refund amount cannot be greater than the split amount",
-      "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
-      "refundOfRefund": "Cannot refund a \"refund\" transaction",
-      "duplicateLink": "This refund is already linked to that transaction"
+      "wholeLinkWithPartials": "Ein Link für eine vollständige Rückerstattung kann nicht mit Teil-Links kombiniert werden",
+      "externalLinkWithOthers": "Eine Rückerstattung für einen Kauf außerhalb der App kann nicht mit anderen Rückerstattungs-Links kombiniert werden",
+      "externalLinkWithAmount": "Eine Rückerstattung für eine Transaktion außerhalb der App kann keinen Teilbetrag haben; sie deckt immer die gesamte Rückerstattung ab.",
+      "totalExceedsRefund": "Die Summe der Rückerstattungs-Link-Beträge kann den Betrag der Rückerstattungstransaktion nicht überschreiten",
+      "totalExceedsSplit": "Der Gesamtrückerstattungsbetrag kann den Aufteilungsbetrag nicht überschreiten",
+      "totalExceedsOriginal": "Der Gesamtrückerstattungsbetrag kann den ursprünglichen Transaktionsbetrag nicht überschreiten",
+      "refundOfRefund": "Eine \"Rückerstattung\"-Transaktion kann nicht erstattet werden",
+      "duplicateLink": "Diese Rückerstattung ist bereits mit dieser Transaktion verknüpft"
     },
     "splits": {
       "splitsOnTransfer": "Umbuchungstransaktionen können keine Aufteilungen hinzugefügt werden",
@@ -145,6 +146,13 @@
         "message_other": "{{count}} Transaktionen sind seit über einer Woche ausstehend. Überprüfe sie bei deiner Bank, damit dein Kontostand korrekt bleibt."
       },
       "maintenanceConflict": "Die ausgewählten Transaktionen gehören zu unterschiedlichen Wartungsterminen."
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "budgets": {
@@ -192,9 +200,9 @@
     "openEndedGoalCannotSnooze": "Ein Ziel ohne Enddatum kann nicht pausiert werden.",
     "zeroSumNeedsPool": "Um „Noch zu verteilen“ auf 0 zu halten, ist ein Plan erforderlich, der aus einem Pool finanziert wird.",
     "suggestedGroups": {
-      "bills": "Rechnungen",
-      "everyday": "Alltag",
-      "life": "Leben"
+      "bills": "Bills",
+      "everyday": "Everyday",
+      "life": "Life"
     }
   },
   "tags": {
@@ -274,7 +282,8 @@
     "unrealizedLossAlert": {
       "title_one": "{{count}} Position hat deinen Verlust-Warnschwellenwert überschritten",
       "title_other": "{{count}} Positionen haben deinen Verlust-Warnschwellenwert überschritten"
-    }
+    },
+    "linkedTransactionMustBelongToDestinationAccount": "Die verknüpfte Transaktion muss zum Zielkonto gehören."
   },
   "landingFaq": {
     "unavailable": "Der Assistent ist derzeit nicht verfügbar. Bitte versuche es später erneut oder schreibe eine E-Mail an support@moneymatter.app."
@@ -305,7 +314,7 @@
     "providerTypeMismatch": "Verbindung {{connectionId}} gilt für Anbieter {{actualType}}, nicht {{expectedType}}",
     "providerAlreadyRegistered": "Anbieter {{providerType}} ist bereits registriert. Anlegen von Duplikaten nicht möglich.",
     "providerNotRegistered": "Anbieter {{providerType}} ist nicht registriert. Verfügbare Anbieter: {{available}}",
-    "unexpected": "Unerwarteter Fehler."
+    "unexpected": "Unexpected error."
   },
   "validation": {
     "dateInvalid": "\"date\" ist ein ungültiges Datum."
@@ -459,7 +468,7 @@
     "aiRateLimited": "Ratenlimit des KI-Anbieters erreicht. Bitte versuche es in einigen Minuten erneut.",
     "aiExtractionFailed": "KI-Extrahierung fehlgeschlagen. Bitte versuche es erneut.",
     "ynab": {
-      "importAlreadyInProgress": "A YNAB import is already running. Wait for it to finish before starting another one.",
+      "importAlreadyInProgress": "Ein YNAB-Import läuft bereits. Warte, bis dieser abgeschlossen ist, bevor du einen weiteren startest.",
       "parse": {
         "fileEmpty": "YNAB Register.csv ist leer.",
         "unparseable": "YNAB Register.csv konnte nicht als CSV-Datei verarbeitet werden.",
@@ -618,7 +627,7 @@
       "communication": "Kommunikation & IT",
       "financial-expenses": "Finanzausgaben",
       "investments": "Investitionen",
-      "income": "Einnahmen",
+      "income": "Income",
       "other": "Sonstiges"
     },
     "subcategories": {
@@ -695,7 +704,7 @@
         "realty": "Immobilien",
         "vehicles-chattels": "Fahrzeuge & Sachwerte",
         "financial-investments": "Finanzinvestitionen",
-        "savings": "Sparen",
+        "savings": "Savings",
         "collections": "Sammlungen"
       },
       "income": {
@@ -728,6 +737,11 @@
         "requiresAccountField": "Automatische Erfassung erfordert ein Konto, auf das die Transaktion gebucht wird.",
         "requiresAmountField": "Automatische Erfassung erfordert \"expectedAmount\" und \"expectedCurrencyCode\".",
         "excludesMatchingField": "Automatische Erfassung und Abgleichsregeln schließen sich gegenseitig aus."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },
@@ -739,8 +753,8 @@
     "accountMustBeSystem": "In einer Transaktionsvorlage können nur manuell verwaltete Konten verwendet werden.",
     "accountArchived": "Archivierte Konten können nicht in einer Vorlage verwendet werden.",
     "categoryNotFound": "Kategorie nicht gefunden oder gehört nicht zum Nutzer.",
-    "payeeNotFound": "Zahlungsempfänger nicht gefunden oder gehört nicht zum Nutzer.",
-    "tagsNotFound": "Ein oder mehrere Tags wurden nicht gefunden oder gehören nicht zum Nutzer."
+    "payeeNotFound": "Payee not found or does not belong to user.",
+    "tagsNotFound": "One or more tags were not found or do not belong to user."
   },
   "payees": {
     "aliasNameRequired": "Alias-Name ist erforderlich",
@@ -768,7 +782,7 @@
     "eventNotFound": "Venture-Ereignis nicht gefunden"
   },
   "vehicles": {
-    "notFound": "Fahrzeug nicht gefunden"
+    "notFound": "Vehicle not found"
   },
   "stats": {
     "netWorthHistoryTooManyPoints": "Dieser Datumsbereich und diese Granularität erzeugen zu viele Datenpunkte. Wähle eine gröbere Granularität oder einen kürzeren Zeitraum."
@@ -843,9 +857,9 @@
   "auth": {
     "errors": {
       "passwordAlreadySet": "Dein Konto hat bereits ein Passwort.",
-      "passwordTooShort": "Passwort ist zu kurz.",
-      "passwordTooLong": "Passwort ist zu lang.",
-      "reauthenticationRequired": "Zu deiner Sicherheit melde dich erneut an, um diese Änderung vorzunehmen.",
+      "passwordTooShort": "Password is too short.",
+      "passwordTooLong": "Password is too long.",
+      "reauthenticationRequired": "For your security, sign in again to make this change.",
       "signupsDisabled": "Registrierungen wurden vom Administrator deaktiviert."
     }
   },
@@ -882,7 +896,7 @@
   },
   "goals": {
     "goalNotFound": "Ziel nicht gefunden.",
-    "accountNotFound": "Eines der ausgewählten Konten wurde nicht gefunden.",
+    "accountNotFound": "One of the selected accounts was not found.",
     "accountNotEligible": "{{accountName}} kann nicht für ein Ziel angerechnet werden. Wähle ein Bargeld-, Giro-, Spar-, Investment- oder Krypto-Konto aus.",
     "shareCapacityExceeded": "{{accountName}} hat {{free}}% frei: Du hast {{requested}}% angefragt, und andere Ziele nutzen bereits {{usedByOtherGoals}}%.",
     "fixedAmountsBelowTarget": "Festbeträge ergeben in der Summe {{total}} {{currencyCode}}, weniger als das Ziel von {{target}} {{currencyCode}}. Erhöhe einen Betrag oder berücksichtige ein Konto prozentual.",

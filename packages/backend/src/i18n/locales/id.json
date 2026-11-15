@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "Kategori akun pinjaman tidak dapat diubah.",
     "dedicatedFlowCategoryNotAllowed": "Akun pinjaman dan kendaraan harus dibuat melalui endpoint khusus, bukan endpoint akun umum.",
     "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
-    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Penyesuaian saldo",
@@ -145,6 +146,13 @@
       "totalExceedsOriginal": "Total refund amount cannot be greater than the original transaction amount",
       "refundOfRefund": "Cannot refund a \"refund\" transaction",
       "duplicateLink": "This refund is already linked to that transaction"
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "tags": {
@@ -224,7 +232,8 @@
     "unrealizedLossAlert": {
       "title_one": "{{count}} holding crossed your loss alert",
       "title_other": "{{count}} holdings crossed your loss alert"
-    }
+    },
+    "linkedTransactionMustBelongToDestinationAccount": "The linked transaction must belong to the destination account."
   },
   "landingFaq": {
     "unavailable": "The assistant is unavailable right now. Please try again later or email support@moneymatter.app."
@@ -255,7 +264,7 @@
     "providerTypeMismatch": "Koneksi {{connectionId}} adalah untuk provider {{actualType}}, bukan {{expectedType}}",
     "providerAlreadyRegistered": "Provider {{providerType}} sudah terdaftar. Tidak dapat mendaftarkan provider duplikat.",
     "providerNotRegistered": "Provider {{providerType}} belum terdaftar. Provider yang tersedia: {{available}}",
-    "unexpected": "Kesalahan tak terduga."
+    "unexpected": "Unexpected error."
   },
   "validation": {
     "dateInvalid": "\"date\" adalah tanggal tidak valid."
@@ -678,6 +687,11 @@
         "requiresAccountField": "Perekaman otomatis memerlukan akun untuk mencatat transaksi.",
         "requiresAmountField": "Perekaman otomatis memerlukan expectedAmount dan expectedCurrencyCode.",
         "excludesMatchingField": "Perekaman otomatis dan aturan pencocokan bersifat mutually exclusive."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },
@@ -791,7 +805,7 @@
     "openEndedGoalCannotSnooze": "An open-ended goal can't be snoozed.",
     "zeroSumNeedsPool": "Keeping Ready to Assign at 0 needs a plan funded from a pool.",
     "suggestedGroups": {
-      "bills": "Tagihan",
+      "bills": "Bills",
       "everyday": "Everyday",
       "life": "Life"
     }
@@ -843,8 +857,8 @@
   "auth": {
     "errors": {
       "passwordAlreadySet": "Your account already has a password.",
-      "passwordTooShort": "Kata sandi terlalu pendek.",
-      "passwordTooLong": "Kata sandi terlalu panjang.",
+      "passwordTooShort": "Password is too short.",
+      "passwordTooLong": "Password is too long.",
       "reauthenticationRequired": "For your security, sign in again to make this change.",
       "signupsDisabled": "Signups are disabled by the administrator."
     }

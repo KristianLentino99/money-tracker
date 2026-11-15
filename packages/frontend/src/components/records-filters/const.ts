@@ -27,7 +27,8 @@ export interface FiltersStruct {
   accountIds: string[];
   trackerIds: string[];
   excludedTrackerIds: string[];
-  noteIncludes: string;
+  /** Free text matched against note, payee name and tag names. */
+  search: string;
   attachmentFilter: FILTER_OPERATION;
   categoryIds: string[];
   uncategorizedOnly: boolean;
@@ -51,7 +52,7 @@ export const DEFAULT_FILTERS: FiltersStruct = {
   accountIds: [],
   trackerIds: [],
   excludedTrackerIds: [],
-  noteIncludes: '',
+  search: '',
   attachmentFilter: FILTER_OPERATION.all,
   categoryIds: [],
   uncategorizedOnly: false,

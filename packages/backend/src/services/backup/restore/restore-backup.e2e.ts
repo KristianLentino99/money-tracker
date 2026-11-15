@@ -996,6 +996,7 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
         raw: true,
         patch: {
           fire: { spendingExcludedCategoryIds: [category.id], returnIndicatorId: `portfolio:${portfolio.id}` },
+          ios: { addExpense: { showBankAccounts: true, excludedCategoryIds: [category.id, generateRandomRecordId()] } },
           categoryOrder: {
             [CATEGORY_ORDER_ROOT_KEY]: [category.id],
             [category.id]: [category.id, generateRandomRecordId()],
@@ -1044,8 +1045,9 @@ describe('Data backup restore (POST /user/backup/restore)', () => {
           expect(targetPayee!.id).not.toBe(payee.id);
           expect(targetTracker!.id).not.toBe(tracker.id);
 
-          const { fire, fireHistory, incomeCategoryIds, categoryOrder, savedTransactionViews } =
+          const { fire, fireHistory, incomeCategoryIds, categoryOrder, savedTransactionViews, ios } =
             await helpers.getUserSettings({ raw: true });
+          expect(ios?.addExpense).toStrictEqual({ showBankAccounts: true, excludedCategoryIds: [targetCategory!.id] });
           expect(categoryOrder).toStrictEqual({
             [CATEGORY_ORDER_ROOT_KEY]: [targetCategory!.id],
             [targetCategory!.id]: [targetCategory!.id],

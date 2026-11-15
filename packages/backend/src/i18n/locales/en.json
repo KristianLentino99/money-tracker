@@ -17,7 +17,8 @@
     "loanCategoryImmutable": "A loan account's category can't be changed.",
     "dedicatedFlowCategoryNotAllowed": "Loan and vehicle accounts must be created through their dedicated endpoints, not the generic accounts endpoint.",
     "initialBalanceOnlySystem": "Initial balance can only be changed for manual accounts",
-    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request"
+    "initialAndCurrentBalanceTogether": "Initial balance and current balance can't be changed in the same request",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
   },
   "balanceAdjustment": {
     "defaultNote": "Balance adjustment",
@@ -41,7 +42,8 @@
     "systemParentForbidden": "System categories cannot be used as a parent.",
     "ownParent": "Category cannot be its own parent.",
     "underOwnSubcategory": "Category cannot be moved under its own subcategory.",
-    "nestingTooDeep": "Categories cannot be nested deeper than {{max}} levels."
+    "nestingTooDeep": "Categories cannot be nested deeper than {{max}} levels.",
+    "defaultCannotBeDeleted": "This category holds uncategorized transactions and cannot be deleted."
   },
   "transactions": {
     "notFound": "Transaction not found",
@@ -145,6 +147,13 @@
         "message_other": "{{count}} transactions have been pending for over a week. Check them with your bank so your balance stays accurate."
       },
       "maintenanceConflict": "The selected transactions belong to different maintenance visits."
+    },
+    "trash": {
+      "paymentNotTrashable": "Remove it from the payment first to delete it.",
+      "portfolioNotTrashable": "Unlink it from the portfolio first to delete it.",
+      "ventureNotTrashable": "Unlink it from the venture first to delete it.",
+      "accountTypeChanged": "This transaction can't be restored because its account type has changed.",
+      "loanPaymentLegMissing": "This loan payment can't be restored because its other side was deleted."
     }
   },
   "budgets": {
@@ -339,7 +348,7 @@
     "periodLoadNotSupported": "Loading transactions for a custom period is not supported by this provider.",
     "transactionsLoadedCount": "Loaded {{count}} transactions.",
     "transactionsAllDuplicates": "Found {{count}} transactions for this period — all were already imported.",
-    "transactionsNoneInPeriod": "The provider returned no transactions for this period.",
+    "transactionsNoneInPeriod": "The data provider didn't return any transactions for this period.",
     "apiError": "{{provider}} API error: {{message}}",
     "currencySelectionRequired": "Account \"{{account}}\" has no currency reported by the bank — choose a currency for it before connecting.",
     "providerNotAvailable": "This bank provider is not available for new connections.",
@@ -714,7 +723,9 @@
         "holiday-trips-hotels": "Holiday, trips, hotels",
         "charity-gifts": "Charity, gifts",
         "alcohol-tobacco": "Alcohol, tobacco",
-        "lottery-gambling": "Lottery, gambling"
+        "lottery-gambling": "Lottery, gambling",
+        "gifts": "Gifts",
+        "charity": "Charity"
       },
       "communication": {
         "phone-cell-phone": "Phone, cell phone",
@@ -768,6 +779,11 @@
         "requiresAccountField": "Auto-record requires an account to book the transaction against.",
         "requiresAmountField": "Auto-record requires expectedAmount and expectedCurrencyCode.",
         "excludesMatchingField": "Auto-record and matching rules are mutually exclusive."
+      },
+      "customInterval": {
+        "required": "A custom frequency needs an interval unit and count.",
+        "presetConflict": "An interval unit and count can only be set with the custom frequency.",
+        "countOutOfRange": "The interval count must be between {{min}} and {{max}} for this unit."
       }
     }
   },

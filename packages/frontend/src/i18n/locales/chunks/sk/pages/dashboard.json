@@ -85,7 +85,15 @@
         "vsPreviousPeriod": "vs. predchádzajúce obdobie",
         "viewButton": "Zobraziť",
         "allExpenses": "All expenses",
-        "loadFailed": "Couldn't load the category breakdown."
+        "loadFailed": "Couldn't load the category breakdown.",
+        "incomeTitle": "Štruktúra príjmov",
+        "back": "Späť",
+        "openInAnalytics": "Otvoriť v Analytike",
+        "metric": {
+          "expenses": "Výdavky",
+          "income": "Príjmy"
+        },
+        "seeTransactions": "Zobraziť transakcie"
       },
       "latestTransactions": {
         "title": "Posledné transakcie",
@@ -148,7 +156,7 @@
       "netWorth": {
         "title": "Čistá hodnota majetku",
         "description": "Ako sa čistá hodnota majetku zmenila za vybrané obdobie. Zohľadňuje každú zmenu zostatku: účty, investície, pôžičky a hodnoty aktív.",
-        "vsPrevious": "vs. predchádzajúce obdobie",
+        "vsPrevious": "oproti predchádzajúcemu obdobiu",
         "start": "Začiatok",
         "end": "Koniec",
         "growth": "Nárast",
@@ -269,7 +277,7 @@
         "amount": "Dane",
         "shareOfIncome": "Podiel na príjmoch",
         "shareOfTaxes": "Podiel daní",
-        "other": "Ostatné",
+        "other": "Iné",
         "moreCategories": "{count} ďalších",
         "viewDetails": "Zobraziť peňažný tok",
         "loadFailed": "Daňové údaje sa nepodarilo načítať.",
@@ -400,7 +408,33 @@
           "settings": {
             "showReached": "Zobraziť dosiahnuté ciele"
           },
-          "reachedSection": "Dosiahnuté"
+          "reachedSection": "Dosiahnutý"
+        },
+        "tagAnalysis": {
+          "name": "Analýza značiek",
+          "description": "Pozrite si, ako sa vaše výdavky rozdeľujú medzi vybrané značky, napríklad potreby, priania a úspory"
+        }
+      },
+      "tagAnalysis": {
+        "title": "Analýza značiek",
+        "noTagsTitle": "Nie sú vybrané žiadne značky",
+        "noTagsDescription": "Značky na porovnanie vyberte v nastaveniach widgetu.",
+        "ofIncome": "z príjmu",
+        "remaining": "Nepridelené",
+        "targetTooltip": "Cieľ: {value} %",
+        "settings": {
+          "tagsLabel": "Značky",
+          "tagsPlaceholder": "Vyberte značky",
+          "targetsLabel": "Ciele, %",
+          "targetsNoneSet": "Nenastavené",
+          "targetsSetCount": "Nastavené: {set} z {total}",
+          "targetsEmpty": "Najprv pridajte značky, aby ste mohli nastaviť ich ciele",
+          "targetPlaceholder": "Žiadne",
+          "percentBaseLabel": "Percento z",
+          "percentBaseTags": "Vybrané značky",
+          "percentBaseIncome": "Príjem",
+          "includeTransfersLabel": "Zahrnúť prevody",
+          "includeTransfersDescription": "Počítať prevody na vaše vlastné účty a portfóliá ako výdavky"
         }
       }
     },
@@ -475,10 +509,10 @@
       "unitMonths": "{n} mes. | {n} mes. | {n} mes.",
       "atAge": "vo veku {age}",
       "nextMilestone": "Ďalší medzník",
-      "saved": "Ušetrené",
+      "saved": "Usporené",
       "progress": "Priebeh",
       "coastFire": "Coast FIRE",
-      "reached": "Dosiahnuté",
+      "reached": "Dosiahnutý",
       "milestoneIn": "{pct} % za {duration}",
       "typeNumber": "Cieľové číslo {type}",
       "atRate": "pri {rate}%",

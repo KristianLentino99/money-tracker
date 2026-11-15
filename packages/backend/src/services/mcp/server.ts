@@ -24,7 +24,7 @@ export const MCP_PROMPTS = [
 
 /**
  * Creates a new MCP server instance with the prompts, the `core` tools and the tools of the given
- * toolsets. Each MCP session gets its own server instance; the toolsets come from the scopes the
+ * toolsets. Every request to `/mcp` gets its own server instance; the toolsets come from the scopes the
  * user granted on the consent screen.
  *
  * After changing the tools, prompts or server info, run `npm run mcp:generate-metadata`.
@@ -38,7 +38,9 @@ export function createMcpServer({ toolsets }: { toolsets: readonly McpOptionalTo
   slimToolListing({ server });
 
   for (const { name, description, text } of MCP_PROMPTS) {
-    server.prompt(name, description, () => ({ messages: [{ role: 'user', content: { type: 'text', text } }] }));
+    server.registerPrompt(name, { description }, () => ({
+      messages: [{ role: 'user', content: { type: 'text', text } }],
+    }));
   }
 
   registerToolsets({ server, toolsets });

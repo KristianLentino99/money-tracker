@@ -329,6 +329,7 @@ describe('SimpleFIN Data Provider E2E', () => {
 
       const transactions = await Transactions.findAll({ where: { accountId }, raw: true });
       expect(transactions.length).toBe(MOCK_AMOUNT);
+      for (const tx of transactions) expect(tx.accountType).toBe(ACCOUNT_TYPES.simplefin);
     });
 
     it('skips pending transactions (posted = 0)', async () => {
@@ -607,6 +608,32 @@ describe('SimpleFIN Data Provider E2E', () => {
       const stored = await Transactions.findAll({ where: { accountId }, raw: true });
       expect(stored.length).toBe(3);
       expect(result.createdCount).toBe(3);
+    });
+
+    it('accepts a full leap year (366 days) as a one-year range', async () => {
+      const connectionId = await connectSimplefin();
+      const accountId = await importFirstAccount(connectionId);
+
+      const from = '2024-01-01T00:00:00.000Z';
+
+      const exactYear = await helpers.bankDataProviders.loadTransactionsForPeriod({
+        connectionId,
+        accountId,
+        from,
+        to: '2025-01-01T00:00:00.000Z',
+      });
+      expect(exactYear.statusCode).toBe(200);
+
+      const overYear = await helpers.bankDataProviders.loadTransactionsForPeriod({
+        connectionId,
+        accountId,
+        from,
+        to: '2025-01-01T00:00:00.001Z',
+      });
+      expect(overYear.statusCode).toBe(ERROR_CODES.ValidationError);
+      expect((helpers.extractResponse(overYear) as unknown as helpers.ErrorResponse).message).toBe(
+        'Date range cannot exceed 1 year.',
+      );
     });
 
     it('logs legacy bridge errors at info, never warn, so they stay out of Sentry', async () => {

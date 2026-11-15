@@ -33,7 +33,7 @@
       "actions": {
         "addCustomConnector": "Benutzerdefinierten Connector hinzufügen",
         "addConnector": "Konnektor hinzufügen",
-        "add": "Hinzufügen"
+        "add": "Add"
       },
       "connectedApps": {
         "title": "Aktive Konnektoren",
@@ -57,7 +57,8 @@
         "financeWrite": "Finanzdaten bearbeiten",
         "financeDelete": "Finanzdaten löschen",
         "profileRead": "Profil lesen",
-        "offlineAccess": "Offline-Zugriff"
+        "offlineAccess": "Offline-Zugriff",
+        "toolset": "Tools: {name}"
       }
     }
   }

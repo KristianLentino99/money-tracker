@@ -146,6 +146,7 @@ export function slimTransactionsForMcp({
       accountId: tx.accountId,
       categoryId: tx.categoryId,
       isForecastOnly: tx.isForecastOnly,
+      excludeFromStats: tx.excludeFromStats,
       payeeId: tx.payeeId,
       payee: tx.payeeId && payeeName !== undefined ? { id: tx.payeeId, name: payeeName } : null,
       ...(tx.tags && { tags: tx.tags.map((t) => ({ id: t.id, name: t.name })) }),
@@ -173,6 +174,8 @@ export type SubscriptionDetailForMcp = Pick<
   | 'name'
   | 'type'
   | 'frequency'
+  | 'intervalUnit'
+  | 'intervalCount'
   | 'startDate'
   | 'endDate'
   | 'dueDate'
@@ -223,6 +226,8 @@ export function slimSubscriptionDetailForMcp(sub: SubscriptionDetailForMcp) {
     expectedCurrencyCode: sub.expectedCurrencyCode,
     tagIds: sub.tagIds ?? [],
     frequency: sub.frequency,
+    intervalUnit: sub.intervalUnit,
+    intervalCount: sub.intervalCount,
     startDate: sub.startDate,
     endDate: sub.endDate,
     dueDate: sub.dueDate,

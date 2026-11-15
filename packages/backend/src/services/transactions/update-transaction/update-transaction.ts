@@ -243,6 +243,7 @@ const makeBasicBaseTxUpdation = async (
     currencyCode: prevData.currencyCode,
     refundLinked: prevData.refundLinked,
     isForecastOnly: newData.isForecastOnly,
+    excludeFromStats: newData.excludeFromStats,
     originalAmount: newData.originalAmount,
     originalCurrencyCode: newData.originalCurrencyCode,
   };

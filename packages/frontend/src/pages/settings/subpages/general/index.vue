@@ -17,6 +17,8 @@
         <Separator />
         <AccountDropdownRows />
         <Separator />
+        <IosAddExpenseRows />
+        <Separator />
         <QuickStartRow />
         <Separator />
 
@@ -40,6 +42,7 @@ import BankSyncRows from './rows/bank-sync-rows.vue';
 import CategoryRows from './rows/category-rows.vue';
 import CreditLimitRow from './rows/credit-limit-row.vue';
 import DistanceUnitRow from './rows/distance-unit-row.vue';
+import IosAddExpenseRows from './rows/ios-add-expense-rows.vue';
 import PaydayRow from './rows/payday-row.vue';
 import QuickStartRow from './rows/quick-start-row.vue';
 import TransactionRows from './rows/transaction-rows.vue';

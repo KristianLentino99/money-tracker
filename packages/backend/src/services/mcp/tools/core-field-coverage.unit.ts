@@ -117,6 +117,7 @@ describe('create_transaction', () => {
         location: LOCATION,
         payeeLocked: true,
         applyAutomations: true,
+        excludeFromStats: true,
       },
       WRITE,
     );
@@ -127,6 +128,7 @@ describe('create_transaction', () => {
         location: LOCATION,
         payeeLocked: true,
         applyAutomations: true,
+        excludeFromStats: true,
       }),
     );
   });
@@ -145,6 +147,7 @@ describe('update_transaction', () => {
         location: LOCATION,
         payeeLocked: false,
         isForecastOnly: true,
+        excludeFromStats: true,
       }).success,
     ).toBe(true);
     expect(schema.safeParse({ id: ID, externalUrl: null, externalReference: null, location: null }).success).toBe(true);
@@ -183,6 +186,7 @@ describe('update_transaction', () => {
         location: LOCATION,
         payeeLocked: true,
         isForecastOnly: false,
+        excludeFromStats: true,
       },
       WRITE,
     );
@@ -194,6 +198,7 @@ describe('update_transaction', () => {
         location: LOCATION,
         payeeLocked: true,
         isForecastOnly: false,
+        excludeFromStats: true,
       }),
     );
   });

@@ -27,8 +27,9 @@
     "more": "More",
     "budget": "Budget",
     "community": "Community",
-    "updateAvailable": "Pembaruan tersedia",
-    "updateToVersion": "Update · {version}"
+    "updateAvailable": "Update available",
+    "updateToVersion": "Update · {version}",
+    "trash": "Trash"
   },
   "sidebar": {
     "collapse": "Collapse sidebar",

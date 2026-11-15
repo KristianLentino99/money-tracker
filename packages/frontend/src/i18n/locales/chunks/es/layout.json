@@ -18,7 +18,7 @@
       "planned": "Planificado",
       "subscriptions": "Cargos recurrentes",
       "budgets": "Rastreadores",
-      "goals": "Objetivos"
+      "goals": "Goals"
     },
     "venture": "Venture",
     "helpAndDocs": "Ayuda & Documentación",
@@ -27,8 +27,9 @@
     "more": "More",
     "budget": "Presupuestos",
     "community": "Comunidad",
-    "updateAvailable": "Actualización disponible",
-    "updateToVersion": "Actualizar «{version}»"
+    "updateAvailable": "Update available",
+    "updateToVersion": "Actualizar «{version}»",
+    "trash": "Trash"
   },
   "sidebar": {
     "collapse": "Contraer barra lateral",

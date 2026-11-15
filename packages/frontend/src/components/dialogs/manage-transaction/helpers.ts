@@ -142,6 +142,13 @@ export const resolveOriginalCurrencyPair = ({ form }: { form: UI_FORM_STRUCT }):
   return { state: 'untouched' };
 };
 
+/**
+ * Payment rows can't go to Trash until unlinked. Portfolio and venture rows are left to the
+ * backend, which decides by the link row rather than `transferNature`.
+ */
+export const isPaymentTransaction = ({ transaction }: { transaction: TransactionModel }): boolean =>
+  !!transaction.paymentParentId || hasPaymentParts({ transaction });
+
 // The backend cascades a transfer delete across both legs, so an external-bank
 // partner (which can't be removed) would orphan the call — hide the button instead.
 export const canDeleteTransaction = ({
@@ -155,7 +162,7 @@ export const canDeleteTransaction = ({
   accounts: Record<string, AccountModel>;
   canMutate: boolean;
 }): boolean => {
-  if (!transaction || !canMutate) return false;
+  if (!transaction || !canMutate || isPaymentTransaction({ transaction })) return false;
   // A planned row is never a transfer leg and stays `accountType: system` until it
   // merges, so the backend deletes it whatever account it sits on.
   if (transaction.isForecastOnly) return true;
@@ -236,6 +243,7 @@ export const prepopulateForm = ({
       // to prevent later Payee selections from silently overwriting it.
       categoryUserTouched: transaction.categoryId !== null && transaction.categoryId !== undefined,
       isForecastOnly: Boolean(transaction.isForecastOnly),
+      excludeFromStats: Boolean(transaction.excludeFromStats),
       originalAmount: transaction.originalAmount ?? null,
       originalCurrency: transaction.originalCurrencyCode
         ? (systemCurrencies.find((item) => item.code === transaction.originalCurrencyCode) ?? null)
