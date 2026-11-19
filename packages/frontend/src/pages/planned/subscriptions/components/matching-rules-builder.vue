@@ -179,7 +179,7 @@ const updateAmountMax = ({ index, rule, v }: { index: number; rule: Subscription
           @update:model-value="(v: any) => v && updateRuleField({ index, field: v.value })"
         />
         <DesktopOnlyTooltip :content="$t('planned.subscriptions.editors.automation.removeRule')">
-          <Button type="button" variant="ghost-destructive" size="icon-sm" @click="removeRule({ index })">
+          <Button type="button" variant="ghost-destructive" size="icon" @click="removeRule({ index })">
             <Trash2Icon class="size-3.5" />
           </Button>
         </DesktopOnlyTooltip>
@@ -203,7 +203,7 @@ const updateAmountMax = ({ index, rule, v }: { index: number; rule: Subscription
               <Button
                 type="button"
                 variant="ghost-destructive"
-                size="icon-sm"
+                size="icon"
                 class="shrink-0"
                 @click="removeNoteKeyword({ ruleIndex: index, keywordIndex: ki })"
               >

@@ -312,7 +312,8 @@
           "account": "Účet",
           "currency": "Mena",
           "transactionType": "Typ transakcie",
-          "payee": "Protistrana"
+          "payee": "Protistrana",
+          "tags": "Značky"
         },
         "dateFormat": {
           "label": "Formát dátumu",

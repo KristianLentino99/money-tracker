@@ -13,8 +13,8 @@
         "alwaysVisibleTooltip": "Esta sección siempre es visible."
       },
       "sidebarNav": {
-        "title": "Navegación en la barra lateral",
-        "description": "Escoja qué páginas aparecen en Cuentas en la barra lateral de navegación."
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       },
       "header": {
         "title": "Encabezado",
@@ -26,9 +26,10 @@
         "description": "Cómo se muestra la moneda en los importes. Los símbolos cortos se ven como Rp, ₴ o zł en lugar de IDR, UAH o PLN, pero las monedas que comparten símbolo (USD, CAD, AUD, SGD) se muestran todas como $.",
         "narrowSymbol": "Usar símbolos de moneda cortos"
       },
-      "sidebarNav": {
-        "title": "Sidebar navigation",
-        "description": "Pick which pages appear under Accounts in the sidebar navigation."
+      "transactions": {
+        "title": "Transactions",
+        "description": "Show the payee's logo instead of the category icon in transaction rows, when the payee has one.",
+        "payeeLogos": "Payee logos"
       }
     }
   }

@@ -1630,6 +1630,7 @@ export const updateTransactions = (
     refundLinked?: boolean;
     payeeId?: string | null;
     payeeLocked?: boolean;
+    excludeFromStats?: boolean;
     categorizationMeta?: CategorizationMeta | null;
   },
   where: Record<string, unknown> & { userId: number },

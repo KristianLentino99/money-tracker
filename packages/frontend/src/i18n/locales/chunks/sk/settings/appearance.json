@@ -13,8 +13,8 @@
         "alwaysVisibleTooltip": "Táto sekcia je vždy viditeľná."
       },
       "sidebarNav": {
-        "title": "Navigácia v bočnom paneli",
-        "description": "Vyberte stránky, ktoré sa majú zobrazovať pod položkou Účty v navigácii bočného panela."
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       },
       "header": {
         "title": "Hlavička",
@@ -26,9 +26,10 @@
         "description": "Ako sumy zobrazujú svoju menu. Krátke symboly vyzerajú ako Rp, ₴ alebo zł namiesto IDR, UAH alebo PLN, no meny, ktoré majú spoločný symbol (USD, CAD, AUD, SGD), sa všetky zmenia na $.",
         "narrowSymbol": "Používať krátke symboly mien"
       },
-      "sidebarNav": {
-        "title": "Sidebar navigation",
-        "description": "Pick which pages appear under Accounts in the sidebar navigation."
+      "transactions": {
+        "title": "Transakcie",
+        "description": "V riadkoch transakcií zobrazí logo príjemcu namiesto ikony kategórie, ak ho príjemca má.",
+        "payeeLogos": "Logá príjemcov"
       }
     }
   }

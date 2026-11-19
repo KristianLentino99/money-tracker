@@ -13,8 +13,8 @@
         "alwaysVisibleTooltip": "Dieser Abschnitt ist immer sichtbar."
       },
       "sidebarNav": {
-        "title": "Seitenleisten-Navigation",
-        "description": "Wähle, welche Seiten unter \"Konten\" in der Seitenleisten-Navigation angezeigt werden."
+        "title": "Sidebar navigation",
+        "description": "Pick which pages appear under Accounts in the sidebar navigation."
       },
       "header": {
         "title": "Kopfzeile",
@@ -26,9 +26,10 @@
         "description": "Wie Beträge ihre Währung anzeigen. Kurze Symbole sehen wie Rp, ₴ oder zł anstelle von IDR, UAH oder PLN aus, aber Währungen, die sich ein Symbol teilen (USD, CAD, AUD, SGD), werden alle zu $.",
         "narrowSymbol": "Kurze Währungssymbole verwenden"
       },
-      "sidebarNav": {
-        "title": "Sidebar navigation",
-        "description": "Pick which pages appear under Accounts in the sidebar navigation."
+      "transactions": {
+        "title": "Transactions",
+        "description": "Show the payee's logo instead of the category icon in transaction rows, when the payee has one.",
+        "payeeLogos": "Payee logos"
       }
     }
   }

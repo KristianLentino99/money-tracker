@@ -213,13 +213,7 @@ export function useBulkTransactionActions({
   );
 
   const handleBulkApply = (values: BulkEditFormValues) => {
-    bulkUpdateMutation.mutate({
-      ...getBulkTarget(),
-      ...(values.categoryId !== undefined && { categoryId: values.categoryId }),
-      ...(values.tagIds !== undefined && { tagIds: values.tagIds, tagMode: values.tagMode }),
-      ...(values.note !== undefined && { note: values.note }),
-      ...(values.payeeId !== undefined && { payeeId: values.payeeId }),
-    });
+    bulkUpdateMutation.mutate({ ...getBulkTarget(), ...values });
   };
 
   const handleBulkDelete = () => {
