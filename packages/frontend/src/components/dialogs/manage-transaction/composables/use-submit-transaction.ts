@@ -34,7 +34,8 @@ interface SubmitTransactionParams {
   isTransferTx: boolean;
   isCurrenciesDifferent: boolean;
   isOriginalRefundsOverriden: boolean;
-  isRecordExternal: boolean;
+  isRecordBankLocked: boolean;
+  isRecordOnBankAccount: boolean;
   transaction?: TransactionModel;
   linkedTransaction?: TransactionModel | null;
   /** Files picked before the row existed; uploaded right after creation. */
@@ -174,7 +175,8 @@ export function useSubmitTransaction({
         isTransferTx,
         isCurrenciesDifferent,
         isOriginalRefundsOverriden,
-        isRecordExternal,
+        isRecordBankLocked,
+        isRecordOnBankAccount,
         transaction,
         linkedTransaction,
         pendingAttachments = [],
@@ -263,7 +265,8 @@ export function useSubmitTransaction({
             transaction: transaction!,
             linkedTransaction,
             isTransferTx,
-            isRecordExternal,
+            isRecordBankLocked,
+            isRecordOnBankAccount,
             isCurrenciesDifferent,
             isOriginalRefundsOverriden,
           }),
@@ -272,7 +275,7 @@ export function useSubmitTransaction({
       }
     },
     onMutate: async (params): Promise<OptimisticUpdateContext | undefined> => {
-      const { form, isFormCreation, transaction, isRecordExternal, linkedTransaction, isTransferTx } = params;
+      const { form, isFormCreation, transaction, isRecordBankLocked, linkedTransaction, isTransferTx } = params;
 
       // Only apply optimistic updates for edits (not creation, linking, or portfolio conversion)
       if (
@@ -294,7 +297,7 @@ export function useSubmitTransaction({
       const updatedTransaction = buildOptimisticTransaction({
         form,
         transaction,
-        isRecordExternal,
+        isRecordBankLocked,
       });
 
       // Apply optimistic update to all relevant caches

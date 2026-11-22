@@ -97,7 +97,7 @@
                tap the disabled button and read the reason as a popover (a regular
                hover-only tooltip would never surface on mobile). -->
           <ResponsiveTooltip
-            v-if="hasExternalSelected"
+            v-if="hasUndeletableSelected"
             content-class-name="max-w-75"
             :content="$t('transactions.bulkDelete.externalTooltip')"
           >
@@ -291,6 +291,7 @@
       v-if="editTarget"
       :key="inlineCellKey({ txId: editTarget.tx.id, column: editTarget.column })"
       :tx="editTarget.tx"
+      :opposite-tx="editTarget.oppositeTx"
       :column="editTarget.column"
       :label="editTarget.label"
       :mode="editTarget.mode"
@@ -463,7 +464,7 @@ const {
   toggleTransaction,
   clearSelection,
   getUnselectableReason,
-  hasExternalSelected,
+  hasUndeletableSelected,
   selectedTotals,
   selectAllState,
   handleSelectAllToggle,
