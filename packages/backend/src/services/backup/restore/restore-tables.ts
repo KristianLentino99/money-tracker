@@ -15,7 +15,6 @@ import type { ParsedArchive } from './load-archive';
 import { type GuardedFk, buildGuardedReferenceMap, guardRowReferences } from './owned-reference-guard';
 import { remapEmbeddedReferences } from './remap-embedded-references';
 import { type CustomCurrencyDefinition } from './resolve-custom-currencies';
-import { legacyMileageToMeters } from './vehicle-mileage';
 
 type Row = Record<string, unknown>;
 
@@ -186,13 +185,6 @@ function buildRowOverrides({
     overrides.isActive = false;
     const metadata = (row.metadata && typeof row.metadata === 'object' ? row.metadata : {}) as Row;
     overrides.metadata = { ...metadata, deactivationReason: DEACTIVATION_REASON.RESTORED };
-  }
-
-  // A kilometre-based fallback is converted only when the canonical metre
-  // field is absent; when both shapes are present, the canonical value wins.
-  if (def.fileName === 'vehicles' && row.currentMileageMeters === undefined) {
-    const currentMileageMeters = legacyMileageToMeters({ value: row.currentMileage });
-    if (currentMileageMeters !== undefined) overrides.currentMileageMeters = currentMileageMeters;
   }
 
   return overrides;

@@ -1,6 +1,8 @@
 import { TRANSACTION_DELETION_REASON } from '@bt/shared/types';
 import isPlainObject from 'lodash/isPlainObject';
 
+import { legacyMileageToMeters } from './vehicle-mileage';
+
 type Row = Record<string, unknown>;
 
 /** Format version whose archives still carry the pre-rename "budget" names for trackers. */
@@ -103,6 +105,16 @@ export function normalizeLegacyArchive({
     if (asObject(row.categorizationMeta)?.source === 'mcc_rule') row.categorizationMeta = null;
     // Rows soft-deleted before `deletionReason` existed came from reconciliation; the DB CHECK needs a reason.
     if (row.deletedAt && !row.deletionReason) row.deletionReason = TRANSACTION_DELETION_REASON.reconciliation;
+    // `isForecastOnly` is the current name of the column archives from other builds call `isPlanned`.
+    renameKey({ obj: row, from: 'isPlanned', to: 'isForecastOnly' });
+  }
+  for (const row of rowsAt({ parsedByPath, name: 'vehicles' })) {
+    // The canonical metre value wins when an archive carries both shapes.
+    if (row.currentMileageMeters === undefined) {
+      const meters = legacyMileageToMeters({ value: row.currentMileage });
+      if (meters !== undefined) row.currentMileageMeters = meters;
+    }
+    delete row.currentMileage;
   }
   if (formatVersion > LEGACY_TRACKER_TYPE_VERSION) return;
   if (formatVersion <= LEGACY_TRACKER_NAMING_VERSION) normalizeTrackerNaming({ parsedByPath });
