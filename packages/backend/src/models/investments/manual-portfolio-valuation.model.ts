@@ -10,7 +10,7 @@ import Portfolios from './portfolios.model';
 export default class ManualPortfolioValuations extends Model {
   @Column(IdColumn()) declare id: RecordId;
   @ForeignKey(() => Portfolios) @Index @Column({ type: DataType.UUID, allowNull: false }) portfolioId!: RecordId;
-  @MoneyField({ storage: 'decimal', precision: 20, scale: 10 }) declare value: Money;
+  @MoneyField({ precision: 20, scale: 10 }) declare value: Money;
   @Index @Column({ type: DataType.DATEONLY, allowNull: false }) date!: string;
   @Column({ type: DataType.TEXT, allowNull: true }) note!: string | null;
   @Column({ type: DataType.STRING(64), allowNull: true }) source!: string | null;

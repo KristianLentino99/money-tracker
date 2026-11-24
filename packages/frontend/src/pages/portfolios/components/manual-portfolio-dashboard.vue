@@ -60,7 +60,9 @@ const isSavingTransaction = computed(() => createTransaction.isPending.value || 
 const isSavingValuation = computed(() => createValuation.isPending.value || updateValuation.isPending.value);
 const { formatAmountByCurrencyCode } = useFormatCurrency();
 const money = (value: string | null | undefined) =>
-  value == null || !overview.value ? '—' : formatAmountByCurrencyCode(Number(value), overview.value.currencyCode);
+  value == null || !overview.value
+    ? '—'
+    : formatAmountByCurrencyCode({ amount: Number(value), currencyCode: overview.value.currencyCode });
 
 const categoryOptions = computed(() =>
   Object.values(MANUAL_PORTFOLIO_TRANSACTION_CATEGORY).map((value) => ({

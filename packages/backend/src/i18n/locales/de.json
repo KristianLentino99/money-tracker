@@ -12,12 +12,14 @@
     "accountNoExternalIdEnableBanking": "Konto hat keine externe ID von Enable Banking aktivieren",
     "accountNotFoundForTransaction": "Konto für diese Transaktion nicht gefunden",
     "deleteBlockedByLoanPayments": "Dieses Konto hat Kreditrückzahlungen. Löschen oder neu zuweisen, bevor das Konto gelöscht wird.",
+    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account.",
     "loanBalanceUseUpdateLoan": "Passe den Restbetrag des Kredits direkt auf dessen Detailseite an, nicht in den Kontoeinstellungen.",
     "loanCategoryImmutable": "Die Kategorie eines Kreditkontos kann nicht geändert werden.",
     "dedicatedFlowCategoryNotAllowed": "Kredit- und Fahrzeugkonten müssen über ihre eigenen Endpunkte erstellt werden und nicht über den Endpunkt der allgemeinen Konten.",
     "initialBalanceOnlySystem": "Der Startsaldo kann nur für manuelle Konten geändert werden",
     "initialAndCurrentBalanceTogether": "Startsaldo und aktueller Saldo können nicht in derselben Anfrage geändert werden",
-    "deleteBlockedByTrashedLoanPayments": "This account has loan payments in Trash. Delete them permanently from Trash before deleting the account."
+    "onlySystemAccountsCanBeLinked": "Only manually created accounts can be linked to a bank connection.",
+    "bankLinkImportStillRunning": "An import is still running. Wait for it to finish before linking, unlinking, archiving or disconnecting a bank account. If the import stopped, this block clears on its own 3 hours after the import started."
   },
   "balanceAdjustment": {
     "defaultNote": "Kontostandsanpassung",
@@ -56,6 +58,12 @@
     "cannotCreateWithParams": "Transaktion kann mit den angegebenen Parametern nicht erstellt werden",
     "idCannotBeChanged": "ID kann nicht geändert werden",
     "editReadonlyFields": "Versuch, schreibgeschützte Felder des externen Kontos zu bearbeiten",
+    "preSeamTimeOnOrAfterLinkDay": "A manual transaction on a bank-linked account must stay dated before {{date}}, the day the account was linked.",
+    "manualRowOnOrAfterLinkDay": "This transaction is dated on or after {{date}}, the day the account was linked to the bank. From that day on, the bank's records are what counts, so it can't be edited or deleted.",
+    "manualRowOnOrAfterLinkDayCreate": "Your bank owns everything from {{date}} on, so a manual transaction must be dated before {{date}}.",
+    "bulkDeleteBankRowsSelected": "Transactions synced from your bank, and ones dated on or after the day the account was linked, can't be deleted.",
+    "oppositeLegOnBankAccount": "The other side of this transfer is on a bank-linked account, so this change isn't allowed there.",
+    "moveAcrossBankLinkedAccount": "A transaction can't be moved onto or off a bank-linked account. Delete it and add it again on the other account.",
     "changeTypeNotAllowed": "Es ist nicht erlaubt, den „transactionType“ eines Nicht-System-Kontos zu ändern",
     "bothRefundFieldsNotAllowed": "Du kannst nicht gleichzeitig \"refundedByTxIds\" und \"refundsTargets\" verwenden. Bitte entscheide dich für eines von beiden.",
     "oppositeTransactionNotFound": "Gegenbuchung zum Aktualisieren wurde nicht gefunden",
@@ -250,6 +258,7 @@
     "holdingNotFoundForRecalculation": "Position für die Neuberechnung nicht gefunden.",
     "securityAlreadyInPortfolio": "Dieses Wertpapier befindet sich bereits im Portfolio.",
     "securityNotFound": "Wertpapier nicht gefunden.",
+    "securitySearchResultNotRecognized": "Das Suchergebnis für das Wertpapier wurde nicht erkannt oder ist abgelaufen. Suche erneut nach dem Wertpapier.",
     "currencyForSecurityNotFound": "Währung für das Wertpapier nicht gefunden.",
     "currencyNotFound": "Währung nicht gefunden",
     "transactionNotFound": "Investment-Transaktion nicht gefunden",
@@ -264,15 +273,10 @@
     "cannotDeleteHoldingWithActivePosition": "Eine Position mit aktivem Bestand kann nicht gelöscht werden. Bitte verkaufe oder übertrage zuerst alle Anteile.",
     "transactionAlreadyTransfer": "Transaktion ist bereits als Umbuchung markiert und kann nicht mit einem Portfolio verknüpft werden.",
     "transactionAlreadyLinkedToPortfolio": "Transaktion ist bereits mit einer Portfolio-Umbuchung verknüpft.",
+    "linkedTransactionMustBelongToDestinationAccount": "Die verknüpfte Transaktion muss zum Zielkonto gehören.",
     "transactionAlreadyLinkedToVenture": "Transaktion ist bereits mit einer Portfolio-Umbuchung verknüpft",
     "portfolioTransferNotFound": "Portfolio-Umbuchung nicht gefunden",
     "exchangeCurrenciesMustDiffer": "Währungen beim Umtausch müssen unterschiedlich sein",
-    "contributionPurchaseRequired": "At least one investment purchase is required.",
-    "contributionSecurityRequired": "Each investment purchase must include a security.",
-    "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
-    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
-    "contributionDeletePurchasesConfirmationRequired": "Deleting this contribution requires explicit confirmation to delete its linked investment purchases.",
-    "securitySearchResultNotRecognized": "Das Suchergebnis für das Wertpapier wurde nicht erkannt oder ist abgelaufen. Suche erneut nach dem Wertpapier.",
     "importNoTransactionsFound": "Keine Transaktionen in der Datei gefunden.",
     "import": {
       "tokenLimitExceededSuggestion": "Teile den Upload in kleinere Dateien auf oder verwende ein Modell mit einem größeren Kontextfenster.",
@@ -283,7 +287,11 @@
       "title_one": "{{count}} Position hat deinen Verlust-Warnschwellenwert überschritten",
       "title_other": "{{count}} Positionen haben deinen Verlust-Warnschwellenwert überschritten"
     },
-    "linkedTransactionMustBelongToDestinationAccount": "Die verknüpfte Transaktion muss zum Zielkonto gehören."
+    "contributionPurchaseRequired": "At least one investment purchase is required.",
+    "contributionSecurityRequired": "Each investment purchase must include a security.",
+    "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
+    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
+    "contributionDeletePurchasesConfirmationRequired": "Deleting this contribution requires explicit confirmation to delete its linked investment purchases."
   },
   "landingFaq": {
     "unavailable": "Der Assistent ist derzeit nicht verfügbar. Bitte versuche es später erneut oder schreibe eine E-Mail an support@moneymatter.app."
@@ -313,7 +321,8 @@
     "providerTypeMismatch": "Verbindung {{connectionId}} gilt für Anbieter {{actualType}}, nicht {{expectedType}}",
     "providerAlreadyRegistered": "Anbieter {{providerType}} ist bereits registriert. Anlegen von Duplikaten nicht möglich.",
     "providerNotRegistered": "Anbieter {{providerType}} ist nicht registriert. Verfügbare Anbieter: {{available}}",
-    "unexpected": "Unerwarteter Fehler."
+    "unexpected": "Unerwarteter Fehler.",
+    "clientUpdateRequired": "This version of the app is no longer supported. Please update it from the App Store."
   },
   "validation": {
     "dateInvalid": "\"date\" ist ein ungültiges Datum."
@@ -334,6 +343,7 @@
     "failedToFetchCountries": "Abrufen der Länder fehlgeschlagen. Bitte überprüfe deine Zugangsdaten.",
     "accountNotLinkedToConnection": "Konto nicht gefunden oder nicht mit dieser Verbindung verknüpft",
     "accountAlreadyConnectedToAnotherConnection": "Konto \"{{account}}\" ist bereits über \"{{connection}}\" verbunden. Trenne es zuerst dort.",
+    "accountBalanceUnavailable": "Couldn't get the current balance of {{account}} from the bank. Please try again in a few minutes.",
     "cannotLoadBeforeLinkDate": "Transaktionen vor dem Verknüpfungsdatum ({{linkedAt}}) können nicht geladen werden. Dieses Konto wurde mit der Strategie „nur vorwärts“ verknüpft, um Duplikate zu vermeiden.",
     "dateRangeExceedsLimit": "Datumsbereich darf 1 Jahr nicht überschreiten.",
     "fromAfterTo": "\"Von\"-Datum muss vor dem \"Bis\"-Datum liegen",
@@ -440,7 +450,47 @@
     "transactionTypeValuesNotCovered": "Die Transaktionstyp-Spalte enthält Werte, die nicht durch Einnahmen-/Ausgabenlisten abgedeckt sind: {{uncovered}}. Gefundene Werte: {{found}}",
     "selectedAccountNotFound": "Das ausgewählte Konto wurde nicht gefunden oder gehört nicht dir.",
     "selectedCategoryNotFound": "Die ausgewählte Kategorie wurde nicht gefunden oder gehört nicht dir.",
-    "linkedAccountCurrencyMismatch": "Währungen müssen übereinstimmen, um ein bestehendes Konto zu verknüpfen: {{mismatches}}. Verknüpfe ein Konto mit derselben Währung oder erstelle ein neues."
+    "linkedAccountCurrencyMismatch": "Währungen müssen übereinstimmen, um ein bestehendes Konto zu verknüpfen: {{mismatches}}. Verknüpfe ein Konto mit derselben Währung oder erstelle ein neues.",
+    "bankLinkChangedSinceReview": "The bank link of an account in this import changed after the review. Go back to the review step and run it again."
+  },
+  "ofxImport": {
+    "noFileUploaded": "Es wurde keine Datei hochgeladen. Sende die OFX- oder QFX-Datei als Raw-Request-Body.",
+    "errors": {
+      "emptyFile": "Die OFX-Datei ist leer.",
+      "xmlDeclarationIncomplete": "Die OFX-XML-Deklaration ist unvollständig.",
+      "headerMissing": "Der OFX-Header fehlt oder ist zu groß.",
+      "headerFieldMissing": "Das OFX-Header-Feld {{field}} fehlt.",
+      "invalidVersion": "Die OFX-Version ist ungültig.",
+      "unsupportedData": "OFX-Datentyp {{data}} wird nicht unterstützt.",
+      "compressedFile": "Komprimierte OFX-Dateien werden nicht unterstützt.",
+      "prohibitedDeclaration": "OFX-DTD- und Entitätsdeklarationen werden nicht unterstützt.",
+      "markupIncomplete": "Das OFX-Markup ist unvollständig.",
+      "tagsMismatch": "Die OFX-XML-Tags stimmen nicht überein.",
+      "unclosedTags": "Das OFX-XML enthält nicht geschlossene Tags.",
+      "missingRoot": "Das OFX-Stammelement fehlt.",
+      "malformedOfx": "Das OFX-Dokument kann nicht verarbeitet werden.",
+      "unsupportedEncoding": "OFX-Kodierung {{encoding}}/{{charset}} wird nicht unterstützt.",
+      "fileTooLarge": "Die OFX-Datei ist größer als 10 MB.",
+      "emptyBody": "Die OFX-Datei hat keinen Inhalt.",
+      "invalidDate": "Ungültiges OFX-Datum: {{value}}",
+      "invalidAmount": "Ungültiger OFX-Betrag: {{value}}",
+      "textTooLong": "Der OFX-Wert {{field}} überschreitet {{max}} Zeichen.",
+      "unsupportedMessageSet": "Die Datei enthält keine unterstützten Bank- oder Kreditkartenabrechnungen.",
+      "missingAccount": "Der Bereich {{tag}} fehlt.",
+      "missingAccountId": "Die Quellkonto-ID fehlt.",
+      "correctionRecord": "OFX-Korrekturdatensätze werden nicht unterstützt.",
+      "missingAmount": "Ein OFX-Transaktionsbetrag fehlt.",
+      "missingDate": "Ein OFX-Transaktionsdatum fehlt.",
+      "invalidCurrency": "Die Währung des Auszugs fehlt oder ist ungültig.",
+      "rowLimit": "Die OFX-Datei enthält mehr als {{max}} Transaktionen.",
+      "conflictingFitid": "Eine doppelte FITID enthält widersprüchliche Transaktionsdaten."
+    },
+    "uploadUnavailable": "Dieser OFX-Upload ist nicht mehr verfügbar. Bitte lade die Datei erneut hoch.",
+    "importInProgress": "Ein Import für diese Datei wird bereits ausgeführt.",
+    "missingAccountMapping": "Fehlende Kontenzuordnung für: {{accounts}}",
+    "accountCurrencyMismatch": "Konto {{account}} muss {{currency}} verwenden.",
+    "linkedAccountNotFound": "Das verknüpfte Konto für {{account}} wurde nicht gefunden.",
+    "crossCurrencyLink": "Konto {{account}} kann nicht währungsübergreifend verknüpft werden."
   },
   "importExport": {
     "batchDeleteBankLinkedAccount": "Dieser Import kann nicht mehr rückgängig gemacht werden, da das zugehörige Konto jetzt mit einer Bank verbunden ist. Das Löschen dieser Transaktionen könnte den synchronisierten Saldo verfälschen.",
@@ -772,6 +822,11 @@
     "colorRequiresInitials": "Eine Hintergrundfarbe erfordert Buchstaben oder ein Symbol.",
     "slotsExclusive": "Wähle einen Logo-Typ aus: Marke, Buchstaben, Icon oder Bild."
   },
+  "logoImages": {
+    "invalidImage": "Die Datei ist kein PNG-, JPEG- oder WebP-Bild.",
+    "tooLarge": "Logo-Bilder dürfen maximal 50 KB groß sein.",
+    "notFound": "Logo-Bild nicht gefunden."
+  },
   "venture": {
     "dealNotFound": "Venture-Deal nicht gefunden",
     "eventNotFound": "Venture-Ereignis nicht gefunden"
@@ -804,50 +859,6 @@
     "incompleteInvoice": "Anbieter, Gesamtbetrag und Datum konnten aus dieser Rechnung nicht gelesen werden.",
     "pdfWithoutText": "Eigene KI-Verbindungen können PDF-Dateien nicht direkt empfangen, und diese Datei konnte nicht geöffnet werden, um sie zu konvertieren (z.B. weil sie passwortgeschützt ist). Konvertiere sie in ein Bild (PNG oder JPEG), wie z.B. einen Screenshot der Rechnung, und lade dieses stattdessen hoch.",
     "noFileUploaded": "Es wurde keine Datei hochgeladen."
-  },
-  "ofxImport": {
-    "noFileUploaded": "Es wurde keine Datei hochgeladen. Sende die OFX- oder QFX-Datei als Raw-Request-Body.",
-    "errors": {
-      "emptyFile": "Die OFX-Datei ist leer.",
-      "xmlDeclarationIncomplete": "Die OFX-XML-Deklaration ist unvollständig.",
-      "headerMissing": "Der OFX-Header fehlt oder ist zu groß.",
-      "headerFieldMissing": "Das OFX-Header-Feld {{field}} fehlt.",
-      "invalidVersion": "Die OFX-Version ist ungültig.",
-      "unsupportedData": "OFX-Datentyp {{data}} wird nicht unterstützt.",
-      "compressedFile": "Komprimierte OFX-Dateien werden nicht unterstützt.",
-      "prohibitedDeclaration": "OFX-DTD- und Entitätsdeklarationen werden nicht unterstützt.",
-      "markupIncomplete": "Das OFX-Markup ist unvollständig.",
-      "tagsMismatch": "Die OFX-XML-Tags stimmen nicht überein.",
-      "unclosedTags": "Das OFX-XML enthält nicht geschlossene Tags.",
-      "missingRoot": "Das OFX-Stammelement fehlt.",
-      "malformedOfx": "Das OFX-Dokument kann nicht verarbeitet werden.",
-      "unsupportedEncoding": "OFX-Kodierung {{encoding}}/{{charset}} wird nicht unterstützt.",
-      "fileTooLarge": "Die OFX-Datei ist größer als 10 MB.",
-      "emptyBody": "Die OFX-Datei hat keinen Inhalt.",
-      "invalidDate": "Ungültiges OFX-Datum: {{value}}",
-      "invalidAmount": "Ungültiger OFX-Betrag: {{value}}",
-      "textTooLong": "Der OFX-Wert {{field}} überschreitet {{max}} Zeichen.",
-      "unsupportedMessageSet": "Die Datei enthält keine unterstützten Bank- oder Kreditkartenabrechnungen.",
-      "missingAccount": "Der Bereich {{tag}} fehlt.",
-      "missingAccountId": "Die Quellkonto-ID fehlt.",
-      "correctionRecord": "OFX-Korrekturdatensätze werden nicht unterstützt.",
-      "missingAmount": "Ein OFX-Transaktionsbetrag fehlt.",
-      "missingDate": "Ein OFX-Transaktionsdatum fehlt.",
-      "invalidCurrency": "Die Währung des Auszugs fehlt oder ist ungültig.",
-      "rowLimit": "Die OFX-Datei enthält mehr als {{max}} Transaktionen.",
-      "conflictingFitid": "Eine doppelte FITID enthält widersprüchliche Transaktionsdaten."
-    },
-    "uploadUnavailable": "Dieser OFX-Upload ist nicht mehr verfügbar. Bitte lade die Datei erneut hoch.",
-    "importInProgress": "Ein Import für diese Datei wird bereits ausgeführt.",
-    "missingAccountMapping": "Fehlende Kontenzuordnung für: {{accounts}}",
-    "accountCurrencyMismatch": "Konto {{account}} muss {{currency}} verwenden.",
-    "linkedAccountNotFound": "Das verknüpfte Konto für {{account}} wurde nicht gefunden.",
-    "crossCurrencyLink": "Konto {{account}} kann nicht währungsübergreifend verknüpft werden."
-  },
-  "logoImages": {
-    "invalidImage": "Die Datei ist kein PNG-, JPEG- oder WebP-Bild.",
-    "tooLarge": "Logo-Bilder dürfen maximal 50 KB groß sein.",
-    "notFound": "Logo-Bild nicht gefunden."
   },
   "auth": {
     "errors": {

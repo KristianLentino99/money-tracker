@@ -8,19 +8,19 @@
     "groupNotFound": "Групу або рахунок не знайдено",
     "accountNotFound": "Рахунок не знайдено!",
     "accountUpdateFailed": "Оновлення рахунку не вдалося",
-    "accountNoExternalId": "Рахунок не має зовнішнього ID",
     "accountNoExternalIdMonobank": "Рахунок не має зовнішнього ID від Monobank",
     "accountNoExternalIdEnableBanking": "Рахунок не має зовнішнього ID від Enable Banking",
     "accountNotFoundForTransaction": "Рахунок для цієї транзакції не знайдено",
     "deleteBlockedByLoanPayments": "Цей рахунок має платежі за кредитами. Видаліть або перепризначте їх перед видаленням рахунку.",
+    "deleteBlockedByTrashedLoanPayments": "Цей рахунок має платежі за кредитами у смітнику. Остаточно видаліть їх зі смітника перед видаленням рахунку.",
     "loanBalanceUseUpdateLoan": "Змінюйте залишок боргу на сторінці кредиту, а не в налаштуваннях рахунку.",
     "loanCategoryImmutable": "Категорію кредитного рахунку не можна змінити.",
     "dedicatedFlowCategoryNotAllowed": "Рахунки кредитів та транспортних засобів мають бути створені через їх спеціальні точки входу, а не через загальну точку входу рахунків.",
     "initialBalanceOnlySystem": "Початковий баланс можна змінити тільки для ручних рахунків",
     "initialAndCurrentBalanceTogether": "Початковий баланс та поточний баланс не можна змінювати в одному запиті",
-    "deleteBlockedByTrashedLoanPayments": "Цей рахунок має платежі за кредитами у смітнику. Остаточно видаліть їх зі смітника перед видаленням рахунку.",
     "onlySystemAccountsCanBeLinked": "До банківського підключення можна прив'язати лише рахунки, створені вручну.",
-    "bankLinkImportStillRunning": "Імпорт ще виконується. Дочекайтеся його завершення, перш ніж підключати рахунок до банку, відключати його від банку, архівувати його або відключати банківське підключення. Якщо імпорт зупинився, це обмеження знімається саме через 3 години після початку імпорту."
+    "bankLinkImportStillRunning": "Імпорт ще виконується. Дочекайтеся його завершення, перш ніж підключати рахунок до банку, відключати його від банку, архівувати його або відключати банківське підключення. Якщо імпорт зупинився, це обмеження знімається саме через 3 години після початку імпорту.",
+    "accountNoExternalId": "Рахунок не має зовнішнього ID"
   },
   "balanceAdjustment": {
     "defaultNote": "Коригування балансу",
@@ -42,15 +42,16 @@
     "systemCannotBeMoved": "Системні категорії не можна переміщати.",
     "parentNotFound": "Категорія з таким parentId не існує.",
     "systemParentForbidden": "Системні категорії не можна використовувати як батьківські.",
+    "defaultCannotBeDeleted": "Ця категорія містить транзакції без категорії, тому її не можна видалити.",
     "ownParent": "Категорія не може бути батьківською для самої себе.",
     "underOwnSubcategory": "Категорію не можна перемістити під власну підкатегорію.",
-    "nestingTooDeep": "Категорії не можна вкладати глибше ніж на {{max}} рівнів.",
-    "defaultCannotBeDeleted": "Ця категорія містить транзакції без категорії, тому її не можна видалити."
+    "nestingTooDeep": "Категорії не можна вкладати глибше ніж на {{max}} рівнів."
   },
   "transactions": {
     "notFound": "Транзакція не знайдена",
     "missingRequiredFields": "Одне з обов'язкових полів відсутнє: destinationAmount, destinationAccountId.",
     "destinationAmountRequiredCrossCurrency": "destinationAmount є обов'язковим при зміні amount для міжвалютного переказу.",
+    "amountBelowSmallestUnit": "Сума менша за найменшу одиницю {{code}}.",
     "refundAndTransferNotAllowed": "Не дозволено створювати транзакцію, яка є одночасно поверненням і переказом",
     "notOwnTransaction": "Ви можете редагувати або видаляти лише транзакції, створені вами на цьому спільному рахунку.",
     "sharedAccountChangeNotSupported": "Переміщення транзакції до іншого рахунку дозволено лише власнику рахунку.",
@@ -228,6 +229,7 @@
     "reminderAlreadyExists": "Ідентичне нагадування вже існує для цього тегу",
     "amountThresholdRequired": "Порогова сума обов'язкова для нагадувань про перевищення суми",
     "maxRemindersReached": "Досягнуто максимальну кількість нагадувань (50)",
+    "amountThresholdRoundsToZero": "Поріг округлюється до нуля в вашій базовій валюті (десяткових знаків: {{decimals}}). Введіть більшу суму.",
     "notifications": {
       "thresholdExceeded": {
         "title": "Сповіщення про витрати по тегу",
@@ -264,11 +266,13 @@
     "securitySearchResultNotRecognized": "Результат пошуку цінного папера не розпізнано або він застарів. Виконайте пошук цінного папера ще раз.",
     "currencyForSecurityNotFound": "Валюту для цінного папера не знайдено.",
     "currencyNotFound": "Валюту не знайдено",
+    "customCurrencyNotSupported": "Портфелі підтримують лише валюти ISO 4217. \"{{code}}\" — це власна валюта",
     "transactionNotFound": "Інвестиційну транзакцію не знайдено",
     "userBaseCurrencyNotFound": "Базову валюту користувача не знайдено",
     "insufficientSharesToSell": "Недостатня кількість для продажу. Після цього оновлення кількість становитиме {{adjustedQuantity}}, а кількість для продажу — {{sellQuantity}}.",
     "sourceAndDestinationMustDiffer": "Вихідний і цільовий портфелі повинні бути різними",
     "transferAmountMustBePositive": "Сума переказу повинна бути більше нуля",
+    "transferCurrencyMustMatchAccount": "Валюта переказу повинна збігатися з валютою рахунку призначення ({{currency}}).",
     "sourcePortfolioNotFound": "Вихідний портфель не знайдено",
     "destinationPortfolioNotFound": "Цільовий портфель не знайдено",
     "sourceAccountNotFound": "Вихідний рахунок не знайдено",
@@ -280,11 +284,6 @@
     "transactionAlreadyLinkedToVenture": "Транзакція вже прив'язана до венчурної угоди",
     "portfolioTransferNotFound": "Переказ портфеля не знайдено",
     "exchangeCurrenciesMustDiffer": "Валюти обміну мають бути різними",
-    "contributionPurchaseRequired": "Потрібна принаймні одна інвестиційна покупка.",
-    "contributionSecurityRequired": "Кожна інвестиційна покупка повинна містити цінний папір.",
-    "contributionExceedsCash": "Інвестиційні покупки перевищують доступні грошові кошти портфеля у валюті {{currencyCode}}.",
-    "contributionSourceMustBeExpense": "Лише транзакції витрат можна записувати як інвестиційні внески.",
-    "contributionDeletePurchasesConfirmationRequired": "Видалення цього внеску потребує явного підтвердження для видалення пов'язаних з ним інвестиційних покупок.",
     "importNoTransactionsFound": "У файлі не знайдено транзакцій.",
     "import": {
       "tokenLimitExceededSuggestion": "Розділіть завантаження на менші файли або виберіть модель із більшим контекстним вікном.",
@@ -296,7 +295,12 @@
       "title_few": "{{count}} активи перетнули поріг вашого сповіщення про збиток",
       "title_many": "{{count}} активів перетнули поріг вашого сповіщення про збиток",
       "title_other": "{{count}} активу перетнули поріг вашого сповіщення про збиток"
-    }
+    },
+    "contributionPurchaseRequired": "Потрібна принаймні одна інвестиційна покупка.",
+    "contributionSecurityRequired": "Кожна інвестиційна покупка повинна містити цінний папір.",
+    "contributionExceedsCash": "Інвестиційні покупки перевищують доступні грошові кошти портфеля у валюті {{currencyCode}}.",
+    "contributionSourceMustBeExpense": "Лише транзакції витрат можна записувати як інвестиційні внески.",
+    "contributionDeletePurchasesConfirmationRequired": "Видалення цього внеску потребує явного підтвердження для видалення пов'язаних з ним інвестиційних покупок."
   },
   "landingFaq": {
     "unavailable": "Помічник недоступний прямо зараз. Спробуйте ще раз пізніше або напишіть на support@moneymatter.app."
@@ -321,14 +325,14 @@
     "connectionNotFound": "Підключення не знайдено",
     "connectionNotFoundOrNotYours": "Підключення не знайдено або не належить вам",
     "providerNoReauthorization": "Провайдер {{providerType}} не підтримує повторну авторизацію",
-    "providerNotFoundInRegistry": "Провайдер {{providerType}} не знайдено в реєстрі",
     "connectionIdNotFound": "Підключення банківського провайдера {{connectionId}} не знайдено",
     "accountIdNotFound": "Рахунок {{accountId}} не знайдено",
     "providerTypeMismatch": "Підключення {{connectionId}} призначене для провайдера {{actualType}}, а не {{expectedType}}",
     "providerAlreadyRegistered": "Провайдер {{providerType}} вже зареєстрований. Не можна реєструвати дублікати провайдерів.",
     "providerNotRegistered": "Провайдер {{providerType}} не зареєстрований. Доступні провайдери: {{available}}",
     "unexpected": "Неочікувана помилка.",
-    "clientUpdateRequired": "Ця версія застосунку більше не підтримується. Будь ласка, оновіть застосунок через App Store."
+    "clientUpdateRequired": "Ця версія застосунку більше не підтримується. Будь ласка, оновіть застосунок через App Store.",
+    "providerNotFoundInRegistry": "Провайдер {{providerType}} не знайдено в реєстрі"
   },
   "validation": {
     "dateInvalid": "\"date\" є неправильною датою."
@@ -364,18 +368,19 @@
     "transactionsAllDuplicates": "Знайдено транзакцій за цей період: {{count}} — усі вже були імпортовані.",
     "transactionsNoneInPeriod": "Провайдер даних не повернув жодної транзакції за цей період.",
     "apiError": "Помилка API {{provider}}: {{message}}",
+    "simplefinUnreachable": "SimpleFIN тимчасово недоступний. Спробуйте пізніше.",
     "currencySelectionRequired": "Рахунок «{{account}}» не має валюти, повідомленої банком — оберіть для нього валюту перед підключенням.",
     "providerNotAvailable": "Цей провайдер недоступний для нових підключень.",
     "monobank": {
       "invalidCredentialsFormat": "Недійсний формат облікових даних для Monobank",
       "invalidApiToken": "Недійсний API-токен Monobank",
       "rateLimitExceeded": "Перевищено ліміт запитів до API Monobank. Спробуйте ще раз через хвилину.",
-      "accountNotFound": "Рахунок {{accountExternalId}} не знайдено в Monobank",
       "accountReconnectRequired": "Цей рахунок більше не доступний у Monobank. Будь ласка, перепідключіть Monobank, щоб відновити синхронізацію.",
-      "webhookNotImplemented": "handleWebhook ще не реалізовано для Monobank",
       "unknownCurrencyCode": "Невідомий код валюти: {{numericCode}}",
       "geoBlocked": "Monobank блокує запити з IP-адреси цього сервера. Вимкніть VPN або використайте українську IP-адресу.",
-      "geoBlockedProduction": "Синхронізація Monobank тимчасово недоступна. Ми отримали сповіщення і працюємо над виправленням. Зверніться до підтримки, якщо це терміново."
+      "geoBlockedProduction": "Синхронізація Monobank тимчасово недоступна. Ми отримали сповіщення і працюємо над виправленням. Зверніться до підтримки, якщо це терміново.",
+      "accountNotFound": "Рахунок {{accountExternalId}} не знайдено в Monobank",
+      "webhookNotImplemented": "handleWebhook ще не реалізовано для Monobank"
     },
     "enableBanking": {
       "invalidCredentialsFormat": "Недійсний формат облікових даних для Enable Banking",
@@ -426,8 +431,7 @@
       "invalidApiKey": "Недійсний API-ключ або приватний ключ Walutomat.",
       "accountNoExternalId": "Рахунок Walutomat не має зовнішнього ID.",
       "walletNotFound": "Гаманець Walutomat не знайдено для валюти: {{currency}}"
-    },
-    "simplefinUnreachable": "SimpleFIN тимчасово недоступний. Спробуйте пізніше."
+    }
   },
   "csvImport": {
     "headersCannotBeParsed": "Неможливо розпарсити заголовки",
@@ -507,6 +511,7 @@
     "batchDeleteLinkedLoanTransfer": "Цей імпорт прив'язаний до платежу за кредитом і не може бути скасований окремо. Увімкніть опцію «Також видалити прив'язану транзакцію переказу», щоб видалити його.",
     "batchDeleteInProgress": "Пакет імпорту вже видаляється. Дочекайтеся завершення, перш ніж розпочинати ще одне видалення.",
     "batchDeleteImportStillRunning": "Цей імпорт ще виконується. Дочекайтеся його завершення, перш ніж скасовувати.",
+    "batchDeleteInterruptedByServerUpdate": "Оновлення сервера перервало видалення. Частина імпорту могла вже бути видалена – видаліть його знову, щоб завершити.",
     "importIntoBankLinkedAccount": "Рахунок «{{accountName}}» підключено до банку, тому імпортувати в нього транзакції не можна. Виберіть інший рахунок або створіть новий.",
     "statementImportInProgress": "Імпорт виписки вже виконується. Дочекайтеся завершення, перш ніж розпочинати ще один.",
     "importInterruptedByServerUpdate": "Оновлення сервера перервало цей імпорт. Уже збережені транзакції залишено. Видаліть цей імпорт в «Історії імпорту», перш ніж імпортувати файл повторно, інакше вони продублюються.",
@@ -614,9 +619,11 @@
   "currencies": {
     "notSupportedForBaseCurrency": "Зміна базової валюти на {{currency}} не підтримується. Підтримуються лише такі валюти: {{supportedCurrencies}}.",
     "listIsEmpty": "Список валют порожній",
+    "amountTooLarge": "Суми в {{code}} не можуть перевищувати {{max, number}}",
     "noBaseCurrency": "Користувач не має встановленої базової валюти",
     "alreadyBaseCurrency": "Обрана валюта вже є базовою",
     "baseCurrencyLockedByShares": "Неможливо змінити базову валюту, поки є активні спільні ресурси. Спочатку відкличте їх або вийдіть з них.",
+    "baseCurrencyLockedByBudgetPlan": "Неможливо змінити базову валюту, поки є активний бюджетний план. Спочатку видаліть план.",
     "baseCurrencyLockedByHousehold": "Неможливо змінити базову валюту, поки ви є членом активної сім'ї. Спочатку відкличте членство або вийдіть із сім'ї.",
     "baseCurrencyChangeInProgress": "Зміна базової валюти вже триває. Будь ласка, зачекайте, поки процес завершиться.",
     "baseCurrencyChangeSyncInProgress": "Синхронізація з банком ще завершується. Спробуйте змінити базову валюту знову за кілька хвилин.",
@@ -626,7 +633,34 @@
     "cannotCalculateRefAmount": "Не вдалося розрахувати базову суму",
     "currencyNotConnected": "Запитана валюта не підключена",
     "exchangeRateNotAvailable": "Курс обміну недоступний для {{baseCode}}/{{quoteCode}} на {{date}}",
-    "baseCurrencyLockedByBudgetPlan": "Неможливо змінити базову валюту, поки є активний бюджетний план. Спочатку видаліть план."
+    "unknownCurrencyCode": "Невідомий код валюти: {{code}}",
+    "invalidCode": "Недійсний код валюти «{{code}}». Використайте від 2 до 16 літер або цифр, наприклад «USD».",
+    "invalidCodeIso": "Недійсний код валюти «{{code}}». Використайте код за ISO 4217, наприклад «USD».",
+    "invalidCodeWithCustom": "Недійсний код валюти «{{code}}». Використайте код за ISO 4217, наприклад «USD», або одну зі своїх власних валют: {{customCodes}}.",
+    "amountExceedsDecimals": "{{code}} дозволяє не більше {{decimals}} знаків після коми",
+    "customCurrencyNotFound": "Власну валюту «{{code}}» не знайдено",
+    "customCurrencyIsoCode": "«{{code}}» — це код валюти за ISO 4217, його не можна визначити як власну валюту",
+    "customCurrencyAlreadyDefined": "У вас уже є валюта з кодом «{{code}}»",
+    "customCurrencyDecimalsInUse": "Неможливо змінити кількість знаків після коми для {{code}}, поки ваші дані її використовують.",
+    "customCurrencyUseCustomEndpoint": "«{{code}}» — це власна валюта. Видаліть її зі своїх власних валют",
+    "customCurrencyCannotBeBase": "«{{code}}» — це власна валюта, її не можна зробити базовою",
+    "customCurrencyRateBetweenCustom": "Власні валюти котируються лише у валютах ISO: «{{baseCode}}» і «{{quoteCode}}» є власними валютами",
+    "customCurrencyLastRate": "«{{code}}» — це власна валюта, і їй завжди потрібен курс. Встановіть новий курс замість видалення останнього",
+    "customCurrencyQuoteNotIso": "Курс власної валюти потрібно вказувати у валюті ISO, а «{{code}}» — це власна валюта",
+    "customCurrencyRateNeedsQuote": "Спершу встановіть базову валюту або вкажіть курс власної валюти у валюті ISO, яку ви маєте",
+    "customCurrencyOneQuote": "Курс {{code}} за один день можна котирувати лише в одній валюті.",
+    "customCurrencyRateNotManual": "{{code}} бере курси зі свого джерела курсу. Перемкніть її на курси вручну, щоб встановити чи видалити курс.",
+    "customCurrencyRemovalNeedsDate": "Вкажіть день курсу {{code}}, який потрібно видалити: курси власної валюти видаляються по одному дню.",
+    "customCurrencyRateViaPairs": "«{{code}}» — це власна валюта. Натомість змініть її курс у розділі курсу обміну",
+    "customCurrencyDefinitionConflict": "Ваша власна «{{code}}» має іншу кількість знаків після коми, ніж «{{code}}» власника рахунку, тому ви не можете додавати чи редагувати транзакції в «{{code}}» на цьому спільному рахунку",
+    "rateSourceCurrencyNotHeld": "«{{code}}» немає у ваших валютах",
+    "rateSourceIsoNotAllowed": "Джерела курсу призначені лише для власних валют. Для {{code}} використовуйте актуальні курси або власний курс.",
+    "rateHistoryIsoNotAllowed": "«{{code}}» — валюта за ISO, тому має один курс без дати й історії курсів",
+    "rateSourceHttpsRequired": "Курси з HTTP-джерела потрібно отримувати через https",
+    "rateSourceHeadersUnreadable": "Не вдалося прочитати збережені заголовки запиту для «{{code}}» (змінився секрет сервера). Введіть заголовки ще раз",
+    "rateSourceFirstFetchFailed": "Не вдалося отримати курс для «{{code}}» із цього джерела, тому його не збережено. Перевірте його налаштування й спробуйте ще раз.",
+    "rateSourceLeavesNoRate": "«{{code}}» — це власна валюта, і їй завжди потрібен курс. Це джерело залишило б її без курсу, тому його не збережено.",
+    "rateSourceChangedMeanwhile": "Джерело курсу «{{code}}» змінилося, поки зберігалося це. Перезавантажте сторінку й спробуйте ще раз."
   },
   "userSettings": {
     "userSettingsNotFound": "Налаштування користувача не знайдено"
@@ -701,10 +735,10 @@
         "home-garden": "Дім, сад",
         "pets-animals": "Домашні тварини",
         "electronics-accessories": "Електроніка, аксесуари",
-        "gifts-joy": "Подарунки, радість",
         "stationery-tools": "Канцелярія, інструменти",
         "free-time": "Вільний час",
-        "drugstore-chemist": "Аптека, хімія"
+        "drugstore-chemist": "Аптека, хімія",
+        "gifts-joy": "Подарунки, радість"
       },
       "housing": {
         "rent": "Оренда",
@@ -738,11 +772,11 @@
         "books-audio-subscriptions": "Книги, аудіо, підписки",
         "tv-streaming": "ТБ, стрімінг",
         "holiday-trips-hotels": "Відпустка, подорожі, готелі",
-        "charity-gifts": "Благодійність, подарунки",
+        "gifts": "Подарунки",
+        "charity": "Благодійність",
         "alcohol-tobacco": "Алкоголь, тютюн",
         "lottery-gambling": "Лотерея, азартні ігри",
-        "gifts": "Подарунки",
-        "charity": "Благодійність"
+        "charity-gifts": "Благодійність, подарунки"
       },
       "communication": {
         "phone-cell-phone": "Телефон, мобільний",
@@ -907,7 +941,10 @@
         "malformedManifestEntry": "Архів резервної копії містить пошкоджений запис маніфесту для {{path}}.",
         "missingFile": "В архіві резервної копії відсутній {{path}}, указаний у маніфесті.",
         "checksumMismatch": "Файл резервної копії {{path}} не пройшов перевірку цілісності (контрольна сума не збігається).",
+        "amountNotCents": "Файл резервної копії {{path}} пошкоджений: він містить некоректну суму ({{value}}).",
         "differentAccount": "Цю резервну копію експортовано з іншого облікового запису, тому її не можна відновити тут.",
+        "customCurrencyInvalid": "Власна валюта «{{code}}» з резервної копії має недійсне визначення або джерело курсу, тому її не можна відновити",
+        "customCurrencyWithoutRate": "Власна валюта «{{code}}» з резервної копії потребує додатного курсу обміну до валюти ISO або прив'язки до неї, тому її не можна відновити",
         "alreadyInProgress": "Відновлення з резервної копії вже виконується. Дочекайтеся його завершення, перш ніж запускати нове.",
         "failed": "Не вдалося відновити з резервної копії. Ваші наявні дані не змінено."
       }

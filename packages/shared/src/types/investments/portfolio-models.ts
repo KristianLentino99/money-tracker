@@ -38,6 +38,7 @@ export interface PortfolioModel extends EntityLogoFields {
   displayCurrencyCode: string | null;
   /** When enabled, value is reported by dated manual valuations instead of holdings prices. */
   isManualTracking: boolean;
+  externalUrl: string | null;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -20,6 +20,7 @@ export function buildPortfolioPayload({
   portfolioType = PORTFOLIO_TYPE.investment,
   description = 'Test portfolio description',
   displayCurrencyCode,
+  externalUrl,
   isEnabled = true,
   isManualTracking,
 }: Partial<Omit<Parameters<typeof _createPortfolio>[0], 'userId'>> = {}): Omit<
@@ -31,6 +32,7 @@ export function buildPortfolioPayload({
     portfolioType,
     description,
     ...(displayCurrencyCode !== undefined ? { displayCurrencyCode } : {}),
+    ...(externalUrl !== undefined ? { externalUrl } : {}),
     isEnabled,
     ...(isManualTracking !== undefined ? { isManualTracking } : {}),
   };

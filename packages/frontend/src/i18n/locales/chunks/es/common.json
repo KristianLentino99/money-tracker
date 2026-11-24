@@ -29,8 +29,8 @@
       "copyInviteLink": "Copiar enlace de invitación",
       "moveTo": "Mover a…",
       "learnMore": "Saber más",
-      "undo": "Undo",
-      "more": "More"
+      "undo": "Deshacer",
+      "more": "Más"
     },
     "ui": {
       "close": "Cerrar",
@@ -106,7 +106,7 @@
       "mobilePayment": "Pago móvil",
       "voucher": "Vale",
       "webPayment": "Pago web",
-      "none": "None"
+      "none": "Nada"
     },
     "vehicleClasses": {
       "sedan": "Sedán",
@@ -146,16 +146,16 @@
         "description": "Escanea nuevas transacciones y sugiere las que pertenecen a un rastreador inteligente."
       },
       "transferMatching": {
-        "name": "Transfer matching",
+        "name": "Transferir coincidencia",
         "description": "Comprueba la transferencia de resultados del escaneo y mantiene los pares que parecen transferencias reales"
       }
     },
     "transactions": {
       "delete": {
-        "success": "Eliminado correctamente",
-        "error": "Error al eliminar la transacción",
-        "undoSuccess": "Restored",
-        "undoError": "Couldn't undo. You can still restore it from the Trash."
+        "success": "Movido a la papelera",
+        "undoSuccess": "Restaurado",
+        "undoError": "No se pudo deshacer. Todavía puede restaurarlo desde la basura.",
+        "error": "Error al eliminar la transacción"
       },
       "submit": {
         "unexpectedError": "Error inesperado"
@@ -164,17 +164,17 @@
         "error": "Error al desvincular las transacciones"
       },
       "record": {
-        "hiddenAccount": "Cuenta oculta",
+        "addedByTooltip": "This transaction was attached to the budget by {handle}",
+        "addedByRule": "Agregado por las reglas del rastreador",
+        "matchedByAi": "Coincidencia por IA",
         "externalLinkTooltip": "Abrir enlace externo",
         "locationTooltip": "Abrir ubicación en el mapa",
         "attachmentsTooltip": "Tiene adjuntos",
-        "selectRow": "Select transaction",
+        "hiddenAccount": "Cuenta oculta",
+        "selectRow": "Seleccionar transacción",
         "unselectableReasons": {
           "sharedAccount": "No se puede seleccionar: esta transacción pertenece a una cuenta compartida contigo, y solo su propietario puede editarla."
         },
-        "addedByTooltip": "This transaction was attached to the budget by {handle}",
-        "matchedByAi": "Matched by AI",
-        "addedByRule": "Agregado por las reglas del rastreador",
         "payment": {
           "paidFrom": "Pagado desde {count} cuentas",
           "receivedInto": "Recibido en {count} cuentas",
@@ -241,7 +241,7 @@
       "tabs": {
         "brand": "Marca",
         "letters": "Letras",
-        "icon": "Icon",
+        "icon": "Icono",
         "custom": "Imagen"
       },
       "searchPlaceholder": "Nombre de marca o dominio",
@@ -259,7 +259,7 @@
       "remove": "Quitar logo",
       "pickerDescription": "Elige un logo de marca o usa letras en su lugar.",
       "updatedToast": "Logo actualizado",
-      "resetToast": "Logo removed",
+      "resetToast": "Logo eliminado",
       "updateError": "No se pudo actualizar el logo. Vuelve a intentarlo.",
       "lettersLabel": "Letras (1–2)",
       "lettersPlaceholder": "AB",
@@ -274,17 +274,21 @@
       "imageTooLarge": "La imagen tiene aún más de 50 KB después de cambiar el tamaño. Prueba con una imagen más sencilla.",
       "imageUnreadable": "No se ha podido leer {name} como una imagen."
     },
+    "iconPicker": {
+      "searchPlaceholder": "Buscar iconos...",
+      "clear": "Quitar icono"
+    },
     "importBatchDeleteOverlay": {
       "title": "Eliminando transacciones importadas",
       "description": "Se está eliminando un gran lote de importación. Los saldos se recalculan cuando termina, por lo que la aplicación está bloqueada hasta entonces.",
       "deleting": "Eliminando transacción",
       "preparing": "Preparándose",
-      "finishing": "Finishing up",
+      "finishing": "Finalizando",
       "takingLong": "Esto está tardando más de lo habitual, grandes lotes pueden tardar varios minutos. Mantenga esta página abierta.",
-      "unreachableTitle": "Can't reach the server",
+      "unreachableTitle": "No se puede conectar con el servidor",
       "unreachableDescription": "El borrado puede estar ejecutándose. Descartar para seguir usando la aplicación, y volver a cargar más tarde para ver el resultado.",
       "failedTitle": "No se pudo eliminar",
-      "dismiss": "Dismiss"
+      "dismiss": "Descartar"
     },
     "duration": {
       "years": "{n} año | {n} años",
@@ -304,17 +308,13 @@
         "offTrack": "Fuera de lo previsto"
       }
     },
-    "cancel": "Cancel",
-    "iconPicker": {
-      "searchPlaceholder": "Buscar iconos...",
-      "clear": "Quitar icono"
-    },
     "pasteImage": {
       "button": "Pegar imagen",
       "shortcutHint": "o presiona {{shortcut}}",
       "noImage": "No se ha encontrado ninguna imagen en el portapapeles.",
       "readFailed": "No se pudo leer el portapapeles. Permitir el acceso al portapapeles o pegar con el acceso directo del teclado."
-    }
+    },
+    "cancel": "Cancel"
   },
   "accountGroups": {
     "create": {
@@ -468,6 +468,22 @@
     },
     "sessionExpiredNotice": "Su sesión de demostración ha finalizado. Cree una cuenta gratuita para continuar, o inicie sesión a continuación si ya tiene una."
   },
+  "billing": {
+    "seePlans": "Ver planes",
+    "trialStartFailed": "No se pudo iniciar la prueba gratuita. Inténtalo de nuevo.",
+    "updatePaymentMethod": "Actualice su método de pago",
+    "planRequired": {
+      "essential": "Incluido en el Plan Esencial",
+      "plus": "Incluido en el Plan Plus",
+      "hint": "Su plan actual no incluye esta característica. Actualice para desbloquearlo."
+    },
+    "banner": {
+      "trial": "Queda {count} día de prueba · {link} | Quedan {count} días de prueba · {link}",
+      "readOnly": "Tu prueba ha terminado. Puedes ver y exportar tus datos, suscríbete para seguir editando. {link}",
+      "subscriptionEnded": "Tu suscripción ha terminado. {link} para seguir editando tus datos.",
+      "pastDue": "Tu último pago falló. {link} para mantener tu plan."
+    }
+  },
   "settings": {
     "currencies": {
       "setBase": {
@@ -501,65 +517,13 @@
       "setByEndpoint": "Definido por su endpoint"
     }
   },
-  "transactionGroups": {
-    "groupDialog": {
-      "editTitle": "Editar grupo",
-      "nameLabel": "Nombre",
-      "noteLabel": "Nota (opcional)",
-      "notePlaceholder": "Nota opcional…",
-      "loadingText": "Cargando…",
-      "savingAction": "Guardar",
-      "cancelButton": "Cancelar",
-      "editAction": "Editar",
-      "deleteAction": "Eliminar grupo",
-      "transactionsLabel": "Transacciones",
-      "deleteGroupTitle": "Eliminar grupo",
-      "deleteGroupDescription": "¿Está seguro de que desea eliminar \"{groupName}\"? Las transacciones no se eliminarán.",
-      "removeTransactionTitle": "Quitar transacción del grupo",
-      "removeTransactionDescription": "Esto dejará menos de 2 transacciones en el grupo, por lo que el grupo se eliminará. ¿Continuar?",
-      "removeTransactionDescriptionNormal": "¿Está seguro de que desea quitar esta transacción del grupo?",
-      "removeButtonText": "Quitar",
-      "removeAndDeleteButtonText": "Quitar y eliminar el grupo",
-      "removeFromGroup": "Remove from group",
-      "saveError": "No se pudo guardar el grupo",
-      "removeError": "No se pudo eliminar la transacción del grupo",
-      "manageTransactions": "Manage",
-      "showMoreNote": "Mostrar más",
-      "showLessNote": "Show less",
-      "summary": {
-        "transactions": "Transacciones",
-        "net": "Neto",
-        "moneyIn": "Dinero entrante",
-        "moneyOut": "Dinero saliente"
-      }
-    },
-    "transactionGroupRecord": {
-      "transactionCountLabel": "transacciones"
-    }
-  },
-  "billing": {
-    "seePlans": "Ver planes",
-    "trialStartFailed": "No se pudo iniciar la prueba gratuita. Inténtalo de nuevo.",
-    "updatePaymentMethod": "Actualice su método de pago",
-    "planRequired": {
-      "essential": "Incluido en el Plan Esencial",
-      "plus": "Incluido en el Plan Plus",
-      "hint": "Su plan actual no incluye esta característica. Actualice para desbloquearlo."
-    },
-    "banner": {
-      "trial": "Queda {count} día de prueba · {link} | Quedan {count} días de prueba · {link}",
-      "readOnly": "Tu prueba ha terminado. Puedes ver y exportar tus datos, suscríbete para seguir editando. {link}",
-      "subscriptionEnded": "Tu suscripción ha terminado. {link} para seguir editando tus datos.",
-      "pastDue": "Tu último pago falló. {link} para mantener tu plan."
-    }
-  },
   "aiUsage": {
     "title": "Incluye uso IA",
     "used": "usado",
-    "percentUsed": "{percent}% used",
+    "percentUsed": "{percent}% usado",
     "resetsOn": "Se reinicia en {date}",
     "connectOwnModel": "Conecte su propio modelo",
-    "gotIt": "Got it",
+    "gotIt": "Entendido",
     "badge": {
       "used": "{percent}% IA utilizada",
       "reached": "Límite de IA alcanzado"
@@ -586,54 +550,90 @@
       "reached": "Utilizado hasta el {date}. Las funciones de IA están en pausa."
     }
   },
+  "transactionGroups": {
+    "groupDialog": {
+      "editTitle": "Editar grupo",
+      "nameLabel": "Nombre",
+      "noteLabel": "Nota (opcional)",
+      "notePlaceholder": "Nota opcional…",
+      "loadingText": "Cargando…",
+      "savingAction": "Guardar",
+      "cancelButton": "Cancelar",
+      "editAction": "Editar",
+      "deleteAction": "Eliminar grupo",
+      "transactionsLabel": "Transacciones",
+      "deleteGroupTitle": "Eliminar grupo",
+      "deleteGroupDescription": "¿Está seguro de que desea eliminar \"{groupName}\"? Las transacciones no se eliminarán.",
+      "removeTransactionTitle": "Quitar transacción del grupo",
+      "removeTransactionDescription": "Esto dejará menos de 2 transacciones en el grupo, por lo que el grupo se eliminará. ¿Continuar?",
+      "removeTransactionDescriptionNormal": "¿Está seguro de que desea quitar esta transacción del grupo?",
+      "removeButtonText": "Quitar",
+      "removeAndDeleteButtonText": "Quitar y eliminar el grupo",
+      "removeFromGroup": "Quitar del grupo",
+      "saveError": "No se pudo guardar el grupo",
+      "removeError": "No se pudo eliminar la transacción del grupo",
+      "manageTransactions": "Gestionar",
+      "showMoreNote": "Mostrar más",
+      "showLessNote": "Mostrar menos",
+      "summary": {
+        "transactions": "Transacciones",
+        "net": "Neto",
+        "moneyIn": "Dinero entrante",
+        "moneyOut": "Dinero saliente"
+      }
+    },
+    "transactionGroupRecord": {
+      "transactionCountLabel": "transacciones"
+    }
+  },
   "mcpToolsets": {
     "core": {
-      "label": "Core",
-      "description": "Accounts, transactions, categories, tags, payees and reports"
+      "label": "Núcleo",
+      "description": "Cuentas, transacciones, categorías, etiquetas, beneficiarios y reportes"
     },
     "subscriptions": {
-      "label": "Recurring payments",
-      "description": "Recurring payments, their periods and planned transactions"
+      "label": "Pagos recurrentes",
+      "description": "Pagos recurrientes, sus períodos y transacciones planificadas"
     },
     "budgetPlans": {
-      "label": "Budget plans",
-      "description": "Plans, lines, line goals and savings goals"
+      "label": "Planes de presupuesto",
+      "description": "Planes, líneas, metas de línea y objetivos de ahorro"
     },
     "trackers": {
-      "label": "Trackers",
-      "description": "Spending trackers and their suggestions"
+      "label": "Rastreadores",
+      "description": "Rastreadores de gastos y sus sugerencias"
     },
     "automations": {
-      "label": "Automations",
-      "description": "Rules, payee aliases, ignored payee names and tag reminders"
+      "label": "Automatizaciones",
+      "description": "Reglas, alias de beneficiario, nombres de beneficiarios ignorados y recordatorios de etiquetas"
     },
     "review": {
-      "label": "Review and cleanup",
-      "description": "Transfer and refund matches, duplicates and stuck pending transactions"
+      "label": "Revisar y limpiar",
+      "description": "Transferir y reembolsar partidos, duplicar y atascar transacciones pendientes"
     },
     "groupsTemplates": {
-      "label": "Groups and templates",
-      "description": "Transaction groups and transaction templates"
+      "label": "Grupos y plantillas",
+      "description": "Grupos de transacciones y plantillas de transacción"
     },
     "investments": {
-      "label": "Investments",
-      "description": "Portfolios, holdings, securities and investment transactions"
+      "label": "Inversiones",
+      "description": "Carteras, tenencias, valores y transacciones de inversión"
     },
     "ventures": {
       "label": "Ventures",
-      "description": "Venture platforms, deals and events"
+      "description": "Plataformas de ventas, ofertas y eventos"
     },
     "loansVehicles": {
-      "label": "Loans and vehicles",
-      "description": "Loans with their payments, and vehicles"
+      "label": "Préstamos y vehículos",
+      "description": "Préstamos con sus pagos y vehículos"
     },
     "currencies": {
-      "label": "Currencies",
-      "description": "Your currencies and exchange rates"
+      "label": "Monedas",
+      "description": "Sus monedas y tipos de cambio"
     },
     "imports": {
-      "label": "Imports and sharing",
-      "description": "Import batches (list, undo) and bank connections (status, unlink an account); sharing is read only."
+      "label": "Importar y compartir",
+      "description": "Importar lotes (lista, deshacer) y conexiones bancarias (estado, desvincular una cuenta); compartir sólo es de lectura."
     }
   }
 }

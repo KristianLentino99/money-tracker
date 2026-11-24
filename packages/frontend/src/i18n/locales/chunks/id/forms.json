@@ -68,6 +68,8 @@
       "displayCurrencyPlaceholder": "Pilih mata uang tampilan",
       "displayCurrencyBaseOption": "Mata uang dasar ({code})",
       "displayCurrencyDescription": "Nilai dan statistik portofolio dikonversi ke mata uang ini dengan nilai tukar saat ini.",
+      "externalUrlLabel": "External URL (optional)",
+      "externalUrlPlaceholder": "https://broker.example.com",
       "cancelButton": "Batal",
       "submitButton": "Simpan Perubahan",
       "submitButtonLoading": "Menyimpan...",
@@ -139,6 +141,8 @@
       "creditLimitLabel": "Batas kredit",
       "creditLimitPlaceholder": "Batas kredit",
       "defaultPaymentTypeLabel": "Default payment type",
+      "externalUrlLabel": "External URL (optional)",
+      "externalUrlPlaceholder": "https://bank.example.com",
       "submitButton": "Buat",
       "submitButtonLoading": "Membuat...",
       "notifications": {
@@ -192,7 +196,9 @@
     },
     "validators": {
       "invalidCurrencyDecimal": "Masukkan jumlah yang valid (hingga 2 desimal)",
-      "mustBePositive": "Jumlah harus positif"
+      "mustBePositive": "Jumlah harus positif",
+      "httpUrl": "Enter a valid http(s) URL",
+      "maxLength": "Must not exceed {max} characters"
     },
     "exchangeCurrency": {
       "fromCurrencyLabel": "Dari Mata Uang",

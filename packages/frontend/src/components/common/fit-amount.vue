@@ -19,7 +19,9 @@ const withSign = ({ amount, text }: { amount: number; text: string }) =>
 const formatFull = (amount: number) =>
   withSign({
     amount,
-    text: props.currencyCode ? formatAmountByCurrencyCode(amount, props.currencyCode) : formatBaseCurrency(amount),
+    text: props.currencyCode
+      ? formatAmountByCurrencyCode({ amount, currencyCode: props.currencyCode })
+      : formatBaseCurrency(amount),
   });
 const formatCompact = (amount: number) =>
   withSign({

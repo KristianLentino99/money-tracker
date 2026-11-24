@@ -89,8 +89,6 @@ export interface BackupTableDef<Name extends string = BackupFileName> {
   selfRefOrphanValues?: Record<string, Record<string, unknown>>;
   /** Encrypted blob to blank before writing (undecryptable on another instance). */
   stripSecret?: 'bankCredentials' | 'aiKeys';
-  /** Drop a row on restore whose `currencyCode` isn't seeded on the target instance. */
-  requireSeededCurrency?: boolean;
   /** Global preset rows are resolved by natural key and are never duplicated. */
   globalRows?: BackupGlobalRowDef;
   /** Drop a row on restore that breaks an app-level rule the DB constraints don't cover. */
@@ -129,7 +127,6 @@ const TABLE_DEFS = [
     tier: 2,
     scope: { strategy: 'userColumn', column: 'userId' },
     restoreMode: 'insert',
-    requireSeededCurrency: true,
   },
   {
     fileName: 'categories',
@@ -673,7 +670,11 @@ interface BackupExcludedDef {
  * a new model added without one fails that test.
  */
 export const BACKUP_EXCLUDED: readonly BackupExcludedDef[] = [
-  { model: models.Currencies, reason: 'Global ISO seed, referenced by natural code — stable across instances.' },
+  {
+    model: models.Currencies,
+    reason:
+      'Global ISO seed, referenced by natural code. A custom code is a bare stub: its definition travels in users-currencies and restore recreates the stub.',
+  },
   {
     model: models.ExchangeRates,
     reason: 'Global; self-heals via startup backfill (1999→today) plus the daily rate cron.',

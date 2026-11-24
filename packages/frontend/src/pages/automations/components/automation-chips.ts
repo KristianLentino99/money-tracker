@@ -33,7 +33,8 @@ export type AutomationChip =
     }
   | { kind: 'dayOfMonth'; value: string }
   | { kind: 'ref'; refType: AutomationRefType; id: RecordId; negated: boolean }
-  | { kind: 'note'; labelKey: string; value: string };
+  | { kind: 'note'; labelKey: string; value: string }
+  | { kind: 'excludeFromStats' };
 
 type AutomationRulePreview = Pick<TransactionAutomationModel, 'conditions' | 'actions'>;
 
@@ -43,8 +44,9 @@ interface AutomationChips {
   then: AutomationChip[];
 }
 
+// Bounds compare exactly against amounts of any currency, so every digit they carry shows.
 const formatAmount = ({ value }: { value: number }) =>
-  toLocalNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  toLocalNumber(value, { minimumFractionDigits: 0, maximumFractionDigits: 20 });
 
 const buildAmountValue = ({ condition }: { condition: Extract<AutomationCondition, { field: 'amount' }> }) => {
   const { min, max } = condition.value;
@@ -149,6 +151,8 @@ const buildActionChips = ({ action }: { action: AutomationAction }): AutomationC
           value: action.value,
         },
       ];
+    case 'exclude_from_stats':
+      return [{ kind: 'excludeFromStats' }];
   }
 };
 

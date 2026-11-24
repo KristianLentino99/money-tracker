@@ -379,6 +379,7 @@
           "syncFailed": "Gagal memulai sinkronisasi"
         },
         "actions": {
+          "openExternalUrl": "Open external link",
           "renameButton": "Ganti nama koneksi",
           "disconnectButton": "Putuskan Integrasi",
           "manage": "Kelola"
@@ -438,6 +439,8 @@
           "title": "Edit Nama Koneksi",
           "description": "Beri nama khusus untuk koneksi Anda agar mudah diidentifikasi.",
           "label": "Nama Koneksi",
+          "externalUrlLabel": "External URL (optional)",
+          "externalUrlPlaceholder": "https://bridge.example.com",
           "saving": "Menyimpan...",
           "save": "Simpan"
         },

@@ -21,6 +21,7 @@ interface UpdatePortfolioParams extends NonImageLogoPayload {
   portfolioType?: PORTFOLIO_TYPE;
   description?: string | null;
   displayCurrencyCode?: string | null;
+  externalUrl?: string | null;
   isEnabled?: boolean;
   isManualTracking?: boolean;
 }
@@ -32,6 +33,7 @@ const updatePortfolioImpl = async ({
   portfolioType,
   description,
   displayCurrencyCode,
+  externalUrl,
   isEnabled,
   isManualTracking,
   logoDomain,
@@ -95,6 +97,7 @@ const updatePortfolioImpl = async ({
   if (portfolioType !== undefined) updateData.portfolioType = portfolioType;
   if (description !== undefined) updateData.description = description;
   if (displayCurrencyCode !== undefined) updateData.displayCurrencyCode = displayCurrencyCode;
+  if (externalUrl !== undefined) updateData.externalUrl = externalUrl;
   if (isEnabled !== undefined) updateData.isEnabled = isEnabled;
   if (isManualTracking !== undefined) updateData.isManualTracking = isManualTracking;
 

@@ -1,5 +1,5 @@
 import { SUBSCRIPTION_PERIOD_STATUSES, SUBSCRIPTION_TYPES, TRANSACTION_TYPES } from '@bt/shared/types';
-import { centsToApiDecimalOrNull } from '@common/types/money';
+import { moneyToApiDecimalOrNull } from '@common/types/money';
 import SubscriptionPeriods from '@models/subscription-periods.model';
 import Subscriptions from '@models/subscriptions.model';
 
@@ -30,7 +30,7 @@ export const getLoanInstallments = async ({ userId, accountId }: { userId: numbe
   return subscriptions.map((subscription) => ({
     id: subscription.id,
     name: subscription.name,
-    expectedAmount: centsToApiDecimalOrNull(subscription.expectedAmount),
+    expectedAmount: moneyToApiDecimalOrNull(subscription.expectedAmount),
     expectedCurrencyCode: subscription.expectedCurrencyCode,
     frequency: subscription.frequency,
     startDate: subscription.startDate,

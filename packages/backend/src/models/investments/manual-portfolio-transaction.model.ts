@@ -13,7 +13,7 @@ export default class ManualPortfolioTransactions extends Model {
   @ForeignKey(() => Portfolios) @Index @Column({ type: DataType.UUID, allowNull: false }) portfolioId!: RecordId;
   @Column({ type: DataType.ENUM(...Object.values(MANUAL_PORTFOLIO_TRANSACTION_CATEGORY)), allowNull: false })
   category!: MANUAL_PORTFOLIO_TRANSACTION_CATEGORY;
-  @MoneyField({ storage: 'decimal', precision: 20, scale: 10 }) declare amount: Money;
+  @MoneyField({ precision: 20, scale: 10 }) declare amount: Money;
   @Index @Column({ type: DataType.DATEONLY, allowNull: false }) date!: string;
   @Column({ type: DataType.TEXT, allowNull: true }) note!: string | null;
   @Column({ type: DataType.STRING(64), allowNull: true }) source!: string | null;

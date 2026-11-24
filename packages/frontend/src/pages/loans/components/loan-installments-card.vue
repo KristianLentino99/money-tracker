@@ -127,7 +127,10 @@ const installmentProgress = ({ installment }: { installment: LoanInstallmentApiR
 
 const installmentAmount = ({ installment }: { installment: LoanInstallmentApiResponse }) => {
   if (installment.expectedAmount == null || installment.expectedCurrencyCode == null) return null;
-  return formatAmountByCurrencyCode(installment.expectedAmount, installment.expectedCurrencyCode);
+  return formatAmountByCurrencyCode({
+    amount: installment.expectedAmount,
+    currencyCode: installment.expectedCurrencyCode,
+  });
 };
 
 watch(isLinkDialogOpen, (open) => {
@@ -221,7 +224,13 @@ watch(isLinkDialogOpen, (open) => {
             <span class="text-muted-foreground mt-0.5 block text-xs">
               {{ $t('planned.subscriptions.typeInstallment') }}
               <span v-if="installment.expectedAmount && installment.expectedCurrencyCode">
-                · {{ formatAmountByCurrencyCode(installment.expectedAmount, installment.expectedCurrencyCode) }}
+                ·
+                {{
+                  formatAmountByCurrencyCode({
+                    amount: installment.expectedAmount,
+                    currencyCode: installment.expectedCurrencyCode,
+                  })
+                }}
               </span>
             </span>
           </span>

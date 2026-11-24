@@ -8,17 +8,19 @@
     "groupNotFound": "Gruppo o conto non trovato.",
     "accountNotFound": "Conto non trovato.",
     "accountUpdateFailed": "Impossibile aggiornare il conto.",
-    "accountNoExternalId": "Il conto non ha un ID esterno.",
     "accountNoExternalIdMonobank": "Il conto non ha un ID esterno di Monobank.",
     "accountNoExternalIdEnableBanking": "Il conto non ha un ID esterno di Enable Banking.",
     "accountNotFoundForTransaction": "Conto non trovato per questa transazione.",
     "deleteBlockedByLoanPayments": "Questo conto ha pagamenti di prestito collegati. Eliminarli o riassegnarli prima di eliminare il conto.",
+    "deleteBlockedByTrashedLoanPayments": "Questo conto ha pagamenti del prestito nel Cestino. Eliminarli definitivamente dal Cestino prima di eliminare il conto.",
     "loanBalanceUseUpdateLoan": "Modificare il saldo residuo di un prestito dalla relativa pagina del prestito, non dalle impostazioni del conto.",
     "loanCategoryImmutable": "La categoria di un conto prestito non può essere modificata.",
     "dedicatedFlowCategoryNotAllowed": "I conti prestito e veicolo devono essere creati tramite i rispettivi endpoint dedicati, non tramite l'endpoint generico dei conti.",
     "initialBalanceOnlySystem": "Il saldo iniziale può essere modificato solo per i conti a gestione manuale",
     "initialAndCurrentBalanceTogether": "Saldo iniziale e saldo corrente non possono essere modificati nella stessa richiesta",
-    "deleteBlockedByTrashedLoanPayments": "Questo conto ha pagamenti del prestito nel Cestino. Eliminarli definitivamente dal Cestino prima di eliminare il conto."
+    "onlySystemAccountsCanBeLinked": "Solo i conti creati manualmente possono essere collegati a una connessione bancaria.",
+    "bankLinkImportStillRunning": "È ancora in corso un'importazione. Attendere che termini prima di collegare, scollegare, archiviare o disconnettere un conto bancario. Se l'importazione si è interrotta, questo blocco si rimuove da solo 3 ore dopo il suo avvio.",
+    "accountNoExternalId": "Il conto non ha un ID esterno."
   },
   "balanceAdjustment": {
     "defaultNote": "Correzione del saldo",
@@ -30,10 +32,20 @@
     "groupNotFound": "Gruppo non trovato.",
     "groupUpdateFailed": "Impossibile aggiornare il gruppo.",
     "parentGroupNotExist": "Non esiste un gruppo genitore con tale ID.",
+    "parentGroupCycle": "Un gruppo non può essere collocato all'interno di se stesso o di uno dei suoi sottogruppi.",
     "parentGroupDoesNotExist": "Il gruppo genitore non esiste.",
     "accountNotFound": "Conto con questo ID non trovato.",
-    "accountGroupNotFound": "Gruppo di conti con questo ID non trovato.",
-    "parentGroupCycle": "Un gruppo non può essere collocato all'interno di se stesso o di uno dei suoi sottogruppi."
+    "accountGroupNotFound": "Gruppo di conti con questo ID non trovato."
+  },
+  "categories": {
+    "notFound": "La categoria con l'ID indicato non esiste.",
+    "systemCannotBeMoved": "Le categorie di sistema non possono essere spostate.",
+    "parentNotFound": "Non esiste una categoria genitore con tale ID.",
+    "systemParentForbidden": "Le categorie di sistema non possono essere usate come genitore.",
+    "defaultCannotBeDeleted": "Questa categoria contiene le transazioni senza categoria e non può essere eliminata.",
+    "ownParent": "Una categoria non può essere genitore di se stessa.",
+    "underOwnSubcategory": "Una categoria non può essere spostata all'interno della propria sottocategoria.",
+    "nestingTooDeep": "Le categorie non possono essere nidificate più in profondità di {{max}} livelli."
   },
   "transactions": {
     "notFound": "Transazione non trovata.",
@@ -47,13 +59,19 @@
     "cannotCreateWithParams": "Impossibile creare la transazione con i parametri forniti.",
     "idCannotBeChanged": "L'ID non può essere modificato",
     "editReadonlyFields": "Tentativo di modificare campi in sola lettura del conto esterno",
+    "preSeamTimeOnOrAfterLinkDay": "Una transazione manuale su un conto collegato a una banca deve avere una data precedente al {{date}}, giorno in cui il conto è stato collegato.",
+    "manualRowOnOrAfterLinkDay": "Questa transazione ha una data uguale o successiva al {{date}}, giorno in cui il conto è stato collegato alla banca. Da quel giorno fanno fede i dati della banca, quindi non può essere modificata né eliminata.",
+    "manualRowOnOrAfterLinkDayCreate": "Dal {{date}} in poi i dati provengono dalla banca, quindi una transazione manuale deve avere una data precedente al {{date}}.",
+    "bulkDeleteBankRowsSelected": "Le transazioni sincronizzate dalla banca e quelle con data uguale o successiva al giorno del collegamento del conto non possono essere eliminate.",
+    "oppositeLegOnBankAccount": "L'altro lato di questo trasferimento si trova su un conto collegato a una banca, quindi lì questa modifica non è consentita.",
+    "moveAcrossBankLinkedAccount": "Una transazione non può essere spostata su o da un conto collegato a una banca. Eliminarla e aggiungerla di nuovo sull'altro conto.",
     "changeTypeNotAllowed": "Non è consentito modificare \"transactionType\" di un conto non di sistema.",
     "bothRefundFieldsNotAllowed": "Non è possibile usare contemporaneamente \"refundedByTxIds\" e \"refundsTargets\". Sceglierne uno.",
-    "refundExceedsOriginal": "L'importo totale del rimborso non può essere maggiore dell'importo della transazione originale.",
     "oppositeTransactionNotFound": "Impossibile trovare la transazione complementare per effettuare un aggiornamento",
     "transactionIdNotExist": "La transazione con l'ID indicato non esiste.",
     "notAuthorizedToEdit": "Autorizzazione insufficiente per modificare questa transazione.",
     "cannotDeleteExternal": "Non è consentito eliminare manualmente le transazioni esterne.",
+    "bulkDeleteLimitExceeded": "È possibile eliminare fino a 500 transazioni alla volta. Restringere la selezione e riprovare.",
     "unexpectedDeleteIssue": "Si è verificato un errore imprevisto durante l'eliminazione della transazione.",
     "linkSelfNotAllowed": "Non puoi collegare una transazione a sé stessa.",
     "linkSameTypeNotAllowed": "Non puoi collegare una transazione a un'altra con lo stesso \"transactionType\".",
@@ -83,6 +101,25 @@
     "plannedUnflipOnConnectedAccount": "Questa pianificazione si trova su un conto collegato alla banca, quindi verrà confermata automaticamente dalla banca. Eliminarla se non è più prevista.",
     "plannedCannotConfirmPayment": "Una transazione pianificata non può confermare un pagamento. Attenderne la conferma, quindi collegarla.",
     "plannedCannotBeRefundLinked": "Una transazione pianificata non può far parte di un collegamento di rimborso.",
+    "paymentLegsNotAllowed": "Solo una normale entrata o uscita sul proprio conto può essere suddivisa su più conti. Non è possibile per trasferimenti, rimborsi, transazioni pianificate o suddivise per categoria.",
+    "inPaymentNotAllowed": "Questa transazione fa parte di un pagamento da più conti. Rimuoverla prima dal pagamento.",
+    "paymentLegInvalidAccount": "Ogni nuova parte deve trovarsi su un altro dei propri conti manuali.",
+    "paymentLegDuplicateAccount": "Ogni nuova parte deve trovarsi su un conto diverso.",
+    "paymentLegEditThroughMain": "Questa è una parte di un pagamento da più conti. Modificare invece la transazione principale.",
+    "paymentAmountRequired": "Inserire l'importo nella valuta della transazione principale per ogni parte in una valuta diversa.",
+    "paymentLinkNotAllowed": "Questa transazione non può essere collegata al pagamento. Possono essere collegate solo entrate o uscite proprie dello stesso tipo, non trasferimenti, rimborsi, suddivisioni, transazioni in sospeso o parti di un altro pagamento.",
+    "paymentLinkedAmountFixed": "L'importo di una transazione collegata non può essere modificato.",
+    "paymentLinkedTypeMismatch": "Le transazioni collegate devono avere lo stesso tipo del pagamento. Scollegarle prima.",
+    "refunds": {
+      "wholeLinkWithPartials": "Un collegamento di rimborso totale non può essere combinato con collegamenti parziali",
+      "externalLinkWithOthers": "Un rimborso per un acquisto esterno all'app non può essere combinato con altri collegamenti di rimborso",
+      "externalLinkWithAmount": "Un rimborso di una transazione esterna all'app non può avere un importo parziale: copre sempre l'intero rimborso.",
+      "totalExceedsRefund": "Il totale degli importi dei collegamenti di rimborso non può superare l'importo della transazione di rimborso",
+      "totalExceedsSplit": "L'importo totale del rimborso non può superare l'importo della suddivisione",
+      "totalExceedsOriginal": "L'importo totale del rimborso non può superare l'importo della transazione originale",
+      "refundOfRefund": "Impossibile rimborsare una transazione di \"rimborso\"",
+      "duplicateLink": "Questo rimborso è già collegato a quella transazione"
+    },
     "splits": {
       "splitsOnTransfer": "Impossibile aggiungere suddivisioni alle transazioni di trasferimento",
       "splitLimitExceeded": "Sono consentite al massimo {{max}} suddivisioni per transazione",
@@ -119,32 +156,63 @@
       },
       "maintenanceConflict": "Le transazioni selezionate appartengono a interventi di manutenzione diversi."
     },
-    "bulkDeleteLimitExceeded": "È possibile eliminare fino a 500 transazioni alla volta. Restringere la selezione e riprovare.",
-    "paymentLegsNotAllowed": "Solo una normale entrata o uscita sul proprio conto può essere suddivisa su più conti. Non è possibile per trasferimenti, rimborsi, transazioni pianificate o suddivise per categoria.",
-    "inPaymentNotAllowed": "Questa transazione fa parte di un pagamento da più conti. Rimuoverla prima dal pagamento.",
-    "paymentLegInvalidAccount": "Ogni nuova parte deve trovarsi su un altro dei propri conti manuali.",
-    "paymentLegDuplicateAccount": "Ogni nuova parte deve trovarsi su un conto diverso.",
-    "paymentLegEditThroughMain": "Questa è una parte di un pagamento da più conti. Modificare invece la transazione principale.",
-    "paymentAmountRequired": "Inserire l'importo nella valuta della transazione principale per ogni parte in una valuta diversa.",
-    "paymentLinkNotAllowed": "Questa transazione non può essere collegata al pagamento. Possono essere collegate solo entrate o uscite proprie dello stesso tipo, non trasferimenti, rimborsi, suddivisioni, transazioni in sospeso o parti di un altro pagamento.",
-    "paymentLinkedAmountFixed": "L'importo di una transazione collegata non può essere modificato.",
-    "paymentLinkedTypeMismatch": "Le transazioni collegate devono avere lo stesso tipo del pagamento. Scollegarle prima.",
-    "refunds": {
-      "wholeLinkWithPartials": "Un collegamento di rimborso totale non può essere combinato con collegamenti parziali",
-      "externalLinkWithOthers": "Un rimborso per un acquisto esterno all'app non può essere combinato con altri collegamenti di rimborso",
-      "externalLinkWithAmount": "Un rimborso di una transazione esterna all'app non può avere un importo parziale: copre sempre l'intero rimborso.",
-      "totalExceedsRefund": "Il totale degli importi dei collegamenti di rimborso non può superare l'importo della transazione di rimborso",
-      "totalExceedsSplit": "L'importo totale del rimborso non può superare l'importo della suddivisione",
-      "totalExceedsOriginal": "L'importo totale del rimborso non può superare l'importo della transazione originale",
-      "refundOfRefund": "Impossibile rimborsare una transazione di \"rimborso\"",
-      "duplicateLink": "Questo rimborso è già collegato a quella transazione"
-    },
     "trash": {
       "paymentNotTrashable": "Rimuoverla dal pagamento prima di eliminarla.",
       "portfolioNotTrashable": "Scollegarla dal portafoglio prima di eliminarla.",
       "ventureNotTrashable": "Scollegarla dal venture capital prima di eliminarla.",
       "accountTypeChanged": "Impossibile ripristinare questa transazione perché il tipo di conto è cambiato.",
       "loanPaymentLegMissing": "Impossibile ripristinare questo pagamento del prestito perché l'altro lato è stato eliminato."
+    },
+    "refundExceedsOriginal": "L'importo totale del rimborso non può essere maggiore dell'importo della transazione originale."
+  },
+  "budgets": {
+    "budgetNotFound": "Tracker non trovato",
+    "lineNotFound": "Voce del tracker non trovata",
+    "onlyOwnerCanDuplicate": "Solo il proprietario può duplicare questo tracker",
+    "someTransactionIdsInvalid": "Alcuni ID di transazione non sono validi",
+    "transactionsAddedSuccessfully": "Transazioni aggiunte correttamente",
+    "someCategoryIdsInvalid": "Alcuni ID di categoria non sono validi o non esistono",
+    "startDateAfterEndDate": "La data di inizio deve essere uguale o precedente alla data di fine",
+    "rulesNeedCategoryOrTag": "Scegliere almeno una categoria o un'etichetta per aggiungere transazioni automaticamente.",
+    "smartTracking": {
+      "ownerOnly": "Solo il proprietario del tracker può modificare il monitoraggio intelligente.",
+      "descriptionRequired": "Descrivere lo scopo di questo tracker per attivare il monitoraggio intelligente.",
+      "startDateRequired": "Impostare una data di inizio per attivare il monitoraggio intelligente.",
+      "scanRunning": "L'abbinamento è in corso per questo tracker. Riprovare al termine.",
+      "suggestionNotFound": "Suggerimento non trovato.",
+      "suggestionAlreadyResolved": "Questo suggerimento è già {{status}}."
+    }
+  },
+  "budgetPlans": {
+    "planNotFound": "Piano di budget non trovato.",
+    "activePlanExists": "Esiste già un piano di budget attivo.",
+    "baseCurrencyChanged": "La valuta di base è cambiata mentre questo piano di budget era eliminato, quindi non può più essere ripristinato.",
+    "epochInFuture": "Un piano di budget non può iniziare nel futuro.",
+    "epochTooFarBack": "Un piano di budget non può iniziare più di {{max}} periodi prima di oggi.",
+    "intervalOutOfRange": "Questo intervallo è troppo lungo per questa cadenza.",
+    "secondAnchorDayRequired": "Un piano quindicinale richiede un secondo giorno del mese.",
+    "secondAnchorDayNotAllowed": "Un secondo giorno del mese si applica solo ai piani quindicinali.",
+    "semiMonthlyDaysTooClose": "I due giorni di un piano quindicinale devono distare almeno 10 giorni.",
+    "accountNotFound": "Uno dei conti selezionati non è stato trovato.",
+    "lineNotFound": "Voce di budget non trovata.",
+    "goalNotFound": "Obiettivo di budget non trovato.",
+    "lineAlreadyArchived": "Questa voce di budget è già archiviata.",
+    "lineNotArchived": "Questa voce di budget non è archiviata.",
+    "activeFromNotPeriodStart": "La data di inizio deve corrispondere all'inizio di un periodo passato o corrente di questo piano.",
+    "effectiveFromOutsideLifetime": "La data di decorrenza deve corrispondere all'inizio di un periodo passato o corrente compreso nella durata di questa voce.",
+    "categoryNotFound": "Una delle categorie non esiste.",
+    "lineCategoriesOverlap": "Un'altra voce di questo piano copre già una di queste categorie in quel periodo.",
+    "periodNotFound": "Periodo di budget non trovato.",
+    "periodOutsideLifetime": "Questo periodo non rientra nella durata della voce di budget.",
+    "groupNotFound": "Gruppo di voci non trovato.",
+    "groupNotEmpty": "Spostare o archiviare le voci di questo gruppo prima di eliminarlo.",
+    "layoutInvalid": "Il layout deve elencare ogni gruppo del piano una sola volta e ogni voce del piano al massimo una volta.",
+    "openEndedGoalCannotSnooze": "Un obiettivo senza scadenza non può essere posticipato.",
+    "zeroSumNeedsPool": "Mantenere Da assegnare a 0 richiede un piano finanziato da un fondo comune.",
+    "suggestedGroups": {
+      "bills": "Bollette",
+      "everyday": "Spese quotidiane",
+      "life": "Stile di vita"
     }
   },
   "tags": {
@@ -192,6 +260,7 @@
     "holdingNotFoundForRecalculation": "Posizione non trovata per il ricalcolo.",
     "securityAlreadyInPortfolio": "Questo titolo è già nel portafoglio.",
     "securityNotFound": "Titolo non trovato.",
+    "securitySearchResultNotRecognized": "Il risultato della ricerca del titolo non è riconosciuto o è scaduto. Cercare di nuovo il titolo.",
     "currencyForSecurityNotFound": "Valuta del titolo non trovata.",
     "currencyNotFound": "Valuta non trovata",
     "transactionNotFound": "Transazione di investimento non trovata",
@@ -210,12 +279,6 @@
     "transactionAlreadyLinkedToVenture": "La transazione è già collegata a un'operazione di venture capital",
     "portfolioTransferNotFound": "Trasferimento di portafoglio non trovato",
     "exchangeCurrenciesMustDiffer": "Le valute del cambio devono essere diverse",
-    "contributionPurchaseRequired": "È necessario almeno un acquisto di investimento.",
-    "contributionSecurityRequired": "Ogni acquisto di investimento deve includere un titolo.",
-    "contributionExceedsCash": "Gli acquisti di investimento superano la liquidità disponibile del portafoglio in {{currencyCode}}.",
-    "contributionSourceMustBeExpense": "Solo le transazioni di spesa possono essere registrate come contributi di investimento.",
-    "contributionDeletePurchasesConfirmationRequired": "L'eliminazione di questo contributo richiede una conferma esplicita per eliminare i relativi acquisti di investimento.",
-    "securitySearchResultNotRecognized": "Il risultato della ricerca del titolo non è riconosciuto o è scaduto. Cercare di nuovo il titolo.",
     "importNoTransactionsFound": "Nessuna transazione trovata nel file.",
     "import": {
       "tokenLimitExceededSuggestion": "Dividere il caricamento in file più piccoli o usare un modello con una finestra di contesto più ampia.",
@@ -225,7 +288,15 @@
     "unrealizedLossAlert": {
       "title_one": "{{count}} posizione ha superato la soglia di perdita impostata",
       "title_other": "{{count}} posizioni hanno superato la soglia di perdita impostata"
-    }
+    },
+    "contributionPurchaseRequired": "È necessario almeno un acquisto di investimento.",
+    "contributionSecurityRequired": "Ogni acquisto di investimento deve includere un titolo.",
+    "contributionExceedsCash": "Gli acquisti di investimento superano la liquidità disponibile del portafoglio in {{currencyCode}}.",
+    "contributionSourceMustBeExpense": "Solo le transazioni di spesa possono essere registrate come contributi di investimento.",
+    "contributionDeletePurchasesConfirmationRequired": "L'eliminazione di questo contributo richiede una conferma esplicita per eliminare i relativi acquisti di investimento."
+  },
+  "landingFaq": {
+    "unavailable": "L'assistente non è disponibile in questo momento. Riprovare più tardi o scrivere a support@moneymatter.app."
   },
   "loans": {
     "loanNotFound": "Prestito non trovato.",
@@ -252,8 +323,9 @@
     "providerTypeMismatch": "La connessione {{connectionId}} è per il provider {{actualType}}, non {{expectedType}}",
     "providerAlreadyRegistered": "Il provider {{providerType}} è già registrato. Impossibile registrare provider duplicati.",
     "providerNotRegistered": "Il provider {{providerType}} non è registrato. Provider disponibili: {{available}}",
-    "missingRequiredProviders": "Mancano i fornitori di dati bancari obbligatori: {{missing}}. Assicurati che siano registrati all'avvio dell'app.",
-    "unexpected": "Errore imprevisto."
+    "unexpected": "Errore imprevisto.",
+    "clientUpdateRequired": "Questa versione dell'app non è più supportata. Aggiornarla dall'App Store.",
+    "missingRequiredProviders": "Mancano i fornitori di dati bancari obbligatori: {{missing}}. Assicurati che siano registrati all'avvio dell'app."
   },
   "validation": {
     "dateInvalid": "\"date\" non è una data valida."
@@ -273,6 +345,8 @@
     "failedToFetchBanks": "Impossibile recuperare l'elenco delle banche. Verificare le credenziali e il codice paese.",
     "failedToFetchCountries": "Impossibile recuperare l'elenco dei paesi. Verificare le credenziali.",
     "accountNotLinkedToConnection": "Conto non trovato o non collegato a questa connessione",
+    "accountAlreadyConnectedToAnotherConnection": "Il conto \"{{account}}\" è già collegato tramite \"{{connection}}\". Scollegarlo prima da lì.",
+    "accountBalanceUnavailable": "Impossibile ottenere dalla banca il saldo attuale di {{account}}. Riprovare tra qualche minuto.",
     "cannotLoadBeforeLinkDate": "Impossibile caricare transazioni precedenti alla data di collegamento del conto ({{linkedAt}}). Il conto è stato collegato con la strategia \"forward-only\" per evitare la duplicazione dei dati.",
     "dateRangeExceedsLimit": "L'intervallo di date non può superare 1 anno.",
     "fromAfterTo": "La data \"from\" deve essere precedente alla data \"to\"",
@@ -287,7 +361,9 @@
     "transactionsAllDuplicates": "Trovate {{count}} transazioni per questo periodo, già tutte importate.",
     "transactionsNoneInPeriod": "Il fornitore di dati non ha restituito transazioni per questo periodo.",
     "apiError": "Errore API di {{provider}}: {{message}}",
+    "simplefinUnreachable": "SimpleFIN è temporaneamente irraggiungibile. Riprovare più tardi.",
     "currencySelectionRequired": "La banca non ha indicato una valuta per il conto \"{{account}}\": sceglierne una prima di collegarlo.",
+    "providerNotAvailable": "Questo provider bancario non è disponibile per nuove connessioni.",
     "monobank": {
       "invalidCredentialsFormat": "Formato delle credenziali Monobank non valido",
       "invalidApiToken": "Token API di Monobank non valido",
@@ -323,6 +399,14 @@
       "accountNoExternalId": "Il conto non ha un ID esterno per la sincronizzazione con LunchFlow.",
       "accountNotFound": "Conto LunchFlow non trovato."
     },
+    "akahu": {
+      "invalidCredentialsFormat": "Formato delle credenziali Akahu non valido. Sono obbligatori lo User Access Token e l'App ID Token.",
+      "invalidTokens": "Token Akahu non validi. Verificare lo User Access Token e l'App ID Token nella pagina dell'app Akahu.",
+      "accountNoExternalId": "Il conto non ha un ID esterno per la sincronizzazione con Akahu.",
+      "accountNotFound": "Conto Akahu non trovato.",
+      "rateLimited": "Akahu sta limitando le richieste in questo momento. Riprovare a breve.",
+      "missingCurrency": "Akahu non ha restituito una valuta per questo conto."
+    },
     "simplefin": {
       "invalidCredentialsFormat": "Formato delle credenziali SimpleFIN non valido.",
       "invalidSetupToken": "Token di configurazione SimpleFIN non valido o già utilizzato. Generarne uno nuovo da SimpleFIN Bridge e riprovare.",
@@ -338,17 +422,6 @@
       "invalidApiKey": "Chiave API o chiave privata di Walutomat non valida.",
       "accountNoExternalId": "Il conto Walutomat non ha un ID esterno.",
       "walletNotFound": "Portafoglio Walutomat non trovato per la valuta: {{currency}}"
-    },
-    "accountAlreadyConnectedToAnotherConnection": "Il conto \"{{account}}\" è già collegato tramite \"{{connection}}\". Scollegarlo prima da lì.",
-    "providerNotAvailable": "Questo provider bancario non è disponibile per nuove connessioni.",
-    "simplefinUnreachable": "SimpleFIN è temporaneamente irraggiungibile. Riprovare più tardi.",
-    "akahu": {
-      "invalidCredentialsFormat": "Formato delle credenziali Akahu non valido. Sono obbligatori lo User Access Token e l'App ID Token.",
-      "invalidTokens": "Token Akahu non validi. Verificare lo User Access Token e l'App ID Token nella pagina dell'app Akahu.",
-      "accountNoExternalId": "Il conto non ha un ID esterno per la sincronizzazione con Akahu.",
-      "accountNotFound": "Conto Akahu non trovato.",
-      "rateLimited": "Akahu sta limitando le richieste in questo momento. Riprovare a breve.",
-      "missingCurrency": "Akahu non ha restituito una valuta per questo conto."
     }
   },
   "csvImport": {
@@ -382,10 +455,137 @@
     "transactionTypeValuesNotCovered": "La colonna del tipo di transazione contiene valori non presenti negli elenchi entrate/uscite: {{uncovered}}. Valori trovati: {{found}}",
     "selectedAccountNotFound": "Il conto selezionato non è stato trovato o non appartiene all'utente.",
     "selectedCategoryNotFound": "La categoria selezionata non è stata trovata o non appartiene all'utente.",
-    "linkedAccountCurrencyMismatch": "Per collegare un conto esistente le valute devono coincidere: {{mismatches}}. Collegare un conto con la stessa valuta o crearne uno nuovo."
+    "linkedAccountCurrencyMismatch": "Per collegare un conto esistente le valute devono coincidere: {{mismatches}}. Collegare un conto con la stessa valuta o crearne uno nuovo.",
+    "bankLinkChangedSinceReview": "Il collegamento bancario di un conto in questa importazione è cambiato dopo la revisione. Tornare al passaggio di revisione ed eseguirlo di nuovo."
+  },
+  "ofxImport": {
+    "noFileUploaded": "Nessun file caricato. Inviare il file OFX o QFX come corpo grezzo della richiesta.",
+    "errors": {
+      "emptyFile": "Il file OFX è vuoto.",
+      "xmlDeclarationIncomplete": "La dichiarazione XML del file OFX è incompleta.",
+      "headerMissing": "L'intestazione OFX è mancante o troppo grande.",
+      "headerFieldMissing": "Manca il campo {{field}} dell'intestazione OFX.",
+      "invalidVersion": "La versione OFX non è valida.",
+      "unsupportedData": "Il tipo di dati OFX {{data}} non è supportato.",
+      "compressedFile": "I file OFX compressi non sono supportati.",
+      "prohibitedDeclaration": "Le dichiarazioni DTD ed entità OFX non sono supportate.",
+      "markupIncomplete": "Il markup OFX è incompleto.",
+      "tagsMismatch": "I tag XML del file OFX non corrispondono.",
+      "unclosedTags": "L'XML del file OFX contiene tag non chiusi.",
+      "missingRoot": "Manca l'elemento radice OFX.",
+      "malformedOfx": "Impossibile analizzare il documento OFX.",
+      "unsupportedEncoding": "La codifica OFX {{encoding}}/{{charset}} non è supportata.",
+      "fileTooLarge": "Il file OFX supera i 10 MB.",
+      "emptyBody": "Il file OFX non ha un corpo.",
+      "invalidDate": "Data OFX non valida: {{value}}",
+      "invalidAmount": "Importo OFX non valido: {{value}}",
+      "textTooLong": "Il valore OFX {{field}} supera {{max}} caratteri.",
+      "unsupportedMessageSet": "Il file non contiene estratti conto bancari o di carte di credito supportati.",
+      "missingAccount": "Manca la sezione {{tag}}.",
+      "missingAccountId": "Manca l'ID del conto di origine.",
+      "correctionRecord": "I record di correzione OFX non sono supportati.",
+      "missingAmount": "Manca l'importo di una transazione OFX.",
+      "missingDate": "Manca la data di una transazione OFX.",
+      "invalidCurrency": "La valuta dell'estratto conto è mancante o non valida.",
+      "rowLimit": "Il file OFX contiene più di {{max}} transazioni.",
+      "conflictingFitid": "Un FITID ripetuto ha dati di transazione in conflitto."
+    },
+    "uploadUnavailable": "Questo caricamento OFX non è più disponibile. Caricare di nuovo il file.",
+    "importInProgress": "È già in corso un'importazione per questo file.",
+    "missingAccountMapping": "Corrispondenza del conto mancante per: {{accounts}}",
+    "accountCurrencyMismatch": "Il conto {{account}} deve usare {{currency}}.",
+    "linkedAccountNotFound": "Conto collegato per {{account}} non trovato.",
+    "crossCurrencyLink": "Il conto {{account}} non può essere collegato tra valute diverse."
+  },
+  "importExport": {
+    "batchDeleteBankLinkedAccount": "Questa importazione non può più essere annullata perché il conto è ora collegato a una banca. Eliminare queste transazioni potrebbe alterare il saldo sincronizzato.",
+    "batchDeleteLinkedLoanTransfer": "Questa importazione è collegata al pagamento di un prestito e non può essere annullata da sola. Attivare \"elimina anche le transazioni di trasferimento collegate\" per rimuoverla.",
+    "batchDeleteInProgress": "È già in corso l'eliminazione di un'importazione. Attenderne il termine prima di avviarne un'altra.",
+    "batchDeleteImportStillRunning": "Questa importazione è ancora in corso. Attenderne il termine prima di annullarla.",
+    "importIntoBankLinkedAccount": "Il conto \"{{accountName}}\" è collegato a una banca, quindi non è possibile importarvi transazioni. Scegliere un altro conto o crearne uno nuovo.",
+    "statementImportInProgress": "È già in corso l'importazione di un estratto conto. Attenderne il termine prima di avviarne un'altra.",
+    "importInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto questa importazione. Le transazioni già salvate sono state mantenute. Eliminare questa importazione in \"Cronologia importazioni\" prima di importare di nuovo il file, altrimenti verranno duplicate.",
+    "categoryNameTooLong": "Il nome della categoria \"{{name}}\" è troppo lungo ({{length}} caratteri); il massimo è {{max}}.",
+    "payeeNameTooLong": "Il nome del beneficiario \"{{name}}\" è troppo lungo ({{length}} caratteri); il massimo è {{max}}.",
+    "categoryIdNotFound": "Categoria con ID {{id}} non trovata",
+    "tagIdNotFound": "Etichetta con ID {{id}} non trovata",
+    "accountIdNotFound": "Conto con ID {{id}} non trovato",
+    "newAccountCurrencyUnknown": "Impossibile determinare la valuta del nuovo conto \"{{accountName}}\"",
+    "accountCreateFailed": "Creazione del conto \"{{accountName}}\" non riuscita.",
+    "accountMappingMissing": "Nessuna corrispondenza trovata per il conto \"{{accountName}}\"",
+    "aiUnparseableResponse": "Impossibile interpretare la risposta dell'IA. L'output non era nel formato previsto.",
+    "aiTemporarilyUnavailable": "Provider IA temporaneamente non disponibile. Riprovare più tardi.",
+    "aiRateLimited": "Raggiunto il limite di richieste del provider IA. Riprovare tra qualche minuto.",
+    "aiExtractionFailed": "Estrazione IA non riuscita. Riprovare.",
+    "ynab": {
+      "importAlreadyInProgress": "È già in corso un'importazione da YNAB. Attenderne il termine prima di avviarne un'altra.",
+      "parse": {
+        "fileEmpty": "Il file Register.csv di YNAB è vuoto.",
+        "unparseable": "Impossibile analizzare il file Register.csv di YNAB come file CSV.",
+        "noTransactions": "Il file Register.csv di YNAB non contiene transazioni.",
+        "tooManyRows": "Il file Register.csv di YNAB ha {{rows}} righe; il massimo supportato è {{max}}.",
+        "missingColumns": "Nel file Register.csv di YNAB mancano colonne obbligatorie: {{columns}}. Il formato di esportazione potrebbe essere cambiato.",
+        "mixedDateOrders": "La colonna Date del file Register.csv di YNAB mescola ordini giorno/mese contraddittori: alcune righe hanno senso solo come GG/MM/AAAA e altre solo come MM/GG/AAAA. Esportare di nuovo il budget con un unico formato di data.",
+        "noUsableRows": "Nessuna riga utilizzabile nel file Register.csv di YNAB (tutte le righe sono state saltate o non sono interpretabili).",
+        "noUsableRowsWithProblem": "Nessuna riga utilizzabile nel file Register.csv di YNAB (tutte le righe sono state saltate o non sono interpretabili). Primo problema: {{problem}}"
+      },
+      "warnings": {
+        "ambiguousDateOrder": "Nessuna riga della colonna Date permette di stabilire se il giorno precede il mese o viceversa; le date sono state interpretate come MM/GG/AAAA. Controllare alcune transazioni dopo l'importazione.",
+        "noAccount": "Riga senza Account; saltata.",
+        "unparseableDate": "Impossibile interpretare la data \"{{value}}\"; riga saltata.",
+        "unparseableOutflow": "Impossibile interpretare Outflow \"{{value}}\"; riga saltata.",
+        "unparseableInflow": "Impossibile interpretare Inflow \"{{value}}\"; riga saltata.",
+        "unknownFlag": "Valore del flag sconosciuto \"{{value}}\"; ignorato.",
+        "transferNoInflow": "Il trasferimento verso \"{{account}}\" non ha una riga di entrata corrispondente; verrà importato come uscita normale.",
+        "transferNoOutflow": "Il trasferimento da \"{{account}}\" non ha una riga di uscita corrispondente; verrà importato come entrata normale.",
+        "currencyUndetected": "Impossibile rilevare la valuta del conto \"{{account}}\"; sceglierne una nell'anteprima."
+      }
+    },
+    "budgetBakersWallet": {
+      "parse": {
+        "fileEmpty": "Il CSV di Wallet è vuoto.",
+        "unparseable": "Impossibile analizzare il CSV di Wallet come file CSV.",
+        "noTransactions": "Il CSV di Wallet non contiene transazioni.",
+        "tooManyRows": "Il CSV di Wallet ha {{rows}} righe; il massimo supportato è {{max}}.",
+        "missingColumns": "Nel CSV di Wallet mancano colonne obbligatorie: {{columns}}. Il formato di esportazione potrebbe essere cambiato.",
+        "unsupportedLanguage": "Impossibile riconoscere i valori del tipo di transazione (entrata/uscita) in questa esportazione di Wallet. Al momento sono supportate solo esportazioni in inglese e spagnolo. Per richiedere un'altra lingua usare la roadmap: {{url}}",
+        "noUsableRows": "Nessuna riga utilizzabile nel CSV di Wallet (tutte le righe sono state saltate o non sono interpretabili)."
+      },
+      "warnings": {
+        "noAccount": "Riga senza conto; saltata.",
+        "unparseableDate": "Impossibile interpretare la data \"{{value}}\"; riga saltata.",
+        "unparseableAmount": "Impossibile interpretare l'importo \"{{value}}\"; riga saltata.",
+        "unparseableRefAmount": "Impossibile interpretare ref_currency_amount \"{{value}}\"; riga saltata.",
+        "unknownType": "Tipo sconosciuto \"{{value}}\"; riga saltata.",
+        "transferNoIncome": "L'uscita di trasferimento da \"{{account}}\" del {{date}} non ha un'entrata corrispondente; importata come trasferimento fuori dai conti.",
+        "transferNoExpense": "L'entrata di trasferimento su \"{{account}}\" del {{date}} non ha un'uscita corrispondente; importata come trasferimento fuori dai conti."
+      }
+    },
+    "msMoney": {
+      "notMsMoneyFile": "Questo file non è un database di Microsoft Money. È previsto un file .mny salvato da Microsoft Money.",
+      "incorrectPassword": "Password errata per questo file di Microsoft Money.",
+      "passwordRequired": "Questo file di Microsoft Money è protetto da password. Inserire la password per continuare.",
+      "unreadableFile": "Impossibile leggere questo file di Microsoft Money: potrebbe essere danneggiato o salvato da una versione non supportata.",
+      "missingTables": "In questo file di Microsoft Money mancano le tabelle dei conti o delle transazioni: potrebbe essere danneggiato o salvato da una versione non supportata.",
+      "noFileUploaded": "Nessun file caricato. Inviare il file .mny come corpo grezzo della richiesta.",
+      "invalidPasswordHeader": "La password del file fornita non è valida.",
+      "warnings": {
+        "accountTypeUnsupported": "I conti di investimento e di prestito sono stati saltati. Gli investimenti appartengono ai portafogli, mentre i prestiti usano un flusso dedicato che non accetta transazioni importate.",
+        "accountCurrencyDefaulted": "Per alcuni conti il file non indica una valuta riconoscibile, quindi viene usata la valuta di base. Se non è corretta, sceglierne un'altra nel passaggio dei conti.",
+        "accountNameMissing": "Alcuni conti non hanno un nome in questo file e vengono importati come \"Conto <numero>\". Rinominarli dopo l'importazione.",
+        "accountNameDuplicated": "Diversi conti hanno lo stesso nome in questo file. I duplicati vengono numerati, ad esempio \"Risparmi (2)\", così restano conti separati.",
+        "transferCounterpartNotImported": "Alcuni trasferimenti hanno spostato denaro verso un conto non incluso in questa importazione. Quelle righe vengono importate come trasferimenti in uscita dai conti monitorati.",
+        "rowLimitReached": "Questo file contiene più di {{max}} transazioni. Le righe in eccesso non sono state importate.",
+        "rowMissingDate": "Alcune righe non avevano una data leggibile e sono state saltate.",
+        "rowAmountUnreadable": "Alcune righe non avevano un importo leggibile. Sono state saltate anziché importate a zero, il che avrebbe registrato una transazione priva di movimento.",
+        "orphanRowSkipped": "Alcune transazioni facevano riferimento a un conto non più presente nel file e sono state saltate.",
+        "fileSchemaUnexpected": "Alcune parti del file non sono strutturate come le scrive di solito Microsoft Money, quindi alcuni dati non possono essere letti: {{details}}."
+      },
+      "schemaGapTableMissing": "{{table}} (mancante)",
+      "schemaGapColumnsMissing": "{{table}} (colonne mancanti: {{columns}})"
+    }
   },
   "statementParser": {
-    "invalidFile": "File non valido.",
     "imageTooLarge": "L'immagine supera 3,75 MB. Caricare un'immagine più piccola o a risoluzione inferiore.",
     "textExtractionFailed": "Questo PDF non contiene testo leggibile, probabilmente perché è una scansione. Caricare invece screenshot o foto delle pagine (JPG, PNG o WebP).",
     "failedToExtractText": "Impossibile estrarre il testo dal file.",
@@ -402,7 +602,8 @@
     "allRowsDropped_one": "Il modello ha restituito {{count}} riga, ma senza una data leggibile e un importo positivo. Riprovare l'estrazione o passare a un altro modello.",
     "allRowsDropped_other": "Il modello ha restituito {{count}} righe, ma nessuna aveva sia una data leggibile sia un importo positivo. Riprovare l'estrazione o passare a un altro modello.",
     "tokenLimitExceeded": "Il file è troppo grande per il modello selezionato ({{modelName}}). Stimati {{estimatedTokens, number}} token, ma il limite è di {{maxTokens, number}} token.",
-    "tokenLimitExceededSuggestion": "Usare un file più piccolo o dividere l'estratto conto in più parti. Consigliati estratti conto con al massimo ~{{maxTransactions, number}} transazioni."
+    "tokenLimitExceededSuggestion": "Usare un file più piccolo o dividere l'estratto conto in più parti. Consigliati estratti conto con al massimo ~{{maxTransactions, number}} transazioni.",
+    "invalidFile": "File non valido."
   },
   "currencies": {
     "notSupportedForBaseCurrency": "Non è possibile impostare {{currency}} come valuta di base. Valute supportate: {{supportedCurrencies}}.",
@@ -410,6 +611,7 @@
     "noBaseCurrency": "L'utente non ha impostato una valuta di base",
     "alreadyBaseCurrency": "La valuta selezionata è già la valuta di base",
     "baseCurrencyLockedByShares": "Impossibile cambiare la valuta di base finché sono presenti risorse condivise attive. Revocarle o abbandonarle prima.",
+    "baseCurrencyLockedByBudgetPlan": "Impossibile cambiare la valuta di base finché è attivo un piano di budget. Eliminare prima il piano.",
     "baseCurrencyLockedByHousehold": "Impossibile cambiare la valuta di base durante l'appartenenza a un nucleo familiare attivo. Revocare o abbandonare prima l'adesione al nucleo familiare.",
     "baseCurrencyChangeInProgress": "Cambio della valuta di base in corso. Attenderne il completamento.",
     "baseCurrencyChangeSyncInProgress": "Una sincronizzazione bancaria è ancora in corso. Riprovare a cambiare la valuta di base tra qualche minuto.",
@@ -418,8 +620,7 @@
     "cannotFindForRefAmount": "Impossibile trovare la valuta per calcolare l'importo di riferimento.",
     "cannotCalculateRefAmount": "Impossibile calcolare l'importo di riferimento",
     "currencyNotConnected": "La valuta richiesta non è collegata",
-    "exchangeRateNotAvailable": "Tasso di cambio non disponibile per {{baseCode}}/{{quoteCode}} in data {{date}}",
-    "baseCurrencyLockedByBudgetPlan": "Impossibile cambiare la valuta di base finché è attivo un piano di budget. Eliminare prima il piano."
+    "exchangeRateNotAvailable": "Tasso di cambio non disponibile per {{baseCode}}/{{quoteCode}} in data {{date}}"
   },
   "userSettings": {
     "userSettingsNotFound": "Impostazioni utente non trovate"
@@ -435,25 +636,6 @@
     "currencyInUse": "{{currencyCode}} non può essere eliminata perché è ancora in uso."
   },
   "ai": {
-    "apiKeyValidationFailed": "Convalida della chiave API non riuscita.",
-    "noApiKeyForProvider": "Nessuna chiave API configurata per il fornitore: {{provider}}",
-    "customEndpointUnreachable": "Impossibile raggiungere l'endpoint. Verificare l'URL di base e che il server sia attivo e raggiungibile da internet.",
-    "customEndpointAuthFailed": "L'endpoint ha rifiutato la chiave API. Verificare che la chiave sia corretta e abbia i permessi necessari.",
-    "customEndpointModelNotFound": "L'endpoint non offre un modello chiamato \"{{model}}\".",
-    "customEndpointModelNotListed": "L'endpoint non offre \"{{model}}\". Modelli disponibili: {{available}}.",
-    "customEndpointMoreModels": "e altri {{count}}",
-    "customEndpointNotApiResponse": "Il server a questo URL ha risposto con HTTP {{status}} invece di una risposta compatibile con OpenAI. Verificare che il server sia attivo e che l'URL di base sia corretto: di solito termina con /v1.",
-    "customEndpointValidationFailed": "L'endpoint non ha restituito una risposta utilizzabile. Verificare l'URL di base, il nome del modello e la chiave API.",
-    "customEndpointMissingFields": "Sono obbligatori un URL di base e il nome di un modello.",
-    "customEndpointNameTaken": "Hai già un endpoint con questo nome.",
-    "customEndpointNameInvalidLength": "Il nome dell'endpoint deve contenere da 1 a 50 caratteri.",
-    "customEndpointNotFound": "Endpoint personalizzato non trovato.",
-    "customEndpointIdRequired": "Seleziona quale endpoint personalizzato fornisce questo modello.",
-    "customModelNameInvalidLength": "Il nome del modello deve contenere da 1 a 200 caratteri.",
-    "customEndpointLimitReached": "Puoi salvare fino a {{max}} endpoint personalizzati. Rimuovine uno prima di aggiungerne un altro.",
-    "customEndpointStoredKeyUnreadable": "Non è più possibile leggere la chiave API salvata per questo endpoint. Inseriscila nuovamente.",
-    "categorizationAlreadyRunning": "La classificazione IA è già in corso. Attenderne il termine prima di avviarne un'altra.",
-    "categorizationRateLimited": "La classificazione IA è stata avviata troppe volte di recente. Riprovare più tardi.",
     "connectionNotFound": "Modello IA non trovato.",
     "connectionNameTaken": "Esiste già un modello IA con questo nome.",
     "connectionLimitReached": "È possibile aggiungere fino a {{max}} modelli IA.",
@@ -471,7 +653,26 @@
     "connectionValidationFailed": "Il provider ha rifiutato la richiesta di prova: {{reason}}",
     "serverModelUnavailable": "Il modello MoneyMatter AI incluso non è disponibile nel piano attuale.",
     "connectionKeyNotInBackup": "La chiave API non è inclusa nei backup. Modificare questo modello e inserire di nuovo la chiave.",
-    "customInstructionsNeedConnection": "Aggiungere un modello IA in Impostazioni → IA per usare le istruzioni personalizzate."
+    "customEndpointUnreachable": "Impossibile raggiungere l'endpoint. Verificare l'URL di base e che il server sia attivo e raggiungibile da internet.",
+    "customEndpointAuthFailed": "L'endpoint ha rifiutato la chiave API. Verificare che la chiave sia corretta e abbia i permessi necessari.",
+    "customEndpointModelNotFound": "L'endpoint non offre un modello chiamato \"{{model}}\".",
+    "customEndpointModelNotListed": "L'endpoint non offre \"{{model}}\". Modelli disponibili: {{available}}.",
+    "customEndpointMoreModels": "e altri {{count}}",
+    "customEndpointNotApiResponse": "Il server a questo URL ha risposto con HTTP {{status}} invece di una risposta compatibile con OpenAI. Verificare che il server sia attivo e che l'URL di base sia corretto: di solito termina con /v1.",
+    "customEndpointValidationFailed": "L'endpoint non ha restituito una risposta utilizzabile. Verificare l'URL di base, il nome del modello e la chiave API.",
+    "categorizationAlreadyRunning": "La classificazione IA è già in corso. Attenderne il termine prima di avviarne un'altra.",
+    "categorizationRateLimited": "La classificazione IA è stata avviata troppe volte di recente. Riprovare più tardi.",
+    "customInstructionsNeedConnection": "Aggiungere un modello IA in Impostazioni → IA per usare le istruzioni personalizzate.",
+    "apiKeyValidationFailed": "Convalida della chiave API non riuscita.",
+    "noApiKeyForProvider": "Nessuna chiave API configurata per il fornitore: {{provider}}",
+    "customEndpointMissingFields": "Sono obbligatori un URL di base e il nome di un modello.",
+    "customEndpointNameTaken": "Hai già un endpoint con questo nome.",
+    "customEndpointNameInvalidLength": "Il nome dell'endpoint deve contenere da 1 a 50 caratteri.",
+    "customEndpointNotFound": "Endpoint personalizzato non trovato.",
+    "customEndpointIdRequired": "Seleziona quale endpoint personalizzato fornisce questo modello.",
+    "customModelNameInvalidLength": "Il nome del modello deve contenere da 1 a 200 caratteri.",
+    "customEndpointLimitReached": "Puoi salvare fino a {{max}} endpoint personalizzati. Rimuovine uno prima di aggiungerne un altro.",
+    "customEndpointStoredKeyUnreadable": "Non è più possibile leggere la chiave API salvata per questo endpoint. Inseriscila nuovamente."
   },
   "middleware": {
     "tooManyRequests": "Troppe richieste. Riprovare più tardi."
@@ -504,10 +705,10 @@
         "home-garden": "Casa e giardino",
         "pets-animals": "Animali domestici",
         "electronics-accessories": "Elettronica e accessori",
-        "gifts-joy": "Regali e divertimento",
         "stationery-tools": "Ferramenta & Dotazioni Funzionali",
         "free-time": "Tempo libero",
-        "drugstore-chemist": "Profumeria e farmacia"
+        "drugstore-chemist": "Profumeria e farmacia",
+        "gifts-joy": "Regali e divertimento"
       },
       "housing": {
         "rent": "Affitto",
@@ -543,9 +744,9 @@
         "holiday-trips-hotels": "Vacanze, viaggi e hotel",
         "gifts": "Regali",
         "charity": "Beneficenza",
-        "charity-gifts": "Beneficenza e regali",
         "alcohol-tobacco": "Alcol e tabacco",
-        "lottery-gambling": "Lotteria e gioco d'azzardo"
+        "lottery-gambling": "Lotteria e gioco d'azzardo",
+        "charity-gifts": "Beneficenza e regali"
       },
       "communication": {
         "phone-cell-phone": "Telefono e cellulare",
@@ -607,6 +808,17 @@
       }
     }
   },
+  "transactionTemplates": {
+    "notFound": "Modello di transazione non trovato.",
+    "nameAlreadyExists": "Esiste già un modello di transazione con questo nome.",
+    "amountRequiresAccount": "Un importo può essere salvato solo insieme a un conto.",
+    "accountNotFound": "Conto non trovato o non appartenente all'utente.",
+    "accountMustBeSystem": "In un modello di transazione possono essere usati solo conti a gestione manuale.",
+    "accountArchived": "I conti archiviati non possono essere usati in un modello.",
+    "categoryNotFound": "Categoria non trovata o non appartenente all'utente.",
+    "payeeNotFound": "Beneficiario non trovato o non appartenente all'utente.",
+    "tagsNotFound": "Una o più etichette non sono state trovate o non appartengono all'utente."
+  },
   "payees": {
     "aliasNameRequired": "Il nome dell'alias è obbligatorio",
     "aliasNotFound": "Alias non trovato",
@@ -625,9 +837,14 @@
     "renameCollision": "Un altro beneficiario usa già questo nome: unirli"
   },
   "brandLogos": {
-    "domainAndInitialsExclusive": "Non puoi impostare contemporaneamente un logo del marchio e lettere personalizzate.",
     "colorRequiresInitials": "Un colore di sfondo richiede lettere o un'icona.",
-    "slotsExclusive": "Scegliere un solo tipo di logo: marchio, lettere, icona o immagine."
+    "slotsExclusive": "Scegliere un solo tipo di logo: marchio, lettere, icona o immagine.",
+    "domainAndInitialsExclusive": "Non puoi impostare contemporaneamente un logo del marchio e lettere personalizzate."
+  },
+  "logoImages": {
+    "invalidImage": "Il file non è un'immagine PNG, JPEG o WebP.",
+    "tooLarge": "Le immagini del logo devono pesare al massimo 50 KB.",
+    "notFound": "Immagine del logo non trovata."
   },
   "venture": {
     "dealNotFound": "Operazione di venture capital non trovata",
@@ -638,135 +855,6 @@
   },
   "stats": {
     "netWorthHistoryTooManyPoints": "Questo intervallo di date e questa granularità producono troppi punti dati. Scegliere una granularità meno fine o un intervallo più breve."
-  },
-  "categories": {
-    "notFound": "La categoria con l'ID indicato non esiste.",
-    "systemCannotBeMoved": "Le categorie di sistema non possono essere spostate.",
-    "parentNotFound": "Non esiste una categoria genitore con tale ID.",
-    "systemParentForbidden": "Le categorie di sistema non possono essere usate come genitore.",
-    "ownParent": "Una categoria non può essere genitore di se stessa.",
-    "underOwnSubcategory": "Una categoria non può essere spostata all'interno della propria sottocategoria.",
-    "nestingTooDeep": "Le categorie non possono essere nidificate più in profondità di {{max}} livelli."
-  },
-  "budgets": {
-    "budgetNotFound": "Tracker non trovato",
-    "someTransactionIdsInvalid": "Alcuni ID di transazione non sono validi",
-    "transactionsAddedSuccessfully": "Transazioni aggiunte correttamente",
-    "someCategoryIdsInvalid": "Alcuni ID di categoria non sono validi o non esistono",
-    "lineNotFound": "Voce del tracker non trovata",
-    "onlyOwnerCanDuplicate": "Solo il proprietario può duplicare questo tracker",
-    "startDateAfterEndDate": "La data di inizio deve essere uguale o precedente alla data di fine",
-    "smartTracking": {
-      "ownerOnly": "Solo il proprietario del tracker può modificare il monitoraggio intelligente.",
-      "descriptionRequired": "Descrivere lo scopo di questo tracker per attivare il monitoraggio intelligente.",
-      "startDateRequired": "Impostare una data di inizio per attivare il monitoraggio intelligente.",
-      "scanRunning": "L'abbinamento è in corso per questo tracker. Riprovare al termine.",
-      "suggestionNotFound": "Suggerimento non trovato.",
-      "suggestionAlreadyResolved": "Questo suggerimento è già {{status}}."
-    },
-    "rulesNeedCategoryOrTag": "Scegliere almeno una categoria o un'etichetta per aggiungere transazioni automaticamente."
-  },
-  "landingFaq": {
-    "unavailable": "L'assistente non è disponibile in questo momento. Riprovare più tardi o scrivere a support@moneymatter.app."
-  },
-  "importExport": {
-    "batchDeleteBankLinkedAccount": "Questa importazione non può più essere annullata perché il conto è ora collegato a una banca. Eliminare queste transazioni potrebbe alterare il saldo sincronizzato.",
-    "batchDeleteLinkedLoanTransfer": "Questa importazione è collegata al pagamento di un prestito e non può essere annullata da sola. Attivare \"elimina anche le transazioni di trasferimento collegate\" per rimuoverla.",
-    "batchDeleteInProgress": "È già in corso l'eliminazione di un'importazione. Attenderne il termine prima di avviarne un'altra.",
-    "statementImportInProgress": "È già in corso l'importazione di un estratto conto. Attenderne il termine prima di avviarne un'altra.",
-    "importInterruptedByServerUpdate": "Un aggiornamento del server ha interrotto questa importazione. Le transazioni già salvate sono state mantenute. Eliminare questa importazione in \"Cronologia importazioni\" prima di importare di nuovo il file, altrimenti verranno duplicate.",
-    "batchDeleteImportStillRunning": "Questa importazione è ancora in corso. Attenderne il termine prima di annullarla.",
-    "importIntoBankLinkedAccount": "Il conto \"{{accountName}}\" è collegato a una banca, quindi non è possibile importarvi transazioni. Scegliere un altro conto o crearne uno nuovo.",
-    "categoryNameTooLong": "Il nome della categoria \"{{name}}\" è troppo lungo ({{length}} caratteri); il massimo è {{max}}.",
-    "payeeNameTooLong": "Il nome del beneficiario \"{{name}}\" è troppo lungo ({{length}} caratteri); il massimo è {{max}}.",
-    "categoryIdNotFound": "Categoria con ID {{id}} non trovata",
-    "tagIdNotFound": "Etichetta con ID {{id}} non trovata",
-    "accountIdNotFound": "Conto con ID {{id}} non trovato",
-    "newAccountCurrencyUnknown": "Impossibile determinare la valuta del nuovo conto \"{{accountName}}\"",
-    "accountCreateFailed": "Creazione del conto \"{{accountName}}\" non riuscita.",
-    "accountMappingMissing": "Nessuna corrispondenza trovata per il conto \"{{accountName}}\"",
-    "aiUnparseableResponse": "Impossibile interpretare la risposta dell'IA. L'output non era nel formato previsto.",
-    "aiTemporarilyUnavailable": "Provider IA temporaneamente non disponibile. Riprovare più tardi.",
-    "aiRateLimited": "Raggiunto il limite di richieste del provider IA. Riprovare tra qualche minuto.",
-    "aiExtractionFailed": "Estrazione IA non riuscita. Riprovare.",
-    "ynab": {
-      "parse": {
-        "fileEmpty": "Il file Register.csv di YNAB è vuoto.",
-        "unparseable": "Impossibile analizzare il file Register.csv di YNAB come file CSV.",
-        "noTransactions": "Il file Register.csv di YNAB non contiene transazioni.",
-        "tooManyRows": "Il file Register.csv di YNAB ha {{rows}} righe; il massimo supportato è {{max}}.",
-        "missingColumns": "Nel file Register.csv di YNAB mancano colonne obbligatorie: {{columns}}. Il formato di esportazione potrebbe essere cambiato.",
-        "mixedDateOrders": "La colonna Date del file Register.csv di YNAB mescola ordini giorno/mese contraddittori: alcune righe hanno senso solo come GG/MM/AAAA e altre solo come MM/GG/AAAA. Esportare di nuovo il budget con un unico formato di data.",
-        "noUsableRows": "Nessuna riga utilizzabile nel file Register.csv di YNAB (tutte le righe sono state saltate o non sono interpretabili).",
-        "noUsableRowsWithProblem": "Nessuna riga utilizzabile nel file Register.csv di YNAB (tutte le righe sono state saltate o non sono interpretabili). Primo problema: {{problem}}"
-      },
-      "warnings": {
-        "ambiguousDateOrder": "Nessuna riga della colonna Date permette di stabilire se il giorno precede il mese o viceversa; le date sono state interpretate come MM/GG/AAAA. Controllare alcune transazioni dopo l'importazione.",
-        "noAccount": "Riga senza Account; saltata.",
-        "unparseableDate": "Impossibile interpretare la data \"{{value}}\"; riga saltata.",
-        "unparseableOutflow": "Impossibile interpretare Outflow \"{{value}}\"; riga saltata.",
-        "unparseableInflow": "Impossibile interpretare Inflow \"{{value}}\"; riga saltata.",
-        "unknownFlag": "Valore del flag sconosciuto \"{{value}}\"; ignorato.",
-        "transferNoInflow": "Il trasferimento verso \"{{account}}\" non ha una riga di entrata corrispondente; verrà importato come uscita normale.",
-        "transferNoOutflow": "Il trasferimento da \"{{account}}\" non ha una riga di uscita corrispondente; verrà importato come entrata normale.",
-        "currencyUndetected": "Impossibile rilevare la valuta del conto \"{{account}}\"; sceglierne una nell'anteprima."
-      },
-      "importAlreadyInProgress": "È già in corso un'importazione da YNAB. Attenderne il termine prima di avviarne un'altra."
-    },
-    "budgetBakersWallet": {
-      "parse": {
-        "fileEmpty": "Il CSV di Wallet è vuoto.",
-        "unparseable": "Impossibile analizzare il CSV di Wallet come file CSV.",
-        "noTransactions": "Il CSV di Wallet non contiene transazioni.",
-        "tooManyRows": "Il CSV di Wallet ha {{rows}} righe; il massimo supportato è {{max}}.",
-        "missingColumns": "Nel CSV di Wallet mancano colonne obbligatorie: {{columns}}. Il formato di esportazione potrebbe essere cambiato.",
-        "unsupportedLanguage": "Impossibile riconoscere i valori del tipo di transazione (entrata/uscita) in questa esportazione di Wallet. Al momento sono supportate solo esportazioni in inglese e spagnolo. Per richiedere un'altra lingua usare la roadmap: {{url}}",
-        "noUsableRows": "Nessuna riga utilizzabile nel CSV di Wallet (tutte le righe sono state saltate o non sono interpretabili)."
-      },
-      "warnings": {
-        "noAccount": "Riga senza conto; saltata.",
-        "unparseableDate": "Impossibile interpretare la data \"{{value}}\"; riga saltata.",
-        "unparseableAmount": "Impossibile interpretare l'importo \"{{value}}\"; riga saltata.",
-        "unparseableRefAmount": "Impossibile interpretare ref_currency_amount \"{{value}}\"; riga saltata.",
-        "unknownType": "Tipo sconosciuto \"{{value}}\"; riga saltata.",
-        "transferNoIncome": "L'uscita di trasferimento da \"{{account}}\" del {{date}} non ha un'entrata corrispondente; importata come trasferimento fuori dai conti.",
-        "transferNoExpense": "L'entrata di trasferimento su \"{{account}}\" del {{date}} non ha un'uscita corrispondente; importata come trasferimento fuori dai conti."
-      }
-    },
-    "msMoney": {
-      "notMsMoneyFile": "Questo file non è un database di Microsoft Money. È previsto un file .mny salvato da Microsoft Money.",
-      "incorrectPassword": "Password errata per questo file di Microsoft Money.",
-      "passwordRequired": "Questo file di Microsoft Money è protetto da password. Inserire la password per continuare.",
-      "unreadableFile": "Impossibile leggere questo file di Microsoft Money: potrebbe essere danneggiato o salvato da una versione non supportata.",
-      "missingTables": "In questo file di Microsoft Money mancano le tabelle dei conti o delle transazioni: potrebbe essere danneggiato o salvato da una versione non supportata.",
-      "noFileUploaded": "Nessun file caricato. Inviare il file .mny come corpo grezzo della richiesta.",
-      "invalidPasswordHeader": "La password del file fornita non è valida.",
-      "warnings": {
-        "accountTypeUnsupported": "I conti di investimento e di prestito sono stati saltati. Gli investimenti appartengono ai portafogli, mentre i prestiti usano un flusso dedicato che non accetta transazioni importate.",
-        "accountCurrencyDefaulted": "Per alcuni conti il file non indica una valuta riconoscibile, quindi viene usata la valuta di base. Se non è corretta, sceglierne un'altra nel passaggio dei conti.",
-        "accountNameMissing": "Alcuni conti non hanno un nome in questo file e vengono importati come \"Conto <numero>\". Rinominarli dopo l'importazione.",
-        "accountNameDuplicated": "Diversi conti hanno lo stesso nome in questo file. I duplicati vengono numerati, ad esempio \"Risparmi (2)\", così restano conti separati.",
-        "transferCounterpartNotImported": "Alcuni trasferimenti hanno spostato denaro verso un conto non incluso in questa importazione. Quelle righe vengono importate come trasferimenti in uscita dai conti monitorati.",
-        "rowLimitReached": "Questo file contiene più di {{max}} transazioni. Le righe in eccesso non sono state importate.",
-        "rowMissingDate": "Alcune righe non avevano una data leggibile e sono state saltate.",
-        "rowAmountUnreadable": "Alcune righe non avevano un importo leggibile. Sono state saltate anziché importate a zero, il che avrebbe registrato una transazione priva di movimento.",
-        "orphanRowSkipped": "Alcune transazioni facevano riferimento a un conto non più presente nel file e sono state saltate.",
-        "fileSchemaUnexpected": "Alcune parti del file non sono strutturate come le scrive di solito Microsoft Money, quindi alcuni dati non possono essere letti: {{details}}."
-      },
-      "schemaGapTableMissing": "{{table}} (mancante)",
-      "schemaGapColumnsMissing": "{{table}} (colonne mancanti: {{columns}})"
-    }
-  },
-  "transactionTemplates": {
-    "notFound": "Modello di transazione non trovato.",
-    "nameAlreadyExists": "Esiste già un modello di transazione con questo nome.",
-    "amountRequiresAccount": "Un importo può essere salvato solo insieme a un conto.",
-    "accountNotFound": "Conto non trovato o non appartenente all'utente.",
-    "accountMustBeSystem": "In un modello di transazione possono essere usati solo conti a gestione manuale.",
-    "accountArchived": "I conti archiviati non possono essere usati in un modello.",
-    "categoryNotFound": "Categoria non trovata o non appartenente all'utente.",
-    "payeeNotFound": "Beneficiario non trovato o non appartenente all'utente.",
-    "tagsNotFound": "Una o più etichette non sono state trovate o non appartengono all'utente."
   },
   "automations": {
     "automationNotFound": "Automazione non trovata.",
@@ -790,82 +878,6 @@
     "incompleteInvoice": "Impossibile leggere fornitore, importo totale e data da questa fattura.",
     "pdfWithoutText": "Le connessioni IA personalizzate non possono ricevere file PDF direttamente, e non è stato possibile aprire questo file per convertirlo (ad esempio perché è protetto da password). Convertirlo in un'immagine (PNG o JPEG), ad esempio uno screenshot della fattura, e caricare quella.",
     "noFileUploaded": "Nessun file caricato."
-  },
-  "budgetPlans": {
-    "planNotFound": "Piano di budget non trovato.",
-    "activePlanExists": "Esiste già un piano di budget attivo.",
-    "baseCurrencyChanged": "La valuta di base è cambiata mentre questo piano di budget era eliminato, quindi non può più essere ripristinato.",
-    "epochInFuture": "Un piano di budget non può iniziare nel futuro.",
-    "epochTooFarBack": "Un piano di budget non può iniziare più di {{max}} periodi prima di oggi.",
-    "intervalOutOfRange": "Questo intervallo è troppo lungo per questa cadenza.",
-    "secondAnchorDayRequired": "Un piano quindicinale richiede un secondo giorno del mese.",
-    "secondAnchorDayNotAllowed": "Un secondo giorno del mese si applica solo ai piani quindicinali.",
-    "semiMonthlyDaysTooClose": "I due giorni di un piano quindicinale devono distare almeno 10 giorni.",
-    "accountNotFound": "Uno dei conti selezionati non è stato trovato.",
-    "lineNotFound": "Voce di budget non trovata.",
-    "goalNotFound": "Obiettivo di budget non trovato.",
-    "lineAlreadyArchived": "Questa voce di budget è già archiviata.",
-    "lineNotArchived": "Questa voce di budget non è archiviata.",
-    "activeFromNotPeriodStart": "La data di inizio deve corrispondere all'inizio di un periodo passato o corrente di questo piano.",
-    "effectiveFromOutsideLifetime": "La data di decorrenza deve corrispondere all'inizio di un periodo passato o corrente compreso nella durata di questa voce.",
-    "categoryNotFound": "Una delle categorie non esiste.",
-    "lineCategoriesOverlap": "Un'altra voce di questo piano copre già una di queste categorie in quel periodo.",
-    "periodNotFound": "Periodo di budget non trovato.",
-    "periodOutsideLifetime": "Questo periodo non rientra nella durata della voce di budget.",
-    "groupNotFound": "Gruppo di voci non trovato.",
-    "groupNotEmpty": "Spostare o archiviare le voci di questo gruppo prima di eliminarlo.",
-    "layoutInvalid": "Il layout deve elencare ogni gruppo del piano una sola volta e ogni voce del piano al massimo una volta.",
-    "openEndedGoalCannotSnooze": "Un obiettivo senza scadenza non può essere posticipato.",
-    "zeroSumNeedsPool": "Mantenere Da assegnare a 0 richiede un piano finanziato da un fondo comune.",
-    "suggestedGroups": {
-      "bills": "Bollette",
-      "everyday": "Spese quotidiane",
-      "life": "Stile di vita"
-    }
-  },
-  "ofxImport": {
-    "noFileUploaded": "Nessun file caricato. Inviare il file OFX o QFX come corpo grezzo della richiesta.",
-    "errors": {
-      "emptyFile": "Il file OFX è vuoto.",
-      "xmlDeclarationIncomplete": "La dichiarazione XML del file OFX è incompleta.",
-      "headerMissing": "L'intestazione OFX è mancante o troppo grande.",
-      "headerFieldMissing": "Manca il campo {{field}} dell'intestazione OFX.",
-      "invalidVersion": "La versione OFX non è valida.",
-      "unsupportedData": "Il tipo di dati OFX {{data}} non è supportato.",
-      "compressedFile": "I file OFX compressi non sono supportati.",
-      "prohibitedDeclaration": "Le dichiarazioni DTD ed entità OFX non sono supportate.",
-      "markupIncomplete": "Il markup OFX è incompleto.",
-      "tagsMismatch": "I tag XML del file OFX non corrispondono.",
-      "unclosedTags": "L'XML del file OFX contiene tag non chiusi.",
-      "missingRoot": "Manca l'elemento radice OFX.",
-      "malformedOfx": "Impossibile analizzare il documento OFX.",
-      "unsupportedEncoding": "La codifica OFX {{encoding}}/{{charset}} non è supportata.",
-      "fileTooLarge": "Il file OFX supera i 10 MB.",
-      "emptyBody": "Il file OFX non ha un corpo.",
-      "invalidDate": "Data OFX non valida: {{value}}",
-      "invalidAmount": "Importo OFX non valido: {{value}}",
-      "textTooLong": "Il valore OFX {{field}} supera {{max}} caratteri.",
-      "unsupportedMessageSet": "Il file non contiene estratti conto bancari o di carte di credito supportati.",
-      "missingAccount": "Manca la sezione {{tag}}.",
-      "missingAccountId": "Manca l'ID del conto di origine.",
-      "correctionRecord": "I record di correzione OFX non sono supportati.",
-      "missingAmount": "Manca l'importo di una transazione OFX.",
-      "missingDate": "Manca la data di una transazione OFX.",
-      "invalidCurrency": "La valuta dell'estratto conto è mancante o non valida.",
-      "rowLimit": "Il file OFX contiene più di {{max}} transazioni.",
-      "conflictingFitid": "Un FITID ripetuto ha dati di transazione in conflitto."
-    },
-    "uploadUnavailable": "Questo caricamento OFX non è più disponibile. Caricare di nuovo il file.",
-    "importInProgress": "È già in corso un'importazione per questo file.",
-    "missingAccountMapping": "Corrispondenza del conto mancante per: {{accounts}}",
-    "accountCurrencyMismatch": "Il conto {{account}} deve usare {{currency}}.",
-    "linkedAccountNotFound": "Conto collegato per {{account}} non trovato.",
-    "crossCurrencyLink": "Il conto {{account}} non può essere collegato tra valute diverse."
-  },
-  "logoImages": {
-    "invalidImage": "Il file non è un'immagine PNG, JPEG o WebP.",
-    "tooLarge": "Le immagini del logo devono pesare al massimo 50 KB.",
-    "notFound": "Immagine del logo non trovata."
   },
   "auth": {
     "errors": {

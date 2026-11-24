@@ -19,6 +19,7 @@ interface CreatePortfolioRequest {
   description?: string;
   /** Currency for displaying portfolio summary/stats. Null/omitted = user's base currency. */
   displayCurrencyCode?: string | null;
+  externalUrl?: string | null;
   isEnabled?: boolean;
   isManualTracking?: boolean;
 }

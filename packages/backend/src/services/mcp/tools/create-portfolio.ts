@@ -22,6 +22,7 @@ export const createPortfolioTool = defineTool({
     isManualTracking: createPortfolioBodyShape.isManualTracking.describe(
       'Track manual cash flows and end-of-day valuations; requires displayCurrencyCode and cannot change after portfolio history exists',
     ),
+    externalUrl: createPortfolioBodyShape.externalUrl.describe('Optional http(s) URL for the institution portal'),
   },
   run: async ({ userId, args }) => {
     const portfolio = await createPortfolio({
@@ -30,6 +31,7 @@ export const createPortfolioTool = defineTool({
       portfolioType: args.portfolioType,
       description: args.description ?? null,
       displayCurrencyCode: args.displayCurrencyCode,
+      externalUrl: args.externalUrl ?? null,
       isManualTracking: args.isManualTracking,
       isEnabled: args.isEnabled,
     });

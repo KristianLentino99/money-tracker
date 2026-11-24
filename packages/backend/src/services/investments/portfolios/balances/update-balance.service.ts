@@ -91,6 +91,7 @@ const updatePortfolioBalanceImpl = async ({
     amount: Money.fromDecimal(newAvailableCash),
     baseCode: currency.code,
     userId,
+    definitionOwnerUserId: userId,
     date: new Date(),
   });
 
@@ -98,6 +99,7 @@ const updatePortfolioBalanceImpl = async ({
     amount: Money.fromDecimal(newTotalCash),
     baseCode: currency.code,
     userId,
+    definitionOwnerUserId: userId,
     date: new Date(),
   });
 

@@ -12,12 +12,14 @@
     "accountNoExternalIdEnableBanking": "Účet nemá externé ID z Enable Banking",
     "accountNotFoundForTransaction": "Pre túto transakciu sa nenašiel účet",
     "deleteBlockedByLoanPayments": "Tento účet má splátky pôžičky. Pred zmazaním účtu ich zmažte alebo preraďte.",
+    "deleteBlockedByTrashedLoanPayments": "Tento účet má splátky úveru v koši. Pred odstránením účtu ich natrvalo odstráňte z koša.",
     "loanBalanceUseUpdateLoan": "Nesplatený zostatok pôžičky zmeňte na jej stránke, nie v nastaveniach účtu.",
     "loanCategoryImmutable": "Kategóriu účtu pôžičky nemožno zmeniť.",
     "dedicatedFlowCategoryNotAllowed": "Účty pôžičiek a vozidiel sa musia vytvárať cez svoje vyhradené rozhrania, nie cez všeobecné rozhranie účtov.",
     "initialBalanceOnlySystem": "Počiatočný zostatok možno zmeniť len pri manuálnych účtoch",
     "initialAndCurrentBalanceTogether": "Počiatočný zostatok a aktuálny zostatok nemožno zmeniť v rámci jednej požiadavky",
-    "deleteBlockedByTrashedLoanPayments": "Tento účet má splátky úveru v koši. Pred odstránením účtu ich natrvalo odstráňte z koša."
+    "onlySystemAccountsCanBeLinked": "K bankovému pripojeniu možno prepojiť len ručne vytvorené účty.",
+    "bankLinkImportStillRunning": "Import stále prebieha. Pred prepojením, zrušením prepojenia, archiváciou alebo odpojením bankového účtu počkajte na jeho dokončenie. Ak sa import zastavil, blokovanie sa samo zruší 3 hodiny po jeho spustení."
   },
   "balanceAdjustment": {
     "defaultNote": "Úprava zostatku",
@@ -56,6 +58,12 @@
     "cannotCreateWithParams": "Transakciu so zadanými parametrami sa nepodarilo vytvoriť",
     "idCannotBeChanged": "ID nemožno zmeniť",
     "editReadonlyFields": "Pokus o úpravu polí externého účtu, ktoré sú len na čítanie",
+    "preSeamTimeOnOrAfterLinkDay": "Ručne zadaná transakcia na účte prepojenom s bankou musí mať dátum pred {{date}}, teda pred dňom prepojenia účtu.",
+    "manualRowOnOrAfterLinkDay": "Táto transakcia má dátum od {{date}}, teda od dňa prepojenia účtu s bankou. Od tohto dňa platia záznamy banky, preto ju nemožno upraviť ani zmazať.",
+    "manualRowOnOrAfterLinkDayCreate": "Všetko od {{date}} spravuje banka, preto musí mať ručná transakcia dátum pred {{date}}.",
+    "bulkDeleteBankRowsSelected": "Transakcie synchronizované z banky a transakcie s dátumom od dňa prepojenia účtu nemožno zmazať.",
+    "oppositeLegOnBankAccount": "Druhá strana tohto prevodu je na účte prepojenom s bankou, preto tu táto zmena nie je povolená.",
+    "moveAcrossBankLinkedAccount": "Transakciu nemožno presunúť na účet prepojený s bankou ani z neho. Zmažte ju a pridajte znova na druhom účte.",
     "changeTypeNotAllowed": "Zmena „transactionType\" pri nesystémovom účte nie je povolená",
     "bothRefundFieldsNotAllowed": "Nemožno použiť súčasne „refundedByTxIds\" aj „refundsTargets\". Vyberte jedno z nich, prosím.",
     "oppositeTransactionNotFound": "Opačnú transakciu na aktualizáciu sa nepodarilo nájsť",
@@ -250,6 +258,7 @@
     "holdingNotFoundForRecalculation": "Pozícia na prepočet sa nenašla.",
     "securityAlreadyInPortfolio": "Tento cenný papier už je v portfóliu.",
     "securityNotFound": "Cenný papier sa nenašiel.",
+    "securitySearchResultNotRecognized": "Výsledok vyhľadávania cenného papiera nie je rozpoznaný, alebo vypršal. Vyhľadajte cenný papier znova.",
     "currencyForSecurityNotFound": "Mena pre cenný papier sa nenašla.",
     "currencyNotFound": "Mena sa nenašla",
     "transactionNotFound": "Investičná transakcia sa nenašla",
@@ -264,15 +273,10 @@
     "cannotDeleteHoldingWithActivePosition": "Pozíciu s aktívnym podielom nemožno zmazať. Najprv predajte alebo previeďte všetky akcie, prosím.",
     "transactionAlreadyTransfer": "Transakcia je už označená ako prevod a nemožno ju prepojiť s portfóliom.",
     "transactionAlreadyLinkedToPortfolio": "Transakcia je už prepojená s prevodom do portfólia.",
+    "linkedTransactionMustBelongToDestinationAccount": "Prepojená transakcia musí patriť do cieľového účtu.",
     "transactionAlreadyLinkedToVenture": "Transakcia je už prepojená s obchodom v rizikovom kapitáli",
     "portfolioTransferNotFound": "Prevod do portfólia sa nenašiel",
     "exchangeCurrenciesMustDiffer": "Meny pri výmene musia byť rôzne",
-    "contributionPurchaseRequired": "At least one investment purchase is required.",
-    "contributionSecurityRequired": "Each investment purchase must include a security.",
-    "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
-    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
-    "contributionDeletePurchasesConfirmationRequired": "Deleting this contribution requires explicit confirmation to delete its linked investment purchases.",
-    "securitySearchResultNotRecognized": "Výsledok vyhľadávania cenného papiera nie je rozpoznaný, alebo vypršal. Vyhľadajte cenný papier znova.",
     "importNoTransactionsFound": "V súbore sa nenašli žiadne transakcie.",
     "import": {
       "tokenLimitExceededSuggestion": "Rozdeľte nahrávaný súbor na menšie časti, alebo použite model s väčším kontextovým oknom.",
@@ -283,7 +287,11 @@
       "title_one": "{{count}} pozícia prekročila vaše upozornenie na stratu",
       "title_other": "{{count}} pozícií prekročilo vaše upozornenie na stratu"
     },
-    "linkedTransactionMustBelongToDestinationAccount": "Prepojená transakcia musí patriť do cieľového účtu."
+    "contributionPurchaseRequired": "At least one investment purchase is required.",
+    "contributionSecurityRequired": "Each investment purchase must include a security.",
+    "contributionExceedsCash": "Investment purchases exceed available {{currencyCode}} portfolio cash.",
+    "contributionSourceMustBeExpense": "Only expense transactions can be recorded as investment contributions.",
+    "contributionDeletePurchasesConfirmationRequired": "Deleting this contribution requires explicit confirmation to delete its linked investment purchases."
   },
   "landingFaq": {
     "unavailable": "Asistent je momentálne nedostupný. Skúste to znova neskôr, alebo napíšte na support@moneymatter.app."
@@ -313,7 +321,8 @@
     "providerTypeMismatch": "Pripojenie {{connectionId}} je pre poskytovateľa {{actualType}}, nie {{expectedType}}",
     "providerAlreadyRegistered": "Poskytovateľ {{providerType}} je už zaregistrovaný. Duplicitných poskytovateľov nemožno registrovať.",
     "providerNotRegistered": "Poskytovateľ {{providerType}} nie je zaregistrovaný. Dostupní poskytovatelia: {{available}}",
-    "unexpected": "Neočakávaná chyba."
+    "unexpected": "Neočakávaná chyba.",
+    "clientUpdateRequired": "Táto verzia aplikácie už nie je podporovaná. Aktualizujte ju z App Store, prosím."
   },
   "validation": {
     "dateInvalid": "„date\" je neplatný dátum."
@@ -334,6 +343,7 @@
     "failedToFetchCountries": "Krajiny sa nepodarilo načítať. Skontrolujte svoje prístupové údaje, prosím.",
     "accountNotLinkedToConnection": "Účet sa nenašiel, alebo nie je prepojený s týmto pripojením",
     "accountAlreadyConnectedToAnotherConnection": "Účet „{{account}}\" je už pripojený cez „{{connection}}\". Najprv ho tam odpojte.",
+    "accountBalanceUnavailable": "Nepodarilo sa získať aktuálny zostatok účtu {{account}} z banky. Skúste to znova o niekoľko minút, prosím.",
     "cannotLoadBeforeLinkDate": "Transakcie spred dátumu prepojenia účtu ({{linkedAt}}) sa nedajú načítať. Tento účet bol prepojený stratégiou „len dopredu\", aby sa predišlo duplicite údajov.",
     "dateRangeExceedsLimit": "Rozsah dátumov nesmie presiahnuť 1 rok.",
     "fromAfterTo": "Dátum „from\" musí byť pred dátumom „to\"",
@@ -440,7 +450,47 @@
     "transactionTypeValuesNotCovered": "Stĺpec typu transakcie obsahuje hodnoty, ktoré nepokrývajú zoznamy príjmov/výdavkov: {{uncovered}}. Nájdené hodnoty: {{found}}",
     "selectedAccountNotFound": "Vybraný účet sa nenašiel, alebo vám nepatrí.",
     "selectedCategoryNotFound": "Vybraná kategória sa nenašla, alebo vám nepatrí.",
-    "linkedAccountCurrencyMismatch": "Na prepojenie s existujúcim účtom sa musia zhodovať meny: {{mismatches}}. Prepojte účet s rovnakou menou, alebo vytvorte nový."
+    "linkedAccountCurrencyMismatch": "Na prepojenie s existujúcim účtom sa musia zhodovať meny: {{mismatches}}. Prepojte účet s rovnakou menou, alebo vytvorte nový.",
+    "bankLinkChangedSinceReview": "Prepojenie jedného z účtov v tomto importe s bankou sa po kontrole zmenilo. Vráťte sa na krok kontroly a spustite ju znova."
+  },
+  "ofxImport": {
+    "noFileUploaded": "Nebol nahraný žiadny súbor. Odošlite súbor OFX alebo QFX ako surové telo požiadavky.",
+    "errors": {
+      "emptyFile": "Súbor OFX je prázdny.",
+      "xmlDeclarationIncomplete": "Deklarácia XML súboru OFX je neúplná.",
+      "headerMissing": "Hlavička OFX chýba, alebo je príliš veľká.",
+      "headerFieldMissing": "V hlavičke OFX chýba pole {{field}}.",
+      "invalidVersion": "Verzia OFX je neplatná.",
+      "unsupportedData": "Typ údajov OFX {{data}} nie je podporovaný.",
+      "compressedFile": "Komprimované súbory OFX nie sú podporované.",
+      "prohibitedDeclaration": "Deklarácie DTD a entít v OFX nie sú podporované.",
+      "markupIncomplete": "Značkovanie OFX je neúplné.",
+      "tagsMismatch": "Značky XML v OFX sa nezhodujú.",
+      "unclosedTags": "XML súboru OFX má neuzavreté značky.",
+      "missingRoot": "Koreňový prvok OFX chýba.",
+      "malformedOfx": "Dokument OFX sa nepodarilo spracovať.",
+      "unsupportedEncoding": "Kódovanie OFX {{encoding}}/{{charset}} nie je podporované.",
+      "fileTooLarge": "Súbor OFX je väčší než 10 MB.",
+      "emptyBody": "Súbor OFX nemá telo.",
+      "invalidDate": "Neplatný dátum OFX: {{value}}",
+      "invalidAmount": "Neplatná suma OFX: {{value}}",
+      "textTooLong": "Hodnota poľa OFX {{field}} presahuje {{max}} znakov.",
+      "unsupportedMessageSet": "Súbor neobsahuje žiadne podporované bankové ani kreditné výpisy.",
+      "missingAccount": "Sekcia {{tag}} chýba.",
+      "missingAccountId": "ID zdrojového účtu chýba.",
+      "correctionRecord": "Opravné záznamy OFX nie sú podporované.",
+      "missingAmount": "Suma transakcie OFX chýba.",
+      "missingDate": "Dátum transakcie OFX chýba.",
+      "invalidCurrency": "Mena výpisu chýba, alebo je neplatná.",
+      "rowLimit": "Súbor OFX má viac než {{max}} transakcií.",
+      "conflictingFitid": "Opakované FITID má protichodné údaje transakcie."
+    },
+    "uploadUnavailable": "Tento nahraný súbor OFX už nie je dostupný. Nahrajte súbor znova, prosím.",
+    "importInProgress": "Import tohto súboru už prebieha.",
+    "missingAccountMapping": "Chýba priradenie účtu pre: {{accounts}}",
+    "accountCurrencyMismatch": "Účet {{account}} musí používať {{currency}}.",
+    "linkedAccountNotFound": "Prepojený účet pre {{account}} sa nenašiel.",
+    "crossCurrencyLink": "Účet {{account}} nemožno prepojiť naprieč menami."
   },
   "importExport": {
     "batchDeleteBankLinkedAccount": "Tento import už nemožno vrátiť späť, keďže jeho účet je teraz pripojený k banke. Zmazanie týchto transakcií by mohlo narušiť synchronizovaný zostatok.",
@@ -772,6 +822,11 @@
     "colorRequiresInitials": "Farba pozadia vyžaduje písmená alebo ikonu.",
     "slotsExclusive": "Vyberte jeden typ loga: značku, písmená, ikonu alebo obrázok."
   },
+  "logoImages": {
+    "invalidImage": "Súbor nie je obrázok vo formáte PNG, JPEG ani WebP.",
+    "tooLarge": "Obrázky loga musia mať najviac 50 KB.",
+    "notFound": "Obrázok loga sa nenašiel."
+  },
   "venture": {
     "dealNotFound": "Obchod v rizikovom kapitáli sa nenašiel",
     "eventNotFound": "Udalosť v rizikovom kapitáli sa nenašla"
@@ -804,50 +859,6 @@
     "incompleteInvoice": "Z tejto faktúry sa nepodarilo prečítať dodávateľa, celkovú sumu a dátum.",
     "pdfWithoutText": "Vlastné pripojenia AI nedokážu prijímať súbory PDF priamo a tento sa nepodarilo otvoriť ani na prevod (napríklad je chránený heslom). Prevedte ho na obrázok (PNG alebo JPEG), napríklad snímku obrazovky faktúry a nahrajte namiesto neho ten.",
     "noFileUploaded": "Nebol nahraný žiadny súbor."
-  },
-  "ofxImport": {
-    "noFileUploaded": "Nebol nahraný žiadny súbor. Odošlite súbor OFX alebo QFX ako surové telo požiadavky.",
-    "errors": {
-      "emptyFile": "Súbor OFX je prázdny.",
-      "xmlDeclarationIncomplete": "Deklarácia XML súboru OFX je neúplná.",
-      "headerMissing": "Hlavička OFX chýba, alebo je príliš veľká.",
-      "headerFieldMissing": "V hlavičke OFX chýba pole {{field}}.",
-      "invalidVersion": "Verzia OFX je neplatná.",
-      "unsupportedData": "Typ údajov OFX {{data}} nie je podporovaný.",
-      "compressedFile": "Komprimované súbory OFX nie sú podporované.",
-      "prohibitedDeclaration": "Deklarácie DTD a entít v OFX nie sú podporované.",
-      "markupIncomplete": "Značkovanie OFX je neúplné.",
-      "tagsMismatch": "Značky XML v OFX sa nezhodujú.",
-      "unclosedTags": "XML súboru OFX má neuzavreté značky.",
-      "missingRoot": "Koreňový prvok OFX chýba.",
-      "malformedOfx": "Dokument OFX sa nepodarilo spracovať.",
-      "unsupportedEncoding": "Kódovanie OFX {{encoding}}/{{charset}} nie je podporované.",
-      "fileTooLarge": "Súbor OFX je väčší než 10 MB.",
-      "emptyBody": "Súbor OFX nemá telo.",
-      "invalidDate": "Neplatný dátum OFX: {{value}}",
-      "invalidAmount": "Neplatná suma OFX: {{value}}",
-      "textTooLong": "Hodnota poľa OFX {{field}} presahuje {{max}} znakov.",
-      "unsupportedMessageSet": "Súbor neobsahuje žiadne podporované bankové ani kreditné výpisy.",
-      "missingAccount": "Sekcia {{tag}} chýba.",
-      "missingAccountId": "ID zdrojového účtu chýba.",
-      "correctionRecord": "Opravné záznamy OFX nie sú podporované.",
-      "missingAmount": "Suma transakcie OFX chýba.",
-      "missingDate": "Dátum transakcie OFX chýba.",
-      "invalidCurrency": "Mena výpisu chýba, alebo je neplatná.",
-      "rowLimit": "Súbor OFX má viac než {{max}} transakcií.",
-      "conflictingFitid": "Opakované FITID má protichodné údaje transakcie."
-    },
-    "uploadUnavailable": "Tento nahraný súbor OFX už nie je dostupný. Nahrajte súbor znova, prosím.",
-    "importInProgress": "Import tohto súboru už prebieha.",
-    "missingAccountMapping": "Chýba priradenie účtu pre: {{accounts}}",
-    "accountCurrencyMismatch": "Účet {{account}} musí používať {{currency}}.",
-    "linkedAccountNotFound": "Prepojený účet pre {{account}} sa nenašiel.",
-    "crossCurrencyLink": "Účet {{account}} nemožno prepojiť naprieč menami."
-  },
-  "logoImages": {
-    "invalidImage": "Súbor nie je obrázok vo formáte PNG, JPEG ani WebP.",
-    "tooLarge": "Obrázky loga musia mať najviac 50 KB.",
-    "notFound": "Obrázok loga sa nenašiel."
   },
   "auth": {
     "errors": {

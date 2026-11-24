@@ -11,6 +11,7 @@ interface CreatePortfolioParams {
   portfolioType: PORTFOLIO_TYPE;
   description?: string | null;
   displayCurrencyCode?: string | null;
+  externalUrl?: string | null;
   isEnabled?: boolean;
   isManualTracking?: boolean;
 }
@@ -21,6 +22,7 @@ const createPortfolioImpl = async ({
   portfolioType,
   description = null,
   displayCurrencyCode = null,
+  externalUrl = null,
   isEnabled = true,
   isManualTracking = false,
 }: CreatePortfolioParams) => {
@@ -44,6 +46,7 @@ const createPortfolioImpl = async ({
     portfolioType,
     description,
     displayCurrencyCode,
+    externalUrl,
     isEnabled,
     isManualTracking,
   });

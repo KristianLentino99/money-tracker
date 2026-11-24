@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { normalizeExternalUrl, validateOptionalExternalUrl } from '@/common/utils/external-url';
 import ResponsiveDialog from '@/components/common/responsive-dialog.vue';
 import DisplayCurrencySelect from '@/components/fields/display-currency-select.vue';
+import ExternalUrlField from '@/components/fields/external-url-field.vue';
 import FieldLabel from '@/components/fields/components/field-label.vue';
 import InputField from '@/components/fields/input-field.vue';
 import TextareaField from '@/components/fields/textarea-field.vue';
@@ -32,6 +34,7 @@ const form = reactive({
   description: '',
   displayCurrencyCode: null as string | null,
   isManualTracking: false,
+  externalUrl: '',
 });
 
 // Portfolio type options for the select dropdown
@@ -57,6 +60,7 @@ const isSubmitDisabled = computed(
   () =>
     createPortfolioMutation.isPending.value ||
     !form.name.trim() ||
+    validateOptionalExternalUrl({ value: form.externalUrl }) !== null ||
     (form.isManualTracking && !submittedDisplayCurrencyCode.value),
 );
 
@@ -66,6 +70,7 @@ const resetForm = () => {
   form.description = '';
   form.displayCurrencyCode = null;
   form.isManualTracking = false;
+  form.externalUrl = '';
 };
 
 const onPortfolioCreation = () => {
@@ -75,6 +80,7 @@ const onPortfolioCreation = () => {
 };
 
 const createPortfolio = async () => {
+  const normalizedExternalUrl = normalizeExternalUrl({ value: form.externalUrl });
   try {
     await createPortfolioMutation.mutateAsync({
       name: form.name.trim(),
@@ -82,6 +88,7 @@ const createPortfolio = async () => {
       description: form.description.trim() || undefined,
       displayCurrencyCode: submittedDisplayCurrencyCode.value,
       isManualTracking: form.isManualTracking,
+      externalUrl: normalizedExternalUrl ?? undefined,
       isEnabled: true,
     });
 
@@ -174,6 +181,13 @@ const createPortfolio = async () => {
         v-model="form.description"
         :label="$t('dialogs.createPortfolio.form.descriptionLabel')"
         :placeholder="$t('dialogs.createPortfolio.form.descriptionPlaceholder')"
+        :disabled="createPortfolioMutation.isPending.value"
+      />
+
+      <ExternalUrlField
+        v-model="form.externalUrl"
+        :label="$t('dialogs.createPortfolio.form.externalUrlLabel')"
+        :placeholder="$t('dialogs.createPortfolio.form.externalUrlPlaceholder')"
         :disabled="createPortfolioMutation.isPending.value"
       />
 

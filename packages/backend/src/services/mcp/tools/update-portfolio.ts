@@ -9,7 +9,7 @@ export const updatePortfolioTool = defineTool({
   toolset: 'investments',
   access: 'write',
   description:
-    "Update an existing portfolio's name, type, description, display currency, manual tracking or enabled state. Use when the user wants to rename, recategorize, or disable one of their portfolios. Obtain the portfolioId from get_portfolios first. Only the fields provided are changed.",
+    "Update an existing portfolio's name, type, description, displayCurrencyCode, externalUrl (pass null to clear), manual tracking or enabled state. Use when the user wants to rename, recategorize, or disable one of their portfolios. Obtain the portfolioId from get_portfolios first. Only the fields provided are changed.",
   input: {
     portfolioId: recordId().describe('Portfolio ID (from get_portfolios)'),
     name: updatePortfolioBodyShape.name.describe('New portfolio name (must be unique for this user), 1-255 characters'),
@@ -23,6 +23,9 @@ export const updatePortfolioTool = defineTool({
     ),
     isManualTracking: updatePortfolioBodyShape.isManualTracking.describe(
       'Track manual cash flows and end-of-day valuations; requires displayCurrencyCode and cannot change after portfolio history exists',
+    ),
+    externalUrl: updatePortfolioBodyShape.externalUrl.describe(
+      'New external http(s) URL for the institution portal (pass null to clear, omit to keep)',
     ),
   },
   run: ({ userId, args }) => {
