@@ -14,6 +14,7 @@ import BudgetAssignmentsModel from './budget-assignments.model';
 import BudgetLineCategoriesModel from './budget-line-categories.model';
 import BudgetLineGoalsModel from './budget-line-goals.model';
 import BudgetLineGroupsModel from './budget-line-groups.model';
+import BudgetLineNotesModel from './budget-line-notes.model';
 import BudgetLinesModel from './budget-lines.model';
 import BudgetPeriodsModel from './budget-periods.model';
 import BudgetPlanAccountsModel from './budget-plan-accounts.model';
@@ -38,6 +39,9 @@ import PortfoliosModel from './investments/portfolios.model';
 import SecuritiesModel from './investments/securities.model';
 import SecurityCurrencyCacheModel from './investments/security-currency-cache.model';
 import SecurityPricingModel from './investments/security-pricing.model';
+import WatchlistAlertsModel from './investments/watchlist-alerts.model';
+import WatchlistItemsModel from './investments/watchlist-items.model';
+import WatchlistSectionsModel from './investments/watchlist-sections.model';
 import LoanDetailsModel from './loan-details.model';
 import NotificationsModel from './notifications.model';
 import PayeeAliasesModel from './payee-aliases.model';
@@ -150,6 +154,9 @@ const models = [
   SecurityCurrencyCacheModel,
   SecurityPricingModel,
   PortfoliosModel,
+  WatchlistSectionsModel,
+  WatchlistItemsModel,
+  WatchlistAlertsModel,
   PortfolioBalancesModel,
   PortfolioTransfersModel,
   SubscriptionsModel,
@@ -187,6 +194,7 @@ const models = [
   BudgetLineGoalsModel,
   BudgetPeriodsModel,
   BudgetAssignmentsModel,
+  BudgetLineNotesModel,
   BudgetPlanAccountsModel,
   GoalsModel,
   GoalAccountsModel,

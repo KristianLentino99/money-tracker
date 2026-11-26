@@ -332,6 +332,7 @@
         "mainCategoryLabel": "Categoría principal",
         "selectCategoryPlaceholder": "Seleccionar categoría",
         "amountPlaceholder": "0",
+        "notePlaceholder": "Note (optional)",
         "addCategoryButton": "Añadir categoría",
         "removeRowLabel": "Eliminar categoría",
         "totalAmountLabel": "Importe total",

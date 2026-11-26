@@ -10,6 +10,7 @@ export const ENTITLEMENTS = {
     subscriptions: [
       {
         externalSubscriptionId: 'sub_docs',
+        provider: 'stripe',
         tier: 'plus',
         status: 'active',
         billingCycle: 'year',
@@ -18,6 +19,22 @@ export const ENTITLEMENTS = {
       },
     ],
   }),
+  /** Essential subscriber who never started a day trial, so Plus-only tabs offer one. */
+  essentialNoTrials: () => {
+    const plus = ENTITLEMENTS.activePlusYearly();
+    return {
+      ...plus,
+      seats: 2,
+      // Mirrors ESSENTIAL_FEATURES in packages/shared/src/types/billing.ts.
+      features: ['backup_export', 'backup_restore', 'data_export', 'attachments', 'budget_plan', 'goals'],
+      featureTrials: {},
+      budgetPlanTrialEndsAt: null,
+      trialUsage: {},
+      subscriptions: [
+        { ...plus.subscriptions[0], tier: 'essential', billingCycle: 'month', currentPeriodEndsAt: daysFromNow(20) },
+      ],
+    };
+  },
   trialEnded: () => ({
     plan: null,
     trialEndsAt: daysFromNow(-4),
@@ -81,6 +98,36 @@ export async function mockEnableBankingConsent({ page, connectionId, daysLeft = 
     });
     connection.provider = { ...connection.provider, name: 'Enable Banking' };
     connection.accounts = connection.accounts.map((a) => ({ ...a, type: 'enable-banking' }));
+    await route.fulfill({ response: res, json: body });
+  });
+}
+
+/**
+ * Replaces a budget period's pool with readable numbers that still add up, so the strip, the Assign/Fix menus and
+ * Budget calculation agree. The flow is that of the pool's first period.
+ */
+export async function mockBudgetPool({ page, planId, periodId, readyToAssign }) {
+  await page.route(new RegExp(`/api/v1/budget-plans/${planId}/periods/${periodId}$`), async (route) => {
+    if (route.request().method() !== 'GET') return route.fallback();
+    const res = await route.fetch();
+    const body = await res.json();
+    const { totalAssigned: assigned = 0 } = body.response.header ?? {};
+    const inLines = body.response.pool?.balance.inLines ?? 0;
+    const income = body.response.pool?.flow.income ?? 0;
+    const outsideSpending = body.response.pool?.flow.outsideSpending ?? 0;
+    const round = (value) => Math.round(value * 100) / 100;
+    body.response.pool = {
+      readyToAssign,
+      committedLater: 0,
+      flow: {
+        leftOver: round(readyToAssign - income - outsideSpending + assigned),
+        income,
+        outsideSpending,
+        fromLines: 0,
+        assigned,
+      },
+      balance: { cash: round(readyToAssign + inLines), inLines, drift: 0 },
+    };
     await route.fulfill({ response: res, json: body });
   });
 }

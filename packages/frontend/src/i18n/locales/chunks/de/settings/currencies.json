@@ -24,18 +24,15 @@
         "custom": "Benutzerdefiniert",
         "live": "Live",
         "unused": "Ungenutzt",
-        "accountsCount": "{count} Konto | {count} Konten"
+        "accountsCount": "{count} Konto | {count} Konten",
+        "customCurrency": "Benutzerdefinierte Währung"
       },
       "empty": {
         "title": "Noch keine weiteren Währungen",
         "description": "Füge oben eine Währung hinzu, um Salden und Wechselkurse neben deiner Basiswährung zu verfolgen."
       },
       "exchangeRate": {
-        "disableLiveUpdate": "Deaktiviere Live-Aktualisierung, um einen benutzerdefinierten Wechselkurs festlegen zu können.",
-        "liveUpdateInfo": "Wenn aktiviert, wird der benutzerdefinierte Kurs ignoriert.",
-        "liveUpdateLabel": "Live-Aktualisierung",
         "ratePlaceholder": "0.00",
-        "saveButton": "Speichern",
         "successfullyUpdated": "Erfolgreich aktualisiert.",
         "balancesNotRefreshed": "{count} Kontostand/Kontostände konnten noch nicht mit dem neuen Kurs aktualisiert werden — sie werden automatisch aktualisiert, sobald ein Kurs verfügbar ist.",
         "errors": {
@@ -48,7 +45,6 @@
         "description": "Eine Währung kann nur gelöscht/getrennt werden, wenn ihr keine Konten und/oder Transaktionen zugeordnet sind.",
         "button": "Währung löschen",
         "buttonShort": "Löschen",
-        "disabledTooltip": "Du kannst diese Währung nicht löschen, da sie noch mit Konten verbunden ist.",
         "successfullyDeleted": "Erfolgreich gelöscht.",
         "foreignAmountsWarning": "In dieser Währung erfasste Fremdbeträge werden aus deinen Transaktionen entfernt. Beträge in der Kontowährung bleiben unverändert.",
         "inUse": {
@@ -65,7 +61,8 @@
             "transactionTemplate": "Transaktionsvorlagen",
             "budget": "Budgets",
             "goal": "Ziele",
-            "ventureDeal": "Beteiligungen"
+            "ventureDeal": "Beteiligungen",
+            "customCurrency": "Darin notierte benutzerdefinierte Währungen"
           }
         },
         "errors": {
@@ -102,7 +99,274 @@
           "lockedShares": "Du hast {count} aktive Kontofreigabe. Widerrufe diese zuerst im Konto. | Du hast {count} aktive Kontofreigaben. Widerrufe diese zuerst in jedem Konto.",
           "lockedBudgetPlan": "Ein aktiver Budgetplan blockiert die Änderung. Lösche ihn zuerst. | {count} aktive Budgetpläne blockieren die Änderung. Lösche sie zuerst."
         }
-      }
+      },
+      "custom": {
+        "addButton": "Benutzerdefinierte Währung hinzufügen",
+        "createTitle": "Benutzerdefinierte Währung hinzufügen",
+        "createDescription": "Definiere eine Währung, die keine ISO-Währung ist, wie z.B. einen Stablecoin oder ein Krypto-Asset. Nur du kannst sie sehen.",
+        "editTitle": "Benutzerdefinierte Währung bearbeiten",
+        "editDescription": "Änderungen gelten für jedes Konto und jede Transaktion, die du in dieser Währung führst.",
+        "codeLabel": "Code",
+        "codePlaceholder": "USDT",
+        "nameLabel": "Name",
+        "namePlaceholder": "Tether",
+        "symbolLabel": "Symbol (optional)",
+        "symbolPlaceholder": "₮",
+        "decimalsLabel": "Nachkommastellen",
+        "decimalsPlaceholder": "6",
+        "decimalsHint": "Beträge behalten bis zu dieser Anzahl an Stellen nach dem Komma (0 bis 8).",
+        "decimalsLockedHint": "Nachkommastellen können nur geändert werden, solange kein Konto, keine Transaktion und keine Vorlage {code} verwendet.",
+        "preview": "Beispiel: {value}",
+        "createButton": "Währung hinzufügen",
+        "saveButton": "Änderungen speichern",
+        "cancelButton": "Abbrechen",
+        "rateLabel": "Kurs",
+        "ratePlaceholder": "1.00",
+        "createRateHint": "Was eine Einheit dieser Währung in deiner Basiswährung wert ist. Du kannst ihn später in der jeweiligen Zeile ändern.",
+        "successfullyCreated": "Benutzerdefinierte Währung hinzugefügt",
+        "successfullyUpdated": "Benutzerdefinierte Währung aktualisiert",
+        "errors": {
+          "codeRequired": "Gib einen Code ein",
+          "codeFormat": "Verwende 2 bis 16 Großbuchstaben oder Ziffern",
+          "codeIsIso": "Dies ist ein ISO-Währungscode. Füge ihn stattdessen über die Währungsliste hinzu",
+          "codeExists": "Du hast bereits eine Währung mit diesem Code",
+          "nameRequired": "Gib einen Namen ein",
+          "symbolTooLong": "Verwende bis zu 8 Zeichen",
+          "decimalsRange": "Gib eine ganze Zahl von 0 bis 8 ein",
+          "rateRequired": "Gib einen Kurs über 0 ein",
+          "createFailed": "Unerwarteter Fehler. Benutzerdefinierte Währung wurde nicht hinzugefügt.",
+          "updateFailed": "Unerwarteter Fehler. Benutzerdefinierte Währung wurde nicht aktualisiert."
+        }
+      },
+      "rateSource": {
+        "successfullySaved": "Kursquelle gespeichert",
+        "quoteLabel": "Kurswährung",
+        "quotePlaceholder": "Währung auswählen",
+        "manual": {
+          "successfullyRemoved": "Kurs entfernt",
+          "errors": {
+            "removeFailed": "Unerwarteter Fehler. Der Kurs wurde nicht entfernt."
+          }
+        },
+        "peg": {
+          "currencyPlaceholder": "Währung auswählen",
+          "factorPlaceholder": "1"
+        },
+        "coingecko": {
+          "searchLabel": "Coin suchen",
+          "searchPlaceholder": "Nach Name oder Symbol suchen, z.B. Bitcoin",
+          "noResults": "Keine Coins gefunden",
+          "selected": "Ausgewählter Coin: {coin}",
+          "searchFailed": "CoinGecko konnte nicht durchsucht werden. Versuche es gleich noch einmal."
+        },
+        "http": {
+          "urlPlaceholder": "https://api.example.com/price?id={'{code}'}&vs={'{quote}'}&on={'{date}'}",
+          "urlHint": "Platzhalter: {date} ist der Tag im Format JJJJ-MM-TT, {code} ist der Währungscode und {quote} ist die Kurswährung.",
+          "pathPlaceholder": "data.rates[0].price",
+          "headerNameLabel": "Header-Name",
+          "headerNamePlaceholder": "X-Api-Key",
+          "headerValueLabel": "Wert",
+          "headerValuePlaceholder": "Gib den Wert ein",
+          "addHeader": "Header hinzufügen",
+          "removeHeader": "Header entfernen",
+          "savedHeaders": "Gespeicherte Header: {names}. Ihre Werte sind ausgeblendet.",
+          "headersWillBeRemoved": "Die gespeicherten Header werden beim Speichern entfernt.",
+          "replaceHeaders": "Header ersetzen",
+          "keepHeaders": "Gespeicherte Header behalten",
+          "headersOriginChanged": "Gespeicherte Header werden nur an die Adresse gesendet, für die sie gespeichert wurden. Ersetze sie, um diese URL zu verwenden.",
+          "testSuccess": "Am {date}: 1 {code} = {rate} {quote}",
+          "testUnavailable": "Der Test konnte nicht ausgeführt werden. Versuche es gleich noch einmal.",
+          "failures": {
+            "blocked": "Diese Adresse ist nicht zulässig: Private und interne Adressen sind blockiert.",
+            "https_required": "Die Adresse muss HTTPS verwenden.",
+            "timeout": "Der Endpunkt hat zu lange für die Antwort benötigt.",
+            "network": "Der Endpunkt konnte nicht erreicht werden.",
+            "http_status": "Der Endpunkt hat mit einem Fehlerstatus geantwortet.",
+            "too_large": "Die Antwort ist zu groß.",
+            "not_json": "Die Antwort ist kein JSON.",
+            "path_not_found": "Der JSON-Pfad zeigt in der Antwort auf nichts.",
+            "not_a_number": "Der Wert unter dem JSON-Pfad ist keine positive Zahl.",
+            "headers_unreadable": "Die gespeicherten Header konnten nicht gelesen werden. Gib sie erneut ein."
+          }
+        },
+        "errors": {
+          "pegCurrencyRequired": "Wähle die Währung aus, an die gekoppelt werden soll",
+          "factorInvalid": "Gib eine Zahl über 0 ein",
+          "coinRequired": "Suche und wähle einen Coin aus",
+          "urlRequired": "Gib die URL ein",
+          "urlInvalid": "Verwende eine HTTP(S)-URL; die einzigen Platzhalter sind der Tag, der Code und die Kurswährung",
+          "pathRequired": "Gib den JSON-Pfad ein",
+          "headerNameRequired": "Gib jedem Header einen Namen",
+          "headerNameDuplicate": "Header-Namen müssen eindeutig sein",
+          "saveFailed": "Unerwarteter Fehler. Die Kursquelle wurde nicht gespeichert."
+        },
+        "history": {
+          "connectToEdit": "Verbinde {quote}, um diesen Kurs zu bearbeiten."
+        }
+      },
+      "dialog": {
+        "back": "Zurück zu {name}",
+        "summary": {
+          "current": "Aktueller Kurs",
+          "since": "Seit {date}",
+          "follows": "Folgt {code}",
+          "updated": "Aktualisiert am {date}",
+          "live": "Live",
+          "yourRate": "Dein Kurs",
+          "update": "Kurs aktualisieren"
+        },
+        "source": {
+          "label": "Kurs stammt aus",
+          "manual": "Du gibst ihn selbst ein",
+          "peg": "Folgt {code}",
+          "pegDetail": "Immer 1 {code} = {factor} {target}",
+          "coingecko": "CoinGecko · {coin}",
+          "http": "Eigene URL · {host}",
+          "syncedDetail": "Wird jede Nacht aktualisiert",
+          "change": "Ändern"
+        },
+        "recent": {
+          "title": "Aktuelle Kurse",
+          "viewAll": "Alle {count} anzeigen",
+          "viewAllUnknown": "Alle anzeigen",
+          "readOnly": "Kurse aus {source} können nicht bearbeitet werden. Um Kurse selbst einzugeben, ändere, woher der Kurs stammt.",
+          "loadFailedTitle": "Die Kurse konnten nicht geladen werden.",
+          "loadFailedDetail": "Der oben angezeigte aktuelle Kurs stimmt weiterhin.",
+          "refreshFailed": "Die Kurse konnten nicht aktualisiert werden, daher ist die Liste möglicherweise veraltet."
+        },
+        "pegRow": {
+          "title": "Kurshistorie",
+          "count": "{count} Kurs | {count} Kurse",
+          "notUsed": "Wird nicht verwendet, solange {code} {target} folgt",
+          "empty": "Keine gespeicherten Kurse",
+          "view": "Anzeigen"
+        },
+        "row": {
+          "current": "Aktuell",
+          "now": "{from} – jetzt",
+          "rate": "1 {code} = {rate} {quote}",
+          "edit": "Kurs bearbeiten, der ab {date} verwendet wird",
+          "source": {
+            "initial": "Anfangskurs",
+            "manual": "Von dir eingegeben",
+            "coingecko": "CoinGecko",
+            "http": "Eigene URL"
+          }
+        },
+        "history": {
+          "title": "Kurshistorie",
+          "description": "Jeder Kurs wird ab seinem Datum verwendet, bis der nächste beginnt. Daten vor dem ersten Kurs verwenden den ersten Kurs.",
+          "count": "{count} Kurs, neueste zuerst | {count} Kurse, neueste zuerst",
+          "showOlder": "Ältere Kurse anzeigen",
+          "empty": "Keine gespeicherten Kurse. {code} folgt {target} und benötigt daher keine."
+        },
+        "form": {
+          "addTitle": "Kurs aktualisieren",
+          "addDescription": "Lege fest, was 1 {code} wert ist, ab einem Tag deiner Wahl.",
+          "editTitle": "Kurs bearbeiten",
+          "usedFor": "Verwendet für {range}.",
+          "usedFrom": "Verwendet ab {date}.",
+          "usedEveryDay": "Für jeden Tag verwendet.",
+          "usedForAndBefore": "Verwendet für {range} sowie für jeden Tag davor.",
+          "typeEither": "Gib einen von beiden Werten ein.",
+          "dateLabel": "Diesen Kurs verwenden ab",
+          "today": "Heute",
+          "replaceNote": "Für {date} existiert bereits ein Kurs ({rate} {quote}). Durch Speichern wird er ersetzt.",
+          "recalcRange": "Durch Speichern wird der Wert deiner {code}-Transaktionen im Zeitraum {range} neu berechnet.",
+          "recalcFrom": "Durch Speichern wird der Wert deiner {code}-Transaktionen ab {date} neu berechnet.",
+          "recalcUntil": "Durch Speichern wird der Wert deiner {code}-Transaktionen bis {date} neu berechnet.",
+          "recalcAll": "Durch Speichern wird der Wert all deiner {code}-Transaktionen neu berechnet.",
+          "amountsKept": "Ihre {code}-Beträge bleiben gleich.",
+          "noChange": "Bereits gespeicherte Transaktionen behalten ihren Wert.",
+          "unknown": "Falls für diesen Tag bereits ein Kurs existiert, wird er durch Speichern ersetzt. Deine {code}-Transaktionen ab diesem Tag bis zum nächsten Kurs werden neu berechnet.",
+          "moveHint": "Um diesen Kurs ab einem anderen Tag zu verwenden, entferne ihn und füge einen neuen hinzu.",
+          "save": "Kurs speichern",
+          "replace": "Kurs ersetzen",
+          "remove": "Kurs entfernen",
+          "lastRate": "Eine Währung benötigt mindestens einen Kurs."
+        },
+        "remove": {
+          "title": "Den Kurs vom {date} entfernen?",
+          "takenOver": "{range} verwendet stattdessen den Kurs vom {date} (1 {code} = {rate} {quote}).",
+          "takenOverWithEarlier": "{range} und jeder Tag davor verwenden stattdessen den Kurs vom {date} (1 {code} = {rate} {quote}).",
+          "unknown": "{range} verwendet stattdessen den vorherigen Kurs.",
+          "unknownDays": "Die Tage, die dieser Kurs abdeckt, verwenden stattdessen einen anderen gespeicherten Kurs.",
+          "recalc": "Der Wert deiner {code}-Transaktionen an diesen Tagen wird neu berechnet. Ihre {code}-Beträge bleiben gleich.",
+          "confirm": "Kurs entfernen"
+        },
+        "sourceView": {
+          "title": "Woher soll der Kurs stammen?",
+          "now": {
+            "manual": "Derzeit gibst du ihn selbst ein.",
+            "peg": "Derzeit folgt er {target}.",
+            "coingecko": "Derzeit stammt er von CoinGecko.",
+            "http": "Derzeit stammt er von einer eigenen URL."
+          },
+          "option": {
+            "manual": "Selbst eingeben",
+            "manualHint": "Gib einen Kurs ein, wenn sich der Preis ändert.",
+            "peg": "Einer Währung folgen",
+            "pegHint": "Immer einen festen Betrag in USD, EUR oder einer anderen Währung wert.",
+            "coingecko": "Kryptokurs",
+            "coingeckoHint": "Wird jede Nacht von CoinGecko aktualisiert.",
+            "http": "Eigene URL",
+            "httpHint": "Wird jede Nacht von einer von dir angegebenen Webadresse aktualisiert."
+          },
+          "schedule": {
+            "coingecko": "Der Kurs wird einmal täglich über Nacht abgerufen. Bis zur nächsten Aktualisierung wird der zuletzt abgerufene Kurs verwendet.",
+            "http": "Die Adresse wird einmal täglich über Nacht aufgerufen. Bis zur nächsten Aktualisierung wird der zuletzt zurückgegebene Kurs verwendet."
+          },
+          "inUse": "In Verwendung",
+          "advanced": "Erweitert",
+          "notAvailable": "Nicht verfügbar",
+          "note": {
+            "manual": "Nach dem Speichern gibst du den Kurs selbst ein. Die bereits gespeicherten Kurse werden wieder verwendet.",
+            "manualNoRates": "{code} hat noch keine gespeicherten Kurse. Folge zuerst einer Währung oder verknüpfe einen Kurs.",
+            "peg": "Nach dem Speichern ist 1 {code} immer {factor} {target} wert. Die von dir eingegebenen Kurse bleiben in der Historie und werden wieder verwendet, wenn du zurückwechselst.",
+            "coingecko": "Beim Speichern laden wir die Kurse des letzten Jahres für {coin} herunter und berechnen den Wert deiner bisherigen {code}-Transaktionen neu. Selbst hinzugefügte Kurse bleiben erhalten. Der Anfangskurs wird an Tagen ersetzt, für die CoinGecko einen Kurs hat.",
+            "coingeckoCoinChanged": "Kurse des vorherigen Coins werden entfernt.",
+            "http": "Beim Speichern rufen wir den heutigen Kurs von dieser Adresse ab und berechnen den Wert deiner bisherigen {code}-Transaktionen neu. Frühere Tage behalten die bereits gespeicherten Kurse. Selbst hinzugefügte Kurse bleiben erhalten."
+          },
+          "pegCurrency": "Währung, der gefolgt werden soll",
+          "pegAmount": "1 {code} =",
+          "notSaved": "Noch nicht gespeichert",
+          "saving": "Wird gespeichert",
+          "downloading": "Kurse eines Jahres werden heruntergeladen. Das kann einen Moment dauern.",
+          "fetchingToday": "Heutiger Kurs wird von der Adresse abgerufen. Das kann einen Moment dauern.",
+          "saveFailedTitle": "Konnte nicht gespeichert werden. Es wurde nichts geändert.",
+          "unavailable": "Kryptokurse sind auf diesem Server nicht eingerichtet. Wer ihn betreibt, muss einen CoinGecko-Schlüssel hinzufügen. Du kannst den Kurs weiterhin selbst eingeben oder einer Währung folgen.",
+          "http": {
+            "address": "Webadresse",
+            "path": "Wo der Kurs in der Antwort steht",
+            "headers": "Geheime Header",
+            "headersStored": "verschlüsselt gespeichert",
+            "test": "Testen",
+            "testAgain": "Erneut testen"
+          }
+        },
+        "discard": {
+          "title": "Änderungen verwerfen?",
+          "body": "{code} bezieht seinen Kurs weiterhin wie bisher: {current}. Deine Eingaben hier gehen verloren.",
+          "rateBody": "Der von dir für {code} eingegebene Kurs ist nicht gespeichert und geht verloren.",
+          "keep": "Weiter bearbeiten",
+          "confirm": "Verwerfen"
+        },
+        "iso": {
+          "liveTitle": "Live-Kurs",
+          "liveOn": "Wird automatisch aktualisiert. Deaktiviere diese Option, um deinen eigenen Kurs einzugeben.",
+          "liveOff": "Deaktiviert. Durch erneutes Aktivieren wird dein Kurs entfernt.",
+          "save": "Kurs speichern",
+          "note": "Dein Kurs wird für neue Transaktionen verwendet. Bereits gespeicherte Transaktionen behalten ihre Werte.",
+          "confirmTitle": "Zurück zum Live-Kurs wechseln?",
+          "confirmBody": "Dein Kurs ({rate}) wird entfernt und {code} folgt wieder dem Marktkurs. Bereits gespeicherte Transaktionen behalten ihre Werte.",
+          "confirm": "Live-Kurs verwenden"
+        },
+        "footer": {
+          "editDetails": "Details bearbeiten",
+          "deleteBlocked": "Wird von {count} Konto verwendet und kann daher nicht gelöscht werden. | Wird von {count} Konten verwendet und kann daher nicht gelöscht werden."
+        }
+      },
+      "refreshFailed": "Gespeichert, aber die Währungsliste konnte nicht aktualisiert werden. Lade die Seite neu, falls etwas veraltet aussieht."
     }
   }
 }

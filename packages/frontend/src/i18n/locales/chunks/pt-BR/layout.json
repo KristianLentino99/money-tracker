@@ -34,6 +34,7 @@
   "sidebar": {
     "collapse": "Recolher barra lateral",
     "expand": "Expandir barra lateral",
+    "hideAmounts": "Hide amounts",
     "resize": "Resize sidebar",
     "settings": {
       "title": "Configurações",

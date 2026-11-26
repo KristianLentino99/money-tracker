@@ -9,24 +9,12 @@ on:
   workflow_dispatch:
 
 # Deploys run in push order so an older run can't overwrite a newer `latest`.
-# Never cancel in progress: that could cut off the database backup mid-dump.
+# Never cancel in progress: that could cut off a deploy midway.
 concurrency:
   group: image-to-docker-hub
   cancel-in-progress: false
 
 jobs:
-  # Create database backup before deployment
-  backup:
-    if: >-
-      ${{ github.event_name == 'workflow_dispatch' || (
-        github.event.workflow_run.conclusion == 'success' &&
-        github.event.workflow_run.event == 'push' &&
-        github.event.workflow_run.head_repository.full_name == github.repository) }}
-    uses: ./.github/workflows/database-backup.yml
-    with:
-      backup_reason: 'pre-deployment'
-    secrets: inherit
-
   prepare:
     if: >-
       ${{ github.event_name == 'workflow_dispatch' || (
@@ -75,11 +63,10 @@ jobs:
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-  # always(): a failed backup must not block the deploy.
   build-frontend:
-    needs: [backup, prepare]
+    needs: [prepare]
     runs-on: ubuntu-latest
-    if: ${{ always() && needs.prepare.result == 'success' }}
+    if: ${{ needs.prepare.result == 'success' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -129,8 +116,8 @@ jobs:
           push: 'true'
 
   build-backend:
-    needs: [backup, prepare]
-    if: ${{ always() && needs.prepare.result == 'success' }}
+    needs: [prepare]
+    if: ${{ needs.prepare.result == 'success' }}
     strategy:
       matrix:
         include:

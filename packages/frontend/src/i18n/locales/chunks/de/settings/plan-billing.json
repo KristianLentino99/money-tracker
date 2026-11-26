@@ -17,6 +17,23 @@
       "voteOnRoadmap": "Über Roadmap abstimmen",
       "roadmapNote": "Kostenlos. Stimme dafür ab und wir informieren dich, sobald es verfügbar ist.",
       "saveUpTo": "Spare bis zu {percent}%",
+      "promotion": {
+        "title": "{name}: {percent}% Rabatt auf deine erste Zahlung",
+        "subtitle": "Wird an der Kasse automatisch angewendet, kein Code erforderlich. Endet am {date}.",
+        "badge": "{name} –{percent}%",
+        "firstCycle": {
+          "year": "/ erstes Jahr",
+          "month": "/ erster Monat"
+        },
+        "renews": {
+          "year": "Danach {amount}/Jahr",
+          "month": "Danach {amount}/Monat"
+        },
+        "billedToday": "Heute abgebucht: {amount}. Jederzeit kündbar.",
+        "names": {
+          "blackFriday2026": "Black Friday"
+        }
+      },
       "portalFailed": "Abrechnungsportal konnte nicht geöffnet werden. Bitte versuche es erneut.",
       "pastDueNote": "Deine letzte Zahlung ist fehlgeschlagen. Stripe wird deine Karte in den nächsten Tagen automatisch erneut belasten. Aktualisiere deine Zahlungsmethode über \"Abrechnung verwalten\", um den Zugriff nach dem {date} zu behalten.",
       "priceNote": "Preise sind in USD, exklusive Steuern. Deine lokale Währung und alle anfallenden Steuern werden beim Checkout angezeigt.",
@@ -32,7 +49,7 @@
       "current": {
         "lifetime": "{plan} · Lebenslang",
         "lifetimeMeta": "Alles aus Plus. Keine Verlängerung, keine Karte hinterlegt.",
-        "lifetimePurchaseMeta": "No renewal, no card on file.",
+        "lifetimePurchaseMeta": "Keine Verlängerung, keine Karte hinterlegt.",
         "earlyAdopterNote": "Danke, dass du von Anfang an dabei bist. Alles aus Plus im heutigen Umfang gehört dir lebenslang. Funktionen, die wir ab jetzt hinzufügen, und alles, was uns pro Benutzer Kosten verursacht, gehört zu den kostenpflichtigen Tarifen. Möchtest du sie? 50% Rabatt auf jeden Tarif, für immer, automatisch beim Checkout angewendet.",
         "seats": "1 Haushaltsplatz | {count} Haushaltsplätze",
         "subscription": "{tier} · {cycle}",
@@ -119,6 +136,7 @@
             "bankProviders": "Bankverbindungen (Monobank, Enable Banking, SimpleFIN, LunchFlow, Walutomat)",
             "ourAiKey": "KI-Funktionen mit unserem Schlüssel, begrenzt durch Fair-Use",
             "firePlanner": "FIRE-Planer",
+            "customCurrencies": "Benutzerdefinierte Währungen",
             "seats": "5 Haushaltsplätze"
           }
         },

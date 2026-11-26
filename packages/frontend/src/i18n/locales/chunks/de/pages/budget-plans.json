@@ -32,6 +32,16 @@
       "deleted": "Budget in den Papierkorb verschoben",
       "deleteError": "Budget konnte nicht in den Papierkorb verschoben werden"
     },
+    "carryReset": {
+      "action": "Übertrag zurücksetzen",
+      "undo": "Zurücksetzen rückgängig machen",
+      "confirmTitle": "Übertrag für diesen Zeitraum zurücksetzen?",
+      "confirmDescription": "Jede Zeile startet diesen Zeitraum nur mit dem, was du zuweist. Restbeträge und Mehrausgaben aus früheren Zeiträumen werden nicht übernommen. Du kannst dies rückgängig machen.",
+      "confirm": "Zurücksetzen",
+      "resetDone": "Übertrag zurückgesetzt",
+      "undone": "Zurücksetzen rückgängig gemacht",
+      "error": "Übertrag konnte nicht aktualisiert werden"
+    },
     "lineCount": "{count} Zeile | {count} Zeilen",
     "trialNotice": {
       "active": "Testphase für Early Adopter: Noch {count} Tag Budgetierung verbleibend | Testphase für Early Adopter: Noch {count} Tage Budgetierung verbleibend",
@@ -316,17 +326,28 @@
       "saved": "Zuweisung gespeichert",
       "error": "Die Zuweisung konnte nicht gespeichert werden"
     },
+    "move": {
+      "menuItem": "Geld verschieben",
+      "title": "Geld verschieben",
+      "description": "Verschiebt zugewiesenes Geld für diesen Zeitraum von einer Zeile in eine andere.",
+      "fromLabel": "Von",
+      "toLabel": "Nach",
+      "pickPlaceholder": "Zeile auswählen",
+      "swap": "Von und Nach tauschen",
+      "amountLabel": "Wie viel?",
+      "tooMuch": "{line} kann höchstens {amount} abgeben",
+      "chipCover": "Mehrausgaben decken · {amount}",
+      "chipAll": "Maximaler Betrag · {amount}",
+      "submit": "{amount} verschieben",
+      "submitInstead": "Stattdessen {amount} verschieben",
+      "toast": "{amount} von {from} nach {to} verschoben"
+    },
     "unbudgeted": {
       "summary": "Ausgaben außerhalb deiner Zeilen: {amount} in {count} Kategorie | Ausgaben außerhalb deiner Zeilen: {amount} in {count} Kategorien"
     },
     "pool": {
       "readyToAssign": "Noch zu verteilen",
       "assign": "Zuweisen",
-      "assignTitle": "Aus dem Pool zuweisen",
-      "toLabel": "An",
-      "toPlaceholder": "Zeile auswählen",
-      "amountLabel": "Betrag",
-      "assignSubmit": "{amount} zuweisen",
       "calc": {
         "title": "Budget-Berechnung",
         "cash": "Budgetierbares Geld",
@@ -340,7 +361,7 @@
         "outsideSpending": "Ausgaben außerhalb deiner Zeilen",
         "fromLines": "Aus Zeilen (Übertrag zurückerstattet / Mehrausgaben gedeckt)",
         "assigned": "In diesem Zeitraum zugewiesen",
-        "cashHint": "Bargeld auf den Konten des Plans, abzüglich Kreditlimits.",
+        "cashHint": "Guthaben auf den Konten des Plans. Kreditlimits werden abgezogen, wenn \"Kreditlimits im Kontostand berücksichtigen\" aktiviert ist.",
         "inLinesHint": "Alles, was sich derzeit in deinen Zeilen befindet.",
         "driftHint": "Kursbewegungen und Salden, die nicht durch Transaktionen erklärt werden.",
         "committedLaterHint": "Bereits in einem späteren Zeitraum zugewiesen.",
@@ -359,11 +380,81 @@
       "allAssigned": "Alles Geld zugewiesen",
       "overAssigned": "{amount} zu viel zugewiesen",
       "fix": "Beheben",
-      "fixTitle": "Zuweisung korrigieren",
-      "fromLabel": "Nehmen von",
-      "fromPlaceholder": "Zeile auswählen",
-      "fixSubmit": "{amount} zurücknehmen",
-      "fixNoLines": "In diesem Zeitraum gibt es nichts zurückzunehmen."
+      "fixNoLines": "In diesem Zeitraum gibt es nichts zurückzunehmen.",
+      "notInLine": "Noch in keiner Zeile",
+      "addLine": "Zeile hinzufügen",
+      "menu": {
+        "assignTitle": "Gib {amount} eine Aufgabe",
+        "assignSubtitle": "Wähle einen Vorschlag oder suche selbst eine Zeile aus. Bis zur Bestätigung wird nichts gespeichert.",
+        "goalsTitle": "Ziele finanzieren",
+        "goalsDescription": "{count} Zeile benötigt diesen Monat noch Geld | {count} Zeilen benötigen diesen Monat noch Geld",
+        "overspendingTitle": "Mehrausgaben decken",
+        "overspendingOne": "{line} ist um {amount} überzogen",
+        "overspendingMany": "{count} Zeile überzogen | {count} Zeilen überzogen",
+        "repeatTitle": "Letzten Monat wiederholen",
+        "repeatDescription": "{count} Zeile auf den Betrag des letzten Monats auffüllen | {count} Zeilen auf die Beträge des letzten Monats auffüllen",
+        "oneLineTitle": "Einer Zeile zuweisen",
+        "oneLineDescription": "Eine beliebige Zeile auswählen und den Betrag eingeben",
+        "noSuggestions": "Derzeit gibt es keine Vorschläge. Sie erscheinen, wenn eine Zeile ein Ziel hat, überzogen ist oder letzten Monat mehr erhalten hat."
+      },
+      "freeUp": {
+        "title": "{amount} freigeben",
+        "subtitle": "Geld aus Zeilen zurückholen, in denen noch etwas übrig ist. Bereits ausgegebenes Geld bleibt unberührt.",
+        "leftoversTitle": "Aus Restbeträgen zurückholen",
+        "leftoversOne": "Aus {line}, wo am meisten übrig ist",
+        "leftoversTwo": "Aus {first} und {second}, wo am meisten übrig ist",
+        "oneLineTitle": "Aus einer Zeile entnehmen",
+        "oneLineDescription": "Eine Zeile auswählen und den Betrag eingeben",
+        "laterIncome": "Nicht dringend? Später eingehende Einnahmen füllen die Lücke von selbst."
+      },
+      "review": {
+        "goalsHint": "Jede Zeile erhält das, was für ihr Ziel diesen Monat noch fehlt.",
+        "overspendingHint": "Jede Zeile erhält so viel, dass sie wieder auf null steht.",
+        "repeatHint": "Jede Zeile wird auf den Betrag aufgefüllt, den sie letzten Monat erhalten hat.",
+        "leftoversHint": "Geld kommt aus den Zeilen zurück, in denen am meisten übrig ist. Bereits ausgegebenes Geld bleibt unberührt.",
+        "goalNeeds": "Benötigt diesen Monat {amount}",
+        "goalPartial": "Erhält {amount} der benötigten {need}",
+        "overBy": "Um {amount} überzogen",
+        "lastMonth": "Letzten Monat {amount} erhalten",
+        "leftAvailable": "{amount} übrig",
+        "goalsShort": "Deine Ziele benötigen {total}, aber du hast {available}. Ziele, die als Nächstes fällig sind, werden zuerst aufgefüllt.",
+        "short": "Diese Zeilen benötigen {total}, aber du hast {available}. Weiter oben stehende Zeilen werden zuerst aufgefüllt.",
+        "tooMuch": "Es können höchstens {amount} zurückgeholt werden",
+        "readyNow": "Jetzt noch zu verteilen",
+        "goesTo": "Geht an {count} Zeile | Geht an {count} Zeilen",
+        "stillToAssign": "Danach noch zu verteilen",
+        "overBySummary": "Überzogen um",
+        "takenBack": "Zurückgeholt",
+        "readyAfter": "Danach noch zu verteilen",
+        "assignSubmit": "{amount} zuweisen",
+        "takeBackSubmit": "{amount} zurückholen"
+      },
+      "line": {
+        "pickLabel": "Zeile",
+        "pickPlaceholder": "Zeile auswählen",
+        "goalHint": "Ziel benötigt diesen Monat {amount}",
+        "overspentHint": "Um {amount} überzogen",
+        "availableNow": "Jetzt verfügbar {available}",
+        "availableNowGoal": "Jetzt verfügbar {available} · Ziel benötigt {need}",
+        "amountLabel": "Wie viel?",
+        "chipGoal": "Was das Ziel benötigt · {amount}",
+        "chipAll": "Alles · {amount}",
+        "previewAvailable": "{line} verfügbar",
+        "overWarning": "Das sind {amount} mehr, als du zuweisen kannst. Du kannst es trotzdem tun, aber Noch zu verteilen wird rot, bis du die Differenz aus einer anderen Zeile zurückholst.",
+        "assignAnyway": "{amount} trotzdem zuweisen",
+        "assignInstead": "Stattdessen {amount} zuweisen",
+        "tooMuch": "{line} kann höchstens {amount} zurückgeben"
+      },
+      "toast": {
+        "assignedOne": "{amount} an {line} zugewiesen",
+        "assignedTwo": "{amount} an {first} und {second} zugewiesen",
+        "assignedMany": "{amount} an {count} Zeile zugewiesen | {amount} an {count} Zeilen zugewiesen",
+        "tookBackOne": "{amount} aus {line} zurückgeholt",
+        "tookBackTwo": "{amount} aus {first} und {second} zurückgeholt",
+        "tookBackMany": "{amount} aus {count} Zeile zurückgeholt | {amount} aus {count} Zeilen zurückgeholt",
+        "undone": "Rückgängig gemacht",
+        "undoError": "Konnte nicht rückgängig gemacht werden. Es wurde nichts geändert."
+      }
     },
     "panel": {
       "summary": "Zusammenfassung",
@@ -377,8 +468,8 @@
       "pace": "Ausgabentempo",
       "spent": "Ausgegeben",
       "elapsed": "Vergangene Zeit",
-      "usuallyByToday": "Usually by today",
-      "slowDown": "Slow down to ~{perDay}/day to make it last",
+      "usuallyByToday": "Üblicherweise bis heute",
+      "slowDown": "Reduziere auf ~{perDay}/Tag, damit es reicht",
       "spentOfTotal": "{spent} von {total}",
       "daysLeft": "Noch {n} T.",
       "scheduled": "Geplant",
@@ -398,7 +489,43 @@
       },
       "nextPeriodCoverage": "Abdeckung des nächsten Zeitraums",
       "goals": "Ziele",
-      "goal": "Ziel"
+      "goal": "Ziel",
+      "lineTransactions": {
+        "title": "Transaktionen",
+        "empty": "Keine Transaktionen in diesem Zeitraum",
+        "more": "{count} weitere",
+        "seeAll": "Alle in Transaktionen anzeigen"
+      },
+      "averages": {
+        "title": "Durchschnitte",
+        "setAssigned": "Zugewiesen festlegen auf",
+        "now": "jetzt {amount}",
+        "lastAssigned": "Zuletzt zugewiesen",
+        "lastSpent": "Zuletzt ausgegeben",
+        "avgAssigned": "Ø zugewiesen",
+        "avgSpent": "Ø ausgegeben",
+        "noChange": "keine Änderung",
+        "hint": "Ø des letzten Zeitraums · legt Zugewiesen nur für diesen Zeitraum fest | Ø der letzten {count} Zeiträume · legt Zugewiesen nur für diesen Zeitraum fest"
+      },
+      "notCovered": {
+        "title": "Nicht gedeckt",
+        "count": "{count} nicht gedeckt | {count} nicht gedeckt",
+        "covered": "Gedeckt",
+        "pill": "Nicht gedeckt · {amount} fehlen",
+        "shortForScheduled": "{amount} fehlen für noch geplante Zahlungen",
+        "assign": "{amount} zuweisen"
+      },
+      "arrange": {
+        "title": "Bereiche anordnen",
+        "description": "Ziehe die Panel-Bereiche, um sie neu anzuordnen, oder deaktiviere einen, um ihn auszublenden. Einige Bereiche erscheinen nur für eine ausgewählte Zeile oder für die Zeitraumübersicht.",
+        "reset": "Auf Standard zurücksetzen"
+      },
+      "note": {
+        "label": "Notiz",
+        "placeholder": "Notiz für diesen Zeitraum hinzufügen",
+        "gridIcon": "Hat eine Notiz",
+        "error": "Notiz konnte nicht gespeichert werden"
+      }
     },
     "groups": {
       "headerLabel": "Zeilengruppe",
@@ -434,10 +561,10 @@
       "layoutError": "Layout konnte nicht gespeichert werden"
     },
     "pace": {
-      "aheadUsual": "{amount} ahead of usual pace",
-      "aheadEven": "{amount} ahead of pace",
-      "aheadUsualPerDay": "{amount} ahead of usual pace · ~{perDay}/day left for {count} day | {amount} ahead of usual pace · ~{perDay}/day left for {count} days",
-      "aheadEvenPerDay": "{amount} ahead of pace · ~{perDay}/day left for {count} day | {amount} ahead of pace · ~{perDay}/day left for {count} days"
+      "aheadUsual": "{amount} über dem üblichen Schnitt",
+      "aheadEven": "{amount} über dem Tempo",
+      "aheadUsualPerDay": "{amount} über dem üblichen Tempo · noch ~{perDay}/Tag für {count} Tag | {amount} über dem üblichen Tempo · noch ~{perDay}/Tag für {count} Tage",
+      "aheadEvenPerDay": "{amount} über dem Tempo · noch ~{perDay}/Tag für {count} Tag | {amount} über dem Tempo · noch ~{perDay}/Tag für {count} Tage"
     },
     "options": {
       "title": "Optionen",
@@ -448,7 +575,7 @@
       "rowBarCombined": "Kombinierter Balken",
       "rowBarSplit": "Geteilte Balken",
       "rowBarNone": "Kein Balken",
-      "paceHint": "Pace hint"
+      "paceHint": "Tempo-Hinweis"
     },
     "goals": {
       "askHint": "Weise hier diesen Betrag zu, um auf Kurs zu bleiben.",

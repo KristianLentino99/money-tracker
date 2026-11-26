@@ -6,7 +6,16 @@ import InvestmentTransaction from '@models/investments/investment-transaction.mo
 import PortfolioTransfers from '@models/investments/portfolio-transfers.model';
 import Portfolios from '@models/investments/portfolios.model';
 import Securities from '@models/investments/securities.model';
-import { Op } from 'sequelize';
+import { Includeable, Op } from 'sequelize';
+
+export const PORTFOLIO_TRANSFER_INCLUDES: Includeable[] = [
+  { model: Portfolios, as: 'fromPortfolio' },
+  { model: Portfolios, as: 'toPortfolio' },
+  { model: Accounts, as: 'fromAccount', attributes: ['id', 'name', 'currencyCode', 'type'] },
+  { model: Accounts, as: 'toAccount', attributes: ['id', 'name', 'currencyCode', 'type'] },
+  { model: Currencies, as: 'currency' },
+  { model: Currencies, as: 'toCurrency' },
+];
 
 interface ListPortfolioTransfersParams {
   userId: number;
@@ -66,12 +75,7 @@ export async function listPortfolioTransfers({
   const transfers = await PortfolioTransfers.findAll({
     where: whereClause,
     include: [
-      { model: Portfolios, as: 'fromPortfolio' },
-      { model: Portfolios, as: 'toPortfolio' },
-      { model: Accounts, as: 'fromAccount', attributes: ['id', 'name', 'currencyCode', 'type'] },
-      { model: Accounts, as: 'toAccount', attributes: ['id', 'name', 'currencyCode', 'type'] },
-      { model: Currencies, as: 'currency' },
-      { model: Currencies, as: 'toCurrency' },
+      ...PORTFOLIO_TRANSFER_INCLUDES,
       { model: InvestmentTransaction, as: 'investmentTransactions', include: [{ model: Securities, as: 'security' }] },
     ],
     order: [

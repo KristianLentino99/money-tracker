@@ -24,18 +24,15 @@
         "custom": "Personalizzato",
         "live": "In tempo reale",
         "unused": "Non usata",
-        "accountsCount": "{count} conto | {count} conti"
+        "accountsCount": "{count} conto | {count} conti",
+        "customCurrency": "Valuta personalizzata"
       },
       "empty": {
         "title": "Ancora nessun'altra valuta",
         "description": "Aggiungere una valuta qui sopra per monitorare saldi e tassi di cambio accanto alla valuta di base."
       },
       "exchangeRate": {
-        "disableLiveUpdate": "Disattivare l'aggiornamento in tempo reale per impostare un tasso di cambio personalizzato.",
-        "liveUpdateInfo": "Se attivo, il tasso personalizzato viene ignorato.",
-        "liveUpdateLabel": "Aggiornamento in tempo reale",
         "ratePlaceholder": "0.00",
-        "saveButton": "Salva",
         "successfullyUpdated": "Aggiornato con successo.",
         "balancesNotRefreshed": "Non è stato ancora possibile aggiornare il saldo di {count} conti con il nuovo tasso: verrà aggiornato automaticamente quando sarà disponibile un tasso.",
         "errors": {
@@ -48,7 +45,6 @@
         "description": "Una valuta può essere eliminata/scollegata solo se non ha conti e/o transazioni associati.",
         "button": "Elimina valuta",
         "buttonShort": "Elimina",
-        "disabledTooltip": "Impossibile eliminare questa valuta perché è ancora collegata a uno o più conti.",
         "successfullyDeleted": "Eliminata con successo.",
         "foreignAmountsWarning": "Gli importi esteri registrati in questa valuta verranno rimossi dalle transazioni. Gli importi nella valuta del conto restano invariati.",
         "inUse": {
@@ -65,7 +61,8 @@
             "transactionTemplate": "Modelli di transazione",
             "budget": "Budget",
             "goal": "Obiettivi",
-            "ventureDeal": "Operazioni di venture capital"
+            "ventureDeal": "Operazioni di venture capital",
+            "customCurrency": "Valute personalizzate quotate in questa valuta"
           }
         },
         "errors": {
@@ -102,7 +99,274 @@
           "lockedShares": "C'è {count} condivisione di conto attiva. Revocarla prima dal conto. | Ci sono {count} condivisioni di conto attive. Revocarle prima da ciascun conto.",
           "lockedBudgetPlan": "Un piano di budget attivo impedisce la modifica. Eliminarlo prima. | {count} piani di budget attivi impediscono la modifica. Eliminarli prima."
         }
-      }
+      },
+      "custom": {
+        "addButton": "Aggiungi valuta personalizzata",
+        "createTitle": "Aggiungi valuta personalizzata",
+        "createDescription": "Definire una valuta che non è una valuta ISO, come una stablecoin o una cripto-attività. È visibile solo all'utente che la crea.",
+        "editTitle": "Modifica valuta personalizzata",
+        "editDescription": "Le modifiche si applicano a tutti i conti e le transazioni in questa valuta.",
+        "codeLabel": "Codice",
+        "codePlaceholder": "USDT",
+        "nameLabel": "Nome",
+        "namePlaceholder": "Tether",
+        "symbolLabel": "Simbolo (facoltativo)",
+        "symbolPlaceholder": "₮",
+        "decimalsLabel": "Decimali",
+        "decimalsPlaceholder": "6",
+        "decimalsHint": "Gli importi mantengono al massimo questo numero di cifre dopo la virgola (da 0 a 8).",
+        "decimalsLockedHint": "I decimali possono essere modificati solo finché nessun conto, transazione o modello usa {code}.",
+        "preview": "Esempio: {value}",
+        "createButton": "Aggiungi valuta",
+        "saveButton": "Salva modifiche",
+        "cancelButton": "Annulla",
+        "rateLabel": "Tasso",
+        "ratePlaceholder": "1.00",
+        "createRateHint": "Quanto vale un'unità di questa valuta nella valuta di base. È possibile modificarlo in seguito dalla relativa riga.",
+        "successfullyCreated": "Valuta personalizzata aggiunta",
+        "successfullyUpdated": "Valuta personalizzata aggiornata",
+        "errors": {
+          "codeRequired": "Inserire un codice",
+          "codeFormat": "Usare da 2 a 16 lettere maiuscole o cifre",
+          "codeIsIso": "Questo è un codice valuta ISO. Aggiungerlo invece dall'elenco delle valute",
+          "codeExists": "Esiste già una valuta con questo codice",
+          "nameRequired": "Inserire un nome",
+          "symbolTooLong": "Usare al massimo 8 caratteri",
+          "decimalsRange": "Inserire un numero intero da 0 a 8",
+          "rateRequired": "Inserire un tasso maggiore di 0",
+          "createFailed": "Errore imprevisto. La valuta personalizzata non è stata aggiunta.",
+          "updateFailed": "Errore imprevisto. La valuta personalizzata non è stata aggiornata."
+        }
+      },
+      "rateSource": {
+        "successfullySaved": "Fonte del tasso salvata",
+        "quoteLabel": "Valuta di prezzo",
+        "quotePlaceholder": "Selezionare una valuta",
+        "manual": {
+          "successfullyRemoved": "Tasso rimosso",
+          "errors": {
+            "removeFailed": "Errore imprevisto. Il tasso non è stato rimosso."
+          }
+        },
+        "peg": {
+          "currencyPlaceholder": "Selezionare una valuta",
+          "factorPlaceholder": "1"
+        },
+        "coingecko": {
+          "searchLabel": "Trova una criptovaluta",
+          "searchPlaceholder": "Cercare per nome o simbolo, ad esempio Bitcoin",
+          "noResults": "Nessuna criptovaluta trovata",
+          "selected": "Criptovaluta selezionata: {coin}",
+          "searchFailed": "Impossibile cercare su CoinGecko. Riprovare tra un momento."
+        },
+        "http": {
+          "urlPlaceholder": "https://api.example.com/price?id={'{code}'}&vs={'{quote}'}&on={'{date}'}",
+          "urlHint": "Segnaposto: {date} è il giorno nel formato yyyy-mm-dd, {code} è il codice della valuta e {quote} è la valuta di prezzo.",
+          "pathPlaceholder": "data.rates[0].price",
+          "headerNameLabel": "Nome header",
+          "headerNamePlaceholder": "X-Api-Key",
+          "headerValueLabel": "Valore",
+          "headerValuePlaceholder": "Inserire il valore",
+          "addHeader": "Aggiungi header",
+          "removeHeader": "Rimuovi header",
+          "savedHeaders": "Header salvati: {names}. I loro valori sono nascosti.",
+          "headersWillBeRemoved": "Gli header salvati verranno rimossi al salvataggio.",
+          "replaceHeaders": "Sostituisci header",
+          "keepHeaders": "Mantieni header salvati",
+          "headersOriginChanged": "Gli header salvati vengono inviati solo all'indirizzo per cui sono stati salvati. Sostituirli per usare questo URL.",
+          "testSuccess": "Il {date}, 1 {code} = {rate} {quote}",
+          "testUnavailable": "Impossibile eseguire il test. Riprovare tra un momento.",
+          "failures": {
+            "blocked": "Questo indirizzo non è consentito: gli indirizzi privati e interni sono bloccati.",
+            "https_required": "L'indirizzo deve usare https.",
+            "timeout": "L'endpoint ha impiegato troppo tempo a rispondere.",
+            "network": "Impossibile raggiungere l'endpoint.",
+            "http_status": "L'endpoint ha risposto con uno stato di errore.",
+            "too_large": "La risposta è troppo grande.",
+            "not_json": "La risposta non è in formato JSON.",
+            "path_not_found": "Il percorso JSON non corrisponde a nulla nella risposta.",
+            "not_a_number": "Il valore nel percorso JSON non è un numero positivo.",
+            "headers_unreadable": "Non è stato possibile leggere gli header salvati. Inserirli di nuovo."
+          }
+        },
+        "errors": {
+          "pegCurrencyRequired": "Selezionare la valuta a cui ancorarsi",
+          "factorInvalid": "Inserire un numero maggiore di 0",
+          "coinRequired": "Cercare e selezionare una criptovaluta",
+          "urlRequired": "Inserire l'URL",
+          "urlInvalid": "Usare un URL http(s); gli unici segnaposto ammessi sono il giorno, il codice e la valuta di prezzo",
+          "pathRequired": "Inserire il percorso JSON",
+          "headerNameRequired": "Assegnare un nome a ogni header",
+          "headerNameDuplicate": "I nomi degli header devono essere univoci",
+          "saveFailed": "Errore imprevisto. La fonte del tasso non è stata salvata."
+        },
+        "history": {
+          "connectToEdit": "Collegare {quote} per modificare questo tasso."
+        }
+      },
+      "dialog": {
+        "back": "Torna a {name}",
+        "summary": {
+          "current": "Tasso attuale",
+          "since": "Dal {date}",
+          "follows": "Segue {code}",
+          "updated": "Aggiornato il {date}",
+          "live": "In tempo reale",
+          "yourRate": "Tasso personalizzato",
+          "update": "Aggiorna tasso"
+        },
+        "source": {
+          "label": "Fonte del tasso",
+          "manual": "Inserito manualmente",
+          "peg": "Segue {code}",
+          "pegDetail": "Sempre 1 {code} = {factor} {target}",
+          "coingecko": "CoinGecko · {coin}",
+          "http": "URL personalizzato · {host}",
+          "syncedDetail": "Aggiornato ogni notte",
+          "change": "Cambia"
+        },
+        "recent": {
+          "title": "Tassi recenti",
+          "viewAll": "Visualizza tutti ({count})",
+          "viewAllUnknown": "Visualizza tutti",
+          "readOnly": "I prezzi da {source} non possono essere modificati. Per inserire i tassi manualmente, cambiare la fonte del tasso.",
+          "loadFailedTitle": "Impossibile caricare i tassi.",
+          "loadFailedDetail": "Il tasso attuale qui sopra è comunque corretto.",
+          "refreshFailed": "Impossibile aggiornare i tassi: l'elenco potrebbe non essere aggiornato."
+        },
+        "pegRow": {
+          "title": "Storico dei tassi",
+          "count": "{count} tasso | {count} tassi",
+          "notUsed": "Non usato finché {code} segue {target}",
+          "empty": "Nessun tasso memorizzato",
+          "view": "Visualizza"
+        },
+        "row": {
+          "current": "Attuale",
+          "now": "{from} – oggi",
+          "rate": "1 {code} = {rate} {quote}",
+          "edit": "Modifica il tasso usato dal {date}",
+          "source": {
+            "initial": "Tasso iniziale",
+            "manual": "Inserito manualmente",
+            "coingecko": "CoinGecko",
+            "http": "URL personalizzato"
+          }
+        },
+        "history": {
+          "title": "Storico dei tassi",
+          "description": "Ogni tasso si applica dalla sua data fino all'inizio del successivo. Le date precedenti al primo tasso usano il primo tasso.",
+          "count": "{count} tasso, dal più recente | {count} tassi, dal più recente",
+          "showOlder": "Mostra tassi precedenti",
+          "empty": "Nessun tasso memorizzato. {code} segue {target}, quindi non ne ha bisogno."
+        },
+        "form": {
+          "addTitle": "Aggiorna tasso",
+          "addDescription": "Impostare quanto vale 1 {code}, a partire da un giorno a scelta.",
+          "editTitle": "Modifica tasso",
+          "usedFor": "Usato per {range}.",
+          "usedFrom": "Usato dal {date} in poi.",
+          "usedEveryDay": "Usato per ogni giorno.",
+          "usedForAndBefore": "Usato per {range} e per ogni giorno precedente.",
+          "typeEither": "Inserire l'uno o l'altro.",
+          "dateLabel": "Usare questo tasso dal",
+          "today": "Oggi",
+          "replaceNote": "Per il {date} esiste già un tasso ({rate} {quote}). Il salvataggio lo sostituisce.",
+          "recalcRange": "Il salvataggio ricalcola il valore delle transazioni in {code} con data {range}.",
+          "recalcFrom": "Il salvataggio ricalcola il valore delle transazioni in {code} dal {date} in poi.",
+          "recalcUntil": "Il salvataggio ricalcola il valore delle transazioni in {code} fino al {date}.",
+          "recalcAll": "Il salvataggio ricalcola il valore di tutte le transazioni in {code}.",
+          "amountsKept": "Gli importi in {code} restano invariati.",
+          "noChange": "Le transazioni già salvate mantengono il loro valore.",
+          "unknown": "Se per questo giorno esiste già un tasso, il salvataggio lo sostituisce. Le transazioni in {code} da questo giorno fino al tasso successivo vengono ricalcolate.",
+          "moveHint": "Per usare questo tasso da un altro giorno, rimuoverlo e aggiungerne uno nuovo.",
+          "save": "Salva tasso",
+          "replace": "Sostituisci tasso",
+          "remove": "Rimuovi tasso",
+          "lastRate": "Una valuta deve avere almeno un tasso."
+        },
+        "remove": {
+          "title": "Rimuovere il tasso del {date}?",
+          "takenOver": "{range} userà invece il tasso del {date} (1 {code} = {rate} {quote}).",
+          "takenOverWithEarlier": "{range} e ogni giorno precedente useranno invece il tasso del {date} (1 {code} = {rate} {quote}).",
+          "unknown": "{range} userà invece il tasso precedente.",
+          "unknownDays": "I giorni coperti da questo tasso useranno invece un altro tasso memorizzato.",
+          "recalc": "Il valore delle transazioni in {code} in quei giorni viene ricalcolato. Gli importi in {code} restano invariati.",
+          "confirm": "Rimuovi tasso"
+        },
+        "sourceView": {
+          "title": "Da dove deve provenire il tasso?",
+          "now": {
+            "manual": "Al momento viene inserito manualmente.",
+            "peg": "Al momento segue {target}.",
+            "coingecko": "Al momento proviene da CoinGecko.",
+            "http": "Al momento proviene da un URL personalizzato."
+          },
+          "option": {
+            "manual": "Inserimento manuale",
+            "manualHint": "Inserire un tasso quando il prezzo cambia.",
+            "peg": "Seguire una valuta",
+            "pegHint": "Vale sempre un importo fisso in USD, EUR o in un'altra valuta.",
+            "coingecko": "Prezzo cripto",
+            "coingeckoHint": "Aggiornato ogni notte da CoinGecko.",
+            "http": "URL personalizzato",
+            "httpHint": "Aggiornato ogni notte da un indirizzo web indicato."
+          },
+          "schedule": {
+            "coingecko": "Il prezzo viene recuperato una volta al giorno, durante la notte. Fino al prossimo aggiornamento viene usato l'ultimo prezzo recuperato.",
+            "http": "L'indirizzo viene interrogato una volta al giorno, durante la notte. Fino al prossimo aggiornamento viene usato l'ultimo prezzo restituito."
+          },
+          "inUse": "In uso",
+          "advanced": "Avanzate",
+          "notAvailable": "Non disponibile",
+          "note": {
+            "manual": "Dopo il salvataggio, il tasso va inserito manualmente. I tassi già memorizzati tornano a essere usati.",
+            "manualNoRates": "{code} non ha ancora tassi memorizzati. Seguire prima una valuta o collegare un prezzo.",
+            "peg": "Dopo il salvataggio, 1 {code} varrà sempre {factor} {target}. I tassi inseriti restano nello storico e tornano a essere usati in caso di ritorno all'opzione precedente.",
+            "coingecko": "Al salvataggio vengono scaricati i prezzi di {coin} dell'ultimo anno e ricalcolato il valore delle transazioni passate in {code}. I tassi aggiunti manualmente vengono mantenuti. Il tasso iniziale viene sostituito nei giorni in cui CoinGecko ha un prezzo.",
+            "coingeckoCoinChanged": "I prezzi della criptovaluta precedente vengono rimossi.",
+            "http": "Al salvataggio viene recuperato il prezzo di oggi da questo indirizzo e ricalcolato il valore delle transazioni passate in {code}. I giorni precedenti mantengono i tassi già memorizzati. I tassi aggiunti manualmente vengono mantenuti."
+          },
+          "pegCurrency": "Valuta da seguire",
+          "pegAmount": "1 {code} =",
+          "notSaved": "Non ancora salvato",
+          "saving": "Salvataggio in corso",
+          "downloading": "Download di un anno di prezzi in corso. L'operazione può richiedere qualche istante.",
+          "fetchingToday": "Recupero del prezzo di oggi dall'indirizzo in corso. L'operazione può richiedere qualche istante.",
+          "saveFailedTitle": "Impossibile salvare. Non è stato modificato nulla.",
+          "unavailable": "I prezzi cripto non sono configurati su questo server. Chi lo gestisce deve aggiungere una chiave CoinGecko. È comunque possibile inserire il tasso manualmente o seguire una valuta.",
+          "http": {
+            "address": "Indirizzo web",
+            "path": "Posizione del tasso nella risposta",
+            "headers": "Header segreti",
+            "headersStored": "memorizzati in forma cifrata",
+            "test": "Prova",
+            "testAgain": "Prova di nuovo"
+          }
+        },
+        "discard": {
+          "title": "Scartare le modifiche?",
+          "body": "{code} continua a ricevere il tasso come ora: {current}. I dati inseriti qui andranno persi.",
+          "rateBody": "Il tasso inserito per {code} non è stato salvato e andrà perso.",
+          "keep": "Continua a modificare",
+          "confirm": "Scarta"
+        },
+        "iso": {
+          "liveTitle": "Tasso in tempo reale",
+          "liveOn": "Aggiornato automaticamente. Disattivarlo per inserire un tasso personalizzato.",
+          "liveOff": "Disattivato. Riattivandolo, il tasso personalizzato viene rimosso.",
+          "save": "Salva tasso",
+          "note": "Il tasso personalizzato viene usato per le nuove transazioni. Le transazioni già salvate mantengono i loro valori.",
+          "confirmTitle": "Tornare al tasso in tempo reale?",
+          "confirmBody": "Il tasso personalizzato ({rate}) viene rimosso e {code} torna a seguire il tasso di mercato. Le transazioni già salvate mantengono i loro valori.",
+          "confirm": "Usa tasso in tempo reale"
+        },
+        "footer": {
+          "editDetails": "Modifica dettagli",
+          "deleteBlocked": "Usata da {count} conto, quindi non può essere eliminata. | Usata da {count} conti, quindi non può essere eliminata."
+        }
+      },
+      "refreshFailed": "Salvato, ma non è stato possibile aggiornare l'elenco delle valute. Ricaricare la pagina se qualcosa non sembra aggiornato."
     }
   }
 }

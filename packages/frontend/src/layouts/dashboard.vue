@@ -10,8 +10,9 @@
       class="min-h-0 min-w-0 flex-1"
       scrollbar-class="z-40"
       :scroll-area-id="SCROLL_AREA_IDS.dashboard"
+      :style="{ '--app-header-height': `${headerHeight}px`, '--app-viewport-height': `${viewportHeight}px` }"
     >
-      <ui-header class="bg-card dark:bg-background sticky top-0 z-30 pt-[env(safe-area-inset-top)]" />
+      <ui-header ref="headerRef" class="bg-card dark:bg-background sticky top-0 z-30 pt-[env(safe-area-inset-top)]" />
 
       <template v-if="isAppInitialized">
         <div class="max-md:pb-10">
@@ -56,6 +57,7 @@ import { useIdleEnabled } from '@/composable/use-idle-enabled';
 import { CUSTOM_BREAKPOINTS, useWindowBreakpoints } from '@/composable/window-breakpoints';
 import { ROUTES_NAMES } from '@/routes/constants';
 import { useCurrenciesStore, useOnboardingStore, useRootStore } from '@/stores';
+import { useElementSize } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -76,6 +78,10 @@ const isMobileView = useWindowBreakpoints(CUSTOM_BREAKPOINTS.uiMobile, {
 });
 
 const scrollAreaRef = ref<InstanceType<typeof ScrollArea> | null>(null);
+const headerRef = ref<InstanceType<typeof UiHeader> | null>(null);
+const sizeOptions = { box: 'border-box' } as const;
+const { height: headerHeight } = useElementSize(headerRef, undefined, sizeOptions);
+const { height: viewportHeight } = useElementSize(scrollAreaRef, undefined, sizeOptions);
 
 watch(
   () => route.fullPath,

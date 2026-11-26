@@ -17,8 +17,9 @@ const MAX_EXPONENT = 30;
  * Nothing is rounded: every digit the source wrote is kept, and the caller rounds to the
  * account currency's decimals where the amount meets a stored one. The string never uses
  * exponent notation and a zero is always `'0'`.
- * Supports various formats: 1234.56, 1,234.56, -1234.56, (1234.56). An exponent beyond +-30
- * (`1e999999999`) makes the token unparseable instead of expanding it.
+ * Supports various formats: 1234.56, 1,234.56, -1234.56, (1234.56), 1234.56 DR, 1234.56 CR.
+ * A DR/CR suffix next to a sign or parentheses is contradictory and unparseable. An exponent
+ * beyond +-30 (`1e999999999`) makes the token unparseable instead of expanding it.
  *
  * New code should use `parseDecimalAmount`, which rejects ambiguous tokens. This one always
  * guesses: a lone comma is read as the decimal point, so `1,234` returns `'1.234'`.
@@ -32,6 +33,11 @@ export function parseAmount(amountStr: string): string | null {
     .trim()
     .replace(new RegExp(`^[${dashes}]`), '-')
     .replace(new RegExp(`[${dashes}]$`), '-');
+
+  // Bank statements mark debits and credits with a `DR` / `CR` suffix instead of a sign
+  const suffix = /(?<![a-z])\s*(DR|CR)\.?$/i.exec(cleanStr);
+  const isDebit = suffix?.[1]?.toUpperCase() === 'DR';
+  if (suffix) cleanStr = cleanStr.slice(0, suffix.index);
 
   // Handle parentheses as negative (accounting format)
   const isNegativeParens = cleanStr.startsWith('(') && cleanStr.endsWith(')');
@@ -57,6 +63,10 @@ export function parseAmount(amountStr: string): string | null {
   const isNegativeAfterSymbol = cleanStr.startsWith('-');
   if (isNegativeAfterSymbol || cleanStr.startsWith('+')) {
     cleanStr = cleanStr.slice(1);
+  }
+
+  if (suffix && (isNegativeParens || isNegativeSign || isNegativeAfterSymbol)) {
+    return null;
   }
 
   // Determine decimal separator
@@ -100,6 +110,6 @@ export function parseAmount(amountStr: string): string | null {
   }
 
   // Apply negative sign
-  const isNegative = (isNegativeParens || isNegativeSign) !== isNegativeAfterSymbol;
+  const isNegative = isDebit || (isNegativeParens || isNegativeSign) !== isNegativeAfterSymbol;
   return (isNegative ? magnitude.neg() : magnitude).toFixed();
 }

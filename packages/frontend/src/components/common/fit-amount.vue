@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFormatCurrency } from '@/composable/formatters';
 import { formatCompactFiat } from '@/js/helpers';
+import { maskAmountText } from '@/js/helpers/formatters';
 import { useResizeObserver } from '@vueuse/core';
 import { computed, ref, useTemplateRef, watch } from 'vue';
 
@@ -15,7 +16,7 @@ const props = defineProps<{
 const { formatBaseCurrency, formatCompactBaseCurrency, formatAmountByCurrencyCode } = useFormatCurrency();
 
 const withSign = ({ amount, text }: { amount: number; text: string }) =>
-  props.signed && amount > 0 ? `+${text}` : text;
+  props.signed && amount > 0 ? maskAmountText({ text: `+${text}` }) : text;
 const formatFull = (amount: number) =>
   withSign({
     amount,

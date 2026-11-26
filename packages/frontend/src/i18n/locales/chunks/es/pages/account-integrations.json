@@ -338,8 +338,8 @@
         "disconnectFailed": "Error al desconectar la integración",
         "connectAccountsSuccess": "Cuentas conectadas correctamente",
         "connectAccountsFailed": "Error al conectar las cuentas",
-        "updateNameSuccess": "Nombre de la conexión actualizado correctamente",
-        "updateNameFailed": "Error al actualizar el nombre de la conexión",
+        "updateNameSuccess": "Conexión actualizada correctamente",
+        "updateNameFailed": "No se pudo actualizar la conexión",
         "connectionEstablished": "¡Conexión bancaria establecida correctamente!"
       },
       "details": {
@@ -380,7 +380,7 @@
         },
         "actions": {
           "openExternalUrl": "Open external link",
-          "renameButton": "Renombrar conexión",
+          "renameButton": "Editar conexión",
           "disconnectButton": "Desconectar integración",
           "manage": "Gestionar"
         },
@@ -436,8 +436,8 @@
           "disconnect": "Desconectar"
         },
         "editName": {
-          "title": "Editar nombre de la conexión",
-          "description": "Asigne un nombre personalizado a su conexión para identificarla fácilmente.",
+          "title": "Editar conexión",
+          "description": "Actualizar el nombre para mostrar o enlace de portal de institución para esta conexión.",
           "label": "Nombre de la conexión",
           "externalUrlLabel": "External URL (optional)",
           "externalUrlPlaceholder": "https://bridge.example.com",
